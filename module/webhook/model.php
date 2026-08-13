@@ -493,7 +493,7 @@ class webhookModel extends model
      */
     public function getViewLink(string $objectType, int $objectID): string
     {
-        $isAPI = (defined('RUN_MODE') && RUN_MODE == 'api');
+        $isAPI = (helper::isApiRequest());
         if($isAPI)
         {
             global $oldRequestType;

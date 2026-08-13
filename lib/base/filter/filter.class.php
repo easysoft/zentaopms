@@ -1067,7 +1067,7 @@ class baseFixer
         $fields = $this->processFields($fieldName);
         foreach($fields as $fieldName)
         {
-            if(!isset($this->stripedFields[$fieldName]) and (!defined('RUN_MODE') or RUN_MODE != 'admin'))
+            if(!isset($this->stripedFields[$fieldName]) and !helper::isRunMode('admin'))
             {
                 $this->data->$fieldName = self::stripDataTags($this->data->$fieldName, $allowedTags, $attributes);
 

@@ -14,6 +14,7 @@ set::zui(true);
 
 jsVar('fromVersion', $fromVersion);
 jsVar('upgradeVersions', array_keys($upgradeVersions));
+jsVar('executeFailed', $lang->upgrade->executeFailed);
 $isEn = $app->getClientLang() == 'en';
 
 $editionNames = [];

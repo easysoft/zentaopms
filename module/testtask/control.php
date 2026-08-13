@@ -825,7 +825,7 @@ class testtask extends control
 
         $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
+        if(helper::isApiRequest()) return $this->send(array('status' => 'success'));
 
         $browseList = inlink('browse', "productID=$task->product");
         if($this->app->tab == 'execution') $browseList = $this->createLink('execution', 'testtask', "executionID=$task->execution");

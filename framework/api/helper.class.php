@@ -10,7 +10,7 @@
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
  */
-include dirname(__FILE__, 2) . '/base/helper.class.php';
+include_once dirname(__FILE__, 2) . '/base/helper.class.php';
 class helper extends baseHelper
 {
     public static function getViewType(bool $source = false)
@@ -267,7 +267,7 @@ class helper extends baseHelper
      * @access public
      * @return string
      */
-    static public function response(mixed $data = '', int $code = 200)
+    static public function response(mixed $data = '', int $code = 200): string
     {
         $statusCode = array(
             100 => "100 Continue",

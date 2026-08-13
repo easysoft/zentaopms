@@ -1734,7 +1734,7 @@ eof;
      */
     public static function getSysURL(): string
     {
-        if(defined('RUN_MODE') && RUN_MODE == 'test') return '';
+        if(helper::isRunMode('test')) return '';
 
         $httpType = (isset($_SERVER["HTTPS"]) and $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
         if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') $httpType = 'https';
@@ -1936,7 +1936,7 @@ eof;
      */
     public static function canBeChanged(string $module, $object = null): bool
     {
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
+        if(helper::isApiRequest()) return true;
 
         if(empty($object)) return true;
 

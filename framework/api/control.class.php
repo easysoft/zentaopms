@@ -17,29 +17,11 @@
  *
  * @package framework
  */
-include dirname(__FILE__, 2) . '/base/control.class.php';
+include_once dirname(__FILE__, 2) . '/base/control.class.php';
 
 #[AllowDynamicProperties]
 class control extends baseControl
 {
-    /**
-     * 是否收集FormData，用于补全Form表单
-     * Collect form data.
-     *
-     * @var bool
-     * @access public
-     */
-    public $getFormData = false;
-
-    /**
-     * Form表单数据
-     * FormData.
-     *
-     * @var array
-     * @access public
-     */
-    public $formData = array();
-
     /**
      * Check requiredFields and set exportFields for workflow.
      *
@@ -58,7 +40,7 @@ class control extends baseControl
         if($this->config->edition == 'open') return false;
 
         /* Code for task #9224. Set requiredFields for workflow. */
-        if($this->dbh && ($this->app->isServing() || (defined('RUN_MODE') and RUN_MODE == 'api')))
+        if($this->dbh && ($this->app->isServing() || (helper::isApiRequest())))
         {
             $this->extendExportFields();
             $this->extendEditorFields();
@@ -146,6 +128,8 @@ class control extends baseControl
      */
     public function render($moduleName = '', $methodName = '')
     {
+        if($this->app->apiVersion == 'v2') return parent::render($moduleName, $methodName);
+
         if($this->app->apiVersion != 'v2')
         {
             $this->parseJSON($moduleName, $methodName);
@@ -160,82 +144,6 @@ class control extends baseControl
 
             return;
         }
-        elseif(!$this->getFormData)
-        {
-            if($this->viewType == 'html') return parent::render($moduleName, $methodName);
-
-            $this->parseJSON($moduleName, $methodName);
-
-            ob_start();
-            echo $this->output;
-
-            return;
-        }
-
-        if(empty($moduleName)) $moduleName = $this->moduleName;
-        if(empty($methodName)) $methodName = $this->methodName;
-
-        /* Load zin lib */
-        $this->app->loadClass('zin', true);
-        \zin\loadConfig();
-
-        /**
-         * 设置视图文件。(PHP7有一个bug，不能直接$viewFile = $this->setViewFile())。
-         * Set viewFile. (Can't assign $viewFile = $this->setViewFile() directly because one php7's bug.)
-         */
-        $results = $this->setViewFile($moduleName, $methodName, 'ui');
-
-        $viewFile = $results;
-        if(is_array($results)) extract($results);
-
-        /**
-         * 切换到视图文件所在的目录，以保证视图文件里面的include语句能够正常运行。
-         * Change the dir to the view file to keep the relative paths work.
-         */
-        $currentPWD = getcwd();
-        chdir(dirname($viewFile));
-
-        /**
-         * Init zin context data.
-         * 设置 zin 渲染上下文数据。
-         */
-        $context = \zin\context();
-        $context->control = $this;
-        $context->data    = (array)$this->view;
-
-        /**
-         * 使用extract和ob方法渲染$viewFile里面的代码。
-         * Use extract and ob functions to eval the codes in $viewFile.
-         */
-        extract($context->data);
-
-        /* 将 hooks 文件添加到当前 context 中。 */
-        if(!empty($hookFiles)) $context->addHookFiles($hookFiles);
-
-        /* 加载 common.field.php 和 method.field.php。 */
-        $commonFieldFile = dirname($viewFile) . DS . 'common.field.php';
-        $methodFieldFile = dirname($viewFile) . DS . $methodName . '.field.php';
-        helper::import($commonFieldFile);
-        helper::import($methodFieldFile);
-
-        ob_start();
-        include $viewFile;
-
-        $this->setResponseHeader();
-
-        \zin\renderPage(array('type' => 'html'));
-        $content = ob_get_clean();
-
-        $this->app->loadClass('formdom');
-        $parser = new formdom(array('include_disabled' => true));
-
-        $this->formData = $parser->parse($content);
-
-        /**
-         * 解析完毕后，再切换回之前的路径。
-         * At the end, chang the dir to the previous.
-         */
-        chdir($currentPWD);
     }
 
     /**

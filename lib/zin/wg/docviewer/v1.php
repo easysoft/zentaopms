@@ -120,7 +120,7 @@ class docViewer extends wg
         $fileListProps['itemProps']        = array('target' => '_blank');
         $fileListProps['fileActions']      = jsCallback('file')->do('return getFileActions(file)');
 
-        $canPreviewOffice  = $canDownload && !empty($config->file->libreOfficeTurnon);
+        $canPreviewOffice  = $canDownloadFile && !empty($config->file->libreOfficeTurnon);
         $historyPanelProps = $this->prop('historyPanel');
         if(empty($historyPanelProps)) $historyPanelProps = array();
         if(is_array($historyPanelProps)) $historyPanelProps['fileListProps'] = $fileListProps;

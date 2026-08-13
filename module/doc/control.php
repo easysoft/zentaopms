@@ -1416,7 +1416,7 @@ class doc extends control
         if($isApi) $docParam = 'api.' . $docParam;
         if(!$doc || !isset($doc->id))
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->sendError($this->lang->notFound, $this->inlink('index'));
         }
 

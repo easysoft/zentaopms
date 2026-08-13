@@ -21,7 +21,7 @@ CREATE TABLE `ops_artifact_assets` (
   KEY `idx_deleted` (`deleted`),
   KEY `idx_groupID_basename_deleted` (`groupID`,`basename`,`deleted`),
   KEY `idx_versionID_basename_deleted` (`versionID`,`basename`,`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='制品资源表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='制品资源表';
 CREATE TABLE `ops_artifact_blobs` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `storageID` int unsigned NOT NULL DEFAULT '0' COMMENT '存储后端ID',
@@ -40,7 +40,7 @@ CREATE TABLE `ops_artifact_blobs` (
   UNIQUE KEY `uk_ref_storageID` (`ref`,`storageID`),
   KEY `idx_assetID_deleted` (`assetID`,`deleted`),
   KEY `idx_deleted` (`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='制品文件对象表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='制品文件对象表';
 CREATE TABLE `ops_artifact_groups` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `artifactLibID` int unsigned NOT NULL DEFAULT '0' COMMENT '所属制品库ID',
@@ -57,7 +57,7 @@ CREATE TABLE `ops_artifact_groups` (
   KEY `idx_artifactLibID_parentID_deleted` (`artifactLibID`,`parentID`,`deleted`),
   KEY `idx_parentID_deleted` (`parentID`,`deleted`),
   KEY `idx_artifactLibID_parentID_name` (`artifactLibID`,`parentID`,`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='制品分组表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='制品分组表';
 CREATE TABLE `ops_artifact_libs` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `spaceID` int unsigned NOT NULL DEFAULT '0' COMMENT '所属空间ID，0表示全局级',
@@ -78,7 +78,7 @@ CREATE TABLE `ops_artifact_libs` (
   KEY `idx_spaceID_deleted` (`spaceID`,`deleted`),
   KEY `idx_repoID_deleted` (`repoID`,`deleted`),
   KEY `idx_spaceID_repoID_deleted` (`spaceID`,`repoID`,`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='制品库主表（支持全局/空间/代码库三级作用域）';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='制品库主表（支持全局/空间/代码库三级作用域）';
 CREATE TABLE `ops_artifact_meta_assets` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `artifactLibID` int unsigned NOT NULL DEFAULT '0' COMMENT '所属制品库ID',
@@ -98,7 +98,7 @@ CREATE TABLE `ops_artifact_meta_assets` (
   KEY `idx_artifactLibID_deleted` (`artifactLibID`,`deleted`),
   KEY `idx_blobID` (`blobID`),
   KEY `idx_deleted` (`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='制品元数据资源表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='制品元数据资源表';
 CREATE TABLE `ops_artifact_packages` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `artifactLibID` int unsigned NOT NULL DEFAULT '0' COMMENT '所属制品库ID',
@@ -117,7 +117,7 @@ CREATE TABLE `ops_artifact_packages` (
   KEY `idx_artifactLibID_namespace_deleted` (`artifactLibID`,`namespace`,`deleted`),
   KEY `idx_groupID_deleted` (`groupID`,`deleted`),
   KEY `idx_deleted` (`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='制品包表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='制品包表';
 CREATE TABLE `ops_artifact_tree_nodes` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `artifactLibID` int unsigned NOT NULL DEFAULT '0' COMMENT '所属制品库ID',
@@ -138,7 +138,7 @@ CREATE TABLE `ops_artifact_tree_nodes` (
   KEY `idx_artifactLibID_linkTable_linkRecord_deleted` (`artifactLibID`,`linkTable`,`linkRecord`,`deleted`),
   KEY `idx_artifactLibID_type_deleted` (`artifactLibID`,`type`,`deleted`),
   KEY `idx_deleted` (`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='制品树节点表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='制品树节点表';
 CREATE TABLE `ops_artifact_versions` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `artifactLibID` int unsigned NOT NULL DEFAULT '0' COMMENT '所属制品库ID',
@@ -156,7 +156,7 @@ CREATE TABLE `ops_artifact_versions` (
   KEY `idx_createdDate` (`createdDate`),
   KEY `idx_editedDate` (`editedDate`),
   KEY `idx_deleted` (`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='制品版本表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='制品版本表';
 CREATE TABLE `ops_branch_ruleset` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `repo` int unsigned NOT NULL DEFAULT '0' COMMENT '仓库ID',
@@ -181,7 +181,7 @@ CREATE TABLE `ops_branch_ruleset` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
   KEY `idx_repo` (`repo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='分支规则表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='分支规则表';
 CREATE TABLE `ops_branch_type` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `repo` int unsigned NOT NULL DEFAULT '0' COMMENT '仓库ID，0为系统级别分支类型',
@@ -197,12 +197,12 @@ CREATE TABLE `ops_branch_type` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_repo_key` (`repo`,`key`),
   UNIQUE KEY `uk_repo_prefix` (`repo`,`prefix`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='分支类型表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='分支类型表';
 CREATE TABLE `ops_migrations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `version` text COMMENT '版本',
+  `version` text DEFAULT NULL COMMENT '版本',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `ops_pipeline` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '流水线ID，自增主键',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '流水线名称',
@@ -216,7 +216,7 @@ CREATE TABLE `ops_pipeline` (
   `latestVersion` int unsigned NOT NULL DEFAULT '0' COMMENT '流水线最新版本',
   `defaultBranch` varchar(255) NOT NULL DEFAULT '' COMMENT '流水线默认分支',
   `yamlPath` varchar(255) NOT NULL DEFAULT '' COMMENT '流水线配置文件路径',
-  `customParam` text COMMENT 'Jenkins,GitLab 流水线执行传参',
+  `customParam` text DEFAULT NULL COMMENT 'Jenkins,GitLab 流水线执行传参',
   `lastExec` datetime DEFAULT NULL COMMENT '最后一次执行时间',
   `lastResult` varchar(30) NOT NULL DEFAULT '' COMMENT '最后一次执行状态',
   `externalPipeline` varchar(128) NOT NULL DEFAULT '' COMMENT 'Jenkins/GitLab pipeline',
@@ -227,20 +227,20 @@ CREATE TABLE `ops_pipeline` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_spaceID_repoID_name` (`spaceID`,`repoID`,`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='流水线基本信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流水线基本信息表';
 CREATE TABLE `ops_pipeline_content` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `pipelineID` int unsigned NOT NULL DEFAULT '0' COMMENT '关联的流水线ID',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT '流水线版本',
-  `data` longtext COMMENT '流水线内容',
-  `variables` text COMMENT '流水线参数',
+  `data` longtext DEFAULT NULL COMMENT '流水线内容',
+  `variables` text DEFAULT NULL COMMENT '流水线参数',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁编辑',
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_pipelineID_version` (`pipelineID`,`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='流水线配置表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流水线配置表';
 CREATE TABLE `ops_pipeline_executions` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '执行记录ID，自增主键',
   `pipelineID` int unsigned NOT NULL DEFAULT '0' COMMENT '关联的流水线ID',
@@ -248,14 +248,14 @@ CREATE TABLE `ops_pipeline_executions` (
   `trigger` varchar(50) NOT NULL DEFAULT '' COMMENT '触发方式：manual,branch_updated',
   `commit` char(40) NOT NULL DEFAULT '' COMMENT 'CommitID',
   `ref` varchar(255) NOT NULL DEFAULT '' COMMENT '分支/tag/commit，如refs/heads/main,refs/tags/v1.0,commit',
-  `params` text COMMENT '执行入参（JSON格式）',
+  `params` text DEFAULT NULL COMMENT '执行入参（JSON格式）',
   `startedDate` datetime DEFAULT NULL COMMENT '执行开始时间',
   `finishedDate` datetime DEFAULT NULL COMMENT '执行结束时间',
   `duration` int unsigned NOT NULL DEFAULT '0' COMMENT '执行时长(s)',
   `status` varchar(50) NOT NULL DEFAULT '' COMMENT '执行状态',
   `error` varchar(500) NOT NULL DEFAULT '' COMMENT '执行错误信息（无错误则为空字符串）',
   `number` int unsigned NOT NULL DEFAULT '0' COMMENT 'Jenkins队列号，用于后续状态查询和去重',
-  `logs` longtext COMMENT 'Jenkins,GitLab的流水线日志，支持 longtext（最大 4GB）',
+  `logs` longtext DEFAULT NULL COMMENT 'Jenkins,GitLab的流水线日志，支持 longtext（最大 4GB）',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
@@ -263,22 +263,22 @@ CREATE TABLE `ops_pipeline_executions` (
   PRIMARY KEY (`id`),
   KEY `idx_createdBy` (`createdBy`),
   KEY `idx_status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='流水线执行记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流水线执行记录表';
 CREATE TABLE `ops_plugin_group` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '插件分组ID，自增主键',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '插件分组名称',
   `desc` varchar(255) NOT NULL DEFAULT '' COMMENT '插件分组描述信息',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='插件分组基本信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='插件分组基本信息表';
 CREATE TABLE `ops_plugins` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '插件ID，自增主键',
   `groupID` int unsigned NOT NULL DEFAULT '0' COMMENT '插件分组ID',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '插件名称（唯一标识符）',
-  `desc` mediumtext COMMENT '插件描述信息',
-  `logo` mediumtext COMMENT '插件Logo（SVG格式）',
-  `yaml` longtext COMMENT '插件规范配置（YAML格式）',
-  `json` longtext COMMENT '插件规范配置（JSON格式）',
+  `desc` mediumtext DEFAULT NULL COMMENT '插件描述信息',
+  `logo` mediumtext DEFAULT NULL COMMENT '插件Logo（SVG格式）',
+  `yaml` longtext DEFAULT NULL COMMENT '插件规范配置（YAML格式）',
+  `json` longtext DEFAULT NULL COMMENT '插件规范配置（JSON格式）',
   `type` varchar(255) NOT NULL DEFAULT '' COMMENT '插件类型：step/stage',
   `kind` varchar(255) NOT NULL DEFAULT '' COMMENT '插件 kind',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
@@ -289,11 +289,11 @@ CREATE TABLE `ops_plugins` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_name` (`name`),
   KEY `idx_type` (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='CI插件表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='CI插件表';
 CREATE TABLE `ops_ppm` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT 'PR 标题',
-  `desc` text COMMENT '拉取请求详细描述',
+  `desc` text DEFAULT NULL COMMENT '拉取请求详细描述',
   `repoID` int unsigned NOT NULL DEFAULT '0' COMMENT '关联zt_repo表的id',
   `sourceRepoID` int unsigned NOT NULL DEFAULT '0' COMMENT '源仓库ID，关联repository表的id',
   `sourceBranch` varchar(255) NOT NULL DEFAULT '' COMMENT '源分支名称（待合并的分支）',
@@ -306,9 +306,9 @@ CREATE TABLE `ops_ppm` (
   `mergeBaseSHA` char(40) NOT NULL DEFAULT '' COMMENT '合并基准 SHA(源分支和目标分支的共同祖先)',
   `mergeSHA` char(40) NOT NULL DEFAULT '' COMMENT '合并后生成的 commit SHA',
   `mergeCheckStatus` varchar(255) NOT NULL DEFAULT '' COMMENT '合并前检查状态unchecked=未检查，conflict=有冲突，mergeable=无冲突）',
-  `mergeConflicts` text COMMENT 'merge/squash 冲突文件列表,换行符分隔',
+  `mergeConflicts` text DEFAULT NULL COMMENT 'merge/squash 冲突文件列表,换行符分隔',
   `rebaseCheckStatus` varchar(255) NOT NULL DEFAULT 'unchecked' COMMENT '变基检查状态（unchecked=未检查，conflict=有冲突，mergeable=无冲突）',
-  `rebaseConflicts` text COMMENT '变基时产生的冲突详情（文件路径、冲突内容，未变基/无冲突则为NULL）',
+  `rebaseConflicts` text DEFAULT NULL COMMENT '变基时产生的冲突详情（文件路径、冲突内容，未变基/无冲突则为NULL）',
   `commitCount` int unsigned NOT NULL DEFAULT '0' COMMENT 'PR 包含的 commit 数量',
   `fileCount` int unsigned NOT NULL DEFAULT '0' COMMENT 'PR 修改的文件数量',
   `additions` int unsigned NOT NULL DEFAULT '0' COMMENT '新增的代码行数',
@@ -330,7 +330,7 @@ CREATE TABLE `ops_ppm` (
   PRIMARY KEY (`id`),
   KEY `idx_createdBy` (`createdBy`),
   KEY `idx_sourceRepoID_sourceBranch_targetRepoID_targetBranch` (`sourceRepoID`,`sourceBranch`,`targetRepoID`,`targetBranch`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='合并请求主表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='合并请求主表';
 CREATE TABLE `ops_provider` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `type` varchar(30) NOT NULL DEFAULT '' COMMENT 'GitLab,Gitea,Gogs,Subversion,GitHub,Jenkins',
@@ -343,14 +343,14 @@ CREATE TABLE `ops_provider` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='外部服务表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='外部服务表';
 CREATE TABLE `ops_public_keys` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `account` varchar(30) NOT NULL DEFAULT '' COMMENT '关联用户账号',
   `identifier` varchar(255) NOT NULL DEFAULT '' COMMENT '公钥唯一标识',
   `verifiedDate` datetime DEFAULT NULL COMMENT '公钥验证时间',
   `fingerprint` varchar(255) NOT NULL DEFAULT '' COMMENT '公钥指纹',
-  `content` text COMMENT '公钥原始内容',
+  `content` text DEFAULT NULL COMMENT '公钥原始内容',
   `comment` varchar(500) NOT NULL DEFAULT '' COMMENT '公钥注释部分',
   `type` varchar(50) NOT NULL DEFAULT '' COMMENT '公钥算法类型',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
@@ -360,7 +360,7 @@ CREATE TABLE `ops_public_keys` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_fingerprint` (`fingerprint`),
   UNIQUE KEY `uk_identifier_account` (`identifier`,`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='SSH公钥表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='SSH公钥表';
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '代码库ID',
   `spaceID` int unsigned NOT NULL DEFAULT '0' COMMENT '空间ID',
@@ -372,7 +372,7 @@ CREATE TABLE `ops_repo` (
   `forkID` int unsigned NOT NULL DEFAULT '0' COMMENT '派生来源代码库ID',
   `mirror` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否为镜像库（0=普通库，1=镜像库）',
   `providerID` int unsigned NOT NULL DEFAULT '0' COMMENT '源代码提供商ID',
-  `connector` text COMMENT '连接器信息',
+  `connector` text DEFAULT NULL COMMENT '连接器信息',
   `defaultBranch` varchar(255) NOT NULL DEFAULT '' COMMENT '默认分支名',
   `acl` varchar(30) NOT NULL DEFAULT 'open' COMMENT '权限:private,open',
   `status` varchar(30) NOT NULL DEFAULT 'active' COMMENT '代码库状态',
@@ -387,7 +387,7 @@ CREATE TABLE `ops_repo` (
   UNIQUE KEY `uk_name_spaceID` (`name`,`spaceID`),
   UNIQUE KEY `uk_gitUID` (`gitUID`),
   KEY `idx_deleted` (`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='代码库表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='代码库表';
 CREATE TABLE `ops_repobranch` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `repo` int unsigned NOT NULL DEFAULT '0' COMMENT '仓库ID',
@@ -397,7 +397,7 @@ CREATE TABLE `ops_repobranch` (
   UNIQUE KEY `uk_repo_revision_branch` (`repo`,`revision`,`branch`),
   KEY `idx_branch` (`branch`),
   KEY `idx_revision` (`revision`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `ops_repofiles` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `repo` int unsigned NOT NULL DEFAULT '0' COMMENT '仓库ID',
@@ -412,26 +412,26 @@ CREATE TABLE `ops_repofiles` (
   KEY `idx_parent` (`parent`),
   KEY `idx_repo` (`repo`),
   KEY `idx_revision` (`revision`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `ops_repohistory` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `repo` int unsigned NOT NULL DEFAULT '0' COMMENT '仓库ID',
   `revision` varchar(40) NOT NULL DEFAULT '' COMMENT '修订版本',
   `commit` int unsigned NOT NULL DEFAULT '0' COMMENT '提交记录',
-  `comment` text COMMENT '备注',
+  `comment` text DEFAULT NULL COMMENT '备注',
   `committer` varchar(100) NOT NULL DEFAULT '' COMMENT '提交者',
   `time` datetime DEFAULT NULL COMMENT '时间',
   PRIMARY KEY (`id`),
   KEY `idx_repo` (`repo`),
   KEY `idx_revision` (`revision`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `ops_repouser` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `repo` int unsigned NOT NULL DEFAULT '0' COMMENT '所属代码库',
   `account` varchar(30) NOT NULL DEFAULT '' COMMENT '用户帐号',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_repo_account` (`repo`,`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='代码库用户关联表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='代码库用户关联表';
 CREATE TABLE `ops_request_reviewers` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `requestID` int unsigned NOT NULL DEFAULT '0' COMMENT '关联合并请求ID',
@@ -439,20 +439,20 @@ CREATE TABLE `ops_request_reviewers` (
   `decision` varchar(255) NOT NULL DEFAULT '' COMMENT '最新审核决策（如：approve-批准、reject-拒绝、pending-待审核等）',
   `sha` varchar(40) NOT NULL DEFAULT '' COMMENT '审核对应的代码提交SHA校验值',
   `account` varchar(30) NOT NULL DEFAULT '' COMMENT '评审人',
-  `opinion` mediumtext COMMENT '评审意见',
+  `opinion` mediumtext DEFAULT NULL COMMENT '评审意见',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`),
   KEY `idx_requestID` (`requestID`),
   KEY `idx_account` (`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='评审人员表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='评审人员表';
 CREATE TABLE `ops_review_flow` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `repo` int unsigned NOT NULL DEFAULT '0' COMMENT '仓库ID',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '评审流程名称',
   `desc` varchar(500) NOT NULL DEFAULT '' COMMENT '评审流程描述',
-  `definition` text COMMENT '评审规则，json定义',
+  `definition` text DEFAULT NULL COMMENT '评审规则，json定义',
   `status` varchar(20) NOT NULL DEFAULT '' COMMENT 'enable-启用，disable-停用',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
@@ -461,7 +461,7 @@ CREATE TABLE `ops_review_flow` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
   KEY `idx_repo` (`repo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='评审流程表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='评审流程表';
 CREATE TABLE `ops_runner` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `name` varchar(200) NOT NULL DEFAULT '' COMMENT 'Runner名称',
@@ -471,7 +471,7 @@ CREATE TABLE `ops_runner` (
   `ip` varchar(45) NOT NULL DEFAULT '' COMMENT 'IP地址',
   `os` varchar(50) NOT NULL DEFAULT '' COMMENT '操作系统',
   `arch` varchar(20) NOT NULL DEFAULT '' COMMENT '系统架构',
-  `labels` text COMMENT '标签（JSON格式）',
+  `labels` text DEFAULT NULL COMMENT '标签（JSON格式）',
   `token` varchar(255) NOT NULL DEFAULT '' COMMENT '认证令牌',
   `heartBeat` int unsigned NOT NULL DEFAULT '0' COMMENT '心跳时间戳',
   `online` varchar(20) NOT NULL DEFAULT 'offline' COMMENT '在线状态 (online:离线, offline:在线)',
@@ -485,7 +485,7 @@ CREATE TABLE `ops_runner` (
   KEY `idx_token` (`token`),
   KEY `idx_online` (`online`),
   KEY `idx_status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='runner 基本信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='runner 基本信息表';
 CREATE TABLE `ops_scan_issue_task_binds` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `taskID` int unsigned NOT NULL DEFAULT '0' COMMENT '扫描任务ID',
@@ -494,12 +494,12 @@ CREATE TABLE `ops_scan_issue_task_binds` (
   UNIQUE KEY `uk_taskID_issueID` (`taskID`,`issueID`),
   KEY `idx_taskID` (`taskID`),
   KEY `idx_issueID` (`issueID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='扫描问题与任务绑定关系表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扫描问题与任务绑定关系表';
 CREATE TABLE `ops_scan_issues` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `issueKey` varchar(255) NOT NULL DEFAULT '' COMMENT '问题唯一标识（SHA1）',
   `ruleID` int unsigned NOT NULL DEFAULT '0' COMMENT '关联规则ID',
-  `message` text COMMENT '问题描述信息',
+  `message` text DEFAULT NULL COMMENT '问题描述信息',
   `path` varchar(500) NOT NULL DEFAULT '' COMMENT '文件路径',
   `line` bigint unsigned NOT NULL DEFAULT '0' COMMENT '行号',
   `repoID` int unsigned NOT NULL DEFAULT '0' COMMENT '仓库ID',
@@ -508,7 +508,7 @@ CREATE TABLE `ops_scan_issues` (
   `updatedByTaskID` int unsigned NOT NULL DEFAULT '0' COMMENT '最后更新该问题的任务ID',
   `status` varchar(20) NOT NULL DEFAULT 'wait' COMMENT '问题状态（wait/todo/solving/solved/closed/ignore）',
   `scanMethod` varchar(20) NOT NULL DEFAULT '' COMMENT '扫描方法（check/smell）',
-  `payload` text COMMENT '扩展数据（JSON）',
+  `payload` text DEFAULT NULL COMMENT '扩展数据（JSON）',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `resolution` varchar(50) NOT NULL DEFAULT '' COMMENT '问题解决方案（bydesign/duplicate/external/fixed/notrepro/postponed/willnotfix/tostory）',
@@ -524,7 +524,7 @@ CREATE TABLE `ops_scan_issues` (
   KEY `idx_scanMethod` (`scanMethod`),
   KEY `idx_deleted` (`deleted`),
   KEY `idx_resolution` (`resolution`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='扫描问题表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扫描问题表';
 CREATE TABLE `ops_scan_plan_conditions` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `planID` int unsigned NOT NULL DEFAULT '0' COMMENT '扫描计划ID',
@@ -543,7 +543,7 @@ CREATE TABLE `ops_scan_plan_conditions` (
   KEY `idx_triggerID_deleted` (`triggerID`,`deleted`),
   KEY `idx_repoID_planID_triggerID_deleted` (`repoID`,`planID`,`triggerID`,`deleted`),
   KEY `idx_deleted` (`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='扫描计划触发条件表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扫描计划触发条件表';
 CREATE TABLE `ops_scan_plan_solutions` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `planID` int unsigned NOT NULL DEFAULT '0' COMMENT '扫描计划ID',
@@ -559,15 +559,15 @@ CREATE TABLE `ops_scan_plan_solutions` (
   KEY `idx_planID_deleted` (`planID`,`deleted`),
   KEY `idx_solutionID` (`solutionID`),
   KEY `idx_deleted` (`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='扫描计划与扫描方案关联表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扫描计划与扫描方案关联表';
 CREATE TABLE `ops_scan_plans` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `repoID` int unsigned NOT NULL DEFAULT '0' COMMENT '仓库ID',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '扫描计划名称',
-  `desc` text COMMENT '扫描计划描述',
+  `desc` text DEFAULT NULL COMMENT '扫描计划描述',
   `scanType` varchar(20) NOT NULL DEFAULT 'full' COMMENT '扫描类型（full/incremental）',
-  `branches` text COMMENT '扫描分支范围',
-  `files` text COMMENT '扫描文件范围',
+  `branches` text DEFAULT NULL COMMENT '扫描分支范围',
+  `files` text DEFAULT NULL COMMENT '扫描文件范围',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁编辑',
@@ -578,7 +578,7 @@ CREATE TABLE `ops_scan_plans` (
   KEY `idx_repoID_deleted` (`repoID`,`deleted`),
   KEY `idx_name` (`name`),
   KEY `idx_deleted` (`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='扫描计划表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扫描计划表';
 CREATE TABLE `ops_scan_rule_migrations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '迁移名称',
@@ -587,20 +587,20 @@ CREATE TABLE `ops_scan_rule_migrations` (
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='扫描规则迁移记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扫描规则迁移记录表';
 CREATE TABLE `ops_scan_rules` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `ruleKey` varchar(255) NOT NULL DEFAULT '' COMMENT '规则唯一标识',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '规则名称',
-  `desc` text COMMENT '规则描述（中文）',
-  `descEn` text COMMENT '规则描述（英文）',
+  `desc` text DEFAULT NULL COMMENT '规则描述（中文）',
+  `descEn` text DEFAULT NULL COMMENT '规则描述（英文）',
   `lang` varchar(50) NOT NULL DEFAULT '' COMMENT '语言类型（如：java、python等）',
   `plugin` varchar(50) NOT NULL DEFAULT '' COMMENT '所属插件名称（标识规则归属的扫描插件）',
   `tag` varchar(50) NOT NULL DEFAULT '' COMMENT '规则标签（用于分类筛选，如：安全、规范、性能等）',
   `priority` varchar(20) NOT NULL DEFAULT '' COMMENT '规则优先级（low-低、medium-中、high-高）',
   `type` varchar(20) NOT NULL DEFAULT '' COMMENT '规则类型（如：defect(缺陷)、security(安全)、compliance(合规)、optimize(优化)等）',
-  `content` text COMMENT '规则内容（中文，如扫描正则、检查逻辑描述等）',
-  `contentEn` text COMMENT '规则内容（英文，如扫描正则、检查逻辑描述等）',
+  `content` text DEFAULT NULL COMMENT '规则内容（中文，如扫描正则、检查逻辑描述等）',
+  `contentEn` text DEFAULT NULL COMMENT '规则内容（英文，如扫描正则、检查逻辑描述等）',
   `isCustom` tinyint unsigned NOT NULL DEFAULT '1' COMMENT '是否自定义规则（1=自定义规则，0=系统默认规则）',
   `status` varchar(20) NOT NULL DEFAULT 'enabled' COMMENT '规则状态（enabled-启用、disabled-禁用，默认启用）',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
@@ -616,7 +616,7 @@ CREATE TABLE `ops_scan_rules` (
   KEY `idx_priority_status` (`priority`,`status`),
   KEY `idx_deleted` (`deleted`),
   KEY `idx_lang` (`lang`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='扫描规则表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扫描规则表';
 CREATE TABLE `ops_scan_ruleset_rules` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `rulesetID` int unsigned NOT NULL DEFAULT '0' COMMENT '规则集主键ID',
@@ -632,11 +632,11 @@ CREATE TABLE `ops_scan_ruleset_rules` (
   KEY `idx_ruleID` (`ruleID`),
   KEY `idx_deleted` (`deleted`),
   KEY `idx_rulesetID_ruleID_deleted` (`rulesetID`,`ruleID`,`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='扫描集与扫描规则关联表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扫描集与扫描规则关联表';
 CREATE TABLE `ops_scan_rulesets` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '规则集名称',
-  `desc` text COMMENT '规则集描述（中文）',
+  `desc` text DEFAULT NULL COMMENT '规则集描述（中文）',
   `descEn` varchar(500) NOT NULL DEFAULT '' COMMENT '规则集描述（英文）',
   `type` varchar(20) NOT NULL DEFAULT '' COMMENT '规则集类型（如：代码扫描、依赖扫描、全量扫描等）',
   `lang` varchar(50) NOT NULL DEFAULT '' COMMENT '适配语言类型（java、python，NULL表示适配所有语言）',
@@ -656,7 +656,7 @@ CREATE TABLE `ops_scan_rulesets` (
   KEY `idx_status` (`status`),
   KEY `idx_plugin_tag` (`plugin`,`tag`),
   KEY `idx_deleted` (`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='扫描规则集表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扫描规则集表';
 CREATE TABLE `ops_scan_solution_rulesets` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `solutionID` int unsigned NOT NULL DEFAULT '0' COMMENT '扫描方案主键ID',
@@ -671,7 +671,7 @@ CREATE TABLE `ops_scan_solution_rulesets` (
   KEY `idx_rulesetID` (`rulesetID`),
   KEY `idx_solutionID` (`solutionID`),
   KEY `idx_deleted` (`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='扫描方案与规则集关联表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扫描方案与规则集关联表';
 CREATE TABLE `ops_scan_solutions` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '扫描解决方案名称',
@@ -690,7 +690,7 @@ CREATE TABLE `ops_scan_solutions` (
   KEY `idx_name` (`name`),
   KEY `idx_status` (`status`),
   KEY `idx_deleted` (`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='扫描方案表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扫描方案表';
 CREATE TABLE `ops_scan_tasks` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `planID` int unsigned NOT NULL DEFAULT '0' COMMENT '扫描计划ID',
@@ -712,7 +712,7 @@ CREATE TABLE `ops_scan_tasks` (
   KEY `idx_executionID` (`executionID`),
   KEY `idx_status` (`status`),
   KEY `idx_deleted` (`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='扫描任务表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扫描任务表';
 CREATE TABLE `ops_scan_trigger_solutions` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `triggerID` int unsigned NOT NULL DEFAULT '0' COMMENT '触发器ID',
@@ -724,19 +724,19 @@ CREATE TABLE `ops_scan_trigger_solutions` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_triggerID_solutionID` (`triggerID`,`solutionID`),
   KEY `idx_triggerID` (`triggerID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='扫描触发器关联解决方案表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扫描触发器关联解决方案表';
 CREATE TABLE `ops_scan_triggers` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `planID` int unsigned NOT NULL DEFAULT '0' COMMENT '扫描计划ID',
   `repoID` int unsigned NOT NULL DEFAULT '0' COMMENT '仓库ID',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '触发器名称',
-  `desc` text COMMENT '触发器描述',
+  `desc` text DEFAULT NULL COMMENT '触发器描述',
   `type` varchar(20) NOT NULL DEFAULT '' COMMENT '触发器类型（cron/manual/event）',
   `scanType` varchar(20) NOT NULL DEFAULT '' COMMENT '扫描类型（full/incremental）',
   `cron` varchar(255) NOT NULL DEFAULT '' COMMENT 'cron 表达式',
   `cronBranch` varchar(255) NOT NULL DEFAULT '' COMMENT 'cron 扫描分支',
-  `keywords` text COMMENT '关键字过滤条件',
-  `actions` text COMMENT '触发动作配置',
+  `keywords` text DEFAULT NULL COMMENT '关键字过滤条件',
+  `actions` text DEFAULT NULL COMMENT '触发动作配置',
   `disabled` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否禁用，0-启用，1-禁用',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
@@ -747,14 +747,14 @@ CREATE TABLE `ops_scan_triggers` (
   KEY `idx_planID` (`planID`),
   KEY `idx_repoID_planID_deleted` (`repoID`,`planID`,`deleted`),
   KEY `idx_deleted` (`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='扫描计划触发器表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扫描计划触发器表';
 CREATE TABLE `ops_schedule_jobs` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '任务ID，自增主键',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '任务唯一标识',
   `type` varchar(255) NOT NULL DEFAULT '' COMMENT '任务类型',
   `priority` int unsigned NOT NULL DEFAULT '0' COMMENT '任务优先级',
-  `data` text COMMENT '任务数据（JSON格式）',
-  `result` text COMMENT '任务结果（JSON格式）',
+  `data` text DEFAULT NULL COMMENT '任务数据（JSON格式）',
+  `result` text DEFAULT NULL COMMENT '任务结果（JSON格式）',
   `maxDurationSeconds` int unsigned NOT NULL DEFAULT '0' COMMENT '最大执行时长（秒）',
   `maxRetries` int unsigned NOT NULL DEFAULT '0' COMMENT '最大重试次数',
   `state` varchar(255) NOT NULL DEFAULT '' COMMENT '任务状态',
@@ -767,7 +767,7 @@ CREATE TABLE `ops_schedule_jobs` (
   `isRecurring` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否为周期性任务，0-否，1-是',
   `recurringCron` varchar(255) NOT NULL DEFAULT '' COMMENT '周期性任务Cron表达式',
   `consecutiveFailures` int unsigned NOT NULL DEFAULT '0' COMMENT '连续失败次数',
-  `lastFailureError` text COMMENT '最后失败错误信息',
+  `lastFailureError` text DEFAULT NULL COMMENT '最后失败错误信息',
   `groupID` varchar(255) NOT NULL DEFAULT '' COMMENT '任务组ID',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
@@ -779,7 +779,7 @@ CREATE TABLE `ops_schedule_jobs` (
   KEY `idx_type` (`type`),
   KEY `idx_state` (`state`),
   KEY `idx_groupID` (`groupID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='后台任务表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='后台任务表';
 CREATE TABLE `ops_space` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `name` varchar(200) NOT NULL DEFAULT '' COMMENT '名称',
@@ -794,7 +794,7 @@ CREATE TABLE `ops_space` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='空间表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='空间表';
 CREATE TABLE `ops_spaceuser` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `space` int unsigned NOT NULL DEFAULT '0' COMMENT '所属空间',
@@ -802,7 +802,7 @@ CREATE TABLE `ops_spaceuser` (
   `account` varchar(30) NOT NULL DEFAULT '' COMMENT '用户帐号',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_space_account` (`space`,`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='空间用户关联表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='空间用户关联表';
 CREATE TABLE `ops_stage_executions` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '阶段ID，自增主键',
   `repoID` int unsigned NOT NULL DEFAULT '0' COMMENT '关联的代码仓库ID,并发控制用',
@@ -826,9 +826,9 @@ CREATE TABLE `ops_stage_executions` (
   `status` varchar(50) NOT NULL DEFAULT '' COMMENT '阶段执行状态',
   `errorType` varchar(50) NOT NULL DEFAULT '' COMMENT '失败类型',
   `errorCode` int unsigned NOT NULL DEFAULT '0' COMMENT '阶段执行退出码（0=成功，非0=失败）',
-  `errorLog` text COMMENT '阶段执行错误信息（无错误则为空字符串）',
+  `errorLog` text DEFAULT NULL COMMENT '阶段执行错误信息（无错误则为空字符串）',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='流水线阶段执行表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流水线阶段执行表';
 CREATE TABLE `ops_step_executions` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '步骤唯一主键',
   `stageID` int unsigned NOT NULL DEFAULT '0' COMMENT '关联阶段stages主键ID',
@@ -846,21 +846,21 @@ CREATE TABLE `ops_step_executions` (
   `errorCode` int unsigned NOT NULL DEFAULT '0' COMMENT '步骤执行退出码',
   `errorLog` varchar(500) NOT NULL DEFAULT '' COMMENT '步骤执行失败时的错误信息，成功时为空字符串',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='流水线步骤执行表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流水线步骤执行表';
 CREATE TABLE `ops_tokens` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `account` varchar(30) NOT NULL DEFAULT '' COMMENT '关联用户账号',
   `identifier` varchar(255) NOT NULL DEFAULT '' COMMENT 'Token唯一标识',
   `type` varchar(50) NOT NULL DEFAULT '' COMMENT 'Token类型: pat,app',
   `expirationDate` datetime DEFAULT NULL COMMENT '过期时间',
-  `token` text COMMENT 'Token值',
+  `token` text DEFAULT NULL COMMENT 'Token值',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁编辑',
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_identifier_account` (`identifier`,`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='令牌表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='令牌表';
 CREATE TABLE `ops_triggers` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '触发器ID，自增主键',
   `repoID` int unsigned NOT NULL DEFAULT '0' COMMENT '关联的仓库ID',
@@ -875,22 +875,22 @@ CREATE TABLE `ops_triggers` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
   KEY `idx_pipelineID` (`pipelineID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='流水线触发器表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流水线触发器表';
 CREATE TABLE `ops_webhook_executions` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Web钩子执行记录主键ID，自增',
   `webhookID` int unsigned NOT NULL DEFAULT '0' COMMENT '关联的Web钩子ID',
   `triggerType` varchar(255) NOT NULL DEFAULT '' COMMENT '触发类型（如push、merge、release等）',
   `eventID` varchar(255) NOT NULL DEFAULT '' COMMENT '触发事件唯一标识,内部事件ID',
-  `result` text COMMENT '执行结果（成功/失败/超时等状态描述）',
+  `result` text DEFAULT NULL COMMENT '执行结果（成功/失败/超时等状态描述）',
   `duration` bigint unsigned NOT NULL DEFAULT '0' COMMENT '执行耗时（毫秒），从请求发送到接收响应的总时长',
-  `error` text COMMENT '执行错误信息（无错误则为空字符串）',
+  `error` text DEFAULT NULL COMMENT '执行错误信息（无错误则为空字符串）',
   `reqUrl` varchar(255) NOT NULL DEFAULT '' COMMENT '回调请求URL',
-  `reqHeaders` text COMMENT '回调请求头（JSON格式文本存储）',
-  `reqBody` text COMMENT '回调请求体（JSON/表单等格式文本）',
+  `reqHeaders` text DEFAULT NULL COMMENT '回调请求头（JSON格式文本存储）',
+  `reqBody` text DEFAULT NULL COMMENT '回调请求体（JSON/表单等格式文本）',
   `respStatusCode` int unsigned NOT NULL DEFAULT '0' COMMENT '回调响应状态码（如200、400、500等）',
   `respStatus` varchar(255) NOT NULL DEFAULT '' COMMENT '回调响应状态描述（如OK、Bad Request等）',
-  `respHeaders` text COMMENT '回调响应头（JSON格式文本存储）',
-  `respBody` text COMMENT '回调响应体（JSON/文本等格式）',
+  `respHeaders` text DEFAULT NULL COMMENT '回调响应头（JSON格式文本存储）',
+  `respBody` text DEFAULT NULL COMMENT '回调响应体（JSON/文本等格式）',
   `retriggerID` int unsigned NOT NULL DEFAULT '0' COMMENT '关联重触发的执行记录ID（若为重试则指向原执行记录）',
   `retriggerable` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否可重触发：1=可重触发，0=不可重触发',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
@@ -898,7 +898,7 @@ CREATE TABLE `ops_webhook_executions` (
   PRIMARY KEY (`id`),
   KEY `idx_webhookID` (`webhookID`),
   KEY `idx_createdDate` (`createdDate`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='Web钩子执行记录表：存储每次Web钩子回调的请求、响应、执行状态、耗时等全量信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Web钩子执行记录表：存储每次Web钩子回调的请求、响应、执行状态、耗时等全量信息';
 CREATE TABLE `ops_webhooks` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Web钩子主键ID，自增',
   `spaceID` int unsigned NOT NULL DEFAULT '0' COMMENT '空间ID，关联spaces表id',
@@ -920,7 +920,7 @@ CREATE TABLE `ops_webhooks` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='Web钩子配置表：存储Web钩子的基本信息、触发规则、认证方式、执行状态等';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Web钩子配置表：存储Web钩子的基本信息、触发规则、认证方式、执行状态等';
 CREATE TABLE `zt_acl` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
@@ -931,20 +931,20 @@ CREATE TABLE `zt_acl` (
   PRIMARY KEY (`id`),
   KEY `idx_object` (`objectType`,`objectID`,`account`),
   KEY `idx_account` (`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_action` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT '0',
-  `product` text,
+  `product` text DEFAULT NULL,
   `project` int unsigned NOT NULL DEFAULT '0',
   `execution` int unsigned NOT NULL DEFAULT '0',
   `actor` varchar(30) NOT NULL DEFAULT '',
   `action` varchar(80) NOT NULL DEFAULT '',
   `date` datetime DEFAULT NULL,
-  `comment` text,
-  `files` text,
-  `extra` text,
+  `comment` text DEFAULT NULL,
+  `files` text DEFAULT NULL,
+  `extra` text DEFAULT NULL,
   `read` tinyint unsigned NOT NULL DEFAULT '0',
   `efforted` tinyint unsigned NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
@@ -955,7 +955,7 @@ CREATE TABLE `zt_action` (
   KEY `execution` (`execution`),
   KEY `action` (`action`),
   KEY `objectID` (`objectID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_actionproduct` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `action` int unsigned NOT NULL DEFAULT '0',
@@ -963,20 +963,20 @@ CREATE TABLE `zt_actionproduct` (
   PRIMARY KEY (`id`),
   KEY `action_product` (`action`,`product`),
   KEY `product` (`product`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_actionrecent` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT '0',
-  `product` text,
+  `product` text DEFAULT NULL,
   `project` int unsigned NOT NULL DEFAULT '0',
   `execution` int unsigned NOT NULL DEFAULT '0',
   `actor` varchar(30) NOT NULL DEFAULT '',
   `action` varchar(80) NOT NULL DEFAULT '',
   `date` datetime DEFAULT NULL,
-  `comment` text,
-  `files` text,
-  `extra` text,
+  `comment` text DEFAULT NULL,
+  `files` text DEFAULT NULL,
+  `extra` text DEFAULT NULL,
   `read` tinyint unsigned NOT NULL DEFAULT '0',
   `efforted` tinyint unsigned NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
@@ -987,7 +987,7 @@ CREATE TABLE `zt_actionrecent` (
   KEY `execution` (`execution`),
   KEY `action` (`action`),
   KEY `objectID` (`objectID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_activity` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `process` int unsigned NOT NULL DEFAULT '0',
@@ -995,7 +995,7 @@ CREATE TABLE `zt_activity` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `optional` varchar(255) NOT NULL DEFAULT '',
   `tailorNorm` varchar(255) NOT NULL DEFAULT '',
-  `content` mediumtext,
+  `content` mediumtext DEFAULT NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
@@ -1007,24 +1007,24 @@ CREATE TABLE `zt_activity` (
   `order` int unsigned NOT NULL DEFAULT '0',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ai_agent` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(30) NOT NULL DEFAULT '' COMMENT '内部 code',
   `name` varchar(20) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `model` varchar(255) NOT NULL DEFAULT '',
   `knowledgeLib` varchar(255) NOT NULL DEFAULT '' COMMENT '关联的知识库ID列表',
   `skill` varchar(255) NOT NULL DEFAULT '' COMMENT '关联的技能ID列表',
   `module` varchar(30) NOT NULL DEFAULT '',
   `displayPosition` varchar(20) NOT NULL DEFAULT '' COMMENT '显示位置，目前包括：详情页（detail）、表单页（form）',
   `actionPurpose` varchar(100) NOT NULL DEFAULT '' COMMENT '操作目的编码',
-  `source` text,
+  `source` text DEFAULT NULL,
   `targetForm` varchar(30) NOT NULL DEFAULT '',
-  `purpose` text,
-  `elaboration` text,
-  `role` text,
-  `characterization` text,
+  `purpose` text DEFAULT NULL,
+  `elaboration` text DEFAULT NULL,
+  `role` text DEFAULT NULL,
+  `characterization` text DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'draft',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
@@ -1032,41 +1032,41 @@ CREATE TABLE `zt_ai_agent` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ai_agentfield` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `appID` int unsigned NOT NULL COMMENT '所属 Prompt 的 ID，对应 zt_ai_agent.id',
   `name` varchar(30) NOT NULL DEFAULT '' COMMENT '字段名称',
   `type` varchar(20) NOT NULL DEFAULT 'text' COMMENT '字段类型',
-  `placeholder` text COMMENT '输入提示',
-  `options` text COMMENT '选项列表，逗号分隔',
+  `placeholder` text DEFAULT NULL COMMENT '输入提示',
+  `options` text DEFAULT NULL COMMENT '选项列表，逗号分隔',
   `required` tinyint unsigned NOT NULL DEFAULT '1' COMMENT '是否必填',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ai_agentrole` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `model` varchar(255) NOT NULL DEFAULT '',
-  `role` text,
-  `characterization` text,
+  `role` text DEFAULT NULL,
+  `characterization` text DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ai_assistant` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL DEFAULT '',
   `modelId` int unsigned NOT NULL DEFAULT '0',
-  `desc` text,
-  `systemMessage` text,
-  `greetings` text,
+  `desc` text DEFAULT NULL,
+  `systemMessage` text DEFAULT NULL,
+  `greetings` text DEFAULT NULL,
   `icon` varchar(30) NOT NULL DEFAULT 'coding-1',
   `enabled` tinyint unsigned NOT NULL DEFAULT '1',
   `createdDate` datetime DEFAULT NULL,
   `publishedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ai_knowledgeitem` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '知识库内容条目在禅道中的 ID',
   `lib` int unsigned NOT NULL DEFAULT '0' COMMENT '知识库内容条目所属知识库，对应 zt_ai_knowledgelib.id',
@@ -1074,11 +1074,11 @@ CREATE TABLE `zt_ai_knowledgeitem` (
   `file` int unsigned NOT NULL DEFAULT '0' COMMENT '文件类型条目对应的文件在禅道中的 ID，对应 zt_file.id',
   `objectType` varchar(30) NOT NULL DEFAULT '' COMMENT '禅道对象类型条目对应的禅道对象在禅道中的类型，例如 bug',
   `objectID` int unsigned NOT NULL DEFAULT '0' COMMENT '禅道对象类型条目对应的禅道对象在禅道中的 ID',
-  `objectData` text COMMENT '禅道对象数据，JSON 格式',
+  `objectData` text DEFAULT NULL COMMENT '禅道对象数据，JSON 格式',
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
-  `content` text COMMENT '知识库内容条目内容，如果是自定义文本，对应的是文本内容，如果是文件则为空，如果是禅道对象，则为禅道对象转为 Markdown 的内容',
+  `content` text DEFAULT NULL COMMENT '知识库内容条目内容，如果是自定义文本，对应的是文本内容，如果是文件则为空，如果是禅道对象，则为禅道对象转为 Markdown 的内容',
   `contentType` varchar(10) NOT NULL DEFAULT 'markdown' COMMENT '内容类型',
-  `attrs` text COMMENT '知识库内容条目属性，JSON 格式',
+  `attrs` text DEFAULT NULL COMMENT '知识库内容条目属性，JSON 格式',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '知识库内容条目创建者',
   `createdDate` datetime DEFAULT NULL COMMENT '知识库内容条目创建时间',
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '知识库内容条目编辑者',
@@ -1087,7 +1087,7 @@ CREATE TABLE `zt_ai_knowledgeitem` (
   `syncedDate` datetime DEFAULT NULL COMMENT '上次成功同步时间，为空表示未同步',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否已删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ai_knowledgelib` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd' COMMENT '所属界面',
@@ -1095,7 +1095,7 @@ CREATE TABLE `zt_ai_knowledgelib` (
   `importType` varchar(20) NOT NULL DEFAULT '' COMMENT '知识库导入类型，目前包括：从文档库导入（doclib）、从资产库导入（assetlib）',
   `importID` int unsigned NOT NULL DEFAULT '0' COMMENT '知识库导入类型条目对应的导入对象在禅道中的 ID，对应 zt_doclib.id 或 zt_assetlib.id',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '知识库名称',
-  `desc` text COMMENT '知识库描述',
+  `desc` text DEFAULT NULL COMMENT '知识库描述',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建者',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '编辑者',
@@ -1105,27 +1105,27 @@ CREATE TABLE `zt_ai_knowledgelib` (
   `publishedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '上次发布者',
   `acl` varchar(10) NOT NULL DEFAULT 'open' COMMENT '权限控制',
   `groups` varchar(255) NOT NULL DEFAULT '' COMMENT '权限控制组',
-  `users` text COMMENT '权限控制用户',
+  `users` text DEFAULT NULL COMMENT '权限控制用户',
   `externalID` varchar(255) NOT NULL DEFAULT '' COMMENT '知识库在外部服务中的 ID，在 ZAI 中对应 memory_id，如果没有 ID，表示未在外部服务中创建对应知识库',
   `syncedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '上次成功同步者',
   `syncedDate` datetime DEFAULT NULL COMMENT '上次成功同步时间，为空表示未同步',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否已删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ai_message` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `appID` int unsigned NOT NULL DEFAULT '0',
   `user` int unsigned NOT NULL DEFAULT '0',
   `type` varchar(10) NOT NULL DEFAULT '',
-  `content` text,
+  `content` text DEFAULT NULL,
   `createdDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ai_miniprogram` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL DEFAULT '',
   `category` varchar(30) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `model` varchar(255) NOT NULL DEFAULT '',
   `knowledgeLib` varchar(255) NOT NULL DEFAULT '' COMMENT '关联的知识库ID列表',
   `icon` varchar(30) NOT NULL DEFAULT 'writinghand-7',
@@ -1135,21 +1135,21 @@ CREATE TABLE `zt_ai_miniprogram` (
   `editedDate` datetime DEFAULT NULL,
   `published` tinyint unsigned NOT NULL DEFAULT '0',
   `publishedDate` datetime DEFAULT NULL,
-  `prompt` text,
+  `prompt` text DEFAULT NULL,
   `builtIn` tinyint unsigned NOT NULL DEFAULT '0',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ai_miniprogramfield` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `appID` int unsigned NOT NULL DEFAULT '0',
   `name` varchar(30) NOT NULL DEFAULT '',
   `type` varchar(10) NOT NULL DEFAULT 'text',
-  `placeholder` text,
-  `options` text,
+  `placeholder` text DEFAULT NULL,
+  `options` text DEFAULT NULL,
   `required` tinyint unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ai_miniprogramstar` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `appID` int unsigned NOT NULL DEFAULT '0',
@@ -1157,15 +1157,15 @@ CREATE TABLE `zt_ai_miniprogramstar` (
   `createdDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_appUser` (`appID`,`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ai_model` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(20) NOT NULL DEFAULT '',
   `vendor` varchar(20) NOT NULL DEFAULT '',
-  `credentials` text,
-  `proxy` text,
+  `credentials` text DEFAULT NULL,
+  `proxy` text DEFAULT NULL,
   `name` varchar(20) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -1173,7 +1173,7 @@ CREATE TABLE `zt_ai_model` (
   `enabled` tinyint unsigned NOT NULL DEFAULT '1',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ai_skill` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT 'Skill名称',
@@ -1182,21 +1182,21 @@ CREATE TABLE `zt_ai_skill` (
   `status` varchar(20) NOT NULL DEFAULT '' COMMENT '状态',
   `fromID` int unsigned NOT NULL DEFAULT '0' COMMENT '来源ID（可将公开技能复制成个人技能）',
   `skillID` varchar(64) NOT NULL DEFAULT '' COMMENT 'ZAI中的skillID',
-  `desc` text COMMENT '描述',
+  `desc` text DEFAULT NULL COMMENT '描述',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建人',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '最后修改人ID',
   `editedDate` datetime DEFAULT NULL COMMENT '最后修改时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ai_useragent` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `account` varchar(30) NOT NULL DEFAULT '' COMMENT '禅道用户名',
   `agent` varchar(255) NOT NULL DEFAULT '' COMMENT 'ZAI agent ID',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_account_agent` (`account`,`agent`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_api` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `product` varchar(255) NOT NULL DEFAULT '',
@@ -1210,30 +1210,30 @@ CREATE TABLE `zt_api` (
   `responseType` varchar(100) NOT NULL DEFAULT '',
   `status` varchar(20) NOT NULL DEFAULT '',
   `owner` varchar(30) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `version` smallint unsigned NOT NULL DEFAULT '1',
-  `params` text,
-  `paramsExample` text,
-  `responseExample` text,
-  `response` text,
-  `commonParams` text,
+  `params` text DEFAULT NULL,
+  `paramsExample` text DEFAULT NULL,
+  `responseExample` text DEFAULT NULL,
+  `response` text DEFAULT NULL,
+  `commonParams` text DEFAULT NULL,
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_api_lib_release` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `lib` int unsigned NOT NULL DEFAULT '0',
   `desc` varchar(255) NOT NULL DEFAULT '',
   `version` varchar(255) NOT NULL DEFAULT '',
-  `snap` mediumtext,
+  `snap` mediumtext DEFAULT NULL,
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_apispec` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `doc` int unsigned NOT NULL DEFAULT '0',
@@ -1246,69 +1246,69 @@ CREATE TABLE `zt_apispec` (
   `responseType` varchar(100) NOT NULL DEFAULT '',
   `status` varchar(20) NOT NULL DEFAULT '',
   `owner` varchar(30) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `version` smallint unsigned NOT NULL DEFAULT '1',
-  `params` text,
-  `paramsExample` text,
-  `responseExample` text,
-  `response` text,
+  `params` text DEFAULT NULL,
+  `paramsExample` text DEFAULT NULL,
+  `responseExample` text DEFAULT NULL,
+  `response` text DEFAULT NULL,
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_apistruct` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `lib` int unsigned NOT NULL DEFAULT '0',
   `name` varchar(30) NOT NULL DEFAULT '',
   `type` varchar(50) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `version` smallint unsigned NOT NULL DEFAULT '1',
-  `attribute` text,
+  `attribute` text DEFAULT NULL,
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_apistruct_spec` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(50) NOT NULL DEFAULT '',
   `desc` varchar(255) NOT NULL DEFAULT '',
-  `attribute` text,
+  `attribute` text DEFAULT NULL,
   `version` smallint unsigned NOT NULL DEFAULT '1',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_approval` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `flow` int unsigned NOT NULL DEFAULT '0',
   `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT '0',
-  `nodes` mediumtext,
+  `nodes` mediumtext DEFAULT NULL,
   `version` smallint unsigned NOT NULL DEFAULT '1',
   `status` varchar(20) NOT NULL DEFAULT 'doing',
   `result` varchar(20) NOT NULL DEFAULT '',
-  `extra` text,
+  `extra` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_approvalflow` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `code` varchar(100) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `version` smallint unsigned NOT NULL DEFAULT '1',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `workflow` varchar(30) NOT NULL DEFAULT '',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_approvalflowobject` (
   `id` int NOT NULL AUTO_INCREMENT,
   `root` int NOT NULL DEFAULT '0',
@@ -1319,16 +1319,16 @@ CREATE TABLE `zt_approvalflowobject` (
   `relatedDate` datetime DEFAULT NULL,
   `extra` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_approvalflowspec` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `flow` int unsigned NOT NULL DEFAULT '0',
   `version` smallint unsigned NOT NULL DEFAULT '1',
-  `nodes` mediumtext,
+  `nodes` mediumtext DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_approvalnode` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `approval` int unsigned NOT NULL DEFAULT '0',
@@ -1342,44 +1342,44 @@ CREATE TABLE `zt_approvalnode` (
   `percent` tinyint unsigned NOT NULL DEFAULT '0',
   `needAll` tinyint unsigned NOT NULL DEFAULT '0',
   `solicit` tinyint unsigned NOT NULL DEFAULT '0',
-  `prev` mediumtext,
-  `next` mediumtext,
+  `prev` mediumtext DEFAULT NULL,
+  `next` mediumtext DEFAULT NULL,
   `status` varchar(30) NOT NULL DEFAULT 'wait',
   `result` varchar(30) NOT NULL DEFAULT '',
   `date` date DEFAULT NULL,
-  `opinion` mediumtext,
-  `extra` mediumtext,
+  `opinion` mediumtext DEFAULT NULL,
+  `extra` mediumtext DEFAULT NULL,
   `revertTo` varchar(30) NOT NULL DEFAULT '',
   `forwardBy` varchar(30) NOT NULL DEFAULT '',
   `reviewedBy` varchar(30) NOT NULL DEFAULT '',
   `reviewedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_reviewed_date` (`reviewedDate`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_approvalobject` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `approval` int unsigned NOT NULL DEFAULT '0',
   `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT '0',
-  `reviewers` text,
-  `opinion` text,
+  `reviewers` text DEFAULT NULL,
+  `opinion` text DEFAULT NULL,
   `result` varchar(10) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT '',
   `appliedBy` varchar(30) NOT NULL DEFAULT '',
   `appliedDate` datetime DEFAULT NULL,
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `extra` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_approvalrole` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(30) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL DEFAULT '',
-  `desc` text,
-  `users` longtext,
+  `desc` text DEFAULT NULL,
+  `users` longtext DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_artifactrepo` (
   `id` smallint unsigned NOT NULL AUTO_INCREMENT,
   `space` int unsigned NOT NULL DEFAULT '0',
@@ -1396,12 +1396,12 @@ CREATE TABLE `zt_artifactrepo` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_assetlib` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(255) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `order` int unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
@@ -1409,7 +1409,7 @@ CREATE TABLE `zt_assetlib` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_attend` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
@@ -1423,7 +1423,7 @@ CREATE TABLE `zt_attend` (
   `manualIn` time DEFAULT NULL,
   `manualOut` time DEFAULT NULL,
   `reason` varchar(30) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `reviewStatus` varchar(30) NOT NULL DEFAULT '',
   `reviewedBy` varchar(30) NOT NULL DEFAULT '',
   `reviewedDate` datetime DEFAULT NULL,
@@ -1435,7 +1435,7 @@ CREATE TABLE `zt_attend` (
   KEY `reason` (`reason`),
   KEY `reviewStatus` (`reviewStatus`),
   KEY `reviewedBy` (`reviewedBy`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_attendstat` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
@@ -1460,7 +1460,7 @@ CREATE TABLE `zt_attendstat` (
   KEY `account` (`account`),
   KEY `month` (`month`),
   KEY `status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_auditcl` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `workflowGroup` int unsigned NOT NULL DEFAULT '0',
@@ -1480,7 +1480,7 @@ CREATE TABLE `zt_auditcl` (
   `assignedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_auditplan` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '活动检查编号',
   `objectID` int unsigned NOT NULL DEFAULT '0' COMMENT '活动或文档编号',
@@ -1508,7 +1508,7 @@ CREATE TABLE `zt_auditplan` (
   `assignedDate` datetime DEFAULT NULL COMMENT '指派时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_auditresult` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `auditplan` int unsigned NOT NULL DEFAULT '0',
@@ -1516,7 +1516,7 @@ CREATE TABLE `zt_auditresult` (
   `result` varchar(30) NOT NULL DEFAULT '',
   `checkedBy` varchar(30) NOT NULL DEFAULT '',
   `checkedDate` date DEFAULT NULL,
-  `comment` text,
+  `comment` text DEFAULT NULL,
   `severity` tinyint unsigned NOT NULL DEFAULT '0',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT '',
@@ -1528,24 +1528,24 @@ CREATE TABLE `zt_auditresult` (
   `assignedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_autocache` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(30) NOT NULL DEFAULT '',
   `fields` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `cache` (`code`,`fields`(190))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_automation` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `node` int unsigned NOT NULL DEFAULT '0',
   `product` int unsigned NOT NULL DEFAULT '0',
   `scriptPath` varchar(255) NOT NULL DEFAULT '',
-  `shell` mediumtext,
+  `shell` mediumtext DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_basicmeas` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `purpose` varchar(50) NOT NULL DEFAULT '',
@@ -1554,12 +1554,12 @@ CREATE TABLE `zt_basicmeas` (
   `name` varchar(90) NOT NULL DEFAULT '',
   `code` varchar(30) NOT NULL DEFAULT '',
   `unit` varchar(100) NOT NULL DEFAULT '',
-  `configure` text,
-  `params` text,
-  `definition` text,
+  `configure` text DEFAULT NULL,
+  `params` text DEFAULT NULL,
+  `definition` text DEFAULT NULL,
   `source` varchar(255) NOT NULL DEFAULT '',
   `collectType` varchar(30) NOT NULL DEFAULT '',
-  `collectConf` text,
+  `collectConf` text DEFAULT NULL,
   `execTime` varchar(30) NOT NULL DEFAULT '',
   `collectedBy` varchar(10) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
@@ -1570,7 +1570,7 @@ CREATE TABLE `zt_basicmeas` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_block` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
@@ -1583,12 +1583,12 @@ CREATE TABLE `zt_block` (
   `height` smallint unsigned NOT NULL DEFAULT '3',
   `left` tinyint unsigned NOT NULL DEFAULT '0',
   `top` smallint unsigned NOT NULL DEFAULT '0',
-  `params` text,
+  `params` text DEFAULT NULL,
   `hidden` tinyint unsigned NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`),
   KEY `account` (`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_branch` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `product` int unsigned NOT NULL DEFAULT '0',
@@ -1602,7 +1602,7 @@ CREATE TABLE `zt_branch` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `product` (`product`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_budget` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -1610,14 +1610,14 @@ CREATE TABLE `zt_budget` (
   `subject` int unsigned NOT NULL DEFAULT '0',
   `amount` varchar(30) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
   `lastEditedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_bug` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -1642,7 +1642,7 @@ CREATE TABLE `zt_bug` (
   `browser` varchar(255) NOT NULL DEFAULT '',
   `hardware` varchar(30) NOT NULL DEFAULT '',
   `found` varchar(30) NOT NULL DEFAULT '',
-  `steps` mediumtext,
+  `steps` mediumtext DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'active',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `color` char(7) NOT NULL DEFAULT '',
@@ -1651,7 +1651,7 @@ CREATE TABLE `zt_bug` (
   `activatedDate` datetime DEFAULT NULL,
   `feedbackBy` varchar(100) NOT NULL DEFAULT '',
   `notifyEmail` varchar(100) NOT NULL DEFAULT '',
-  `mailto` text,
+  `mailto` text DEFAULT NULL,
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime DEFAULT NULL,
   `openedBuild` varchar(255) NOT NULL DEFAULT '',
@@ -1672,7 +1672,7 @@ CREATE TABLE `zt_bug` (
   `result` int unsigned NOT NULL DEFAULT '0',
   `repo` int unsigned NOT NULL DEFAULT '0',
   `mr` int unsigned NOT NULL DEFAULT '0',
-  `entry` text,
+  `entry` text DEFAULT NULL,
   `lines` varchar(10) NOT NULL DEFAULT '',
   `v1` varchar(255) NOT NULL DEFAULT '',
   `v2` varchar(255) NOT NULL DEFAULT '',
@@ -1697,7 +1697,7 @@ CREATE TABLE `zt_bug` (
   KEY `product_status_deleted` (`product`,`status`,`deleted`),
   KEY `idx_repo` (`repo`),
   KEY `feedback` (`feedback`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_build` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -1710,11 +1710,11 @@ CREATE TABLE `zt_build` (
   `scmPath` varchar(255) NOT NULL DEFAULT '',
   `filePath` varchar(255) NOT NULL DEFAULT '',
   `date` date DEFAULT NULL,
-  `stories` text,
-  `bugs` text,
+  `stories` text DEFAULT NULL,
+  `bugs` text DEFAULT NULL,
   `artifactRepoID` int unsigned NOT NULL DEFAULT '0',
   `builder` varchar(30) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
@@ -1722,7 +1722,7 @@ CREATE TABLE `zt_build` (
   KEY `product` (`product`),
   KEY `execution` (`execution`),
   KEY `idx_system` (`system`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_burn` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `execution` int unsigned NOT NULL DEFAULT '0',
@@ -1735,7 +1735,7 @@ CREATE TABLE `zt_burn` (
   `storyPoint` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `execution_task` (`execution`,`date`,`task`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_case` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -1748,7 +1748,7 @@ CREATE TABLE `zt_case` (
   `story` int unsigned NOT NULL DEFAULT '0',
   `storyVersion` smallint unsigned NOT NULL DEFAULT '1',
   `title` varchar(255) NOT NULL DEFAULT '',
-  `precondition` text,
+  `precondition` text DEFAULT NULL,
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `pri` tinyint unsigned NOT NULL DEFAULT '3',
   `type` varchar(30) NOT NULL DEFAULT '',
@@ -1756,7 +1756,7 @@ CREATE TABLE `zt_case` (
   `frame` varchar(10) NOT NULL DEFAULT '',
   `stage` varchar(255) NOT NULL DEFAULT '',
   `howRun` varchar(30) NOT NULL DEFAULT '',
-  `script` longtext,
+  `script` longtext DEFAULT NULL,
   `scriptedBy` varchar(30) NOT NULL DEFAULT '',
   `scriptedDate` datetime DEFAULT NULL,
   `scriptStatus` varchar(30) NOT NULL DEFAULT '',
@@ -1789,29 +1789,29 @@ CREATE TABLE `zt_case` (
   KEY `fromBug` (`fromBug`),
   KEY `module` (`module`),
   KEY `scene` (`scene`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_casespec` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `case` int unsigned NOT NULL DEFAULT '0',
   `version` smallint unsigned NOT NULL DEFAULT '1',
   `title` varchar(255) NOT NULL DEFAULT '',
-  `precondition` text,
-  `files` text,
+  `precondition` text DEFAULT NULL,
+  `files` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `case` (`case`,`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_casestep` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `parent` int unsigned NOT NULL DEFAULT '0',
   `case` int unsigned NOT NULL DEFAULT '0',
   `version` smallint unsigned NOT NULL DEFAULT '1',
   `type` varchar(10) NOT NULL DEFAULT 'step',
-  `desc` text,
-  `expect` text,
+  `desc` text DEFAULT NULL,
+  `expect` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `case` (`case`),
   KEY `version` (`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_cfd` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `execution` int unsigned NOT NULL DEFAULT '0',
@@ -1821,7 +1821,7 @@ CREATE TABLE `zt_cfd` (
   `date` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `execution_type_name_date` (`execution`,`type`,`name`,`date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_chart` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -1831,26 +1831,26 @@ CREATE TABLE `zt_chart` (
   `dimension` int unsigned NOT NULL DEFAULT '0',
   `type` varchar(30) NOT NULL DEFAULT '',
   `group` varchar(255) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `acl` varchar(10) NOT NULL DEFAULT 'open',
-  `whitelist` text,
-  `settings` mediumtext,
-  `filters` mediumtext,
+  `whitelist` text DEFAULT NULL,
+  `settings` mediumtext DEFAULT NULL,
+  `filters` mediumtext DEFAULT NULL,
   `step` tinyint unsigned NOT NULL DEFAULT '0',
-  `fields` mediumtext,
-  `langs` text,
-  `sql` mediumtext,
+  `fields` mediumtext DEFAULT NULL,
+  `langs` text DEFAULT NULL,
+  `sql` mediumtext DEFAULT NULL,
   `version` varchar(10) NOT NULL DEFAULT '1',
   `stage` varchar(10) NOT NULL DEFAULT 'draft',
   `builtin` tinyint unsigned NOT NULL DEFAULT '0',
-  `objects` mediumtext,
+  `objects` mediumtext DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_charter` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -1860,44 +1860,44 @@ CREATE TABLE `zt_charter` (
   `check` tinyint unsigned NOT NULL DEFAULT '0',
   `appliedBy` varchar(30) NOT NULL DEFAULT '',
   `appliedDate` datetime DEFAULT NULL,
-  `appliedReviewer` text,
+  `appliedReviewer` text DEFAULT NULL,
   `budget` decimal(12,2) unsigned NOT NULL DEFAULT '0.00',
   `budgetUnit` varchar(30) NOT NULL DEFAULT 'CNY',
-  `product` text,
-  `roadmap` text,
-  `plan` text,
+  `product` text DEFAULT NULL,
+  `roadmap` text DEFAULT NULL,
+  `plan` text DEFAULT NULL,
   `type` varchar(30) NOT NULL DEFAULT 'roadmap',
-  `filesConfig` text,
-  `spec` mediumtext,
+  `filesConfig` text DEFAULT NULL,
+  `spec` mediumtext DEFAULT NULL,
   `status` varchar(30) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
-  `charterFiles` text,
-  `completionFiles` text,
-  `canceledFiles` text,
+  `charterFiles` text DEFAULT NULL,
+  `completionFiles` text DEFAULT NULL,
+  `canceledFiles` text DEFAULT NULL,
   `prevCanceledStatus` varchar(30) NOT NULL DEFAULT '',
   `closedBy` varchar(30) NOT NULL DEFAULT '',
   `closedDate` datetime DEFAULT NULL,
   `closedReason` varchar(255) NOT NULL DEFAULT '',
   `activatedBy` varchar(30) NOT NULL DEFAULT '',
   `activatedDate` datetime DEFAULT NULL,
-  `activatedReviewer` text,
+  `activatedReviewer` text DEFAULT NULL,
   `reviewedBy` varchar(255) NOT NULL DEFAULT '',
   `reviewedResult` varchar(30) NOT NULL DEFAULT '',
   `reviewedDate` datetime DEFAULT NULL,
   `reviewStatus` varchar(30) NOT NULL DEFAULT 'wait',
   `completedBy` varchar(30) NOT NULL DEFAULT '',
   `completedDate` datetime DEFAULT NULL,
-  `completedReviewer` text,
+  `completedReviewer` text DEFAULT NULL,
   `canceledBy` varchar(30) NOT NULL DEFAULT '',
   `canceledDate` datetime DEFAULT NULL,
-  `canceledReviewer` text,
+  `canceledReviewer` text DEFAULT NULL,
   `meetingDate` date DEFAULT NULL,
   `meetingLocation` varchar(255) NOT NULL DEFAULT '',
-  `meetingMinutes` mediumtext,
+  `meetingMinutes` mediumtext DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_charterproduct` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `charter` int unsigned NOT NULL DEFAULT '0',
@@ -1907,13 +1907,13 @@ CREATE TABLE `zt_charterproduct` (
   `roadmap` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `charter_product` (`charter`,`product`,`branch`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_cmcl` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(30) NOT NULL DEFAULT '',
   `projectType` varchar(255) NOT NULL DEFAULT '',
   `title` int unsigned NOT NULL DEFAULT '0',
-  `contents` text,
+  `contents` text DEFAULT NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT '',
   `order` int unsigned NOT NULL DEFAULT '0',
@@ -1923,7 +1923,7 @@ CREATE TABLE `zt_cmcl` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_company` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(120) NOT NULL DEFAULT '',
@@ -1937,7 +1937,7 @@ CREATE TABLE `zt_company` (
   `admins` varchar(255) NOT NULL DEFAULT '',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_compile` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '',
@@ -1945,7 +1945,7 @@ CREATE TABLE `zt_compile` (
   `queue` int unsigned NOT NULL DEFAULT '0',
   `status` varchar(100) NOT NULL DEFAULT '',
   `branch` varchar(255) NOT NULL DEFAULT '',
-  `logs` longtext,
+  `logs` longtext DEFAULT NULL,
   `atTime` varchar(10) NOT NULL DEFAULT '',
   `testtask` int unsigned NOT NULL DEFAULT '0',
   `tag` varchar(255) NOT NULL DEFAULT '',
@@ -1956,7 +1956,7 @@ CREATE TABLE `zt_compile` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `idx_created_status` (`createdDate`,`status`,`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_config` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `vision` varchar(10) NOT NULL DEFAULT '',
@@ -1964,14 +1964,14 @@ CREATE TABLE `zt_config` (
   `module` varchar(30) NOT NULL DEFAULT '',
   `section` varchar(30) NOT NULL DEFAULT '',
   `key` varchar(30) NOT NULL DEFAULT '',
-  `value` longtext,
+  `value` longtext DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique` (`vision`,`owner`,`module`,`section`,`key`),
   KEY `vision` (`vision`),
   KEY `owner` (`owner`),
   KEY `module` (`module`),
   KEY `key` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_cron` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `m` varchar(20) NOT NULL DEFAULT '',
@@ -1979,7 +1979,7 @@ CREATE TABLE `zt_cron` (
   `dom` varchar(20) NOT NULL DEFAULT '',
   `mon` varchar(20) NOT NULL DEFAULT '',
   `dow` varchar(20) NOT NULL DEFAULT '',
-  `command` text,
+  `command` text DEFAULT NULL,
   `remark` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(20) NOT NULL DEFAULT '',
   `buildin` tinyint unsigned NOT NULL DEFAULT '0',
@@ -1987,18 +1987,18 @@ CREATE TABLE `zt_cron` (
   `lastTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `lastTime` (`lastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_dataset` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(155) NOT NULL DEFAULT '',
-  `sql` text,
-  `fields` mediumtext,
-  `objects` mediumtext,
+  `sql` text DEFAULT NULL,
+  `fields` mediumtext DEFAULT NULL,
+  `objects` mediumtext DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_dataview` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `group` int unsigned NOT NULL DEFAULT '0',
@@ -2007,17 +2007,17 @@ CREATE TABLE `zt_dataview` (
   `mode` varchar(50) NOT NULL DEFAULT 'builder',
   `driver` varchar(10) NOT NULL DEFAULT 'mysql',
   `view` varchar(57) NOT NULL DEFAULT '',
-  `sql` text,
-  `fields` text,
-  `langs` text,
-  `objects` text,
+  `sql` text DEFAULT NULL,
+  `fields` text DEFAULT NULL,
+  `langs` text DEFAULT NULL,
+  `objects` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_decision` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `workflowGroup` int unsigned NOT NULL DEFAULT '0',
@@ -2033,7 +2033,7 @@ CREATE TABLE `zt_decision` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_deliverable` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `workflowGroup` int unsigned NOT NULL DEFAULT '0',
@@ -2046,7 +2046,7 @@ CREATE TABLE `zt_deliverable` (
   `trimmable` char(30) NOT NULL DEFAULT '0',
   `trimRule` varchar(255) NOT NULL,
   `template` text NOT NULL,
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `createdBy` varchar(30) DEFAULT NULL,
   `createdDate` date DEFAULT NULL,
   `lastEditedBy` varchar(30) DEFAULT NULL,
@@ -2054,7 +2054,7 @@ CREATE TABLE `zt_deliverable` (
   `category` varchar(255) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_deliverablestage` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `deliverable` int unsigned NOT NULL DEFAULT '0',
@@ -2062,7 +2062,7 @@ CREATE TABLE `zt_deliverablestage` (
   `required` varchar(30) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique` (`deliverable`,`stage`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_demand` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `pool` int unsigned NOT NULL DEFAULT '0',
@@ -2078,7 +2078,7 @@ CREATE TABLE `zt_demand` (
   `email` varchar(255) NOT NULL DEFAULT '',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime DEFAULT NULL,
-  `reviewedBy` text,
+  `reviewedBy` text DEFAULT NULL,
   `reviewedDate` datetime DEFAULT NULL,
   `status` varchar(30) NOT NULL DEFAULT '',
   `stage` varchar(20) NOT NULL DEFAULT 'wait',
@@ -2088,7 +2088,7 @@ CREATE TABLE `zt_demand` (
   `roadmap` int unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
-  `mailto` text,
+  `mailto` text DEFAULT NULL,
   `duplicateDemand` int unsigned NOT NULL DEFAULT '0',
   `childDemands` varchar(255) NOT NULL DEFAULT '',
   `version` smallint unsigned NOT NULL DEFAULT '1',
@@ -2110,21 +2110,21 @@ CREATE TABLE `zt_demand` (
   `vision` varchar(10) NOT NULL DEFAULT 'or',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_demandpool` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `status` varchar(30) NOT NULL DEFAULT '',
   `products` varchar(255) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
-  `owner` text,
-  `reviewer` text,
+  `owner` text DEFAULT NULL,
+  `reviewer` text DEFAULT NULL,
   `acl` varchar(10) NOT NULL DEFAULT 'open',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_demandreview` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `demand` int unsigned NOT NULL DEFAULT '0',
@@ -2134,18 +2134,18 @@ CREATE TABLE `zt_demandreview` (
   `reviewDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `demand` (`demand`,`version`,`reviewer`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_demandspec` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `demand` int unsigned NOT NULL DEFAULT '0',
   `version` smallint unsigned NOT NULL DEFAULT '1',
   `title` varchar(255) NOT NULL DEFAULT '',
-  `spec` mediumtext,
-  `verify` mediumtext,
-  `files` text,
+  `spec` mediumtext DEFAULT NULL,
+  `verify` mediumtext DEFAULT NULL,
+  `files` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `demand` (`demand`,`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_deploy` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `begin` datetime DEFAULT NULL,
@@ -2153,18 +2153,18 @@ CREATE TABLE `zt_deploy` (
   `estimate` datetime DEFAULT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   `host` varchar(255) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `status` varchar(20) NOT NULL DEFAULT '',
   `owner` varchar(30) NOT NULL DEFAULT '',
-  `members` text,
-  `notify` text,
-  `cases` text,
+  `members` text DEFAULT NULL,
+  `notify` text DEFAULT NULL,
+  `cases` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `result` varchar(20) NOT NULL DEFAULT '',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_deployproduct` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `deploy` int unsigned NOT NULL DEFAULT '0',
@@ -2172,14 +2172,14 @@ CREATE TABLE `zt_deployproduct` (
   `release` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `deploy_product_release` (`deploy`,`product`,`release`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_deploystep` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `deploy` int unsigned NOT NULL DEFAULT '0',
   `parent` int unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `stage` varchar(30) NOT NULL DEFAULT '',
-  `content` text,
+  `content` text DEFAULT NULL,
   `status` varchar(30) NOT NULL DEFAULT '',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime DEFAULT NULL,
@@ -2189,7 +2189,7 @@ CREATE TABLE `zt_deploystep` (
   `createdDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_dept` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL DEFAULT '',
@@ -2201,12 +2201,12 @@ CREATE TABLE `zt_dept` (
   PRIMARY KEY (`id`),
   KEY `parent` (`parent`),
   KEY `path` (`path`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_design` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
   `product` int unsigned NOT NULL DEFAULT '0',
-  `commit` text,
+  `commit` text DEFAULT NULL,
   `commitedBy` varchar(30) NOT NULL DEFAULT '',
   `execution` int unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -2220,32 +2220,32 @@ CREATE TABLE `zt_design` (
   `assignedDate` datetime DEFAULT NULL,
   `story` varchar(30) NOT NULL DEFAULT '',
   `storyVersion` smallint unsigned NOT NULL DEFAULT '1',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态',
   `version` smallint NOT NULL DEFAULT '0',
   `type` varchar(30) NOT NULL DEFAULT '',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_designspec` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `design` int unsigned NOT NULL DEFAULT '0',
   `version` smallint unsigned NOT NULL DEFAULT '1',
   `name` varchar(255) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `files` varchar(255) NOT NULL DEFAULT '',
-  `docs` text,
-  `docVersions` text,
+  `docs` text DEFAULT NULL,
+  `docVersions` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `design` (`design`,`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_dimension` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(90) NOT NULL DEFAULT '',
   `code` varchar(45) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `acl` varchar(10) NOT NULL DEFAULT 'open',
-  `whitelist` text,
+  `whitelist` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -2253,7 +2253,7 @@ CREATE TABLE `zt_dimension` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_doc` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -2262,11 +2262,11 @@ CREATE TABLE `zt_doc` (
   `lib` int unsigned NOT NULL DEFAULT '0',
   `template` varchar(30) NOT NULL DEFAULT '',
   `templateType` varchar(30) NOT NULL DEFAULT '',
-  `templateDesc` text,
-  `objects` text,
+  `templateDesc` text DEFAULT NULL,
+  `objects` text DEFAULT NULL,
   `chapterType` varchar(30) NOT NULL DEFAULT '',
   `cycle` varchar(10) NOT NULL DEFAULT '',
-  `cycleConfig` text,
+  `cycleConfig` text DEFAULT NULL,
   `module` int unsigned NOT NULL DEFAULT '0',
   `reportModule` varchar(20) NOT NULL DEFAULT '',
   `title` varchar(255) NOT NULL DEFAULT '',
@@ -2282,7 +2282,7 @@ CREATE TABLE `zt_doc` (
   `assetLibType` varchar(30) NOT NULL DEFAULT '',
   `from` int unsigned NOT NULL DEFAULT '0',
   `fromVersion` smallint unsigned NOT NULL DEFAULT '1',
-  `draft` longtext,
+  `draft` longtext DEFAULT NULL,
   `collects` smallint unsigned NOT NULL DEFAULT '0',
   `weeklyDate` char(8) NOT NULL DEFAULT '',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
@@ -2292,15 +2292,15 @@ CREATE TABLE `zt_doc` (
   `approvedDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
-  `editingDate` text,
-  `editedList` text,
-  `mailto` text,
+  `editingDate` text DEFAULT NULL,
+  `editedList` text DEFAULT NULL,
+  `mailto` text DEFAULT NULL,
   `acl` varchar(10) NOT NULL DEFAULT 'open',
   `isDeliverable` tinyint unsigned NOT NULL DEFAULT '0',
   `groups` varchar(255) NOT NULL DEFAULT '',
-  `users` text,
+  `users` text DEFAULT NULL,
   `readGroups` varchar(255) NOT NULL DEFAULT '',
-  `readUsers` text,
+  `readUsers` text DEFAULT NULL,
   `version` smallint unsigned NOT NULL DEFAULT '1',
   `builtIn` tinyint unsigned NOT NULL DEFAULT '0',
   `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态',
@@ -2311,7 +2311,7 @@ CREATE TABLE `zt_doc` (
   KEY `execution` (`execution`),
   KEY `lib` (`lib`),
   KEY `templateType` (`templateType`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_docaction` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `doc` int unsigned NOT NULL DEFAULT '0',
@@ -2321,25 +2321,25 @@ CREATE TABLE `zt_docaction` (
   PRIMARY KEY (`id`),
   KEY `doc` (`doc`),
   KEY `actor` (`actor`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_docblock` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `doc` int unsigned NOT NULL DEFAULT '0',
   `type` varchar(50) NOT NULL DEFAULT '',
-  `settings` text,
-  `content` mediumtext,
+  `settings` text DEFAULT NULL,
+  `content` mediumtext DEFAULT NULL,
   `extra` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `idx_doc` (`doc`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_doccontent` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `doc` int unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `digest` varchar(255) NOT NULL DEFAULT '',
-  `content` longtext,
-  `rawContent` longtext,
-  `files` text,
+  `content` longtext DEFAULT NULL,
+  `rawContent` longtext DEFAULT NULL,
+  `files` text DEFAULT NULL,
   `type` varchar(10) NOT NULL DEFAULT '',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime DEFAULT NULL,
@@ -2349,7 +2349,7 @@ CREATE TABLE `zt_doccontent` (
   `fromVersion` smallint unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `doc_version` (`doc`,`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_doclib` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(30) NOT NULL DEFAULT '',
@@ -2361,10 +2361,10 @@ CREATE TABLE `zt_doclib` (
   `baseUrl` varchar(255) NOT NULL DEFAULT '',
   `acl` varchar(10) NOT NULL DEFAULT 'open',
   `groups` varchar(255) NOT NULL DEFAULT '',
-  `users` text,
+  `users` text DEFAULT NULL,
   `main` tinyint unsigned NOT NULL DEFAULT '0',
-  `collector` text,
-  `desc` mediumtext,
+  `collector` text DEFAULT NULL,
+  `desc` mediumtext DEFAULT NULL,
   `order` int unsigned NOT NULL DEFAULT '0',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime DEFAULT NULL,
@@ -2375,7 +2375,7 @@ CREATE TABLE `zt_doclib` (
   PRIMARY KEY (`id`),
   KEY `product` (`product`),
   KEY `execution` (`execution`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_duckdbqueue` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `object` varchar(255) NOT NULL DEFAULT '',
@@ -2383,7 +2383,7 @@ CREATE TABLE `zt_duckdbqueue` (
   `syncTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `object` (`object`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_durationestimation` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -2399,22 +2399,22 @@ CREATE TABLE `zt_durationestimation` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_effort` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT '0',
-  `product` text,
+  `product` text DEFAULT NULL,
   `project` int unsigned NOT NULL DEFAULT '0',
   `execution` int unsigned NOT NULL DEFAULT '0',
   `account` varchar(30) NOT NULL DEFAULT '',
-  `work` text,
+  `work` text DEFAULT NULL,
   `date` date DEFAULT NULL,
   `left` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   `consumed` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   `begin` char(4) NOT NULL DEFAULT '',
   `end` char(4) NOT NULL DEFAULT '',
-  `extra` text,
+  `extra` text DEFAULT NULL,
   `order` int unsigned NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
@@ -2423,7 +2423,7 @@ CREATE TABLE `zt_effort` (
   KEY `objectID` (`objectID`),
   KEY `date` (`date`),
   KEY `account` (`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_entry` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '',
@@ -2432,7 +2432,7 @@ CREATE TABLE `zt_entry` (
   `key` char(32) NOT NULL DEFAULT '',
   `freePasswd` tinyint unsigned NOT NULL DEFAULT '0',
   `ip` varchar(100) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `calledTime` int unsigned NOT NULL DEFAULT '0',
@@ -2440,54 +2440,54 @@ CREATE TABLE `zt_entry` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_expect` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `userID` int unsigned NOT NULL DEFAULT '0',
   `project` int unsigned NOT NULL DEFAULT '0',
-  `expect` text,
-  `progress` text,
+  `expect` text DEFAULT NULL,
+  `progress` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_extension` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(150) NOT NULL DEFAULT '',
   `code` varchar(30) NOT NULL DEFAULT '',
   `version` varchar(50) NOT NULL DEFAULT '',
   `author` varchar(100) NOT NULL DEFAULT '',
-  `desc` mediumtext,
-  `license` text,
+  `desc` mediumtext DEFAULT NULL,
+  `license` text DEFAULT NULL,
   `type` varchar(20) NOT NULL DEFAULT 'extension',
   `site` varchar(150) NOT NULL DEFAULT '',
-  `zentaoCompatible` text,
+  `zentaoCompatible` text DEFAULT NULL,
   `installedTime` datetime DEFAULT NULL,
   `depends` varchar(100) NOT NULL DEFAULT '',
-  `dirs` mediumtext,
-  `files` mediumtext,
+  `dirs` mediumtext DEFAULT NULL,
+  `files` mediumtext DEFAULT NULL,
   `status` varchar(20) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`),
   KEY `name` (`name`),
   KEY `installedTime` (`installedTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_extuser` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(255) NOT NULL DEFAULT '',
   `account` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_faq` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `module` int unsigned NOT NULL DEFAULT '0',
   `product` int unsigned NOT NULL DEFAULT '0',
   `question` varchar(255) NOT NULL DEFAULT '',
-  `answer` text,
+  `answer` text DEFAULT NULL,
   `addedtime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_feedback` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `product` int unsigned NOT NULL DEFAULT '0',
@@ -2495,7 +2495,7 @@ CREATE TABLE `zt_feedback` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
   `solution` varchar(30) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `pri` tinyint unsigned NOT NULL DEFAULT '2',
   `status` varchar(30) NOT NULL DEFAULT '',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
@@ -2504,7 +2504,7 @@ CREATE TABLE `zt_feedback` (
   `notify` tinyint unsigned NOT NULL DEFAULT '0',
   `notifyEmail` varchar(100) NOT NULL DEFAULT '',
   `source` varchar(255) NOT NULL DEFAULT '',
-  `likes` text,
+  `likes` text DEFAULT NULL,
   `result` int unsigned NOT NULL DEFAULT '0',
   `faq` int unsigned NOT NULL DEFAULT '0',
   `openedBy` varchar(30) NOT NULL DEFAULT '',
@@ -2529,14 +2529,14 @@ CREATE TABLE `zt_feedback` (
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_feedbackview` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
   `product` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `account_product` (`account`,`product`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_file` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `pathname` varchar(100) NOT NULL DEFAULT '',
@@ -2555,13 +2555,13 @@ CREATE TABLE `zt_file` (
   KEY `objectType` (`objectType`),
   KEY `objectID` (`objectID`),
   KEY `gid` (`gid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_gapanalysis` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
   `account` varchar(30) NOT NULL DEFAULT '',
   `role` varchar(20) NOT NULL DEFAULT '',
-  `analysis` mediumtext,
+  `analysis` mediumtext DEFAULT NULL,
   `needTrain` varchar(10) NOT NULL DEFAULT 'no',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
@@ -2570,7 +2570,7 @@ CREATE TABLE `zt_gapanalysis` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `project_account` (`project`,`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_group` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -2578,11 +2578,11 @@ CREATE TABLE `zt_group` (
   `name` varchar(30) NOT NULL DEFAULT '',
   `role` varchar(30) NOT NULL DEFAULT '',
   `desc` varchar(255) NOT NULL DEFAULT '',
-  `acl` text,
+  `acl` text DEFAULT NULL,
   `developer` tinyint unsigned NOT NULL DEFAULT '1',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_grouppriv` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `group` int unsigned NOT NULL DEFAULT '0',
@@ -2590,31 +2590,31 @@ CREATE TABLE `zt_grouppriv` (
   `method` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `group` (`group`,`module`,`method`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_history` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `action` int unsigned NOT NULL DEFAULT '0',
   `field` varchar(30) NOT NULL DEFAULT '',
-  `old` longtext,
-  `oldValue` text,
-  `new` longtext,
-  `newValue` text,
-  `diff` mediumtext,
+  `old` longtext DEFAULT NULL,
+  `oldValue` text DEFAULT NULL,
+  `new` longtext DEFAULT NULL,
+  `newValue` text DEFAULT NULL,
+  `diff` mediumtext DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `action` (`action`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_holiday` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL DEFAULT '',
   `type` varchar(10) NOT NULL DEFAULT 'holiday',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `year` char(4) NOT NULL DEFAULT '',
   `begin` date DEFAULT NULL,
   `end` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year` (`year`),
   KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_host` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -2625,7 +2625,7 @@ CREATE TABLE `zt_host` (
   `diskSize` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(50) NOT NULL DEFAULT '',
   `secret` varchar(50) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `tokenSN` varchar(50) NOT NULL DEFAULT '',
   `tokenTime` datetime DEFAULT NULL,
   `oldTokenSN` varchar(50) NOT NULL DEFAULT '',
@@ -2653,7 +2653,7 @@ CREATE TABLE `zt_host` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_image` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `host` int unsigned NOT NULL DEFAULT '0',
@@ -2668,12 +2668,12 @@ CREATE TABLE `zt_image` (
   `disk` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   `fileSize` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   `md5` varchar(64) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `restoreDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_instance` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `space` int unsigned NOT NULL DEFAULT '0',
@@ -2685,8 +2685,8 @@ CREATE TABLE `zt_instance` (
   `chart` varchar(50) NOT NULL DEFAULT '',
   `logo` varchar(255) NOT NULL DEFAULT '',
   `version` varchar(50) NOT NULL DEFAULT '',
-  `desc` text,
-  `introduction` text,
+  `desc` text DEFAULT NULL,
+  `introduction` text DEFAULT NULL,
   `source` varchar(20) NOT NULL DEFAULT '',
   `channel` varchar(20) NOT NULL DEFAULT '',
   `k8name` varchar(64) NOT NULL DEFAULT '',
@@ -2695,25 +2695,25 @@ CREATE TABLE `zt_instance` (
   `domain` varchar(255) NOT NULL DEFAULT '',
   `smtpSnippetName` varchar(30) NOT NULL DEFAULT '',
   `ldapSnippetName` varchar(30) NOT NULL DEFAULT '',
-  `ldapSettings` text,
-  `dbSettings` text,
+  `ldapSettings` text DEFAULT NULL,
+  `dbSettings` text DEFAULT NULL,
   `autoBackup` tinyint unsigned NOT NULL DEFAULT '0',
   `backupKeepDays` int unsigned NOT NULL DEFAULT '1',
   `autoRestore` tinyint unsigned NOT NULL DEFAULT '0',
-  `env` text,
+  `env` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdAt` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `space` (`space`),
   KEY `k8name` (`k8name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_intervention` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
   `activity` int unsigned NOT NULL DEFAULT '0',
   `status` varchar(30) NOT NULL DEFAULT '',
-  `partake` text,
+  `partake` text DEFAULT NULL,
   `begin` date DEFAULT NULL,
   `realBegin` date DEFAULT NULL,
   `situation` varchar(255) NOT NULL DEFAULT '',
@@ -2722,21 +2722,21 @@ CREATE TABLE `zt_intervention` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `project` (`project`,`activity`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_issue` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `resolvedBy` varchar(30) NOT NULL DEFAULT '',
   `project` int unsigned NOT NULL DEFAULT '0',
   `execution` int unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `pri` tinyint unsigned NOT NULL DEFAULT '3',
   `severity` tinyint unsigned NOT NULL DEFAULT '0',
   `type` varchar(30) NOT NULL DEFAULT '',
   `activity` varchar(255) NOT NULL DEFAULT '',
   `deadline` date DEFAULT NULL,
   `resolution` varchar(30) NOT NULL DEFAULT '',
-  `resolutionComment` text,
+  `resolutionComment` text DEFAULT NULL,
   `objectID` varchar(255) NOT NULL DEFAULT '',
   `resolvedDate` date DEFAULT NULL,
   `status` varchar(30) NOT NULL DEFAULT '',
@@ -2758,16 +2758,16 @@ CREATE TABLE `zt_issue` (
   `approvedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_kanban` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `space` int unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
   `owner` varchar(30) NOT NULL DEFAULT '',
-  `team` text,
-  `desc` mediumtext,
+  `team` text DEFAULT NULL,
+  `desc` mediumtext DEFAULT NULL,
   `acl` varchar(10) NOT NULL DEFAULT 'open',
-  `whitelist` text,
+  `whitelist` text DEFAULT NULL,
   `archived` tinyint unsigned NOT NULL DEFAULT '1',
   `performable` tinyint unsigned NOT NULL DEFAULT '0',
   `status` varchar(10) NOT NULL DEFAULT 'active',
@@ -2790,7 +2790,7 @@ CREATE TABLE `zt_kanban` (
   `activatedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_kanbancard` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `kanban` int unsigned NOT NULL DEFAULT '0',
@@ -2801,15 +2801,15 @@ CREATE TABLE `zt_kanbancard` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT 'doing',
   `pri` int unsigned NOT NULL DEFAULT '0',
-  `assignedTo` text,
-  `desc` mediumtext,
+  `assignedTo` text DEFAULT NULL,
+  `desc` mediumtext DEFAULT NULL,
   `begin` date DEFAULT NULL,
   `end` date DEFAULT NULL,
   `estimate` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   `progress` decimal(5,2) unsigned NOT NULL DEFAULT '0.00',
   `color` char(7) NOT NULL DEFAULT '',
   `acl` varchar(10) NOT NULL DEFAULT 'open',
-  `whitelist` text,
+  `whitelist` text DEFAULT NULL,
   `order` int unsigned NOT NULL DEFAULT '0',
   `archived` tinyint unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
@@ -2822,18 +2822,18 @@ CREATE TABLE `zt_kanbancard` (
   `assignedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_kanbancell` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `kanban` int unsigned NOT NULL DEFAULT '0',
   `lane` int unsigned NOT NULL DEFAULT '0',
   `column` int unsigned NOT NULL DEFAULT '0',
   `type` varchar(30) NOT NULL DEFAULT '',
-  `cards` mediumtext,
+  `cards` mediumtext DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `card_group` (`kanban`,`type`,`lane`,`column`),
   KEY `lane` (`lane`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_kanbancolumn` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `parent` int NOT NULL DEFAULT '0',
@@ -2849,14 +2849,14 @@ CREATE TABLE `zt_kanbancolumn` (
   PRIMARY KEY (`id`),
   KEY `parent` (`parent`),
   KEY `group` (`group`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_kanbangroup` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `kanban` int unsigned NOT NULL DEFAULT '0',
   `region` int unsigned NOT NULL DEFAULT '0',
   `order` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_kanbanlane` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `execution` int unsigned NOT NULL DEFAULT '0',
@@ -2873,7 +2873,7 @@ CREATE TABLE `zt_kanbanlane` (
   PRIMARY KEY (`id`),
   KEY `execution` (`execution`),
   KEY `group` (`group`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_kanbanregion` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `space` int unsigned NOT NULL DEFAULT '0',
@@ -2886,16 +2886,16 @@ CREATE TABLE `zt_kanbanregion` (
   `lastEditedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_kanbanspace` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(50) NOT NULL DEFAULT '',
   `owner` varchar(30) NOT NULL DEFAULT '',
-  `team` text,
-  `desc` mediumtext,
+  `team` text DEFAULT NULL,
+  `desc` mediumtext DEFAULT NULL,
   `acl` varchar(10) NOT NULL DEFAULT 'open',
-  `whitelist` text,
+  `whitelist` text DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'active',
   `order` int unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
@@ -2908,19 +2908,19 @@ CREATE TABLE `zt_kanbanspace` (
   `activatedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_lang` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `lang` varchar(30) NOT NULL DEFAULT '',
   `module` varchar(30) NOT NULL DEFAULT '',
   `section` varchar(50) NOT NULL DEFAULT '',
   `key` varchar(60) NOT NULL DEFAULT '',
-  `value` text,
+  `value` text DEFAULT NULL,
   `system` tinyint unsigned NOT NULL DEFAULT '1',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`),
   UNIQUE KEY `lang` (`lang`,`module`,`section`,`key`,`vision`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_leave` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `year` char(4) NOT NULL DEFAULT '',
@@ -2931,7 +2931,7 @@ CREATE TABLE `zt_leave` (
   `hours` decimal(4,1) unsigned NOT NULL DEFAULT '0.0',
   `backDate` datetime DEFAULT NULL,
   `type` varchar(30) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `status` varchar(30) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
@@ -2939,14 +2939,14 @@ CREATE TABLE `zt_leave` (
   `reviewedDate` datetime DEFAULT NULL,
   `level` tinyint unsigned NOT NULL DEFAULT '0',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
-  `reviewers` text,
-  `backReviewers` text,
+  `reviewers` text DEFAULT NULL,
+  `backReviewers` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year` (`year`),
   KEY `type` (`type`),
   KEY `status` (`status`),
   KEY `createdBy` (`createdBy`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_lieu` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `year` char(4) NOT NULL DEFAULT '',
@@ -2957,7 +2957,7 @@ CREATE TABLE `zt_lieu` (
   `hours` decimal(4,1) unsigned NOT NULL DEFAULT '0.0',
   `overtime` varchar(255) NOT NULL DEFAULT '',
   `trip` varchar(255) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `status` varchar(30) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
@@ -2965,12 +2965,12 @@ CREATE TABLE `zt_lieu` (
   `reviewedDate` datetime DEFAULT NULL,
   `level` tinyint unsigned NOT NULL DEFAULT '0',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
-  `reviewers` text,
+  `reviewers` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year` (`year`),
   KEY `status` (`status`),
   KEY `createdBy` (`createdBy`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_log` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(30) NOT NULL DEFAULT '',
@@ -2979,12 +2979,12 @@ CREATE TABLE `zt_log` (
   `date` datetime DEFAULT NULL,
   `url` varchar(255) NOT NULL DEFAULT '',
   `contentType` varchar(30) NOT NULL DEFAULT '',
-  `data` text,
-  `result` text,
+  `data` text DEFAULT NULL,
+  `result` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `objectType` (`objectType`),
   KEY `obejctID` (`objectID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_mark` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(10) NOT NULL DEFAULT '',
@@ -2997,7 +2997,7 @@ CREATE TABLE `zt_mark` (
   PRIMARY KEY (`id`),
   KEY `idx_object` (`objectType`,`objectID`),
   KEY `idx_account` (`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_market` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -3008,14 +3008,14 @@ CREATE TABLE `zt_market` (
   `competition` varchar(255) NOT NULL DEFAULT '',
   `strategy` varchar(255) NOT NULL DEFAULT '',
   `ppm` varchar(20) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime DEFAULT NULL,
   `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
   `lastEditedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_marketreport` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -3025,7 +3025,7 @@ CREATE TABLE `zt_marketreport` (
   `owner` varchar(30) NOT NULL DEFAULT '',
   `participants` varchar(255) NOT NULL DEFAULT '',
   `source` varchar(30) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `status` varchar(20) NOT NULL DEFAULT '',
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime DEFAULT NULL,
@@ -3035,22 +3035,22 @@ CREATE TABLE `zt_marketreport` (
   `publishedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_measqueue` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(30) NOT NULL DEFAULT '',
   `mid` int unsigned NOT NULL DEFAULT '0',
   `status` varchar(100) NOT NULL DEFAULT '',
-  `logs` text,
+  `logs` text DEFAULT NULL,
   `execTime` varchar(10) NOT NULL DEFAULT '',
-  `params` text,
+  `params` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `updateDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `status_deleted` (`status`,`deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_measrecords` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(30) NOT NULL DEFAULT '',
@@ -3059,7 +3059,7 @@ CREATE TABLE `zt_measrecords` (
   `project` int unsigned NOT NULL DEFAULT '0',
   `product` int unsigned NOT NULL DEFAULT '0',
   `execution` int unsigned NOT NULL DEFAULT '0',
-  `params` text,
+  `params` text DEFAULT NULL,
   `year` char(4) NOT NULL DEFAULT '',
   `month` char(6) NOT NULL DEFAULT '',
   `week` char(2) NOT NULL DEFAULT '',
@@ -3070,17 +3070,17 @@ CREATE TABLE `zt_measrecords` (
   UNIQUE KEY `time` (`year`,`month`,`day`,`week`),
   KEY `product` (`product`),
   KEY `project` (`project`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_meastemplate` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `model` varchar(30) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL DEFAULT '',
-  `content` mediumtext,
+  `content` mediumtext DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_meeting` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3092,10 +3092,10 @@ CREATE TABLE `zt_meeting` (
   `dept` int unsigned NOT NULL DEFAULT '0',
   `mode` varchar(255) NOT NULL DEFAULT '',
   `host` varchar(30) NOT NULL DEFAULT '',
-  `participant` text,
+  `participant` text DEFAULT NULL,
   `date` date DEFAULT NULL,
   `room` int unsigned NOT NULL DEFAULT '0',
-  `minutes` text,
+  `minutes` text DEFAULT NULL,
   `minutedBy` varchar(30) NOT NULL DEFAULT '',
   `minutedDate` datetime DEFAULT NULL,
   `objectType` varchar(15) NOT NULL DEFAULT '',
@@ -3106,7 +3106,7 @@ CREATE TABLE `zt_meeting` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_meetingroom` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -3120,7 +3120,7 @@ CREATE TABLE `zt_meetingroom` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_metric` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `purpose` varchar(50) NOT NULL DEFAULT '',
@@ -3133,9 +3133,9 @@ CREATE TABLE `zt_metric` (
   `code` varchar(90) NOT NULL DEFAULT '',
   `unit` varchar(10) NOT NULL DEFAULT '',
   `dateType` varchar(50) NOT NULL DEFAULT '',
-  `collector` text,
-  `desc` text,
-  `definition` text,
+  `collector` text DEFAULT NULL,
+  `desc` text DEFAULT NULL,
+  `definition` text DEFAULT NULL,
   `when` varchar(30) NOT NULL DEFAULT '',
   `event` varchar(30) NOT NULL DEFAULT '',
   `cronCFG` varchar(30) NOT NULL DEFAULT '',
@@ -3155,7 +3155,7 @@ CREATE TABLE `zt_metric` (
   `lastCalcTime` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_metriclib` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `metricID` int unsigned NOT NULL DEFAULT '0',
@@ -3186,7 +3186,7 @@ CREATE TABLE `zt_metriclib` (
   KEY `metricCode_product_date` (`metricCode`,`product`,`date`),
   KEY `metricCode_execution_date` (`metricCode`,`execution`,`date`),
   KEY `metricCode_user_date` (`metricCode`,`user`,`date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_module` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `root` int unsigned NOT NULL DEFAULT '0',
@@ -3199,7 +3199,7 @@ CREATE TABLE `zt_module` (
   `type` varchar(30) NOT NULL DEFAULT '',
   `from` int unsigned NOT NULL DEFAULT '0',
   `owner` varchar(30) NOT NULL DEFAULT '',
-  `collector` text,
+  `collector` text DEFAULT NULL,
   `short` varchar(60) NOT NULL DEFAULT '',
   `extra` varchar(30) NOT NULL DEFAULT '',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
@@ -3207,7 +3207,7 @@ CREATE TABLE `zt_module` (
   KEY `root` (`root`),
   KEY `type` (`type`),
   KEY `path` (`path`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_nc` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3216,7 +3216,7 @@ CREATE TABLE `zt_nc` (
   `deliverable` int unsigned NOT NULL DEFAULT '0' COMMENT '交付物',
   `listID` int unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `type` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT 'active',
   `severity` tinyint unsigned NOT NULL DEFAULT '0',
@@ -3236,25 +3236,25 @@ CREATE TABLE `zt_nc` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_notify` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(10) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT '0',
   `action` int unsigned NOT NULL DEFAULT '0',
-  `toList` text,
-  `ccList` text,
-  `subject` text,
-  `data` text,
+  `toList` text DEFAULT NULL,
+  `ccList` text DEFAULT NULL,
+  `subject` text DEFAULT NULL,
+  `data` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `sendTime` datetime DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'wait',
-  `failReason` text,
+  `failReason` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `objectType` (`objectType`),
   KEY `status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_oauth` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
@@ -3266,7 +3266,7 @@ CREATE TABLE `zt_oauth` (
   KEY `account` (`account`),
   KEY `providerType` (`providerType`),
   KEY `providerID` (`providerID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_object` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3276,17 +3276,17 @@ CREATE TABLE `zt_object` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `category` varchar(255) NOT NULL DEFAULT '',
   `categoryTitle` varchar(255) NOT NULL DEFAULT '',
-  `categoryVersion` text,
+  `categoryVersion` text DEFAULT NULL,
   `version` varchar(255) NOT NULL DEFAULT '',
   `type` enum('reviewed','taged','decision') NOT NULL DEFAULT 'reviewed',
   `status` varchar(20) NOT NULL DEFAULT '',
   `approval` int unsigned NOT NULL DEFAULT '0',
   `reviewResult` varchar(20) NOT NULL DEFAULT '',
-  `reviewOpinion` text,
-  `reviewers` text,
+  `reviewOpinion` text DEFAULT NULL,
+  `reviewers` text DEFAULT NULL,
   `enabled` enum('0','1') NOT NULL DEFAULT '1',
-  `data` text,
-  `items` text COMMENT '评审条目列表',
+  `data` text DEFAULT NULL,
+  `items` text DEFAULT NULL COMMENT '评审条目列表',
   `end` date DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
@@ -3294,7 +3294,7 @@ CREATE TABLE `zt_object` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_opportunity` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3312,12 +3312,12 @@ CREATE TABLE `zt_opportunity` (
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime DEFAULT NULL,
   `approvedDate` datetime DEFAULT NULL,
-  `prevention` mediumtext,
+  `prevention` mediumtext DEFAULT NULL,
   `plannedClosedDate` date DEFAULT NULL,
   `actualClosedDate` date DEFAULT NULL,
   `lib` int unsigned NOT NULL DEFAULT '0',
   `from` int unsigned NOT NULL DEFAULT '0',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `version` smallint unsigned NOT NULL DEFAULT '1',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
@@ -3332,14 +3332,14 @@ CREATE TABLE `zt_opportunity` (
   `cancelReason` varchar(30) NOT NULL DEFAULT '',
   `hangupedBy` varchar(30) NOT NULL DEFAULT '',
   `hangupedDate` datetime DEFAULT NULL,
-  `resolution` mediumtext,
+  `resolution` mediumtext DEFAULT NULL,
   `resolvedBy` varchar(30) NOT NULL DEFAULT '',
   `resolvedDate` datetime DEFAULT NULL,
   `lastCheckedBy` varchar(30) NOT NULL DEFAULT '',
   `lastCheckedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_overtime` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `year` char(4) NOT NULL DEFAULT '',
@@ -3350,7 +3350,7 @@ CREATE TABLE `zt_overtime` (
   `hours` decimal(4,1) unsigned NOT NULL DEFAULT '0.0',
   `leave` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `status` varchar(30) NOT NULL DEFAULT '',
   `rejectReason` varchar(100) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
@@ -3359,13 +3359,13 @@ CREATE TABLE `zt_overtime` (
   `reviewedDate` datetime DEFAULT NULL,
   `level` tinyint unsigned NOT NULL DEFAULT '0',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
-  `reviewers` text,
+  `reviewers` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year` (`year`),
   KEY `type` (`type`),
   KEY `status` (`status`),
   KEY `createdBy` (`createdBy`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_pivot` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `dimension` int unsigned NOT NULL DEFAULT '0',
@@ -3373,17 +3373,17 @@ CREATE TABLE `zt_pivot` (
   `code` varchar(255) NOT NULL DEFAULT '',
   `driver` varchar(10) NOT NULL DEFAULT 'mysql',
   `mode` varchar(10) NOT NULL DEFAULT 'builder',
-  `name` text,
-  `desc` text,
+  `name` text DEFAULT NULL,
+  `desc` text DEFAULT NULL,
   `acl` varchar(10) NOT NULL DEFAULT 'open',
-  `whitelist` text,
-  `sql` text,
-  `fields` text,
-  `langs` text,
-  `vars` text,
-  `objects` text,
-  `settings` text,
-  `filters` text,
+  `whitelist` text DEFAULT NULL,
+  `sql` text DEFAULT NULL,
+  `fields` text DEFAULT NULL,
+  `langs` text DEFAULT NULL,
+  `vars` text DEFAULT NULL,
+  `objects` text DEFAULT NULL,
+  `settings` text DEFAULT NULL,
+  `filters` text DEFAULT NULL,
   `step` tinyint unsigned NOT NULL DEFAULT '0',
   `stage` varchar(10) NOT NULL DEFAULT 'draft',
   `builtin` tinyint unsigned NOT NULL DEFAULT '0',
@@ -3396,39 +3396,39 @@ CREATE TABLE `zt_pivot` (
   PRIMARY KEY (`id`),
   KEY `dimension` (`dimension`),
   KEY `group` (`group`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_pivotdrill` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `pivot` int unsigned NOT NULL DEFAULT '0',
   `version` varchar(10) NOT NULL DEFAULT '1',
   `field` varchar(255) NOT NULL DEFAULT '',
   `object` varchar(40) NOT NULL DEFAULT '',
-  `whereSql` mediumtext,
-  `condition` mediumtext,
+  `whereSql` mediumtext DEFAULT NULL,
+  `condition` mediumtext DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'published',
   `account` varchar(30) NOT NULL DEFAULT '',
   `type` varchar(10) NOT NULL DEFAULT 'manual',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_pivotspec` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `pivot` int unsigned NOT NULL DEFAULT '0',
   `version` varchar(10) NOT NULL DEFAULT '1',
   `driver` varchar(10) NOT NULL DEFAULT 'mysql',
   `mode` varchar(10) NOT NULL DEFAULT 'builder',
-  `name` text,
-  `desc` text,
-  `sql` text,
-  `fields` text,
-  `langs` text,
-  `vars` text,
-  `objects` text,
-  `settings` text,
-  `filters` text,
+  `name` text DEFAULT NULL,
+  `desc` text DEFAULT NULL,
+  `sql` text DEFAULT NULL,
+  `fields` text DEFAULT NULL,
+  `langs` text DEFAULT NULL,
+  `vars` text DEFAULT NULL,
+  `objects` text DEFAULT NULL,
+  `settings` text DEFAULT NULL,
+  `filters` text DEFAULT NULL,
   `createdDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_pivot_version` (`pivot`,`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_planstory` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `plan` int unsigned NOT NULL DEFAULT '0',
@@ -3436,7 +3436,7 @@ CREATE TABLE `zt_planstory` (
   `order` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `plan_story` (`plan`,`story`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_practice` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `module` int unsigned NOT NULL DEFAULT '0',
@@ -3444,18 +3444,18 @@ CREATE TABLE `zt_practice` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `labels` varchar(255) NOT NULL DEFAULT '',
   `summary` varchar(255) NOT NULL DEFAULT '',
-  `content` text,
+  `content` text DEFAULT NULL,
   `contributor` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_process` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `workflowGroup` int unsigned NOT NULL DEFAULT '0',
   `module` int unsigned NOT NULL DEFAULT '0',
   `abbr` varchar(30) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT '',
   `order` int unsigned NOT NULL DEFAULT '0',
@@ -3467,7 +3467,7 @@ CREATE TABLE `zt_process` (
   `assignedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_product` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `program` int unsigned NOT NULL DEFAULT '0',
@@ -3479,7 +3479,7 @@ CREATE TABLE `zt_product` (
   `type` varchar(30) NOT NULL DEFAULT 'normal',
   `status` varchar(30) NOT NULL DEFAULT '',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `PO` varchar(30) NOT NULL DEFAULT '',
   `QD` varchar(30) NOT NULL DEFAULT '',
   `RD` varchar(30) NOT NULL DEFAULT '',
@@ -3487,10 +3487,10 @@ CREATE TABLE `zt_product` (
   `ticket` varchar(30) NOT NULL DEFAULT '',
   `workflowGroup` int unsigned NOT NULL DEFAULT '0',
   `acl` varchar(10) NOT NULL DEFAULT 'open',
-  `groups` text,
-  `whitelist` text,
-  `reviewer` text,
-  `PMT` text,
+  `groups` text DEFAULT NULL,
+  `whitelist` text DEFAULT NULL,
+  `reviewer` text DEFAULT NULL,
+  `PMT` text DEFAULT NULL,
   `draftEpics` int unsigned NOT NULL DEFAULT '0',
   `activeEpics` int unsigned NOT NULL DEFAULT '0',
   `changingEpics` int unsigned NOT NULL DEFAULT '0',
@@ -3528,7 +3528,7 @@ CREATE TABLE `zt_product` (
   PRIMARY KEY (`id`),
   KEY `acl` (`acl`),
   KEY `order` (`order`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_productplan` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `product` int unsigned NOT NULL DEFAULT '0',
@@ -3536,12 +3536,12 @@ CREATE TABLE `zt_productplan` (
   `parent` int NOT NULL DEFAULT '0',
   `title` varchar(90) NOT NULL DEFAULT '',
   `status` varchar(10) NOT NULL DEFAULT 'wait',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `begin` date DEFAULT NULL,
   `end` date DEFAULT NULL,
   `finishedDate` datetime DEFAULT NULL,
   `closedDate` datetime DEFAULT NULL,
-  `order` text,
+  `order` text DEFAULT NULL,
   `closedReason` varchar(20) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
@@ -3549,7 +3549,7 @@ CREATE TABLE `zt_productplan` (
   PRIMARY KEY (`id`),
   KEY `product` (`product`),
   KEY `end` (`end`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_programactivity` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3557,7 +3557,7 @@ CREATE TABLE `zt_programactivity` (
   `process` int unsigned NOT NULL DEFAULT '0',
   `activity` int unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
-  `content` text,
+  `content` text DEFAULT NULL,
   `reason` varchar(255) NOT NULL DEFAULT '',
   `result` varchar(30) NOT NULL DEFAULT '',
   `linkedBy` varchar(30) NOT NULL DEFAULT '',
@@ -3565,7 +3565,7 @@ CREATE TABLE `zt_programactivity` (
   `createdDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_programoutput` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3573,7 +3573,7 @@ CREATE TABLE `zt_programoutput` (
   `process` int unsigned NOT NULL DEFAULT '0',
   `activity` int unsigned NOT NULL DEFAULT '0',
   `output` int unsigned NOT NULL DEFAULT '0',
-  `content` text,
+  `content` text DEFAULT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   `reason` varchar(255) NOT NULL DEFAULT '',
   `result` varchar(30) NOT NULL DEFAULT '',
@@ -3582,7 +3582,7 @@ CREATE TABLE `zt_programoutput` (
   `createdDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_programprocess` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3590,26 +3590,26 @@ CREATE TABLE `zt_programprocess` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
   `abbr` varchar(30) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `reason` varchar(255) NOT NULL DEFAULT '',
   `linkedBy` varchar(30) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_programreport` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `template` int unsigned NOT NULL DEFAULT '0',
   `project` int unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
-  `params` text,
-  `content` text,
+  `params` text DEFAULT NULL,
+  `content` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_project` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3624,7 +3624,7 @@ CREATE TABLE `zt_project` (
   `attribute` varchar(30) NOT NULL DEFAULT '',
   `percent` decimal(5,2) unsigned NOT NULL DEFAULT '0.00',
   `milestone` tinyint unsigned NOT NULL DEFAULT '0',
-  `output` text,
+  `output` text DEFAULT NULL,
   `auth` varchar(30) NOT NULL DEFAULT '',
   `storyType` varchar(30) NOT NULL DEFAULT 'story',
   `parent` int unsigned NOT NULL DEFAULT '0',
@@ -3640,11 +3640,11 @@ CREATE TABLE `zt_project` (
   `realBegan` date DEFAULT NULL,
   `realEnd` date DEFAULT NULL,
   `days` smallint unsigned NOT NULL DEFAULT '0',
-  `schedule` mediumtext,
+  `schedule` mediumtext DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT '',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `pri` tinyint unsigned NOT NULL DEFAULT '1',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `version` smallint unsigned NOT NULL DEFAULT '1',
   `parentVersion` smallint unsigned NOT NULL DEFAULT '1',
   `planDuration` int unsigned NOT NULL DEFAULT '0',
@@ -3672,9 +3672,9 @@ CREATE TABLE `zt_project` (
   `RD` varchar(30) NOT NULL DEFAULT '',
   `team` varchar(90) NOT NULL DEFAULT '',
   `acl` varchar(10) NOT NULL DEFAULT 'open',
-  `whitelist` text,
+  `whitelist` text DEFAULT NULL,
   `tplAcl` varchar(30) NOT NULL DEFAULT 'open',
-  `tplWhiteList` text,
+  `tplWhiteList` text DEFAULT NULL,
   `order` int unsigned NOT NULL DEFAULT '0',
   `stageBy` varchar(10) NOT NULL DEFAULT 'product',
   `displayCards` smallint unsigned NOT NULL DEFAULT '0',
@@ -3700,18 +3700,18 @@ CREATE TABLE `zt_project` (
   KEY `order` (`order`),
   KEY `project` (`project`),
   KEY `type_order` (`type`,`order`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_projectadmin` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `group` smallint unsigned NOT NULL DEFAULT '0',
   `account` varchar(30) NOT NULL DEFAULT '',
-  `programs` text,
-  `projects` text,
-  `products` text,
-  `executions` text,
+  `programs` text DEFAULT NULL,
+  `projects` text DEFAULT NULL,
+  `products` text DEFAULT NULL,
+  `executions` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `group_account` (`group`,`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_projectcase` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3722,7 +3722,7 @@ CREATE TABLE `zt_projectcase` (
   `order` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `project` (`project`,`case`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_projectchange` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0' COMMENT '所属项目',
@@ -3734,11 +3734,11 @@ CREATE TABLE `zt_projectchange` (
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '变更状态',
   `approval` int unsigned NOT NULL DEFAULT '0' COMMENT '审批流程',
   `reviewResult` varchar(20) NOT NULL DEFAULT '' COMMENT '审批结果',
-  `reviewOpinion` text COMMENT '审批意见',
-  `reviewers` text COMMENT '评审人员',
+  `reviewOpinion` text DEFAULT NULL COMMENT '审批意见',
+  `reviewers` text DEFAULT NULL COMMENT '评审人员',
   `owner` varchar(30) NOT NULL DEFAULT '' COMMENT '负责人',
   `reason` varchar(1000) NOT NULL DEFAULT '' COMMENT '变更原因',
-  `desc` text COMMENT '变更描述',
+  `desc` text DEFAULT NULL COMMENT '变更描述',
   `deadline` datetime DEFAULT NULL COMMENT '期望完成时间',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建人',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
@@ -3747,7 +3747,7 @@ CREATE TABLE `zt_projectchange` (
   `deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
   KEY `project` (`project`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_projectdeliverable` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0' COMMENT '所属项目',
@@ -3768,7 +3768,7 @@ CREATE TABLE `zt_projectdeliverable` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `project_deliverable_doc` (`project`,`deliverable`,`doc`),
   KEY `project` (`project`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_projectproduct` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3778,7 +3778,7 @@ CREATE TABLE `zt_projectproduct` (
   `roadmap` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `project_product` (`project`,`product`,`branch`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_projectspec` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3789,7 +3789,7 @@ CREATE TABLE `zt_projectspec` (
   `end` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `project` (`project`,`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_projectstory` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3801,12 +3801,12 @@ CREATE TABLE `zt_projectstory` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `project` (`project`,`story`),
   KEY `story` (`story`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_queue` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `cron` int unsigned NOT NULL DEFAULT '0',
   `type` varchar(255) NOT NULL DEFAULT '',
-  `command` text,
+  `command` text DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `execId` int unsigned NOT NULL DEFAULT '0',
   `createdDate` datetime DEFAULT NULL,
@@ -3814,7 +3814,7 @@ CREATE TABLE `zt_queue` (
   PRIMARY KEY (`id`),
   KEY `status_createdDate` (`status`,`createdDate`),
   KEY `cron_createdDate` (`cron`,`createdDate`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_relation` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3832,7 +3832,7 @@ CREATE TABLE `zt_relation` (
   UNIQUE KEY `relation` (`product`,`relation`,`AType`,`BType`,`AID`,`BID`),
   KEY `AID` (`AType`,`AID`),
   KEY `BID` (`BType`,`BID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_relationoftasks` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3843,7 +3843,7 @@ CREATE TABLE `zt_relationoftasks` (
   `action` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `relationoftasks` (`execution`,`task`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_release` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` varchar(255) NOT NULL DEFAULT '0',
@@ -3857,11 +3857,11 @@ CREATE TABLE `zt_release` (
   `marker` tinyint unsigned NOT NULL DEFAULT '0',
   `date` date DEFAULT NULL,
   `releasedDate` date DEFAULT NULL,
-  `stories` text,
-  `bugs` text,
-  `leftBugs` text,
-  `desc` mediumtext,
-  `mailto` text,
+  `stories` text DEFAULT NULL,
+  `bugs` text DEFAULT NULL,
+  `leftBugs` text DEFAULT NULL,
+  `desc` mediumtext DEFAULT NULL,
+  `mailto` text DEFAULT NULL,
   `notify` varchar(255) NOT NULL DEFAULT '',
   `status` varchar(20) NOT NULL DEFAULT 'normal',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
@@ -3872,7 +3872,7 @@ CREATE TABLE `zt_release` (
   KEY `product` (`product`),
   KEY `build` (`build`),
   KEY `idx_system` (`system`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_releaserelated` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `release` int unsigned NOT NULL DEFAULT '0',
@@ -3882,24 +3882,24 @@ CREATE TABLE `zt_releaserelated` (
   UNIQUE KEY `unique` (`release`,`objectID`,`objectType`),
   KEY `objectID` (`objectID`),
   KEY `objectType` (`objectType`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_report` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(100) NOT NULL DEFAULT '',
-  `name` text,
+  `name` text DEFAULT NULL,
   `dimension` int unsigned NOT NULL DEFAULT '0',
   `module` varchar(100) NOT NULL DEFAULT '',
-  `sql` text,
-  `vars` text,
-  `langs` text,
-  `params` text,
+  `sql` text DEFAULT NULL,
+  `vars` text DEFAULT NULL,
+  `langs` text DEFAULT NULL,
+  `params` text DEFAULT NULL,
   `step` tinyint unsigned NOT NULL DEFAULT '2',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_researchplan` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3912,22 +3912,22 @@ CREATE TABLE `zt_researchplan` (
   `location` varchar(255) NOT NULL DEFAULT '',
   `team` varchar(255) NOT NULL DEFAULT '',
   `method` varchar(20) NOT NULL DEFAULT '',
-  `outline` mediumtext,
-  `schedule` mediumtext,
+  `outline` mediumtext DEFAULT NULL,
+  `schedule` mediumtext DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_researchreport` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
   `relatedPlan` int unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `author` varchar(30) NOT NULL DEFAULT '',
-  `content` mediumtext,
+  `content` mediumtext DEFAULT NULL,
   `customer` varchar(255) NOT NULL DEFAULT '',
   `researchObjects` varchar(255) NOT NULL DEFAULT '',
   `begin` datetime DEFAULT NULL,
@@ -3940,7 +3940,7 @@ CREATE TABLE `zt_researchreport` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_review` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3965,7 +3965,7 @@ CREATE TABLE `zt_review` (
   `result` char(30) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_reviewcl` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `workflowGroup` int unsigned NOT NULL DEFAULT '0',
@@ -3983,7 +3983,7 @@ CREATE TABLE `zt_reviewcl` (
   `assignedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_reviewissue` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -3994,7 +3994,7 @@ CREATE TABLE `zt_reviewissue` (
   `type` varchar(30) NOT NULL DEFAULT 'review',
   `listID` int unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
-  `opinion` mediumtext,
+  `opinion` mediumtext DEFAULT NULL,
   `opinionDate` date DEFAULT NULL,
   `status` char(30) NOT NULL DEFAULT '',
   `resolution` varchar(30) NOT NULL DEFAULT '',
@@ -4006,7 +4006,7 @@ CREATE TABLE `zt_reviewissue` (
   `assignedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_reviewlist` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL DEFAULT '',
@@ -4022,20 +4022,20 @@ CREATE TABLE `zt_reviewlist` (
   `assignedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_reviewresult` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `review` int unsigned NOT NULL DEFAULT '0',
   `type` varchar(30) NOT NULL DEFAULT 'review',
   `result` varchar(30) NOT NULL DEFAULT '',
-  `opinion` text,
+  `opinion` text DEFAULT NULL,
   `reviewer` varchar(30) NOT NULL DEFAULT '',
   `remainIssue` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `consumed` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `reviewer` (`review`,`reviewer`,`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_risk` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -4050,8 +4050,8 @@ CREATE TABLE `zt_risk` (
   `rate` varchar(30) NOT NULL DEFAULT '',
   `pri` tinyint unsigned NOT NULL DEFAULT '2',
   `identifiedDate` date DEFAULT NULL,
-  `prevention` mediumtext,
-  `remedy` mediumtext,
+  `prevention` mediumtext DEFAULT NULL,
+  `remedy` mediumtext DEFAULT NULL,
   `plannedClosedDate` date DEFAULT NULL,
   `actualClosedDate` date DEFAULT NULL,
   `lib` int unsigned NOT NULL DEFAULT '0',
@@ -4061,7 +4061,7 @@ CREATE TABLE `zt_risk` (
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
-  `resolution` mediumtext,
+  `resolution` mediumtext DEFAULT NULL,
   `resolvedBy` varchar(30) NOT NULL DEFAULT '',
   `activateBy` varchar(30) NOT NULL DEFAULT '',
   `activateDate` date DEFAULT NULL,
@@ -4079,14 +4079,14 @@ CREATE TABLE `zt_risk` (
   `approvedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_riskissue` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `risk` int unsigned NOT NULL DEFAULT '0',
   `issue` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `risk_issue` (`risk`,`issue`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_roadmap` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `product` int unsigned NOT NULL DEFAULT '0',
@@ -4095,7 +4095,7 @@ CREATE TABLE `zt_roadmap` (
   `status` varchar(30) NOT NULL DEFAULT '',
   `begin` date DEFAULT NULL,
   `end` date DEFAULT NULL,
-  `desc` longtext,
+  `desc` longtext DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `closedBy` varchar(30) NOT NULL DEFAULT '',
@@ -4103,7 +4103,7 @@ CREATE TABLE `zt_roadmap` (
   `closedReason` varchar(10) NOT NULL DEFAULT '',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_roadmapstory` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `roadmap` int unsigned NOT NULL DEFAULT '0',
@@ -4111,7 +4111,7 @@ CREATE TABLE `zt_roadmapstory` (
   `order` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `roadmap_story` (`roadmap`,`story`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_scene` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `product` int unsigned NOT NULL DEFAULT '0',
@@ -4128,7 +4128,7 @@ CREATE TABLE `zt_scene` (
   `path` varchar(1000) NOT NULL DEFAULT '',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_score` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
@@ -4143,16 +4143,16 @@ CREATE TABLE `zt_score` (
   KEY `account` (`account`),
   KEY `module` (`module`),
   KEY `method` (`method`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_screen` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `dimension` int unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `acl` varchar(10) NOT NULL DEFAULT 'open',
-  `whitelist` text,
-  `cover` mediumtext,
-  `scheme` mediumtext,
+  `whitelist` text DEFAULT NULL,
+  `cover` mediumtext DEFAULT NULL,
+  `scheme` mediumtext DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'draft',
   `builtin` tinyint unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
@@ -4161,20 +4161,20 @@ CREATE TABLE `zt_screen` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_searchdict` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `key` smallint unsigned NOT NULL DEFAULT '0',
   `value` char(3) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `key_value` (`key`,`value`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_searchindex` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT '0',
-  `title` text,
-  `content` text,
+  `title` text DEFAULT NULL,
+  `content` text DEFAULT NULL,
   `addedDate` datetime DEFAULT NULL,
   `editedDate` datetime DEFAULT NULL,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
@@ -4182,7 +4182,7 @@ CREATE TABLE `zt_searchindex` (
   UNIQUE KEY `object` (`objectType`,`objectID`),
   KEY `addedDate` (`addedDate`),
   FULLTEXT KEY `title_content` (`title`,`content`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_serverroom` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL DEFAULT '',
@@ -4197,14 +4197,14 @@ CREATE TABLE `zt_serverroom` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_solutions` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
   `execution` int unsigned NOT NULL DEFAULT '0',
-  `contents` text,
-  `support` text,
-  `measures` text,
+  `contents` text DEFAULT NULL,
+  `support` text DEFAULT NULL,
+  `measures` text DEFAULT NULL,
   `type` varchar(30) NOT NULL DEFAULT '',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime DEFAULT NULL,
@@ -4212,28 +4212,28 @@ CREATE TABLE `zt_solutions` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_sqlbuilder` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectID` int unsigned NOT NULL DEFAULT '0',
   `objectType` varchar(10) NOT NULL DEFAULT '',
-  `sql` text,
-  `setting` text,
+  `sql` text DEFAULT NULL,
+  `setting` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_sqlview` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(90) NOT NULL DEFAULT '',
   `code` varchar(45) NOT NULL DEFAULT '',
-  `sql` text,
-  `desc` text,
+  `sql` text DEFAULT NULL,
+  `desc` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_stage` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `workflowGroup` int unsigned NOT NULL DEFAULT '0',
@@ -4248,7 +4248,7 @@ CREATE TABLE `zt_stage` (
   `order` int unsigned NOT NULL DEFAULT '0',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_stakeholder` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectID` int unsigned NOT NULL DEFAULT '0',
@@ -4265,18 +4265,18 @@ CREATE TABLE `zt_stakeholder` (
   PRIMARY KEY (`id`),
   KEY `objectID` (`objectID`),
   KEY `objectType` (`objectType`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_story` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `parent` int unsigned NOT NULL DEFAULT '0',
   `isParent` tinyint unsigned NOT NULL DEFAULT '0',
   `root` int unsigned NOT NULL DEFAULT '0',
-  `path` text,
+  `path` text DEFAULT NULL,
   `grade` tinyint unsigned NOT NULL DEFAULT '0',
   `product` int unsigned NOT NULL DEFAULT '0',
   `branch` int unsigned NOT NULL DEFAULT '0',
   `module` int unsigned NOT NULL DEFAULT '0',
-  `plan` text,
+  `plan` text DEFAULT NULL,
   `source` varchar(20) NOT NULL DEFAULT '',
   `sourceNote` varchar(255) NOT NULL DEFAULT '',
   `fromBug` int unsigned NOT NULL DEFAULT '0',
@@ -4292,7 +4292,7 @@ CREATE TABLE `zt_story` (
   `color` char(7) NOT NULL DEFAULT '',
   `stage` varchar(10) NOT NULL DEFAULT 'wait',
   `stagedBy` varchar(30) NOT NULL DEFAULT '',
-  `mailto` text,
+  `mailto` text DEFAULT NULL,
   `lib` int unsigned NOT NULL DEFAULT '0',
   `fromStory` int unsigned NOT NULL DEFAULT '0',
   `fromVersion` smallint unsigned NOT NULL DEFAULT '1',
@@ -4315,7 +4315,7 @@ CREATE TABLE `zt_story` (
   `toBug` int unsigned NOT NULL DEFAULT '0',
   `linkStories` varchar(255) NOT NULL DEFAULT '',
   `linkRequirements` varchar(255) NOT NULL DEFAULT '',
-  `docs` text,
+  `docs` text DEFAULT NULL,
   `twins` varchar(255) NOT NULL DEFAULT '',
   `duplicateStory` int unsigned NOT NULL DEFAULT '0',
   `version` smallint unsigned NOT NULL DEFAULT '1',
@@ -4345,18 +4345,18 @@ CREATE TABLE `zt_story` (
   KEY `status` (`status`),
   KEY `assignedTo` (`assignedTo`),
   KEY `feedback` (`feedback`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_storyestimate` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `story` int unsigned NOT NULL DEFAULT '0',
   `round` smallint unsigned NOT NULL DEFAULT '0',
-  `estimate` text,
+  `estimate` text DEFAULT NULL,
   `average` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `story` (`story`,`round`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_storygrade` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(20) NOT NULL DEFAULT '',
@@ -4364,7 +4364,7 @@ CREATE TABLE `zt_storygrade` (
   `name` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_storyreview` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `story` int unsigned NOT NULL DEFAULT '0',
@@ -4374,20 +4374,20 @@ CREATE TABLE `zt_storyreview` (
   `reviewDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `story` (`story`,`version`,`reviewer`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_storyspec` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `story` int unsigned NOT NULL DEFAULT '0',
   `version` smallint unsigned NOT NULL DEFAULT '1',
   `title` varchar(255) NOT NULL DEFAULT '',
-  `spec` mediumtext,
-  `verify` mediumtext,
-  `files` text,
-  `docs` text,
-  `docVersions` text,
+  `spec` mediumtext DEFAULT NULL,
+  `verify` mediumtext DEFAULT NULL,
+  `files` text DEFAULT NULL,
+  `docs` text DEFAULT NULL,
+  `docVersions` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `story` (`story`,`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_storystage` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `story` int unsigned NOT NULL DEFAULT '0',
@@ -4397,7 +4397,7 @@ CREATE TABLE `zt_storystage` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `story_branch` (`story`,`branch`),
   KEY `story` (`story`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_suitecase` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `suite` int unsigned NOT NULL DEFAULT '0',
@@ -4407,7 +4407,7 @@ CREATE TABLE `zt_suitecase` (
   `version` smallint unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `suitecase` (`suite`,`case`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_system` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL DEFAULT '',
@@ -4417,7 +4417,7 @@ CREATE TABLE `zt_system` (
   `latestDate` datetime DEFAULT NULL,
   `children` varchar(255) NOT NULL DEFAULT '',
   `status` varchar(10) NOT NULL DEFAULT 'active',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -4426,7 +4426,7 @@ CREATE TABLE `zt_system` (
   PRIMARY KEY (`id`),
   KEY `idx_product` (`product`),
   KEY `idx_status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_task` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -4443,8 +4443,8 @@ CREATE TABLE `zt_task` (
   `fromBug` int unsigned NOT NULL DEFAULT '0',
   `feedback` int unsigned NOT NULL DEFAULT '0',
   `fromIssue` int unsigned NOT NULL DEFAULT '0',
-  `docs` text,
-  `docVersions` text,
+  `docs` text DEFAULT NULL,
+  `docVersions` text DEFAULT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(20) NOT NULL DEFAULT '',
   `mode` varchar(10) NOT NULL DEFAULT '',
@@ -4456,9 +4456,9 @@ CREATE TABLE `zt_task` (
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `color` char(7) NOT NULL DEFAULT '',
-  `mailto` text,
+  `mailto` text DEFAULT NULL,
   `keywords` varchar(255) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `version` smallint unsigned NOT NULL DEFAULT '1',
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime DEFAULT NULL,
@@ -4468,7 +4468,7 @@ CREATE TABLE `zt_task` (
   `realStarted` datetime DEFAULT NULL,
   `finishedBy` varchar(30) NOT NULL DEFAULT '',
   `finishedDate` datetime DEFAULT NULL,
-  `finishedList` text,
+  `finishedList` text DEFAULT NULL,
   `canceledBy` varchar(30) NOT NULL DEFAULT '',
   `canceledDate` datetime DEFAULT NULL,
   `closedBy` varchar(30) NOT NULL DEFAULT '',
@@ -4496,7 +4496,7 @@ CREATE TABLE `zt_task` (
   KEY `assignedTo` (`assignedTo`),
   KEY `order` (`order`),
   KEY `feedback` (`feedback`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_taskestimate` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `task` int unsigned NOT NULL DEFAULT '0',
@@ -4504,11 +4504,11 @@ CREATE TABLE `zt_taskestimate` (
   `left` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   `consumed` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   `account` varchar(30) NOT NULL DEFAULT '',
-  `work` text,
+  `work` text DEFAULT NULL,
   `order` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `task` (`task`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_taskspec` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `task` int unsigned NOT NULL DEFAULT '0',
@@ -4518,7 +4518,7 @@ CREATE TABLE `zt_taskspec` (
   `deadline` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `task` (`task`,`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_taskteam` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `task` int unsigned NOT NULL DEFAULT '0',
@@ -4532,7 +4532,7 @@ CREATE TABLE `zt_taskteam` (
   `order` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `task` (`task`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_team` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `root` int unsigned NOT NULL DEFAULT '0',
@@ -4550,7 +4550,7 @@ CREATE TABLE `zt_team` (
   `order` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `team` (`root`,`type`,`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_testreport` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -4562,18 +4562,18 @@ CREATE TABLE `zt_testreport` (
   `begin` date DEFAULT NULL,
   `end` date DEFAULT NULL,
   `owner` varchar(30) NOT NULL DEFAULT '',
-  `members` text,
-  `stories` text,
-  `bugs` text,
-  `cases` text,
-  `report` text,
+  `members` text DEFAULT NULL,
+  `stories` text DEFAULT NULL,
+  `bugs` text DEFAULT NULL,
+  `cases` text DEFAULT NULL,
+  `report` text DEFAULT NULL,
   `objectType` varchar(10) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_testresult` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `run` int unsigned NOT NULL DEFAULT '0',
@@ -4582,19 +4582,19 @@ CREATE TABLE `zt_testresult` (
   `job` int unsigned NOT NULL DEFAULT '0',
   `compile` int unsigned NOT NULL DEFAULT '0',
   `caseResult` varchar(30) NOT NULL DEFAULT '',
-  `stepResults` text,
-  `ZTFResult` text,
+  `stepResults` text DEFAULT NULL,
+  `ZTFResult` text DEFAULT NULL,
   `node` int unsigned NOT NULL DEFAULT '0',
   `lastRunner` varchar(30) NOT NULL DEFAULT '',
   `date` datetime DEFAULT NULL,
   `duration` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',
-  `xml` text,
+  `xml` text DEFAULT NULL,
   `deploy` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `case` (`case`),
   KEY `version` (`version`),
   KEY `run` (`run`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_testrun` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `task` int unsigned NOT NULL DEFAULT '0',
@@ -4608,13 +4608,13 @@ CREATE TABLE `zt_testrun` (
   `status` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `task` (`task`,`case`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_testsuite` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
   `product` int unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `type` varchar(20) NOT NULL DEFAULT '',
   `order` int unsigned NOT NULL DEFAULT '0',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
@@ -4624,7 +4624,7 @@ CREATE TABLE `zt_testsuite` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `product` (`product`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_testtask` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '测试单编号',
   `project` int unsigned NOT NULL DEFAULT '0' COMMENT '所属项目',
@@ -4640,21 +4640,21 @@ CREATE TABLE `zt_testtask` (
   `end` date DEFAULT NULL COMMENT '计划结束日期',
   `realBegan` date DEFAULT NULL COMMENT '实际开始日期',
   `realFinishedDate` datetime DEFAULT NULL COMMENT '实际完成时间',
-  `mailto` text COMMENT '抄送人',
-  `desc` mediumtext COMMENT '描述',
-  `report` text,
+  `mailto` text DEFAULT NULL COMMENT '抄送人',
+  `desc` mediumtext DEFAULT NULL COMMENT '描述',
+  `report` text DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'wait' COMMENT '状态',
   `testreport` int unsigned NOT NULL DEFAULT '0' COMMENT '相关联的测试报告',
   `auto` varchar(10) NOT NULL DEFAULT 'no' COMMENT '是否为自动化测试',
   `subStatus` varchar(30) NOT NULL DEFAULT '' COMMENT '子状态',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
-  `members` text COMMENT '团队成员',
+  `members` text DEFAULT NULL COMMENT '团队成员',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
   KEY `product` (`product`),
   KEY `build` (`build`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_testtaskproduct` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
   `product` int unsigned NOT NULL DEFAULT '0' COMMENT '所属产品',
@@ -4664,14 +4664,14 @@ CREATE TABLE `zt_testtaskproduct` (
   `project` int unsigned NOT NULL DEFAULT '0' COMMENT '所属项目',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_productbuild` (`product`,`build`,`task`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ticket` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `product` int unsigned NOT NULL DEFAULT '0',
   `module` int unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `openedBuild` varchar(255) NOT NULL DEFAULT '',
   `feedback` int unsigned NOT NULL DEFAULT '0',
   `assignedTo` varchar(255) NOT NULL DEFAULT '',
@@ -4696,7 +4696,7 @@ CREATE TABLE `zt_ticket` (
   `finishedDate` datetime DEFAULT NULL,
   `resolvedBy` varchar(30) NOT NULL DEFAULT '',
   `resolvedDate` datetime DEFAULT NULL,
-  `resolution` text,
+  `resolution` text DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
   `keywords` varchar(255) NOT NULL DEFAULT '',
@@ -4707,7 +4707,7 @@ CREATE TABLE `zt_ticket` (
   PRIMARY KEY (`id`),
   KEY `product` (`product`),
   KEY `feedback` (`feedback`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ticketrelation` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `ticketId` int unsigned NOT NULL DEFAULT '0',
@@ -4715,7 +4715,7 @@ CREATE TABLE `zt_ticketrelation` (
   `objectType` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `ticketId` (`ticketId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_ticketsource` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `ticketId` int unsigned NOT NULL DEFAULT '0',
@@ -4725,7 +4725,7 @@ CREATE TABLE `zt_ticketsource` (
   `createdDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ticketId` (`ticketId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_todo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
@@ -4738,7 +4738,7 @@ CREATE TABLE `zt_todo` (
   `objectID` int unsigned NOT NULL DEFAULT '0',
   `pri` tinyint unsigned NOT NULL DEFAULT '0',
   `name` varchar(150) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `private` tinyint unsigned NOT NULL DEFAULT '0',
   `config` varchar(1000) NOT NULL DEFAULT '',
@@ -4757,7 +4757,7 @@ CREATE TABLE `zt_todo` (
   KEY `finishedBy` (`finishedBy`),
   KEY `date` (`date`),
   KEY `feedback` (`feedback`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_traincategory` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL DEFAULT '',
@@ -4769,7 +4769,7 @@ CREATE TABLE `zt_traincategory` (
   PRIMARY KEY (`id`),
   KEY `parent` (`parent`),
   KEY `path` (`path`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_traincontents` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(50) NOT NULL DEFAULT '',
@@ -4778,7 +4778,7 @@ CREATE TABLE `zt_traincontents` (
   `type` varchar(30) NOT NULL DEFAULT '',
   `parent` int unsigned NOT NULL DEFAULT '0',
   `path` varchar(255) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `order` int unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
@@ -4786,7 +4786,7 @@ CREATE TABLE `zt_traincontents` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_traincourse` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(255) NOT NULL DEFAULT '',
@@ -4794,7 +4794,7 @@ CREATE TABLE `zt_traincourse` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `status` varchar(10) NOT NULL DEFAULT '',
   `teacher` varchar(30) NOT NULL DEFAULT '',
-  `desc` mediumtext,
+  `desc` mediumtext DEFAULT NULL,
   `importedStatus` varchar(10) NOT NULL DEFAULT '',
   `lastUpdatedTime` int unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(255) NOT NULL DEFAULT '',
@@ -4803,7 +4803,7 @@ CREATE TABLE `zt_traincourse` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_trainplan` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -4811,18 +4811,18 @@ CREATE TABLE `zt_trainplan` (
   `begin` date DEFAULT NULL,
   `end` date DEFAULT NULL,
   `place` varchar(255) NOT NULL DEFAULT '',
-  `trainee` text,
+  `trainee` text DEFAULT NULL,
   `lecturer` varchar(20) NOT NULL DEFAULT '',
   `type` varchar(10) NOT NULL DEFAULT 'inside',
   `status` varchar(20) NOT NULL DEFAULT '',
-  `summary` mediumtext,
+  `summary` mediumtext DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_trainrecords` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user` varchar(30) NOT NULL DEFAULT '',
@@ -4831,13 +4831,13 @@ CREATE TABLE `zt_trainrecords` (
   `status` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `object` (`user`,`objectId`,`objectType`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_trip` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(10) NOT NULL DEFAULT 'trip',
   `customers` varchar(20) NOT NULL DEFAULT '',
   `name` varchar(30) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `year` char(4) NOT NULL DEFAULT '',
   `begin` date DEFAULT NULL,
   `end` date DEFAULT NULL,
@@ -4850,7 +4850,7 @@ CREATE TABLE `zt_trip` (
   PRIMARY KEY (`id`),
   KEY `year` (`year`),
   KEY `createdBy` (`createdBy`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_user` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `company` int unsigned NOT NULL DEFAULT '0',
@@ -4864,7 +4864,7 @@ CREATE TABLE `zt_user` (
   `pinyin` varchar(255) NOT NULL DEFAULT '',
   `nickname` varchar(60) NOT NULL DEFAULT '',
   `commiter` varchar(100) NOT NULL DEFAULT '',
-  `avatar` text,
+  `avatar` text DEFAULT NULL,
   `birthday` date DEFAULT NULL,
   `gender` char(1) NOT NULL DEFAULT 'f',
   `email` varchar(90) NOT NULL DEFAULT '',
@@ -4878,9 +4878,9 @@ CREATE TABLE `zt_user` (
   `whatsapp` varchar(90) NOT NULL DEFAULT '',
   `address` varchar(120) NOT NULL DEFAULT '',
   `zipcode` varchar(10) NOT NULL DEFAULT '',
-  `nature` text,
-  `analysis` text,
-  `strategy` text,
+  `nature` text DEFAULT NULL,
+  `analysis` text DEFAULT NULL,
+  `strategy` text DEFAULT NULL,
   `join` date DEFAULT NULL,
   `visits` int unsigned NOT NULL DEFAULT '0',
   `visions` varchar(20) NOT NULL DEFAULT 'rnd,lite',
@@ -4906,57 +4906,57 @@ CREATE TABLE `zt_user` (
   KEY `commiter` (`commiter`),
   KEY `deleted` (`deleted`),
   KEY `idx_reset` (`resetToken`,`resetExpired`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_usercontact` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
   `listName` varchar(60) NOT NULL DEFAULT '',
-  `userList` text,
+  `userList` text DEFAULT NULL,
   `public` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `account` (`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_usergroup` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
   `group` int unsigned NOT NULL DEFAULT '0',
-  `project` text,
+  `project` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `account` (`account`,`group`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_userquery` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
   `module` varchar(30) NOT NULL DEFAULT '',
   `title` varchar(90) NOT NULL DEFAULT '',
-  `form` text,
-  `sql` text,
+  `form` text DEFAULT NULL,
+  `sql` text DEFAULT NULL,
   `shortcut` tinyint unsigned NOT NULL DEFAULT '0',
   `common` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `account` (`account`),
   KEY `module` (`module`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_usertpl` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
   `title` varchar(150) NOT NULL DEFAULT '',
-  `content` text,
+  `content` text DEFAULT NULL,
   `public` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `account` (`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_userview` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
-  `programs` mediumtext,
-  `products` mediumtext,
-  `projects` mediumtext,
-  `sprints` mediumtext,
+  `programs` mediumtext DEFAULT NULL,
+  `products` mediumtext DEFAULT NULL,
+  `projects` mediumtext DEFAULT NULL,
+  `sprints` mediumtext DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `account` (`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_webhook` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(15) NOT NULL DEFAULT 'default',
@@ -4966,18 +4966,18 @@ CREATE TABLE `zt_webhook` (
   `secret` varchar(255) NOT NULL DEFAULT '',
   `contentType` varchar(30) NOT NULL DEFAULT 'application/json',
   `sendType` varchar(10) NOT NULL DEFAULT 'sync',
-  `products` text,
-  `executions` text,
+  `products` text DEFAULT NULL,
+  `executions` text DEFAULT NULL,
   `params` varchar(100) NOT NULL DEFAULT '',
-  `actions` text,
-  `desc` text,
+  `actions` text DEFAULT NULL,
+  `desc` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_weeklyreport` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -4992,7 +4992,7 @@ CREATE TABLE `zt_weeklyreport` (
   `workload` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `week` (`project`,`weekStart`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workestimation` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
@@ -5010,7 +5010,7 @@ CREATE TABLE `zt_workestimation` (
   `dayHour` decimal(10,2) NOT NULL DEFAULT '0.00',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workflow` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `group` int unsigned NOT NULL DEFAULT '0',
@@ -5025,16 +5025,16 @@ CREATE TABLE `zt_workflow` (
   `name` varchar(30) NOT NULL DEFAULT '',
   `icon` varchar(30) NOT NULL DEFAULT 'flow',
   `titleField` varchar(30) NOT NULL DEFAULT '',
-  `contentField` text,
-  `flowchart` text,
-  `js` text,
-  `css` text,
+  `contentField` text DEFAULT NULL,
+  `flowchart` text DEFAULT NULL,
+  `js` text DEFAULT NULL,
+  `css` text DEFAULT NULL,
   `order` int unsigned NOT NULL DEFAULT '0',
   `buildin` tinyint unsigned NOT NULL DEFAULT '0',
   `role` varchar(10) NOT NULL DEFAULT 'buildin',
   `belong` varchar(50) NOT NULL DEFAULT '',
-  `administrator` text,
-  `desc` text,
+  `administrator` text DEFAULT NULL,
+  `desc` text DEFAULT NULL,
   `version` varchar(10) NOT NULL DEFAULT '1.0',
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `approval` varchar(10) NOT NULL DEFAULT 'disabled',
@@ -5049,7 +5049,7 @@ CREATE TABLE `zt_workflow` (
   KEY `app` (`app`),
   KEY `module` (`module`),
   KEY `order` (`order`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workflowaction` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `group` int unsigned NOT NULL DEFAULT '0',
@@ -5068,15 +5068,15 @@ CREATE TABLE `zt_workflowaction` (
   `buildin` tinyint unsigned NOT NULL DEFAULT '0',
   `role` varchar(10) NOT NULL DEFAULT 'custom',
   `virtual` tinyint unsigned NOT NULL DEFAULT '0',
-  `conditions` text,
-  `verifications` text,
-  `hooks` text,
-  `linkages` text,
-  `js` text,
-  `css` text,
+  `conditions` text DEFAULT NULL,
+  `verifications` text DEFAULT NULL,
+  `hooks` text DEFAULT NULL,
+  `linkages` text DEFAULT NULL,
+  `js` text DEFAULT NULL,
+  `css` text DEFAULT NULL,
   `toList` varchar(255) NOT NULL DEFAULT '',
-  `blocks` text,
-  `desc` text,
+  `blocks` text DEFAULT NULL,
+  `desc` text DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'enable',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
@@ -5088,13 +5088,13 @@ CREATE TABLE `zt_workflowaction` (
   KEY `module` (`module`),
   KEY `action` (`action`),
   KEY `order` (`order`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workflowdatasource` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(10) NOT NULL DEFAULT 'option',
   `name` varchar(30) NOT NULL DEFAULT '',
   `code` varchar(30) NOT NULL DEFAULT '',
-  `datasource` text,
+  `datasource` text DEFAULT NULL,
   `view` varchar(20) NOT NULL DEFAULT '',
   `keyField` varchar(50) NOT NULL DEFAULT '',
   `valueField` varchar(50) NOT NULL DEFAULT '',
@@ -5106,7 +5106,7 @@ CREATE TABLE `zt_workflowdatasource` (
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`),
   KEY `type` (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workflowfield` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `group` int unsigned NOT NULL DEFAULT '0',
@@ -5116,8 +5116,8 @@ CREATE TABLE `zt_workflowfield` (
   `length` varchar(10) NOT NULL DEFAULT '',
   `name` varchar(50) NOT NULL DEFAULT '',
   `control` varchar(20) NOT NULL DEFAULT '',
-  `expression` text,
-  `options` text,
+  `expression` text DEFAULT NULL,
+  `options` text DEFAULT NULL,
   `default` varchar(100) NOT NULL DEFAULT '',
   `rules` varchar(255) NOT NULL DEFAULT '',
   `placeholder` varchar(255) NOT NULL DEFAULT '',
@@ -5130,7 +5130,7 @@ CREATE TABLE `zt_workflowfield` (
   `readonly` tinyint unsigned NOT NULL DEFAULT '0',
   `buildin` tinyint unsigned NOT NULL DEFAULT '0',
   `role` varchar(10) NOT NULL DEFAULT 'custom',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -5140,7 +5140,7 @@ CREATE TABLE `zt_workflowfield` (
   KEY `module` (`module`),
   KEY `field` (`field`),
   KEY `order` (`order`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workflowgroup` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectID` int unsigned NOT NULL DEFAULT '0',
@@ -5149,7 +5149,7 @@ CREATE TABLE `zt_workflowgroup` (
   `projectType` varchar(10) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL DEFAULT '',
   `code` varchar(30) NOT NULL DEFAULT '',
-  `desc` text,
+  `desc` text DEFAULT NULL,
   `disabledModules` varchar(255) NOT NULL DEFAULT '',
   `disabledFeatures` varchar(255) NOT NULL DEFAULT '' COMMENT '项目流程关闭的功能',
   `status` varchar(10) NOT NULL DEFAULT 'wait',
@@ -5159,12 +5159,12 @@ CREATE TABLE `zt_workflowgroup` (
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
-  `deliverable` text,
+  `deliverable` text DEFAULT NULL,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `type` (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workflowlabel` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `group` int unsigned NOT NULL DEFAULT '0',
@@ -5173,9 +5173,9 @@ CREATE TABLE `zt_workflowlabel` (
   `code` varchar(30) NOT NULL DEFAULT '',
   `label` varchar(255) NOT NULL DEFAULT '',
   `type` enum('data','sql') NOT NULL DEFAULT 'data',
-  `params` text,
-  `sql` text,
-  `orderBy` text,
+  `params` text DEFAULT NULL,
+  `sql` text DEFAULT NULL,
+  `orderBy` text DEFAULT NULL,
   `order` tinyint unsigned NOT NULL DEFAULT '0',
   `buildin` tinyint unsigned NOT NULL DEFAULT '0',
   `role` varchar(10) NOT NULL DEFAULT 'custom',
@@ -5185,7 +5185,7 @@ CREATE TABLE `zt_workflowlabel` (
   `editedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `module` (`module`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workflowlayout` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `group` int unsigned NOT NULL DEFAULT '0',
@@ -5195,12 +5195,12 @@ CREATE TABLE `zt_workflowlayout` (
   `field` varchar(50) NOT NULL DEFAULT '',
   `order` int unsigned NOT NULL DEFAULT '0',
   `width` smallint unsigned NOT NULL DEFAULT '0',
-  `position` text,
+  `position` text DEFAULT NULL,
   `ditto` tinyint unsigned NOT NULL DEFAULT '0',
   `readonly` tinyint unsigned NOT NULL DEFAULT '0',
   `mobileShow` tinyint unsigned NOT NULL DEFAULT '1',
   `summary` varchar(20) NOT NULL DEFAULT '',
-  `defaultValue` text,
+  `defaultValue` text DEFAULT NULL,
   `layoutRules` varchar(255) NOT NULL DEFAULT '',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`),
@@ -5208,7 +5208,7 @@ CREATE TABLE `zt_workflowlayout` (
   KEY `module` (`module`),
   KEY `action` (`action`),
   KEY `order` (`order`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workflowlinkdata` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(30) NOT NULL DEFAULT '',
@@ -5219,19 +5219,19 @@ CREATE TABLE `zt_workflowlinkdata` (
   `createdDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique` (`objectType`,`objectID`,`linkedType`,`linkedID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workflowrelation` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `prev` varchar(30) NOT NULL DEFAULT '',
   `next` varchar(30) NOT NULL DEFAULT '',
   `field` varchar(50) NOT NULL DEFAULT '',
   `actions` varchar(20) NOT NULL DEFAULT '',
-  `actionCodes` text,
+  `actionCodes` text DEFAULT NULL,
   `buildin` tinyint unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workflowrelationlayout` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `prev` varchar(30) NOT NULL DEFAULT '',
@@ -5246,7 +5246,7 @@ CREATE TABLE `zt_workflowrelationlayout` (
   KEY `next` (`next`),
   KEY `action` (`action`),
   KEY `order` (`order`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workflowreport` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `module` varchar(30) NOT NULL DEFAULT '',
@@ -5255,31 +5255,31 @@ CREATE TABLE `zt_workflowreport` (
   `countType` varchar(10) NOT NULL DEFAULT 'sum',
   `displayType` varchar(10) NOT NULL DEFAULT 'value',
   `dimension` varchar(130) NOT NULL DEFAULT '',
-  `fields` text,
+  `fields` text DEFAULT NULL,
   `order` int unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workflowrule` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(10) NOT NULL DEFAULT 'regex',
   `name` varchar(30) NOT NULL DEFAULT '',
-  `rule` text,
+  `rule` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `type` (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workflowsql` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `module` varchar(30) NOT NULL DEFAULT '',
   `field` varchar(50) NOT NULL DEFAULT '',
   `action` varchar(50) NOT NULL DEFAULT '',
-  `sql` text,
-  `vars` text,
+  `sql` text DEFAULT NULL,
+  `vars` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -5288,39 +5288,39 @@ CREATE TABLE `zt_workflowsql` (
   KEY `module` (`module`),
   KEY `field` (`field`),
   KEY `action` (`action`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workflowui` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `group` int unsigned NOT NULL DEFAULT '0',
   `module` varchar(30) NOT NULL DEFAULT '',
   `action` varchar(50) NOT NULL DEFAULT '',
   `name` varchar(30) NOT NULL DEFAULT '',
-  `conditions` text,
+  `conditions` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `module` (`module`),
   KEY `action` (`action`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_workflowversion` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `module` varchar(30) NOT NULL DEFAULT '',
   `version` varchar(10) NOT NULL DEFAULT '',
-  `fields` text,
-  `actions` text,
-  `layouts` text,
-  `sqls` text,
-  `labels` text,
-  `table` text,
-  `datas` text,
+  `fields` text DEFAULT NULL,
+  `actions` text DEFAULT NULL,
+  `layouts` text DEFAULT NULL,
+  `sqls` text DEFAULT NULL,
+  `labels` text DEFAULT NULL,
+  `table` text DEFAULT NULL,
+  `datas` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `moduleversion` (`module`,`version`),
   KEY `module` (`module`),
   KEY `version` (`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_zoutput` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `activity` int unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
-  `content` mediumtext,
+  `content` mediumtext DEFAULT NULL,
   `optional` varchar(20) NOT NULL DEFAULT '',
   `tailorNorm` varchar(255) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT '',
@@ -5331,4 +5331,4 @@ CREATE TABLE `zt_zoutput` (
   `order` int unsigned NOT NULL DEFAULT '0',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

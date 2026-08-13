@@ -372,7 +372,7 @@ class kanban extends control
 
         if(!$kanban)
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('kanban', 'space'))));
         }
 
