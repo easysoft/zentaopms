@@ -142,6 +142,7 @@ $config->story->form->review['pri']            = array('type' => 'int',    'cont
 $config->story->form->review['estimate']       = array('type' => 'string', 'control' => 'text',           'required' => false, 'default' => '');
 $config->story->form->review['duplicateStory'] = array('type' => 'string', 'control' => 'picker',         'required' => false, 'default' => '');
 $config->story->form->review['status']         = array('type' => 'string', 'control' => 'hidden',         'required' => false, 'default' => '');
+$config->story->form->review['comment']        = array('type' => 'string', 'control' => 'editor',         'required' => false, 'default' => '');
 
 $config->story->form->activate = array();
 $config->story->form->activate['assignedTo']      = array('type' => 'string',   'required' => false, 'default' => '');
