@@ -183,14 +183,16 @@ class userModel extends model
      *
      * @param  string $params
      * @param  string $fields
+     * @param  bool   $followShowOutside
      * @access public
      * @return array
      */
-    public function getList(string $params = 'nodeleted', string $fields = '*'): array
+    public function getList(string $params = 'nodeleted', string $fields = '*', bool $followShowOutside = true): array
     {
+        $showAll = strpos($params, 'all') !== false || ($followShowOutside && !empty($this->config->user->showOutside));
         return $this->dao->select($fields)->from(TABLE_USER)
             ->where('1 = 1')
-            ->beginIF(strpos($params, 'all') === false && empty($this->config->user->showOutside))->andWhere('type')->eq('inside')->fi()
+            ->beginIF(!$showAll)->andWhere('type')->eq('inside')->fi()
             ->beginIF(strpos($params, 'nodeleted') !== false)->andWhere('deleted')->eq(0)->fi()
             ->orderBy('account')
             ->fetchAll('', false);
@@ -241,10 +243,11 @@ class userModel extends model
      * @param  string|array $usersToAppended  account1,account2
      * @param  int          $maxCount
      * @param  string|array $accounts
+     * @param  bool         $followShowOutside
      * @access public
      * @return array
      */
-    public function getPairs(string $params = '', string|array $usersToAppended = '', int $maxCount = 0, string|array $accounts = '')
+    public function getPairs(string $params = '', string|array $usersToAppended = '', int $maxCount = 0, string|array $accounts = '', bool $followShowOutside = true)
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getUserPairs();
 
@@ -263,7 +266,7 @@ class userModel extends model
         if(strpos($params, 'pmfirst') !== false) $fields .= ", INSTR(',td,pm,', role) AS roleOrder";
         if(strpos($params, 'devfirst')!== false) $fields .= ", INSTR(',td,pm,qd,qa,dev,', role) AS roleOrder";
         $type     = (strpos($params, 'outside') !== false) ? 'outside' : 'inside';
-        $showAll  = strpos($params, 'all') !== false || !empty($this->config->user->showOutside);
+        $showAll  = strpos($params, 'all') !== false || ($followShowOutside && !empty($this->config->user->showOutside));
         $orderBy  = (strpos($params, 'first')   !== false) ? 'roleOrder DESC, account' : 'account';
         $keyField = (strpos($params, 'useid')   !== false) ? 'id' : "account";
 

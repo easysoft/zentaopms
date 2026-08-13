@@ -230,9 +230,9 @@ class group extends control
         }
         $group        = $this->group->getById($groupID);
         $groupUsers   = $this->group->getUserPairs($groupID);
-        $allUsers     = $this->loadModel('dept')->getDeptUserPairs($deptID);
+        $allUsers     = $this->loadModel('dept')->getDeptUserPairs($deptID, 'account', 'inside', '', false);
         $otherUsers   = array_diff_assoc($allUsers, $groupUsers);
-        $outsideUsers = $this->loadModel('user')->getPairs('outside|noclosed|noletter|noempty');
+        $outsideUsers = $this->loadModel('user')->getPairs('outside|noclosed|noletter|noempty', '', 0, '', false);
 
         $this->view->title        = $this->lang->company->common . $this->lang->hyphen . $group->name . $this->lang->hyphen . $this->lang->group->manageMember;
         $this->view->group        = $group;
