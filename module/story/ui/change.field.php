@@ -13,7 +13,7 @@ $fields->field('reviewer')
     ->control(array('control' => 'picker', 'disabled' => !data('forceReview') && data('needReview'), 'multiple' => true, 'items' => data('fields.reviewer.options'), 'value' => data('fields.reviewer.default')))
     ->itemEnd()
     ->itemBegin('needNotReview')
-    ->control(array('control' => 'checkbox', 'id' => 'needNotReview', 'checked' => data('needReview'), 'rootClass' => 'w-32 ml-2 items-center', 'text' => $lang->story->needNotReview, 'value' => data('forceReview') ? 0 : 1))
+    ->control(array('control' => 'checkbox', 'id' => 'needNotReview', 'checked' => data('needReview'), 'rootClass' => 'w-32 ml-2 items-center ' . (data('forceReview') ? 'hidden' : ''), 'text' => $lang->story->needNotReview, 'value' => '1'))
     ->itemEnd();
 
 $fields->field('title')
@@ -53,13 +53,13 @@ $fields->field('title')
                     set::value(1),
                     $lang->story->relievedTwinsRelation
                 )
-            ) : null
+            ) : null,
+            input(set::name('status'), setClass('hidden'), set::value(data('fields.status.default')))
         );
     });
 
 $storyType = data('story.type') ? data('story.type') : 'story';
 
-$fields->field('status')->width('1/3')->control('hidden')->value(data('fields.status.default'));
 $fields->field('lastEditedDate')->width('1/3')->control('hidden')->value(data('story.lastEditedDate'));
 $fields->field('spec')->required(strpos(",{$config->{$storyType}->change->requiredFields},", ",spec,") !== false)->width('full')->control(array('control' => 'editor', 'value' => data('fields.spec.default')));
 
