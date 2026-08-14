@@ -1580,11 +1580,13 @@ class api extends router
         $this->normalizeBatchPostData();
 
         /* Avoid empty post body. */
-        if(in_array($this->control->moduleName, ['feedback', 'ticket']))
-        {
-            $_POST['uid'] = '1';
-        }
-        else
+        $_POST['uid'] = '1';
+
+        /*
+         * API 没有真实密码，只有 user/my 等密码相关逻辑需要 verifyPassword。
+         * API has no real password; only password-related logic such as user/my needs verifyPassword.
+         */
+        if(in_array($this->control->moduleName, ['user', 'my']))
         {
             $_POST['verifyPassword'] = '1';
         }
