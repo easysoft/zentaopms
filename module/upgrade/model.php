@@ -13624,12 +13624,21 @@ class upgradeModel extends model
                 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'bugInjection'       LIMIT 1) WHERE `module` = 'bug'      AND `field` = 'injection';
                 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'bugIdentify'        LIMIT 1) WHERE `module` = 'bug'      AND `field` = 'identify';
                 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'ticketClosedReason' LIMIT 1) WHERE `module` = 'ticket'   AND `field` = 'closedReason';
-                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'feedbackPri'        LIMIT 1) WHERE `module` = 'feedback' AND `field` = 'pri';";
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'feedbackPri'        LIMIT 1) WHERE `module` = 'feedback' AND `field` = 'pri';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'ticketRepeat'       LIMIT 1) WHERE `module` = 'ticket'   AND `field` = 'repeatTicket';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'feedbackRepeat'     LIMIT 1) WHERE `module` = 'feedback' AND `field` = 'repeatFeedback';";
 
             foreach(explode(';', $sqls) as $sql)
             {
                 if($sql) $this->dao->exec($sql);
             }
+
+            $this->app->loadLang('workflowfield');
+            $this->dao->update(TABLE_WORKFLOWFIELD)
+                ->set('options')->eq(helper::jsonEncode((array)$this->lang->workflowfield->buildinList))
+                ->where('module')->eq('feedback')
+                ->andWhere('field')->eq('public')
+                ->exec();
         }
 
         return true;
