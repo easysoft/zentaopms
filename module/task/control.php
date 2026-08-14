@@ -47,6 +47,23 @@ class task extends control
         $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
         parse_str($cardPosition, $output);
 
+        /*
+         * 项目创建任务时，无执行项目自动使用内部默认执行；有执行项目必须传 executionID。
+         * When creating a project task, automatically use the internal default execution for a no-execution project, and require executionID for a project with executions.
+         */
+        if(empty($executionID) && !empty($this->post->project))
+        {
+            $project = $this->project->getByID($this->post->project);
+            if(empty($project->multiple))
+            {
+                $executionID = $this->execution->getNoMultipleID($project->id);
+            }
+            else
+            {
+                return $this->sendError('Need execution id.');
+            }
+        }
+
         $this->session->set('executionStoryList', $this->app->getURI(true), 'execution');
 
         /* Set menu and get execution information. */

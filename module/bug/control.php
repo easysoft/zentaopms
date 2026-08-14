@@ -260,6 +260,17 @@ class bug extends control
 
         $from = isset($params['from']) ? $params['from'] : '';
 
+        /* 项目型项目没有显式产品，创建 Bug 时自动使用项目的影子产品。For a non-product project, automatically use its shadow product when creating a bug. */
+        if(empty($productID) && !empty($params['projectID']))
+        {
+            $project = $this->loadModel('project')->getByID($params['projectID']);
+            if($project && empty($project->hasProduct))
+            {
+                $productID        = $this->loadModel('product')->getShadowProductByProject($params['projectID'])->id;
+                $_POST['product'] = $productID;
+            }
+        }
+
         if(!empty($_POST))
         {
             if(!empty($params['productID'])) $product = $this->bug->fetchByID((int)$params['productID'], 'product');

@@ -31,6 +31,16 @@ class storyZen extends story
             if(!empty($products)) $productID = key($products);
         }
 
+        /* 项目型项目没有显式产品，创建需求时自动使用项目的影子产品。For a non-product project, automatically use its shadow product when creating a story. */
+        if(empty($productID) && !empty($objectID))
+        {
+            $object = $this->project->fetchByID($objectID);
+            if($object && empty($object->hasProduct))
+            {
+                $productID = $this->loadModel('product')->getShadowProductByProject($objectID)->id;
+            }
+        }
+
         /* Get objectID by tab. */
         if(empty($objectID))
         {
