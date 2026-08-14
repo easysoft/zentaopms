@@ -237,6 +237,7 @@ class baseMao
     {
         $this->conditions = [];
 
+        $fields = str_replace('`', '', $fields);
         $fields = explode(',', $fields);
 
         $alias = [];
