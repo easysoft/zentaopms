@@ -1061,7 +1061,7 @@ class dataset
      */
     public function getPipeline($fieldList)
     {
-        return $this->dao->select($fieldList)->from(TABLE_JOB)->alias('t1')
+        return $this->dao->select($fieldList)->from(TABLE_PIPELINE)->alias('t1')
             ->where('t1.deleted')->eq('0');
     }
 
@@ -1075,8 +1075,8 @@ class dataset
      */
     public function getCompile($fieldList)
     {
-        return $this->dao->select($fieldList)->from(TABLE_COMPILE)->alias('t1')
-            ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job = t2.id')
+        return $this->dao->select($fieldList)->from(TABLE_PIPELINEEXEC)->alias('t1')
+            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.`pipelineID` = t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0');
     }
@@ -1128,7 +1128,7 @@ class dataset
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.`repoID` = t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
-            ->andWhere('t1.isFlow')->eq('0');
+            ->andWhere('t1.flow')->eq('0');
     }
 
     /**
