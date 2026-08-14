@@ -7,6 +7,17 @@ $projectTable = zenData('project')->loadYaml('project');
 $projectTable->status->range('closed');
 $projectTable->gen(20);
 
+/* 为无产品项目准备影子产品。Prepare shadow products for projects without a product. */
+zenData('product')->gen(6);
+
+$projectProductTable = zenData('projectproduct');
+$projectProductTable->project->range('1,3,5,11,13,15');
+$projectProductTable->product->range('1-6');
+$projectProductTable->branch->range('0');
+$projectProductTable->plan->range('');
+$projectProductTable->roadmap->range('');
+$projectProductTable->gen(6);
+
 /**
 
 title=测试 projectModel->activate();

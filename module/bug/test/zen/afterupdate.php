@@ -59,6 +59,7 @@ $execution->gen(5);
 $action = zenData('action');
 $action->gen(0);
 
+zenData('user')->gen(5);
 su('admin');
 
 global $tester;

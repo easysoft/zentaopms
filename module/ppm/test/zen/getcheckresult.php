@@ -26,6 +26,15 @@ $app->setMethodName('view');
 zenData('entry')->loadYaml('entry', false, 2)->gen(1);
 zenData('user')->gen(3);
 
+$ppmTable = zenData('ops_ppm')->loadYaml('ops_ppm', false, 2);
+$ppmTable->id->range('9101');
+$ppmTable->repoID->range('42');
+$ppmTable->sourceRepoID->range('42');
+$ppmTable->sourceBranch->range('feature/demo');
+$ppmTable->targetRepoID->range('42');
+$ppmTable->targetBranch->range('release/main');
+$ppmTable->gen(1);
+
 su('admin');
 
 $ppmZen = new ppmZenTest();

@@ -20,73 +20,18 @@ cid=18238
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-// 简化的screenTest类，专门用于getByID方法测试
-class simpleScreenTest
-{
-    private $mockData;
-
-    public function __construct()
-    {
-        // 模拟screen数据
-        $this->mockData = array(
-            1 => (object)array(
-                'id' => 1,
-                'dimension' => 1,
-                'name' => 'Screen1',
-                'desc' => '测试大屏1',
-                'acl' => 'open',
-                'scheme' => '{"componentList":[]}',
-                'status' => 'published',
-                'builtin' => '0',
-                'createdBy' => 'admin',
-                'createdDate' => '2023-01-01 00:00:00',
-                'editedBy' => 'admin',
-                'editedDate' => '2023-01-01 00:00:00',
-                'deleted' => '0'
-            ),
-            2 => (object)array(
-                'id' => 2,
-                'dimension' => 1,
-                'name' => 'Screen2',
-                'desc' => '测试大屏2',
-                'acl' => 'open',
-                'scheme' => '{"componentList":[]}',
-                'status' => 'published',
-                'builtin' => '0',
-                'createdBy' => 'admin',
-                'createdDate' => '2023-01-01 00:00:00',
-                'editedBy' => 'admin',
-                'editedDate' => '2023-01-01 00:00:00',
-                'deleted' => '0'
-            )
-        );
-    }
-
-    public function getByIDTest($screenID, $year = 0, $month = 0, $dept = 0, $account = '', $withChartData = true)
-    {
-        // 模拟getByID方法的核心逻辑
-        if (!isset($this->mockData[$screenID]) || $screenID <= 0) {
-            return false;
-        }
-
-        $screen = clone $this->mockData[$screenID];
-
-        if (empty($screen->scheme)) {
-            $screen->scheme = '{"componentList":[]}';
-        }
-
-        // 简化版本：当withChartData为true时添加chartData
-        if ($withChartData) {
-            $screen->chartData = new stdClass();
-        }
-
-        return $screen;
-    }
-}
+$screen = zenData('screen');
+$screen->id->range('1-2');
+$screen->name->range('Screen1,Screen2');
+$screen->scheme->range('{"componentList":[]}');
+$screen->builtin->range('0');
+$screen->deleted->range('0');
+$screen->gen(2);
 
 su('admin');
-$screenTest = new simpleScreenTest();
+$screenTest = new screenModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($screenTest->getByIDTest(999)) && p() && e('0'); // 步骤1：查询不存在的screen ID

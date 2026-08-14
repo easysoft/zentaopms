@@ -9,6 +9,7 @@ zenData('project')->loadYaml('project')->gen(100);
 zenData('project')->loadYaml('execution')->gen(300, false);
 zenData('build')->gen(500);
 zenData('testtask')->gen(500);
+zenData('user')->gen(5);
 
 su('admin');
 

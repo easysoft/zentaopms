@@ -20,6 +20,7 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zenData('case')->gen(10);
 zenData('product')->gen(1);
+zenData('user')->gen(5);
 su('admin');
 
 $caseIdList = range(1, 10);

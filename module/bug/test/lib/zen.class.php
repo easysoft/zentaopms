@@ -390,7 +390,9 @@ class bugZenTest extends baseTest
 
         try
         {
+            ob_start();
             $this->invokeArgs('buildCreateForm', [$bug, $param, $from]);
+            ob_end_clean();
         }
         catch(Throwable $e)
         {

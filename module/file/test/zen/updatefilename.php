@@ -23,6 +23,7 @@ include dirname(__FILE__, 2) . '/lib/filezen.unittest.class.php';
 zenData('file')->loadYaml('file_updatefilename', false, 2)->gen(5);
 zenData('action')->gen(0);
 zenData('history')->gen(0);
+zenData('user')->gen(5);
 
 // 3. 用户登录（选择合适角色）
 su('admin');

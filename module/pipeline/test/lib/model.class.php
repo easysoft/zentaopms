@@ -31,7 +31,7 @@ class pipelineModelTest extends baseTest
     public function execJenkinsPipelineTest(object $pipeline, string $triggerType = 'manual') { return $this->safeCall(fn() => $this->instance->execJenkinsPipeline($pipeline, $triggerType), false); }
     public function getBySpacesTest(array $spaceIdList): array { return $this->safeCall(fn() => $this->instance->getBySpaces($spaceIdList), array()); }
     public function importFromProviderTest(object $repo, object $formData) { return $this->safeCall(fn() => $this->instance->importFromProvider($repo, $formData), 0); }
-    public function isClickableTest(object $pipeline, string $action) { return $this->instance->isClickable($pipeline, $action); }
+    public function isClickableTest(object $pipeline, string $action) { ob_start(); $result = $this->instance->isClickable($pipeline, $action); ob_end_clean(); return $result; }
     public function getStepGroupsTest(): object|bool|array { return $this->safeCall(fn() => $this->instance->getStepGroups(), false); }
     public function getStepSchemaTest(string $stepName): string { return $this->safeCall(fn() => $this->instance->getStepSchema($stepName), ''); }
     public function updateContentTest(int $pipelineID, object $content): bool { return $this->safeCall(fn() => $this->instance->updateContent($pipelineID, $content) ? true : false, false); }

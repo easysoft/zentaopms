@@ -2,7 +2,6 @@
 <?php
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
 
 /**
 
@@ -19,6 +18,8 @@ cid=17033
 */
 
 global $tester;
+zenData('user')->gen(5);
+su('admin');
 $tester->loadModel('mail');
 
 $story = new stdclass();
