@@ -209,6 +209,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
         postMessage,
         creatingChat: getAgentCreatingOptions(info),
     };
+    if(testingMode) delete popupOptions.creatingChat.agent;
     const popup = zaiPanel.openPopup(popupOptions);
     await new Promise(resolve => requestAnimationFrame(resolve));
     return popup;
