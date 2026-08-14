@@ -350,10 +350,13 @@ class action extends control
                     return print(js::error($this->lang->error->accessDenied));
                 }
 
-                $table = $this->config->objectTables[$objectType];
-                $objectData = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
-                $objectData->actioncomment = $commentData->actioncomment;
-                $this->loadModel('message')->sendMentionNotice($objectType, 'comment', $actionID, $objectData);
+                if(isset($this->config->objectTables[$objectType]))
+                {
+                    $table = $this->config->objectTables[$objectType];
+                    $objectData = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
+                    $objectData->actioncomment = $commentData->actioncomment;
+                    $this->loadModel('message')->sendMentionNotice($objectType, 'comment', $actionID, $objectData);
+                }
 
                 if(helper::isApiRequest()) return $this->send(array('status' => 'success', 'data' => $actionID));
             }
