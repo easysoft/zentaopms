@@ -1008,7 +1008,7 @@ class doc extends control
                 $_POST['parent'] = 0;
             }
 
-            if(!$doc) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorNotFound));
+            if(!$doc) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
 
             $isOpen          = $doc->acl == 'open';
             $currentAccount  = $this->app->user->account;
