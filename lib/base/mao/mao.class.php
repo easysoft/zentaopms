@@ -557,6 +557,8 @@ class baseMao
             $data = new stdclass();
             foreach($this->fields as $field => $alias)
             {
+                if($field[0] == '`') $field = trim($field, '`');
+                if($alias[0] == '`') $alias = trim($alias, '`');
                 if($field == '*')
                 {
                     $data = $row;
