@@ -37,6 +37,7 @@ zenData('product')->loadYaml('buildbrowseview/product', false, 2)->gen(3);
 zenData('project')->loadYaml('buildbrowseview/project', false, 2)->gen(4);
 zenData('story')->loadYaml('buildbrowseview/story', false, 2)->gen(3);
 zenData('task')->loadYaml('buildbrowseview/task', false, 2)->gen(5);
+zenData('user')->gen(5);
 
 su('admin');
 

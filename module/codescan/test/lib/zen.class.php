@@ -294,7 +294,10 @@ class codescanZenTest extends baseTest
         $instance = $this->getZenInstance();
         $method = new ReflectionMethod($instance, 'processExecBranch');
         $method->setAccessible(true);
-        return $method->invoke($instance, $planID, $repoID);
+        ob_start();
+        $result = $method->invoke($instance, $planID, $repoID);
+        ob_end_clean();
+        return $result;
     }
 
     /**

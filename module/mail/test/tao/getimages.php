@@ -35,6 +35,15 @@ su('admin');
 global $tester;
 $mailModel = $tester->loadModel('mail');
 
+/* 生成与文件记录对应的真实物理文件。Create real files matching the file records. */
+$uploadRoot = $tester->app->getAppRoot() . 'www/data/upload/1/';
+foreach(array('202301/test1.jpg', '202301/test2.png', '202301/test3.gif') as $filePath)
+{
+    $realPath = $uploadRoot . $filePath;
+    if(!is_dir(dirname($realPath))) mkdir(dirname($realPath), 0777, true);
+    file_put_contents($realPath, 'unittest image');
+}
+
 $body1 = '<img alt="test" src="{1.jpg}" />';
 $body2 = '<img alt="test" src="/data/upload/test/image" />';
 $body3 = '<img alt="test" src="index.php?m=file&f=read&fileID=1" />';

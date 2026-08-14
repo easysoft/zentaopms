@@ -43,12 +43,13 @@ cid=18600
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
 
+zenData('user')->gen(5);
 zenData('product')->gen(1);
 zenData('story')->gen(10);
 zenData('project')->gen(20);
 zenData('storygrade')->gen(10);
+su('admin');
 
 global $tester;
 $tester->loadModel('story');

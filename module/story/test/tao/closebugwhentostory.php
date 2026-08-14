@@ -20,12 +20,14 @@ cid=18612
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
+zenData('user')->gen(5);
 zenData('story')->gen(5);
 zenData('bug')->gen(1);
 $file = zenData('file');
 $file->objectType->range('bug');
 $file->objectID->range('1');
 $file->gen(5);
+su('admin');
 
 $storyTest = new storyTaoTest();
 

@@ -626,7 +626,9 @@ class storyTaoTest extends baseTest
 
         global $app;
         $app->upgrading = true;
+        ob_start();
         $this->instance->linkToExecutionForCreate($executionID, $storyID, $story, $extra);
+        ob_end_clean();
         return array_filter((array)$this->instance->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch());
     }
 

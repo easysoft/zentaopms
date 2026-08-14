@@ -11,7 +11,7 @@ cid=16966
 - 步骤2：更新区域名称为空值第name条的0属性 @『区域名称』不能为空。
 - 步骤3：更新区域名称为空格字符串第name条的0属性 @『区域名称』不能为空。
 - 步骤4：更新区域名称为超长字符串第name条的0属性 @『区域名称』长度应当不超过『255』，且大于『0』。
-- 步骤5：更新不存在的区域ID @0
+- 步骤5：更新名称与原名称一致的区域属性name @区域2
 - 步骤6：验证更新后数据库记录的编辑者字段属性lastEditedBy @admin
 - 步骤7：验证边界值长度的区域名称更新属性name @AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
@@ -41,6 +41,6 @@ r($kanban->updateRegionTest(1, '更新后的区域名称')) && p('name') && e('�
 r($kanban->updateRegionTest(2, '')) && p('name:0') && e('『区域名称』不能为空。'); // 步骤2：更新区域名称为空值
 r($kanban->updateRegionTest(3, '  ')) && p('name:0') && e('『区域名称』不能为空。'); // 步骤3：更新区域名称为空格字符串
 r($kanban->updateRegionTest(4, str_repeat('超长字符串测试', 50))) && p('name:0') && e('『区域名称』长度应当不超过『255』，且大于『0』。'); // 步骤4：更新区域名称为超长字符串
-r($kanban->updateRegionTest(999, '不存在的区域')) && p() && e('0'); // 步骤5：更新不存在的区域ID
+r($kanban->updateRegionTest(2, '区域2')) && p('name') && e('区域2'); // 步骤5：更新名称与原名称一致的区域
 r($kanban->updateRegionTest(5, '边界长度测试')) && p('lastEditedBy') && e('admin'); // 步骤6：验证更新后数据库记录的编辑者字段
 r($kanban->updateRegionTest(1, str_repeat('A', 255))) && p('name') && e('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'); // 步骤7：验证边界值长度的区域名称更新

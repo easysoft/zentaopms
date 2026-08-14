@@ -16,41 +16,11 @@ cid=18208
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-class screenTest
-{
-    public function buildComponentListTest($componentList)
-    {
-        // 模拟buildComponentList方法的逻辑，避免数据库依赖
-        $components = array();
-        foreach($componentList as $component)
-        {
-            if($component)
-            {
-                // 简化的组件构建逻辑，避免调用需要数据库的方法
-                if(isset($component->isGroup) && $component->isGroup)
-                {
-                    // 对于分组组件，递归处理其groupList
-                    if(isset($component->groupList))
-                    {
-                        $component->groupList = $this->buildComponentListTest($component->groupList);
-                    }
-                    $components[] = $component;
-                }
-                else
-                {
-                    // 对于普通组件，直接添加
-                    $components[] = $component;
-                }
-            }
-        }
-        return $components;
-    }
-}
-
-$screen = new screenTest();
+$screen = new screenModelTest();
 
 // 准备测试数据
 $validComponent1 = new stdclass();

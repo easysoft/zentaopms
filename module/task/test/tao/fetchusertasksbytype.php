@@ -2,7 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/tao.class.php';
-su('admin');
 
 $task = zenData('task');
 $task->id->range('1-20');
@@ -45,6 +44,7 @@ $story->status->range('active{10},draft{5},reviewing{2},closed{2},changing');
 $story->gen(20);
 
 zenData('user')->gen(30);
+su('admin');
 
 $taskTeam = zenData('taskteam');
 $taskTeam->id->range('1-5');

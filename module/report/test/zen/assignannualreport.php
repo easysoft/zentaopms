@@ -14,7 +14,7 @@ cid=18190
 - 测试有效account的情况,返回hasData属性hasData @yes
 - 测试dept为0的边界情况,返回dept属性dept @0
 - 测试正常情况返回hasYears属性hasYears @yes
-- 测试正常情况返回hasRadarData属性hasRadarData @no
+- 测试正常情况返回hasRadarData属性hasRadarData @yes
 
 */
 
@@ -23,7 +23,9 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zenData('user')->gen(20);
 zenData('dept')->gen(10);
-zenData('action')->gen(100);
+$actionTable = zenData('action');
+$actionTable->date->range('(-2Y)-(w):1D')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+$actionTable->gen(100);
 zenData('todo')->gen(50);
 zenData('effort')->gen(50);
 zenData('story')->gen(30);
@@ -44,4 +46,4 @@ r($reportTest->assignAnnualReportTest('', '1', '')) && p('year') && e('2026'); /
 r($reportTest->assignAnnualReportTest('2025', '1', 'admin')) && p('hasData') && e('yes'); // 测试有效account的情况,返回hasData
 r($reportTest->assignAnnualReportTest('2025', '0', '')) && p('dept') && e('0'); // 测试dept为0的边界情况,返回dept
 r($reportTest->assignAnnualReportTest('2025', '1', '')) && p('hasYears') && e('yes'); // 测试正常情况返回hasYears
-r($reportTest->assignAnnualReportTest('2025', '1', '')) && p('hasRadarData') && e('no'); // 测试正常情况返回hasRadarData
+r($reportTest->assignAnnualReportTest('2025', '1', '')) && p('hasRadarData') && e('yes'); // 测试正常情况返回hasRadarData

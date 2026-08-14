@@ -120,6 +120,7 @@ class designModelTest extends baseTest
      */
     public function linkCommitTest(int $designID, int $repoID, array $revisions = array()): array|string
     {
+        $this->instance->session->designRevisions = array();
         if($revisions) $this->instance->session->designRevisions = $this->instance->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->in($revisions)->fetchAll();
 
         $this->instance->linkCommit($designID, $repoID, $revisions);

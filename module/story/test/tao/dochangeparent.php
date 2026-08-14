@@ -23,8 +23,8 @@ cid=18616
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/tao.class.php';
-su('admin');
 
+zenData('user')->gen(5);
 $story = zenData('story');
 $story->id->range('1-100');
 $story->title->range('teststory');
@@ -34,6 +34,7 @@ $story->path->range('`,1,`,`,1,2,`,`,1,3,`,`,4,`,`,4,5,`,`,4,6,`,`,7,`,`,7,8,`,`
 $story->type->range('story{3},requirement{3},epic{3}');
 $story->version->range('1,2');
 $story->gen(9);
+su('admin');
 
 $noParent = new stdClass();
 $noParent->parent = 0;

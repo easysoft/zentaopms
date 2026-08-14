@@ -17,13 +17,12 @@ cid=15448
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-su('admin');
-
 global $tester, $app;
 $app->rawModule = 'bug';
 $app->rawMethod = 'browse';
 
 // zendata数据准备
+zenData('user')->gen(5);
 zenData('bug')->gen(5);
 $product = zenData('product');
 $product->type->range('branch');
@@ -32,6 +31,8 @@ $branch = zenData('branch');
 $branch->name->range('branch');
 $branch->product->range('1');
 $branch->gen(5);
+
+su('admin');
 
 $zen = initReference('bug');
 $func = $zen->getMethod('getBranchesForCreate');

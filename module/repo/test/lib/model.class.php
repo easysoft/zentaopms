@@ -498,7 +498,9 @@ class repoModelTest extends baseTest
 
     public function getByIdListTest($idList)
     {
+        ob_start();
         $objects = $this->instance->getByIdList($idList);
+        ob_end_clean();
 
         if(dao::isError()) return dao::getError();
 
@@ -549,7 +551,9 @@ class repoModelTest extends baseTest
 
     public function getLatestCommitTest(int $repoID)
     {
+        ob_start();
         $objects = $this->instance->getLatestCommit($repoID);
+        ob_end_clean();
 
         if(dao::isError()) return dao::getError();
 
@@ -565,7 +569,9 @@ class repoModelTest extends baseTest
      */
     public function getLatestCommitTestWithoutCount(int $repoID)
     {
+        ob_start();
         $objects = $this->instance->getLatestCommit($repoID, false);
+        ob_end_clean();
 
         if(dao::isError()) return dao::getError();
 
@@ -884,7 +890,9 @@ class repoModelTest extends baseTest
 
     public function updateCommitDateTest(int $repoID)
     {
+        ob_start();
         $this->instance->updateCommitDate($repoID);
+        ob_end_clean();
 
         if(dao::isError()) return dao::getError();
 
@@ -1789,7 +1797,9 @@ class repoModelTest extends baseTest
     {
         $repo   = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return array();
+        ob_start();
         $result = $this->instance->getFileCommits($repo, $branch, $parent);
+        ob_end_clean();
 
         if(dao::isError()) return dao::getError();
         return $result;
