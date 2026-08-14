@@ -67,7 +67,10 @@ $fields->field('reviewer')
     ->items(false)
     ->itemBegin('reviewer[]')->control('picker')->id('reviewer')->items(isset($createFields['reviewer']['options']) ? $createFields['reviewer']['options'] : array())
     ->value(isset($createFields['reviewer']['default']) ? $createFields['reviewer']['default'] : '')->multiple()
+    ->itemEnd()
+    ->itemBegin('status')->control('input')->class('hidden')->value('active')
     ->itemEnd();
+
 $fields->field('needNotReview')->control('hidden')->value(data('forceReview') ? 0 : 1);
 
 $fields->field('assignedTo')
@@ -174,9 +177,6 @@ $fields->field('mailto')
     ->control('mailto');
 
 $fields->field('keywords')->foldable()->required(!empty($createFields['keywords']['required']));
-
-$fields->field('type')->control('hidden')->value($type);
-$fields->field('status')->control('hidden')->value('active');
 
 $fields->field('tmpModule')->control('hidden');
 $fields->field('tmpCategory')->control('hidden');
