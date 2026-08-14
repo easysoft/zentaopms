@@ -35,6 +35,13 @@ DELETE FROM zt_workflowfield WHERE `module`='ticket'   AND `field`='consumed';
 DELETE FROM zt_workflowfield WHERE `module`='ticket'   AND `field`='deleted';
 DELETE FROM zt_workflowfield WHERE `module`='feedback' AND `field`='faq';
 DELETE FROM zt_workflowfield WHERE `module`='feedback' AND `field`='deleted';
+DELETE FROM zt_workflowfield WHERE `module`='testcase' AND `field`='deleted';
+DELETE FROM zt_workflowfield WHERE `module`='testcase' AND `field`='color';
+DELETE FROM zt_workflowfield WHERE `module`='testcase' AND `field`='project';
+DELETE FROM zt_workflowfield WHERE `module`='testcase' AND `field`='execution';
+DELETE FROM zt_workflowfield WHERE `module`='testcase' AND `field`='lib';
+DELETE FROM zt_workflowfield WHERE `module`='testcase' AND `field`='storyVersion';
+DELETE FROM zt_workflowfield WHERE `module`='task'     AND `field`='color';
 
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'   AND `field` = 'assignedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'   AND `field` = 'realStarted';
