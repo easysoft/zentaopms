@@ -410,7 +410,9 @@ class dao extends baseDAO
 
         $pager->setRecTotal($recTotal);
         $pager->setPageTotal();
-        if($originalPageID > ceil(($pager->recTotal - $pager->offset) / $pager->recPerPage)) $pager->setPageID($pager->pageTotal);
+
+        $lastPage = ceil(($pager->recTotal - $pager->offset) / $pager->recPerPage);
+        if(!helper::isApiRequest() && $originalPageID > $lastPage) $pager->setPageID($pager->pageTotal);
 
         $this->sqlobj->limit($pager->limit());
         return $this;
