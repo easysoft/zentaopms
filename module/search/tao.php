@@ -198,7 +198,7 @@ class searchTao extends searchModel
             }
             else
             {
-                $condition = $control == 'select' ? " LIKE CONCAT('%,', '{$value}', ',%')" : ' LIKE ' . $this->dbh->quote("%$value%");
+                $condition = $control == 'select' ? ' LIKE ' . $this->dbh->quote('%,' . $value . ',%') : ' LIKE ' . $this->dbh->quote('%' . $value . '%');
             }
         }
         elseif($operator == "notinclude")
@@ -214,7 +214,7 @@ class searchTao extends searchModel
             }
             else
             {
-                $condition = $control == 'select' ? " NOT LIKE CONCAT('%,', '{$value}', ',%')" : ' NOT LIKE ' . $this->dbh->quote("%$value%");
+                $condition = $control == 'select' ? ' NOT LIKE ' . $this->dbh->quote('%,' . $value . ',%') : ' NOT LIKE ' . $this->dbh->quote('%' . $value . '%');
             }
         }
         elseif($operator == 'belong')
