@@ -236,7 +236,8 @@ class searchModel extends model
             if($andOr != 'AND' and $andOr != 'OR') $andOr = 'AND';
 
             /* Set operator. */
-            $value    = addcslashes(trim($this->post->$valueName), '%');
+            $value    = addcslashes(trim((string)$this->post->$valueName), '%');
+            $value    = htmlspecialchars($value, ENT_QUOTES);
             $operator = $this->post->$operatorName;
             if(!isset($this->lang->search->operators[$operator])) $operator = '=';
 
@@ -251,7 +252,7 @@ class searchModel extends model
                 }
                 else
                 {
-                    $condition = $fieldControl == 'select' ? " LIKE CONCAT('%,', '{$value}', ',%')" : ' LIKE ' . $this->dbh->quote("%$value%");
+                    $condition = $fieldControl == 'select' ? ' LIKE ' . $this->dbh->quote('%,' . $value . ',%') : ' LIKE ' . $this->dbh->quote('%' . $value . '%');
                 }
             }
             elseif($operator == "notinclude")
@@ -263,7 +264,7 @@ class searchModel extends model
                 }
                 else
                 {
-                    $condition = $fieldControl == 'select' ? " NOT LIKE CONCAT('%,', '{$value}', ',%')" : ' NOT LIKE ' . $this->dbh->quote("%$value%");
+                    $condition = $fieldControl == 'select' ? ' NOT LIKE ' . $this->dbh->quote('%,' . $value . ',%') : ' NOT LIKE ' . $this->dbh->quote('%' . $value . '%');
                 }
             }
             elseif($operator == 'belong')
