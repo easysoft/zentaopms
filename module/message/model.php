@@ -298,7 +298,7 @@ class messageModel extends model
         if(empty($toList) && $objectType == 'meeting')     $toList = $object->host . $object->participant;
         if(empty($toList) && $objectType == 'ppm')         $toList = $object->createdBy . ',' . $object->assignee;
         if(empty($toList) and $objectType == 'demandpool') $toList = trim($object->owner, ',') . ',' . trim($object->reviewer, ',');
-        if(empty($toList) && in_array($objectType, array('release', 'doc', 'execution')))
+        if(empty($toList) && in_array($objectType, array('release', 'doc', 'execution', 'product', 'productplan')))
         {
             list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object);
             $toList = $toList . ',' . $ccList;
@@ -355,12 +355,6 @@ class messageModel extends model
             if(($flow && !$flow->buildin) || ($method && !$method->buildin)) $toList = $this->loadModel('flow')->getToList($flow, $object->id, $method);
         }
 
-        if($objectType == 'product')
-        {
-            $toAndCcList = $this->loadModel('product')->getToAndCcList($object);
-            if(!empty($toAndCcList)) list($toList, $ccList) = $toAndCcList;
-            $toList = $toList . ',' . $ccList;
-        }
         if($objectType == 'project') $toList = $object->openedBy . ',' . $object->PM;
 
         return trim($toList, ',');
