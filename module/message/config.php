@@ -17,17 +17,19 @@ $config->message->objectTypes['doc']         = array('releaseddoc', 'edited', 'm
 $config->message->objectTypes['kanbancard']  = array('created', 'edited', 'finished', 'activated', 'archived', 'restore', 'deleted', 'moved', 'nearing', 'mentioned');
 
 $config->message->available = array();
-$config->message->available['mail']['product']     = array('mentioned');
+$config->message->available['mail']['product']     = $config->message->objectTypes['product'];
 if($config->enableER) $config->message->available['mail']['epic']        = $config->message->objectTypes['epic'];
 if($config->URAndSR)  $config->message->available['mail']['requirement'] = $config->message->objectTypes['requirement'];
 $config->message->available['mail']['story']       = $config->message->objectTypes['story'];
-$config->message->available['mail']['productplan'] = array('mentioned');
+$config->message->available['mail']['productplan'] = $config->message->objectTypes['productplan'];
 $config->message->available['mail']['release']     = $config->message->objectTypes['release'];
+$config->message->available['mail']['project']     = $config->message->objectTypes['project'];
 $config->message->available['mail']['execution']   = $config->message->objectTypes['execution'];
 $config->message->available['mail']['task']        = $config->message->objectTypes['task'];
 $config->message->available['mail']['bug']         = $config->message->objectTypes['bug'];
-$config->message->available['mail']['case']        = array('mentioned');
-$config->message->available['mail']['testtask']    = array('opened', 'edited', 'closed');
+$config->message->available['mail']['case']        = $config->message->objectTypes['case'];
+$config->message->available['mail']['testtask']    = $config->message->objectTypes['testtask'];
+$config->message->available['mail']['todo']        = $config->message->objectTypes['todo'];
 $config->message->available['mail']['doc']         = $config->message->objectTypes['doc'];
 $config->message->available['mail']['kanbancard']  = $config->message->objectTypes['kanbancard'];
 

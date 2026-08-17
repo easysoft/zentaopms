@@ -355,7 +355,12 @@ class messageModel extends model
             if(($flow && !$flow->buildin) || ($method && !$method->buildin)) $toList = $this->loadModel('flow')->getToList($flow, $object->id, $method);
         }
 
-        if($objectType == 'product') $toList = $object->createdBy . ',' . $object->PO;
+        if($objectType == 'product')
+        {
+            $toAndCcList = $this->loadModel('product')->getToAndCcList($object);
+            if(!empty($toAndCcList)) list($toList, $ccList) = $toAndCcList;
+            $toList = $toList . ',' . $ccList;
+        }
         if($objectType == 'project') $toList = $object->openedBy . ',' . $object->PM;
 
         return trim($toList, ',');
