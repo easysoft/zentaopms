@@ -700,6 +700,9 @@ class transferModel extends model
         $queryCondition = $this->session->{$module . 'QueryCondition'};
         $orderBy        = $this->session->{$module . 'OrderBy'};
 
+        /* 如果不是符合格式的 id 列表，则返回空数组。If not a valid id list, return empty array. */
+        if(!preg_match('/^(?:[1-9]\d*)(?:,(?:[1-9]\d*))*$/', $checkedItem)) return [];
+
         /* 插入用例场景数据。*/
         /* Fetch the scene's cases. */
         if($module == 'testcase') $queryCondition = preg_replace("/AND\s+t[0-9]\.\"?scene\"?\s+=\s+'0'/i", '', $queryCondition);
