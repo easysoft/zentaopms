@@ -247,7 +247,7 @@ $routes['/doc/project/spaces/:projectID/libs/:libID/docs'] = array(
 );
 $routes['/doc/docs/:docID'] = array(
     'get'    => array('redirect' => '/doc/ajaxGetDoc?docID=:docID'),
-    'put'    => array('redirect' => '/doc/edit?docID=:docID'),
+    'put'    => array('redirect' => '/doc/edit?docID=:docID', 'data' => 'contentType=html'),
     'delete' => array('redirect' => '/doc/delete?docID=:docID')
 );
 $routes['/doc/docs/:docID/collect'] = array(
