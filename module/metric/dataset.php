@@ -1077,8 +1077,7 @@ class dataset
     {
         return $this->dao->select($fieldList)->from(TABLE_PIPELINEEXEC)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.`pipelineID` = t2.id')
-            ->where('t1.deleted')->eq('0')
-            ->andWhere('t2.deleted')->eq('0');
+            ->where('t2.deleted')->eq('0');
     }
 
     /**
