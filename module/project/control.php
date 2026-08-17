@@ -1346,7 +1346,7 @@ class project extends control
         $group      = $this->group->getById($groupID);
         $project    = $this->project->getByID((int)$group->project);
         $groupUsers = $this->group->getUserPairs($groupID);
-        $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID);
+        $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'account', 'inside', '', false);
         $otherUsers = array_diff_assoc($allUsers, $groupUsers);
 
         if($project->acl != 'open')
@@ -1358,7 +1358,7 @@ class project extends control
             }
         }
 
-        $outsideUsers = $this->loadModel('user')->getPairs('outside|noclosed|noletter|noempty');
+        $outsideUsers = $this->loadModel('user')->getPairs('outside|noclosed|noletter|noempty', '', 0, '', false);
         if($project->acl != 'open')
         {
             foreach($outsideUsers as $account => $outsideUser)

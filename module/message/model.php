@@ -641,38 +641,61 @@ class messageModel extends model
             }
         }
 
+        if(isset($messageSetting['xuanxuan']))
+        {
+            $actions = $messageSetting['xuanxuan']['setting'];
+            if(isset($actions[$settingObjectType]) && in_array('mentioned', $actions[$settingObjectType]))
+            {
+                $mentionUserIds = $this->dao->select('id')->from(TABLE_USER)->where('account')->in($mentionUsers)->andWhere('account')->ne($actor)->fetchPairs();
+
+                if($mentionUserIds)
+                {
+                    $title      = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
+                    $server     = $this->loadModel('im')->getServer('zentao');
+                    $url        = $server . $viewLink;
+                    $xxcUrl     = 'xxc:openInApp/zentao-integrated/' . urlencode($url);
+                    $avatarUrl  = $server . $this->app->getWebRoot() . 'favicon.ico';
+                    $senderName = zget($this->lang->message, 'sender', 'ZenTao');
+                    $sender     = array('id' => 'zentao', 'realname' => $senderName, 'name' => $senderName, 'avatar' => $avatarUrl);
+
+                    $this->loadModel('im')->messageCreateNotify($mentionUserIds, $title, '', '', 'text', $xxcUrl, array(), $sender);
+                }
+            }
+        }
+
         if(isset($messageSetting['webhook']))
         {
             $actions = $messageSetting['webhook']['setting'];
             if(isset($actions[$settingObjectType]) && in_array('mentioned', $actions[$settingObjectType]))
             {
                 $webhooks = $this->loadModel('webhook')->getList();
-                if(!$webhooks) return true;
-
-                $title = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
-                foreach($webhooks as $id => $webhook)
+                if($webhooks)
                 {
-                    if(strpos($webhook->type, 'group') !== false)  continue;
-
-                    $host = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
-                    $text = sprintf($this->lang->message->mention, $actorRealname, "[{$objectTitle}]({$host}{$viewLink})");
-                    $data = $this->webhook->getDataByType($webhook, $action, $title, $text, '', '', $objectType, (int)$object->id);
-                    if(!$data) continue;
-
-                    if($webhook->sendType == 'async')
+                    $title = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
+                    foreach($webhooks as $id => $webhook)
                     {
-                        if($webhook->type == 'dinguser')
+                        if(strpos($webhook->type, 'group') !== false)  continue;
+
+                        $host = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
+                        $text = sprintf($this->lang->message->mention, $actorRealname, "[{$objectTitle}]({$host}{$viewLink})");
+                        $data = $this->webhook->getDataByType($webhook, $action, $title, $text, '', '', $objectType, (int)$object->id);
+                        if(!$data) continue;
+
+                        if($webhook->sendType == 'async')
                         {
-                            $openIdList = $this->webhook->getOpenIdList($webhook->id, $actionID);
-                            if(empty($openIdList)) continue;
+                            if($webhook->type == 'dinguser')
+                            {
+                                $openIdList = $this->webhook->getOpenIdList($webhook->id, $actionID);
+                                if(empty($openIdList)) continue;
+                            }
+
+                            $this->webhook->saveData($id, $actionID, $data, $actor);
+                            continue;
                         }
 
-                        $this->webhook->saveData($id, $actionID, $data, $actor);
-                        continue;
+                        $result = $this->webhook->fetchHook($webhook, $data, $actionID, $mentionUsers);
+                        if(!empty($result)) $this->webhook->saveLog($webhook, $actionID, $data, (string)$result);
                     }
-
-                    $result = $this->webhook->fetchHook($webhook, $data, $actionID, $mentionUsers);
-                    if(!empty($result)) $this->webhook->saveLog($webhook, $actionID, $data, (string)$result);
                 }
             }
         }

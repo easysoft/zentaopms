@@ -21,10 +21,24 @@ $routes['/executions/:executionID/stories'] = array('redirect' => '/executions/s
 $routes['/stories/:storyID']                = array('response' => 'story,actions(array)');
 
 $routes['/products/:productID/epics']     = array('redirect' => '/products/browse?productID=:productID&storyType=epic', 'response' => 'stories(array)|epics,pager', 'search' => array('enabled' => true));
-$routes['/epics/:storyID']                = array('response' => 'story|epic,actions(array)');
+$routes['/epics/:storyID'] = array(
+    'get'    => array('response' => 'story|epic,actions(array)'),
+    'put'    => array('response' => '*'),
+    'delete' => array('response' => '*'),
+);
+$routes['/epics/:storyID/change']   = array('put' => array('response' => '*'));
+$routes['/epics/:storyID/close']    = array('put' => array('response' => '*'));
+$routes['/epics/:storyID/activate'] = array('put' => array('response' => '*'));
 
 $routes['/products/:productID/requirements'] = array('redirect' => '/products/browse?productID=:productID&storyType=requirement', 'response' => 'stories(array)|requirements,pager', 'search' => array('enabled' => true));
-$routes['/requirements/:storyID']            = array('response' => 'story|requirement,actions(array)');
+$routes['/requirements/:storyID'] = array(
+    'get'    => array('response' => 'story|requirement,actions(array)'),
+    'put'    => array('response' => '*'),
+    'delete' => array('response' => '*'),
+);
+$routes['/requirements/:storyID/change']   = array('put' => array('response' => '*'));
+$routes['/requirements/:storyID/close']    = array('put' => array('response' => '*'));
+$routes['/requirements/:storyID/activate'] = array('put' => array('response' => '*'));
 
 $routes['/products/:productID/productplans'] = array('redirect' => '/productplans?productID=:productID', 'response' => 'plans(array)|productplans,pager', 'search' => array('enabled' => true));
 $routes['/productplans/:planID']             = array('get' => array ('response' => 'plan|productplan,actions(array)'), 'put' => array ('response' => '*'));
