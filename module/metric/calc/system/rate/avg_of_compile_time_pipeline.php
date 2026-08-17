@@ -22,7 +22,7 @@ class avg_of_compile_time_pipeline extends baseCalc
 {
     public $dataset = 'getCompile';
 
-    public $fieldList = array('t1.`createdDate`', 't1.`updateDate`');
+    public $fieldList = array('t1.`createdDate`', 't1.`editedDate`');
 
     public $result = array();
 
@@ -31,7 +31,7 @@ class avg_of_compile_time_pipeline extends baseCalc
     public function calculate($row)
     {
         $createdDate = $row->createdDate;
-        $updateDate  = $row->updateDate;
+        $editedDate  = $row->editedDate;
 
         $year = $this->getYear($createdDate);
         if(!$year) return false;
@@ -45,7 +45,7 @@ class avg_of_compile_time_pipeline extends baseCalc
 
         $date = substr($createdDate, 0, 10);
         if(!isset($this->compileTime[$date]))  $this->compileTime[$date] = array();
-        $this->compileTime[$date][] = strtotime($updateDate) - strtotime($createdDate);
+        $this->compileTime[$date][] = strtotime($editedDate) - strtotime($createdDate);
     }
 
     public function getResult($options = array())
