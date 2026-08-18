@@ -894,6 +894,12 @@ class api extends router
 
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
+
+        /* 检查工作流是否存在并已发布，不存在或未发布时返回友好的 API 错误，避免报控制文件不存在的代码错误。*/
+        /* Check whether the workflow exists and is released; otherwise return a friendly API error. */
+        $flow = $this->dbQuery("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '{$moduleName}'")->fetch();
+        if(empty($flow) || $flow->status != 'normal') $this->sendV2Error($this->lang->flowNotRelease);
+
         $this->setControlFile();
 
         $this->prepareDeleteConfirmParam();
