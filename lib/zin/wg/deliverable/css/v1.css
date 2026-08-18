@@ -1,3 +1,5 @@
 .deliverable-category-name>.text:after { right: -0.5rem !important; }
 .deliverable-item .form-tip { padding-left: 0.5rem; }
 .deliverable-item-doc-picker { width: 18rem; }
+.deliverable-item-empty-actions { gap: 0rem; }
+.submitTip { min-width: 200px; }
