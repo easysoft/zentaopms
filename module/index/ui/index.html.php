@@ -124,6 +124,7 @@ jsVar('pollTime',    (!empty($config->message->browser->turnon) && !empty($confi
 jsVar('turnon',      empty($config->message->browser->turnon) ? 0 : 1);
 jsVar('runnable',    $this->loadModel('cron')->runnable());
 jsVar('showFeatures', $showFeatures);
+jsVar('langNotification', $lang->index->notification);
 
 set::zui(true);
 set::bodyClass($this->cookie->hideMenu ? 'hide-menu' : 'show-menu');
