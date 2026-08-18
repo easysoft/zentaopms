@@ -1230,7 +1230,20 @@ class baseRouter
         /* API session use tmp/apisession directory. */
         $apiMode = $this->apiVersion && !isset($_GET[$this->config->sessionVar]);
 
-        if(ini_get('session.save_handler') == 'files' || $apiMode)
+        /*
+         * 会话存储驱动。默认 file，保持原有的文件存储行为不变；
+         * 设置为 db 时将会话存入数据库，多台应用服务器即可共享会话。
+         * Session storage driver. Defaults to 'file', which keeps the original
+         * file-based behaviour exactly as before. Set it to 'db' to store sessions in
+         * the database so several app servers can share one session without a shared
+         * filesystem. API mode keeps its own directory either way.
+         */
+        if(!$apiMode && zget($this->config, 'sessionDriver', 'file') == 'db' && !empty($this->dbh))
+        {
+            $ztSessionHandler = new ztDBSessionHandler($this->dbh, $this->config);
+            session_set_save_handler($ztSessionHandler, true);
+        }
+        elseif(ini_get('session.save_handler') == 'files' || $apiMode)
         {
             $savePath = $this->getTmpRoot() . ($apiMode ? 'apisession' : 'session');
             if(!is_dir($savePath)) mkdir($savePath, 0777, true);
@@ -3985,5 +3998,185 @@ class ztSessionHandler implements SessionHandlerInterface
         }
 
         return $count;
+    }
+}
+
+/**
+ * 数据库会话存储处理器。 The database session handler.
+ *
+ * 仅在 $config->sessionDriver 为 'db' 时启用；默认为 'file'，因此现有部署不受影响。
+ * Only used when $config->sessionDriver is 'db'. The default is 'file', so existing
+ * deployments are unaffected.
+ *
+ * 为什么需要它：文件会话要求每台应用服务器共享同一个文件系统。在网络文件系统上，
+ * 一次会话读写往往比一次数据库查询慢一到两个数量级，而应用本来就连着数据库。
+ * Why this exists: file sessions require every app server to share a filesystem. On a
+ * network filesystem one session read/write is often one to two orders of magnitude
+ * slower than a database query, and the application is already connected to the
+ * database anyway.
+ *
+ * 所需数据表（前缀取自 $config->db->prefix）:
+ * Required table (prefix comes from $config->db->prefix):
+ *
+ *   CREATE TABLE IF NOT EXISTS `zt_session` (
+ *     `id`      varchar(128) NOT NULL,
+ *     `data`    mediumblob   NOT NULL,
+ *     `expires` int unsigned NOT NULL,
+ *     PRIMARY KEY (`id`),
+ *     KEY `expires` (`expires`)
+ *   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+ *
+ * data 用 mediumblob 而非 text：序列化后的会话是二进制安全的字节串，不应经过字符集转换。
+ * `data` is a mediumblob rather than text because serialized session data is a
+ * binary-safe byte string and must not go through charset conversion.
+ */
+class ztDBSessionHandler implements SessionHandlerInterface
+{
+    public $dbh;
+    public $table;
+    public $lifetime;
+    public $sessionID;
+
+    /**
+     * Construct.
+     *
+     * @param  object $dbh
+     * @param  object $config
+     * @access public
+     * @return void
+     */
+    public function __construct($dbh, $config)
+    {
+        $this->dbh      = $dbh;
+        $this->table    = $config->db->prefix . 'session';
+        $this->lifetime = (int)ini_get('session.gc_maxlifetime');
+        if($this->lifetime <= 0) $this->lifetime = 1440;
+
+        /* 与文件处理器一致：请求结束时写回会话。 Mirror the file handler: write the session back at request end. */
+        register_shutdown_function('session_write_close');
+    }
+
+    /**
+     * Get sessionID.
+     *
+     * @access public
+     * @return string
+     */
+    public function getSessionID()
+    {
+        return $this->sessionID;
+    }
+
+    /**
+     * Creates a new session, or reinitialize an existing one.
+     *
+     * @param  string $savePath
+     * @param  string $sessionName
+     * @access public
+     * @return bool
+     */
+    #[\ReturnTypeWillChange]
+    public function open($savePath, $sessionName): bool
+    {
+        return true;
+    }
+
+    /**
+     * Closes the current session.
+     *
+     * @access public
+     * @return bool
+     */
+    #[\ReturnTypeWillChange]
+    public function close(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Reads the session data and returns it.
+     *
+     * @param  string       $id
+     * @access public
+     * @return string|false
+     */
+    #[\ReturnTypeWillChange]
+    public function read($id): string|false
+    {
+        if(!preg_match('/^\w+$/', $id)) return false;
+        $this->sessionID = $id;
+
+        $stmt = $this->dbh->prepare("SELECT `data` FROM `{$this->table}` WHERE `id` = ? AND `expires` > ?");
+        if(!$stmt) return '';
+
+        $stmt->execute(array($id, time()));
+        $data = $stmt->fetchColumn();
+
+        return $data === false ? '' : (string)$data;
+    }
+
+    /**
+     * Writes the session data.
+     *
+     * 单条 upsert，写入本身是原子的，等价于文件处理器的 LOCK_EX。
+     * A single upsert, so the write itself is atomic — the equivalent of the file
+     * handler's LOCK_EX.
+     *
+     * @param  string $id
+     * @param  string $sessData
+     * @access public
+     * @return bool
+     */
+    #[\ReturnTypeWillChange]
+    public function write($id, $sessData): bool
+    {
+        if(!preg_match('/^\w+$/', $id)) return true;
+
+        $stmt = $this->dbh->prepare("INSERT INTO `{$this->table}` (`id`, `data`, `expires`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `data` = VALUES(`data`), `expires` = VALUES(`expires`)");
+        if(!$stmt) return true;
+
+        $stmt->execute(array($id, $sessData, time() + $this->lifetime));
+
+        return true;
+    }
+
+    /**
+     * Destroys a session.
+     *
+     * @param  string $id
+     * @access public
+     * @return bool
+     */
+    #[\ReturnTypeWillChange]
+    public function destroy($id): bool
+    {
+        if(!preg_match('/^\w+$/', $id)) return true;
+
+        $stmt = $this->dbh->prepare("DELETE FROM `{$this->table}` WHERE `id` = ?");
+        if($stmt) $stmt->execute(array($id));
+
+        return true;
+    }
+
+    /**
+     * Cleans up expired sessions.
+     *
+     * @param  int       $maxlifeTime
+     * @access public
+     * @return int|false
+     */
+    #[\ReturnTypeWillChange]
+    public function gc($maxlifeTime): int|false
+    {
+        /* API session never expires — 与文件处理器一致。 Same rule as the file handler. */
+        global $config;
+        if((defined('RUN_MODE') && RUN_MODE == 'api') || isset($_GET[$config->sessionVar])) return 0;
+
+        $stmt = $this->dbh->prepare("DELETE FROM `{$this->table}` WHERE `expires` < ?");
+        if(!$stmt) return 0;
+
+        $stmt->execute(array(time()));
+
+        return $stmt->rowCount();
     }
 }

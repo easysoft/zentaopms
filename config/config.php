@@ -23,6 +23,7 @@ $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The co
 $config->timezone      = 'Asia/Shanghai';      // 时区设置。        The time zone setting, for more see http://www.php.net/manual/en/timezones.php.
 $config->webRoot       = '';                   // URL根目录。       The root path of the url.
 $config->customSession = false;                // 是否开启自定义session的存储路径。Whether custom the session save path.
+$config->sessionDriver = 'file';               // 会话存储驱动，可选 file|db。db 把会话存入数据库，便于多台应用服务器共享会话。Session storage driver: file|db. 'db' stores sessions in the database so several app servers can share them.
 $config->edition       = 'open';               // 设置系统的edition，可选值：open|biz|max。Set edition, optional: open|biz|max.
 $config->tabSession    = false;                // 是否开启浏览器新标签独立session.
 $config->clientCache   = false;                // 是否开启客户端缓存。Whether enable client cache or not.
@@ -227,6 +228,7 @@ if($config->inContainer || $config->inQuickon)
     $config->debug         = (int)getenv('ZT_DEBUG');
     $config->requestType   = getenv('ZT_REQUEST_TYPE');
     $config->timezone      = getEnvData('ZT_TIMEZONE', 'Asia/Shanghai');
+    $config->sessionDriver = getEnvData('ZT_SESSION_DRIVER', 'file');
     $config->db->driver    = getenv('ZT_DB_DRIVER');
     $config->db->host      = getenv('ZT_DB_HOST');
     $config->db->port      = getenv('ZT_DB_PORT');
