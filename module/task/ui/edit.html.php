@@ -206,6 +206,7 @@ detailBody
         ),
         section
         (
+            setID('desc'),
             set::title($lang->task->desc),
             editor
             (
