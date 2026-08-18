@@ -1971,7 +1971,7 @@ class treeModel extends model
                 $module->root   = $rootID;
                 $module->name   = strip_tags(trim($moduleName));
                 $module->parent = $parentModuleID;
-                $module->branch = isset($branches[$moduleID]) ? $branches[$moduleID] : 0;
+                $module->branch = isset($branches[$moduleID]) ? (int)$branches[$moduleID] : 0;
                 $module->short  = $shorts[$moduleID];
                 $module->grade  = $grade;
                 $module->type   = $type;
@@ -1998,7 +1998,7 @@ class treeModel extends model
                 $data->name   = strip_tags(trim($moduleName));
                 $data->short  = $short;
                 $data->order  = $order;
-                $data->branch = isset($branches[$originID]) ? $branches[$originID] : 0;
+                $data->branch = isset($branches[$originID]) ? (int)$branches[$originID] : 0;
 
                 $this->dao->update(TABLE_MODULE)->data($data)->autoCheck()->where('id')->eq($moduleID)->exec();
                 if(dao::isError()) return false;
