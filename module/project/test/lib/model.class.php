@@ -1378,4 +1378,20 @@ class projectModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 测试获取项目的邮件通知收件人。
+     * Test getToAndCcList method.
+     *
+     * @param  object $project
+     * @access public
+     * @return array|false|string
+     */
+    public function getToAndCcListTest(object $project): array|false|string
+    {
+        $result = $this->instance->getToAndCcList($project);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
