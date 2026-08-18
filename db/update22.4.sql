@@ -40,3 +40,15 @@ UPDATE `zt_config` SET `value` = 'ui20' WHERE `module` = 'common' AND `section` 
 
 DROP VIEW IF EXISTS `ztv_projectnotpl`;
 CREATE OR REPLACE VIEW `ztv_projectnotpl` AS SELECT * FROM `zt_project` WHERE `deleted` = '0' AND `isTpl` = 0;
+
+DELETE FROM `zt_queue` WHERE `command` = 'moduleName=svn&methodName=run';
+DELETE FROM `zt_queue` WHERE `command` = 'moduleName=git&methodName=run';
+DELETE FROM `zt_queue` WHERE `command` = 'moduleName=ci&methodName=checkCompileStatus';
+DELETE FROM `zt_queue` WHERE `command` = 'moduleName=ci&methodName=exec';
+DELETE FROM `zt_queue` WHERE `command` = 'moduleName=mr&methodName=syncMR';
+DELETE FROM `zt_queue` WHERE `command` = 'moduleName=compile&methodName=ajaxSyncCompile';
+DELETE FROM `zt_queue` WHERE `command` = 'moduleName=ci&methodName=initQueue';
+DELETE FROM `zt_queue` WHERE `command` = 'moduleName=instance&methodName=cronCleanBackup';
+
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=instance&methodName=syncGitFoxData';
+DELETE FROM `zt_queue` WHERE `command` = 'moduleName=instance&methodName=syncGitFoxData';

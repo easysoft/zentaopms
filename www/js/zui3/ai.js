@@ -186,7 +186,7 @@ window.getAgentCreatingOptions = function(info, langData)
         title    : info.name,
         type     : 'agent',
         model    : info.model,
-        agent    : 'zentao-api',
+        agent    : 'zentao-api-readonly',
         tools    : tools,
         prompt   : [info.role, zui.formatString(langData.processDataPrefix, {data: info.dataPrompt}), noTargetForm ? null : zui.formatString(langData.promptExtraLimit, {toolName: toolName})].filter(Boolean).join('\n\n'),
         form     : formConfig,
@@ -487,7 +487,7 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
                     }
                 }
                 const taskResult = {
-                    agentID: 'zentao-api',
+                    agentID: 'zentao-api-readonly',
                     id: 'zentao-agent-result-' + Date.now(),
                     tool: agentToolDef,
                     title: response.title,
@@ -537,7 +537,7 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
             ],
         },
         creatingChat: {
-            agent: 'zentao-api',
+            agent: 'zentao-api-readonly',
             title: langData.formFillTitle,
             type:  'agent',
             prompt: prompt,

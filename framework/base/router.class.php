@@ -1235,7 +1235,8 @@ class baseRouter
 
         if(ini_get('session.save_handler') == 'files' || $useToken)
         {
-            $savePath = $this->getTmpRoot() . ($useToken ? 'apisession' : 'session');
+            $sessionPathEnv = $useToken ? 'ZT_APISESSION_PATH' : 'ZT_SESSION_PATH';
+            $savePath       = getenv($sessionPathEnv) ?: $this->getTmpRoot() . ($useToken ? 'apisession' : 'session');
             if(!is_dir($savePath)) mkdir($savePath, 0777, true);
 
             if(is_writable($savePath))

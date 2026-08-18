@@ -2642,6 +2642,16 @@ class treeModel extends model
         }
         elseif($data->createType == 'child')
         {
+            if($module->parent)
+            {
+                $parent = $this->getByID($module->parent);
+                if(empty($parent) || $parent->deleted || $parent->root != $module->root || $parent->type != $module->type)
+                {
+                    dao::$errors[] = $this->lang->tree->invalidParent;
+                    return false;
+                }
+            }
+
             $maxOrder = $this->dao->select('`order`')->from(TABLE_MODULE)
                 ->where('root')->eq($module->root)
                 ->andWhere('parent')->eq($module->parent)
