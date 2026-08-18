@@ -4122,4 +4122,19 @@ class testcaseModelTest extends baseTest
         foreach($steps as $step) $output[] = $step;
         return $output;
     }
+
+    /**
+     * Test getToAndCcList method.
+     *
+     * @param  object $case
+     * @access public
+     * @return array|false|string
+     */
+    public function getToAndCcListTest(object $case): array|false|string
+    {
+        $result = $this->instance->getToAndCcList($case);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

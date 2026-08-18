@@ -197,6 +197,7 @@ class mailTao extends mailModel
     {
         if(empty($objectType) || empty($objectID)) return false;
 
+        if($objectType == 'case') $objectType = 'testcase';
         $objectModel = $objectType == 'kanbancard' ? $this->loadModel('kanban') : $this->loadModel($objectType);
         if(!$objectModel) return false;
 
@@ -237,6 +238,7 @@ class mailTao extends mailModel
     {
         if(empty($objectType) || empty($object) || empty($action) || empty($action->action)) return false;
 
+        if($objectType == 'case') $objectType = 'testcase';
         $objectModel = $this->loadModel($objectType);
         if(!$objectModel) return false;
 
@@ -259,6 +261,7 @@ class mailTao extends mailModel
     {
         if(empty($objectType) || empty($object) || empty($action)) return '';
 
+        if($objectType == 'case') $objectType = 'testcase';
         $this->loadModel('action');
 
         $domain     = zget($this->config->mail, 'domain', common::getSysURL());
