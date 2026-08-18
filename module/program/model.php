@@ -513,8 +513,10 @@ class programModel extends model
             $query = str_replace('`id`','t1.id', $this->session->projectQuery);
         }
 
-        $stmt = $this->dao->select("DISTINCT t1.*, CAST(NULLIF(t1.budget, 0) AS DECIMAL) AS budget")->from(TABLE_PROJECT)->alias('t1');
-        if($this->cookie->involved || $browseType == 'involved') $stmt = $this->loadModel('project')->leftJoinInvolvedTable($stmt);
+        $joinInvolved = $this->cookie->involved || $browseType == 'involved';
+        $select       = ($joinInvolved ? 'DISTINCT ' : '') . 't1.*, CAST(NULLIF(t1.budget, 0) AS DECIMAL) AS budget';
+        $stmt         = $this->dao->select($select)->from(TABLE_PROJECT)->alias('t1');
+        if($joinInvolved) $stmt = $this->loadModel('project')->leftJoinInvolvedTable($stmt);
         $stmt->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF($browseType == 'bysearch' && $query)->andWhere($query)->fi()
@@ -533,7 +535,7 @@ class programModel extends model
             ->beginIF(!$queryAll && !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi();
 
         if($this->cookie->involved) $stmt = $this->project->appendInvolvedCondition($stmt);
-        $projectList = $stmt->orderBy($orderBy)->page($pager, 't1.id')->fetchAll('id');
+        $projectList = $stmt->orderBy($orderBy)->page($pager, $joinInvolved ? 't1.id' : '')->fetchAll('id');
 
         /* Determine how to display the name of the program. */
         if($programTitle and in_array($this->config->systemMode, array('ALM', 'PLM'))) $projectList = $this->batchProcessProgramName($projectList, $programTitle);
