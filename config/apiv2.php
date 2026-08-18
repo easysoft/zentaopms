@@ -90,6 +90,7 @@ $routes['/projects/:projectID/bugs']     = array(
 $routes['/executions/:executionID/bugs'] = array('redirect' => '/executions/bug?executionID=:executionID', 'search' => array('enabled' => true, 'searchModule' => 'executionBug', 'querySessionKey' => 'executionBug'));
 $routes['/feedbacks/:feedbackID/bugs']   = array('post' => array('redirect' => '/bug/create?productID=0&branch=0&extras=projectID=0,fromType=feedback,fromID=:feedbackID', 'data' => 'feedback=:feedbackID'));
 $routes['/bugs/:bugID']                  = array('response' => 'bug,actions(array)');
+$routes['/bugs/:bugID/confirm']          = array('put' => array('response' => '*'));
 
 $routes['/products/:productID/testcases']     = array('redirect' => '/testcases?productID=:productID', 'response' => 'cases(array)|testcases,pager', 'search' => array('enabled' => true, 'searchModule' => 'testcase', 'querySessionKey' => 'testcase'));
 $routes['/projects/:projectID/testcases']     = array('redirect' => '/projects/testcase?projectID=:projectID', 'search' => array('enabled' => true, 'searchModule' => 'testcase', 'querySessionKey' => 'testcase'));
