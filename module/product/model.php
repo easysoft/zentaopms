@@ -2256,6 +2256,8 @@ class productModel extends model
      */
     public function createSystem(int $productID, string $productName)
     {
+        if($this->config->vision != 'rnd') return;
+
         $hasSameName = $this->dao->select('name')->from(TABLE_SYSTEM)->where('name')->eq($productName)->fetch('name');
 
         $systemData = new stdClass();
