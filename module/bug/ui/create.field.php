@@ -14,6 +14,11 @@ if($files)
 {
     foreach($files as $key => $fileInfo)
     {
+        if($fileInfo->objectType == 'stepResult')
+        {
+            $fileInfo->extra = '';
+            continue;
+        }
         if($fileInfo->extra != '') unset($files[$key]);
     }
 }
