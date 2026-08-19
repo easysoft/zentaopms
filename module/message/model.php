@@ -295,12 +295,11 @@ class messageModel extends model
             return trim($toList, ',');
         }
         if(!empty($object->assignedTo))                    $toList = $object->assignedTo;
-        if(empty($toList) && $objectType == 'todo')        $toList = $object->account;
         if(empty($toList) && $objectType == 'testtask')    $toList = $object->owner;
         if(empty($toList) && $objectType == 'meeting')     $toList = $object->host . $object->participant;
         if(empty($toList) && $objectType == 'ppm')         $toList = $object->createdBy . ',' . $object->assignee;
         if(empty($toList) and $objectType == 'demandpool') $toList = trim($object->owner, ',') . ',' . trim($object->reviewer, ',');
-        if(empty($toList) && in_array($objectType, array('release', 'doc', 'execution', 'product', 'productplan', 'project', 'testcase')))
+        if(empty($toList) && in_array($objectType, array('release', 'doc', 'execution', 'product', 'productplan', 'project', 'testcase', 'todo')))
         {
             list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object);
             $toList = $toList . ',' . $ccList;
