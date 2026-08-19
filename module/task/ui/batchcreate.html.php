@@ -13,6 +13,7 @@ namespace zin;
 /* ====== Preparing and processing page data ====== */
 jsVar('edition', $config->edition);
 jsVar('parentID', (int)$parent);
+jsVar('projectID', $project->id);
 jsVar('executionID', $execution->id);
 jsVar('storyTasks', $storyTasks);
 jsVar('parentEstStarted', isset($parentTask) ? $parentTask->estStarted : '');
@@ -24,125 +25,34 @@ jsVar('taskHasConsumed', $taskConsumed > 0);
 jsVar('langAddChildTask', $lang->task->addChildTask);
 jsVar('taskDateLimit', $project->taskDateLimit);
 
-/* zin: Set variables to define picker options for form. */
-$storyItem         = '';
-$previewItem       = '';
-$copyStoryItem     = '';
-$storyEstimateItem = '';
-$storyDescItem     = '';
-$storyPriItem      = '';
+$items = array();
+
+$items[] = array('name' => 'module', 'label' => $lang->task->module, 'control' => 'picker', 'value' => $moduleID, 'items' => $modules, 'width' => '200px', 'ditto' => true);
 if(!$hideStory)
 {
-    $storyItem = formBatchItem(
-        set::name('story'),
-        set::label($lang->task->story),
-        set::control('picker'),
-        set::items($stories),
-        set::value($storyID),
-        set::width('240px'),
-        set::ditto(true)
-    );
-
-    $previewItem = formBatchItem(
-        set::name('preview'),
-        set::label(''),
-        set('labelClass', 'hidden'),
-        set::width('40px'),
-        set::control('hidden'),
-        btn
-        (
-            set(
-                array
-                (
-                    'type' => 'btn',
-                    'icon' => 'eye',
-                    'class' => 'ghost',
-                    'hint' => $lang->preview,
-                    'data-url' => empty($storyID) ? '#' : createLink('story', 'view', "storyID={$storyID}"),
-                    'data-toggle' => 'modal',
-                    'data-size' => 'lg',
-                    'disabled' => empty($storyID)
-                )
-            )
-        )
-    );
-
-    $copyStoryItem = formBatchItem(
-        set::name('copyStory'),
-        set::label(''),
-        set('labelClass', 'hidden'),
-        set::width('40px'),
-        set::control('hidden'),
-        btn
-        (
-            set(
-                array
-                (
-                    'type' => 'btn',
-                    'icon' => 'arrow-right',
-                    'class' => 'ghost',
-                    'hint' => $lang->task->copyStoryTitle
-                )
-            )
-        )
-    );
-
-    $storyEstimateItem = formBatchItem(
-        set::hidden(true),
-        set::name('storyEstimate'),
-        set::label(''),
-        set('labelClass', 'hidden'),
-        set::value(isset($story->estimate) ? $story->estimate : ''),
-        set::control('hidden')
-    );
-
-    $storyDescItem = formBatchItem(
-        set::hidden(true),
-        set::name('storyDesc'),
-        set::label(''),
-        set('labelClass', 'hidden'),
-        set::value(isset($story->desc) ? $story->desc : ''),
-        set::control('hidden')
-    );
-
-    $storyPriItem = formBatchItem(
-        set::hidden(true),
-        set::name('storyPri'),
-        set::label(''),
-        set('labelClass', 'hidden'),
-        set::value(isset($story->pri) ? $story->pri : '3'),
-        set::control('hidden')
-    );
+    $items[] = array('name' => 'story', 'label' => $lang->task->story, 'control' => 'picker', 'items' => $stories, 'value' => $storyID, 'width' => '240px', 'ditto' => true);
+    $items[] = array('name' => 'preview', 'label' => '', 'labelClass' => 'hidden', 'width' => '40px', 'control' => array('control' => 'btn', 'icon' => 'eye', 'class' => 'ghost', 'hint' => $lang->preview, 'data-url' => empty($storyID) ? '#' : createLink('story', 'view', "storyID={$storyID}"), 'data-toggle' => 'modal', 'data-size' => 'lg', 'disabled' => empty($storyID)));
+    $items[] = array('name' => 'copyStory', 'label' => '', 'labelClass' => 'hidden', 'width' => '40px', 'control' => array('control' => 'btn', 'icon' => 'arrow-right', 'class' => 'ghost', 'hint' => $lang->task->copyStoryTitle));
+    $items[] = array('name' => 'storyEstimate', 'label' => '', 'labelClass' => 'hidden', 'value' => isset($story->estimate) ? $story->estimate : '', 'control' => 'hidden', 'hidden' => true);
+    $items[] = array('name' => 'storyDesc', 'label' => '', 'labelClass' => 'hidden', 'value' => isset($story->desc) ? $story->desc : '', 'control' => 'hidden', 'hidden' => true);
+    $items[] = array('name' => 'storyPri', 'label' => '', 'labelClass' => 'hidden', 'value' => isset($story->pri) ? $story->pri : '3', 'control' => 'hidden', 'hidden' => true);
 }
 
 /* Field of region and lane. */
-$regionItem = '';
-$laneItem   = '';
 if($execution->type == 'kanban')
 {
-    $regionItem = formBatchItem(
-        set::name('region'),
-        set::label($lang->kanbancard->region),
-        set::control('picker'),
-        set::value($regionID),
-        set::items($regionPairs),
-        set::width('160px'),
-        set::ditto(true),
-        set::required(true),
-        set::hidden($config->vision == 'lite')
-    );
-    $laneItem = formBatchItem(
-        set::name('lane'),
-        set::label($lang->kanbancard->lane),
-        set::control('picker'),
-        set::value($laneID),
-        set::items($lanePairs),
-        set::width('160px'),
-        set::ditto(true),
-        set::required(true),
-        set::hidden($config->vision == 'lite')
-    );
+    $items[] = array('name' => 'region', 'label' => $lang->kanbancard->region, 'control' => 'picker', 'value' => $regionID, 'items' => $regionPairs, 'width' => '160px', 'ditto' => true, 'required' => true, 'hidden' => $config->vision == 'lite');
+    $items[] = array('name' => 'lane',   'label' => $lang->kanbancard->lane,   'control' => 'picker', 'value' => $laneID,   'items' => $lanePairs,   'width' => '160px', 'ditto' => true, 'required' => true, 'hidden' => $config->vision == 'lite');
 }
+$items[] = array('name' => 'name', 'control' => 'colorInput', 'label' => $lang->task->name, 'width' => '240px');
+$items[] = array('name' => 'isParent', 'control' => 'hidden', 'value' => '0');
+$items[] = array('name' => 'type', 'label' => $lang->task->type, 'control' => 'picker', 'items' => $lang->task->typeList, 'value' => 'devel', 'width' => '160px', 'ditto' => true, 'data-on' => 'change', 'data-call' => 'changeType', 'data-params' => 'event');
+$items[] = array('name' => 'assignedTo', 'label' => $lang->task->assignedTo, 'control' => array('control' => 'taskAssignedTo', 'manageLink' => ($manageLink ? $manageLink : '')), 'items' => $members, 'width' => '128px', 'ditto' => true);
+$items[] = array('name' => 'pri', 'label' => $lang->task->pri, 'control' => array('control' => 'priPicker', 'required' => true), 'value' => 3, 'ditto' => true, 'items' => $lang->task->priList, 'width' => '110px');
+$items[] = array('name' => 'estimate', 'label' => $lang->task->estimateAB, 'width' => '110px', 'ditto' => true, 'control' => array('type' => 'inputControl', 'suffix' => $lang->task->suffixHour, 'suffixWidth' => 20));
+$items[] = array('name' => 'estStarted', 'label' => $lang->task->estStarted, 'control' => 'date', 'width' => '128px', 'ditto' => true);
+$items[] = array('name' => 'deadline', 'label' => $lang->task->deadline, 'control' => 'date', 'width' => '128px', 'ditto' => true);
+$items[] = array('name' => 'desc', 'label' => $lang->task->desc, 'control' => 'textarea', 'width' => '240px');
 
 $batchFormOptions = array();
 $batchFormOptions['fixedActions']  = true; // 滚动时固定操作列。
@@ -170,104 +80,8 @@ formBatchPanel
             on::change('toggleZeroTaskStory')
         )
     ),
-    formBatchItem
-    (
-        set::name('module'),
-        set::label($lang->task->module),
-        set::control('picker'),
-        set::value($moduleID),
-        set::items($modules),
-        set::width('200px'),
-        set::ditto(true)
-    ),
-    $storyItem,
-    $previewItem,
-    $copyStoryItem,
-    $storyEstimateItem,
-    $storyDescItem,
-    $storyPriItem,
-    formBatchItem
-    (
-        set::name('name'),
-        set::control('colorInput'),
-        set::label($lang->task->name),
-        set::width('240px')
-    ),
-    formBatchItem
-    (
-        set::name('isParent'),
-        set::control('hidden'),
-        set::value('0')
-    ),
-    $regionItem,
-    $laneItem,
-    formBatchItem
-    (
-        set::name('type'),
-        set::label($lang->task->type),
-        set::control('picker'),
-        set::items($lang->task->typeList),
-        set::value('devel'),
-        set::width('160px'),
-        set::ditto(true)
-    ),
-    formBatchItem
-    (
-        set::name('assignedTo'),
-        set::label($lang->task->assignedTo),
-        set::control(array('control' => 'taskAssignedTo', 'manageLink' => ($manageLink ? $manageLink : ''))),
-        set::items($members),
-        set::width('128px'),
-        set::ditto(true)
-    ),
-    formBatchItem
-    (
-        set::name('pri'),
-        set::label($lang->task->pri),
-        set::control(array('control' => 'priPicker', 'required' => true)),
-        set::value(3),
-        set::ditto(true),
-        set::items($lang->task->priList),
-        set::width('110px')
-    ),
-    formBatchItem
-    (
-        set::name('estimate'),
-        set::label($lang->task->estimateAB),
-        set::width('110px'),
-        set::ditto(true),
-        set::control
-        (
-            array(
-                'type' => 'inputControl',
-                'suffix' => $lang->task->suffixHour,
-                'suffixWidth' => 20
-            )
-        )
-    ),
-    formBatchItem
-    (
-        set::name('estStarted'),
-        set::label($lang->task->estStarted),
-        set::control('date'),
-        set::width('128px'),
-        set::ditto(true)
-    ),
-    formBatchItem
-    (
-        set::name('deadline'),
-        set::label($lang->task->deadline),
-        set::control('date'),
-        set::width('128px'),
-        set::ditto(true)
-    ),
-    formBatchItem
-    (
-        set::name('desc'),
-        set::label($lang->task->desc),
-        set::control('textarea'),
-        set::width('240px')
-    ),
+    set::items($items),
+    on::change('[data-name="type"]', 'changeType'),
     on::change('[data-name="module"]', 'setStories'),
     on::change('input[name^=story]', 'setStoryRelated'),
     on::click('[data-name=story] [data-type=ditto]', 'setStoryRelated'),

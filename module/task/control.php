@@ -1425,30 +1425,6 @@ class task extends control
     }
 
     /**
-     * 根据任务类型获取可以选择的交付物类型。
-     * Ajax get deliverable by task type.
-     *
-     * @param  int    $taskID
-     * @param  string $type
-     * @access public
-     * @return void
-     */
-    public function ajaxGetDeliverableByTaskType(int $taskID, string $type)
-    {
-        $task         = $this->task->getByID($taskID);
-        $project      = $this->loadModel('project')->fetchById($task->project);
-        $deliverables = $this->loadModel('deliverable')->getPairs($project->workflowGroup, "task_{$type}", '', $project->id);
-
-        $items = array();
-        foreach($deliverables as $deliverableID => $deliverableName)
-        {
-            $items[] = array('text' => $deliverableName, 'value' => $deliverableID, 'keys' => $deliverableID);
-        }
-
-        return print(json_encode($items));
-    }
-
-    /**
      * 创建代码分支。
      * Create repo branch.
      *
