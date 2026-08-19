@@ -808,6 +808,12 @@ class pivotState
             $this->settings['columns'][$index] = array_merge($this->getDefaultColumn(), $column);
 
             unset($this->settings['columns'][$index]['drill']);
+            if(!empty($this->settings['columns'][$index]['showOrigin']))
+            {
+                $this->drills = array_filter($this->drills, function($drill) use ($column) { return $drill['field'] !== $column['field']; });
+                $this->drills = array_values($this->drills);
+                continue;
+            }
             foreach($this->drills as $drill)
             {
                 if(empty($drill)) continue;
