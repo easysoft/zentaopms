@@ -360,7 +360,8 @@ detailBody
                     set::name('type'),
                     set::value($task->type),
                     set::items($typeOptions),
-                    set::required(true)
+                    set::required(true),
+                    setData(array('on' => 'change', 'call' => 'changeType', 'params' => 'event'))
                 )
             ),
             empty($task->children) ? item

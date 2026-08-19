@@ -509,6 +509,7 @@ $config->ajaxDependencies['task.ajaxgetstories']                              = 
 $config->ajaxDependencies['task.ajaxgettaskeststartedanddeadline']            = ['task.create', 'task.edit'];
 $config->ajaxDependencies['task.ajaxgetteststories']                          = 'task.create';
 $config->ajaxDependencies['task.ajaxgetusertasks']                            = ['todo.create', 'todo.edit', 'todo.batchcreate'];
+$config->ajaxDependencies['task.ajaxgetdeliverablebytasktype']                = 'task.edit';
 $config->ajaxDependencies['testcase.ajaxgetcanimportmoduleitems']             = 'testcase.importfromlib';
 $config->ajaxDependencies['testcase.ajaxgetoptionmenu']                       = ['testcase.createscene', 'testcase.create', 'testcase.edit', 'testcase.editscene'];
 $config->ajaxDependencies['testcase.ajaxgetproductscenes']                    = 'testcase.showimport';

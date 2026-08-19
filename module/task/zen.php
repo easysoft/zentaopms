@@ -77,7 +77,7 @@ class taskZen extends task
         $this->view->from              = $storyID || $todoID || $bugID  ? 'other' : 'task';
         $this->view->taskID            = $taskID;
         $this->view->parents           = $parents;
-        $this->view->loadUrl           = $this->createLink('task', $this->app->rawMethod, "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}");
+        $this->view->loadUrl           = $this->createLink('task', $this->app->rawMethod, "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}&type={type}");
         $this->view->assignedToOptions = $this->getAssignedToOptions($manageLink);
         $this->view->manageLink        = $manageLink;
     }
