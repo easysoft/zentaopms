@@ -623,11 +623,12 @@ CREATE TABLE `zt_deliverable` (
 CREATE TABLE IF NOT EXISTS `zt_deliverablestage` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `deliverable` int unsigned NOT NULL DEFAULT 0,
+  `type` varchar(30) NOT NULL DEFAULT 'execution',
   `stage` varchar(30) NOT NULL,
   `required` varchar(30) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE UNIQUE INDEX `unique` ON `zt_deliverablestage`(`deliverable`,`stage`);
+CREATE UNIQUE INDEX `unique` ON `zt_deliverablestage`(`deliverable`,`type`,`stage`);
 
 -- DROP TABLE IF EXISTS `zt_decision`;
 CREATE TABLE IF NOT EXISTS `zt_decision` (
