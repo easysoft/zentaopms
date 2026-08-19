@@ -2008,6 +2008,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `mailto` text DEFAULT NULL,
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext DEFAULT NULL,
+  `deliverable` text DEFAULT NULL COMMENT '任务关联的交付物类型',
   `version` smallint unsigned NOT NULL DEFAULT 1,
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime DEFAULT NULL,

@@ -38,10 +38,11 @@ class task extends control
      * @param  int    $todoID
      * @param  string $cardPosition
      * @param  int    $bugID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function create(int $executionID = 0, int $storyID = 0, int $moduleID = 0, int $taskID = 0, int $todoID = 0, string $cardPosition = '', int $bugID = 0)
+    public function create(int $executionID = 0, int $storyID = 0, int $moduleID = 0, int $taskID = 0, int $todoID = 0, string $cardPosition = '', int $bugID = 0, string $type = '')
     {
         /* Analytic parameter. */
         $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
@@ -133,6 +134,7 @@ class task extends control
 
         /* Shows the variables needed to create the task page. */
         $this->taskZen->assignCreateVars($execution, $storyID, $moduleID, $taskID, $todoID, $bugID, $output, $cardPosition);
+        $this->view->type = $type;
         $this->display();
     }
 
@@ -1420,6 +1422,30 @@ class task extends control
         $overParentDeadlineLang   = !empty($task) ? sprintf($this->lang->task->overParentDeadline, $task->deadline) : '';
 
         return print(json_encode(array('estStarted' => $task->estStarted, 'deadline' => $task->deadline, 'overParentEstStartedLang' => $overParentEstStartedLang, 'overParentDeadlineLang' => $overParentDeadlineLang)));
+    }
+
+    /**
+     * 根据任务类型获取可以选择的交付物类型。
+     * Ajax get deliverable by task type.
+     *
+     * @param  int    $taskID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDeliverableByTaskType(int $taskID, string $type)
+    {
+        $task    = $this->task->getByID($taskID);
+        $project = $this->loadModel('project')->fetchById($task->project);
+        $deliverables = $this->loadModel('deliverable')->getPairs($project->workflowGroup, $type, '', $project->id);
+
+        $items = array();
+        foreach($deliverables as $deliverableID => $deliverableName)
+        {
+            $items[] = array('text' => $deliverableName, 'value' => $deliverableID, 'keys' => $deliverableID);
+        }
+
+        return print(json_encode($items));
     }
 
     /**
