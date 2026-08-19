@@ -15,6 +15,7 @@ namespace zin;
 $taskStatus = isset($task->rawStatus) ? $task->rawStatus : $task->status;
 
 /* ====== Preparing and processing page data ====== */
+jsVar('projectID', $task->project);
 jsVar('oldStoryID', $task->story);
 jsVar('oldAssignedTo', $task->assignedTo);
 jsVar('oldExecutionID', $task->execution);

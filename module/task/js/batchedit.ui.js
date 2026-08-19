@@ -88,6 +88,18 @@ window.renderRowData = function($row, index, row)
         });
     }
 
+    $row.find('[data-name="deliverable"]').find('.picker-box').on('inited', function(e, info)
+    {
+        let $deliverable = info[0];
+
+        const link = $.createLink('task', 'ajaxGetDeliverableByTaskType', 'taskID=' + row.id + '&type=' + row.type);
+        $.getJSON(link, function(items)
+        {
+            $deliverable.render({items});
+            $deliverable.$.setValue(row.deliverable);
+        });
+    });
+
     $row.find('[data-name="story"]').find('.picker-box').on('inited', function(e, info)
     {
         const $storyPicker = info[0];
