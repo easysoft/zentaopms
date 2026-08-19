@@ -198,7 +198,8 @@ class api extends router
         if($this->requestBody !== null) return $this->requestBody;
 
         $requestBody = file_get_contents('php://input');
-        return $requestBody === false ? '' : $requestBody;
+        $this->requestBody = $requestBody === false ? '' : $requestBody;
+        return $this->requestBody;
     }
 
     /**
