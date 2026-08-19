@@ -1435,9 +1435,9 @@ class task extends control
      */
     public function ajaxGetDeliverableByTaskType(int $taskID, string $type)
     {
-        $task    = $this->task->getByID($taskID);
-        $project = $this->loadModel('project')->fetchById($task->project);
-        $deliverables = $this->loadModel('deliverable')->getPairs($project->workflowGroup, $type, '', $project->id);
+        $task         = $this->task->getByID($taskID);
+        $project      = $this->loadModel('project')->fetchById($task->project);
+        $deliverables = $this->loadModel('deliverable')->getPairs($project->workflowGroup, "task-{$type}", '', $project->id);
 
         $items = array();
         foreach($deliverables as $deliverableID => $deliverableName)
