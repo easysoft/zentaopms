@@ -995,7 +995,7 @@ class storyModel extends model
 
         $story   = $this->loadModel('file')->replaceImgURL($story, 'spec,verify');
         $changes = common::createChanges($oldStory, $story);
-        if(!empty($this->post->comment) or !empty($changes))
+        if($this->post->comment || !empty($changes))
         {
             $action   = !empty($changes) ? 'Edited' : 'Commented';
             $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
