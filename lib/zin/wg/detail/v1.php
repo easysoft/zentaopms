@@ -121,6 +121,7 @@ class detail extends wg
         .detail-section-title, .detail-section.panel .panel-heading {background: var(--color-canvas); position: sticky; top: 0; z-index: 2}
         .detail-section.panel .panel-heading {z-index: 1}
         .detail-section .detail-section .detail-section-title {z-index: 0}
+        .detail-section .toolbar:has(button.ai-styled) {margin-left: auto}
         .detail-side > * + * {margin-top: 8px}
         .detail-side .tabs {padding: 12px 8px 12px 16px}
         .detail-side .tabs-header {position: sticky; top: 0;}
@@ -293,7 +294,7 @@ CSS;
         if($titleActions) unset($item['titleActions']);
 
         $titleActionNode = null;
-        if($titleActions) $titleActionNode = div(setClass('ml-auto'), toolbar::create($titleActions));
+        if($titleActions) $titleActionNode = toolbar::create($titleActions);
 
         return div
         (
