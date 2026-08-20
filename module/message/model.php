@@ -323,13 +323,28 @@ class messageModel extends model
      */
     public function buildNoticeTextByAccount(string $account, object $object, string $actionType, int $actionID, string $objectType, string $objectTitle, string $role = 'to', array $users = array()): string
     {
-        if($actionType == 'assigned')
+        if($actionType == 'assigned' || $actionType == 'forwarded')
         {
             $assignedTo = zget($object, 'assignedTo', '');
             if($assignedTo != $account && $role == 'to') $role = 'other';
             if($assignedTo == $account && $role != 'to') $role = 'to';
 
             $assignedTo = zget($users, $assignedTo);
+        }
+        if($actionType == 'reviewed')
+        {
+            $submitter = $this->dao->select('actor')->from(TABLE_ACTION)
+                ->where('id')->lt($actionID)
+                ->andWhere('action')->eq('submitreview')
+                ->andWhere('objectType')->eq($objectType)
+                ->andWhere('objectID')->eq($object->id)
+                ->orderBy('id desc')
+                ->limit(1)
+                ->fetch('actor');
+            if($submitter != $account && $role == 'to') $role = 'other';
+            if($submitter == $account && $role != 'to') $role = 'to';
+
+            $submitter = zget($users, $submitter);
         }
 
         $actorName      = $account == 'guest' ? 'guest' : zget($users, $account);
@@ -349,7 +364,7 @@ class messageModel extends model
         if($actionType == 'reviewed')
         {
             list($reviewResult, $reviewComment) = $this->getReviewResultAndComment($actionID);
-            $noticeText = str_replace(array('{reviewResult}', '{reviewComment}'), array($reviewResult, $reviewComment), $noticeText);
+            $noticeText = str_replace(array('{reviewResult}', '{reviewComment}', '{submitter}'), array($reviewResult, $reviewComment, $submitter), $noticeText);
         }
 
         return $noticeText;
