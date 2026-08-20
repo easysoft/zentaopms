@@ -1933,8 +1933,21 @@ class docModel extends model
             $docContent->files       = (!empty($docData->files) && is_string($docData->files)) ? (',' . $docData->files) : implode(',', $files);
             $docContent->fromVersion = isset($docData->fromVersion) ? $docData->fromVersion : max(0, ($version - 1));
 
-            $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
-            $docContent->id          = $this->dao->lastInsertID();
+            /* 目标版本已存在（如上次编辑校验失败残留），更新该版本而不是重复插入，避免唯一索引冲突。 */
+            /* If the target version already exists, update it instead of inserting to avoid unique index conflicts. */
+            $existedContent = $this->getContent($docID, $version);
+            if($existedContent)
+            {
+                $docContent->id    = $existedContent->id;
+                $mergedFiles       = array_unique(array_filter(explode(',', trim((string)$existedContent->files, ',') . ',' . trim((string)$docContent->files, ','))));
+                $docContent->files = implode(',', $mergedFiles);
+                $this->dao->update(TABLE_DOCCONTENT)->data($docContent)->where('id')->eq($docContent->id)->exec();
+            }
+            else
+            {
+                $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+                $docContent->id    = $this->dao->lastInsertID();
+            }
         }
         /* 如果有草稿内容，则直接将草稿内容作为新的版本内容。 */
         /* If current doc has draft data,update the draft data as new version. */

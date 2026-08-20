@@ -3305,9 +3305,10 @@ class baseRouter
      */
     public function saveError(int $level, string $message, string $file, int $line)
     {
-        if(empty($this->config->debug))  return true;
-        if(!is_dir($this->logRoot))      return true;
-        if(!is_writable($this->logRoot)) return true;
+        if(empty($this->config->debug))   return true;
+        if(!is_dir($this->logRoot))       return true;
+        if(!is_writable($this->logRoot))  return true;
+        if(!(error_reporting() & $level)) return true; // 代码里使用错误抑制符(@)不输出错误日志
 
         /*
          * 删除设定时间之前的日志。

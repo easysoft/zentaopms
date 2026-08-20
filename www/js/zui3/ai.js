@@ -724,7 +724,7 @@ function registerZentaoAIPlugin(lang)
                     if(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})`, 'i').test(userPrompt)) return {};
                 }
             };
-        })
+        }).filter(Boolean)
     });
 
     plugin.defineContextProvider(
