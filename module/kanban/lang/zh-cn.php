@@ -95,6 +95,10 @@ $lang->kanban->maxColWidth         = '最大列宽';
 $lang->kanban->nearing             = '卡片即将到期提醒';
 $lang->kanban->due                 = '卡片到期提醒';
 
+$lang->kanban->noticeText = new stdclass();
+$lang->kanban->noticeText->due     = '卡片《{objectTitle}》已到截止日期（{deadline}），请及时推进。';
+$lang->kanban->noticeText->nearing = '卡片《{objectTitle}》即将到期（{deadline}），请及时推进。';
+
 /* Fields. */
 $lang->kanban->space          = '所属空间';
 $lang->kanban->name           = '看板名称';

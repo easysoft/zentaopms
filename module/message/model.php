@@ -700,6 +700,7 @@ class messageModel extends model
         $objectTitle     = $objectTypeName . '#' . sprintf("%03d", $object->id) . ($objectType != 'auditplan' ? zget($object, $objectNameField, '') : '');
         $viewLink        = $objectType == 'kanbancard' ? helper::createLink('kanban', 'viewCard', "cardID={$object->id}") : helper::createLink($linkModule, 'view', "id={$object->id}");
 
+        $notifyData = str_replace(array('{actor}', '{objectType}', '{objectTitle}'), array($actorRealname, $objectTypeName, $objectTypeName, html::a($viewLink, $objectTitle)), $this->lang->message->noticeText->mentioned);
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
@@ -711,7 +712,7 @@ class messageModel extends model
                 $mailObject     = $this->loadModel('mail')->getObjectForMail($mailObjectType, (int)$object->id);
                 if($mailObject) $object = $mailObject;
 
-                $subject     = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
+                $subject     = $notifyData;
                 $mailContent = $this->mail->getMailContent($mailModule, $object, $action);
                 $this->mail->send(implode(',', $mentionUsers), $subject, $mailContent);
             }
@@ -722,7 +723,6 @@ class messageModel extends model
             $actions = $messageSetting['message']['setting'];
             if(isset($actions[$settingObjectType]) && in_array('mentioned', $actions[$settingObjectType]))
             {
-                $data = sprintf($this->lang->message->mention, $actorRealname, html::a($viewLink, $objectTitle));
                 $now  = helper::now();
                 foreach($mentionUsers as $mentionUser)
                 {
@@ -732,7 +732,8 @@ class messageModel extends model
                     $notify->objectType  = 'message';
                     $notify->action      = $actionID;
                     $notify->toList      = ",{$mentionUser},";
-                    $notify->data        = $data;
+                    $notify->subject     = str_replace('{objectType}', $objectTypeName, $this->lang->message->noticeTitle->mentioned);
+                    $notify->data        = $notifyData;
                     $notify->status      = 'wait';
                     $notify->createdBy   = $actor;
                     $notify->createdDate = $now;
@@ -752,7 +753,7 @@ class messageModel extends model
 
                 if($mentionUserIds)
                 {
-                    $title      = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
+                    $title      = $notifyData;
                     $server     = $this->loadModel('im')->getServer('zentao');
                     $url        = $server . $viewLink;
                     $xxcUrl     = 'xxc:openInApp/zentao-integrated/' . urlencode($url);
@@ -773,7 +774,7 @@ class messageModel extends model
                 $webhooks = $this->loadModel('webhook')->getList();
                 if($webhooks)
                 {
-                    $title = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
+                    $title = $notifyData;
                     foreach($webhooks as $id => $webhook)
                     {
                         if(strpos($webhook->type, 'group') !== false)  continue;

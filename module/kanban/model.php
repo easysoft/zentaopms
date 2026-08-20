@@ -3690,15 +3690,16 @@ class kanbanModel extends model
         {
             foreach($cardList as $card)
             {
-                $url   = helper::createLink('kanban', 'view', "kanbanID={$card->kanban}") . "#app=kanban";
-                $data  = $today > $card->deadline ? $this->lang->kanban->due : $this->lang->kanban->nearing;
-                $data .= html::a($url, "#{$card->id} {$card->name}");
+                $url         = helper::createLink('kanban', 'view', "kanbanID={$card->kanban}") . "#app=kanban";
+                $noticeType  = $today > $card->deadline ? 'due' : 'nearing';
+                $objectTitle = html::a($url, "#{$card->id} {$card->name}");
 
                 $notify = new stdclass();
                 $notify->objectType  = 'message';
                 $notify->action      = 0;
                 $notify->toList      = ",{$user},";
-                $notify->data        = $data;
+                $notify->subject     = zget($this->lang->kanban, $noticeType);
+                $notify->data        = str_replace(array('{objectTitle}', '{deadline}'), array($objectTitle, $card->deadline), zget($this->lang->kanban->noticeText, $noticeType));
                 $notify->status      = 'wait';
                 $notify->createdBy   = 'admin';
                 $notify->createdDate = helper::now();
