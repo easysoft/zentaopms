@@ -287,40 +287,41 @@ $config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['url'
 $config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['class']        = 'ajax-submit btn ghost square size-sm';
 $config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['data-confirm'] = $lang->task->confirmDeleteEffort;
 
-$config->task->dtable->children = new stdclass();
+$config->task->children = new stdclass();
+$config->task->children->dtable = new stdclass();
 
-$config->task->dtable->children->fieldList['id']             = $config->task->dtable->fieldList['id'];
-$config->task->dtable->children->fieldList['id']['checkbox'] = false;
-$config->task->dtable->children->fieldList['id']['sortType'] = false;
-$config->task->dtable->children->fieldList['id']['name']     = 'id';
+$config->task->children->dtable->fieldList['id']             = $config->task->dtable->fieldList['id'];
+$config->task->children->dtable->fieldList['id']['checkbox'] = false;
+$config->task->children->dtable->fieldList['id']['sortType'] = false;
+$config->task->children->dtable->fieldList['id']['name']     = 'id';
 
-$config->task->dtable->children->fieldList['name']                 = $config->task->dtable->fieldList['name'];
-$config->task->dtable->children->fieldList['name']['title']        = $lang->task->name;
-$config->task->dtable->children->fieldList['name']['sortType']     = false;
-$config->task->dtable->children->fieldList['name']['name']         = 'name';
-$config->task->dtable->children->fieldList['name']['nestedToggle'] = true;
-$config->task->dtable->children->fieldList['name']['data-toggle']  = 'modal';
-$config->task->dtable->children->fieldList['name']['data-size']    = 'lg';
-$config->task->dtable->children->fieldList['name']['data-load']    = 'modal';
+$config->task->children->dtable->fieldList['name']                 = $config->task->dtable->fieldList['name'];
+$config->task->children->dtable->fieldList['name']['title']        = $lang->task->name;
+$config->task->children->dtable->fieldList['name']['sortType']     = false;
+$config->task->children->dtable->fieldList['name']['name']         = 'name';
+$config->task->children->dtable->fieldList['name']['nestedToggle'] = true;
+$config->task->children->dtable->fieldList['name']['data-toggle']  = 'modal';
+$config->task->children->dtable->fieldList['name']['data-size']    = 'lg';
+$config->task->children->dtable->fieldList['name']['data-load']    = 'modal';
 
-$config->task->dtable->children->fieldList['pri']             = $config->task->dtable->fieldList['pri'];
-$config->task->dtable->children->fieldList['pri']['sortType'] = false;
-$config->task->dtable->children->fieldList['pri']['name']     = 'pri';
+$config->task->children->dtable->fieldList['pri']             = $config->task->dtable->fieldList['pri'];
+$config->task->children->dtable->fieldList['pri']['sortType'] = false;
+$config->task->children->dtable->fieldList['pri']['name']     = 'pri';
 
-$config->task->dtable->children->fieldList['deadline']             = $config->task->dtable->fieldList['deadline'];
-$config->task->dtable->children->fieldList['deadline']['name']     = 'deadline';
-$config->task->dtable->children->fieldList['deadline']['sortType'] = false;
+$config->task->children->dtable->fieldList['deadline']             = $config->task->dtable->fieldList['deadline'];
+$config->task->children->dtable->fieldList['deadline']['name']     = 'deadline';
+$config->task->children->dtable->fieldList['deadline']['sortType'] = false;
 
-$config->task->dtable->children->fieldList['assignedTo']             = $config->task->dtable->fieldList['assignedTo'];
-$config->task->dtable->children->fieldList['assignedTo']['title']    = $lang->task->assignedTo;
-$config->task->dtable->children->fieldList['assignedTo']['sortType'] = false;
-$config->task->dtable->children->fieldList['assignedTo']['name']     = 'assignedTo';
+$config->task->children->dtable->fieldList['assignedTo']             = $config->task->dtable->fieldList['assignedTo'];
+$config->task->children->dtable->fieldList['assignedTo']['title']    = $lang->task->assignedTo;
+$config->task->children->dtable->fieldList['assignedTo']['sortType'] = false;
+$config->task->children->dtable->fieldList['assignedTo']['name']     = 'assignedTo';
 
-$config->task->dtable->children->fieldList['status']              = $config->task->dtable->fieldList['status'];
-$config->task->dtable->children->fieldList['status']['sortType']  = false;
-$config->task->dtable->children->fieldList['status']['statusMap'] = $lang->task->statusList + array('changed' => $lang->task->storyChange);
-$config->task->dtable->children->fieldList['status']['name']      = 'status';
+$config->task->children->dtable->fieldList['status']              = $config->task->dtable->fieldList['status'];
+$config->task->children->dtable->fieldList['status']['sortType']  = false;
+$config->task->children->dtable->fieldList['status']['statusMap'] = $lang->task->statusList + array('changed' => $lang->task->storyChange);
+$config->task->children->dtable->fieldList['status']['name']      = 'status';
 
-$config->task->dtable->children->fieldList['actions']          = $config->task->dtable->fieldList['actions'];
-$config->task->dtable->children->fieldList['actions']['title'] = $lang->actions;
-$config->task->dtable->children->fieldList['actions']['name']  = 'actions';
+$config->task->children->dtable->fieldList['actions']          = $config->task->dtable->fieldList['actions'];
+$config->task->children->dtable->fieldList['actions']['title'] = $lang->actions;
+$config->task->children->dtable->fieldList['actions']['name']  = 'actions';
