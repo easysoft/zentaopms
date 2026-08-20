@@ -90,6 +90,7 @@ $routes['/projects/:projectID/bugs']     = array(
 $routes['/executions/:executionID/bugs'] = array('redirect' => '/executions/bug?executionID=:executionID', 'search' => array('enabled' => true, 'searchModule' => 'executionBug', 'querySessionKey' => 'executionBug'));
 $routes['/feedbacks/:feedbackID/bugs']   = array('post' => array('redirect' => '/bug/create?productID=0&branch=0&extras=projectID=0,fromType=feedback,fromID=:feedbackID', 'data' => 'feedback=:feedbackID'));
 $routes['/bugs/:bugID']                  = array('response' => 'bug,actions(array)');
+$routes['/bugs/:bugID/confirm']          = array('put' => array('response' => '*'));
 
 $routes['/products/:productID/testcases']     = array('redirect' => '/testcases?productID=:productID', 'response' => 'cases(array)|testcases,pager', 'search' => array('enabled' => true, 'searchModule' => 'testcase', 'querySessionKey' => 'testcase'));
 $routes['/projects/:projectID/testcases']     = array('redirect' => '/projects/testcase?projectID=:projectID', 'search' => array('enabled' => true, 'searchModule' => 'testcase', 'querySessionKey' => 'testcase'));
@@ -231,23 +232,23 @@ $routes['/doc/libs/:libID'] = array(
 );
 $routes['/doc/my/spaces/:spaceID/libs/:libID/docs'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=mine&spaceID=:spaceID&libID=:libID&picks=doc'),
-    'post' => array('redirect' => '/doc/create?objectType=mine&objectID=:spaceID&libID=:libID&moduleID=0&docType=', 'data' => 'contentType=html')
+    'post' => array('redirect' => '/doc/create?objectType=mine&objectID=:spaceID&libID=:libID&moduleID=0&docType=', 'data' => 'lib=:libID&module=0&contentType=doc', 'transform' => 'markdown')
 );
 $routes['/doc/team/spaces/:spaceID/libs/:libID/docs'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=custom&spaceID=:spaceID&libID=:libID&picks=doc'),
-    'post' => array('redirect' => '/doc/create?objectType=custom&objectID=:spaceID&libID=:libID&moduleID=0&docType=', 'data' => 'contentType=html')
+    'post' => array('redirect' => '/doc/create?objectType=custom&objectID=:spaceID&libID=:libID&moduleID=0&docType=', 'data' => 'lib=:libID&module=0&contentType=doc', 'transform' => 'markdown')
 );
 $routes['/doc/product/spaces/:productID/libs/:libID/docs'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=product&spaceID=:productID&libID=:libID&picks=doc'),
-    'post' => array('redirect' => '/doc/create?objectType=product&objectID=:productID&libID=:libID&moduleID=0&docType=', 'data' => 'contentType=html')
+    'post' => array('redirect' => '/doc/create?objectType=product&objectID=:productID&libID=:libID&moduleID=0&docType=', 'data' => 'lib=:libID&module=0&contentType=doc', 'transform' => 'markdown')
 );
 $routes['/doc/project/spaces/:projectID/libs/:libID/docs'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=project&spaceID=:projectID&libID=:libID&picks=doc'),
-    'post' => array('redirect' => '/doc/create?objectType=project&objectID=:projectID&libID=:libID&moduleID=0&docType=', 'data' => 'contentType=html')
+    'post' => array('redirect' => '/doc/create?objectType=project&objectID=:projectID&libID=:libID&moduleID=0&docType=', 'data' => 'lib=:libID&module=0&contentType=doc', 'transform' => 'markdown')
 );
 $routes['/doc/docs/:docID'] = array(
-    'get'    => array('redirect' => '/doc/ajaxGetDoc?docID=:docID'),
-    'put'    => array('redirect' => '/doc/edit?docID=:docID'),
+    'get'    => array('redirect' => '/doc/ajaxGetDoc?docID=:docID', 'transform' => 'markdown'),
+    'put'    => array('redirect' => '/doc/edit?docID=:docID', 'data' => 'contentType=doc', 'transform' => 'markdown'),
     'delete' => array('redirect' => '/doc/delete?docID=:docID')
 );
 $routes['/doc/docs/:docID/collect'] = array(

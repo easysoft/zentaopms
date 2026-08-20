@@ -11,6 +11,7 @@
  *  May you share freely, never taking more than you give.
  */
 include_once dirname(__FILE__, 2) . '/router.class.php';
+include_once dirname(__FILE__) . '/transformer.class.php';
 class api extends router
 {
     /**
@@ -121,6 +122,15 @@ class api extends router
     public $routeData = array();
 
     /**
+     * APIv2 转换器实例。
+     * The transformer instance of APIv2.
+     *
+     * @var apiTransformer|null
+     * @access protected
+     */
+    protected $transformer = null;
+
+    /**
      * Workflow create actions need save step only for the final dispatch.
      *
      * @var bool
@@ -188,7 +198,8 @@ class api extends router
         if($this->requestBody !== null) return $this->requestBody;
 
         $requestBody = file_get_contents('php://input');
-        return $requestBody === false ? '' : $requestBody;
+        $this->requestBody = $requestBody === false ? '' : $requestBody;
+        return $this->requestBody;
     }
 
     /**
@@ -894,6 +905,12 @@ class api extends router
 
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
+
+        /* 检查工作流是否存在并已发布，不存在或未发布时返回友好的 API 错误，避免报控制文件不存在的代码错误。*/
+        /* Check whether the workflow exists and is released; otherwise return a friendly API error. */
+        $flow = $this->dbQuery("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '{$moduleName}'")->fetch();
+        if(empty($flow) || $flow->status != 'normal') $this->sendV2Error($this->lang->flowNotRelease);
+
         $this->setControlFile();
 
         $this->prepareDeleteConfirmParam();
@@ -1281,7 +1298,7 @@ class api extends router
         }
         catch(EndResponseException $endResponseException)
         {
-            echo $endResponseException->getContent();
+            echo $this->applyRouteResponseTransform($endResponseException->getContent());
         }
     }
 
@@ -1317,9 +1334,52 @@ class api extends router
             $this->checkAccess();
         }
 
+        $this->applyRouteRequestTransform();
+
         if($this->workflowSaveStep && in_array($this->methodName, array('create', 'batchcreate'))) $this->params['step'] = 'save';
 
         return parent::loadModule();
+    }
+
+    /**
+     * 获取 APIv2 转换器。
+     * Get the APIv2 transformer.
+     *
+     * @access protected
+     * @return apiTransformer
+     */
+    protected function getTransformer(): apiTransformer
+    {
+        if(!$this->transformer) $this->transformer = new apiTransformer($this);
+
+        return $this->transformer;
+    }
+
+    /**
+     * 根据路由 transform 参数转换请求。
+     * Transform request by the route transform parameter.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function applyRouteRequestTransform(): void
+    {
+        $name = zget($this->originRouteInfo, 'transform', '');
+        $this->getTransformer()->transformRequest($name, $_POST);
+    }
+
+    /**
+     * 根据路由 transform 参数转换响应。
+     * Transform response by the route transform parameter.
+     *
+     * @param  string $output
+     * @access protected
+     * @return string
+     */
+    protected function applyRouteResponseTransform(string $output): string
+    {
+        $name = zget($this->originRouteInfo, 'transform', '');
+        return $this->getTransformer()->transformResponse($name, $output);
     }
 
     /**
@@ -1667,6 +1727,7 @@ class api extends router
     public function formatData(string $output)
     {
         /* If the version exists, return output directly. */
+        if($this->apiVersion == 'v2') return $this->applyRouteResponseTransform($output);
         if($this->apiVersion) return $output;
 
         $output = json_decode((string) $output);

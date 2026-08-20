@@ -48,6 +48,7 @@ $lang->tree->onlyRoot           = '該分類只支持維護一級。';
 $lang->tree->successSave        = '成功保存';
 $lang->tree->successFixed       = '成功修正數據！';
 $lang->tree->repeatName         = '模組名“%s”已經存在！';
+$lang->tree->invalidParent      = '父級目錄不存在或無效。';
 $lang->tree->shouldNotBlank     = '模組名不能為空格！';
 $lang->tree->host               = '主机';
 $lang->tree->Aiskill            = '維護Skill分類';

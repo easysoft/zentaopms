@@ -1779,7 +1779,9 @@ class myModel extends model
         $url      = sprintf($apiRoot->url, '/user/keys');
         $result   = json_decode(common::http($url, null, array(), $apiRoot->header, 'json'));
         $response = $this->gitfox->getResponse($result);
-        return isset($response->data) ? $response->data : $response;
+        $sshList  = isset($response->data) ? $response->data : $response;
+
+        return is_array($sshList) ? $sshList : array();
     }
 
     /**

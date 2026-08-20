@@ -58,6 +58,7 @@ $lang->tree->successSave            = '成功保存';
 $lang->tree->successFixed           = '成功修正数据！';
 $lang->tree->repeatName             = '模块名“%s”已经存在！';
 $lang->tree->repeatDirName          = '目录名“%s”已经存在！';
+$lang->tree->invalidParent          = '父级目录不存在或无效。';
 $lang->tree->shouldNotBlank         = '模块名不能为空格！';
 $lang->tree->syncProductModule      = "同步{$lang->productCommon}模块";
 $lang->tree->host                   = '主机';

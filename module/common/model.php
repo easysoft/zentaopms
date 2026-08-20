@@ -1245,6 +1245,7 @@ eof;
                 {
                     static::$userPrivs = array();
                     $this->resetProjectPriv(); // 项目有继承和重新定义两种权限，在此处需要重置权限。
+                    if($this->isOpenMethod($module, $method)) return true; // ajax 依赖的权限在项目权限重置后才生效，需重新判断。
                     if(commonModel::hasPriv($module, $method)) return true;
                 }
 

@@ -1971,7 +1971,7 @@ class treeModel extends model
                 $module->root   = $rootID;
                 $module->name   = strip_tags(trim($moduleName));
                 $module->parent = $parentModuleID;
-                $module->branch = isset($branches[$moduleID]) ? $branches[$moduleID] : 0;
+                $module->branch = isset($branches[$moduleID]) ? (int)$branches[$moduleID] : 0;
                 $module->short  = $shorts[$moduleID];
                 $module->grade  = $grade;
                 $module->type   = $type;
@@ -1998,7 +1998,7 @@ class treeModel extends model
                 $data->name   = strip_tags(trim($moduleName));
                 $data->short  = $short;
                 $data->order  = $order;
-                $data->branch = isset($branches[$originID]) ? $branches[$originID] : 0;
+                $data->branch = isset($branches[$originID]) ? (int)$branches[$originID] : 0;
 
                 $this->dao->update(TABLE_MODULE)->data($data)->autoCheck()->where('id')->eq($moduleID)->exec();
                 if(dao::isError()) return false;
@@ -2642,6 +2642,16 @@ class treeModel extends model
         }
         elseif($data->createType == 'child')
         {
+            if($module->parent)
+            {
+                $parent = $this->getByID($module->parent);
+                if(empty($parent) || $parent->deleted || $parent->root != $module->root || $parent->type != $module->type)
+                {
+                    dao::$errors[] = $this->lang->tree->invalidParent;
+                    return false;
+                }
+            }
+
             $maxOrder = $this->dao->select('`order`')->from(TABLE_MODULE)
                 ->where('root')->eq($module->root)
                 ->andWhere('parent')->eq($module->parent)

@@ -312,9 +312,18 @@ class screenModel extends model
 
         if($type == 'chart' && (!$chart->builtin or in_array($chart->id, $this->config->screen->builtinChart)))
         {
+            if(isset($component->option) && empty($component->option->series))
+            {
+                $type = zget($component, 'type', '');
+                if($type == 'bar')       $type = 'cluBarX';
+                if($type == 'piecircle') $type = 'pie';
+
+                $defaultOption = json_decode(zget($this->config->screen->chartOption, $type, ''));
+                if($defaultOption && !empty($defaultOption->series)) $component->option->series = $defaultOption->series;
+            }
+
             if(!empty($component->option->series))
             {
-
                 $defaultSeries = $component->option->series;
                 if($component->type == 'radar')
                 {
@@ -325,7 +334,7 @@ class screenModel extends model
                     foreach($component->option->dataset->seriesData as $seriesData) $legends[] = $seriesData->name;
                     $component->option->legend->data = $legends;
                 }
-                elseif($component->type != 'waterpolo')
+                elseif($component->type != 'waterpolo' && !empty($component->option->dataset->dimensions) && count($component->option->dataset->dimensions) >= 2)
                 {
                     $series = array();
                     for($i = 1; $i < count($component->option->dataset->dimensions); $i ++) $series[] = $defaultSeries[0];
@@ -1744,6 +1753,15 @@ class screenModel extends model
         if(!isset($component->request)) $component->request = $this->config->bi->default->request;
         if(!isset($component->events))  $component->events  = $this->config->bi->default->events;
 
+        if(!isset($component->option) || !empty($component->option->series)) return $component;
+
+        $type = zget($component, 'type', '');
+        if($type == 'bar')       $type = 'cluBarX';
+        if($type == 'piecircle') $type = 'pie';
+
+        $defaultOption = json_decode(zget($this->config->screen->chartOption, $type, ''));
+        if($defaultOption && !empty($defaultOption->series)) $component->option->series = $defaultOption->series;
+
         return $component;
     }
 
@@ -2015,7 +2033,7 @@ class screenModel extends model
             $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
             $component->key         = "LineCommon";
             $component->chartConfig = json_decode('{"key":"LineCommon","chartKey":"VLineCommon","conKey":"VCLineCommon","title":"折线图","category":"Lines","categoryName":"折线图","package":"Charts","chartFrame":"echarts","image":"/static/png/line-e714bc74.png"}');
-            $component->option      = json_decode('{"legend":{"show":true,"top":"5%","textStyle":{"color":"#B9B8CE"}},"xAxis":{"type":"category"},"yAxis":{"show":true,"axisLine":{"show":true},"type":"value"},"backgroundColor":"rgba(0,0,0,0)"}');
+            $component->option      = json_decode('{"legend":{"show":true,"top":"5%","textStyle":{"color":"#B9B8CE"}},"xAxis":{"type":"category"},"yAxis":{"show":true,"axisLine":{"show":true},"type":"value"},"series":[{"type":"line"}],"backgroundColor":"rgba(0,0,0,0)"}');
 
             return $this->setComponentDefaults($component);
         }

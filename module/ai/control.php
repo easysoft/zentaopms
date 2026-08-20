@@ -722,7 +722,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function promptExecute(int $promptId, int $objectId, string $mode = 'testing')
+    public function promptExecute(int $promptId, int $objectId, string $mode = '')
     {
         $prompt = $this->ai->getPromptByID($promptId);
         if(empty($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));

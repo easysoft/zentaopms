@@ -101,6 +101,7 @@ class my extends control
         }
 
         if(in_array($mode, array('testcase', 'feedback')) && $browseType == 'assignedTo') $browseType = 'assigntome';
+        if($mode == 'mymeeting' && $browseType == 'assignedTo') $browseType = 'futureMeeting';
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][strtolower($mode)];
 
         echo $this->fetch('my', $mode, "browseType={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
