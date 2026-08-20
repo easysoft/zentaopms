@@ -269,6 +269,19 @@ class messageModel extends model
         return true;
     }
 
+    /**
+     * 构建通知标题
+     * Build notice title
+     *
+     * @param  string $objectType
+     * @param  string $actionType
+     * @param  string $account
+     * @param  object $object
+     * @param  string $role      to|cc|other
+     * @param  array  $users
+     * @access public
+     * @return string
+     */
     public function buildNoticeTitle(string $objectType, string $actionType, string $account, object $object, string $role = 'to', array $users = array()): string
     {
         $objectActions  = $this->getObjectActions();
@@ -284,15 +297,30 @@ class messageModel extends model
             $assignedTo = zget($users, $assignedTo);
         }
 
-        $noticeTitle = zget($this->lang->message->noticeTitle, $objectType, $this->lang->message->noticeTitle->generic);
-        if(isset($lang->message->noticeTitle->extend[$actionType][$role])) $noticeTitle = $lang->message->noticeTitle->extend[$actionType][$role];
+        $noticeTitle = zget($this->lang->message->noticeTitle, $actionType, $this->lang->message->noticeTitle->generic);
+        if(isset($this->lang->message->noticeTitle->extend[$actionType][$role])) $noticeTitle = $this->lang->message->noticeTitle->extend[$actionType][$role];
         if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed'))) $noticeTitle = zget($this->lang->message->noticeTitle, $objectType . $actionType, $this->lang->message->noticeTitle->generic);
 
         $noticeTitle = str_replace(array('{objectType}', '{action}'), array($objectTypeName, $actionName), $noticeTitle);
-        if($assignedTo) $noticeTitle = str_replace('{assignedTo}', $assignedTo, $noticeTitle);
+        if(isset($assignedTo)) $noticeTitle = str_replace('{assignedTo}', $assignedTo, $noticeTitle);
         return $noticeTitle;
     }
 
+    /**
+     * 构建通知内容
+     * Build notice text
+     *
+     * @param  string $account
+     * @param  object $object
+     * @param  string $actionType
+     * @param  int    $actionID
+     * @param  string $objectType
+     * @param  string $objectTitle
+     * @param  string $role        to|cc|other
+     * @param  array  $users
+     * @access public
+     * @return string
+     */
     public function buildNoticeTextByAccount(string $account, object $object, string $actionType, int $actionID, string $objectType, string $objectTitle, string $role = 'to', array $users = array()): string
     {
         if($actionType == 'assigned')
@@ -308,8 +336,8 @@ class messageModel extends model
         $objectTypeName = zget($this->lang->action->objectTypes, $objectType);
         $actionName     = zget($this->lang->action->label, $actionType);
 
-        $noticeText = zget($this->lang->message->noticeText, $objectType, $this->lang->message->noticeText->generic);
-        if(isset($lang->message->noticeText->extend[$actionType][$role])) $noticeText = $lang->message->noticeText->extend[$actionType][$role];
+        $noticeText = zget($this->lang->message->noticeText, $actionType, $this->lang->message->noticeText->generic);
+        if(isset($this->lang->message->noticeText->extend[$actionType][$role])) $noticeText = $this->lang->message->noticeText->extend[$actionType][$role];
         if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed'))) $noticeText = zget($this->lang->message->noticeText, $objectType . $actionType, $this->lang->message->noticeText->generic);
 
         $noticeText     = str_replace(array('{actor}', '{action}', '{objectType}', '{objectTitle}'), array($actorName, $actionName, $objectTypeName, $objectTitle), $noticeText);

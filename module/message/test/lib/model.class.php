@@ -239,6 +239,28 @@ class messageModelTest extends baseTest
     }
 
     /**
+     * 测试构建消息标题。
+     * Test build notice title.
+     *
+     * @param  string $objectType
+     * @param  string $actionType
+     * @param  string $account
+     * @param  object $object
+     * @param  string $role
+     * @param  array  $users
+     * @access public
+     * @return string
+     */
+    public function buildNoticeTitleTest(string $objectType, string $actionType, string $account, object $object, string $role = 'to', array $users = array()): string
+    {
+        $title = $this->instance->buildNoticeTitle($objectType, $actionType, $account, $object, $role, $users);
+
+        if(dao::isError()) return dao::getError();
+
+        return $title;
+    }
+
+    /**
      * 测试获取要提示的待办信息。
      * Test get notice todos.
      *
