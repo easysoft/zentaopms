@@ -134,6 +134,7 @@ class detail extends wg
         .no-width {padding: 0!important; width: 0!important; overflow: hidden!important;}
         .detail-toggle {margin: 0!important; z-index: 1}
         .detail-toggle:hover {background-color: rgba(var(--color-border-rgb), var(--tw-bg-opacity)); transition-duration: .15s; transition-property: background-color; transition-timing-function: cubic-bezier(.4,0,.2,1);}
+        .detail-toggle > .btn {position: relative; top: min(calc((100% - 3px) / 2), calc((100vh - 142px) / 2))}
         .article > .files-list > li.file{white-space:normal;}
         .ai-task-status .status-doing {color: #FAAE1A;}
         .ai-task-status .status-done {color: #3883FA;}
@@ -545,7 +546,7 @@ CSS;
             $this->buildTabsList(),
             $this->block('side'),
             div(
-                setClass('detail-toggle h-full w-2 absolute top-0 flex justify-center items-center'),
+                setClass('detail-toggle h-full w-2 absolute top-0 flex justify-center'),
                 setStyle('left', '-.5rem'),
                 btn(
                     setClass('w-4 rounded-lg'),
