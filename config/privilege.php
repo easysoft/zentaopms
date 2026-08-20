@@ -255,6 +255,7 @@ $config->logonMethods[] = 'artifact.moveartifact';
 $config->logonMethods[] = 'artifact.copycmd';
 $config->logonMethods[] = 'zai.ajaxgettoken';
 $config->logonMethods[] = 'zai.ajaxgetuseragent';
+$config->logonMethods[] = 'zai.ajaxsearchknowledges';
 $config->logonMethods[] = 'repo.import';
 
 /* Ajax 方法依赖的方法。The methods that Ajax methods depend on. */
@@ -509,6 +510,7 @@ $config->ajaxDependencies['task.ajaxgetstories']                              = 
 $config->ajaxDependencies['task.ajaxgettaskeststartedanddeadline']            = ['task.create', 'task.edit'];
 $config->ajaxDependencies['task.ajaxgetteststories']                          = 'task.create';
 $config->ajaxDependencies['task.ajaxgetusertasks']                            = ['todo.create', 'todo.edit', 'todo.batchcreate'];
+$config->ajaxDependencies['task.ajaxgetdeliverablebytasktype']                = 'task.edit';
 $config->ajaxDependencies['testcase.ajaxgetcanimportmoduleitems']             = 'testcase.importfromlib';
 $config->ajaxDependencies['testcase.ajaxgetoptionmenu']                       = ['testcase.createscene', 'testcase.create', 'testcase.edit', 'testcase.editscene'];
 $config->ajaxDependencies['testcase.ajaxgetproductscenes']                    = 'testcase.showimport';

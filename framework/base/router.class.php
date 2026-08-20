@@ -1235,7 +1235,8 @@ class baseRouter
 
         if(ini_get('session.save_handler') == 'files' || $useToken)
         {
-            $savePath = $this->getTmpRoot() . ($useToken ? 'apisession' : 'session');
+            $sessionPathEnv = $useToken ? 'ZT_APISESSION_PATH' : 'ZT_SESSION_PATH';
+            $savePath       = getenv($sessionPathEnv) ?: $this->getTmpRoot() . ($useToken ? 'apisession' : 'session');
             if(!is_dir($savePath)) mkdir($savePath, 0777, true);
 
             if(is_writable($savePath))
@@ -3304,9 +3305,10 @@ class baseRouter
      */
     public function saveError(int $level, string $message, string $file, int $line)
     {
-        if(empty($this->config->debug))  return true;
-        if(!is_dir($this->logRoot))      return true;
-        if(!is_writable($this->logRoot)) return true;
+        if(empty($this->config->debug))   return true;
+        if(!is_dir($this->logRoot))       return true;
+        if(!is_writable($this->logRoot))  return true;
+        if(!(error_reporting() & $level)) return true; // 代码里使用错误抑制符(@)不输出错误日志
 
         /*
          * 删除设定时间之前的日志。

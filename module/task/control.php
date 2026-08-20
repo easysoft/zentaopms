@@ -38,10 +38,11 @@ class task extends control
      * @param  int    $todoID
      * @param  string $cardPosition
      * @param  int    $bugID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function create(int $executionID = 0, int $storyID = 0, int $moduleID = 0, int $taskID = 0, int $todoID = 0, string $cardPosition = '', int $bugID = 0)
+    public function create(int $executionID = 0, int $storyID = 0, int $moduleID = 0, int $taskID = 0, int $todoID = 0, string $cardPosition = '', int $bugID = 0, string $type = '')
     {
         /* Analytic parameter. */
         $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
@@ -133,6 +134,7 @@ class task extends control
 
         /* Shows the variables needed to create the task page. */
         $this->taskZen->assignCreateVars($execution, $storyID, $moduleID, $taskID, $todoID, $bugID, $output, $cardPosition);
+        $this->view->type = $type;
         $this->display();
     }
 

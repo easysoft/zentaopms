@@ -147,7 +147,7 @@ $fnGetParamsContent = function($api) use(&$parseTree, $typeList)
     if(!empty($api->paramsExample))
     {
         $content[] = h3(setClass('title'), $lang->api->paramsExample);
-        $content[] = h::pre(h::code(html($api->paramsExample)));
+        $content[] = h::pre(h::code($api->paramsExample));
     }
     return $content;
 };
@@ -180,7 +180,7 @@ $fnGetResponseContent = function($api) use($parseTree, $typeList)
     if(!empty($api->responseExample))
     {
         $content[] = h3(setClass('title'), $lang->api->responseExample);
-        $content[] = h::pre(h::code(html($api->responseExample)));
+        $content[] = h::pre(h::code($api->responseExample));
     }
     return $content;
 };

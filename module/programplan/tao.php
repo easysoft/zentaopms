@@ -262,10 +262,16 @@ class programplanTao extends programplanModel
             /* Determines if the object is delay. */
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
-            if($today > $data->endDate and $plan->status != 'closed')
+            $planEndDate     = $plan->status == 'closed' ? $data->realEnd : $today;
+            if($planEndDate > $data->endDate && $plan->status != 'suspended')
             {
-                $data->delay     = $this->lang->programplan->delayList[1];
-                $data->delayDays = helper::diffDate($today, $data->endDate);
+                $workingDays = $this->loadModel('holiday')->getActualWorkingDays($data->endDate, $planEndDate);
+                $delayDays   = count($workingDays) - 1;
+                if($delayDays > 0)
+                {
+                    $data->delay     = $this->lang->programplan->delayList[1];
+                    $data->delayDays = $delayDays;
+                }
             }
 
             $datas['data'][$plan->id] = $data;

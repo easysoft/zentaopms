@@ -58,6 +58,7 @@ $lang->tree->successSave            = 'Saved.';
 $lang->tree->successFixed           = 'Fixed.';
 $lang->tree->repeatName             = 'The name "%s" exists!';
 $lang->tree->repeatDirName          = 'The name "%s" exists!';
+$lang->tree->invalidParent          = 'The parent directory does not exist or is invalid.';
 $lang->tree->shouldNotBlank         = 'Module name should not be blank!';
 $lang->tree->syncProductModule      = 'Sync Module';
 $lang->tree->host                   = 'Host';

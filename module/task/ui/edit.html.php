@@ -15,6 +15,7 @@ namespace zin;
 $taskStatus = isset($task->rawStatus) ? $task->rawStatus : $task->status;
 
 /* ====== Preparing and processing page data ====== */
+jsVar('projectID', $task->project);
 jsVar('oldStoryID', $task->story);
 jsVar('oldAssignedTo', $task->assignedTo);
 jsVar('oldExecutionID', $task->execution);
@@ -360,7 +361,8 @@ detailBody
                     set::name('type'),
                     set::value($task->type),
                     set::items($typeOptions),
-                    set::required(true)
+                    set::required(true),
+                    setData(array('on' => 'change', 'call' => 'changeType', 'params' => 'event'))
                 )
             ),
             empty($task->children) ? item

@@ -1211,7 +1211,7 @@ class testtaskModel extends model
             {
                 if(str_contains($scene->path, $displayScene . ','))
                 {
-                    $displayScenes += explode(',', trim($scene->path, ','));
+                    $displayScenes = array_merge($displayScenes, explode(',', trim($scene->path, ',')));
                 }
             }
         }

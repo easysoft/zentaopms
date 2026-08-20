@@ -1468,7 +1468,7 @@ class repoZen extends repo
         $provider = $this->provider->getByID($providerID);
 
         $repos   = !$provider ? array() : $this->repo->getProviderRepos($provider);
-        $groupID = urldecode($groupID);
+        $groupID = helper::safe64Decode($groupID);
         $groups  = $groupRepos = array();
         foreach($repos as $repo)
         {
