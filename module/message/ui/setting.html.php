@@ -13,7 +13,7 @@ namespace zin;
 /* First row. */
 $messageSetting = is_string($config->message->setting) ? json_decode($config->message->setting, true) : $config->message->setting;
 
-$headerThs = array(h::th());
+$headerThs = array(h::th(setStyle(array('width' => '150px'))));
 foreach($lang->message->typeList as $type => $typeName)
 {
     $headerThs[] = h::th
@@ -84,6 +84,7 @@ foreach($config->message->objectTypes as $objectType => $actions)
                 {
                     $listKey = $condition . 'List';
                     $list = isset($this->lang->{$moduleName}->{$listKey}) ? $this->lang->{$moduleName}->{$listKey} : $users;
+                    unset($list[0]);
                     $cell[] = picker
                     (
                         set::name("messageSetting[{$type}][condition][{$objectType}][{$condition}][]"),
@@ -127,7 +128,7 @@ panel
     (
         h::table
         (
-            setClass('table condensed bordered'),
+            setClass('table condensed bordered table-fixed'),
             h::thead(h::tr($headerThs)),
             h::tbody($bodyTrs)
         )
