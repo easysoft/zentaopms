@@ -261,6 +261,30 @@ class messageModelTest extends baseTest
     }
 
     /**
+     * 测试构建通知内容。
+     * Test build notice text by account.
+     *
+     * @param  string $account
+     * @param  object $object
+     * @param  string $actionType
+     * @param  int    $actionID
+     * @param  string $objectType
+     * @param  string $objectTitle
+     * @param  string $role
+     * @param  array  $users
+     * @access public
+     * @return string
+     */
+    public function buildNoticeTextByAccountTest(string $account, object $object, string $actionType, int $actionID, string $objectType, string $objectTitle, string $role = 'to', array $users = array()): string
+    {
+        $text = $this->instance->buildNoticeTextByAccount($account, $object, $actionType, $actionID, $objectType, $objectTitle, $role, $users);
+
+        if(dao::isError()) return dao::getError();
+
+        return $text;
+    }
+
+    /**
      * 测试获取要提示的待办信息。
      * Test get notice todos.
      *

@@ -341,8 +341,8 @@ class messageModel extends model
         if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed'))) $noticeText = zget($this->lang->message->noticeText, $objectType . $actionType, $this->lang->message->noticeText->generic);
 
         $noticeText     = str_replace(array('{actor}', '{action}', '{objectType}', '{objectTitle}'), array($actorName, $actionName, $objectTypeName, $objectTitle), $noticeText);
-        $appendCCSuffix = !isset($lang->message->noticeText->extend[$actionType]['cc']);
-        if($role == 'cc' && $appendCCSuffix) $noticeText .= $noticeText->ccSuffix;
+        $appendCCSuffix = !isset($this->lang->message->noticeText->extend[$actionType]['cc']);
+        if($role == 'cc' && $appendCCSuffix) $noticeText .= $this->lang->message->noticeText->ccSuffix;
 
         if(isset($assignedTo)) $noticeText = str_replace(array('{assignedTo}'), array($assignedTo), $noticeText);
 
