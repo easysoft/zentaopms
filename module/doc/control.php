@@ -2513,7 +2513,16 @@ class doc extends control
         if(is_string($docID) && strpos($docID, 'api.') === 0)
         {
             $apiID = (int)str_replace('api.', '', $docID);
-            echo $this->fetch('api', 'ajaxGetApi', "apiID=$apiID&version=$version");
+            $api   = $this->loadModel('api')->getByID($apiID, $version);
+            if($api)
+            {
+                $api->originTitle = $api->title;
+                $api->icon        = "api is-$api->method";
+                $api->title       = "$api->method $api->path $api->title";
+                $api->api         = true;
+                $api->editable    = common::hasPriv('api', 'edit');
+            }
+            $this->send(array('result' => 'success', 'doc' => $api));
             return;
         }
 
