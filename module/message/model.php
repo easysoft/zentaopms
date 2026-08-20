@@ -388,7 +388,7 @@ class messageModel extends model
         }
         if($objectType == 'case') $objectType = 'testcase';
 
-        $action      = $this->loadModel('action')->fetchById($actionID);
+        $action      = $this->loadModel('action')->getById($actionID);
         $objectModel = $this->loadModel($objectType);
         if($objectModel && method_exists($objectModel, 'getToAndCcList'))
         {

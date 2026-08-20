@@ -196,6 +196,49 @@ class messageModelTest extends baseTest
     }
 
     /**
+     * 测试获取要发送人和抄送人列表。
+     * Test get toList and ccList.
+     *
+     * @param  string        $objectType
+     * @param  int           $objectID
+     * @param  int           $actionID
+     * @access public
+     * @return string|array
+     */
+    public function getToAndCcListTest(string $objectType, int $objectID, int $actionID): string|array
+    {
+        global $tester;
+        $table  = $tester->config->objectTables[$objectType];
+        $object = $tester->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
+        $list   = $this->instance->getToAndCcList($object, $objectType, $actionID);
+
+        if(dao::isError())
+        {
+            $error = dao::getError(true);
+            return is_string($error) ? $error : 'dao_error';
+        }
+
+        return trim(implode(',', $list), ',');
+    }
+
+    /**
+     * 测试获取评审结果和评审意见。
+     * Test get review result and comment.
+     *
+     * @param  int  $actionID
+     * @access public
+     * @return array
+     */
+    public function getReviewResultAndCommentTest(int $actionID): array
+    {
+        $result = $this->invokeArgs('getReviewResultAndComment', [$actionID]);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 测试获取要提示的待办信息。
      * Test get notice todos.
      *
