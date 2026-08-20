@@ -78,5 +78,5 @@ formGridPanel
     set::title($title),
     set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '10em'),
     set::fields($fields),
-    set::loadUrl(createLink('repo', 'import', "spaceID={$spaceID}&type={origin}&providerID={providerID}&groupID={organize|urlencode}&acl={acl}")),
+    set::loadUrl(createLink('repo', 'import', "spaceID={$spaceID}&type={origin}&providerID={providerID}&groupID={organize|base64}&acl={acl}")),
 );
