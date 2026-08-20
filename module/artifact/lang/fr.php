@@ -56,6 +56,15 @@ $lang->artifact->repo          = 'Code Repo';
 $lang->artifact->package       = 'Package';
 $lang->artifact->asset         = 'Artifact';
 
+$lang->artifact->existsTitle      = 'Artifact Exists';
+$lang->artifact->selectHandleType = 'Please select a handling method';
+$lang->artifact->renameTip        = 'The name already exists, please rename';
+$lang->artifact->overwrite        = 'Overwrite';
+$lang->artifact->fileName         = 'File Name';
+$lang->artifact->nameExists       = 'The name already exists';
+$lang->artifact->nameRequired     = 'Please enter a file name';
+$lang->artifact->renameExists     = 'A file with the same name and content already exists, please change the name and try again';
+
 $lang->artifact->countArtifact = 'Total %s Artifact';
 
 $lang->artifact->actionComment = new stdclass();

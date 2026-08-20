@@ -121,7 +121,7 @@ class artifactModel extends model
      * @access public
      * @return bool|array|object
      */
-    public function uploadArtifact(int $artifactLibID, array $file, string $path = ''): bool|array|object
+    public function uploadArtifact(int $artifactLibID, array $file, string $path = '', string $overwrite = ''): bool|array|object
     {
         $artifactLib = $this->fetchByID($artifactLibID);
         if(empty($artifactLib)) return false;
@@ -131,6 +131,7 @@ class artifactModel extends model
         $param['name']       = basename($file['name']);
         $param['group']      = ltrim($path, '/');
         $param['file']       = curl_file_create($file['tmp_name']);
+        if($overwrite) $param['overwrite'] = $overwrite;
 
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         $result  = json_decode(common::http(sprintf($apiRoot->url, "/artifacts/upload/{$artifactLib->type}"), $param, array(), $apiRoot->header, 'data', 'POST', 3000));

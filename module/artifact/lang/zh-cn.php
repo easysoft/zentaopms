@@ -56,6 +56,15 @@ $lang->artifact->repo          = '所属代码库';
 $lang->artifact->package       = '包名';
 $lang->artifact->asset         = '制品';
 
+$lang->artifact->existsTitle      = '制品已存在';
+$lang->artifact->selectHandleType = '请选择处理方式';
+$lang->artifact->renameTip        = '有重复名字，请重命名';
+$lang->artifact->overwrite        = '覆盖';
+$lang->artifact->fileName         = '文件名称';
+$lang->artifact->nameExists       = '当前名称已存在';
+$lang->artifact->nameRequired     = '请输入文件名称';
+$lang->artifact->renameExists     = '已存在相同内容的同名文件 请修改名字再次尝试';
+
 $lang->artifact->countArtifact = '共%s个制品';
 
 $lang->artifact->actionComment = new stdclass();
