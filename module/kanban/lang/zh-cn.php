@@ -99,6 +99,10 @@ $lang->kanban->noticeText = new stdclass();
 $lang->kanban->noticeText->due     = '卡片《{objectTitle}》已到截止日期（{deadline}），请及时推进。';
 $lang->kanban->noticeText->nearing = '卡片《{objectTitle}》即将到期（{deadline}），请及时推进。';
 
+$lang->kanban->noticeWebhookText = new stdclass();
+$lang->kanban->noticeWebhookText->due     = '卡片《[#%s::%s](%s) 》已到截止日期（%s），请及时推进。';
+$lang->kanban->noticeWebhookText->nearing = '卡片《[#%s::%s](%s) 》即将到期（%s），请及时推进。';
+
 /* Fields. */
 $lang->kanban->space          = '所属空间';
 $lang->kanban->name           = '看板名称';
