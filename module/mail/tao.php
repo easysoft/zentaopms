@@ -242,10 +242,11 @@ class mailTao extends mailModel
         $objectModel = $this->loadModel($objectType);
         if(!$objectModel) return false;
 
-        if(in_array($objectType, array('epic', 'requirement', 'story', 'task', 'meeting', 'review', 'deploy', 'reviewissue'))) return $objectModel->getToAndCcList($object, $action->action);
-        if(in_array($objectType, array('ticket', 'rule'))) return $objectModel->getToAndCcList($object, $action);
-
-        return $objectModel->getToAndCcList($object);
+        if(method_exists($objectModel, 'getToAndCcList'))
+        {
+            if($objectType == 'rule') return $objectModel->getToAndCcList($object, $action);
+            return $objectModel->getToAndCcList($object, $action->action);
+        }
     }
 
     /**
