@@ -357,9 +357,9 @@ class webhookModel extends model
             if($aitaskObject && !empty($aitaskObject->noticeTime) && $aitaskObject->noticeTime != '1') $needDelay = true;
 
             $messageGroups = array();
-            foreach($toCcList as $role => $users)
+            foreach($toCcList as $role => $userList)
             {
-                foreach($users as $account)
+                foreach(array_unique(array_filter(explode(',', $userList))) as $account)
                 {
                     /* 用户没有绑定，跳过 */
                     if(!empty($openIdList) && !isset($openIdList[$account])) continue;
@@ -368,8 +368,9 @@ class webhookModel extends model
                     if(!$postData) continue;
 
                     $hash = md5($postData);
-                    if(!isset($messageGroups[$hash])) $messageGroups[$hash]['postData'] = $postData;
-                    $messageGroups[$hash]['users'][] = $account;
+                    if(!isset($messageGroups[$hash])) $messageGroups[$hash] = array();
+                    $messageGroups[$hash]['postData'] = $postData;
+                    $messageGroups[$hash]['users'][]  = $account;
                 }
             }
 
@@ -425,7 +426,7 @@ class webhookModel extends model
         if(empty($users)) $users = $this->loadModel('user')->getPairs('nodeleted|noclosed|noletter');
 
         $host     = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
-        $viewLink = $this->getViewLink($objectType == 'kanbancard' ? 'kanban' : $objectType, $objectType == 'kanbancard' ? $object->kanban : $objectID);
+        $viewLink = $this->getViewLink($objectType == 'kanbancard' ? 'kanban' : $objectType, $objectType == 'kanbancard' ? $object->kanban : $action->objectID);
 
         if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed')))
         {
@@ -434,8 +435,9 @@ class webhookModel extends model
         }
         else
         {
+            $field = $this->config->action->objectNameFields[$objectType];
             $title = $this->loadModel('message')->buildNoticeTitle($objectType, $actionType, $account, $object, $role, $users);
-            $text  = $this->loadModel('message')->buildNoticeTextByAccount($account, $object, $actionType, $actionID, $objectType, "[#{$objectID}::{$object->$field}]({$host}{$viewLink})", $role, $users);
+            $text  = $this->loadModel('message')->buildNoticeTextByAccount($account, $object, $actionType, $actionID, $objectType, "[#{$object->id}::{$object->$field}]({$host}{$viewLink})", $role, $users);
         }
         $action->text = $text;
 
@@ -453,7 +455,7 @@ class webhookModel extends model
             }
         }
 
-        return $this->getDataByType($webhook, $action, $title, $text, $mobile, $email, $objectType, $objectID, $assignedTo);
+        return $this->getDataByType($webhook, $action, $title, $text, $mobile, $email, $objectType, $object->id, $assignedTo);
     }
 
     /**
@@ -769,7 +771,7 @@ class webhookModel extends model
     {
         if(is_string($webhook->secret)) $webhook->secret = json_decode($webhook->secret);
 
-        $openIdList = $this->getBoundUsers($webhook->id, $appendUser);
+        $openIdList = implode(',', $this->getBoundUsers($webhook->id, $appendUser));
         if(empty($openIdList)) return false;
 
         if($webhook->type == 'dinguser')
