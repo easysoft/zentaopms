@@ -1,4 +1,5 @@
 ALTER TABLE `zt_task` ADD COLUMN `deliverable` text DEFAULT NULL COMMENT '任务关联的交付物类型' AFTER `desc`;
+ALTER TABLE `zt_task` ADD COLUMN `fromDeliverable` int unsigned NOT NULL DEFAULT 0 COMMENT '由交付物转的任务' AFTER `fromIssue`;
 
 ALTER TABLE `zt_deliverablestage` ADD COLUMN `type` varchar(30) NOT NULL DEFAULT 'execution' AFTER `deliverable`;
 UPDATE `zt_deliverablestage` SET `type` = 'project' WHERE `stage` = 'project';

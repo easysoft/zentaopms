@@ -181,7 +181,7 @@ class task extends control
         /* Check whether the execution has permission to create tasks. */
         if($this->taskZen->isLimitedInExecution($executionID)) return $this->send(array('load' => array('locate' => $this->createLink('execution', 'task', "executionID={$executionID}"), 'alert' => sprintf($this->lang->task->createDenied, $execution->multiple ? $this->lang->executionCommon : $this->lang->projectCommon))));
 
-        if(!empty($_POST))
+        if(!empty($_POST['name']))
         {
             $parent = $taskID > 0 ? $this->task->fetchById($taskID) : null;
             /* Process the request data for the batch create tasks. */
