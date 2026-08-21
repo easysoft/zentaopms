@@ -1592,7 +1592,8 @@ CREATE INDEX `project` ON `zt_projectchange` (`project`);
 CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT 0 COMMENT '所属项目',
-  `submitFrom` int unsigned NOT NULL DEFAULT 0 COMMENT '提交来源',
+  `sourceType` varchar(20) NOT NULL DEFAULT 'project' COMMENT '来源类型',
+  `sourceID` int unsigned NOT NULL DEFAULT 0 COMMENT '来源对象',
   `review` int unsigned NOT NULL DEFAULT 0 COMMENT '关联评审',
   `deliverable` varchar(30) NOT NULL,
   `name` varchar(255) NOT NULL,
