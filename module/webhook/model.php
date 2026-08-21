@@ -435,7 +435,7 @@ class webhookModel extends model
         else
         {
             $title = $this->loadModel('message')->buildNoticeTitle($objectType, $actionType, $account, $object, $role, $users);
-            $text  = $this->loadModel('message')->buildNoticeTextByAccount($account, $object, $actionType, $actionID, $objectType, "#{$objectID}::{$object->$field}({$host}{$viewLink})", $role, $users);
+            $text  = $this->loadModel('message')->buildNoticeTextByAccount($account, $object, $actionType, $actionID, $objectType, "[#{$objectID}::{$object->$field}]({$host}{$viewLink})", $role, $users);
         }
         $action->text = $text;
 

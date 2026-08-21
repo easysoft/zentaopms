@@ -170,32 +170,6 @@ class messageModelTest extends baseTest
     }
 
     /**
-     * 测试获取要发送的人列表。
-     * Test get toList.
-     *
-     * @param  string        $objectType
-     * @param  int           $objectID
-     * @param  int           $actionID
-     * @access public
-     * @return string|array
-     */
-    public function getToListTest(string $objectType, int $objectID, int $actionID): string|array
-    {
-        global $tester;
-        $table  = $tester->config->objectTables[$objectType];
-        $object = $tester->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
-        $toList = $this->instance->getToList($object, $objectType, $actionID);
-
-        if(dao::isError())
-        {
-            $error = dao::getError(true);
-            return is_string($error) ? $error : 'dao_error';
-        }
-
-        return trim($toList, ',');
-    }
-
-    /**
      * 测试获取要发送人和抄送人列表。
      * Test get toList and ccList.
      *

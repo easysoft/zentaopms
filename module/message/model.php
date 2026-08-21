@@ -374,22 +374,6 @@ class messageModel extends model
     }
 
     /**
-     * 获取抄送给的人员。
-     * Get toList.
-     *
-     * @param  object $object
-     * @param  string $objectType
-     * @param  int    $actionID
-     * @access public
-     * @return string
-     */
-    public function getToList(object $object, string $objectType, int $actionID = 0): string
-    {
-        list('to' => $toList, 'cc' => $ccList) = $this->getToAndCcList($object, $objectType, $actionID);
-        return trim($toList . ',' . $ccList, ',');
-    }
-
-    /**
      * 获取发送对象和抄送对象。
      * Get toList and ccList.
      *
@@ -426,19 +410,6 @@ class messageModel extends model
             if(!empty($toAndCcList)) list($toList, $ccList) = $toAndCcList;
         }
         if(empty($toList) && $objectType == 'todo') $toList = $object->account;
-
-        /* 非内置工作流使用工作流的toList。 */
-        if($this->config->edition != 'open')
-        {
-            $flow    = $this->loadModel('workflow')->getByModule($objectType);
-            $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($objectType, $object->id);
-            $method  = $this->loadModel('workflowaction')->getByModuleAndAction($objectType, $this->app->rawMethod, $groupID);
-            if(($flow && !$flow->buildin) || ($method && !$method->buildin))
-            {
-                $toList = $this->loadModel('flow')->getToList($flow, $object->id, $method);
-                $ccList = '';
-            }
-        }
 
         return array('to' => trim($toList, ','), 'cc' => $ccList);
     }
