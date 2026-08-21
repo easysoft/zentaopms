@@ -107,7 +107,7 @@ class pipelineModel extends model
      */
     public function getExecutionList(int $spaceID = 0, int $repoID = 0, string $type = '', int $pipelineID = 0, string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('t1.*, t2.`scope`, t2.`spaceID` AS space, t2.`repoID` AS repo, t2.`name` AS pipelineName')->from(TABLE_PIPELINEEXEC)->alias('t1')
+        return $this->dao->select('t1.*, t2.`scope`, t2.`spaceID` AS space, t2.`repoID` AS repo, t2.`name` AS pipelineName, t2.`engine`')->from(TABLE_PIPELINEEXEC)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.`pipelineID`=t2.id')
             ->where('1=1')
             ->beginIF($repoID)->andWhere('t2.`repoID`')->eq($repoID)->fi()
@@ -600,7 +600,7 @@ class pipelineModel extends model
     {
         $action = strtolower($action);
         if(in_array($action, array('execution', 'exec'))) return !empty($pipeline->status) && $pipeline->status != 'draft';
-
+        if($action === 'cancel') return $pipeline->engine == 'gitfox' && in_array($pipeline->status, array('running', 'pending'));
         if($action === 'edit') return $pipeline->engine != 'gitfox';
         if($action === 'arrange') return $pipeline->engine == 'gitfox';
         return true;
@@ -839,6 +839,38 @@ class pipelineModel extends model
         return $this->dao->select('*')->from(TABLE_PIPELINEEXEC)
             ->where('id')->eq($execID)
             ->fetch();
+    }
+
+    /**
+     * 取消流水线执行。
+     * Cancel pipeline execution.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return bool
+     */
+    public function cancel(int $executionID): bool
+    {
+        $execution = $this->getExecByID($executionID);
+        if(empty($execution)) return false;
+
+        $pipeline = $this->getByID($execution->pipelineID);
+        if(empty($pipeline) || $pipeline->engine != 'gitfox')
+        {
+            dao::$errors['engine'][] = $this->lang->pipeline->cancelFail;
+            return false;
+        }
+
+        if(!in_array($execution->status, array('running', 'pending')))
+        {
+            dao::$errors['status'][] = $this->lang->pipeline->cancelFail;
+            return false;
+        }
+
+        if(!$this->loadModel('gitfox')->apiCancelPipeline($executionID)) return false;
+
+        $this->loadModel('action')->create('pipeline', $pipeline->id, 'canceled');
+        return true;
     }
 
     /**

@@ -17,6 +17,8 @@ $lang->pipeline->dirChange     = 'Directory Changed';
 $lang->pipeline->buildTag      = 'Build Tag';
 $lang->pipeline->execSuccess   = 'Pipeline execution started';
 $lang->pipeline->execFail      = 'Pipeline execution failed';
+$lang->pipeline->cancelSuccess = 'Pipeline execution canceled';
+$lang->pipeline->cancelFail    = 'Failed to cancel pipeline execution';
 $lang->pipeline->trigger       = 'Trigger';
 $lang->pipeline->autoRun       = 'Is it triggered';
 $lang->pipeline->addTrigger    = 'Add Trigger';
@@ -30,6 +32,7 @@ $lang->pipeline->execView      = 'Execution Details';
 $lang->pipeline->confirmDelete      = 'Do you want to delete this job?';
 $lang->pipeline->confirmExec        = 'Are you sure you want to execute this Jenkins pipeline?';
 $lang->pipeline->confirmExecPending = 'There is a job pending execution. Are you sure you want to continue?';
+$lang->pipeline->confirmCancelExec  = 'Do you want to cancel this pipeline execution?';
 
 $lang->pipeline->browseAction    = 'Pipeline List';
 $lang->pipeline->executionAction = 'Pipeline Execution History';
@@ -175,6 +178,7 @@ $lang->pipeline->execStatusList['created']     = 'Created';
 $lang->pipeline->execStatusList['create_fail'] = 'Create Failed';
 $lang->pipeline->execStatusList['timeout']     = 'Timeout';
 $lang->pipeline->execStatusList['canceled']    = 'Canceled';
+$lang->pipeline->execStatusList['killed']      = 'Canceled';
 
 $lang->pipeline->triggerTypeList = array();
 $lang->pipeline->triggerTypeList['manual']                 = 'Manual trigger';
@@ -297,6 +301,8 @@ $lang->pipeline->flowApp->labels['execution-status-error']    = 'Error';
 $lang->pipeline->flowApp->labels['execution-status-skipped']  = 'Skipped';
 $lang->pipeline->flowApp->labels['execution-status-blocked']  = 'Blocked';
 $lang->pipeline->flowApp->labels['execution-status-declined'] = 'Declined';
+$lang->pipeline->flowApp->labels['execution-status-killed']   = 'Canceled';
+$lang->pipeline->flowApp->labels['execution-status-canceled'] = 'Canceled';
 $lang->pipeline->flowApp->labels['view-error']                = 'View Error';
 
 $lang->pipeline->flowApp->labels['event-branch_created']         = 'Create Branch';

@@ -586,6 +586,29 @@ class gitfoxModel extends model
     }
 
     /**
+     * 取消流水线执行。
+     * Cancel pipeline execution.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return bool
+     */
+    public function apiCancelPipeline(int $executionID): bool
+    {
+        $apiRoot  = $this->getApiRoot();
+        $url      = sprintf($apiRoot->url, "/pipeline/executions/{$executionID}/cancel");
+        $response = json_decode(common::http($url, '{}', array(CURLOPT_POST => true), $apiRoot->header, 'json', 'POST'));
+        if(empty($response))
+        {
+            dao::$errors['apiMessage'] = $this->lang->error->httpServerError;
+            return false;
+        }
+
+        $response = $this->getResponse($response);
+        return $response !== false;
+    }
+
+    /**
      * 通过API获取版本库的流水线列表。
      * Get the pipelines list of the repo by API.
      *

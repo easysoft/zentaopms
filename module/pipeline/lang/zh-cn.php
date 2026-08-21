@@ -17,6 +17,8 @@ $lang->pipeline->dirChange     = '目录改动';
 $lang->pipeline->buildTag      = '打标签';
 $lang->pipeline->execSuccess   = '触发流水线成功';
 $lang->pipeline->execFail      = '触发流水线失败';
+$lang->pipeline->cancelSuccess = '取消执行成功';
+$lang->pipeline->cancelFail    = '取消失败';
 $lang->pipeline->trigger       = '触发器';
 $lang->pipeline->autoRun       = '是否触发';
 $lang->pipeline->addTrigger    = '添加触发器';
@@ -30,6 +32,7 @@ $lang->pipeline->execView      = '执行详情';
 $lang->pipeline->confirmDelete      = '确认删除该流水线';
 $lang->pipeline->confirmExec        = '确认执行该Jenkins流水线？';
 $lang->pipeline->confirmExecPending = '当前有正在等待执行的任务，是否继续触发？';
+$lang->pipeline->confirmCancelExec  = '确认取消该流水线执行？';
 
 $lang->pipeline->browseAction    = '流水线列表';
 $lang->pipeline->executionAction = '流水线执行历史';
@@ -175,6 +178,7 @@ $lang->pipeline->execStatusList['created']     = '已创建';
 $lang->pipeline->execStatusList['create_fail'] = '创建失败';
 $lang->pipeline->execStatusList['timeout']     = '超时';
 $lang->pipeline->execStatusList['canceled']    = '已取消';
+$lang->pipeline->execStatusList['killed']      = '已取消';
 
 $lang->pipeline->triggerTypeList = array();
 $lang->pipeline->triggerTypeList['manual']                 = '人工触发';
@@ -296,6 +300,8 @@ $lang->pipeline->flowApp->labels['execution-status-error']    = '错误';
 $lang->pipeline->flowApp->labels['execution-status-skipped']  = '跳过';
 $lang->pipeline->flowApp->labels['execution-status-blocked']  = '阻塞';
 $lang->pipeline->flowApp->labels['execution-status-declined'] = '拒绝';
+$lang->pipeline->flowApp->labels['execution-status-killed']   = '已取消';
+$lang->pipeline->flowApp->labels['execution-status-canceled'] = '已取消';
 $lang->pipeline->flowApp->labels['view-error']                = '查看错误';
 
 $lang->pipeline->flowApp->labels['event-branch_created']         = '创建分支';

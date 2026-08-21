@@ -16,8 +16,16 @@ if($repoID)
 
 $backUrl = createLink('pipeline', "execution", "space={$spaceID}&repoID={$repoID}&type={$type}");
 
-panel
+jsVar('window.executionID', (int)$execution->id);
+jsVar('window.confirmCancelExec', $lang->pipeline->confirmCancelExec);
+
+$execViewJS = file_get_contents(dirname(dirname(__FILE__)) . '/js/execview.ui.js');
+
+div
 (
+    setClass('relative'),
+    h::js($execViewJS),
+    h::css('.execution-status-killed, .execution-status-canceled {color: var(--color-status-cancel);}'),
     zui::FlowExecutionApp
     (
         set::height('calc(100vh - 96px)'),
@@ -25,5 +33,12 @@ panel
         set::id($execution->id),
         set::name('#' . $execution->id . ' ' . $pipeline->name),
         set::labels($lang->pipeline->flowApp->labels)
+    ),
+    btn
+    (
+        setID('cancelExecBtn'),
+        set::type('primary'),
+        setClass('absolute right-2 top-1 z-10 hidden'),
+        $lang->pipeline->cancelBtn
     )
 );
