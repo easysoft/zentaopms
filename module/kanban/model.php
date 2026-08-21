@@ -3711,6 +3711,80 @@ class kanbanModel extends model
     }
 
     /**
+     * 发送看板卡片到期提醒的webhook通知。
+     * Send kanban card due reminders by webhook.
+     *
+     * @param  array $cards
+     * @access public
+     * @return void
+     */
+    public function sendCardNoticeByWebhook(array $cards)
+    {
+        if(empty($cards)) return;
+
+        $this->loadModel('webhook');
+        static $webhooks = array();
+        if(!$webhooks) $webhooks = $this->webhook->getList();
+        if(!$webhooks) return;
+
+        $today = helper::today();
+        $users = $this->dao->select('account,mobile,email')->from(TABLE_USER)->fetchAll('account');
+
+        foreach($cards as $user => $cardList)
+        {
+            foreach($cardList as $card)
+            {
+                $noticeType = $today > $card->deadline ? 'due' : 'nearing';
+                $title      = zget($this->lang->kanban, $noticeType);
+                $cardUser   = zget($users, $user, null);
+
+                foreach($webhooks as $id => $webhook)
+                {
+                    $host     = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
+                    $viewLink = $host . helper::createLink('kanban', 'view', "kanbanID={$card->kanban}") . '#app=kanban';
+                    $text     = sprintf(zget($this->lang->kanban->noticeWebhookText, $noticeType), $card->id, $card->name, $viewLink, $card->deadline);
+                    $mobile   = $cardUser ? $cardUser->mobile : '';
+                    $email    = $cardUser ? $cardUser->email : '';
+
+                    if($webhook->type == 'dinggroup' || $webhook->type == 'dinguser')
+                    {
+                        $data = $this->webhook->getDingdingData($title, $text, $webhook->type == 'dinguser' ? '' : $mobile);
+                    }
+                    elseif($webhook->type == 'bearychat')
+                    {
+                        $data = $this->webhook->getBearychatData($text, $mobile, $email, 'kanbancard', (int)$card->id);
+                    }
+                    elseif($webhook->type == 'wechatgroup' || $webhook->type == 'wechatuser')
+                    {
+                        $data = $this->webhook->getWeixinData($text, $mobile);
+                    }
+                    elseif($webhook->type == 'feishuuser' || $webhook->type == 'feishugroup')
+                    {
+                        $data = $this->webhook->getFeishuData($title, $text);
+                    }
+                    else
+                    {
+                        $data = new stdclass();
+                        $data->text = $text;
+                    }
+
+                    $postData = json_encode($data);
+                    if(!$postData) continue;
+
+                    if($webhook->sendType == 'async')
+                    {
+                        $this->webhook->saveData($id, 0, $postData);
+                        continue;
+                    }
+
+                    $result = $this->webhook->fetchHook($webhook, $postData, 0, $user);
+                    if(!empty($result)) $this->webhook->saveLog($webhook, 0, $postData, (string)$result);
+                }
+            }
+        }
+    }
+
+    /**
      * 获取可转入的看板卡片。
      * Get cards to import.
      *
