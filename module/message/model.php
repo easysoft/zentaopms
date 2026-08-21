@@ -347,7 +347,8 @@ class messageModel extends model
             $submitter = zget($users, $submitter);
         }
 
-        $actorName      = $account == 'guest' ? 'guest' : zget($users, $account);
+        $action         = $this->loadModel('action')->getById($actionID);
+        $actorName      = $action->actor == 'guest' ? 'guest' : zget($users, $action->actor);
         $objectTypeName = zget($this->lang->action->objectTypes, $objectType);
         $actionName     = zget($this->lang->action->label, $actionType);
 
@@ -360,53 +361,16 @@ class messageModel extends model
         if($role == 'cc' && $appendCCSuffix) $noticeText .= $this->lang->message->noticeText->ccSuffix;
 
         if(isset($assignedTo)) $noticeText = str_replace(array('{assignedTo}'), array($assignedTo), $noticeText);
-
         if($actionType == 'reviewed')
-        {
-            list($reviewResult, $reviewComment) = $this->getReviewResultAndComment($actionID);
-            $noticeText = str_replace(array('{reviewResult}', '{reviewComment}', '{submitter}'), array($reviewResult, $reviewComment, $submitter), $noticeText);
-        }
-
-        return $noticeText;
-    }
-
-    /**
-     * 获取评审结果和评审意见。
-     * Get review result and comment.
-     *
-     * @param  int $actionID
-     * @access protected
-     * @return array
-     */
-    protected function getReviewResultAndComment(int $actionID): array
-    {
-        $action  = $this->loadModel('action')->getById($actionID);
-        $result  = '';
-        $comment = '';
-        if($action)
         {
             $result  = (string)$action->extra;
             if(strpos($result, '|') !== false) $result = strtolower(explode('|', $result)[0]);
-            $result  = zget($this->lang->message->reviewResultList, $result, '');
-            $comment = trim(strip_tags((string)$action->comment));
+            $reviewResult  = zget($this->lang->message->reviewResultList, $result, '');
+            $reviewComment = trim(strip_tags((string)$action->comment));
+            $noticeText    = str_replace(array('{reviewResult}', '{reviewComment}', '{submitter}'), array($reviewResult, $reviewComment, $submitter), $noticeText);
         }
-        return array($result, $comment);
-    }
 
-    /**
-     * 获取抄送给的人员。
-     * Get toList.
-     *
-     * @param  object $object
-     * @param  string $objectType
-     * @param  int    $actionID
-     * @access public
-     * @return string
-     */
-    public function getToList(object $object, string $objectType, int $actionID = 0): string
-    {
-        list('to' => $toList, 'cc' => $ccList) = $this->getToAndCcList($object, $objectType, $actionID);
-        return trim($toList . ',' . $ccList, ',');
+        return $noticeText;
     }
 
     /**
@@ -446,19 +410,6 @@ class messageModel extends model
             if(!empty($toAndCcList)) list($toList, $ccList) = $toAndCcList;
         }
         if(empty($toList) && $objectType == 'todo') $toList = $object->account;
-
-        /* 非内置工作流使用工作流的toList。 */
-        if($this->config->edition != 'open')
-        {
-            $flow    = $this->loadModel('workflow')->getByModule($objectType);
-            $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($objectType, $object->id);
-            $method  = $this->loadModel('workflowaction')->getByModuleAndAction($objectType, $this->app->rawMethod, $groupID);
-            if(($flow && !$flow->buildin) || ($method && !$method->buildin))
-            {
-                $toList = $this->loadModel('flow')->getToList($flow, $object->id, $method);
-                $ccList = '';
-            }
-        }
 
         return array('to' => trim($toList, ','), 'cc' => $ccList);
     }
@@ -779,6 +730,9 @@ class messageModel extends model
                     {
                         if(strpos($webhook->type, 'group') !== false)  continue;
 
+                        $openIdList = $this->webhook->getBoundUsers($id, $mentionUsers);
+                        if(empty($openIdList)) continue;
+
                         $host = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
                         $text = sprintf($this->lang->message->mention, $actorRealname, "[{$objectTitle}]({$host}{$viewLink})");
                         $data = $this->webhook->getDataByType($webhook, $action, $title, $text, '', '', $objectType, (int)$object->id);
@@ -786,17 +740,11 @@ class messageModel extends model
 
                         if($webhook->sendType == 'async')
                         {
-                            if($webhook->type == 'dinguser')
-                            {
-                                $openIdList = $this->webhook->getOpenIdList($webhook->id, $actionID);
-                                if(empty($openIdList)) continue;
-                            }
-
-                            $this->webhook->saveData($id, $actionID, $data, $actor);
+                            $this->webhook->saveData($id, $actionID, $data, $actor, null, implode(',', $mentionUsers));
                             continue;
                         }
 
-                        $result = $this->webhook->fetchHook($webhook, $data, $actionID, $mentionUsers);
+                        $result = $this->webhook->fetchHook($webhook, $data, $mentionUsers);
                         if(!empty($result)) $this->webhook->saveLog($webhook, $actionID, $data, (string)$result);
                     }
                 }

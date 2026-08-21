@@ -444,9 +444,9 @@ class webhookTaoTest extends baseTest
      * @access public
      * @return mixed
      */
-    public function fetchHookTest($webhook, $sendData, $actionID = 0, $appendUser = '')
+    public function fetchHookTest($webhook, $sendData, $appendUser = '')
     {
-        $result = $this->objectModel->fetchHook($webhook, $sendData, $actionID, $appendUser);
+        $result = $this->objectModel->fetchHook($webhook, $sendData, $appendUser);
 
         if(dao::isError()) return dao::getError();
 

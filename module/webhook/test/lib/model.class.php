@@ -450,9 +450,9 @@ class webhookModelTest extends baseTest
      * @access public
      * @return mixed
      */
-    public function fetchHookTest($webhook, $sendData, $actionID = 0, $appendUser = '')
+    public function fetchHookTest($webhook, $sendData, $appendUser = '')
     {
-        $result = $this->instance->fetchHook($webhook, $sendData, $actionID, $appendUser);
+        $result = $this->instance->fetchHook($webhook, $sendData, $appendUser);
 
         if(dao::isError()) return dao::getError();
 
@@ -488,11 +488,11 @@ class webhookModelTest extends baseTest
      * @access public
      * @return mixed
      */
-    public function fetchHookTestWithValidUrl($webhook, $sendData, $actionID = 0, $appendUser = '')
+    public function fetchHookTestWithValidUrl($webhook, $sendData, $appendUser = '')
     {
         // Test with a working URL that should return 200
         $webhook->url = 'http://httpbin.org/post';
-        $result = $this->instance->fetchHook($webhook, $sendData, $actionID, $appendUser);
+        $result = $this->instance->fetchHook($webhook, $sendData, $appendUser);
 
         if(dao::isError()) return dao::getError();
 
