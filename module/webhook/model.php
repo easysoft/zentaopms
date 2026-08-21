@@ -336,6 +336,8 @@ class webhookModel extends model
         }
 
         $action = $this->loadModel('action')->getById($actionID);
+        if(empty($action)) return true;;
+
         $table  = zget($this->config->objectTables, $action->objectType, '');
         $object = null;
         if(!empty($table)) $object = $this->dao->select('*')->from($table)->where('id')->eq($action->objectID)->fetch();
@@ -343,7 +345,7 @@ class webhookModel extends model
 
         foreach($webhooks as $id => $webhook)
         {
-            $toCcList   = array('to' => array(''), 'cc' => array());
+            $toCcList   = array('to' => '');
             $openIdList = array();
             if(in_array($webhook->type, array('dinguser', 'wechatuser', 'feishuuser')))
             {
@@ -395,7 +397,7 @@ class webhookModel extends model
      * Build data.
      *
      * @param  string $objectType
-     * @param  int    $objectID
+     * @param  object $object
      * @param  string $actionType
      * @param  int    $actionID
      * @param  object $webhook

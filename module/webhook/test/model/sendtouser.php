@@ -66,8 +66,8 @@ $testWebhook5->secret = 'test_secret';
 
 $testSendData = '{"msgtype":"text","text":{"content":"测试消息"}}';
 
-r($webhookTest->sendToUserTest($testWebhook1, $testSendData, 0, '')) && p() && e('0'); // 步骤1：测试钉钉用户类型（无actionID）
-r($webhookTest->sendToUserTest($testWebhook2, $testSendData, 0, '')) && p() && e('0'); // 步骤2：测试企业微信用户类型（无actionID）
-r($webhookTest->sendToUserTest($testWebhook3, $testSendData, 0, '')) && p() && e('0'); // 步骤3：测试飞书用户类型（无actionID）
-r($webhookTest->sendToUserTest($testWebhook4, $testSendData, 0, '')) && p() && e('0'); // 步骤4：测试无效webhook类型
-r($webhookTest->sendToUserTest($testWebhook5, $testSendData, 0, '')) && p() && e('0'); // 步骤5：测试dinggroup类型（应该跳过）
+r($webhookTest->sendToUserTest($testWebhook1, $testSendData, '')) && p() && e('0'); // 步骤1：测试钉钉用户类型（无actionID）
+r($webhookTest->sendToUserTest($testWebhook2, $testSendData, '')) && p() && e('0'); // 步骤2：测试企业微信用户类型（无actionID）
+r($webhookTest->sendToUserTest($testWebhook3, $testSendData, '')) && p() && e('0'); // 步骤3：测试飞书用户类型（无actionID）
+r($webhookTest->sendToUserTest($testWebhook4, $testSendData, '')) && p() && e('0'); // 步骤4：测试无效webhook类型
+r($webhookTest->sendToUserTest($testWebhook5, $testSendData, '')) && p() && e('0'); // 步骤5：测试dinggroup类型（应该跳过）
