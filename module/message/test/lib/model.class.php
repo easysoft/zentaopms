@@ -222,23 +222,6 @@ class messageModelTest extends baseTest
     }
 
     /**
-     * 测试获取评审结果和评审意见。
-     * Test get review result and comment.
-     *
-     * @param  int  $actionID
-     * @access public
-     * @return array
-     */
-    public function getReviewResultAndCommentTest(int $actionID): array
-    {
-        $result = $this->invokeArgs('getReviewResultAndComment', [$actionID]);
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
      * 测试构建消息标题。
      * Test build notice title.
      *

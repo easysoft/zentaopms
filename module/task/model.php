@@ -4239,7 +4239,7 @@ class taskModel extends model
                         continue;
                     }
 
-                    $result = $this->webhook->fetchHook($webhook, $postData, 0, $user->account);
+                    $result = $this->webhook->fetchHook($webhook, $postData, $user->account);
                     if(!empty($result)) $this->webhook->saveLog($webhook, $actionID, $postData, $result);
                 }
             }
