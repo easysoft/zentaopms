@@ -1033,6 +1033,20 @@ class pipeline extends control
     }
 
     /**
+     * 取消流水线执行。
+     * Cancel pipeline execution.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return void
+     */
+    public function cancel(int $executionID)
+    {
+        if(!$this->pipeline->cancel($executionID)) return $this->sendError(dao::getError());
+        $this->sendSuccess(array('message' => $this->lang->pipeline->cancelSuccess, 'load' => true));
+    }
+
+    /**
      * 获取执行信息。
      * Get execution info.
      *

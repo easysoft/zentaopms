@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+h::css('.status-canceled, .status-killed {color: var(--color-status-cancel);}');
+
 jsVar('repoID', $repoID);
 
 if($repoID)

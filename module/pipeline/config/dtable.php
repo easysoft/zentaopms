@@ -132,12 +132,13 @@ $config->pipeline->execution->dtable->fieldList['name']['sortType'] = false;
 $config->pipeline->execution->dtable->fieldList['name']['minWidth'] = '350';
 $config->pipeline->execution->dtable->fieldList['name']['hint']     = true;
 
-$config->pipeline->execution->dtable->fieldList['status']['title']    = $lang->pipeline->status;
-$config->pipeline->execution->dtable->fieldList['status']['name']     = 'status';
-$config->pipeline->execution->dtable->fieldList['status']['sortType'] = false;
-$config->pipeline->execution->dtable->fieldList['status']['width']    = '110';
-$config->pipeline->execution->dtable->fieldList['status']['hint']     = true;
-$config->pipeline->execution->dtable->fieldList['status']['map']      = $lang->pipeline->execStatusList;
+$config->pipeline->execution->dtable->fieldList['status']['title']     = $lang->pipeline->status;
+$config->pipeline->execution->dtable->fieldList['status']['name']      = 'status';
+$config->pipeline->execution->dtable->fieldList['status']['type']      = 'status';
+$config->pipeline->execution->dtable->fieldList['status']['sortType']  = false;
+$config->pipeline->execution->dtable->fieldList['status']['width']     = '110';
+$config->pipeline->execution->dtable->fieldList['status']['hint']      = true;
+$config->pipeline->execution->dtable->fieldList['status']['statusMap'] = $lang->pipeline->execStatusList;
 
 $config->pipeline->execution->dtable->fieldList['createdBy']['title']    = $lang->pipeline->triggerPerson;
 $config->pipeline->execution->dtable->fieldList['createdBy']['name']     = 'createdBy';
@@ -176,9 +177,16 @@ $config->pipeline->execution->actionList['view']['text'] = $lang->pipeline->log;
 $config->pipeline->execution->actionList['view']['hint'] = $lang->pipeline->log;
 $config->pipeline->execution->actionList['view']['url']  = array('module' => 'pipeline', 'method' => 'execView', 'params' => "execID={id}");
 
+$config->pipeline->execution->actionList['cancel']['icon']         = 'ban';
+$config->pipeline->execution->actionList['cancel']['text']         = $lang->pipeline->cancelBtn;
+$config->pipeline->execution->actionList['cancel']['hint']         = $lang->pipeline->cancelBtn;
+$config->pipeline->execution->actionList['cancel']['ajaxSubmit']   = true;
+$config->pipeline->execution->actionList['cancel']['url']          = array('module' => 'pipeline', 'method' => 'cancel', 'params' => "executionID={id}");
+$config->pipeline->execution->actionList['cancel']['data-confirm'] = array('message' => $lang->pipeline->confirmCancelExec, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+
 $config->pipeline->execution->dtable->fieldList['actions']['name']  = 'actions';
 $config->pipeline->execution->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->pipeline->execution->dtable->fieldList['actions']['width'] = 100;
 $config->pipeline->execution->dtable->fieldList['actions']['type']  = 'actions';
-$config->pipeline->execution->dtable->fieldList['actions']['menu']  = array('view');
+$config->pipeline->execution->dtable->fieldList['actions']['menu']  = array('view', 'cancel');
 $config->pipeline->execution->dtable->fieldList['actions']['list']  = $config->pipeline->execution->actionList;
