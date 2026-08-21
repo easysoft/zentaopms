@@ -357,9 +357,9 @@ class webhookModel extends model
             if($aitaskObject && !empty($aitaskObject->noticeTime) && $aitaskObject->noticeTime != '1') $needDelay = true;
 
             $messageGroups = array();
-            foreach($toCcList as $role => $users)
+            foreach($toCcList as $role => $userList)
             {
-                foreach($users as $account)
+                foreach(array_unique(array_filter(explode(',', $userList))) as $account)
                 {
                     /* 用户没有绑定，跳过 */
                     if(!empty($openIdList) && !isset($openIdList[$account])) continue;
@@ -368,8 +368,9 @@ class webhookModel extends model
                     if(!$postData) continue;
 
                     $hash = md5($postData);
-                    if(!isset($messageGroups[$hash])) $messageGroups[$hash]['postData'] = $postData;
-                    $messageGroups[$hash]['users'][] = $account;
+                    if(!isset($messageGroups[$hash])) $messageGroups[$hash] = array();
+                    $messageGroups[$hash]['postData'] = $postData;
+                    $messageGroups[$hash]['users'][]  = $account;
                 }
             }
 
