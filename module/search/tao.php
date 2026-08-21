@@ -198,7 +198,7 @@ class searchTao extends searchModel
             }
             else
             {
-                $condition = $control == 'select' ? " LIKE CONCAT('%,', '{$value}', ',%')" : ' LIKE ' . $this->dbh->quote("%$value%");
+                $condition = $control == 'select' ? ' LIKE ' . $this->dbh->quote('%,' . $value . ',%') : ' LIKE ' . $this->dbh->quote('%' . $value . '%');
             }
         }
         elseif($operator == "notinclude")
@@ -214,7 +214,7 @@ class searchTao extends searchModel
             }
             else
             {
-                $condition = $control == 'select' ? " NOT LIKE CONCAT('%,', '{$value}', ',%')" : ' NOT LIKE ' . $this->dbh->quote("%$value%");
+                $condition = $control == 'select' ? ' NOT LIKE ' . $this->dbh->quote('%,' . $value . ',%') : ' NOT LIKE ' . $this->dbh->quote('%' . $value . '%');
             }
         }
         elseif($operator == 'belong')
@@ -419,7 +419,7 @@ class searchTao extends searchModel
                 $againstCond[] = '(+"' . $trimmedWord . '")';
             }
 
-            if(is_numeric($word) && strpos($word, '.') === false && strlen($word) == 5) $againstCond .= "(-\" $word \") ";
+            if(is_numeric($word) && strpos($word, '.') === false && strlen($word) == 5) $againstCond[] = "(-\" $word \") ";
         }
 
         if(in_array($this->config->db->driver, $this->config->pgsqlDriverList))
@@ -1173,7 +1173,7 @@ class searchTao extends searchModel
     {
         if($module == 'case') $caseStep = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in(array_keys($dataList))->fetchGroup('case', 'id');
         $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq($module)->andWhere('objectID')->in(array_keys($dataList))->orderBy('date asc')->fetchGroup('objectID', 'id');
-        $files   = $this->dao->select('id,objectID,title,extension')->from(TABLE_FILE)->where('objectType')->eq($module)->andWhere('objectID')->in(array_keys($dataList))->orderBy('id asc')->fetchGroup('objectID', 'id');
+        $files   = $this->dao->select('id,`objectID`,title,extension')->from(TABLE_FILE)->where('objectType')->eq($module)->andWhere('objectID')->in(array_keys($dataList))->orderBy('id asc')->fetchGroup('objectID', 'id');
 
         foreach($dataList as $id => $data)
         {

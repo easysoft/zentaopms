@@ -26,11 +26,12 @@ $projectTable->name->range('project1,project2,project3,project4,project5');
 $projectTable->deleted->range('0{5}');
 $projectTable->gen(5);
 
-$pipelineTable = zenData('pipeline');
-$pipelineTable->id->range('1-5');
-$pipelineTable->name->range('server1,server2,server3,server4,server5');
-$pipelineTable->deleted->range('0{5}');
-$pipelineTable->gen(5);
+$providerTable = zenData('ops_provider');
+$providerTable->id->range('1-5');
+$providerTable->type->range('gitlab{5}');
+$providerTable->name->range('server1,server2,server3,server4,server5');
+$providerTable->deleted->range('0{5}');
+$providerTable->gen(5);
 
 // 3. 用户登录（选择合适角色）
 su('admin');
@@ -57,13 +58,13 @@ $repoAction->objectType = 'repo';
 
 $repoObject = new stdClass();
 $repoObject->id = 1;
-$repoObject->SCM = 'Gitlab';
-$repoObject->serviceHost = 1;
+$repoObject->mirror = 1;
+$repoObject->providerID = 1;
 
 $repoObjectNoServer = new stdClass();
 $repoObjectNoServer->id = 2;
-$repoObjectNoServer->SCM = 'Gitlab';
-$repoObjectNoServer->serviceHost = 999;
+$repoObjectNoServer->mirror = 1;
+$repoObjectNoServer->providerID = 999;
 
 $otherAction = new stdClass();
 $otherAction->objectType = 'task';

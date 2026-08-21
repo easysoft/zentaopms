@@ -26,7 +26,7 @@ class markModel extends model
      */
     public function getNeededMarks(array $objectIDs, string $objectType, string $version, string $mark): array
     {
-        return $this->dao->select('objectID, version')->from(TABLE_MARK)
+        return $this->dao->select('`objectID`, version')->from(TABLE_MARK)
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->in($objectIDs)
             ->beginIF($version != 'all')->andWhere('version')->eq($version)->fi()

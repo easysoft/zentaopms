@@ -914,7 +914,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function create(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '', int $appendLib = 0)
+    public function create(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '', int $appendLib = 0, string $from = '')
     {
         if(!empty($_POST))
         {
@@ -951,9 +951,13 @@ class doc extends control
                 $docData->module = $parentDoc->module;
             }
 
+            /* create 会 unset rawContent，克隆一份供 @ 通知解析。 */
+            /* create() unsets rawContent, clone one copy for parsing @ mentions. */
+            $docForMention = clone $docData;
+
             $docResult = $this->doc->create($docData);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->docZen->responseAfterCreate($docResult);
+            return $this->docZen->responseAfterCreate($docResult, 'doc', $from, $docForMention);
         }
 
         $this->docZen->assignVarsForCreate($objectType, $objectID, $libID, $moduleID, $docType);
@@ -1004,7 +1008,7 @@ class doc extends control
                 $_POST['parent'] = 0;
             }
 
-            if(!$doc) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorNotFound));
+            if(!$doc) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
 
             $isOpen          = $doc->acl == 'open';
             $currentAccount  = $this->app->user->account;
@@ -1030,6 +1034,7 @@ class doc extends control
                     ->setDefault('editedBy', $this->app->user->account)
                     ->setDefault('acl', $doc->acl)
                     ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
+                    ->setIF(!isset($_POST['lib']), 'lib', $doc->lib)
                     ->setIF(!isset($_POST['module']), 'module', $doc->module)
                     ->setIF(!isset($_POST['mailto']), 'mailto', $doc->mailto)
                     ->setIF(!isset($_POST['users']), 'users', $doc->users)
@@ -1052,7 +1057,15 @@ class doc extends control
                 $files   = $result['files'];
             }
 
-            return $this->send($this->docZen->responseAfterEdit($doc, $changes, $files));
+            $response = $this->docZen->responseAfterEdit($doc, $changes, $files);
+
+            if(!empty($response['actionID']))
+            {
+                $docData->id = $docID;
+                $this->loadModel('message')->sendMentionNotice('doc', 'edit', $response['actionID'], $docData, $doc);
+            }
+
+            return $this->send($response);
         }
 
         /* Get doc and set menu. */
@@ -1403,7 +1416,7 @@ class doc extends control
         if($isApi) $docParam = 'api.' . $docParam;
         if(!$doc || !isset($doc->id))
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->sendError($this->lang->notFound, $this->inlink('index'));
         }
 
@@ -2320,7 +2333,7 @@ class doc extends control
      */
     public function quick(string $type = 'view', int $docID = 0, string $orderBy = '', int $recPerPage = 20, int $pageID = 1)
     {
-        if(empty($orderBy)) $orderBy = 'id_desc';
+        if(empty($orderBy)) $orderBy = in_array($type, array('view', 'editedby')) ? 't2.date_desc' : 'id_desc';
         if(!isset($this->config->doc->quickMenu[$type])) $type = 'view';
         $menu = $this->config->doc->quickMenu[$type];
 
@@ -2380,7 +2393,8 @@ class doc extends control
         $browseType  = !empty($search) ? 'bykeyword' : 'all';
         $queryID     = $search;
 
-        $docs = $this->doc->getMineList($type, $browseType, $queryID, 'id_desc', $pager, '', '', $filterType);
+        $orderBy = in_array($type, array('view', 'editedby')) ? 't2.date_desc' : 'id_desc';
+        $docs = $this->doc->getMineList($type, $browseType, $queryID, $orderBy, $pager, '', '', $filterType);
 
         $order = 0;
         $menu = $this->config->doc->quickMenu[$type];
@@ -2418,12 +2432,13 @@ class doc extends control
      * @param  string $type
      * @param  int    $space
      * @param  string $picks
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    public function ajaxGetSpaceData(string $type = 'custom', int $spaceID = 0, string $picks = '')
+    public function ajaxGetSpaceData(string $type = 'custom', int $spaceID = 0, string $picks = '', int $libID = 0)
     {
-        $this->doc->setMenuByType($type, (int)$spaceID, 0);
+        $this->doc->setMenuByType($type, (int)$spaceID, $libID);
 
         if($type === 'template')
         {
@@ -2446,7 +2461,7 @@ class doc extends control
             $this->send($data);
         }
 
-        $data = $this->buildSpaceDataBase($type, $spaceID, $picks);
+        $data = $this->buildSpaceDataBase($type, $spaceID, $picks, $libID);
         $this->send($data);
     }
 
@@ -2457,10 +2472,11 @@ class doc extends control
      * @param  string $type    空间类型
      * @param  int    $spaceID 空间ID
      * @param  string $picks   需要加载的数据项
+     * @param  int    $libID   文档库ID
      * @access private
      * @return array
      */
-    private function buildSpaceDataBase(string $type, int $spaceID, string $picks = ''): array
+    private function buildSpaceDataBase(string $type, int $spaceID, string $picks = '', int $libID = 0): array
     {
         $noPicks = empty($picks);
         $picks   = $noPicks ? '' : ",$picks,";
@@ -2468,7 +2484,7 @@ class doc extends control
         list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
         $data   = array();
         $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
-        $libIds = array_keys($libs);
+        $libIds = $libID ? array($libID) : array_keys($libs);
         foreach($libs as $lib)
         {
             $lib->order = (int)$lib->order;
@@ -2497,7 +2513,16 @@ class doc extends control
         if(is_string($docID) && strpos($docID, 'api.') === 0)
         {
             $apiID = (int)str_replace('api.', '', $docID);
-            echo $this->fetch('api', 'ajaxGetApi', "apiID=$apiID&version=$version");
+            $api   = $this->loadModel('api')->getByID($apiID, $version);
+            if($api)
+            {
+                $api->originTitle = $api->title;
+                $api->icon        = "api is-$api->method";
+                $api->title       = "$api->method $api->path $api->title";
+                $api->api         = true;
+                $api->editable    = common::hasPriv('api', 'edit');
+            }
+            $this->send(array('result' => 'success', 'doc' => $api));
             return;
         }
 
@@ -2508,6 +2533,8 @@ class doc extends control
         $doc->privs   = array('edit' => common::hasPriv('doc', 'edit', $doc) && $doc->acl == 'open');
         $doc->editors = $this->doc->getEditors($docID);
         $doc->draft   = $doc->status == 'draft' ? $this->doc->getContent($docID, 0) : null;
+
+        unset($doc->order); // 防止order覆盖左侧文档树导致乱跳
 
         $lib        = $this->doc->getLibByID((int)$doc->lib);
         $objectType = $lib->type;
@@ -2544,7 +2571,7 @@ class doc extends control
         }
         if($docID) $this->doc->createAction($docID, 'view');
 
-        $this->send($doc);
+        $this->send(array('result' => 'success', 'doc' => $doc));
     }
 
     /**
@@ -2610,7 +2637,7 @@ class doc extends control
      * @param  string $isDraft
      * @access public
      */
-    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $parentID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc', string $docType = 'text')
+    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $parentID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc', string $docType = 'text', string $from = '')
     {
         $this->doc->setMenuByType($objectType, (int)$objectID, (int)$libID);
         $lib      = $libID ? $this->doc->getLibByID($libID) : '';
@@ -2626,6 +2653,7 @@ class doc extends control
         {
             $editTitle = $docType == 'url' ? $this->lang->doc->edit : $this->lang->settings;
             $title     = $isCreate ? $this->lang->doc->create : $editTitle;
+            if($objectType == 'template' && $isCreate) $title = $this->lang->docTemplate->create;
         }
         elseif($modalType == 'doc' && $isDraft != 'no')
         {
@@ -2732,6 +2760,7 @@ class doc extends control
         $this->view->title      = $title;
         $this->view->modalType  = $modalType;
         $this->view->isCreate   = $isCreate;
+        $this->view->from       = $from;
         $this->display();
     }
 

@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('isTutorialMode', common::isTutorialMode());
+aiFormInject(set::module('doc'), set::method('create'));
 
 include 'lefttree.html.php';
 
@@ -23,6 +24,7 @@ $basicInfoModal = modal
     set::title($lang->doc->release . $lang->doc->common),
     set::id('modalBasicInfo'),
     set::bodyClass('form form-horz'),
+    on::show()->do('$("#title").val($("#showTitle").val()).removeClass("has-error");$("#titleTip").remove();'),
     on::change('[name=space],[name=product],[name=execution]')->call('loadObjectModules', jsRaw('event')),
     on::change('[name=lib]')->call('loadLibModules', jsRaw('event')),
     on::change('[name=project]')->call('loadExecutions', jsRaw('event')),

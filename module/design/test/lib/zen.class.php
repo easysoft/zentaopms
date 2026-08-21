@@ -19,11 +19,19 @@ class designZenTest extends baseTest
      */
     public function setMenuTest(int $projectID = 0, int $productID = 0, string $type = '')
     {
-        global $lang;
+        $lang = $this->instance->lang;
         $lang->waterfall = new stdclass();
         $lang->waterfall->menu = new stdclass();
         $lang->ipd = new stdclass();
         $lang->ipd->menu = new stdclass();
+
+        $lang->design->typeList = array();
+        $lang->design->typeList['']     = '';
+        $lang->design->typeList['HLDS'] = '概要设计';
+        $lang->design->typeList['DDS']  = '详细设计';
+        $lang->design->typeList['DBDS'] = '数据库设计';
+        $lang->design->typeList['ADS']  = '接口设计';
+        $lang->design->plusTypeList     = $lang->design->typeList;
 
         $result = $this->invokeArgs('setMenu', [$projectID, $productID, $type]);
         if(dao::isError()) return dao::getError();

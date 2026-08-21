@@ -21,13 +21,21 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
 
+$today = date('Y-m-d');
+$day5  = date('Y-m-d', strtotime('-5 day'));
+$day4  = date('Y-m-d', strtotime('-4 day'));
+$day3  = date('Y-m-d', strtotime('-3 day'));
+$day2  = date('Y-m-d', strtotime('-2 day'));
+$day1  = date('Y-m-d', strtotime('-1 day'));
+$tomorrow = date('Y-m-d', strtotime('+1 day'));
+
 $rows = array(
-    array('id' => 801, 'objectType' => 'task',     'objectID' => 1, 'title' => 'A', 'content' => 'a', 'addedDate' => '2026-07-01 00:00:00', 'editedDate' => '2026-07-01 00:00:00', 'vision' => 'rnd'),
-    array('id' => 802, 'objectType' => 'task',     'objectID' => 2, 'title' => 'B', 'content' => 'b', 'addedDate' => '2026-07-02 00:00:00', 'editedDate' => '2026-07-01 00:00:00', 'vision' => 'rnd'),
-    array('id' => 803, 'objectType' => 'bug',      'objectID' => 3, 'title' => 'C', 'content' => 'c', 'addedDate' => '2026-07-03 00:00:00', 'editedDate' => '2026-07-01 00:00:00', 'vision' => 'rnd'),
-    array('id' => 804, 'objectType' => 'feedback', 'objectID' => 4, 'title' => 'D', 'content' => 'd', 'addedDate' => '2026-07-04 00:00:00', 'editedDate' => '2026-07-01 00:00:00', 'vision' => 'rnd'),
-    array('id' => 805, 'objectType' => 'task',     'objectID' => 5, 'title' => 'E', 'content' => 'e', 'addedDate' => '2026-07-08 00:00:00', 'editedDate' => '2026-07-01 00:00:00', 'vision' => 'rnd'),
-    array('id' => 806, 'objectType' => 'bug',      'objectID' => 6, 'title' => 'F', 'content' => 'f', 'addedDate' => '2026-07-05 00:00:00', 'editedDate' => '2026-07-01 00:00:00', 'vision' => 'lite'),
+    array('id' => 801, 'objectType' => 'task',     'objectID' => 1, 'title' => 'A', 'content' => 'a', 'addedDate' => "{$day5} 00:00:00", 'editedDate' => "{$day1} 00:00:00", 'vision' => 'rnd'),
+    array('id' => 802, 'objectType' => 'task',     'objectID' => 2, 'title' => 'B', 'content' => 'b', 'addedDate' => "{$day4} 00:00:00", 'editedDate' => "{$day1} 00:00:00", 'vision' => 'rnd'),
+    array('id' => 803, 'objectType' => 'bug',      'objectID' => 3, 'title' => 'C', 'content' => 'c', 'addedDate' => "{$day3} 00:00:00", 'editedDate' => "{$day1} 00:00:00", 'vision' => 'rnd'),
+    array('id' => 804, 'objectType' => 'feedback', 'objectID' => 4, 'title' => 'D', 'content' => 'd', 'addedDate' => "{$day2} 00:00:00", 'editedDate' => "{$day1} 00:00:00", 'vision' => 'rnd'),
+    array('id' => 805, 'objectType' => 'task',     'objectID' => 5, 'title' => 'E', 'content' => 'e', 'addedDate' => "{$tomorrow} 00:00:00", 'editedDate' => "{$day1} 00:00:00", 'vision' => 'rnd'),
+    array('id' => 806, 'objectType' => 'bug',      'objectID' => 6, 'title' => 'F', 'content' => 'f', 'addedDate' => "{$day1} 00:00:00", 'editedDate' => "{$day1} 00:00:00", 'vision' => 'lite'),
 );
 foreach($rows as $row) $tester->dao->insert(TABLE_SEARCHINDEX)->data($row)->exec();
 

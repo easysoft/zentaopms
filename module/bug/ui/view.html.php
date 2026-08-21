@@ -12,19 +12,6 @@ declare(strict_types=1);
 namespace zin;
 global $app;
 
-include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
-if($app->tab == 'devops')
-{
-    query('#heading')->append(
-        dropmenu
-        (
-            set::module('repo'),
-            set::tab('repo'),
-            set::url(createLink('repo', 'ajaxGetDropMenu', "objectID=0&module=repo&method=review"))
-        )
-    );
-}
-
 /* 检查是否需要确认撤销/移除。*/
 /* Build confirmeObject. */
 if($this->config->edition == 'ipd')
@@ -44,7 +31,9 @@ jsVar('isInModal',        isInModal());
 jsVar('executions',       $executions);
 jsVar('disableExecution', $lang->project->disableExecution);
 
-$canModify    = !empty($project) ? common::canModify('project', $project) : true;
+$canModify = $app->tab == 'project' && !empty($project) ? common::canModify('project', $project) : true;
+if($canModify && $app->tab == 'execution' && !empty($execution)) $canModify = common::canModify('execution', $execution);
+
 $isInModal    = isInModal();
 $canCreateBug = $canModify && $this->app->tab != 'devops' && hasPriv('bug', 'create');
 $canViewRepo  = hasPriv('repo', 'revision');

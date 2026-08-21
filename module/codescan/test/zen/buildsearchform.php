@@ -20,8 +20,14 @@ cid=0
 su('admin');
 $test = new codescanZenTest();
 
-r(is_null($test->buildSearchFormTest(array('module' => 'codescan', 'params' => array()), 0, 'url'))) && p() && e('1');
-r(is_null($test->buildSearchFormTest(array('module' => 'codescan'), 1, ''))) && p() && e('1');
-r(is_null($test->buildSearchFormTest(array('module' => 'codescan'), 0, 'url2'))) && p() && e('1');
-r(is_null($test->buildSearchFormTest(array('module' => 'codescan'), 0, 'url3'))) && p() && e('1');
-r(is_null($test->buildSearchFormTest(array('module' => 'codescan'), '0', 'url4'))) && p() && e('1');
+$searchConfig = array(
+    'module' => 'codescan',
+    'fields' => array('name' => 'Name'),
+    'params' => array('type' => array('values' => array('all' => 'All', 'bug' => 'Bug')))
+);
+
+r(is_null($test->buildSearchFormTest($searchConfig, 0, 'url'))) && p() && e('1');
+r(is_null($test->buildSearchFormTest($searchConfig, 1, ''))) && p() && e('1');
+r(is_null($test->buildSearchFormTest($searchConfig, 0, 'url2'))) && p() && e('1');
+r(is_null($test->buildSearchFormTest($searchConfig, 0, 'url3'))) && p() && e('1');
+r(is_null($test->buildSearchFormTest($searchConfig, '0', 'url4'))) && p() && e('1');

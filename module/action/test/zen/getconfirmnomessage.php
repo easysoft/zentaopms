@@ -8,7 +8,7 @@ timeout=0
 cid=14970
 
 - 步骤1：名称和代码都重复 @系统内已有同名、同代号的产品，恢复后名称为"product_1"、代号为"PD0001_1"。
-- 步骤2：仅名称重复 @系统内已有同名的，恢复后名称为"story_1"。
+- 步骤2：仅名称重复 @系统内已有同名的研发需求，恢复后名称为"story_1"。
 - 步骤3：仅代码重复 @系统内已有同名、同代号的任务，恢复后名称为"T0001_1"、代号为"T0001_1"。
 - 步骤4：名称和代码都不重复 @0
 - 步骤5：代码为空的情况下仅名称重复 @系统内已有同名的Bug，恢复后名称为"bug_1"。
@@ -21,6 +21,14 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
+
+global $app, $lang;
+$app->loadLang('story');
+$app->loadLang('task');
+$app->loadLang('bug');
+$lang->story->common = '研发需求';
+$lang->task->common  = '任务';
+$lang->bug->common   = 'Bug';
 
 // 3. 创建测试实例（变量名与模块名一致）
 $actionTest = new actionZenTest();

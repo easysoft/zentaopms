@@ -572,6 +572,16 @@ function getAppCode(urlOrModuleName, defaultCode)
     }
     if(moduleName === 'user')
     {
+        if(methodLowerCase === 'deny')
+        {
+            const deniedModule = link.params.$1;
+            if(deniedModule)
+            {
+                const deniedApp = navGroup[deniedModule] || deniedModule;
+                if(apps.map[deniedApp] || allAppsItemsMap.has(deniedApp)) return deniedApp;
+            }
+            return 'my';
+        }
         if(['todo', 'todocalendar', 'effortcalendar', 'effort', 'task', 'todo', 'story', 'bug', 'testtask', 'testcase', 'execution', 'dynamic', 'profile', 'view', 'issue', 'risk'].includes(methodLowerCase)) return 'system';
     }
     if(moduleName === 'my')
@@ -597,7 +607,7 @@ function getAppCode(urlOrModuleName, defaultCode)
         if(methodLowerCase === 'browsetask') return 'execution';
         if(methodLowerCase === 'browsegroup') return 'bi';
     }
-    if(['ai', 'zai', 'aiteammate', 'aitask'].includes(moduleName)) return 'aiapp';
+    if(['ai', 'zai', 'aiteammate', 'aitask', 'aiprocedure', 'aiworkbench'].includes(moduleName)) return 'aiapp';
 
     code = navGroup[moduleName] || moduleName || urlOrModuleName;
     return apps.map[code] ? code : defaultCode;

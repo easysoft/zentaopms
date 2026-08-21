@@ -14,7 +14,7 @@ zenData('user')->gen('10');
 zenData('userview')->gen('0');
 zenData('product')->gen('0');
 zenData('testcase')->gen('0');
-zenData('mr')->gen('0');
+zenData('ops_ppm')->gen('0');
 zenData('requirement')->gen('0');
 zenData('workflow')->gen('0');
 zenData('action')->gen('0');

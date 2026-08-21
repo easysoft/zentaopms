@@ -296,10 +296,10 @@ $lang->execution->treeViewTask              = 'Tree View Task';
 $lang->execution->treeViewStory             = 'Tree View Story';
 $lang->execution->storyKanban               = 'Story Kanban';
 $lang->execution->storySort                 = 'Rank Story';
-$lang->execution->importPlanStory           = "{$lang->executionCommon} is created!\nDo you want to import {$lang->common->story} that have been linked to the plan? Only active %s can be imported.";
-$lang->execution->importEditPlanStory       = "{$lang->executionCommon} is edited!\nDo you want to import {$lang->common->story} that have been linked to the plan? The %s in the draft will be automatically filtered out when imported.";
-$lang->execution->importBranchPlanStory     = "{$lang->executionCommon} is created!\nDo you want to import {$lang->common->story} that have been linked to the plan? Only the activation %s of the branch associated with this " . $lang->executionCommon. ' will be associated with the import';
-$lang->execution->importBranchEditPlanStory = "{$lang->executionCommon} is edited!\nDo you want to import {$lang->common->story} that have been linked to the plan? Only the activation %s of the branch associated with this " . $lang->executionCommon. ' will be associated with the import';
+$lang->execution->importPlanStory           = "{$lang->executionCommon} is created!\nDo you want to import %s that have been linked to the plan? Only active %s can be imported.";
+$lang->execution->importEditPlanStory       = "{$lang->executionCommon} is edited!\nDo you want to import %s that have been linked to the plan? The draft %s will be automatically filtered out when imported.";
+$lang->execution->importBranchPlanStory     = "{$lang->executionCommon} is created!\nDo you want to import %s that have been linked to the plan? Only the active %s of the branch associated with this " . $lang->executionCommon. ' will be associated with the import';
+$lang->execution->importBranchEditPlanStory = "{$lang->executionCommon} is edited!\nDo you want to import %s that have been linked to the plan? Only the active %s of the branch associated with this " . $lang->executionCommon. ' will be associated with the import';
 $lang->execution->needLinkProducts          = "The execution has not been linked with any {$lang->productCommon}, and the related functions cannot be used. Please link the {$lang->productCommon} first and try again.";
 $lang->execution->iteration                 = 'Iterations';
 $lang->execution->iterationInfo             = '%s Iterations';
@@ -565,8 +565,22 @@ $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList[
 $lang->execution->featureBar['all']['delayed']   = $lang->execution->delayed;
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
-$lang->execution->featureBar['bug']['all']        = 'All';
-$lang->execution->featureBar['bug']['unresolved'] = 'Active';
+$lang->execution->featureBar['bug']['all']          = 'Tous';
+$lang->execution->featureBar['bug']['unclosed']     = 'Non fermés';
+$lang->execution->featureBar['bug']['openedbyme']   = 'Détectés par moi';
+$lang->execution->featureBar['bug']['assigntome']   = 'Affectés à moi';
+$lang->execution->featureBar['bug']['resolvedbyme'] = 'Résolus par moi';
+$lang->execution->featureBar['bug']['assignedbyme'] = 'AssignedByMe';
+$lang->execution->featureBar['bug']['more']         = $lang->more;
+
+$lang->execution->moreSelects['bug']['more']['unresolved']    = 'Actifs';
+$lang->execution->moreSelects['bug']['more']['unconfirmed']   = 'Non confirmés';
+$lang->execution->moreSelects['bug']['more']['assigntonull']  = 'Non affectés';
+$lang->execution->moreSelects['bug']['more']['longlifebugs']  = 'Persistant';
+$lang->execution->moreSelects['bug']['more']['toclosed']      = 'A Fermer';
+$lang->execution->moreSelects['bug']['more']['postponedbugs'] = 'Reporté';
+$lang->execution->moreSelects['bug']['more']['overduebugs']   = 'Retard';
+$lang->execution->moreSelects['bug']['more']['needconfirm']   = 'Story Changée';
 
 $lang->execution->featureBar['build']['all'] = 'Build List';
 

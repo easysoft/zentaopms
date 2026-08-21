@@ -8,8 +8,13 @@ zenData('action')->loadYaml('action')->gen(25);
 zenData('actionrecent')->gen(0);
 zenData('product')->loadYaml('product')->gen(2);
 zenData('project')->loadYaml('execution')->gen(111);
-zenData('repo')->loadYaml('repo')->gen(3);
-zenData('pipeline')->gen(1);
+zenData('ops_repo')->loadYaml('repo')->gen(3);
+$providerTable = zenData('ops_provider');
+$providerTable->id->range('1');
+$providerTable->type->range('gitlab');
+$providerTable->name->range('server1');
+$providerTable->deleted->range('0');
+$providerTable->gen(1);
 zenData('projectproduct')->loadYaml('projectproduct')->gen(1);
 zenData('module')->loadYaml('module')->gen(3);
 zenData('review')->loadYaml('review')->gen(2);
@@ -23,6 +28,10 @@ zenData('file')->gen(1);
 zenData('doclib')->loadYaml('doclib')->gen(2);
 zenData('productplan')->loadYaml('productplan')->gen(2);
 zenData('task')->loadYaml('task')->gen(2);
+
+/* repo无服务器的镜像库校验：repo1无服务器，repo2、repo3挂接server1。 */
+$tester->dao->update(TABLE_REPO)->set('mirror')->eq('1')->set('providerID')->eq('999')->where('id')->eq('1')->exec();
+$tester->dao->update(TABLE_REPO)->set('mirror')->eq('1')->set('providerID')->eq('1')->where('id')->in('2,3')->exec();
 
 /**
 
@@ -53,7 +62,7 @@ cid=14934
 - 测试还原action 22, objectType scene 的数据。 @1
 - 测试还原action 23, objectType doc 的数据。 @1
 - 测试还原action 24, objectType productplan 的数据。 @1
-- 测试还原action 25, objectType task 的数据。 @0
+- 测试还原action 25, objectType task 的数据。 @1
 
 */
 

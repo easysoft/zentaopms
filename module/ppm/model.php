@@ -376,11 +376,11 @@ class ppmModel extends model
         if($type == 'task') $orderBy = str_replace('title_', 'name_', $orderBy);
 
         return $this->dao->select('t1.*')->from($this->config->objectTables[$type])->alias('t1')
-            ->leftJoin(TABLE_RELATION)->alias('t2')->on('t1.id=t2.BID')
+            ->leftJoin(TABLE_RELATION)->alias('t2')->on('t1.id=t2.`BID`')
             ->where('t2.relation')->eq('interrated')
-            ->andWhere('t2.AType')->eq($this->moduleName)
-            ->andWhere('t2.AID')->eq($ppmID)
-            ->andWhere('t2.BType')->eq($type)
+            ->andWhere('t2.`AType`')->eq($this->moduleName)
+            ->andWhere('t2.`AID`')->eq($ppmID)
+            ->andWhere('t2.`BType`')->eq($type)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
@@ -401,10 +401,10 @@ class ppmModel extends model
     {
         if(!$module) $module = $this->moduleName;
         return $this->dao->select("t2.id,t2.title,t2.status")->from(TABLE_RELATION)->alias('t1')
-            ->leftJoin(TABLE_PPM)->alias('t2')->on('t1.AID = t2.id')
-            ->where('t1.AType')->eq($module)
-            ->andWhere('t1.BType')->eq($objectType)
-            ->andWhere('t1.BID')->eq($objectID)
+            ->leftJoin(TABLE_PPM)->alias('t2')->on('t1.`AID` = t2.id')
+            ->where('t1.`AType`')->eq($module)
+            ->andWhere('t1.`BType`')->eq($objectType)
+            ->andWhere('t1.`BID`')->eq($objectID)
             ->andWhere('t2.id')->ne(0)
             ->fetchAll('id');
     }
@@ -769,12 +769,12 @@ class ppmModel extends model
             if(!empty($commits->pager) && $commits->pager->pageSize < 100) break;
         }
 
-        $relationList = $this->dao->select('t1.BID as id, t1.BType as type')->from(TABLE_RELATION)->alias('t1')
-            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.AID = t2.id')
+        $relationList = $this->dao->select('t1.`BID` as id, t1.`BType` as type')->from(TABLE_RELATION)->alias('t1')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.`AID` = t2.id')
             ->where('t2.revision')->in(array_column($commitList, 'sha'))
             ->andWhere('t2.repo')->eq(zget($repo, 'id', 0))
-            ->andWhere('t1.AType')->eq('revision')
-            ->beginIF($type)->andWhere('t1.BType')->eq($type)->fi()
+            ->andWhere('t1.`AType`')->eq('revision')
+            ->beginIF($type)->andWhere('t1.`BType`')->eq($type)->fi()
             ->fetchGroup('type', 'id');
 
         $objectList = array();
@@ -945,10 +945,10 @@ class ppmModel extends model
      */
     public function getReviewResults(array $ppmList, int $repoID): array
     {
-        $reviewers = $this->dao->select('distinct t1.*, t2.reviewFlowID')->from(TABLE_PPMREVIEWERS)->alias('t1')
+        $reviewers = $this->dao->select('distinct t1.*, t2.`reviewFlowID`')->from(TABLE_PPMREVIEWERS)->alias('t1')
             ->leftJoin(TABLE_PPM)->alias('t2')
-            ->on('t1.requestID', 't2.id')
-            ->where('t1.requestID')->in($ppmList)
+            ->on('t1.`requestID`', 't2.id')
+            ->where('t1.`requestID`')->in($ppmList)
             ->fetchAll();
         $repoFlows = $this->loadModel('reporeviewflow')->getList($repoID);
 

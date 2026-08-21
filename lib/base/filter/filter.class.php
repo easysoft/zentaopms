@@ -1067,7 +1067,7 @@ class baseFixer
         $fields = $this->processFields($fieldName);
         foreach($fields as $fieldName)
         {
-            if(!isset($this->stripedFields[$fieldName]) and (!defined('RUN_MODE') or RUN_MODE != 'admin'))
+            if(!isset($this->stripedFields[$fieldName]) and !helper::isRunMode('admin'))
             {
                 $this->data->$fieldName = self::stripDataTags($this->data->$fieldName, $allowedTags, $attributes);
 
@@ -1122,9 +1122,16 @@ class baseFixer
             $purifier = new HTMLPurifier($purifierConfig);
             $htmlDef  = $purifierConfig->getHTMLDefinition(true);
 
-            /* Keep mention metadata on span.mention-label. */
+            /*
+             * Keep mention metadata on span for every editor field in one request.
+             * Register these before the first purify(); HTMLPurifier finalizes the
+             * definition then, so later addAttribute() calls would be ignored.
+             */
             $defaultAttributes = array(
                 'a|target|Enum#_blank,_self,_target,_top',
+                'span|data-id|Text',
+                'span|data-type|Text',
+                'span|data-label|Text',
             );
 
             foreach($defaultAttributes as $attribute)
@@ -1132,22 +1139,6 @@ class baseFixer
                 list($element, $name, $values) = explode('|', $attribute);
                 $htmlDef->addAttribute($element, $name, $values);
                 $registeredAttributes[$attribute] = true;
-            }
-        }
-
-        /* Allow all data-* attributes that appear on span.mention-label. */
-        if(preg_match_all('/<span\b[^>]*class=(["\'])[^"\']*\bmention-label\b[^"\']*\1[^>]*>/i', $data, $spanMatches))
-        {
-            foreach($spanMatches[0] as $spanTag)
-            {
-                if(!preg_match_all('/\s(data-[a-z0-9:_-]+)\s*=/i', $spanTag, $dataAttributes)) continue;
-                foreach($dataAttributes[1] as $dataAttribute)
-                {
-                    $attribute = "span|{$dataAttribute}|Text";
-                    if(isset($registeredAttributes[$attribute])) continue;
-                    $htmlDef->addAttribute('span', $dataAttribute, 'Text');
-                    $registeredAttributes[$attribute] = true;
-                }
             }
         }
 

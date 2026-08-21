@@ -523,10 +523,13 @@ class kanbanModel extends model
         if(dao::isError()) return false;
 
         $cardID = $this->dao->lastInsertID();
-        $this->loadModel('action')->create('kanbanCard', $cardID, 'created');
+        $actionID = $this->loadModel('action')->create('kanbanCard', $cardID, 'created');
         $this->file->saveUpload('kanbancard', $cardID);
         $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
         $this->addKanbanCell((int)$card->kanban, (int)$this->post->lane, $columnID, 'common', (string)$cardID);
+
+        $card->id = $cardID;
+        $this->loadModel('message')->sendMentionNotice('kanban', 'createCard', $actionID, $card);
 
         return $cardID;
     }
@@ -1288,7 +1291,7 @@ class kanbanModel extends model
             $creators = array();
             if($fromType == 'productplan' || $fromType == 'release')
             {
-                $creators = $this->dao->select('objectID, actor')->from(TABLE_ACTION)
+                $creators = $this->dao->select('`objectID`, actor')->from(TABLE_ACTION)
                     ->where('objectID')->in(array_keys($objectCards))
                     ->andWhere('objectType')->eq($fromType)
                     ->andWhere('action')->eq('opened')
@@ -2469,8 +2472,8 @@ class kanbanModel extends model
 
         foreach($defaults as $type => $lane)
         {
-            /* 只有综合、需求、设计阶段，才可关联业需、用需。 */
-            if($execution->type != 'stage' && !in_array($execution->attribute, array('mix', 'request', 'design')) && in_array($type, array('epic', 'requirement'))) continue;
+            /* 阶段可关联业需、用需，非阶段跳过。 */
+            if($execution->type != 'stage' && in_array($type, array('epic', 'requirement'))) continue;
 
             $lane->type      = $type;
             $lane->execution = $execution->id;
@@ -2982,9 +2985,15 @@ class kanbanModel extends model
         $this->dao->update(TABLE_KANBANCARD)->set('progress')->eq($this->post->progress ? $this->post->progress : 0)->set('status')->eq('doing')->where('id')->eq($cardID)->exec();
         $card = $this->getCardByID($cardID);
 
-        $changes = common::createChanges($oldCard, $card);
-        $actionID = $this->loadModel('action')->create('kanbanCard', $cardID, 'activated');
+        $changes  = common::createChanges($oldCard, $card);
+        $actionID = $this->loadModel('action')->create('kanbanCard', $cardID, 'activated', $this->post->comment);
         $this->action->logHistory($actionID, $changes);
+
+        if($this->post->comment)
+        {
+            $card->comment = $this->post->comment;
+            $this->loadModel('message')->sendMentionNotice('kanban', 'activateCard', $actionID, $card);
+        }
 
         return true;
     }
@@ -3043,6 +3052,10 @@ class kanbanModel extends model
         {
             $actionID = $this->loadModel('action')->create('kanbanCard', $cardID, 'edited');
             $this->action->logHistory($actionID, $changes);
+
+            $card->id     = $cardID;
+            $card->kanban = $oldCard->kanban;
+            $this->loadModel('message')->sendMentionNotice('kanban', 'editCard', $actionID, $card, $oldCard);
         }
 
         return true;

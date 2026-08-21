@@ -111,7 +111,7 @@ $config->testcase->form->review = array();
 $config->testcase->form->review['reviewedDate'] = array('required' => false, 'type' => 'date',   'default' => $now);
 $config->testcase->form->review['result']       = array('required' => true,  'type' => 'string', 'default' => '');
 $config->testcase->form->review['reviewedBy']   = array('required' => false, 'type' => 'array',  'default' => array(''));
-$config->testcase->form->review['comment']      = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->review['comment']      = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
 
 $config->testcase->form->showImport = array();
 $config->testcase->form->showImport['rawID']        = array('required' => false, 'type' => 'int',    'default' => 0);

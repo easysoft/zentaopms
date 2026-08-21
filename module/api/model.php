@@ -507,10 +507,10 @@ class apiModel extends model
         }
         if($strJoin) $where .= 'and (' . implode(' or ', $strJoin) . ')';
 
-        return $this->dao->select('object.id,object.lib,spec.name,spec.type,spec.desc,spec.attribute,spec.version,spec.addedBy,spec.addedDate,user.realname as addedName')
+        return $this->dao->select('object.id,object.lib,spec.name,spec.type,spec.desc,spec.attribute,spec.version,spec.`addedBy`,spec.`addedDate`,user.realname as addedName')
             ->from(TABLE_APISTRUCT)->alias('object')
             ->leftJoin(TABLE_APISTRUCT_SPEC)->alias('spec')->on('object.name = spec.name')
-            ->leftJoin(TABLE_USER)->alias('user')->on('user.account = spec.addedBy')
+            ->leftJoin(TABLE_USER)->alias('user')->on('user.account = spec.`addedBy`')
             ->where($where)
             ->orderBy($orderBy)
             ->page($pager)

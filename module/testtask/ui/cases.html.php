@@ -15,6 +15,7 @@ $app->loadLang('zanode');
 jsVar('automation',     !empty($automation) ? $automation->id : 0);
 jsVar('runCaseConfirm', $lang->zanode->runCaseConfirm);
 jsVar('canImportToLib', helper::hasFeature('caselib'));
+jsVar('caseChangeTip', $lang->testtask->caseChangeTip);
 
 $canCreateSuite = hasPriv('testsuite', 'create') && helper::hasFeature('testsuite');
 $canGroupCase   = hasPriv('testtask', 'groupcase');
@@ -26,7 +27,9 @@ $canBatchEdit   = hasPriv('testcase', 'batchEdit');
 $canBatchUnlink = hasPriv('testtask', 'batchUnlinkCases');
 $canBatchAssign = hasPriv('testtask', 'batchAssign');
 $canBatchRun    = hasPriv('testtask', 'batchRun');
-$canBatchAction = ($canBeChanged && ($canBatchEdit || $canBatchUnlink || $canBatchAssign || $canBatchRun));
+$canBatchConfirmCaseChange = hasPriv('testtask', 'batchConfirmCaseChange');
+$canBatchIgnoreCaseChange  = hasPriv('testtask', 'batchIgnoreCaseChange');
+$canBatchAction = ($canBeChanged && ($canBatchEdit || $canBatchUnlink || $canBatchAssign || $canBatchRun || $canBatchConfirmCaseChange || $canBatchIgnoreCaseChange));
 
 $closeLink = inlink('cases', "taskID={$task->id}&browseType=bymodule&param=0&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}");
 sidebar
@@ -75,7 +78,7 @@ featureBar
             set::items($suiteItems)
         )
     ) : null,
-    li(searchToggle(set::open($browseType == 'bysearch')))
+    li(searchToggle(set::module('testtaskTestcase'), set::open($browseType == 'bysearch')))
 );
 
 $viewItems   = array();
@@ -131,17 +134,24 @@ toolbar
 $footToolbar = null;
 if($canBatchAction)
 {
+    $navActions = array();
+    if($canBatchUnlink) $navActions[] = array('text' => $lang->unlink, 'innerClass' => 'batch-btn not-open-url ajax-btn', 'data-url' => inlink('batchUnlinkCases', "taskID={$task->id}"));
+    if($canBatchConfirmCaseChange) $navActions[] = array('text' => $lang->testcase->confirmLibcaseChange, 'innerClass' => 'batch-btn not-open-url ajax-btn', 'data-url' => inlink('batchConfirmCaseChange', "taskID={$task->id}"));
+    if($canBatchIgnoreCaseChange) $navActions[] = array('text' => $lang->testcase->ignoreLibcaseChange, 'innerClass' => 'batch-btn not-open-url ajax-btn', 'data-url' => inlink('batchIgnoreCaseChange', "taskID={$task->id}"));
+
     $footToolbar = array('items' => array());
-    if($canBatchEdit && $canBatchUnlink)
+    if($canBatchEdit && !empty($navActions))
     {
         $footToolbar['items'][] = array('type' => 'btn-group', 'items' => array
         (
             array('text' => $lang->edit, 'className' => 'batch-btn not-open-url secondary', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID={$productID}&branch=all")),
-            array('caret' => 'up', 'className' => 'secondary', 'items' => array(array('text' => $lang->unlink, 'innerClass' => 'batch-btn not-open-url ajax-btn', 'data-url' => inlink('batchUnlinkCases', "taskID={$task->id}"))), 'data-placement' => 'top-start')
+            array('caret' => 'up', 'className' => 'secondary', 'items' => $navActions, 'data-placement' => 'top-start')
         ));
     }
-    if($canBatchEdit && !$canBatchUnlink) $footToolbar['items'][] = array('text' => $lang->edit, 'className' => 'batch-btn not-open-url', 'btnType' => 'secondary', 'data-url' => $this->createLink('testcase', 'batchEdit', "productID={$productID}&branch=all"));
+    if($canBatchEdit && empty($navActions)) $footToolbar['items'][] = array('text' => $lang->edit, 'className' => 'batch-btn not-open-url', 'btnType' => 'secondary', 'data-url' => $this->createLink('testcase', 'batchEdit', "productID={$productID}&branch=all"));
     if(!$canBatchEdit && $canBatchUnlink) $footToolbar['items'][] = array('text' => $lang->unlink, 'className' => 'batch-btn not-open-url', 'btnType' => 'secondary', 'data-url' => inlink('batchUnlinkCases', "taskID={$task->id}"));
+    if(!$canBatchEdit && $canBatchConfirmCaseChange) $footToolbar['items'][] = array('text' => $lang->testcase->confirmLibcaseChange, 'className' => 'batch-btn not-open-url', 'btnType' => 'secondary', 'data-url' => inlink('batchConfirmCaseChange', "taskID={$task->id}"));
+    if(!$canBatchEdit && $canBatchIgnoreCaseChange) $footToolbar['items'][] = array('text' => $lang->testcase->ignoreLibcaseChange, 'className' => 'batch-btn not-open-url', 'btnType' => 'secondary', 'data-url' => inlink('batchIgnoreCaseChange', "taskID={$task->id}"));
     if($canBatchAssign)
     {
         $pinyinItems = common::convert2Pinyin($assignedToList);
@@ -170,7 +180,7 @@ $runs = initTableData($runs, $cols);
 $runs = array_map(
     function($run)
     {
-        if(isset($run->version) && isset($run->caseVersion) && $run->version < $run->caseVersion) $run->status = 'changed';
+        if(isset($run->caseStatus) && $run->caseStatus == 'normal' && isset($run->version) && isset($run->caseVersion) && $run->version < $run->caseVersion) $run->status = 'changed';
         if($run->isScene) unset($run->actions);
         return $run;
     },

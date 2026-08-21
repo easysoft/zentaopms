@@ -84,6 +84,8 @@ class testreport extends control
      * @param  int    $objectID
      * @param  string $objectType
      * @param  int    $extra
+     * @param  string $browseType
+     * @param  int    $queryID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -91,7 +93,7 @@ class testreport extends control
      * @access public
      * @return void
      */
-    public function browse(int $objectID = 0, string $objectType = 'product', int $extra = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $objectID = 0, string $objectType = 'product', int $extra = 0, string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if(strpos('product|execution|project', $objectType) === false) return $this->send(array('result' => 'fail', 'message' => 'Type Error!'));
 
@@ -99,7 +101,17 @@ class testreport extends control
         $object   = $this->{$objectType}->getById($objectID);
         if($extra) $task = $this->testtask->getByID($extra);
 
-        $reports = $this->testreportZen->getReportsForBrowse($objectID, $objectType, $extra, $orderBy, $recTotal, $recPerPage, $pageID);
+        $browseType = $browseType ? strtolower($browseType) : 'all';
+        $queryID    = $browseType == 'bysearch' ? $queryID : 0;
+
+        /* Build the search form. */
+        $actionURL = $this->createLink('testreport', 'browse', "objectID={$objectID}&objectType={$objectType}&extra={$extra}&browseType=bysearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        if($objectType == 'project')   $actionURL = $this->createLink('project', 'testreport', "objectID={$objectID}&objectType={$objectType}&extra={$extra}&browseType=bysearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        if($objectType == 'execution') $actionURL = $this->createLink('execution', 'testreport', "objectID={$objectID}&objectType={$objectType}&extra={$extra}&browseType=bysearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+
+        $this->testreport->buildTestreportSearchForm($objectID, $objectType, $queryID, $actionURL);
+
+        $reports = $this->testreportZen->getReportsForBrowse($objectID, $objectType, $extra, $browseType, $queryID, $orderBy, $recTotal, $recPerPage, $pageID);
         if(empty($reports) && common::hasPriv('testreport', 'create'))
         {
             $param = '';
@@ -130,6 +142,8 @@ class testreport extends control
         $this->view->objectType   = $objectType;
         $this->view->object       = $object;
         $this->view->extra        = $extra;
+        $this->view->browseType   = $browseType;
+        $this->view->queryID      = $queryID;
         $this->view->users        = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->tasks        = $tasks ? $this->loadModel('testtask')->getPairsByList($tasks) : array();
         $this->view->executions   = $this->dao->select('id,name')->from(TABLE_PROJECT)->fetchPairs();

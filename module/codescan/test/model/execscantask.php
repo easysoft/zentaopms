@@ -13,7 +13,7 @@ timeout=0
 cid=0
 
 - 测试空plan和空branch >> 0
-- 测试空plan和空branch返回0 >> empty,empty,empty,0
+- 测试零plan和空branch返回0 >> 0,0,empty,0
 - 测试plan有属性 >> 0
 - 测试带branch参数 >> 0
 - 测试带branch参数返回0 >> 3,3,main,0
@@ -23,8 +23,9 @@ cid=0
 $test = new codescanModelTest();
 
 $plan1 = new stdclass(); $plan1->id = 1; $plan1->repoID = 1;
-r($test->execscantaskTest($plan1, '')) && p() && e('0');
-r($test->execscantaskTest(new stdclass(), '')) && p() && e('0');
+r($test->execScanTaskTest($plan1, '')) && p() && e('0');
+$planEmpty = (object)array('id' => 0, 'repoID' => 0);
+r($test->execScanTaskTest($planEmpty, '')) && p() && e('0');
 $plan2 = new stdclass(); $plan2->id = 2; $plan2->repoID = 2;
 r($test->execscantaskTest($plan2, '')) && p() && e('0');
 $plan3 = new stdclass(); $plan3->id = 3; $plan3->repoID = 3;

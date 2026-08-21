@@ -711,7 +711,7 @@ class executionTao extends executionModel
      */
     protected function updateTeam(int $executionID, object $oldExecution, object $execution)
     {
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return;
+        if(helper::isApiRequest()) return;
 
         /* Get team and language item. */
         $this->loadModel('user');

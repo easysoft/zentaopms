@@ -9,25 +9,45 @@ title=测试 repoZen->linkobject();
 timeout=0
 cid=0
 
-- 调用linkObjectTest验证返回 @1
-- 第二次调用返回一致 @1
-- 第三次调用返回一致 @1
-- 第四次调用返回一致 @1
-- 第五次调用返回一致 @1
+- 执行test模块的linkObjectTest方法，参数是1, 'HEAD', 'story', $post  @1
+- 执行test模块的linkObjectTest方法，参数是1, 'HEAD', 'story', $post  @1
+- 执行test模块的linkObjectTest方法，参数是1, 'HEAD', 'story', $post  @1
+- 执行test模块的linkObjectTest方法，参数是1, 'HEAD', 'story', $post  @1
+- 执行test模块的linkObjectTest方法，参数是1, 'HEAD', 'story', $post  @1
 
 */
 
+zenData('ops_repo')->gen(0);
+zenData('ops_repohistory')->gen(0);
+
+$repo = zenData('ops_repo');
+$repo->id->range('1');
+$repo->spaceID->range('1');
+$repo->product->range('1');
+$repo->name->range('repo-zen-link');
+$repo->scmType->range('git');
+$repo->gitUID->range('repo-zen-link-gituid');
+$repo->acl->range('private');
+$repo->status->range('active');
+$repo->deleted->range('0');
+$repo->gen(1);
+
+$history = zenData('ops_repohistory');
+$history->id->range('1');
+$history->repo->range('1');
+$history->revision->range('HEAD');
+$history->commit->range('1');
+$history->comment->range('repo zen link commit');
+$history->committer->range('admin');
+$history->time->range('20260806 000000:0')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+$history->gen(1);
+
 su('admin');
 $test = new repoZenTest();
+$post = array('stories' => array(), 'bugs' => array(), 'tasks' => array());
 
-$r1 = $test->linkObjectTest(1, "HEAD", "story");
-$r2 = $test->linkObjectTest(1, "HEAD", "story");
-$r3 = $test->linkObjectTest(1, "HEAD", "story");
-$r4 = $test->linkObjectTest(1, "HEAD", "story");
-$r5 = $test->linkObjectTest(1, "HEAD", "story");
-
-r(isset($r1) || is_null($r1) ? '1' : '0') && p() && e('1');
-r(isset($r2) || is_null($r2) ? '1' : '0') && p() && e('1');
-r(isset($r3) || is_null($r3) ? '1' : '0') && p() && e('1');
-r(isset($r4) || is_null($r4) ? '1' : '0') && p() && e('1');
-r(isset($r5) || is_null($r5) ? '1' : '0') && p() && e('1');
+r($test->linkObjectTest(1, 'HEAD', 'story', $post)) && p() && e('1');
+r($test->linkObjectTest(1, 'HEAD', 'story', $post)) && p() && e('1');
+r($test->linkObjectTest(1, 'HEAD', 'story', $post)) && p() && e('1');
+r($test->linkObjectTest(1, 'HEAD', 'story', $post)) && p() && e('1');
+r($test->linkObjectTest(1, 'HEAD', 'story', $post)) && p() && e('1');

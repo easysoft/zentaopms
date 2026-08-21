@@ -33,6 +33,7 @@ class deliverable extends wg
         $app->loadLang('deliverable');
         jsVar('createByTemplate', $lang->deliverable->createByTemplate);
         jsVar('createDoc',        $lang->doc->create);
+        jsVar('createLinkDoc',    zget($lang->doc->createList, 'url', 'Link'));
         jsVar('uploadFile',       $lang->doc->uploadFile);
         jsVar('deleteItem',       $lang->delete);
         jsVar('otherLang',        $lang->other);
@@ -69,18 +70,20 @@ class deliverable extends wg
         $app->loadLang('file');
         $app->loadLang('deliverable');
 
-        $formName      = $this->prop('formName') ? $this->prop('formName') : 'deliverable';
-        $isTemplate    = $this->prop('isTemplate') ? $this->prop('isTemplate') : false;
-        $onlyShow      = $this->prop('onlyShow') ? $this->prop('onlyShow') : false;
-        $extraCategory = $this->prop('extraCategory') ? $this->prop('extraCategory') : array_column($this->prop('items'), 'category');
-        $categories    = $this->prop('categories');
-        $projectID     = $this->prop('projectID');
-        $createDocUrl  = $this->prop('createDocUrl');
-        $uploadDocUrl  = $this->prop('uploadDocUrl');
-        $onRenderItem  = $this->prop('onRenderItem') ? $this->prop('onRenderItem') : null;
+        $formName         = $this->prop('formName') ? $this->prop('formName') : 'deliverable';
+        $isTemplate       = $this->prop('isTemplate') ? $this->prop('isTemplate') : false;
+        $onlyShow         = $this->prop('onlyShow') ? $this->prop('onlyShow') : false;
+        $extraCategory    = $this->prop('extraCategory') ? $this->prop('extraCategory') : array_column($this->prop('items'), 'category');
+        $categories       = $this->prop('categories');
+        $projectID        = $this->prop('projectID');
+        $createDocUrl     = $this->prop('createDocUrl');
+        $createLinkDocUrl = $this->prop('createLinkDocUrl') ? $this->prop('createLinkDocUrl') : '';
+        $uploadDocUrl     = $this->prop('uploadDocUrl');
+        $onRenderItem     = $this->prop('onRenderItem') ? $this->prop('onRenderItem') : null;
 
         jsVar('addFile', $isTemplate ? $lang->deliverable->files : $lang->doc->addFile);
         jsVar('createDocUrl', $createDocUrl);
+        jsVar('createLinkDocUrl', $createLinkDocUrl);
         jsVar('uploadDocUrl', $uploadDocUrl);
         jsVar('isTemplate', $isTemplate);
         jsVar('onlyShow', $onlyShow);

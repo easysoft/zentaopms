@@ -20,7 +20,26 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备（根据需要配置）
-// Note: Testing without extensive data generation to avoid database issues
+$file = zenData('file');
+$file->id->range('1-3,9');
+$file->pathname->range('202301/test1.jpg,202301/test2.png,202301/test3.gif,202301/test9.pdf');
+$file->title->range('图片1,图片2,图片3,文档9');
+$file->extension->range('jpg,png,gif,pdf');
+$file->size->range('1024,2048,3072,4096');
+$file->objectType->range('mail');
+$file->objectID->range('1-4');
+$file->addedBy->range('admin');
+$file->addedDate->range('`2023-01-01 10:00:00`');
+$file->gen(4);
+
+/* 生成与图片记录对应的真实物理文件。Create real files matching the image records. */
+$uploadRoot = $tester->app->getAppRoot() . 'www/data/upload/1/';
+foreach(array('202301/test1.jpg', '202301/test2.png', '202301/test3.gif') as $filePath)
+{
+    $realPath = $uploadRoot . $filePath;
+    if(!is_dir(dirname($realPath))) mkdir(dirname($realPath), 0777, true);
+    file_put_contents($realPath, 'unittest image');
+}
 
 // 3. 用户登录（选择合适角色）
 su('admin');

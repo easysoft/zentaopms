@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
-
 jsVar('viewParams', "caseID={$case->id}&version={$version}&from={$from}&taskID={$taskID}&stepsType=");
 
 $isInModal = isInModal();
@@ -230,6 +228,9 @@ $tabs['caseRelatedList'] = setting()
     ->title($lang->testcase->legendOther)
     ->control('caseRelatedList');
 
+$caseVersion = 0;
+if(in_array($from, array('testsuite', 'testtask'))) $caseVersion = '{version}';
+
 detail
 (
     set::urlFormatter(array('{caseID}' => $case->caseID, '{version}' => $case->version, '{product}' => $case->product, '{branch}' => $case->branch, '{module}' => $case->module, '{id}' => $case->id, '{lib}' => $case->lib, '{confirmeObjectID}' => isset($case->confirmeObjectID) ? $case->confirmeObjectID : 0)),
@@ -239,6 +240,6 @@ detail
     set::sections($sections),
     set::tabs($tabs),
     set::actions($actions),
-    set::linkCreator(createLink('testcase', 'view', "caseID={id}&version=0&from={$from}&taskID={$taskID}&stepsType={$stepsType}&suiteID={$suiteID}")),
+    set::linkCreator(createLink('testcase', 'view', "caseID={id}&version={$caseVersion}&from={$from}&taskID={$taskID}&stepsType={$stepsType}&suiteID={$suiteID}")),
     $versionBtn
 );

@@ -23,9 +23,9 @@ class pipelineModel extends model
      */
     public function getByID(int $id): object|false
     {
-        $pipeline = $this->dao->select('t1.*, t2.`variables`, t2.`data`, t3.`id` AS triggerID, t3.`event`, t3.`cron`, t3.`comment`')->from(TABLE_PIPELINE)->alias('t1')
-            ->leftJoin(TABLE_PIPELINECONTENT)->alias('t2')->on('t1.id=t2.pipelineID')
-            ->leftJoin(TABLE_PIPELINETRIGGER)->alias('t3')->on('t1.id=t3.pipelineID')
+        $pipeline = $this->dao->select('t1.*, t2.`variables`, t2.`data`, t3.`id` AS `triggerID`, t3.`event`, t3.`cron`, t3.`comment`')->from(TABLE_PIPELINE)->alias('t1')
+            ->leftJoin(TABLE_PIPELINECONTENT)->alias('t2')->on('t1.id=t2.`pipelineID`')
+            ->leftJoin(TABLE_PIPELINETRIGGER)->alias('t3')->on('t1.id=t3.`pipelineID`')
             ->where('t1.id')->eq($id)
             ->fetch();
         if(empty($pipeline)) return false;
@@ -54,17 +54,17 @@ class pipelineModel extends model
      */
     public function getList(int $spaceID = 0, int $repoID = 0, $type = '', string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        $pipelines = $this->dao->select('t1.*, t2.spaceID AS space, t2.name AS repoName, t3.variables as variables, t4.name AS providerName')->from(TABLE_PIPELINE)->alias('t1')
-            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repoID=t2.id')
-            ->leftJoin(TABLE_PIPELINECONTENT)->alias('t3')->on('t1.id=t3.pipelineID')
-            ->leftJoin(TABLE_PROVIDER)->alias('t4')->on('t1.providerID=t4.id')
+        $pipelines = $this->dao->select('t1.*, t2.`spaceID` AS space, t2.name AS `repoName`, t3.variables as variables, t4.name AS providerName')->from(TABLE_PIPELINE)->alias('t1')
+            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.`repoID`=t2.id')
+            ->leftJoin(TABLE_PIPELINECONTENT)->alias('t3')->on('t1.id=t3.`pipelineID`')
+            ->leftJoin(TABLE_PROVIDER)->alias('t4')->on('t1.`providerID`=t4.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.name')->ne('_codescan')
-            ->beginIF($repoID)->andWhere('t1.repoID')->eq($repoID)->fi()
+            ->beginIF($repoID)->andWhere('t1.`repoID`')->eq($repoID)->fi()
             ->beginIF(!empty($pipelineQuery))->andWhere($pipelineQuery)->fi()
-            ->beginIF($spaceID)->andWhere('t1.spaceID')->eq($spaceID)->fi()
-            ->beginIF($type == 'repo')->andWhere('t1.repoID')->ne(0)->fi()
-            ->beginIF($type == 'space')->andWhere('t1.repoID')->eq(0)->fi()
+            ->beginIF($spaceID)->andWhere('t1.`spaceID`')->eq($spaceID)->fi()
+            ->beginIF($type == 'repo')->andWhere('t1.`repoID`')->ne(0)->fi()
+            ->beginIF($type == 'space')->andWhere('t1.`repoID`')->eq(0)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -108,14 +108,14 @@ class pipelineModel extends model
     public function getExecutionList(int $spaceID = 0, int $repoID = 0, string $type = '', int $pipelineID = 0, string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->select('t1.*, t2.`scope`, t2.`spaceID` AS space, t2.`repoID` AS repo, t2.`name` AS pipelineName')->from(TABLE_PIPELINEEXEC)->alias('t1')
-            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.pipelineID=t2.id')
+            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.`pipelineID`=t2.id')
             ->where('1=1')
-            ->beginIF($repoID)->andWhere('t2.repoID')->eq($repoID)->fi()
+            ->beginIF($repoID)->andWhere('t2.`repoID`')->eq($repoID)->fi()
             ->beginIF(!empty($pipelineQuery))->andWhere($pipelineQuery)->fi()
-            ->beginIF($spaceID)->andWhere('t2.spaceID')->eq($spaceID)->fi()
-            ->beginIF($type == 'repo' && !$pipelineID)->andWhere('t2.repoID')->ne(0)->fi()
-            ->beginIF($type == 'space' && !$pipelineID)->andWhere('t2.repoID')->eq(0)->fi()
-            ->beginIF($pipelineID)->andWhere('t1.pipelineID')->eq($pipelineID)->fi()
+            ->beginIF($spaceID)->andWhere('t2.`spaceID`')->eq($spaceID)->fi()
+            ->beginIF($type == 'repo' && !$pipelineID)->andWhere('t2.`repoID`')->ne(0)->fi()
+            ->beginIF($type == 'space' && !$pipelineID)->andWhere('t2.`repoID`')->eq(0)->fi()
+            ->beginIF($pipelineID)->andWhere('t1.`pipelineID`')->eq($pipelineID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -1123,7 +1123,7 @@ class pipelineModel extends model
     public function getExternalPipeline(array $statusList = array()): array
     {
         return $this->dao->select('t1.*, t2.`providerID`, t2.`externalPipeline`, t2.`engine`')->from(TABLE_PIPELINEEXEC)->alias('t1')
-            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.pipelineID=t2.id')
+            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.`pipelineID`=t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t2.engine')->in('gitlab,jenkins')
             ->andWhere('t1.number')->ne(0)

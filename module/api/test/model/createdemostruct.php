@@ -35,8 +35,8 @@ su('admin');
 $apiTest = new apiModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($apiTest->createDemoStructTest(1, '16.0', 'admin')) && p() && e('1'); // 步骤1：正常的libID创建演示数据结构
-r($apiTest->createDemoStructTest(0, '16.0', 'admin')) && p() && e('1'); // 步骤2：无效libID创建演示数据结构
-r($apiTest->createDemoStructTest(2, '16.0', 'admin')) && p() && e('1'); // 步骤3：使用libID=2创建演示数据结构
-r($apiTest->createDemoStructTest(3, '16.0', 'user')) && p() && e('1'); // 步骤4：不同用户账户创建演示数据结构
-r($apiTest->createDemoStructTest(1, '16.0', 'test')) && p() && e('1'); // 步骤5：使用test用户创建演示数据结构
+r($apiTest->createDemoStructTest(1, 'v1', 'admin')) && p() && e('1'); // 步骤1：正常的libID创建演示数据结构
+r($apiTest->createDemoStructTest(0, 'v1', 'admin')) && p() && e('1'); // 步骤2：无效libID创建演示数据结构
+r($apiTest->createDemoStructTest(2, 'v1', 'admin')) && p() && e('1'); // 步骤3：使用libID=2创建演示数据结构
+r($apiTest->createDemoStructTest(3, 'v1', 'user')) && p() && e('1'); // 步骤4：不同用户账户创建演示数据结构
+r($apiTest->createDemoStructTest(1, 'v1', 'test')) && p() && e('1'); // 步骤5：使用test用户创建演示数据结构

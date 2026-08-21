@@ -265,7 +265,7 @@ class myModel extends model
     public function getAssignedByMe(string $account, ?object $pager = null, string $orderBy = 'id_desc', string $objectType = ''): array
     {
         $module       = in_array($objectType, array('epic', 'requirement')) ? 'story' : $objectType;
-        $objectIdList = $this->dao->select('objectID')->from(TABLE_ACTION)
+        $objectIdList = $this->dao->select('`objectID`')->from(TABLE_ACTION)
             ->where('actor')->eq($account)
             ->andWhere('objectType')->eq($module)
             ->andWhere('action')->eq('assigned')
@@ -590,6 +590,34 @@ class myModel extends model
         unset($this->config->bug->search['fields']['branch']);
 
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
+    }
+
+    /**
+     * 构造测试单列表的搜索表单。
+     * Build testtask search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildTesttaskSearchForm(int $queryID, string $actionURL, bool $cacheSearchFunc = true)
+    {
+        $searchConfig           = $this->config->testtask->search;
+        $searchConfig['module'] = 'myTesttask';
+        if($cacheSearchFunc)
+        {
+            $this->cacheSearchFunc($searchConfig['module'], __METHOD__, func_get_args());
+            return $searchConfig;
+        }
+        $searchConfig['actionURL'] = $actionURL;
+        $searchConfig['queryID']   = $queryID;
+
+        $searchConfig['params']['product']['values']   = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $searchConfig['params']['project']['values']   = $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->bug->allProject);
+        $searchConfig['params']['execution']['values'] = $this->loadModel('execution')->getPairs(0, 'all', 'multiple');
+        $this->loadModel('search')->setSearchParams($searchConfig);
+        return $searchConfig;
     }
 
     /*
@@ -1197,7 +1225,7 @@ class myModel extends model
 
         if($checkExists) return !empty($reviewList);
 
-         $actions = $this->dao->select('objectID, `date`')->from(TABLE_ACTION)->where('objectType')->eq('demand')->andWhere('objectID')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
+         $actions = $this->dao->select('`objectID`, `date`')->from(TABLE_ACTION)->where('objectType')->eq('demand')->andWhere('objectID')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
          foreach($actions as $demandID => $date) $reviewList[$demandID]->time = $date;
 
          return array_values($reviewList);
@@ -1265,7 +1293,7 @@ class myModel extends model
 
         if($checkExists) return !empty($reviewList);
 
-        $actions = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('objectID')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs();
+        $actions = $this->dao->select('`objectID`,`date`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('objectID')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs();
         foreach($actions as $storyID => $date) $reviewList[$storyID]->time = $date;
 
         return array_values($reviewList);
@@ -1341,8 +1369,8 @@ class myModel extends model
         if(!$server) return array();
 
         $ppms = $this->dao->select("t1.`id`, t1.`title`, IF(t1.`flow`='1', 'pullreq', 'ppm') AS type, t1.`createdDate` AS time, 0 AS product, 0 AS project, t3.definition, t1.`reviewStatus`")->from(TABLE_PPM)->alias('t1')
-            ->leftJoin(TABLE_PPMREVIEWERS)->alias('t2')->on('t1.id = t2.requestID')
-            ->leftJoin(TABLE_REVIEWFLOW)->alias('t3')->on('t3.repo = t1.repoID')
+            ->leftJoin(TABLE_PPMREVIEWERS)->alias('t2')->on('t1.id = t2.`requestID`')
+            ->leftJoin(TABLE_REVIEWFLOW)->alias('t3')->on('t3.repo = t1.`repoID`')
             ->where('t1.status')->ne('closed')
             ->andWhere('((t2.account')->eq($this->app->user->account)
             ->andWhere('t2.decision')->eq('pending')->markRight(1)
@@ -1444,7 +1472,6 @@ class myModel extends model
             ->beginIF(!helper::hasFeature('project_opportunity'))->andWhere('objectType')->ne('opportunity')->fi()
             ->beginIF($this->config->systemMode == 'light' || (!helper::hasFeature('program') && $this->config->edition != 'ipd'))->andWhere('objectType')->ne('charter')->fi()
             ->orderBy("t2.{$orderBy}")
-            ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll();
 
         $objectIdList = array();
@@ -1452,7 +1479,7 @@ class myModel extends model
 
         $this->loadModel('flow');
         $this->loadModel('workflowaction');
-        $flows       = $this->dao->select('module,`table`,name,titleField,app')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectIdList))->andWhere('vision')->eq($this->config->vision)->fetchAll('module');
+        $flows       = $this->dao->select('module,`table`,name,`titleField`,app')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectIdList))->andWhere('vision')->eq($this->config->vision)->fetchAll('module');
         $objectGroup = array();
         foreach($objectIdList as $objectType => $idList)
         {
@@ -1560,14 +1587,14 @@ class myModel extends model
             ->where('actor')->eq($this->app->user->account)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere($condition)
-            ->groupBy('objectType,objectID')
+            ->groupBy('`objectType`,`objectID`')
             ->fetchPairs();
 
         $objectTypeList = array();
-        $actions        = $this->dao->select('objectType,objectID,actor,action,`date`,extra')->from(TABLE_ACTION)->where('id')->in($actionIdList)->orderBy($orderBy)->fetchAll();
+        $actions        = $this->dao->select('`objectType`,`objectID`,actor,action,`date`,extra')->from(TABLE_ACTION)->where('id')->in($actionIdList)->orderBy($orderBy)->fetchAll();
         foreach($actions as $action) $objectTypeList[$action->objectType][] = $action->objectID;
 
-        $flows       = $this->config->edition == 'open' ? array() : $this->dao->select('module,`table`,name,titleField')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectTypeList))->andWhere('buildin')->eq(0)->fetchAll('module');
+        $flows       = $this->config->edition == 'open' ? array() : $this->dao->select('module,`table`,name,`titleField`')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectTypeList))->andWhere('buildin')->eq(0)->fetchAll('module');
         $objectGroup = array();
         foreach($objectTypeList as $objectType => $idList)
         {
@@ -1752,7 +1779,9 @@ class myModel extends model
         $url      = sprintf($apiRoot->url, '/user/keys');
         $result   = json_decode(common::http($url, null, array(), $apiRoot->header, 'json'));
         $response = $this->gitfox->getResponse($result);
-        return isset($response->data) ? $response->data : $response;
+        $sshList  = isset($response->data) ? $response->data : $response;
+
+        return is_array($sshList) ? $sshList : array();
     }
 
     /**

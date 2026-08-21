@@ -113,6 +113,7 @@ $config->productplan->view->dtable->fieldList['id']['group']    = 1;
 
 $config->productplan->view->dtable->fieldList['title']['title']        = $lang->story->title;
 $config->productplan->view->dtable->fieldList['title']['type']         = 'title';
+$config->productplan->view->dtable->fieldList['title']['nestedToggle'] = true;
 $config->productplan->view->dtable->fieldList['title']['link']         = array('url' => helper::createLink('story', 'view', 'storyID={id}'));
 $config->productplan->view->dtable->fieldList['title']['sortType']     = true;
 $config->productplan->view->dtable->fieldList['title']['minWidth']     = '342';

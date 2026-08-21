@@ -318,7 +318,11 @@ function toggleStageBy()
     });
 
     if(chosenProducts > 1)  $('.stageByBox').removeClass('hidden');
-    if(chosenProducts <= 1) $('.stageByBox').addClass('hidden');
+    if(chosenProducts <= 1)
+    {
+        $('.stageByBox').addClass('hidden');
+        $('input[name=stageBy][value=project]').prop('checked', true);
+    }
 }
 
 window.getDateMenu = function()

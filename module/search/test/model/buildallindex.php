@@ -7,13 +7,13 @@ title=测试 searchModel::buildAllIndex();
 timeout=0
 cid=18292
 
-- 测试从空类型开始构建时返回首个有数据的对象类型 @build
-- 测试从空类型开始构建时返回正确的数量 @2
-- 测试按 lastID 分页构建 build 索引时返回正确的数量 @1
-- 测试按 lastID 分页构建 build 索引时返回正确的最后 ID @2
-- 测试从 task 类型开始构建时返回 task 类型 @task
-- 测试从 task 类型开始构建时返回正确的数量 @3
-- 测试从 aiapp 类型开始且后续无数据时返回完成状态 @1
+- 测试从空类型开始构建时返回首个有数据的对象类型属性type @build
+- 测试从空类型开始构建时返回正确的数量属性count @2
+- 测试按 lastID 分页构建 build 索引时返回正确的数量属性count @1
+- 测试按 lastID 分页构建 build 索引时返回正确的最后 ID属性lastID @2
+- 测试从 task 类型开始构建时返回 task 类型属性type @task
+- 测试从 task 类型开始构建时返回正确的数量属性count @3
+- 测试从 aiapp 类型开始且后续无数据时返回完成状态属性finished @1
 
 */
 
@@ -51,6 +51,8 @@ $buildFromStart = $search->buildAllIndexTest();
 $buildNextPage  = $search->buildAllIndexTest('build', 1);
 $taskBatch      = $search->buildAllIndexTest('task');
 if(isset($config->search->fields->aiapp)) $tester->dao->delete()->from(TABLE_AI_MINIPROGRAM)->exec();
+global $config;
+$config->search->fields = (object)array('aiapp' => isset($config->search->fields->aiapp) ? $config->search->fields->aiapp : (object)array());
 $finishedResult = $search->buildAllIndexTest('aiapp');
 
 r($buildFromStart) && p('type') && e('build');      // 测试从空类型开始构建时返回首个有数据的对象类型

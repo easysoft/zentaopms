@@ -45,8 +45,17 @@ $lang->aiapp->viewAiToolkit      = '查看智能工具';
 
 $lang->aiapp->id                 = 'ID';
 $lang->aiapp->model              = '模型名称';
+$lang->aiapp->modelID            = '模型ID';
+$lang->aiapp->abilities          = '能力';
 $lang->aiapp->converse           = '开始会话';
 $lang->aiapp->pageSummary        = '共%s项';
+$lang->aiapp->searchModels       = '搜索模型';
+$lang->aiapp->abilityTypes       = [];
+
+$lang->aiapp->abilityTypes['chat']             = '聊天';
+$lang->aiapp->abilityTypes['function-calling'] = '工具调用';
+$lang->aiapp->abilityTypes['reasoning']        = '推理';
+$lang->aiapp->abilityTypes['embedding']        = '向量化';
 
 $lang->aiapp->tips = new stdClass();
 $lang->aiapp->tips->noData = '暂无数据';
@@ -65,7 +74,7 @@ $lang->aiapp->langData->doc                 = '文档';
 $lang->aiapp->langData->design              = '设计';
 $lang->aiapp->langData->feedback            = '反馈';
 $lang->aiapp->langData->currentDocContent   = '当前文档';
-$lang->aiapp->langData->globalMemoryTitle   = '禅道';
+$lang->aiapp->langData->globalMemoryTitle   = '全部';
 $lang->aiapp->langData->zaiConfigNotValid   = '尚未进行ZAI配置，请联系管理员进行<a href="{zaiConfigUrl}">ZAI配置</a>。<br>若已完成相关配置，请尝试重新加载页面。';
 $lang->aiapp->langData->unauthorizedError   = '授权失败，无效的API密钥，请联系管理员进行<a href="{zaiConfigUrl}">ZAI配置</a>。<br>若已完成相关配置，请尝试重新加载页面。';
 $lang->aiapp->langData->processDataPrefix   = "要进行处理的数据如下：\n{data}";
@@ -82,6 +91,23 @@ $lang->aiapp->langData->searchingKLibs      = '正在查找知识库...';
 $lang->aiapp->langData->recentChats         = '最近聊天';
 $lang->aiapp->langData->aiTeammateTasks     = '数字员工任务';
 $lang->aiapp->langData->searchTasks         = '搜索数字员工任务';
+$lang->aiapp->langData->formFillTitle       = '表单填充';
+$lang->aiapp->langData->formFillUserMessage = '请根据当前页面信息填写表单';
+$lang->aiapp->langData->formPageContext     = '当前页面上下文';
+$lang->aiapp->langData->formCurrentData     = '当前表单数据';
+$lang->aiapp->langData->formFillableFields  = '可填充字段';
+$lang->aiapp->langData->formFieldDefinition = '字段说明';
+$lang->aiapp->langData->formRequiredField   = '必填';
+$lang->aiapp->langData->formReturnJSONArray = '请返回 JSON 数组，每个数组元素对应表中的一行数据，键名对应上述可填充字段名。必填字段必须提供值。';
+$lang->aiapp->langData->formZentaoAPITip    = "请先使用 zentao-api-readonly 工具获取所需的上下文数据，然后使用 submitFormData 工具返回填充后的表单数据。必填字段必须提供值。\n通常 submitFormData 只需要调用一次，除非用户特殊要求提供多个方案。";
+$lang->aiapp->langData->formResultGenerated = '表单数据已生成。';
+$lang->aiapp->langData->formCurrentTarget   = '当前';
+$lang->aiapp->langData->stepDescription     = '步骤描述';
+$lang->aiapp->langData->expectDescription   = '预期结果';
+
+$lang->aiapp->langData->submitFormDisplayName = '提交表单数据';
+$lang->aiapp->langData->submitFormDescription = '将填充后的表单数据返回给用户';
+$lang->aiapp->langData->vectorizedData        = '向量化数据';
 
 $lang->aiapp->toolkitTitle = '禅道智能工具箱';
 $lang->aiapp->toolkitItems = array();

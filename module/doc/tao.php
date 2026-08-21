@@ -12,23 +12,6 @@ declare(strict_types=1);
 class docTao extends docModel
 {
     /**
-     * 获取编辑过的文档ID列表。
-     * Get the list of doc id list that have been edited.
-     *
-     * @access protected
-     * @return array
-     */
-    protected function getEditedDocIdList(): array
-    {
-        return $this->dao->select('objectID')->from(TABLE_ACTION)
-            ->where('objectType')->eq('doc')
-            ->andWhere('action')->in('edited')
-            ->andWhere('actor')->eq($this->app->user->account)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->fetchPairs();
-    }
-
-    /**
      * 获取已排序的执行数据。
      * Get ordered executions.
      *
@@ -142,7 +125,7 @@ class docTao extends docModel
      */
     protected function getOpenedDocs(array $hasPrivDocIdList, string $sort, ?object $pager = null): array
     {
-        return $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
+        return $this->dao->select('t1.*, t2.name as libName, t2.type as `objectType`')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.lib')->ne(0)
@@ -167,14 +150,14 @@ class docTao extends docModel
      */
     protected function getEditedDocs(string $sort, ?object $pager = null): array
     {
-        $docIdList = $this->dao->select('objectID')->from(TABLE_ACTION)
+        $docIdList = $this->dao->select('`objectID`')->from(TABLE_ACTION)
             ->where('objectType')->eq('doc')
             ->andWhere('actor')->eq($this->app->user->account)
             ->andWhere('action')->eq('edited')
             ->andWhere('vision')->eq($this->config->vision)
             ->fetchAll('objectID');
 
-        return $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
+        return $this->dao->select('t1.*, t2.name as libName, t2.type as `objectType`')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.id')->in(array_keys($docIdList))

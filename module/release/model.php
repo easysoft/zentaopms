@@ -35,7 +35,7 @@ class releaseModel extends model
             ->fetch();
         if(!$release) return false;
 
-        $release->builds  = $this->dao->select('id, branch, filePath, scmPath, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+        $release->builds  = $this->dao->select('id, branch, `filePath`, `scmPath`, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
         $release->project = trim($release->project, ',');
         $release->branch  = trim($release->branch, ',');
         $release->build   = trim($release->build, ',');
@@ -552,6 +552,14 @@ class releaseModel extends model
 
         $this->processRelated($oldRelease->id, $release);
 
+        /* Update system latestRelease when the system is changed. */
+        if($release->system != $oldRelease->system)
+        {
+            $this->loadModel('system');
+            if($oldRelease->system) $this->system->setSystemRelease($oldRelease->system, $oldRelease->id);
+            if($release->system) $this->system->setSystemRelease($release->system, $oldRelease->id, $oldRelease->createdDate);
+        }
+
         $release = $this->file->replaceImgURL($release, 'desc');
         return common::createChanges($oldRelease, $release);
     }
@@ -585,7 +593,7 @@ class releaseModel extends model
                 $stories  = trim(str_replace(',,', ',', $stories), ',');
                 if(empty($stories)) continue;
 
-                $openedByList   = $this->dao->select('openedBy')->from(TABLE_STORY)->where('id')->in($stories)->fetchPairs();
+                $openedByList   = $this->dao->select('`openedBy`')->from(TABLE_STORY)->where('id')->in($stories)->fetchPairs();
                 $notifyPersons += $openedByList;
             }
             elseif($notify == 'ET' && !empty($release->build))
@@ -670,7 +678,7 @@ class releaseModel extends model
                 /* Reset story stagedBy field for auto compute stage. */
                 $storyID = (int)$storyID;
                 $this->dao->update(TABLE_STORY)->set('stagedBy')->eq('')->where('id')->eq($storyID)->exec();
-                if($product->type != 'normal') $this->dao->update(TABLE_STORYSTAGE)->set('stagedBy')->eq('')->where('story')->eq($storyID)->andWhere('branch')->eq($release->branch)->exec();
+                if($product->type != 'normal') $this->dao->update(TABLE_STORYSTAGE)->set('stagedBy')->eq('')->where('story')->eq($storyID)->andWhere('branch')->in(explode(',', (string)$release->branch))->exec();
 
                 if($release->status == 'normal') $this->story->setStage($storyID);
 
@@ -845,7 +853,7 @@ class releaseModel extends model
     {
         $release = form::data($this->config->release->form->publish)->add('status', $status)->setIF($releasedDate, 'releasedDate', $releasedDate)->get();
 
-        $this->dao->update(TABLE_RELEASE)->data($release)->where('id')->eq($releaseID)->exec();
+        $this->dao->update(TABLE_RELEASE)->data($release, 'comment')->where('id')->eq($releaseID)->exec();
 
         if($status == 'normal') $this->setStoriesStage($releaseID);
         return !dao::isError();
@@ -1025,12 +1033,12 @@ class releaseModel extends model
         $stories = explode(',', trim($release->stories, ','));
         $bugs    = explode(',', trim($release->bugs, ','));
 
-        $storyNotifyList = $this->dao->select('id,title,notifyEmail')->from(TABLE_STORY)
+        $storyNotifyList = $this->dao->select('id,title,`notifyEmail`')->from(TABLE_STORY)
             ->where('id')->in($stories)
             ->andWhere('notifyEmail')->ne('')
             ->fetchGroup('notifyEmail', 'id');
 
-        $bugNotifyList = $this->dao->select('id,title,notifyEmail')->from(TABLE_BUG)
+        $bugNotifyList = $this->dao->select('id,title,`notifyEmail`')->from(TABLE_BUG)
             ->where('id')->in($bugs)
             ->andWhere('notifyEmail')->ne('')
             ->fetchGroup('notifyEmail', 'id');
@@ -1295,6 +1303,66 @@ class releaseModel extends model
 
             $this->loadModel('common')->saveQueryCondition($this->dao->get(), $type == 'linked' ? 'linkedBug' : 'leftBugs');
         }
+
+        return $bugs;
+    }
+
+    /**
+     * 获取发布关联的版本 ID 列表（含子发布）。
+     * Get build id list of a release.
+     *
+     * @param  object $release
+     * @access public
+     * @return array
+     */
+    public function getReleaseBuildIdList(object $release): array
+    {
+        $buildIdList = array_filter(explode(',', trim($release->build, ',')));
+        if(!empty($release->shadow)) $buildIdList[] = $release->shadow;
+
+        if(!empty($release->releases))
+        {
+            $linkedReleases = $this->getListByCondition(explode(',', $release->releases));
+            foreach($linkedReleases as $linkedRelease)
+            {
+                $buildIdList = array_merge($buildIdList, array_filter(explode(',', trim($linkedRelease->build, ','))));
+                if(!empty($linkedRelease->shadow)) $buildIdList[] = $linkedRelease->shadow;
+            }
+        }
+
+        return array_unique($buildIdList);
+    }
+
+    /**
+     * 获取发布逃逸的 Bug 列表。
+     * Get escaped bug list of a release.
+     *
+     * @param  object $release
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getEscapedBugList(object $release, string $orderBy = '', ?object $pager = null): array
+    {
+        if(!in_array($release->status, array('normal', 'terminate'))) return array();
+
+        $buildIdList = $this->getReleaseBuildIdList($release);
+        if(empty($buildIdList)) return array();
+
+        $conditions = array();
+        foreach($buildIdList as $buildID) $conditions[] = "FIND_IN_SET('{$buildID}', openedBuild)";
+
+        $bugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($release->product)
+            ->andWhere('openedDate')->ge($release->releasedDate)
+            ->andWhere('(' . implode(' OR ', $conditions) . ')')
+            ->beginIF($orderBy)->orderBy($orderBy)->fi()
+            ->page($pager)
+            ->fetchAll();
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'escapedBugs');
 
         return $bugs;
     }

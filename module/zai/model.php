@@ -114,6 +114,8 @@ class zaiModel extends model
         }
 
         if(!$includeAdmin) unset($setting->adminToken);
+        $setting->userAgent = $this->getUserAgent();
+        $setting->canAddSkill = common::hasPriv('ai', 'addSkill');
 
         return $setting;
     }
@@ -162,6 +164,65 @@ class zaiModel extends model
             $info->createdBy       = $this->app->user->account;
         }
         return $info;
+    }
+
+    /**
+     * 获取当前用户的ZAI agent。
+     * Get ZAI agent of current user.
+     *
+     * @access public
+     * @return string
+     */
+    public function getUserAgent(): string
+    {
+        $agent = $this->dao->select('agent')->from(TABLE_AI_USERAGENT)->where('account')->eq($this->app->user->account)->fetch('agent');
+        return $agent ? $agent : '';
+    }
+
+    /**
+     * 创建当前用户的ZAI agent。
+     * Create ZAI agent of current user.
+     *
+     * @access public
+     * @param string $account
+     * @return string
+     */
+    public function createUserAgent(string $account): string
+    {
+        $setting = $this->getSetting(true);
+        $token   = $this->loadModel('ai')->generateToken($setting);
+        $baseUrl = $this->ai->getZaiBaseUrl($setting);
+        $user    = $this->loadModel('user')->getByID($account);
+        $skills  = $this->config->edition == 'open' ? [] : $this->loadModel('ai')->getSkills('private', 'active');
+        $header  = array(
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $token
+        );
+
+        $skillIdList = [];
+        foreach($skills as $skill) $skillIdList[] = $skill->skillID;
+
+        $data = array(
+            'name' => $user->realname,
+            'type' => 'custom',
+            'is_default' => false,
+            'execution_runtime' => 'pi_coding_agent',
+            'opencode_mode' => 'serve',
+            'skills' => $skillIdList // 创建agent的时候直接挂载技能
+        );
+
+        $url    = $baseUrl . '/v8/agents';
+        $result = $this->loadModel('ai')->http('POST', $url, $data, $header);
+
+        if(!$result) return '';
+
+        $result = json_decode($result, true);
+        if(empty($result['agent']['id'])) return '';
+
+        $userAgent = $this->dao->select('*')->from(TABLE_AI_USERAGENT)->where('account')->eq($account)->fetch();
+        if(!$userAgent) $this->dao->insert(TABLE_AI_USERAGENT)->data(array('account' => $account, 'agent' => $result['agent']['id']))->exec();
+
+        return $result['agent']['id'];
     }
 
     /**
@@ -269,7 +330,7 @@ class zaiModel extends model
         if($code == 404) return array('result' => 'fail', 'data' => null, 'message' => $this->lang->notFound, 'code' => $code);
         if($code == 401) return array('result' => 'fail', 'data' => null, 'message' => $this->lang->zai->authenticationFailed, 'code' => $code);
 
-        if($error || $code != 200)
+        if($error || $code < 200 || $code >= 300)
         {
             return array('result' => 'fail', 'data' => $data, 'code' => $code, 'postData' => $postData, 'message' => sprintf($this->lang->zai->callZaiAPIFailed, $url, ($this->app->config->debug ? $error : '') . "(code: $code, response: $response)"));
         }
@@ -648,6 +709,28 @@ class zaiModel extends model
             $project = isset($attrs['project']) ? $attrs['project'] : 0;
             if(!$project) $project = $this->dao->select('project')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch('project');
             $canView = strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false;
+        }
+        elseif($objectType === 'project') $canView = strpos(',' . $this->app->user->view->projects . ',', ",$objectID,") !== false;
+        elseif($objectType === 'execution') $canView = strpos(',' . $this->app->user->view->sprints . ',', ",$objectID,") !== false;
+        elseif($objectType === 'product') $canView = strpos(',' . $this->app->user->view->products . ',', ",$objectID,") !== false;
+        elseif($objectType === 'build')
+        {
+            $build = $this->dao->select('product,project,execution')->from(TABLE_BUILD)->where('id')->eq($objectID)->fetch();
+            if($build)
+            {
+                if(!empty($build->product))                $canView = strpos(',' . $this->app->user->view->products . ',', ",{$build->product},") !== false;
+                if(!$canView && !empty($build->project))   $canView = strpos(',' . $this->app->user->view->projects . ',', ",{$build->project},") !== false;
+                if(!$canView && !empty($build->execution)) $canView = strpos(',' . $this->app->user->view->sprints . ',', ",{$build->execution},") !== false;
+            }
+        }
+        elseif($objectType === 'testtask')
+        {
+            $testtask = $this->dao->select('product,execution')->from(TABLE_TESTTASK)->where('id')->eq($objectID)->fetch();
+            if($testtask)
+            {
+                if(!empty($testtask->product))                $canView = strpos(',' . $this->app->user->view->products . ',', ",{$testtask->product},") !== false;
+                if(!$canView && !empty($testtask->execution)) $canView = strpos(',' . $this->app->user->view->sprints . ',', ",{$testtask->execution},") !== false;
+            }
         }
         elseif($objectType === 'feedback')
         {
@@ -1307,6 +1390,24 @@ class zaiModel extends model
     }
 
     /**
+     * 将关联对象 ID 解析为名称。
+     * Resolve related object ID to display name.
+     *
+     * @param  mixed  $id
+     * @param  string $table
+     * @param  string $nameField
+     * @access public
+     * @return string
+     */
+    public static function resolveRelatedName($id, string $table, string $nameField = 'name'): string
+    {
+        if(!$id) return '';
+
+        global $app;
+        return $app->dao->select($nameField)->from($table)->where('id')->eq($id)->fetch($nameField);
+    }
+
+    /**
      * 将 STORY 对象转换为 Markdown 格式。
      * Convert story object to Markdown format.
      *
@@ -1323,7 +1424,7 @@ class zaiModel extends model
         $app->loadLang('story');
         $lang = $app->lang;
 
-        $spec = $app->dao->select('title,spec,verify,files,docs,docVersions')->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->fetch();
+        $spec = $app->dao->select('title,spec,verify,files,docs,`docVersions`')->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->fetch();
         if(empty($spec)) $spec = (object)array('title' => $story->title, 'spec' => '', 'verify' => '', 'files' => '', 'docs' => '', 'docVersions' => '');
 
         $planValue = $story->plan;
@@ -1646,6 +1747,11 @@ class zaiModel extends model
         $app->loadLang('doc');
         $lang = $app->lang;
 
+        $productName   = static::resolveRelatedName($doc->product ?? 0, TABLE_PRODUCT);
+        $projectName   = static::resolveRelatedName($doc->project ?? 0, TABLE_PROJECT);
+        $executionName = static::resolveRelatedName($doc->execution ?? 0, TABLE_EXECUTION);
+        $libName       = static::resolveRelatedName($doc->lib ?? 0, TABLE_DOCLIB);
+
         if(isset($doc->protocol) || !empty($doc->api))
         {
             $app->loadLang('api');
@@ -1654,8 +1760,8 @@ class zaiModel extends model
 
             $content[] = "# {$app->lang->api->common} #$doc->id $doc->title\n";
             $content[] = "## {$lang->doc->basicInfo}\n";
-            $content[] = "* {$lang->doc->product}: $doc->product";
-            $content[] = "* {$lang->doc->lib}: $doc->lib";
+            $content[] = "* {$lang->doc->product}: {$productName}";
+            $content[] = "* {$lang->doc->lib}: {$libName}";
             $content[] = "* {$app->lang->api->module}: $doc->module";
             $content[] = "* {$app->lang->api->title}: $doc->title";
             $content[] = "* {$app->lang->api->path}: $doc->path";
@@ -1665,7 +1771,6 @@ class zaiModel extends model
             $content[] = "* {$app->lang->api->status}: " . zget($app->lang->api->statusOptions, $doc->status);
             $content[] = "* {$app->lang->api->owner}: $doc->owner";
             $content[] = "* {$app->lang->api->version}: $doc->version";
-
             if(!empty($doc->params->header))
             {
                 $content[] = "\n## {$app->lang->api->header}\n";
@@ -1760,11 +1865,11 @@ class zaiModel extends model
             $content[] = "## {$lang->doc->basicInfo}\n";
             $content[] = "* {$lang->doc->title}: $docContent->title";
             $content[] = "* {$lang->doc->type}: " . zget($lang->doc->typeList, $doc->type);
-            $content[] = "* {$lang->doc->product}: $doc->product";
-            $content[] = "* {$lang->doc->project}: $doc->project";
-            $content[] = "* {$lang->doc->execution}: $doc->execution";
+            $content[] = "* {$lang->doc->product}: {$productName}";
+            $content[] = "* {$lang->doc->project}: {$projectName}";
+            $content[] = "* {$lang->doc->execution}: {$executionName}";
             $content[] = "* {$lang->doc->version}: $doc->version";
-            $content[] = "* {$lang->doc->lib}: $doc->lib";
+            $content[] = "* {$lang->doc->lib}: {$libName}";
             $content[] = "* {$lang->doc->module}: $doc->module";
 
             $content[] = "\n---\n";

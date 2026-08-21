@@ -558,7 +558,7 @@ class testcase extends control
         /* If testcase isn't exist, locate to qa-ndex.*/
         if(!$case)
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
             if(!$this->server->http_referer) return print(js::alert($this->lang->notFound) . js::locate($this->createLink('testcase', 'browse', '')));
             return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('testcase', 'browse'))));
         }
@@ -566,9 +566,9 @@ class testcase extends control
         $case->caseID = $case->id;
         $this->executeHooks($caseID);
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api' && !empty($this->app->version)) return $this->send(array('status' => 'success', 'case' => $case));
+        if(helper::isApiRequest() && !empty($this->app->version)) return $this->send(array('status' => 'success', 'case' => $case));
 
-        $this->testcaseZen->assignCaseForView($case, $from, $taskID);
+        $this->testcaseZen->assignCaseForView($case, $from, $taskID, $suiteID);
 
         $isLibCase = $case->lib && empty($case->product);
         /* 如果用例是在用例库内，指定相关变量。 */
@@ -601,7 +601,6 @@ class testcase extends control
             $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $case->branch, '');
         }
 
-        $this->view->suiteID   = $suiteID;
         $this->view->testcase  = $case;
         $this->view->stepsType = $stepsType;
         $this->view->version   = $version ? $version : $case->version;
@@ -646,7 +645,7 @@ class testcase extends control
             $message = $this->executeHooks($caseID);
             if(!$message) $message = $this->lang->saveSuccess;
 
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $caseID));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'success', 'data' => $caseID));
             if(isInModal() && $this->app->tab == 'my') return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
             $testtaskID = $from == 'testtask' && $this->session->testtaskID ? $this->session->testtaskID : 0;
             $locate     = $oldCase->lib ? $this->createLink('caselib', 'viewCase', "caseID={$caseID}") : $this->createLink('testcase', 'view', "caseID={$caseID}&version=0&from={$from}&testtaskID={$testtaskID}");
@@ -838,7 +837,7 @@ class testcase extends control
         $message = $this->executeHooks($caseID);
         if(!$message) $message = $this->lang->saveSuccess;
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
+        if(helper::isApiRequest()) return $this->send(array('status' => 'success'));
 
         $locateLink = $this->session->caseList ? $this->session->caseList : inlink('browse', "productID={$case->product}");
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => $locateLink));
@@ -1032,7 +1031,11 @@ class testcase extends control
     public function confirmChange(int $caseID, int $taskID = 0, string $from = 'view')
     {
         $case = $this->testcase->getById($caseID);
-        $this->dao->update(TABLE_TESTRUN)->set('version')->eq($case->version)->where('`case`')->eq($caseID)->exec();
+        $this->dao->update(TABLE_TESTRUN)
+            ->set('version')->eq($case->version)
+            ->where('`case`')->eq($caseID)
+            ->beginIF(!empty($taskID))->andWhere('task')->eq($taskID)->fi()
+            ->exec();
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $from == 'view' ? inlink('view', "caseID={$caseID}&version={$case->version}&from=testtask&taskID={$taskID}") : true));
     }
 
@@ -1047,65 +1050,24 @@ class testcase extends control
      */
     public function confirmLibcaseChange(int $caseID, int $libCaseID)
     {
-        /** 获取用例和用例库的用例，设置用例版本。 /
-        /* Get case and lib case, set case version.*/
-        $case    = $this->testcase->getById($caseID);
-        $libCase = $this->testcase->getById($libCaseID);
-        $version = $case->version + 1;
-
-        /* 更新用例基础信息。 */
-        /* Update case base information. */
-        $this->dao->update(TABLE_CASE)
-            ->set('version')->eq($version)
-            ->set('fromCaseVersion')->eq($version)
-            ->set('precondition')->eq($libCase->precondition)
-            ->set('title')->eq($libCase->title)
-            ->set('keywords')->eq($libCase->keywords)
-            ->where('id')->eq($caseID)
-            ->exec();
-
-        /* 更新用例步骤。 */
-        /* Update case steps. */
-        $parentSteps = array();
-        foreach($libCase->steps as $step)
-        {
-            $data = new stdclass();
-            $data->parent  = zget($parentSteps, $step->parent, 0);
-            $data->case    = $caseID;
-            $data->version = $version;
-            $data->type    = $step->type;
-            $data->desc    = $step->desc;
-            $data->expect  = $step->expect;
-            $this->dao->insert(TABLE_CASESTEP)->data($data)->exec();
-            $parentSteps[$step->id] = $this->dao->lastInsertID();
-        }
-
-        /* 更新用例文件。 */
-        /* Update case files. */
-        $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->eq($caseID)->exec();
-        foreach($libCase->files as $fileID => $file)
-        {
-            $fileName = pathinfo($file->pathname, PATHINFO_FILENAME);
-            $datePath = substr($file->pathname, 0, 6);
-            $realPath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" . $fileName;
-
-            $rand        = rand();
-            $newFileName = $fileName . 'copy' . $rand;
-            $newFilePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" .  $newFileName;
-            copy($realPath, $newFilePath);
-
-            $newFileName = $file->pathname;
-            $newFileName = str_replace('.', "copy$rand.", $newFileName);
-            $file->title = $file->name;
-
-            unset($file->id, $file->name, $file->realPath, $file->webPath, $file->url);
-            $file->objectID = $caseID;
-            $file->pathname = $newFileName;
-            $this->dao->insert(TABLE_FILE)->data($file)->exec();
-        }
-
+        $this->testcase->confirmLibcaseChange($caseID, $libCaseID);
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
+
+    /**
+     * 批量确认用例库用例的更新。
+     * Batch confirm case changed from lib.
+     *
+     * @access public
+     * @return void
+     */
+     public function batchConfirmLibcaseChange()
+     {
+         $caseIdList     = zget($_POST, 'caseIdList',  array());
+         $fromCaseIdList = $this->dao->select('id, fromCaseID')->from(TABLE_CASE)->where('id')->in($caseIdList)->andWhere('fromCaseID')->ne(0)->fetchPairs('id');
+         foreach($fromCaseIdList as $caseID => $libCaseID) $this->testcase->confirmLibcaseChange($caseID, $libCaseID);
+         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+     }
 
     /**
      * 忽略用例库用例的更新。
@@ -1121,6 +1083,25 @@ class testcase extends control
         $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($case->version)->where('id')->eq($caseID)->exec();
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
+
+    /**
+     * 批量忽略用例库用例的更新。
+     * Batch ignore case changed from lib.
+     *
+     * @access public
+     * @return void
+     */
+     public function batchIgnoreLibcaseChange()
+     {
+         $caseIdList = zget($_POST, 'caseIdList',  array());
+         $caseList   = $this->testcase->getByList($caseIdList, 'fromCaseID != 0');
+         foreach($caseList as $case)
+         {
+             if($case->fromCaseVersion == $case->version) continue;
+             $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($case->version)->where('id')->eq($case->id)->exec();
+         }
+         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+     }
 
     /**
      * Confirm story changes.
@@ -1790,7 +1771,7 @@ class testcase extends control
             $this->testcase->updateScene($scene, $oldScene);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $sceneID));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'success', 'data' => $sceneID));
 
             $locate = $this->session->caseList ? $this->session->caseList : inlink('browse', "productID={$scene->product}&branch={$scene->branch}&browseType=all&param={$scene->module}");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate));

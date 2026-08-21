@@ -33,9 +33,23 @@ $plan->branch = '';
 $plan->branchReg = '';
 $plan->excludePath = '';
 $plan->excludeFile = '';
+$emptyPlan = (object)array(
+    'solutions' => '',
+    'name' => '',
+    'repo' => 0,
+    'scope' => '',
+    'severity' => array(),
+    'type' => array(),
+    'metric' => array(),
+    'threshold' => array(),
+    'branch' => '',
+    'branchReg' => '',
+    'excludePath' => '',
+    'excludeFile' => ''
+);
 
 r(is_object($test->processPlanDataTest($plan))) && p() && e('1');
-r(is_object($test->processPlanDataTest(new stdclass()))) && p() && e('1');
+r(is_object($test->processPlanDataTest($emptyPlan))) && p() && e('1');
 r(is_object($test->processPlanDataTest($plan))) && p() && e('1');
-r(is_object($test->processPlanDataTest(new stdclass()))) && p() && e('1');
+r(is_object($test->processPlanDataTest($emptyPlan))) && p() && e('1');
 r(is_object($test->processPlanDataTest($plan))) && p() && e('1');

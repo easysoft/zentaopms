@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
+require_once dirname(dirname(dirname(__DIR__))) . DS . 'lib' . DS . 'zin' . DS . 'wg' . DS . 'aiagententry' . DS . 'v1.php';
 
 $isEn       = $app->getClientLang() == 'en';
 $storyTitle = $isEn ? $lang->common->stories : $lang->common->story;
@@ -274,7 +274,18 @@ row
                             toggle::tooltip(array('title' => $lang->project->subAclList[$project->acl], 'className' => 'text-gray border border-gray-300', 'type' => 'white', 'placement' => 'right'))
                         )
                     ),
-                    div(setClass('ai-menu-box flex-auto'))
+                    div
+                    (
+                        setClass('ai-menu-box flex-auto flex justify-end'),
+                        aiAgentEntry
+                        (
+                            set::module('project'),
+                            set::method('view'),
+                            set::type('detail'),
+                            set::objectID($project->id),
+                            set::objectVarName('project')
+                        )
+                    )
                 ),
                 div
                 (

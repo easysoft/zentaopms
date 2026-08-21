@@ -14,7 +14,7 @@ cid=18057
  - 第0条的parent属性 @0
  - 第0条的name属性 @LICENSE
  - 第0条的path属性 @LICENSE
-- 获取代码文件得提交信息数量 @1
+- 获取代码文件得提交信息数量大于1 @1
 - 获取svn代码文件得提交信息第一个文件夹信息
  - 第0条的id属性 @dGFn
  - 第0条的name属性 @tag
@@ -27,102 +27,68 @@ cid=18057
 
 */
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repouser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repobranch`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repofiles`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repohistory`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int NOT NULL DEFAULT 0,
-  `product` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `path` varchar(255) NOT NULL DEFAULT '',
-  `SCM` varchar(30) NOT NULL DEFAULT '',
-  `scmType` varchar(10) NOT NULL DEFAULT 'git',
-  `gitUID` char(42) NOT NULL DEFAULT '',
-  `acl` varchar(30) NOT NULL DEFAULT 'private',
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repouser` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `account` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repohistory` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` varchar(255) NOT NULL DEFAULT '',
-  `comment` text DEFAULT NULL,
-  `committer` varchar(255) NOT NULL DEFAULT '',
-  `time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repobranch` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` int unsigned NOT NULL DEFAULT 0,
-  `branch` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repofiles` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` int unsigned NOT NULL DEFAULT 0,
-  `path` varchar(255) NOT NULL DEFAULT '',
-  `parent` varchar(255) NOT NULL DEFAULT '',
-  `type` varchar(30) NOT NULL DEFAULT 'file',
-  `action` char(1) NOT NULL DEFAULT 'A',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+$repoData = zenData('ops_repo');
+$repoData->id->range('3-4');
+$repoData->spaceID->range('1{2}');
+$repoData->product->range('1{2}');
+$repoData->name->range('giteaRepo,svnRepo');
+$repoData->scmType->range('git,svn');
+$repoData->gitUID->range('filetree-gituid-3,filetree-gituid-4');
+$repoData->acl->range('private{2}');
+$repoData->status->range('active{2}');
+$repoData->deleted->range('0{2}');
+$repoData->gen(2);
 
-$repos = array(
-    array('id' => 3, 'spaceID' => 1, 'product' => '1', 'name' => 'giteaRepo', 'path' => 'http://repo.local/gitea', 'SCM' => 'Gitea', 'scmType' => 'git', 'gitUID' => 'uid3', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
-    array('id' => 4, 'spaceID' => 1, 'product' => '1', 'name' => 'svnRepo',   'path' => 'https://svn.qc.oop.cc/svn/unittest/', 'SCM' => 'Subversion', 'scmType' => 'svn', 'gitUID' => 'uid4', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
-);
-foreach($repos as $repoData)
+$repoUser = zenData('ops_repouser');
+$repoUser->repo->range('3-4');
+$repoUser->account->range('admin{2}');
+$repoUser->gen(2);
+
+$history = zenData('ops_repohistory');
+$history->id->range('1-2');
+$history->repo->range('3-4');
+$history->revision->range('git-tree,1');
+$history->commit->range('1-2');
+$history->comment->range('Add files,+ Add file.');
+$history->committer->range('admin{2}');
+$history->time->range('13,14')->prefix('2023-12-')->postfix(' 19:00:25');
+$history->gen(2);
+
+$file = zenData('ops_repofiles');
+$file->repo->range('3,3,4');
+$file->revision->range('1,1,2');
+$file->path->range('/LICENSE,/README.md,/tag/README.md');
+$file->oldPath->range('[]{3}');
+$file->parent->range('/,/,/tag');
+$file->type->range('file{3}');
+$file->action->range('A{3}');
+$file->gen(3);
+
+$entry = zenData('entry');
+$entry->name->range('GitFox');
+$entry->account->range('admin');
+$entry->code->range('gitfox');
+$entry->key->range('gitfox');
+$entry->freePasswd->range('1');
+$entry->ip->range('*');
+$entry->gen(1);
+
+class repoGetFileTreeHttpClient
 {
-    $tester->dao->insert(TABLE_REPO)->data((object)$repoData)->exec();
-    $tester->dao->insert(TABLE_DEVOPSREPOUSER)->data((object)array('repo' => $repoData['id'], 'account' => 'admin'))->exec();
+    public function request($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = true)
+    {
+        return json_encode(array('code' => 'success', 'data' => array('id' => 1, 'path' => 'space/repo', 'gitURL' => 'http://gitfox.test/space/repo.git', 'gitSSHURL' => 'ssh://git@gitfox.test/space/repo.git', 'importing' => false)));
+    }
 }
-
-$tester->dao->insert(TABLE_REPOHISTORY)->data((object)array('id' => 1, 'repo' => 3, 'revision' => 'git-tree', 'comment' => 'Add files', 'committer' => 'admin', 'time' => '2023-12-13 19:00:25'))->exec();
-$tester->dao->insert(TABLE_REPOHISTORY)->data((object)array('id' => 2, 'repo' => 4, 'revision' => '1', 'comment' => '+ Add file.', 'committer' => 'admin', 'time' => '2023-12-14 11:00:00'))->exec();
-
-$tester->dao->insert(TABLE_REPOFILES)->data((object)array('repo' => 3, 'revision' => 1, 'path' => '/LICENSE', 'parent' => '/', 'type' => 'file', 'action' => 'A'))->exec();
-$tester->dao->insert(TABLE_REPOFILES)->data((object)array('repo' => 3, 'revision' => 1, 'path' => '/README.md', 'parent' => '/', 'type' => 'file', 'action' => 'A'))->exec();
-$tester->dao->insert(TABLE_REPOFILES)->data((object)array('repo' => 4, 'revision' => 2, 'path' => '/tag/README.md', 'parent' => '/tag', 'type' => 'file', 'action' => 'A'))->exec();
 
 $repo = new repoModelTest();
-foreach($repos as $repoData)
-{
-    $repoID = $repoData['id'];
-    $repo->setGitfoxRepoCache($repoID, (object)array(
-        'id'     => $repoID,
-        'path'   => "space/repo{$repoID}",
-        'gitURL' => "http://gitfox.local/space/repo{$repoID}.git",
-    ));
-}
+$oldHttpClient = common::$httpClient;
+common::$httpClient = new repoGetFileTreeHttpClient();
+r($repo->getFileTreeTest(3, '')) && p('0:parent,name,path') && e('0,LICENSE,LICENSE');
+r($repo->getFileTreeCountGreaterThanTest(3, '', 1)) && p() && e('1');
 
-$result = $repo->getFileTreeTest(3, '');
-r($result)            && p('0:parent,name,path') && e('0,LICENSE,LICENSE');
-r(count($result) > 1) && p()                     && e('1');
+r($repo->getFileTreeTest(4, '')) && p('0:id,name,parent') && e('dGFn,tag,0');
+r($repo->getFileTreeChildrenTest(4, '', 0)) && p('0:id,name,parent') && e('dGFnJTJGUkVBRE1FLm1k,README.md,dGFn');
+r($repo->getFileTreeCountTest(4, '')) && p() && e('1');
 
-$result = $repo->getFileTreeTest(4, '');
-r($result)                && p('0:id,name,parent') && e('dGFn,tag,0');
-r($result[0]['children']) && p('0:id,name,parent') && e('dGFnJTJGUkVBRE1FLm1k,README.md,dGFn');
-r(count($result))         && p()                   && e('1');
+common::$httpClient = $oldHttpClient;

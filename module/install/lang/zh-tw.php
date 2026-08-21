@@ -127,6 +127,8 @@ $lang->install->dbEncoding     = '資料庫編碼';
 $lang->install->dbUser         = '資料庫用戶名';
 $lang->install->dbPassword     = '資料庫密碼';
 $lang->install->dbName         = 'PMS使用的庫';
+$lang->install->dbSchema       = '資料庫Schema';
+$lang->install->dbSchemaNote   = 'Gauss/PostgreSQL使用的Schema，MySQL忽略此項';
 $lang->install->dbPrefix       = '建表使用的首碼';
 $lang->install->clearDB        = '清空現有數據';
 $lang->install->importDemoData = '導入demo數據';
@@ -139,6 +141,7 @@ $lang->install->workingList['full']      = '完整研發管理工具';
 
 $lang->install->errorConnectDB      = '資料庫連接失敗 ';
 $lang->install->errorDBName         = '資料庫名不能含有 “.” ';
+$lang->install->errorDBSchema       = 'Schema名稱格式不正確';
 $lang->install->errorCreateDB       = '資料庫創建失敗';
 $lang->install->errorTableExists    = '數據表已經存在，您之前應該有安裝過禪道，繼續安裝請返回前頁並選擇清空數據';
 $lang->install->errorCreateTable    = '創建表失敗';

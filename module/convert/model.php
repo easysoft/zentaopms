@@ -538,7 +538,7 @@ EOT;
         if($this->session->jiraMethod == 'api')  $this->deleteJsonFile();
 
         /* 更新各项目的统计数据。 */
-        $projectList = $this->dao->dbh($this->dbh)->select('BID')->from(JIRA_TMPRELATION)->where('BType')->in('zproject,zexecution')->fetchPairs();
+        $projectList = $this->dao->dbh($this->dbh)->select('`BID`')->from(JIRA_TMPRELATION)->where('BType')->in('zproject,zexecution')->fetchPairs();
         $this->loadModel('program')->updateStats($projectList);
 
         unset($_SESSION['jiraDB']);
@@ -870,7 +870,7 @@ EOT;
      */
     public function getJiraFieldGroupByProject($relations): array
     {
-        $fieldList  = $this->dao->dbh($this->dbh)->select('AID, extra, BID AS field')->from(JIRA_TMPRELATION)->where('AType')->eq('jcustomfield')->andWhere('BType')->eq('zworkflowfield')->fetchGroup('AID', 'extra');
+        $fieldList  = $this->dao->dbh($this->dbh)->select('`AID`, extra, `BID` AS field')->from(JIRA_TMPRELATION)->where('AType')->eq('jcustomfield')->andWhere('BType')->eq('zworkflowfield')->fetchGroup('AID', 'extra');
         if($this->session->jiraMethod == 'api')
         {
             $projectList = $this->getJiraDataFromJson('projectissuefield');
@@ -1304,7 +1304,7 @@ EOT;
     public function getJiraSprintIssue(): array
     {
         $issueGroup     = array();
-        $sprintRelation = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)->where('AType')->eq('jsprint')->andWhere('BType')->eq('zexecution')->fetchPairs();
+        $sprintRelation = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)->where('AType')->eq('jsprint')->andWhere('BType')->eq('zexecution')->fetchPairs();
         if($this->session->jiraMethod != 'db')
         {
             foreach($sprintRelation as $sprintID => $executionID)

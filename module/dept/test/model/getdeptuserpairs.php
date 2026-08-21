@@ -23,6 +23,9 @@ cid=15972
 - 查询所有外部用户统计 @100
 - 根据部门查询用户统计 @10
 - 查询全部用户统计 @200
+- 开启showOutside查询内部用户包含外部用户属性101 @测试1
+- 开启showOutside查询内部用户统计 @200
+- 开启showOutside查询外部用户统计 @200
 
 */
 
@@ -31,6 +34,7 @@ $key        = array('id', 'account', 'out');
 $type       = array('inside', 'outside', 'out');
 $count      = array('0', '1');
 $params     = 'all';
+$showOutside = '1';
 
 $dept = new deptModelTest();
 r($dept->getDeptUserPairsTest($deptIDList[0], $count[0], $key[0], $type[0]))          && p('50')      && e('用户49'); //查询所有内部用户
@@ -43,3 +47,6 @@ r($dept->getDeptUserPairsTest($deptIDList[0], $count[1], $key[0], $type[0]))    
 r($dept->getDeptUserPairsTest($deptIDList[0], $count[1], $key[0], $type[1]))          && p()          && e('100');    //查询所有外部用户统计
 r($dept->getDeptUserPairsTest($deptIDList[1], $count[1], $key[0], $type[0]))          && p()          && e('10');     //根据部门查询用户统计
 r($dept->getDeptUserPairsTest($deptIDList[0], $count[1], $key[0], $type[0], $params)) && p()          && e('200');    //查询全部用户统计
+r($dept->getDeptUserPairsTest($deptIDList[0], $count[0], $key[0], $type[0], '', $showOutside)) && p('101') && e('测试1'); //开启showOutside查询内部用户包含外部用户
+r($dept->getDeptUserPairsTest($deptIDList[0], $count[1], $key[0], $type[0], '', $showOutside)) && p()     && e('200');   //开启showOutside查询内部用户统计
+r($dept->getDeptUserPairsTest($deptIDList[0], $count[1], $key[0], $type[1], '', $showOutside)) && p()     && e('200');   //开启showOutside查询外部用户统计

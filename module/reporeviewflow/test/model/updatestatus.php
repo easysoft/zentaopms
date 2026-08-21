@@ -25,4 +25,3 @@ $flow = new reporeviewflowTest();
 r($flow->updateStatusTest(1, 'enable'))  && p('status,name') && e('enable,review_flow1'); // 修改状态为enable
 r($flow->updateStatusTest(1, 'disable')) && p('status,id')   && e('disable,1');           // 修改状态为disable
 r($flow->updateStatusTest(0, 'enable'))  && p()              && e('0');                   // 不存在的规则ID
-

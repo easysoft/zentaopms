@@ -4,23 +4,25 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
+zenData('ops_pipeline')->gen(0);
+
 /**
 
 title=测试 repoTao->getmatchedreposbyurl();
 timeout=0
 cid=0
 
-- 方法存在性检查 >> 1
-- repoTaoTest 类存在 >> 1
-- repoTao 类存在 >> 1
-- 再次方法存在检查 >> 1
-- 类存在性确认 >> 1
+- 执行repoTest模块的getMatchedReposByUrlIsArrayTest方法，参数是'https://example.com/group/repo.git'  @1
+- 执行repoTest模块的getMatchedReposByUrlIsArrayTest方法，参数是'https://example.com/group/repo'  @1
+- 执行repoTest模块的getMatchedReposByUrlIsArrayTest方法，参数是'ssh://example.com/group/repo.git'  @1
+- 执行repoTest模块的getMatchedReposByUrlIsArrayTest方法，参数是'http://localhost/repo.git'  @1
+- 执行repoTest模块的getMatchedReposByUrlIsArrayTest方法，参数是''  @1
 
 */
 
 $repoTest = new repoTaoTest();
-r(method_exists($repoTest, 'getmatchedreposbyurlTest')) && p() && e('1');
-r(class_exists('repoTaoTest')) && p() && e('1');
-r(class_exists('repoTao')) && p() && e('1');
-r(method_exists($repoTest, 'getmatchedreposbyurlTest')) && p() && e('1');
-r(class_exists('repoTaoTest')) && p() && e('1');
+r($repoTest->getMatchedReposByUrlIsArrayTest('https://example.com/group/repo.git')) && p() && e('1');
+r($repoTest->getMatchedReposByUrlIsArrayTest('https://example.com/group/repo'))     && p() && e('1');
+r($repoTest->getMatchedReposByUrlIsArrayTest('ssh://example.com/group/repo.git')) && p() && e('1');
+r($repoTest->getMatchedReposByUrlIsArrayTest('http://localhost/repo.git'))           && p() && e('1');
+r($repoTest->getMatchedReposByUrlIsArrayTest(''))                                    && p() && e('1');

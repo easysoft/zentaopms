@@ -35,6 +35,183 @@ class aiModel extends model
     public $errors = array();
 
     /**
+     * 获取 ZAI API 基础地址。
+     * Get ZAI API base URL.
+     *
+     * @param  object $setting
+     * @access public
+     * @return string
+     */
+    public function getZaiBaseUrl(object $setting): string
+    {
+        if(!empty($setting->url)) return rtrim($setting->url, '/');
+
+        $isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+        if(!$isHttps) $isHttps = !empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https';
+        if(!$isHttps) $isHttps = !empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443;
+
+        $protocol = $isHttps ? 'https://' : 'http://';
+        $port     = !empty($setting->port) ? ':' . $setting->port : '';
+
+        return $protocol . $setting->host . $port;
+    }
+
+    /**
+     * 生成ZAI token.
+     * Generate ZAI token.
+     *
+     * @param  object $setting
+     * @access public
+     * @return string
+     */
+    public function generateToken(object $setting): string
+    {
+        $isAdmin     = !empty($setting->adminToken);
+        $token       = $isAdmin ? $setting->adminToken : $setting->token;
+        $appID       = $setting->appID;
+        $userID      = $this->app->user->id;
+        $expiredTime = time() + 3600;
+        $message     = $token . $appID . $userID . $expiredTime;
+        $hash        = md5($message);
+
+        $payload = [
+            'hash'         => $hash,
+            'app_id'       => $appID,
+            'user_id'      => (string)$userID,
+            'expired_time' => $expiredTime
+        ];
+
+        $encoded = base64_encode(json_encode($payload, JSON_UNESCAPED_UNICODE));
+        $prefix  = $isAdmin ? 'ak-' : 'ek-';
+
+        return $prefix . $encoded;
+     }
+
+    /**
+     * 获取数据源列表。
+     * Get data source list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataSource(): array
+    {
+        $dataSource = array();
+        $fieldCache = array();
+        $moduleMap  = array('programplans' => 'execution', 'executions' => 'execution', 'stories' => 'story', 'bugs' => 'bug', 'case' => 'testcase', 'tasks' => 'task');
+
+        $moduleGroup = $this->config->ai->moduleGroup;
+        if($this->config->edition != 'open')
+        {
+            if(empty($this->workflowfield)) $this->loadModel('workflowfield');
+
+            $flows = $this->dao->select('module, name')->from(TABLE_WORKFLOW)
+                ->where('type')->eq('flow')
+                ->andWhere('status')->eq('normal')
+                ->andWhere('buildin')->eq('0')
+                ->fetchPairs();
+
+            foreach($flows as $module => $name)
+            {
+                if(isset($moduleGroup[$module])) continue;
+
+                $moduleGroup[$module] = array($module);
+                $this->lang->ai->moduleList[$module]['common'] = $name;
+            }
+        }
+
+        $hasWorkflowField = !empty($this->workflowfield) && method_exists($this->workflowfield, 'getList');
+        foreach($moduleGroup as $group => $modules)
+        {
+            foreach($modules as $module)
+            {
+                $dataSource[$group][$module] = zget($this->config->ai->moduleFields, $module, array());
+                if(!empty($dataSource[$group][$module])) continue;
+                if(!$hasWorkflowField) continue;
+
+                $cacheKey = "$group.$module";
+                if(isset($fieldCache[$cacheKey]))
+                {
+                    $dataSource[$group][$module] = $fieldCache[$cacheKey];
+                    continue;
+                }
+
+                $workflowModule = zget($moduleMap, $module, $module);
+
+                $fieldList = $this->workflowfield->getList($workflowModule);
+                foreach($fieldList as $field => $value)
+                {
+                    if(in_array($field, array('deleted', 'version', 'subStatus')))
+                    {
+                        unset($fieldList[$field]);
+                        continue;
+                    }
+
+                    $this->lang->ai->moduleList[$module][$field] = $value->name;
+                }
+
+                $fields = array_keys($fieldList);
+                if($module == 'story')
+                {
+                    foreach(array('spec', 'verify') as $field)
+                    {
+                        if(!in_array($field, $fields)) $fields[] = $field;
+                    }
+                }
+
+                $fieldCache[$cacheKey]       = $fields;
+                $dataSource[$group][$module] = $fields;
+            }
+        }
+
+        return $dataSource;
+    }
+
+    /**
+     * Get the source module used by prompt sample data.
+     *
+     * @param  string $module
+     * @access protected
+     * @return string
+     */
+    protected function getPromptSampleModule($module): string
+    {
+        $module = (string)$module;
+        return in_array($module, array('epic', 'requirement')) ? 'story' : $module;
+    }
+
+    /**
+     * Build localized prompt data source definition for a module.
+     *
+     * @param  string $module
+     * @access protected
+     * @return array
+     */
+    protected function getPromptDataSourceDefinition(string $module): array
+    {
+        if(empty($module)) return array();
+
+        $dataSource = $this->getDataSource();
+        $moduleData = zget($dataSource, $module, array());
+        if(empty($moduleData)) return array();
+
+        $definition = array();
+        foreach($moduleData as $objectName => $fields)
+        {
+            $moduleList = zget($this->lang->ai->moduleList, $objectName, array());
+            if(empty($moduleList)) continue;
+
+            $definition[$objectName] = array('common' => zget($moduleList, 'common', ''));
+            foreach($fields as $field)
+            {
+                $definition[$objectName][$field] = zget($moduleList, $field, '');
+            }
+        }
+
+        return $definition;
+    }
+
+    /**
      * Check if object action is clickable, used in datatables.
      *
      * @param  object  $object  object to check, model objects are supported, add support for more if needed.
@@ -63,11 +240,11 @@ class aiModel extends model
             $executable = $this->isExecutable($object);
             $published  = $object->status == 'active';
 
-            if($action == 'promptassignrole') return common::hasPriv('ai', 'designPrompt') && !$published;
-            if($action == 'promptaudit')      return common::hasPriv('ai', 'designPrompt') && $executable && !$published;
-            if($action == 'promptedit')       return common::hasPriv('ai', 'promptedit');
-            if($action == 'promptpublish')    return common::hasPriv('ai', 'promptpublish') && !$published && $executable;
-            if($action == 'promptunpublish')  return common::hasPriv('ai', 'promptunpublish') && $published && $executable;
+            if($action == 'promptbasicinfo') return common::hasPriv('ai', 'designPrompt') && !$published;
+            if($action == 'promptaudit')     return common::hasPriv('ai', 'designPrompt') && $executable && !$published;
+            if($action == 'promptedit')      return common::hasPriv('ai', 'promptedit');
+            if($action == 'promptpublish')   return common::hasPriv('ai', 'promptpublish') && !$published && $executable;
+            if($action == 'promptunpublish') return common::hasPriv('ai', 'promptunpublish') && $published;
         }
 
         if(in_array($this->app->rawMethod, array('miniprograms', 'miniprogramview')))
@@ -1693,7 +1870,7 @@ class aiModel extends model
         $this->dao->insert(TABLE_AI_AGENT)
             ->data($prompt)
             ->batchCheck($this->config->ai->createprompt->requiredFields, 'notempty')
-            ->check('name', 'unique')
+            ->check('name', 'unique', "`deleted` = '0'")
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
@@ -1773,7 +1950,7 @@ class aiModel extends model
         $this->dao->update(TABLE_AI_AGENT)
             ->data($prompt)
             ->batchCheck($this->config->ai->createprompt->requiredFields, 'notempty')
-            ->check('name', 'unique', "`id` != {$prompt->id}")
+            ->check('name', 'unique', "`id` != {$prompt->id} AND `deleted` = '0'")
             ->autoCheck()
             ->where('id')->eq($prompt->id)
             ->exec();
@@ -1842,6 +2019,8 @@ class aiModel extends model
     {
         if(empty($data)) return '';
 
+        $this->getDataSource();
+
         /* Handle object data. */
         if(is_object($data)) $data = (array)$data;
 
@@ -1860,21 +2039,31 @@ class aiModel extends model
         /* Handle empty sources array. */
         if(empty($sources)) return '';
 
-        $storyData = [];
-        if(in_array(['task', 'story'], $sources, true) && $data['task']['story'])
+        $storyData = array();
+        $taskStory = 0;
+        if(isset($data['task']))
         {
-            $story     = $this->loadModel('story')->getById($data['task']['story']);
-            $fields    = ['title', 'spec', 'verify', 'product', 'module', 'pri', 'type', 'estimate'];
-            $storyData = [];
-            foreach($fields as $field)
+            $taskData = $data['task'];
+            if(is_object($taskData)) $taskData = (array)$taskData;
+            if(is_array($taskData) && isset($taskData['story'])) $taskStory = $taskData['story'];
+        }
+        if(in_array(array('task', 'story'), $sources, true) && !empty($taskStory))
+        {
+            $story     = $this->loadModel('story')->getById($taskStory);
+            $fields    = array('title', 'spec', 'verify', 'product', 'module', 'pri', 'type', 'estimate');
+            $storyData = array();
+            if(!empty($story))
             {
-                $langLabel = $this->lang->story->$field;
-                $value     = $story->$field;
-                if($field == 'title') $langLabel = $this->lang->story->name;
-                if($field == 'type')  $value = zget($this->lang->story->typeList, $story->type);
-                if($field == 'spec' || $field == 'verify') $value = strip_tags($value);
+                foreach($fields as $field)
+                {
+                    $langLabel = $this->lang->story->$field;
+                    $value     = isset($story->$field) ? $story->$field : '';
+                    if($field == 'title') $langLabel = $this->lang->story->name;
+                    if($field == 'type')  $value = zget($this->lang->story->typeList, $value);
+                    if($field == 'spec' || $field == 'verify') $value = strip_tags($value);
 
-                $storyData[$langLabel] = $value;
+                    $storyData[$langLabel] = $value;
+                }
             }
         }
 
@@ -1883,23 +2072,29 @@ class aiModel extends model
         $supplement = '';
         $supplementTypes = array();
 
+        $dataSourceDefinition = $this->getPromptDataSourceDefinition($module);
         foreach($sources as $source)
         {
+            if(!is_array($source) || count($source) < 2) continue;
+
             $objectName = $source[0];
             $objectKey  = $source[1];
 
-            if(!isset($this->lang->ai->dataSource[$module][$objectName]['common'])) continue;
-            if(!isset($this->lang->ai->dataSource[$module][$objectName][$objectKey])) continue;
+            if(!isset($dataSourceDefinition[$objectName]['common'])) continue;
+            if(!isset($dataSourceDefinition[$objectName][$objectKey])) continue;
+            if(!isset($data[$objectName])) continue;
 
-            $semanticName = $this->lang->ai->dataSource[$module][$objectName]['common'];
-            $semanticKey  = $this->lang->ai->dataSource[$module][$objectName][$objectKey];
+            $semanticName = $dataSourceDefinition[$objectName]['common'];
+            $semanticKey  = $dataSourceDefinition[$objectName][$objectKey];
 
             if(empty($dataObject[$semanticName])) $dataObject[$semanticName] = array();
 
             $obj = $data[$objectName];
+            if(is_object($obj)) $obj = (array)$obj;
+            if(!is_array($obj)) continue;
             if(static::isAssoc($obj))
             {
-                $dataObject[$semanticName][$semanticKey] = isset($data[$objectName][$objectKey]) ? $data[$objectName][$objectKey] : '';
+                $dataObject[$semanticName][$semanticKey] = isset($obj[$objectKey]) ? $obj[$objectKey] : '';
             }
             else
             {
@@ -1907,7 +2102,9 @@ class aiModel extends model
                 {
                     if(empty($dataObject[$semanticName][$idx])) $dataObject[$semanticName][$idx] = array();
                     if(!isset($dataObject[$semanticName][$idx][$semanticKey])) $dataObject[$semanticName][$idx][$semanticKey] = '';
-                    $dataObject[$semanticName][$idx][$semanticKey] = $data[$objectName][$idx][$objectKey];
+                    $row = zget($obj, $idx, array());
+                    if(is_object($row)) $row = (array)$row;
+                    $dataObject[$semanticName][$idx][$semanticKey] = zget($row, $objectKey, '');
                 }
             }
             if(!empty($storyData)) $dataObject[$semanticName] = array_merge($dataObject[$semanticName], $storyData);
@@ -1934,7 +2131,8 @@ class aiModel extends model
      */
     public function generateDemoDataPrompt($module, $source)
     {
-        if(empty($this->lang->ai->demoData->$module)) return $this->lang->ai->demoData->notExist;
+        $sampleModule = $this->getPromptSampleModule($module);
+        if(empty($this->lang->ai->demoData->$sampleModule)) return $this->lang->ai->demoData->notExist;
 
         $sources = explode(',', $source);
         $sources = array_filter($sources);
@@ -1953,17 +2151,20 @@ class aiModel extends model
             $objectKey  = $source[1];
             if(empty($data[$objectName])) $data[$objectName] = array();
 
-            $demoData = $this->lang->ai->demoData->$module[$objectName];
+            $moduleDemoData = $this->lang->ai->demoData->$sampleModule;
+            $demoData       = zget($moduleDemoData, $objectName, array());
+            if(empty($demoData)) continue;
+
             if(static::isAssoc($demoData))
             {
-                $data[$objectName][$objectKey] = $demoData[$objectKey];
+                $data[$objectName][$objectKey] = zget($demoData, $objectKey, '');
             }
             else
             {
                 foreach($demoData as $index => $value)
                 {
                     if(empty($data[$objectName][$index])) $data[$objectName][$index] = array();
-                    $data[$objectName][$index][$objectKey] = $value[$objectKey];
+                    $data[$objectName][$index][$objectKey] = zget($value, $objectKey, '');
                 }
             }
         }
@@ -1989,21 +2190,379 @@ class aiModel extends model
      *
      * @param  string $form
      * @access public
-     * @return array
+     * @return array|object|string
      */
     public function getFunctionCallSchema($form)
     {
         if($form == 'empty.empty') return $form;
 
-        $formPath = explode('.', $form);
+        $formPath = explode('.', $form, 2);
         if(count($formPath) !== 2) return array();
 
-        $targetForm = $this->config->ai->targetForm[$formPath[0]][$formPath[1]];
-        if(empty($targetForm)) return array();
+        list($module, $action) = $formPath;
+        $targetForm = $this->config->ai->targetForm[$module][$action] ?? null;
+        if(!empty($targetForm))
+        {
+            $schema = $this->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)] ?? null;
+            if(!empty($schema)) return $schema;
+        }
 
-        $schema = $this->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)];
+        return $this->getWorkflowFunctionCallSchema($module, $action); // 找不到语言项定义的，就去工作流中获取
+    }
 
-        return empty($schema) ? array() : $schema;
+    /**
+     * 从工作流动作动态构建 function call schema。
+     * Build function call schema from workflow action fields.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @access public
+     * @return array|object
+     */
+    public function getWorkflowFunctionCallSchema(string $module, string $action)
+    {
+        if($this->config->edition == 'open') return array();
+
+        $workflowAction = $this->getWorkflowActionForPrompt($module, $action);
+        if(empty($workflowAction)) return array();
+
+        $fields = $this->getWorkflowPromptFields($module, $action);
+        if(empty($fields)) return array();
+
+        $this->ensureWorkflowTargetForm($module, $action, $workflowAction);
+
+        $schema = new stdclass();
+        $schema->title      = !empty($workflowAction->name) ? $workflowAction->name : $module;
+        $schema->type       = 'object';
+        $schema->properties = new stdclass();
+        $required           = array();
+
+        foreach($fields as $fieldName => $field)
+        {
+            $prop = new stdclass();
+            $prop->type        = 'string';
+            $prop->description = !empty($field->name) ? $field->name : $fieldName;
+
+            if(!empty($field->options) && is_array($field->options))
+            {
+                $enum = array();
+                foreach($field->options as $key => $value)
+                {
+                    if($key === '' || $key === null) continue;
+                    $enum[] = (string)$key;
+                }
+                if(!empty($enum)) $prop->enum = $enum;
+            }
+
+            $rules = !empty($field->rules) ? ",{$field->rules}," : '';
+            if(strpos($rules, ',notempty,') !== false || strpos($rules, ',1,') !== false) $required[] = $fieldName;
+
+            $schema->properties->$fieldName = $prop;
+        }
+
+        if(empty(get_object_vars($schema->properties))) return array();
+
+        $schema->required = $required;
+        if(empty($this->lang->ai->formSchema[$module])) $this->lang->ai->formSchema[$module] = array();
+        $this->lang->ai->formSchema[$module][$action] = $schema;
+
+        return $schema;
+    }
+
+    /**
+     * 获取工作流动作可用于智能体表单的字段。
+     * Get workflow action fields available for prompt forms.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @param  bool   $getRealOptions
+     * @access protected
+     * @return array
+     */
+    protected function getWorkflowPromptFields(string $module, string $action, bool $getRealOptions = true): array
+    {
+        if(isset($this->config->edition) && $this->config->edition == 'open') return array();
+        if(!defined('TABLE_WORKFLOWACTION')) return array();
+
+        $workflowAction = $this->loadModel('workflowaction');
+        if(empty($workflowAction) || !method_exists($workflowAction, 'getPageFields')) return array();
+
+        $pageFields = $workflowAction->getPageFields($module, $action, $getRealOptions);
+        $fields     = array();
+        foreach($pageFields as $fieldName => $field)
+        {
+            if(!$this->isWorkflowPromptFieldAvailable($fieldName, $field)) continue;
+            $fields[$fieldName] = $field;
+        }
+
+        return $fields;
+    }
+
+    /**
+     * 判断工作流字段是否可用于智能体表单。
+     * Check whether a workflow field is available for prompt forms.
+     *
+     * @param  string $fieldName
+     * @param  mixed  $field
+     * @access protected
+     * @return bool
+     */
+    protected function isWorkflowPromptFieldAvailable($fieldName, $field): bool
+    {
+        if(empty($field) || !is_object($field)) return false;
+        if(!empty($field->readonly)) return false;
+
+        $fieldName = (string)$fieldName;
+        if(strpos($fieldName, 'sub_') === 0) return false;
+        if(in_array($fieldName, array('actions', 'id', 'deleted', 'uid'), true)) return false;
+
+        return true;
+    }
+
+    /**
+     * 获取智能体可用的工作流动作。
+     * Get workflow action for prompt target form.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @access public
+     * @return object|false
+     */
+    public function getWorkflowActionForPrompt(string $module, string $action)
+    {
+        if(!defined('TABLE_WORKFLOWACTION')) return false;
+
+        $promptWorkflowExcludeActions = isset($this->config->ai->promptWorkflowExcludeActions) ? $this->config->ai->promptWorkflowExcludeActions : array('browse', 'view', 'delete', 'export', 'exporttemplate', 'import', 'showimport', 'report');
+        if(in_array(strtolower($action), $promptWorkflowExcludeActions)) return false;
+
+        return $this->dao->select('module, action, method, name')->from(TABLE_WORKFLOWACTION)
+            ->where('module')->eq($module)
+            ->andWhere('action')->eq($action)
+            ->andWhere('status')->eq('enable')
+            ->andWhere('open')->ne('none')
+            ->andWhere('`virtual`')->eq(0)
+            ->andWhere('buildin')->eq(0)
+            ->fetch();
+    }
+
+    /**
+     * 确保工作流目标表单配置存在。
+     * Ensure workflow target form config exists.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @param  object $workflowAction
+     * @access public
+     * @return object
+     */
+    public function ensureWorkflowTargetForm(string $module, string $action, object $workflowAction): object
+    {
+        if(empty($this->config->ai->targetForm[$module][$action]))
+        {
+            $this->config->ai->targetForm[$module][$action] = (object)array('m' => $module, 'f' => $action, 'for' => $module);
+        }
+
+        $moduleLabel = $this->getTargetFormModuleLabel($module);
+        if(empty($this->lang->ai->targetForm[$module]['common']) && !empty($moduleLabel))
+        {
+            if(empty($this->lang->ai->targetForm[$module])) $this->lang->ai->targetForm[$module] = array();
+            $this->lang->ai->targetForm[$module]['common'] = $moduleLabel;
+        }
+        if(empty($this->lang->ai->targetForm[$module][$action]) && !empty($workflowAction->name))
+        {
+            $this->lang->ai->targetForm[$module][$action] = $workflowAction->name;
+        }
+
+        return $this->config->ai->targetForm[$module][$action];
+    }
+
+    /**
+     * 获取目标表单显示名称。
+     * Get target form label.
+     *
+     * @param  string $targetForm
+     * @param  bool   $withModule
+     * @param  string $objectModule
+     * @access public
+     * @return string
+     */
+    public function getTargetFormLabel(string $targetForm, bool $withModule = true, string $objectModule = ''): string
+    {
+        if(empty($targetForm)) return '';
+        if($targetForm == 'empty.empty') return '';
+
+        $targetFormPath = explode('.', $targetForm, 2);
+        if(count($targetFormPath) != 2) return $targetForm;
+
+        list($module, $action) = $targetFormPath;
+        if(empty($this->config->ai->targetForm[$module][$action]))
+        {
+            $workflowAction = $this->getWorkflowActionForPrompt($module, $action);
+            if(!empty($workflowAction)) $this->ensureWorkflowTargetForm($module, $action, $workflowAction);
+        }
+
+        $moduleLabel = $this->getTargetFormModuleLabel(empty($objectModule) ? $module : $objectModule);
+        $actionLabel = $this->getTargetFormActionLabel($module, $action);
+
+        if($withModule && !empty($moduleLabel) && !empty($actionLabel)) return $moduleLabel . ' / ' . $actionLabel;
+        if(!empty($actionLabel)) return $actionLabel;
+
+        return $targetForm;
+    }
+
+    /**
+     * 获取目标表单模块显示名称。
+     * Get target form module label.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    public function getTargetFormModuleLabel(string $module): string
+    {
+        if(isset($this->lang->ai->targetForm[$module]) && is_array($this->lang->ai->targetForm[$module]) && isset($this->lang->ai->targetForm[$module]['common'])) return $this->lang->ai->targetForm[$module]['common'];
+        if(isset($this->lang->ai->moduleList[$module]) && is_array($this->lang->ai->moduleList[$module]) && isset($this->lang->ai->moduleList[$module]['common'])) return $this->lang->ai->moduleList[$module]['common'];
+
+        if(defined('TABLE_WORKFLOW'))
+        {
+            $flowName = $this->dao->select('name')->from(TABLE_WORKFLOW)
+                ->where('module')->eq($module)
+                ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
+                ->fetch('name');
+            if(!empty($flowName))
+            {
+                if(empty($this->lang->ai->targetForm[$module])) $this->lang->ai->targetForm[$module] = array();
+                $this->lang->ai->targetForm[$module]['common'] = $flowName;
+                return $flowName;
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * 获取目标表单动作显示名称。
+     * Get target form action label.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @access public
+     * @return string
+     */
+    public function getTargetFormActionLabel(string $module, string $action): string
+    {
+        if(isset($this->lang->ai->targetForm[$module]) && is_array($this->lang->ai->targetForm[$module]) && isset($this->lang->ai->targetForm[$module][$action])) return $this->lang->ai->targetForm[$module][$action];
+
+        if(defined('TABLE_WORKFLOWACTION'))
+        {
+            $actionName = $this->dao->select('name')->from(TABLE_WORKFLOWACTION)
+                ->where('module')->eq($module)
+                ->andWhere('action')->eq($action)
+                ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
+                ->fetch('name');
+            if(!empty($actionName))
+            {
+                if(empty($this->lang->ai->targetForm[$module])) $this->lang->ai->targetForm[$module] = array();
+                $this->lang->ai->targetForm[$module][$action] = $actionName;
+                return $actionName;
+            }
+        }
+
+        if($this->config->edition != 'open')
+        {
+            $this->app->loadLang('workflowaction');
+            if(isset($this->lang->workflowaction->approval->actions[$action])) return $this->lang->workflowaction->approval->actions[$action];
+        }
+
+        return '';
+    }
+
+    /**
+     * 构建工作流目标表单的链接参数配置。
+     * Build target form vars config for workflow action.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @access public
+     * @return object
+     */
+    public function buildWorkflowTargetFormVars(string $module, string $action): object
+    {
+        $actionLower = strtolower($action);
+        if($actionLower == 'create' || $actionLower == 'copy' || strpos($actionLower, 'batchcreate') !== false)
+        {
+            return (object)array('format' => '', 'args' => array());
+        }
+
+        return (object)array('format' => 'dataID=%d', 'args' => array($module => 1));
+    }
+
+    /**
+     * 构建可填充字段描述
+     * Build fillable fields description for prompt.
+     *
+     * @param  object $prompt
+     * @param  array  $allowedFields
+     * @access public
+     * @return string
+     */
+    public function getFormSchemaDescription(object $prompt, array $allowedFields): string
+    {
+        $promptLang = $this->lang->ai->prompts;
+        $formName = $prompt->name ?? $prompt->actionPurpose;
+        $desc       = "{$promptLang->targetFormInfo}\n";
+        $desc      .= sprintf($promptLang->formLabel, $formName) . "\n\n";
+
+        if(!empty($allowedFields))
+        {
+            $desc .= "{$promptLang->fillableFields}\n";
+            foreach($allowedFields as $name => $field)
+            {
+                if(!is_array($field)) continue;
+                $desc .= "- {$name}\n";
+            }
+        }
+
+        $desc .= "\n{$promptLang->returnJSONObject}\n";
+        return $desc;
+    }
+
+    /**
+     * 构建动态 JSON Schema
+     * Build dynamic JSON schema for function calling.
+     *
+     * @param  array  $fields
+     * @param  object $prompt
+     * @access public
+     * @return array
+     */
+    public function buildDynamicSchema(array $fields, object $prompt, bool $isBatch = false): array
+    {
+        $properties = array();
+        $required   = array();
+
+        foreach($fields as $name => $field)
+        {
+            $prop = array('type' => 'string', 'description' => $field['label'] ?? $name);
+            if(!empty($field['options']))
+            {
+                $options = $field['options'];
+                if(is_array($options))
+                {
+                    $prop['enum'] = array_map(function($opt)
+                    {
+                        return is_array($opt) ? ($opt['value'] ?? $opt) : $opt;
+                    }, $options);
+                }
+            }
+            if(!empty($field['required'])) $required[] = $name;
+            if(isset($field['controlType']) && in_array($field['controlType'], array('zenEditor', 'editor'))) $prop['format'] = 'html';
+            $properties[$name] = $prop;
+        }
+
+        $objectSchema = array('type' => 'object', 'title' => $prompt->name ?: $prompt->actionPurpose, 'properties' => $properties, 'required' => $required);
+        if($isBatch) return array('type' => 'array', 'title' => $prompt->name ?: $prompt->actionPurpose, 'items' => $objectSchema);
+        return $objectSchema;
     }
 
     /**
@@ -2016,8 +2575,9 @@ class aiModel extends model
      */
     public function getObjectForPromptById(object $prompt, int $objectId)
     {
-        $module  = $prompt->module;
-        $sources = array_filter(explode(',', $prompt->source));
+        $module       = $prompt->module;
+        $promptSource = isset($prompt->source) ? $prompt->source : '';
+        $sources      = array_filter(explode(',', $promptSource));
 
         /* Explode into grouped sources list. */
         $sourceGroups = array();
@@ -2029,55 +2589,14 @@ class aiModel extends model
             if(empty($sourceGroups[$objectName])) $sourceGroups[$objectName] = array();
             $sourceGroups[$objectName][] = $objectKey;
         }
-
-        $object     = new stdclass();
-        $objectData = new stdclass();
-
-        /* Query necessary object data from zentao. */
-        switch ($module)
+        if(empty($sourceGroups))
         {
-            case 'story':
-                if(isset($sourceGroups['story'])) $object->story = $this->loadModel('story')->getById($objectId);
-                break;
-            case 'execution':
-                if(isset($sourceGroups['execution'])) $object->execution = $this->loadModel('execution')->getByID($objectId);
-                if(isset($sourceGroups['tasks']))     $object->tasks     = array_values($this->loadModel('task')->getExecutionTasks($objectId));
-                break;
-            case 'product':
-                if(isset($sourceGroups['product'])) $object->product = $this->loadModel('product')->getById($objectId);
-                break;
-            case 'project':
-                if(isset($sourceGroups['project'])) $object->project = $this->loadModel('project')->getById($objectId);
-                if($object->project->model == 'waterfall' && isset($sourceGroups['programplans'])) $object->programplans = array_values($this->loadModel('execution')->getByProject($object->project->id));
-                if($object->project->model != 'waterfall' && isset($sourceGroups['executions'])) $object->executions = array_values($this->loadModel('execution')->getByProject($object->project->id));
-                break;
-            case 'release':
-                if(isset($sourceGroups['release'])) $object->release = $this->loadModel('release')->getById($objectId);
-                if(isset($sourceGroups['stories'])) $object->stories = array_values($this->loadModel('story')->getByList(array_filter(explode(',', $object->release->stories))));
-                if(isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByIdList(array_filter(explode(',', $object->release->bugs))));
-                break;
-            case 'productplan':
-                if(isset($sourceGroups['productplan'])) $object->productplan = $this->loadModel('productplan')->getByID($objectId);
-                if(isset($sourceGroups['stories']))     $object->stories     = array_values($this->loadModel('story')->getPlanStories($objectId));
-                if(isset($sourceGroups['bugs']))        $object->bugs        = array_values($this->dao->select('*')->from(TABLE_BUG)->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetchAll('id', false));
-                break;
-            case 'task':
-                if(isset($sourceGroups['task'])) $object->task = $this->loadModel('task')->getById($objectId);
-                break;
-            case 'case':
-                if(isset($sourceGroups['case']))  $object->case  = $this->loadModel('testcase')->getById($objectId);
-                if(isset($sourceGroups['steps'])) $object->steps = array_values($object->case->steps);
-                break;
-            case 'bug':
-                if(isset($sourceGroups['bug'])) $object->bug = $this->loadModel('bug')->getById($objectId);
-                break;
-            case 'doc':
-                if(isset($sourceGroups['doc'])) $object->doc = $this->loadModel('doc')->getById($objectId);
-                break;
-            case 'my':
-                /* TODO: add more later. */
-                break;
+            $sourceModule = $this->getPromptSampleModule($module);
+            $sourceGroups[$sourceModule] = array();
         }
+
+        $object     = $this->getObjectByModuleAndSourceGroups($module, $sourceGroups, $objectId);
+        $objectData = new stdclass();
 
         $objectVars = get_object_vars($object);
         if(empty($objectVars)) return false;
@@ -2106,6 +2625,116 @@ class aiModel extends model
         }
 
         return array($objectData, $object);
+    }
+
+    /**
+     * Get object data by module and source groups.
+     *
+     * @param  string $module
+     * @param  array  $sourceGroups
+     * @param  int    $objectId
+     * @access protected
+     * @return object
+     */
+    protected function getObjectByModuleAndSourceGroups(string $module, array $sourceGroups, int $objectId): object
+    {
+        $object = new stdclass();
+
+        switch($module)
+        {
+            case 'epic':
+            case 'requirement':
+            case 'story':
+                if(isset($sourceGroups['story']))
+                {
+                    $object->story = $this->loadModel('story')->getById($objectId);
+                    if($module != 'story') $object->$module = $object->story;
+                }
+                return $object;
+            case 'execution':
+                if(isset($sourceGroups['execution'])) $object->execution = $this->loadModel('execution')->getByID($objectId);
+                if(isset($sourceGroups['tasks']))     $object->tasks     = array_values($this->loadModel('task')->getExecutionTasks($objectId));
+                return $object;
+            case 'product':
+                if(isset($sourceGroups['product'])) $object->product = $this->loadModel('product')->getById($objectId);
+                return $object;
+            case 'project':
+                if(!isset($sourceGroups['project'])) return $object;
+
+                $object->project = $this->loadModel('project')->getById($objectId);
+                if(empty($object->project)) return $object;
+
+                if($object->project->model == 'waterfall' && isset($sourceGroups['programplans'])) $object->programplans = array_values($this->loadModel('execution')->getByProject($object->project->id));
+                if($object->project->model != 'waterfall' && isset($sourceGroups['executions']))   $object->executions   = array_values($this->loadModel('execution')->getByProject($object->project->id));
+                return $object;
+            case 'release':
+                if(!isset($sourceGroups['release'])) return $object;
+
+                $object->release = $this->loadModel('release')->getById($objectId);
+                if(empty($object->release)) return $object;
+
+                if(isset($sourceGroups['stories'])) $object->stories = array_values($this->loadModel('story')->getByList(array_filter(explode(',', $object->release->stories))));
+                if(isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByIdList(array_filter(explode(',', $object->release->bugs))));
+                return $object;
+            case 'build':
+                if(!isset($sourceGroups['build'])) return $object;
+
+                $object->build = $this->loadModel('build')->getByID($objectId);
+                if(empty($object->build)) return $object;
+
+                if(isset($sourceGroups['stories'])) $object->stories = array_values($this->loadModel('story')->getByList(array_filter(explode(',', $object->build->stories))));
+                if(isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByIdList(array_filter(explode(',', $object->build->bugs))));
+                return $object;
+            case 'productplan':
+                if(isset($sourceGroups['productplan'])) $object->productplan = $this->loadModel('productplan')->getByID($objectId);
+                if(isset($sourceGroups['stories']))     $object->stories     = array_values($this->loadModel('story')->getPlanStories($objectId));
+                if(isset($sourceGroups['bugs']))        $object->bugs        = array_values($this->dao->select('*')->from(TABLE_BUG)->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetchAll('id', false));
+                return $object;
+            case 'task':
+                if(isset($sourceGroups['task'])) $object->task = $this->loadModel('task')->getById($objectId);
+                return $object;
+            case 'case':
+                if(!isset($sourceGroups['case'])) return $object;
+
+                $object->case = $this->loadModel('testcase')->getById($objectId);
+                if(empty($object->case)) return $object;
+
+                if(isset($sourceGroups['steps'])) $object->steps = array_values($object->case->steps);
+                return $object;
+            case 'bug':
+                if(isset($sourceGroups['bug'])) $object->bug = $this->loadModel('bug')->getById($objectId);
+                return $object;
+            case 'feedback':
+                if(isset($sourceGroups['feedback'])) $object->feedback = zget($this->loadModel('feedback')->getByList(array($objectId)), $objectId, null);
+                return $object;
+            case 'ticket':
+                if(isset($sourceGroups['ticket'])) $object->ticket = $this->loadModel('ticket')->getByID($objectId);
+                return $object;
+            case 'risk':
+                if(isset($sourceGroups['risk'])) $object->risk = $this->loadModel('risk')->getByID($objectId);
+                return $object;
+            case 'issue':
+                if(isset($sourceGroups['issue'])) $object->issue = $this->loadModel('issue')->getByID($objectId);
+                return $object;
+            case 'opportunity':
+                if(isset($sourceGroups['opportunity'])) $object->opportunity = $this->loadModel('opportunity')->getByID($objectId);
+                return $object;
+            case 'doc':
+                if(isset($sourceGroups['doc'])) $object->doc = $this->loadModel('doc')->getById($objectId);
+                return $object;
+            case 'my':
+            default:
+                if($this->config->edition != 'open')
+                {
+                    $flow = $this->loadModel('workflow')->getByModule($module);
+                    if($flow && $flow->type == 'flow' && empty($flow->buildin))
+                    {
+                        $data = $this->loadModel('flow')->getDataByID($flow, $objectId);
+                        if(!empty($data)) $object->$module = $data;
+                    }
+                }
+                return $object;
+        }
     }
 
     /**
@@ -2142,33 +2771,13 @@ class aiModel extends model
     }
 
     /**
-     * Assemble prompt with prompt data.
-     *
-     * @param  object $prompt
-     * @param  string $dataPrompt
-     * @access public
-     * @return string
-     */
-    public static function assemblePrompt($prompt, $dataPrompt)
-    {
-        $wholePrompt = empty($dataPrompt) ? '' : "$dataPrompt\n";
-
-        $wholePrompt .= static::tryPunctuate($prompt->role);
-        $wholePrompt .= static::autoPrependNewline(static::tryPunctuate($prompt->characterization, true));
-
-        $wholePrompt .= static::autoPrependNewline(static::tryPunctuate($prompt->purpose));
-        $wholePrompt .= static::autoPrependNewline(static::tryPunctuate($prompt->elaboration, true));
-
-        return $wholePrompt;
-    }
-
-    /**
      * Execute prompt on object.
      *
      * @param  int|object    $prompt    prompt (or id) to execute.
      * @param  int|object    $object    object (or id) to execute prompt on.
      * @access public
      * @return string|int    returns either JSON string or negative integer on error.
+     *
      * @throws AIResponseException
      */
     public function executePrompt($prompt, $object)
@@ -2180,17 +2789,37 @@ class aiModel extends model
         if(empty($object)) return -2;
 
         list($objectData) = $object;
-        $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
-        if(empty($dataPrompt)) return -3;
+
+        $displayPosition = isset($prompt->displayPosition) ? $prompt->displayPosition : '';
+        $source          = isset($prompt->source) ? $prompt->source : '';
+        $dataPrompt = $this->serializeDataToPrompt($prompt->module, $source, $objectData);
+        if(empty($dataPrompt))
+        {
+            $sources = array_filter(explode(',', $source));
+            if($displayPosition != 'form' && !empty($sources)) return -3;
+            $dataPrompt = '';
+        }
 
         $role   = static::tryPunctuate($prompt->role);
         $role  .= static::autoPrependNewline(static::tryPunctuate($prompt->characterization, true));
-        $schema = $this->getFunctionCallSchema($prompt->targetForm);
+        $schema = $this->getFunctionCallSchema($prompt->actionPurpose);
         if(empty($schema)) return -5;
 
         $this->useLanguageModel($prompt->model);
-        return array('role' => $role, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $prompt->targetForm, 'promptID' => $prompt->id);
+        return array('role' => $role, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $prompt->actionPurpose, 'promptID' => $prompt->id);
     }
+
+    /**
+     * Get prompt target form.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return string
+     */
+    public function getPromptTargetForm(object $prompt): string
+    {
+        if(!empty($prompt->displayPosition) && $prompt->displayPosition == 'form' && !empty($prompt->actionPurpose)) return $prompt->actionPurpose;
+        return !empty($prompt->targetForm) ? $prompt->targetForm : '';    }
 
     /**
      * Check if prompt can be tested.
@@ -2204,8 +2833,11 @@ class aiModel extends model
         if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
         if(empty($prompt)) return false;
 
-        $executable = true;
-        $requiredFields = explode(',', $this->config->ai->testPrompt->requiredFields);
+        $executable      = true;
+        $displayPosition = $prompt->displayPosition ?? '';
+        if(empty($displayPosition)) return false;
+
+        $requiredFields = array('name', 'module', 'purpose', 'actionPurpose', 'displayPosition');
 
         foreach($requiredFields as $field)
         {
@@ -2230,98 +2862,120 @@ class aiModel extends model
     {
         $module = $prompt->module;
 
-        if($module == 'my')
+        if($module == 'my') return helper::createLink('my', 'effort', "type=all");
+
+        return $this->getTestingLink($prompt, $this->getTestingObjectId($prompt));
+    }
+
+    /**
+     * Get object id for prompt testing.
+     *
+     * @param  object $prompt
+     * @access protected
+     * @return int|string|false
+     */
+    protected function getTestingObjectId($prompt)
+    {
+        $module = $prompt->module;
+
+        switch($module)
         {
-            return helper::createLink('my', 'effort', "type=all");
-        }
-        elseif($module == 'product')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCT)
-                ->where('id')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'productplan')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCTPLAN)
-                ->where('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'release')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_RELEASE)
-                ->where('project')->in($this->app->user->view->projects)
-                ->orWhere('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'project')
-        {
-            /* programplan/create only exist in the waterfall model project. */
-            if(strpos($prompt->targetForm, 'programplan/create'))
-            {
-                $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
-                    ->where('id')->in($this->app->user->view->projects)
-                    ->andWhere('model')->eq('waterfall')
+            case 'product':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PRODUCT)
+                    ->where('id')->in($this->app->user->view->products)
                     ->fetch('maxId');
-            }
-            else
-            {
-                $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
+            case 'productplan':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PRODUCTPLAN)
+                    ->where('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+            case 'release':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_RELEASE)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->orWhere('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+            case 'project':
+                /* programplan/create only exist in the waterfall model project. */
+                if(strpos($prompt->actionPurpose, 'programplan/create'))
+                {
+                    return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PROJECT)
+                        ->where('id')->in($this->app->user->view->projects)
+                        ->andWhere('model')->eq('waterfall')
+                        ->fetch('maxId');
+                }
+
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PROJECT)
                     ->where('id')->in($this->app->user->view->projects)
                     ->fetch('maxId');
-            }
-        }
-        elseif($module == 'story')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_STORY)
-                ->where('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'execution')
-        {
-            $executionIds = array_map('intval', explode(',', $this->app->user->view->sprints));
-            $objectId  = max($executionIds);
-        }
-        elseif($module == 'task')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_TASK)
-                ->where('project')->in($this->app->user->view->projects)
-                ->fetch('maxId');
-        }
-        elseif($module == 'case')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_CASE)
-                ->where('project')->in($this->app->user->view->projects)
-                ->orWhere('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'bug')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)
-                ->where('project')->in($this->app->user->view->projects)
-                ->orWhere('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'doc')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
-                ->where('project')->in($this->app->user->view->projects)
-                ->orWhere('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-            if(empty($objectId))
-            {
+            case 'epic':
+            case 'requirement':
+            case 'story':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_STORY)
+                    ->where('product')->in($this->app->user->view->products)
+                    ->andWhere('type')->eq($module)
+                    ->fetch('maxId');
+            case 'execution':
+                $executionIds = array_map('intval', explode(',', $this->app->user->view->sprints));
+                return max($executionIds);
+            case 'task':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_TASK)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->fetch('maxId');
+            case 'case':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_CASE)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->orWhere('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+            case 'bug':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_BUG)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->orWhere('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+            case 'ticket':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_TICKET)
+                    ->where('product')->in($this->app->user->view->products)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetch('maxId');
+            case 'risk':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_RISK)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetch('maxId');
+            case 'issue':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_ISSUE)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetch('maxId');
+            case 'doc':
+                $objectId = $this->dao->select('MAX(id) AS maxId')->from(TABLE_DOC)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->orWhere('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+                if(!empty($objectId)) return $objectId;
+
                 $userDocLibs = $this->dao->select('id')->from(TABLE_DOCLIB)
                     ->where('type')->eq('mine')
                     ->andWhere('addedBy')->eq($this->app->user->account)
                     ->fetchPairs();
-                if(!empty($userDocLibs))
-                {
-                    $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
-                        ->where('lib')->in($userDocLibs)
-                        ->fetch('maxId');
-                }
-            }
-        }
+                if(empty($userDocLibs)) return false;
 
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_DOC)
+                    ->where('lib')->in($userDocLibs)
+                    ->fetch('maxId');
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Build testing link by object id.
+     *
+     * @param  object           $prompt
+     * @param  int|string|false $objectId
+     * @access protected
+     * @return string|false
+     */
+    protected function getTestingLink($prompt, $objectId)
+    {
         if(!empty($objectId)) return helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId");
 
         return false;
@@ -2341,21 +2995,35 @@ class aiModel extends model
         if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
         if(empty($prompt)) return array(false, true);
 
-        $targetForm = $prompt->targetForm;
+        $targetForm = $prompt->actionPurpose;
         if(empty($targetForm)) return array(false, true);
         if($targetForm === 'empty.empty') return array(false, false);
 
-        list($m, $f) = explode('.', $targetForm);
+        $targetFormPath = explode('.', $targetForm, 2);
+        if(count($targetFormPath) !== 2) return array(false, true);
+
+        list($m, $f) = $targetFormPath;
+        if(empty($this->config->ai->targetForm[$m][$f]))
+        {
+            $workflowAction = $this->getWorkflowActionForPrompt($m, $f);
+            if(empty($workflowAction)) return array(false, true);
+            $this->ensureWorkflowTargetForm($m, $f, $workflowAction);
+        }
+
         $targetFormConfig = $this->config->ai->targetForm[$m][$f];
         $module = strtolower($targetFormConfig->m);
         $method = strtolower($targetFormConfig->f);
+        $promptObject = !empty($object->{$prompt->module}) ? $object->{$prompt->module} : null;
+        if(empty($promptObject) && in_array($prompt->module, array('epic', 'requirement')) && !empty($object->story)) $promptObject = $object->story;
 
         if($targetForm == 'doc.create')
         {
-            $objectType = '';
+            $objectType = 'mine';
             $params     = '';
-            $objectData = $object->{$prompt->module};
-            if(in_array($prompt->module, array('product', 'story', 'productplan', 'release', 'case', 'bug')))
+            $objectData = $promptObject;
+            if(empty($objectData)) return array(helper::createLink('ai', 'promptExecutionReset', 'failed=1'), true);
+
+            if(in_array($prompt->module, array('product', 'epic', 'requirement', 'story', 'productplan', 'release', 'case', 'bug')))
             {
                 $objectType = 'product';
                 $productID  = $prompt->module == 'product' ? $objectData->id : $objectData->product;
@@ -2372,13 +3040,24 @@ class aiModel extends model
                 $executionID = $prompt->module == 'execution' ? $objectData->id : $objectData->execution;
                 $params      = helper::safe64Encode("&objectID=$objectData->project&executionID=$executionID");
             }
+            if(in_array($prompt->module, array('feedback', 'ticket')) && !empty($objectData->product))
+            {
+                $objectType = 'product';
+                $params     = helper::safe64Encode("objectID={$objectData->product}");
+            }
+            if(in_array($prompt->module, array('issue', 'risk')) && !empty($objectData->project))
+            {
+                $objectType = 'project';
+                $params     = helper::safe64Encode("objectID={$objectData->project}");
+            }
             if($prompt->module == 'doc') $objectType = 'mine';
 
-            return array(helper::createLink($module, $method, "objectType=$objectType&params=$params&from=ai") . '#open-modal?width=300', false);
+            return array(helper::createLink('doc', 'selectLibType', "objectType=$objectType&params=$params&from=ai") . '#open-modal?width=300', false);
         }
 
         /* Try to assemble link vars from both passed-in `$linkArgs` and object props. */
-        $varsConfig = isset($this->config->ai->targetFormVars[$m][$f]) ? $this->config->ai->targetFormVars[$m][$f] : $this->config->ai->targetFormVars[$module][$method];
+        $varsConfig = isset($this->config->ai->targetFormVars[$m][$f]) ? $this->config->ai->targetFormVars[$m][$f] : ($this->config->ai->targetFormVars[$module][$method] ?? null);
+        if(empty($varsConfig)) $varsConfig = $this->buildWorkflowTargetFormVars($module, $method);
         $vars = array();
         foreach($varsConfig->args as $arg => $isRequired)
         {
@@ -2391,9 +3070,17 @@ class aiModel extends model
             {
                 $var = $object->$arg->id;
             }
-            elseif(!empty($object->{$prompt->module}->$arg)) // If object has the prop, use it.
+            elseif(!empty($promptObject->$arg)) // If object has the prop, use it.
             {
-                $var = $object->{$prompt->module}->$arg;
+                $var = $promptObject->$arg;
+            }
+            elseif(!empty($promptObject->id) && ($arg == $prompt->module || $arg == $module)) // Workflow object itself.
+            {
+                $var = $promptObject->id;
+            }
+            elseif(!empty($object->id) && ($arg == $prompt->module || $arg == $module)) // Flat workflow object.
+            {
+                $var = $object->id;
             }
             else
             {
@@ -2414,11 +3101,11 @@ class aiModel extends model
             if(!empty($isRequired) && empty($var)) return array(helper::createLink('ai', 'promptExecutionReset', 'failed=1'), true);
             $vars[] = $var;
         }
-        $linkVars = vsprintf($varsConfig->format, $vars);
+        $linkVars = empty($varsConfig->format) ? '' : vsprintf($varsConfig->format, $vars);
 
-        /* Overrides for stories. */
-        if($module == 'story' && $method == 'change' && !empty($object->story) && $object->story->status == 'draft') $method = 'edit';
-        if($module == 'story' && $method == 'change' && !empty($object->story) && $object->story->type == 'epic')    $module = 'epic';
+        /* Overrides for requirements. */
+        if(in_array($module, array('story', 'epic', 'requirement')) && $method == 'change' && !empty($object->story) && $object->story->status == 'draft') $method = 'edit';
+        if($module == 'story' && $method == 'change' && !empty($object->story) && in_array($object->story->type, array('epic', 'requirement'))) $module = $object->story->type;
 
         return array(helper::createLink($module, $method, $linkVars) . (empty($varsConfig->app) ? '' : "#app=$varsConfig->app"), false);
     }
@@ -2446,13 +3133,16 @@ class aiModel extends model
         $vars = array();
 
         /* If a native object of a module exists, try getting stuff related to its id. */
-        if(!empty($object->{$prompt->module}) && is_object($object->{$prompt->module}) && !empty($object->{$prompt->module}->id))
+        $promptObject = !empty($object->{$prompt->module}) ? $object->{$prompt->module} : null;
+        if(empty($promptObject) && in_array($prompt->module, array('epic', 'requirement')) && !empty($object->story)) $promptObject = $object->story;
+        if(!empty($promptObject) && is_object($promptObject) && !empty($promptObject->id))
         {
-            $objectId = $object->{$prompt->module}->id;
+            $objectId = $promptObject->id;
+            $promptModule = $this->getPromptSampleModule($prompt->module);
             foreach($objectNames as $objectName)
             {
                 /* Note that modules are within (product, story, productplan, release, project, execution, task, bug, case, doc). */
-                switch ($prompt->module)
+                switch ($promptModule)
                 {
                     case 'product': // story, branch, productplan, execution, task, bug, case, project, doc
                         if(in_array($objectName, array('story', 'branch', 'productplan', 'task', 'bug', 'case', 'doc')))
@@ -2730,14 +3420,19 @@ class aiModel extends model
      */
     public function getLastActiveStep($prompt)
     {
-        if(!empty($prompt))
+        if(empty($prompt)) return 'basicinfo';
+
+        $basicInfoComplete = !empty($prompt->name) && !empty($prompt->module) && !empty($prompt->actionPurpose) && !empty($prompt->displayPosition);
+        if($basicInfoComplete)
         {
-            if($prompt->status == 'active') return 'finalize';
-            if(!empty($prompt->targetForm)) return 'settargetform';
-            if(!empty($prompt->purpose))    return 'setpurpose';
-            if(!empty($prompt->source))     return 'selectdatasource';
+            if(!empty($prompt->status) && $prompt->status == 'active') return 'preview';
+            if(!empty($prompt->purpose)) return 'setprompt';
+            if($prompt->displayPosition == 'form') return 'setinputform';
+            if(!empty($prompt->source)) return 'setinputform';
+            return 'setinputfields';
         }
-        return 'assignrole';
+
+        return 'basicinfo';
     }
 
     /**
@@ -2758,6 +3453,41 @@ class aiModel extends model
     }
 
     /**
+     * 获取当前入口页面可用的智能体列表
+     * Get prompts available for current entry page.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  string $displayPosition
+     * @access public
+     * @return array
+     */
+    public function getPromptsForEntryPage(string $module, string $method, string $displayPosition): array
+    {
+        if($displayPosition === 'detail' && $method !== 'view') return array();
+
+        $prompts = $this->dao->select('*')->from(TABLE_AI_AGENT)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('active')
+            ->andWhere('displayPosition')->eq($displayPosition);
+
+        if($displayPosition === 'detail')
+        {
+            $moduleMap   = $this->config->ai->moduleNameMap ?? array();
+            $queryModule = $moduleMap[$module] ?? $module;
+            $prompts     = $prompts->andWhere('module')->eq($queryModule)->fetchAll('id', false);
+        }
+        else
+        {
+            $actionPurpose = "{$module}.{$method}";
+            $prompts       = $prompts->andWhere('actionPurpose')->eq($actionPurpose)->fetchAll('id', false);
+        }
+
+        $prompts = $this->filterPromptsForExecution($prompts, true);
+        return array_values($prompts);
+    }
+
+    /**
      * Filter prompts by user's privilege and executable state.
      *
      * @param  array   $prompts
@@ -2772,28 +3502,47 @@ class aiModel extends model
         /* Remove the unexecutable ones. */
         $prompts = array_filter($prompts, array($this, 'isExecutable'));
 
-        /* Check user's priv to targetForm. */
+        $moduleMap        = $this->config->ai->moduleNameMap ?? array();
+        $reverseModuleMap = array_flip($moduleMap);
+
+        /* Check user's privilege to the entry page. */
         foreach($prompts as $idx => $prompt)
         {
-            list($m, $f) = explode('.', $prompt->targetForm);
-            if($m === 'empty' && $f === 'empty') continue;
-
-            $targetFormConfig = $this->config->ai->targetForm[$m][$f];
-            if(empty($targetFormConfig))
+            $displayPosition = $prompt->displayPosition ?? '';
+            if($displayPosition === 'form')
             {
-                unset($prompts[$idx]);
-                continue;
-            }
-            if(!commonModel::hasPriv($targetFormConfig->m, $targetFormConfig->f))
-            {
-                if($keepUnauthorized)
-                {
-                    $prompts[$idx]->unauthorized = true;
-                }
-                else
+                $page = explode('.', $prompt->actionPurpose, 2);
+                if(count($page) !== 2)
                 {
                     unset($prompts[$idx]);
+                    continue;
                 }
+
+                list($m, $f) = $page;
+                if(!empty($this->config->ai->targetForm[$m][$f]))
+                {
+                    $targetFormConfig = $this->config->ai->targetForm[$m][$f];
+                    $m                = strtolower($targetFormConfig->m);
+                    $f                = strtolower($targetFormConfig->f);
+                }
+                if(!commonModel::hasPriv($m, $f))
+                {
+                    if($keepUnauthorized) $prompts[$idx]->unauthorized = true;
+                    else unset($prompts[$idx]);
+                }
+            }
+            elseif($displayPosition === 'detail')
+            {
+                $entryModule = $reverseModuleMap[$prompt->module] ?? $prompt->module;
+                if(!commonModel::hasPriv($entryModule, 'view'))
+                {
+                    if($keepUnauthorized) $prompts[$idx]->unauthorized = true;
+                    else unset($prompts[$idx]);
+                }
+            }
+            else
+            {
+                unset($prompts[$idx]);
             }
         }
         return array_values($prompts);
@@ -2809,88 +3558,201 @@ class aiModel extends model
      */
     public function getTestPromptData(object $prompt): array
     {
-        $module       = $prompt->module;
-        $promptSource = $prompt->source;
-        $source       = explode(',', $promptSource);
+        $module       = $prompt->module ?? '';
+        $promptSource = $prompt->source ?? '';
+        $sampleModule = $this->getPromptSampleModule($module);
+        $source       = explode(',', (string)$promptSource);
         $source       = array_filter($source, function($value) {return !empty($value);});
 
-        $titleData = $this->lang->ai->dataSource[$module];
-        $testData  = $this->lang->ai->prompts->testData[$module];
+        $titleData = $this->getPromptDataSourceDefinition($module);
+        $testData  = $this->lang->ai->prompts->testData[$sampleModule] ?? array();
+        if(empty($module) || empty($source) || empty($titleData) || empty($testData)) return array($testData, '');
 
         $categorized = array();
         foreach($source as $value)
         {
-            $prefix = explode('.', $value)[0];
-            $column = explode('.', $value)[1];
-            if(!isset($categorized[$prefix])) $categorized[$prefix] = [];
+            $path = explode('.', $value, 2);
+            if(count($path) !== 2) continue;
+
+            $prefix = $path[0];
+            $column = $path[1];
+            if(!isset($categorized[$prefix])) $categorized[$prefix] = array();
             $categorized[$prefix][] = $column;
         }
 
-        $result = '';
-        foreach($categorized as $groupKey => $pathInfo)
-        {
-            if(in_array($groupKey, array('programplans', 'executions', 'stories', 'bugs', 'tasks', 'steps')))
-            {
-                if($module == 'release' && $groupKey == 'bugs')
-                {
-                    $result .= '##### ' . $titleData[$groupKey]['common'] . $this->lang->colon . "\n";
-                    $result .= $testData[$groupKey]['title'] . "\n";
-                }
-                else
-                {
-                    $result .= '##### ' . $titleData[$groupKey]['common'] . $this->lang->colon . "\n";
-                    $result .= "| ";
-                    foreach($pathInfo as $value) $result .= $titleData[$groupKey][$value] . " | ";
-                    $result .= "\n";
-
-                    $result .= "| ";
-                    foreach($pathInfo as $value) $result .= "--- | ";
-                    $result .= "\n";
-
-                    $firstData = $pathInfo[0];
-                    $count     = count($testData[$groupKey][$firstData]);
-                    for($i = 0; $i < $count; $i++)
-                    {
-                        $result .= "| ";
-                        foreach($pathInfo as $value) $result .= $testData[$groupKey][$value][$i] . " | ";
-                        $result .= "\n";
-                    }
-                }
-            }
-            else
-            {
-                foreach($pathInfo as $value)
-                {
-                    if($groupKey == 'task' && $value == 'story') continue;
-
-                    $result .= '##### ' . $titleData[$groupKey][$value] . $this->lang->colon . "\n";
-                    $result .= $testData[$groupKey][$value] . "\n";
-                }
-            }
-        }
+        $result = $this->buildTestPromptDataPreview($module, $categorized, $titleData, $testData);
 
         return array($testData, $result);
     }
 
     /**
-     * Set inject data for a form. For how injection works, see view/inputinject.html.php file.
+     * 构建智能体测试数据预览。
+     * Build prompt test data preview.
      *
-     * @param  string|array  $form  'module.method' or array('module', 'method').
-     * @param  string|object $data  data to inject, object will be json encoded.
-     * @access public
-     * @return void
+     * @param  string $module
+     * @param  array  $categorized
+     * @param  array  $titleData
+     * @param  array  $testData
+     * @access private
+     * @return string
      */
-    public function setInjectData($form, $data)
+    private function buildTestPromptDataPreview(string $module, array $categorized, array $titleData, array $testData): string
     {
-        if(is_string($form)) $form = explode('.', $form);
+        $result = '';
+        foreach($categorized as $groupKey => $pathInfo)
+        {
+            if(empty($titleData[$groupKey]) || empty($testData[$groupKey])) continue;
 
-        $targetForm = $this->config->ai->targetForm[$form[0]][$form[1]];
-        if(empty($targetForm)) return;
+            $result .= $this->isMultiRowTestPromptDataGroup($groupKey)
+                ? $this->buildMultiRowTestPromptDataPreview($module, $groupKey, $pathInfo, $titleData, $testData)
+                : $this->buildSingleRowTestPromptDataPreview($groupKey, $pathInfo, $titleData, $testData);
+        }
 
-        /* Override method for story drafts. */
-        if($targetForm->m == 'story' && $targetForm->f == 'change') $_SESSION['aiInjectData']['story']['edit'] = is_string($data) ? $data : json_encode($data);
+        return $result;
+    }
 
-        $_SESSION['aiInjectData'][$targetForm->m][$targetForm->f] = is_string($data) ? $data : json_encode($data);
+    /**
+     * 判断测试数据分组是否为多行数据。
+     * Check whether test prompt data group is multi-row.
+     *
+     * @param  string $groupKey
+     * @access private
+     * @return bool
+     */
+    private function isMultiRowTestPromptDataGroup(string $groupKey): bool
+    {
+        return in_array($groupKey, array('programplans', 'executions', 'stories', 'bugs', 'tasks', 'steps'));
+    }
+
+    /**
+     * 构建多行测试数据预览。
+     * Build multi-row test prompt data preview.
+     *
+     * @param  string $module
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $titleData
+     * @param  array  $testData
+     * @access private
+     * @return string
+     */
+    private function buildMultiRowTestPromptDataPreview(string $module, string $groupKey, array $pathInfo, array $titleData, array $testData): string
+    {
+        if($module == 'release' && $groupKey == 'bugs')
+        {
+            if(!isset($titleData[$groupKey]['common']) || !isset($testData[$groupKey]['title'])) return '';
+            return '##### ' . $titleData[$groupKey]['common'] . $this->lang->colon . "\n" . $testData[$groupKey]['title'] . "\n";
+        }
+
+        if(!isset($titleData[$groupKey]['common'])) return '';
+
+        $result  = '##### ' . $titleData[$groupKey]['common'] . $this->lang->colon . "\n";
+        $result .= $this->buildTestPromptDataTableHead($groupKey, $pathInfo, $titleData);
+
+        $firstData = $this->getFirstTestPromptDataColumn($groupKey, $pathInfo, $testData);
+        if($firstData === '') return $result;
+
+        $count = count($testData[$groupKey][$firstData]);
+        for($i = 0; $i < $count; $i++)
+        {
+            $result .= $this->buildTestPromptDataTableRow($groupKey, $pathInfo, $testData, $i);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 构建单行测试数据预览。
+     * Build single-row test prompt data preview.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $titleData
+     * @param  array  $testData
+     * @access private
+     * @return string
+     */
+    private function buildSingleRowTestPromptDataPreview(string $groupKey, array $pathInfo, array $titleData, array $testData): string
+    {
+        $result = '';
+        foreach($pathInfo as $value)
+        {
+            if($groupKey == 'task' && $value == 'story') continue;
+            if(!isset($titleData[$groupKey][$value]) || !isset($testData[$groupKey][$value])) continue;
+
+            $result .= '##### ' . $titleData[$groupKey][$value] . $this->lang->colon . "\n";
+            $result .= $testData[$groupKey][$value] . "\n";
+        }
+
+        return $result;
+    }
+
+    /**
+     * 构建测试数据表头。
+     * Build test prompt data table head.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $titleData
+     * @access private
+     * @return string
+     */
+    private function buildTestPromptDataTableHead(string $groupKey, array $pathInfo, array $titleData): string
+    {
+        $titleRow = '| ';
+        $splitRow = '| ';
+        foreach($pathInfo as $value)
+        {
+            if(!isset($titleData[$groupKey][$value])) continue;
+
+            $titleRow .= $titleData[$groupKey][$value] . ' | ';
+            $splitRow .= '--- | ';
+        }
+
+        return $titleRow . "\n" . $splitRow . "\n";
+    }
+
+    /**
+     * 获取第一列存在的测试数据。
+     * Get the first existing test prompt data column.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $testData
+     * @access private
+     * @return string
+     */
+    private function getFirstTestPromptDataColumn(string $groupKey, array $pathInfo, array $testData): string
+    {
+        foreach($pathInfo as $value)
+        {
+            if(isset($testData[$groupKey][$value])) return $value;
+        }
+
+        return '';
+    }
+
+    /**
+     * 构建测试数据表格行。
+     * Build test prompt data table row.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $testData
+     * @param  int    $index
+     * @access private
+     * @return string
+     */
+    private function buildTestPromptDataTableRow(string $groupKey, array $pathInfo, array $testData, int $index): string
+    {
+        $result = '| ';
+        foreach($pathInfo as $value)
+        {
+            if(!isset($testData[$groupKey][$value][$index])) continue;
+            $result .= $testData[$groupKey][$value][$index] . ' | ';
+        }
+
+        return $result . "\n";
     }
 
     /**
@@ -3131,6 +3993,167 @@ class aiModel extends model
             ->fetch();
     }
 
+    /**
+     * 加载表单页面上下文对象
+     * Load form page context objects.
+     *
+
+    /**
+     * 获取表单页面的 AI 可填充字段
+     * Get allowed fields for a form page.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return array
+     */
+    public function getFormAllowedFields(string $module, string $method): array
+    {
+        $workflowaction = $this->loadModel('workflowaction');
+        if($workflowaction !== false)
+        {
+            $fields = $workflowaction->getPageFields($module, $method);
+            if(!empty($fields))
+            {
+                $allowedFields = array();
+                foreach($fields as $fieldName => $field)
+                {
+                    if(!empty($field->readonly)) continue;
+                    if(strpos($fieldName, 'sub_') === 0) continue;
+                    $allowedFields[] = $fieldName;
+                }
+                return $allowedFields;
+            }
+        }
+
+        return array();
+    }
+
+    /**
+     * 从 formSchema 字段值加载关联上下文对象并构建描述文本。
+     * Load context objects from form schema and build description text.
+     *
+     * @param  array  $formSchema getFormSchema() 返回的表单结构
+     * @access public
+     * @return string
+     */
+    public function loadContextFromFormSchema(array $formSchema): string
+    {
+        $fields = $formSchema['fields'] ?? array();
+        if(empty($fields)) return '';
+
+        $objectTypes    = (array)$this->config->ai->formContextObjectTypes;
+        $relationChain  = (array)$this->config->ai->formContextRelationChain;
+        $pageLevelTypes = (array)$this->config->ai->formContextPageLevelTypes;
+        $context        = array();
+
+        foreach($fields as $field)
+        {
+            $fieldName = $field['name'] ?? '';
+            if(empty($fieldName)) continue;
+
+            $value = $field['currentValue'] ?? '';
+            if($value === '' || $value === null) continue;
+
+            $numVal = (int)$value;
+            if($numVal <= 0) continue;
+
+            $cleanName = strtolower(preg_replace('/_?id$/', '', $fieldName));
+            if(!in_array($cleanName, $objectTypes)) continue;
+
+            if(!$this->loadModel('zai')->canViewObject($cleanName, $numVal)) continue;
+
+            $object = $this->loadModel($cleanName)->getById($numVal);
+            if(empty($object)) continue;
+
+            $context[$cleanName] = $object;
+        }
+
+        foreach($relationChain as $fromModule => $links)
+        {
+            if(!isset($context[$fromModule])) continue;
+            $object = $context[$fromModule];
+
+            foreach($links as $link)
+            {
+                $linkModule = $link['module'];
+                if(isset($context[$linkModule])) continue;
+
+                if(!empty($link['via']) && $link['via'] === 'projectproduct')
+                {
+                    $linkID = $this->loadModel('product')->getProductIDByProject($object->id, true);
+                    if(empty($linkID)) continue;
+                }
+                elseif(!empty($link['field']))
+                {
+                    $linkID = (int)($object->{$link['field']} ?? 0);
+                    if($linkID <= 0) continue;
+                }
+                else continue;
+
+                if(!$this->loadModel('zai')->canViewObject($linkModule, $linkID)) continue;
+
+                $linkObject = $this->loadModel($linkModule)->getById($linkID);
+                if(empty($linkObject)) continue;
+
+                $context[$linkModule] = $linkObject;
+            }
+        }
+
+        if(empty($context)) return '';
+
+        $lines = array();
+        foreach($context as $module => $object)
+        {
+            $label = $this->lang->ai->moduleList[$module] ?? $module;
+            $id    = (int)$object->id;
+
+            if(in_array($module, $pageLevelTypes))
+            {
+                $lines[] = "{$label}：#{$id}";
+
+                if(!empty($object->name))                          $lines[] = "  name：{$object->name}";
+                if(!empty($object->begin) || !empty($object->end)) $lines[] = "  begin：" . ($object->begin ?? '') . " ~ " . ($object->end ?? '');
+                if(!empty($object->desc))                          $lines[] = "  desc：" . strip_tags($object->desc);
+                if(!empty($object->model))                         $lines[] = "  model：{$object->model}";
+            }
+            else
+            {
+                $lines[] = "{$label}：#{$id}";
+                $title   = $object->title ?? $object->name ?? '';
+
+                if(!empty($title))          $lines[] = "  title：{$title}";
+                if(!empty($object->spec))   $lines[] = "  spec：" . strip_tags($object->spec);
+                if(!empty($object->pri))    $lines[] = "  pri：{$object->pri}";
+                if(!empty($object->status)) $lines[] = "  status：{$object->status}";
+            }
+        }
+
+        return implode("\n", $lines);
+    }
+
+    /**
+     * 过滤字段白名单
+     * Filter fields to only allowed ones.
+     *
+     * @param  array $fields
+     * @param  array $allowed
+     * @access public
+     * @return array
+     */
+    public function filterAllowedFields(array $fields, array $allowed)
+    {
+        if(empty($allowed)) return $fields;
+
+        $filtered = array();
+        foreach($fields as $name => $field)
+        {
+            if(in_array($name, $allowed)) $filtered[$name] = $field;
+        }
+
+        return $filtered ?: $fields;
+    }
+
     public function deleteAssistant($assistantId)
     {
         $this->dao->update(TABLE_AI_ASSISTANT)
@@ -3142,6 +4165,80 @@ class aiModel extends model
         $this->loadModel('action')->create('aiAssistant', $assistantId, 'deleted');
 
         return true;
+    }
+
+    /**
+     * 发送 HTTP 请求。
+     * Send HTTP request.
+     *
+     * @param  string $requestType
+     * @param  string $url
+     * @param  array  $data
+     * @param  array  $header
+     * @access public
+     * @return string|false
+     */
+    public function http(string $requestType, string $url, array $data = array(), array $header = array()): string|false
+    {
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_ENCODING, '');
+        curl_setopt($curl, CURLOPT_MAXREDIRS, 10);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 120);
+
+        $requestType = strtoupper($requestType);
+        if($requestType === 'GET')
+        {
+            curl_setopt($curl, CURLOPT_HTTPGET, true);
+        }
+        elseif($requestType === 'POST')
+        {
+            curl_setopt($curl, CURLOPT_POST, true);
+        }
+        else
+        {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $requestType);
+        }
+
+        $hasFile = false;
+        if(!empty($data))
+        {
+            foreach($data as $value)
+            {
+                if($value instanceof CURLFile)
+                {
+                    $hasFile = true;
+                    break;
+                }
+            }
+
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $hasFile ? $data : json_encode($data, JSON_UNESCAPED_UNICODE));
+        }
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        if(curl_errno($curl))
+        {
+            dao::$errors[] = sprintf($this->lang->zai->callZaiAPIFailed, $url, curl_error($curl));
+            curl_close($curl);
+            return false;
+        }
+        curl_close($curl);
+
+        if($httpCode < 200 || $httpCode >= 300)
+        {
+            dao::$errors[] = sprintf($this->lang->zai->callZaiAPIFailed, $url, "HTTP $httpCode, response: $response");
+            return false;
+        }
+
+        return $response;
     }
 }
 

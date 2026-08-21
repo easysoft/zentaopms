@@ -5,7 +5,14 @@ su('admin');
 
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('task')->loadYaml('task')->gen(30);
-zenData('team')->loadYaml('team')->gen(10);
+$team = zenData('team');
+$team->id->range('1-10');
+$team->root->range('1-10');
+$team->type->range('project');
+$team->account->range('admin');
+$team->days->range('0');
+$team->hours->range('0');
+$team->gen(10);
 
 /**
 
@@ -19,20 +26,20 @@ cid=17859
  - 属性totalConsumed @0
  - 属性totalLeft @0
 - 获取项目ID为11的总预计工时
- - 属性totalHours @112.5
- - 属性totalEstimate @61
- - 属性totalConsumed @18
- - 属性totalLeft @61
+ - 属性totalHours @0
+ - 属性totalEstimate @61.0
+ - 属性totalConsumed @18.0
+ - 属性totalLeft @61.0
 - 获取不存在项目工时信息
  - 属性totalHours @0
  - 属性totalEstimate @0
  - 属性totalConsumed @0
  - 属性totalLeft @0
 - 获取项目ID为60的总消耗工时
- - 属性totalHours @300
- - 属性totalEstimate @35
- - 属性totalConsumed @11
- - 属性totalLeft @35
+ - 属性totalHours @0
+ - 属性totalEstimate @35.0
+ - 属性totalConsumed @11.0
+ - 属性totalLeft @35.0
 - 获取不存在项目工时信息
  - 属性totalHours @0
  - 属性totalEstimate @0

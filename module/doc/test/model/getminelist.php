@@ -4,6 +4,7 @@
 /**
 
 title=测试 docModel->getMineList();
+timeout=0
 cid=16109
 
 - 获取最近浏览的所有文档
@@ -55,7 +56,13 @@ $userqueryTable->gen(1);
 
 zenData('doclib')->loadYaml('doclib')->gen(30);
 zenData('doc')->loadYaml('doc')->gen(50);
-zenData('docaction')->loadYaml('docaction')->gen(20);
+$docaction = zenData('docaction');
+$docaction->id->range('1-15');
+$docaction->doc->range('`1`,`2`,`3`,`4`,`5`,`6`,`7`,`8`,`9`,`10`,`3`,`6`,`9`,`1`,`7`');
+$docaction->action->range('`collect`,`collect`,`collect`,`collect`,`collect`,`collect`,`collect`,`collect`,`collect`,`collect`,`view`,`view`,`view`,`edited`,`edited`');
+$docaction->actor->range('`admin`,`user1`,`user2`,`admin`,`user1`,`user2`,`admin`,`user1`,`user2`,`admin`,`admin`,`admin`,`admin`,`admin`,`admin`');
+$docaction->date->range('`2024-01-01 00:00:00`');
+$docaction->gen(15);
 zenData('action')->loadYaml('action')->gen(20);
 zenData('user')->gen(5);
 su('admin');

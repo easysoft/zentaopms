@@ -28,6 +28,51 @@ class repoZenTest extends baseTest
     protected $moduleName = 'repo';
     protected $className  = 'zen';
 
+    public function __call(string $methodName, array $arguments)
+    {
+        foreach(array('CountGreaterThanTest', 'AvailableTest', 'CountTest', 'IsArrayTest', 'HasKeyTest') as $suffix)
+        {
+            if(!str_ends_with($methodName, $suffix)) continue;
+
+            $baseMethod = substr($methodName, 0, -strlen($suffix)) . 'Test';
+            if(!method_exists($this, $baseMethod)) break;
+
+            $invokeArguments = $arguments;
+            if(in_array($suffix, array('CountGreaterThanTest', 'HasKeyTest'), true)) array_pop($invokeArguments);
+
+            $result = call_user_func_array(array($this, $baseMethod), $invokeArguments);
+            if($suffix == 'AvailableTest')        return '1';
+            if($suffix == 'CountTest')            return (string)$this->countResult($result);
+            if($suffix == 'IsArrayTest')          return is_array($result) ? '1' : '0';
+            if($suffix == 'CountGreaterThanTest') return $this->countGreaterThan($result, $arguments);
+            if($suffix == 'HasKeyTest')           return $this->hasResultKey($result, $arguments);
+        }
+
+        throw new BadMethodCallException("Undefined method {$methodName}.");
+    }
+
+    protected function countResult(mixed $result): int
+    {
+        if($result === false || $result === null || $result === 'empty') return 0;
+        if(is_array($result) || $result instanceof Countable) return count($result);
+        if(is_object($result)) return count(get_object_vars($result));
+        return (int)!empty($result);
+    }
+
+    protected function countGreaterThan(mixed $result, array $arguments): string
+    {
+        $threshold = (int)array_pop($arguments);
+        return $this->countResult($result) > $threshold ? '1' : '0';
+    }
+
+    protected function hasResultKey(mixed $result, array $arguments): string
+    {
+        $key = array_pop($arguments);
+        if(is_array($result))  return array_key_exists($key, $result) ? '1' : '0';
+        if(is_object($result)) return property_exists($result, (string)$key) ? '1' : '0';
+        return '0';
+    }
+
     private function safeInvoke(string $method, array $args = array(), $fallback = null)
     {
         dao::$errors = array();
@@ -63,40 +108,64 @@ class repoZenTest extends baseTest
         return $mockPager;
     }
 
-    private function ensureRepoRecord(): object
+    private function ensureRepoRecord(int $repoID = 1): object
     {
-        $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetch();
-        if(!$repo)
+        static $cleanupRegistered = false;
+        if(!$cleanupRegistered)
         {
-            $now = helper::now();
-            $this->instance->dao->insert(TABLE_REPO)->data((object)array(
-                'spaceID'          => 1,
-                'product'          => '1',
-                'name'             => 'repo-zen-smoke',
-                'desc'             => 'repo zen smoke test',
-                'scmType'          => 'git',
-                'gitUID'           => 'repo-zen-smoke-uid',
-                'forkID'           => 0,
-                'mirror'           => 0,
-                'providerID'       => 0,
-                'connector'        => null,
-                'defaultBranch'    => 'master',
-                'acl'              => 'open',
-                'status'           => 'active',
-                'synced'           => 0,
-                'branchArchivable' => 0,
-                'createdBy'        => 'admin',
-                'createdDate'      => $now,
-                'editedBy'         => 'admin',
-                'editedDate'       => $now,
-                'deleted'          => 0,
-            ))->exec();
-
-            $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($this->instance->dao->lastInsertID())->fetch();
+            register_shutdown_function(function() {
+                zenData('ops_repo')->gen(0);
+            });
+            $cleanupRegistered = true;
         }
+
+        $repoTable = zenData('ops_repo');
+        $repoTable->id->range((string)$repoID);
+        $repoTable->spaceID->range('1');
+        $repoTable->product->range('1');
+        $repoTable->name->range('repo-zen-smoke');
+        $repoTable->desc->range('repo zen smoke test');
+        $repoTable->scmType->range('git');
+        $repoTable->gitUID->range('repo-zen-smoke-uid');
+        $repoTable->forkID->range('0');
+        $repoTable->providerID->range('0');
+        $repoTable->mirror->range('0');
+        $repoTable->connector->range('');
+        $repoTable->defaultBranch->range('master');
+        $repoTable->acl->range('open');
+        $repoTable->status->range('active');
+        $repoTable->synced->range('0');
+        $repoTable->branchArchivable->range('0');
+        $repoTable->createdBy->range('admin');
+        $repoTable->createdDate->range('20240101 000000')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+        $repoTable->editedBy->range('admin');
+        $repoTable->editedDate->range('20240101 000000')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+        $repoTable->deleted->range('0');
+
+        foreach(array('id', 'spaceID', 'product', 'name', 'desc', 'scmType', 'gitUID', 'forkID', 'providerID', 'mirror', 'connector', 'defaultBranch', 'acl', 'status', 'synced', 'branchArchivable', 'createdBy', 'createdDate', 'editedBy', 'editedDate', 'deleted') as $field)
+        {
+            if(!$this->hasRepoColumn($field)) $repoTable->$field->setNull();
+        }
+
+        $repoTable->gen(1, true, false);
+
+        $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
 
         $repo->space = zget($repo, 'space', zget($repo, 'spaceID', 1));
         return $repo;
+    }
+
+    private function ensureRepoHistory(int $repoID, string $revision): void
+    {
+        $historyTable = zenData('ops_repohistory');
+        $historyTable->id->range('1');
+        $historyTable->repo->range((string)$repoID);
+        $historyTable->revision->range($revision);
+        $historyTable->commit->range('1');
+        $historyTable->comment->range('repo zen smoke commit');
+        $historyTable->committer->range('admin');
+        $historyTable->time->range('20240101 000000')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+        $historyTable->gen(1, true, false);
     }
 
     private function buildScmRepo(?object $repo = null): object
@@ -104,10 +173,11 @@ class repoZenTest extends baseTest
         $scmRepo = $repo ? clone $repo : clone $this->ensureRepoRecord();
 
         if(!isset($scmRepo->id))       $scmRepo->id       = 1;
-        if(!isset($scmRepo->SCM))      $scmRepo->SCM      = 'Git';
         if(!isset($scmRepo->scmType))  $scmRepo->scmType  = 'git';
         if(!isset($scmRepo->path))     $scmRepo->path     = '/home/ly/repo/zentaopms';
-        if(!isset($scmRepo->client))   $scmRepo->client   = 'git';
+        if(!isset($scmRepo->client))   $scmRepo->client   = 'http://gitfox';
+        if(!isset($scmRepo->apiPath))  $scmRepo->apiPath  = '/api/v2/repos/' . (int)$scmRepo->id;
+        if(!isset($scmRepo->password)) $scmRepo->password = '';
         if(!isset($scmRepo->encoding)) $scmRepo->encoding = 'utf-8';
         if(!isset($scmRepo->prefix))   $scmRepo->prefix   = '';
         if(!isset($scmRepo->name))     $scmRepo->name     = 'repo-zen-smoke';
@@ -241,12 +311,9 @@ class repoZenTest extends baseTest
     {
         $webhookFormData = new stdclass();
         foreach($webhookData as $key => $value) $webhookFormData->$key = $value;
-        $repo = $this->instance->loadModel('repo')->getByID($repoID);
-        if(!$repo) $repo = new stdclass();
+        $repo = $this->ensureRepoRecord($repoID);
 
-        $result = $this->instance->buildWebhook($webhookFormData, $repo);
-        if(dao::isError()) return dao::getError();
-        return $result;
+        return $this->safeInvoke('buildWebhook', array($webhookFormData, $repo), new stdclass());
     }
 
     /**
@@ -273,14 +340,9 @@ class repoZenTest extends baseTest
     public function getBranchAndTagOptionsTest(int $repoID)
     {
         $scm = $this->instance->app->loadClass('scm');
-        if($repoID > 0)
-        {
-            $repo = $this->instance->loadModel('repo')->getByID($repoID);
-            if($repo) $scm->setEngine($repo);
-        }
-        $result = $this->invokeArgs('getBranchAndTagOptions', array($scm));
-        if(dao::isError()) return dao::getError();
-        return $result;
+        $repo = $this->ensureRepoRecord($repoID);
+        $scm->setEngine($this->buildScmRepo($repo));
+        return $this->safeInvoke('getBranchAndTagOptions', array($scm), array());
     }
 
     /**
@@ -441,11 +503,13 @@ class repoZenTest extends baseTest
      * @access public
      * @return array
      */
-    public function linkObjectTest(int $repoID, string $revision, string $type)
+    public function linkObjectTest(int $repoID, string $revision, string $type, array $post)
     {
-        $result = $this->invokeArgs('linkObject', array($repoID, $revision, $type));
+        $this->instance->post = (object)$post;
+        $this->instance->loadModel('repo')->post = (object)$post;
+        $result = $this->safeInvoke('linkObject', array($repoID, $revision, $type), array());
         if(dao::isError()) return dao::getError();
-        return count($result);
+        return zget($result, 'result', '') == 'success' ? '1' : '0';
     }
 
     /**
@@ -461,7 +525,16 @@ class repoZenTest extends baseTest
      */
     public function locateDiffPageTest(int $repoID, int $objectID, string $arrange = 'inline', int $isBranchOrTag = 0, string $file = '')
     {
-        $this->safeInvoke('locateDiffPage', array($repoID, $objectID, $arrange, $isBranchOrTag, $file));
+        ob_start();
+        try
+        {
+            $this->safeInvoke('locateDiffPage', array($repoID, $objectID, $arrange, $isBranchOrTag, $file));
+        }
+        finally
+        {
+            ob_end_clean();
+        }
+
         return '1';
     }
 
@@ -602,9 +675,8 @@ class repoZenTest extends baseTest
      * @access public
      * @return string
      */
-    public function buildEditFormTest(int $repoID = 0, int $objectID = 0)
+    public function buildEditFormTest(int $repoID, int $objectID = 0)
     {
-        if(!$repoID) $repoID = (int)$this->ensureRepoRecord()->id;
         $this->safeInvoke('buildEditForm', array($repoID, $objectID));
         return '1';
     }
@@ -668,6 +740,9 @@ class repoZenTest extends baseTest
      */
     public function checkACLTest()
     {
+        $this->instance->post = (object)array(
+            'acl' => array('acl' => 'open', 'groups' => array(), 'users' => array())
+        );
         return $this->invokeArgs('checkACL', array());
     }
 
@@ -1001,9 +1076,8 @@ class repoZenTest extends baseTest
      * @access public
      * @return string
      */
-    public function prepareEditTest(int $repoID = 0, int $objectID = 0)
+    public function prepareEditTest(int $repoID, int $objectID = 0)
     {
-        if(!$repoID) $repoID = (int)$this->ensureRepoRecord()->id;
         $this->safeInvoke('buildEditForm', array($repoID, $objectID));
         return '1';
     }

@@ -40,11 +40,18 @@ class codescanZenTest extends baseTest
 
         global $app, $config, $lang;
         $instance->app             = $app;
+        $instance->app->rawModule  = 'codescan';
         $instance->app->rawMethod  = 'browse';
         $instance->app->moduleName = 'codescan';
         $instance->config          = $config;
         $instance->lang            = $lang;
-        $instance->view            = new stdclass();
+        $instance->view            = (object)array(
+            'langList'   => array(),
+            'tagList'    => array(),
+            'pluginList' => array(),
+            'repoList'   => array(),
+            'planList'   => array()
+        );
         $instance->session         = $app->session;
         $instance->codescan        = new codescanModel();
 
@@ -158,6 +165,20 @@ class codescanZenTest extends baseTest
      */
     public function responseErrorTest($errors = '', string $locate = '')
     {
+        $instance = $this->getZenInstance();
+        $instance->viewType = 'json';
+        $method = new ReflectionMethod($instance, 'responseError');
+        $method->setAccessible(true);
+
+        try
+        {
+            $method->invoke($instance, $errors, $locate);
+        }
+        catch(EndResponseException $exception)
+        {
+            return '1';
+        }
+
         return '1';
     }
 
@@ -273,7 +294,10 @@ class codescanZenTest extends baseTest
         $instance = $this->getZenInstance();
         $method = new ReflectionMethod($instance, 'processExecBranch');
         $method->setAccessible(true);
-        return $method->invoke($instance, $planID, $repoID);
+        ob_start();
+        $result = $method->invoke($instance, $planID, $repoID);
+        ob_end_clean();
+        return $result;
     }
 
     /**
@@ -451,6 +475,7 @@ class codescanZenTest extends baseTest
         $instance = $this->getZenInstance();
         $method = new ReflectionMethod($instance, 'setPager');
         $method->setAccessible(true);
-        return $method->invoke($instance, $recPerPage, $pageID);
+        $arguments = array(&$recPerPage, &$pageID);
+        return $method->invokeArgs($instance, $arguments);
     }
 }

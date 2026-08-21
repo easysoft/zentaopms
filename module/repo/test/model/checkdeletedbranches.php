@@ -33,122 +33,118 @@ cid=18031
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-function resetDeletedBranchTables(): void
-{
-    global $dbh;
-
-    $dbh->exec('DROP TABLE IF EXISTS `ops_repofiles`');
-    $dbh->exec('DROP TABLE IF EXISTS `ops_repobranch`');
-    $dbh->exec('DROP TABLE IF EXISTS `ops_repohistory`');
-
-    $dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repohistory` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` varchar(40) NOT NULL DEFAULT '',
-  `commit` int unsigned NOT NULL DEFAULT 0,
-  `comment` text DEFAULT NULL,
-  `committer` varchar(100) NOT NULL DEFAULT '',
-  `time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `repo` (`repo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-    $dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repobranch` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` int unsigned NOT NULL DEFAULT 0,
-  `branch` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-    $dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repofiles` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` int unsigned NOT NULL DEFAULT 0,
-  `parent` varchar(255) NOT NULL DEFAULT '',
-  `path` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-}
-
-function seedDeletedBranchData(array $rows): void
-{
-    global $tester;
-
-    foreach($rows as $row)
-    {
-        $tester->dao->insert(TABLE_REPOHISTORY)->data((object)array(
-            'id'        => $row['revision'],
-            'repo'      => $row['repo'],
-            'revision'  => 'r' . $row['revision'],
-            'commit'    => $row['revision'],
-            'comment'   => 'commit ' . $row['revision'],
-            'committer' => 'admin',
-            'time'      => sprintf('2024-01-01 10:%02d:00', $row['revision']),
-        ))->exec();
-        $tester->dao->insert(TABLE_REPOBRANCH)->data((object)array(
-            'repo'     => $row['repo'],
-            'revision' => $row['revision'],
-            'branch'   => $row['branch'],
-        ))->exec();
-        $tester->dao->insert(TABLE_REPOFILES)->data((object)array(
-            'id'       => $row['revision'],
-            'repo'     => $row['repo'],
-            'revision' => $row['revision'],
-            'parent'   => '/',
-            'path'     => '/file' . $row['revision'],
-        ))->exec();
-    }
-}
-
-// 用户登录
 su('admin');
-
-// 创建测试实例
 $repoTest = new repoModelTest();
 
-resetDeletedBranchTables();
-seedDeletedBranchData(array(
-    array('repo' => 1, 'revision' => 1, 'branch' => 'master'),
-    array('repo' => 1, 'revision' => 2, 'branch' => 'main'),
-    array('repo' => 1, 'revision' => 3, 'branch' => 'develop'),
-    array('repo' => 1, 'revision' => 4, 'branch' => 'develop'),
-    array('repo' => 1, 'revision' => 5, 'branch' => 'main'),
-    array('repo' => 1, 'revision' => 6, 'branch' => 'master'),
-));
+$history = zenData('ops_repohistory');
+$history->id->range('1-6');
+$history->repo->range('1{6}');
+$history->revision->range('r1,r2,r3,r4,r5,r6');
+$history->commit->range('1-6');
+$history->comment->range('commit 1,commit 2,commit 3,commit 4,commit 5,commit 6');
+$history->committer->range('admin{6}');
+$history->gen(6, true, false);
+
+$branch = zenData('ops_repobranch');
+$branch->id->range('1-6');
+$branch->repo->range('1{6}');
+$branch->revision->range('1-6');
+$branch->branch->range('master,main,develop,develop,main,master');
+$branch->gen(6, true, false);
+
+$file = zenData('ops_repofiles');
+$file->id->range('1-6');
+$file->repo->range('1{6}');
+$file->revision->range('1-6');
+$file->path->range('/file1,/file2,/file3,/file4,/file5,/file6');
+$file->oldPath->range('{6}');
+$file->parent->range('/{6}');
+$file->type->range('file{6}');
+$file->action->range('A{6}');
+$file->gen(6, true, false);
 r($repoTest->checkDeletedBranchesTest(1, array('main' => 'main'))) && p('repoHistoryCount,repoBranchCount,repoFilesCount') && e('4,4,4');
 
-resetDeletedBranchTables();
-seedDeletedBranchData(array(
-    array('repo' => 1, 'revision' => 1, 'branch' => 'master'),
-    array('repo' => 1, 'revision' => 2, 'branch' => 'main'),
-    array('repo' => 1, 'revision' => 3, 'branch' => 'develop'),
-    array('repo' => 1, 'revision' => 4, 'branch' => 'develop'),
-    array('repo' => 1, 'revision' => 5, 'branch' => 'main'),
-    array('repo' => 1, 'revision' => 6, 'branch' => 'master'),
-));
+$history = zenData('ops_repohistory');
+$history->id->range('1-6');
+$history->repo->range('1{6}');
+$history->revision->range('r1,r2,r3,r4,r5,r6');
+$history->commit->range('1-6');
+$history->comment->range('commit 1,commit 2,commit 3,commit 4,commit 5,commit 6');
+$history->committer->range('admin{6}');
+$history->gen(6, true, false);
+
+$branch = zenData('ops_repobranch');
+$branch->id->range('1-6');
+$branch->repo->range('1{6}');
+$branch->revision->range('1-6');
+$branch->branch->range('master,main,develop,develop,main,master');
+$branch->gen(6, true, false);
+
+$file = zenData('ops_repofiles');
+$file->id->range('1-6');
+$file->repo->range('1{6}');
+$file->revision->range('1-6');
+$file->path->range('/file1,/file2,/file3,/file4,/file5,/file6');
+$file->oldPath->range('{6}');
+$file->parent->range('/{6}');
+$file->type->range('file{6}');
+$file->action->range('A{6}');
+$file->gen(6, true, false);
 r($repoTest->checkDeletedBranchesTest(1, array())) && p('repoHistoryCount,repoBranchCount,repoFilesCount') && e('6,6,6');
 
-resetDeletedBranchTables();
-seedDeletedBranchData(array(
-    array('repo' => 1, 'revision' => 1, 'branch' => 'master'),
-    array('repo' => 1, 'revision' => 2, 'branch' => 'main'),
-    array('repo' => 1, 'revision' => 3, 'branch' => 'feature'),
-    array('repo' => 1, 'revision' => 4, 'branch' => 'main'),
-    array('repo' => 1, 'revision' => 5, 'branch' => 'master'),
-));
+$history = zenData('ops_repohistory');
+$history->id->range('1-5');
+$history->repo->range('1{5}');
+$history->revision->range('r1,r2,r3,r4,r5');
+$history->commit->range('1-5');
+$history->comment->range('commit 1,commit 2,commit 3,commit 4,commit 5');
+$history->committer->range('admin{5}');
+$history->gen(5, true, false);
+
+$branch = zenData('ops_repobranch');
+$branch->id->range('1-5');
+$branch->repo->range('1{5}');
+$branch->revision->range('1-5');
+$branch->branch->range('master,main,feature,main,master');
+$branch->gen(5, true, false);
+
+$file = zenData('ops_repofiles');
+$file->id->range('1-5');
+$file->repo->range('1{5}');
+$file->revision->range('1-5');
+$file->path->range('/file1,/file2,/file3,/file4,/file5');
+$file->oldPath->range('{5}');
+$file->parent->range('/{5}');
+$file->type->range('file{5}');
+$file->action->range('A{5}');
+$file->gen(5, true, false);
 r($repoTest->checkDeletedBranchesTest(1, array('main' => 'main'))) && p('repoHistoryCount,repoBranchCount,repoFilesCount') && e('4,4,4');
 
-resetDeletedBranchTables();
-seedDeletedBranchData(array(
-    array('repo' => 2, 'revision' => 7,  'branch' => 'master'),
-    array('repo' => 2, 'revision' => 8,  'branch' => 'main'),
-    array('repo' => 2, 'revision' => 9,  'branch' => 'develop'),
-    array('repo' => 2, 'revision' => 10, 'branch' => 'develop'),
-));
+$history = zenData('ops_repohistory');
+$history->id->range('7-10');
+$history->repo->range('2{4}');
+$history->revision->range('r7,r8,r9,r10');
+$history->commit->range('7-10');
+$history->comment->range('commit 7,commit 8,commit 9,commit 10');
+$history->committer->range('admin{4}');
+$history->gen(4, true, false);
+
+$branch = zenData('ops_repobranch');
+$branch->id->range('7-10');
+$branch->repo->range('2{4}');
+$branch->revision->range('7-10');
+$branch->branch->range('master,main,develop,develop');
+$branch->gen(4, true, false);
+
+$file = zenData('ops_repofiles');
+$file->id->range('7-10');
+$file->repo->range('2{4}');
+$file->revision->range('7-10');
+$file->path->range('/file7,/file8,/file9,/file10');
+$file->oldPath->range('{4}');
+$file->parent->range('/{4}');
+$file->type->range('file{4}');
+$file->action->range('A{4}');
+$file->gen(4, true, false);
 r($repoTest->checkDeletedBranchesTest(2, array('main' => 'main'))) && p('repoHistoryCount,repoBranchCount,repoFilesCount') && e('2,2,2');
 r($repoTest->checkDeletedBranchesTest(999, array('master' => 'master'))) && p('repoHistoryCount,repoBranchCount,repoFilesCount') && e('2,2,2');

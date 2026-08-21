@@ -260,7 +260,7 @@ class executionModel extends model
         }
 
         /* 项目模板不校验访问权限。 */
-        $isTpl = $this->dao->select('isTpl')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->andWhere('id')->in($this->app->user->view->sprints)->fetch('isTpl');
+        $isTpl = $this->dao->select('`isTpl`')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->andWhere('id')->in($this->app->user->view->sprints)->fetch('isTpl');
         /* If the execution doesn't exist in the list, use the first execution in the list. */
         if(empty($isTpl) && !isset($executions[$executionID]))
         {
@@ -823,6 +823,12 @@ class executionModel extends model
             $this->loadModel('action');
             $actionID = $this->action->create('execution', $executionID, 'Started', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($postData->comment)
+            {
+                $oldExecution->comment = $postData->comment;
+                $this->loadModel('message')->sendMentionNotice('execution', 'start', $actionID, $oldExecution);
+            }
         }
 
         return $changes;
@@ -860,6 +866,12 @@ class executionModel extends model
             $this->loadModel('action');
             $actionID = $this->action->create('execution', $executionID, 'Delayed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($postData->comment)
+            {
+                $oldExecution->comment = $postData->comment;
+                $this->loadModel('message')->sendMentionNotice('execution', 'putoff', $actionID, $oldExecution);
+            }
         }
         return $changes;
     }
@@ -891,6 +903,12 @@ class executionModel extends model
         {
             $actionID = $this->loadModel('action')->create('execution', $executionID, 'Suspended', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($this->post->comment)
+            {
+                $oldExecution->comment = $this->post->comment;
+                $this->loadModel('message')->sendMentionNotice('execution', 'suspend', $actionID, $oldExecution);
+            }
         }
         return $changes;
     }
@@ -952,7 +970,7 @@ class executionModel extends model
         if(!empty($postData->readjustTask))
         {
             $beginTimeStamp = strtotime($execution->begin);
-            $tasks = $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
+            $tasks = $this->dao->select('id,`estStarted`,deadline,status')->from(TABLE_TASK)
                 ->where('execution')->eq($executionID)
                 ->andWhere('deadline')->notNULL()
                 ->andWhere('status')->in('wait,doing')
@@ -995,6 +1013,12 @@ class executionModel extends model
             $this->loadModel('action');
             $actionID = $this->action->create('execution', $executionID, 'Activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($this->post->comment)
+            {
+                $oldExecution->comment = $this->post->comment;
+                $this->loadModel('message')->sendMentionNotice('execution', 'activate', $actionID, $oldExecution);
+            }
         }
 
         return $changes;
@@ -1035,6 +1059,12 @@ class executionModel extends model
             $this->loadModel('action');
             $actionID = $this->action->create('execution', $executionID, 'Closed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($this->post->comment)
+            {
+                $oldExecution->comment = $this->post->comment;
+                $this->loadModel('message')->sendMentionNotice('execution', 'close', $actionID, $oldExecution);
+            }
         }
 
         $this->loadModel('score')->create('execution', 'close', $oldExecution);
@@ -1183,7 +1213,7 @@ class executionModel extends model
         $projectModel = '';
         if($projectID)
         {
-            $projectInfo  = $this->dao->select('model,isTpl')->from(TABLE_EXECUTION)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch();
+            $projectInfo  = $this->dao->select('model,`isTpl`')->from(TABLE_EXECUTION)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch();
             $projectModel = isset($projectInfo->model) ? $projectInfo->model : '';
             $orderBy      = in_array($projectModel, array('waterfall', 'waterfallplus')) ? 'sortStatus_asc,begin_asc,id_asc' : 'id_desc';
 
@@ -1316,7 +1346,7 @@ class executionModel extends model
      */
     public function getLaneMaxEditedTime(int $executionID): string|null
     {
-        return $this->dao->select("max(lastEditedTime) as lastEditedTime")->from(TABLE_KANBANLANE)->where('execution')->eq($executionID)->fetch('lastEditedTime');
+        return $this->dao->select("max(`lastEditedTime`) as `lastEditedTime`")->from(TABLE_KANBANLANE)->where('execution')->eq($executionID)->fetch('lastEditedTime');
     }
 
     /**
@@ -1398,7 +1428,7 @@ class executionModel extends model
      */
     public function getExecutionCounts(int $projectID = 0, string $browseType = 'all'): int
     {
-        $executions = $this->dao->select('t1.*,t2.`name` as projectName, t2.`model` as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+        $executions = $this->dao->select('t1.*,t2.`name` as projectName, t2.`model` as `projectModel`')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.deleted')->eq('0')
@@ -1513,7 +1543,7 @@ class executionModel extends model
      */
     public function fetchExecutionsByProjectIdList(array $projectIdList = array()): array
     {
-        return $this->dao->select('t1.*,t2.`name` projectName, t2.`model` as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+        return $this->dao->select('t1.*,t2.`name` projectName, t2.`model` as `projectModel`')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.deleted')->eq('0')
@@ -1543,7 +1573,7 @@ class executionModel extends model
         $executionQuery = $browseType == 'bysearch' ? $this->getExecutionQuery($param) : '';
         $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
 
-        return $this->dao->select('t1.*,t2.`name` as projectName, t2.`model` as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+        return $this->dao->select('t1.*,t2.`name` as projectName, t2.`model` as `projectModel`')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->beginIF($productID)->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')->fi()
             ->where('t1.type')->in('sprint,stage,kanban')
@@ -2213,7 +2243,7 @@ class executionModel extends model
      */
     public function getDefaultManagers(int $executionID): object
     {
-        $managers = $this->dao->select('PO,QD,RD')->from(TABLE_PRODUCT)->alias('t1')
+        $managers = $this->dao->select('`PO`,`QD`,`RD`')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
             ->where('t2.project')->eq($executionID)
             ->fetch();
@@ -2386,7 +2416,7 @@ class executionModel extends model
         $gradePairs = array();
         $gradeList  = $this->loadModel('story')->getGradeList('');
         $storyTypes = isset($project->storyType) ? $project->storyType : 'story';
-        if(!($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design')))) $storyTypes = 'story';
+        if($execution->type != 'stage') $storyTypes = 'story';
         foreach($gradeList as $grade)
         {
             if(strpos($storyTypes, $grade->type) === false) continue;
@@ -2923,7 +2953,7 @@ class executionModel extends model
             if(empty($story)) continue;
             if(strpos($project->storyType, "$story->type") === false && $this->config->vision == 'rnd') continue;
 
-            if($execution->multiple && $story->type != 'story' && (!($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design'))) && $execution->type != 'project') && $this->config->vision == 'rnd') continue;
+            if($execution->multiple && $story->type != 'story' && ($execution->type != 'stage' && $execution->type != 'project') && $this->config->vision == 'rnd') continue;
             if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
 
             $columnID = $this->kanban->getColumnIDByLaneID((int)$laneID, 'backlog');
@@ -3048,7 +3078,7 @@ class executionModel extends model
                 {
                     if($story->status != 'active' || (!empty($story->branch) && !empty($executionBranches) && !isset($executionBranches[$story->branch]))) unset($planStories[$id]);
                     if(strpos($project->storyType, $story->type) === false) unset($planStories[$id]);
-                    if(!in_array($execution->attribute, array('mix', 'request', 'design')) && $story->type != 'story' && $execution->multiple) unset($planStories[$id]);
+                    if($execution->type != 'stage' && $story->type != 'story' && $execution->multiple) unset($planStories[$id]);
                 }
                 $stories = array_merge($stories, array_keys($planStories));
             }
@@ -3218,7 +3248,7 @@ class executionModel extends model
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembers();
 
-        return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as userID, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
+        return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as `userID`, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$executionID)
             ->andWhere('t1.type')->eq('execution')
@@ -4255,6 +4285,39 @@ class executionModel extends model
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
 
+    /**
+     * 构造用例列表的搜索表单。
+     * Build testtask search form.
+     *
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildTesttaskSearchForm(array $products, int $queryID, string $actionURL, bool $cacheSearchFunc = true)
+    {
+        $searchConfig           = $this->config->testtask->search;
+        $searchConfig['module'] = 'executionTesttask';
+        if($cacheSearchFunc)
+        {
+            $this->cacheSearchFunc('executionTesttask', __METHOD__, func_get_args());
+            return $searchConfig;
+        }
+        $searchConfig['actionURL'] = $actionURL;
+        $searchConfig['queryID']   = $queryID;
+
+        unset($searchConfig['fields']['project']);
+        unset($searchConfig['params']['project']);
+        unset($searchConfig['fields']['execution']);
+        unset($searchConfig['params']['execution']);
+
+        $productPairs = array(0 => '');
+        foreach($products as $product) $productPairs[$product->id] = $product->name;
+        $searchConfig['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
+        $this->loadModel('search')->setSearchParams($searchConfig);
+        return $searchConfig;
+    }
     /**
      * 构建搜索任务的表单。
      * Build task search form.

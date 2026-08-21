@@ -37,13 +37,15 @@ class treeModel extends model
     public function getAllModulePairs(string $type = 'task', int|array $rootIdList = 0)
     {
         $modules = $this->dao->select('*')->from(TABLE_MODULE)
-            ->where('(type')->eq('story')
+            ->where('1=1')
+            ->beginIF($type != 'caselib')->andWhere('(type')->eq('story')
             ->beginIF($type == 'task')->orWhere('type')->eq('task')->fi()
             ->beginIF($type == 'bug')->orWhere('type')->eq('bug')->fi()
             ->beginIF($type == 'case')->orWhere('type')->eq('case')->fi()
             ->beginIF($type == 'ticket')->orWhere('type')->eq('ticket')->fi()
             ->beginIF($type == 'feedback')->orWhere('type')->eq('feedback')->fi()
             ->markRight(1)
+            ->beginIF($type == 'caselib')->andWhere('type')->eq('caselib')->fi()
             ->beginIF(!empty($rootIdList))->andWhere('root')->in($rootIdList)->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy('grade asc')
@@ -1969,7 +1971,7 @@ class treeModel extends model
                 $module->root   = $rootID;
                 $module->name   = strip_tags(trim($moduleName));
                 $module->parent = $parentModuleID;
-                $module->branch = isset($branches[$moduleID]) ? $branches[$moduleID] : 0;
+                $module->branch = isset($branches[$moduleID]) ? (int)$branches[$moduleID] : 0;
                 $module->short  = $shorts[$moduleID];
                 $module->grade  = $grade;
                 $module->type   = $type;
@@ -1996,7 +1998,7 @@ class treeModel extends model
                 $data->name   = strip_tags(trim($moduleName));
                 $data->short  = $short;
                 $data->order  = $order;
-                $data->branch = isset($branches[$originID]) ? $branches[$originID] : 0;
+                $data->branch = isset($branches[$originID]) ? (int)$branches[$originID] : 0;
 
                 $this->dao->update(TABLE_MODULE)->data($data)->autoCheck()->where('id')->eq($moduleID)->exec();
                 if(dao::isError()) return false;
@@ -2058,8 +2060,9 @@ class treeModel extends model
 
         if($self)
         {
+            $rootlessType = ($type == 'host' || $type == 'aiskill');
             if($type == 'ticket' || $type == 'feedback') $module->root = $self->root;
-            if($type == 'host' || !isset($module->root)) $module->root = 0;
+            if($rootlessType || !isset($module->root)) $module->root = 0;
             if(strpos($this->config->tree->groupTypes, ",$type,") !== false) $module->root = $self->root;
             if($self->root && !$module->root) $module->root = $self->root;
             if($self->parent != $module->parent || $self->root != $module->root)
@@ -2639,6 +2642,16 @@ class treeModel extends model
         }
         elseif($data->createType == 'child')
         {
+            if($module->parent)
+            {
+                $parent = $this->getByID($module->parent);
+                if(empty($parent) || $parent->deleted || $parent->root != $module->root || $parent->type != $module->type)
+                {
+                    dao::$errors[] = $this->lang->tree->invalidParent;
+                    return false;
+                }
+            }
+
             $maxOrder = $this->dao->select('`order`')->from(TABLE_MODULE)
                 ->where('root')->eq($module->root)
                 ->andWhere('parent')->eq($module->parent)

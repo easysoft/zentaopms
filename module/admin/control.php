@@ -93,6 +93,81 @@ class admin extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
+        if($this->config->db->driver != 'gauss')
+        {
+            $this->view->title  = $this->lang->admin->safe->common . $this->lang->hyphen . $this->lang->admin->safe->set;
+            $this->view->gdInfo = function_exists('gd_info') ? gd_info() : array();
+            $this->display();
+            return;
+        }
+
+        $roundSql = <<<EOT
+CREATE OR REPLACE FUNCTION "ROUND"(num float)
+RETURNS numeric AS $$ BEGIN RETURN pg_catalog.ROUND(num::numeric, 0); END; $$ LANGUAGE plpgsql IMMUTABLE;
+EOT;
+        $this->dao->dbh->rawQuery($roundSql);
+
+        $roundSql = <<<EOT
+CREATE OR REPLACE FUNCTION "ROUND"(
+    num float,
+    decimals integer
+) RETURNS numeric AS $$
+BEGIN
+    RETURN pg_catalog.ROUND(num::numeric, decimals);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+EOT;
+        $this->dao->dbh->rawQuery($roundSql);
+
+        $roundSql = <<<EOT
+CREATE OR REPLACE FUNCTION "ROUND"(num double precision)
+RETURNS numeric AS $$ BEGIN RETURN pg_catalog.ROUND(num::numeric, 0); END; $$ LANGUAGE plpgsql IMMUTABLE;
+EOT;
+        $this->dao->dbh->rawQuery($roundSql);
+
+        $roundSql = <<<EOT
+CREATE OR REPLACE FUNCTION "ROUND"(
+    num double precision,
+    decimals integer
+) RETURNS numeric AS $$
+BEGIN
+    RETURN pg_catalog.ROUND(num::numeric, decimals);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+EOT;
+        $this->dao->dbh->rawQuery($roundSql);
+
+        $roundSql = <<<EOT
+CREATE OR REPLACE FUNCTION "ROUND"(num text)
+RETURNS numeric AS $$ BEGIN RETURN pg_catalog.ROUND(num::numeric, 0); END; $$ LANGUAGE plpgsql IMMUTABLE;
+EOT;
+        $this->dao->dbh->rawQuery($roundSql);
+
+        $roundSql = <<<EOT
+CREATE OR REPLACE FUNCTION "ROUND"(
+    num text,
+    decimals integer
+) RETURNS numeric AS $$
+BEGIN
+    RETURN pg_catalog.ROUND(num::numeric, decimals);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+EOT;
+        $this->dao->dbh->rawQuery($roundSql);
+
+        $dateTypes = array('DATE', 'TIMESTAMP', 'TIMESTAMPTZ');
+        foreach($dateTypes as $endType)
+        {
+            foreach($dateTypes as $startType)
+            {
+                $dateDiffSql = <<<EOT
+CREATE OR REPLACE FUNCTION "DATEDIFF"(end_date $endType, start_date $startType)
+RETURNS INTEGER AS $$ BEGIN RETURN end_date::DATE - start_date::DATE; END; $$ LANGUAGE plpgsql IMMUTABLE;
+EOT;
+                $this->dao->dbh->rawQuery($dateDiffSql);
+            }
+        }
+
         $this->view->title  = $this->lang->admin->safe->common . $this->lang->hyphen . $this->lang->admin->safe->set;
         $this->view->gdInfo = function_exists('gd_info') ? gd_info() : array();
         $this->display();

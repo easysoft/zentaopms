@@ -585,6 +585,7 @@ class productZen extends product
     protected function buildProductForEdit(int $productID, int $workflowGroup = 0): object
     {
         $productData = form::data($this->config->product->form->edit, $productID, $workflowGroup)
+            ->add('id', $productID)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->get();
 
@@ -673,7 +674,7 @@ class productZen extends product
         if($message) $this->lang->saveSuccess = $message;
 
         /* 移动到control。*/
-        if($this->viewType == 'json') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID);
+        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID);
         return $this->getCreatedLocate($productID, $programID);
     }
 
@@ -1284,7 +1285,7 @@ class productZen extends product
      */
     protected function responseNotFound4View(): void
     {
-        if(defined('RUN_MODE') && RUN_MODE == 'api')
+        if(helper::isApiRequest())
         {
             $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return;

@@ -207,3 +207,235 @@ $config->release->dtable->leftBug->fieldList['actions']['menu']  = array('unlink
 unset($config->release->dtable->leftBug->fieldList['resolvedBuild']);
 unset($config->release->dtable->leftBug->fieldList['resolvedBy']);
 unset($config->release->dtable->leftBug->fieldList['resolvedDate']);
+
+$config->release->dtable->escapedBug = clone $config->release->dtable->bug;
+$config->release->dtable->escapedBug->fieldList['id']['type'] = 'id';
+unset($config->release->dtable->escapedBug->fieldList['actions']);
+
+/* 解决的Bug列表高级表格字段*/
+$config->release->bug = new stdclass();
+$config->release->bug->dtable = new stdclass();
+
+$config->release->bug->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->release->bug->dtable->fieldList['id']['name']     = 'id';
+$config->release->bug->dtable->fieldList['id']['type']     = 'checkID';
+$config->release->bug->dtable->fieldList['id']['sortType'] = 'desc';
+$config->release->bug->dtable->fieldList['id']['checkbox'] = true;
+$config->release->bug->dtable->fieldList['id']['show']     = true;
+
+$config->release->bug->dtable->fieldList['title']['title']       = $lang->bug->title;
+$config->release->bug->dtable->fieldList['title']['name']        = 'title';
+$config->release->bug->dtable->fieldList['title']['type']        = 'title';
+$config->release->bug->dtable->fieldList['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}');
+$config->release->bug->dtable->fieldList['title']['data-toggle'] = 'modal';
+$config->release->bug->dtable->fieldList['title']['data-size']   = 'lg';
+$config->release->bug->dtable->fieldList['title']['data-app']    = $app->tab;
+$config->release->bug->dtable->fieldList['title']['show']        = true;
+
+$config->release->bug->dtable->fieldList['severity']['title']        = $lang->bug->severity;
+$config->release->bug->dtable->fieldList['severity']['name']         = 'severity';
+$config->release->bug->dtable->fieldList['severity']['type']         = 'severity';
+$config->release->bug->dtable->fieldList['severity']['severityList'] = $lang->bug->severityList;
+$config->release->bug->dtable->fieldList['severity']['show']         = true;
+
+$config->release->bug->dtable->fieldList['pri']['title']   = $lang->priAB;
+$config->release->bug->dtable->fieldList['pri']['name']    = 'pri';
+$config->release->bug->dtable->fieldList['pri']['type']    = 'pri';
+$config->release->bug->dtable->fieldList['pri']['priList'] = $lang->bug->priList;
+$config->release->bug->dtable->fieldList['pri']['show']    = true;
+
+$config->release->bug->dtable->fieldList['module']['title']    = $lang->bug->module;
+$config->release->bug->dtable->fieldList['module']['name']     = 'module';
+$config->release->bug->dtable->fieldList['module']['type']     = 'category';
+$config->release->bug->dtable->fieldList['module']['sortType'] = true;
+
+$config->release->bug->dtable->fieldList['status']['title']     = $lang->statusAB;
+$config->release->bug->dtable->fieldList['status']['name']      = 'status';
+$config->release->bug->dtable->fieldList['status']['type']      = 'status';
+$config->release->bug->dtable->fieldList['status']['statusMap'] = $lang->bug->statusList;
+$config->release->bug->dtable->fieldList['status']['show']      = true;
+
+$config->release->bug->dtable->fieldList['type']['title']    = $lang->bug->type;
+$config->release->bug->dtable->fieldList['type']['name']     = 'type';
+$config->release->bug->dtable->fieldList['type']['type']     = 'category';
+$config->release->bug->dtable->fieldList['type']['map']      = $lang->bug->typeList;
+$config->release->bug->dtable->fieldList['type']['flex']     = false;
+$config->release->bug->dtable->fieldList['type']['sortType'] = true;
+
+$config->release->bug->dtable->fieldList['branch']['title']    = $lang->bug->branch;
+$config->release->bug->dtable->fieldList['branch']['name']     = 'branch';
+$config->release->bug->dtable->fieldList['branch']['type']     = 'text';
+$config->release->bug->dtable->fieldList['branch']['sortType'] = true;
+
+$config->release->bug->dtable->fieldList['project']['title']    = $lang->bug->project;
+$config->release->bug->dtable->fieldList['project']['name']     = 'project';
+$config->release->bug->dtable->fieldList['project']['type']     = 'text';
+$config->release->bug->dtable->fieldList['project']['sortType'] = true;
+
+$config->release->bug->dtable->fieldList['execution']['title']    = $lang->bug->execution;
+$config->release->bug->dtable->fieldList['execution']['name']     = 'execution';
+$config->release->bug->dtable->fieldList['execution']['type']     = 'text';
+$config->release->bug->dtable->fieldList['execution']['sortType'] = true;
+
+$config->release->bug->dtable->fieldList['openedBuild']['title']    = $lang->bug->openedBuild;
+$config->release->bug->dtable->fieldList['openedBuild']['name']     = 'openedBuild';
+$config->release->bug->dtable->fieldList['openedBuild']['type']     = 'text';
+$config->release->bug->dtable->fieldList['openedBuild']['control']  = 'multiple';
+$config->release->bug->dtable->fieldList['openedBuild']['sortType'] = true;
+
+$config->release->bug->dtable->fieldList['openedBy']['title'] = $lang->openedByAB;
+$config->release->bug->dtable->fieldList['openedBy']['name']  = 'openedBy';
+$config->release->bug->dtable->fieldList['openedBy']['type']  = 'user';
+$config->release->bug->dtable->fieldList['openedBy']['show']  = true;
+
+$config->release->bug->dtable->fieldList['openedDate']['title']           = $lang->bug->abbr->openedDate;
+$config->release->bug->dtable->fieldList['openedDate']['name']            = 'openedDate';
+$config->release->bug->dtable->fieldList['openedDate']['type']            = 'date';
+$config->release->bug->dtable->fieldList['openedDate']['show']            = true;
+if($isEn) $config->release->bug->dtable->fieldList['openedDate']['width'] = '120';
+
+$config->release->bug->dtable->fieldList['confirmed']['title']           = $lang->bug->confirmed;
+$config->release->bug->dtable->fieldList['confirmed']['name']            = 'confirmed';
+$config->release->bug->dtable->fieldList['confirmed']['type']            = 'category';
+$config->release->bug->dtable->fieldList['confirmed']['map']             = $lang->bug->confirmedList;
+$config->release->bug->dtable->fieldList['confirmed']['flex']            = false;
+$config->release->bug->dtable->fieldList['confirmed']['sortType']        = true;
+if($isEn) $config->release->bug->dtable->fieldList['confirmed']['width'] = '150';
+
+$config->release->bug->dtable->fieldList['assignedTo']['title']           = $lang->bug->assignedTo;
+$config->release->bug->dtable->fieldList['assignedTo']['name']            = 'assignedTo';
+$config->release->bug->dtable->fieldList['assignedTo']['type']            = 'assign';
+$config->release->bug->dtable->fieldList['assignedTo']['assignLink']      = array('module' => 'bug', 'method' => 'assignTo', 'params' => 'bugID={id}');
+$config->release->bug->dtable->fieldList['assignedTo']['sortType']        = true;
+if($isEn) $config->release->bug->dtable->fieldList['assignedTo']['width'] = '120';
+
+$config->release->bug->dtable->fieldList['assignedDate']['title']    = $lang->bug->assignedDate;
+$config->release->bug->dtable->fieldList['assignedDate']['name']     = 'assignedDate';
+$config->release->bug->dtable->fieldList['assignedDate']['type']     = 'date';
+$config->release->bug->dtable->fieldList['assignedDate']['sortType'] = 'date';
+
+$config->release->bug->dtable->fieldList['deadline']['title']    = $lang->bug->deadline;
+$config->release->bug->dtable->fieldList['deadline']['name']     = 'deadline';
+$config->release->bug->dtable->fieldList['deadline']['type']     = 'date';
+$config->release->bug->dtable->fieldList['deadline']['sortType'] = true;
+
+$config->release->bug->dtable->fieldList['resolvedBy']['title']           = $lang->bug->resolvedBy;
+$config->release->bug->dtable->fieldList['resolvedBy']['name']            = 'resolvedBy';
+$config->release->bug->dtable->fieldList['resolvedBy']['type']            = 'user';
+$config->release->bug->dtable->fieldList['resolvedBy']['show']            = true;
+if($isEn) $config->release->bug->dtable->fieldList['resolvedBy']['width'] = 120;
+
+$config->release->bug->dtable->fieldList['resolution']['title']           = $lang->bug->resolution;
+$config->release->bug->dtable->fieldList['resolution']['name']            = 'resolution';
+$config->release->bug->dtable->fieldList['resolution']['type']            = 'category';
+$config->release->bug->dtable->fieldList['resolution']['map']             = $lang->bug->resolutionList;
+$config->release->bug->dtable->fieldList['resolution']['sortType']        = true;
+if($isEn) $config->release->bug->dtable->fieldList['resolution']['width'] = '100';
+
+$config->release->bug->dtable->fieldList['toTask']['title']    = $lang->bug->toTask;
+$config->release->bug->dtable->fieldList['toTask']['name']     = 'toTask';
+$config->release->bug->dtable->fieldList['toTask']['type']     = 'text';
+$config->release->bug->dtable->fieldList['toTask']['link']     = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={toTask}');
+$config->release->bug->dtable->fieldList['toTask']['sortType'] = true;
+
+$config->release->bug->dtable->fieldList['resolvedDate']['title']    = $lang->bug->abbr->resolvedDate;
+$config->release->bug->dtable->fieldList['resolvedDate']['name']     = 'resolvedDate';
+$config->release->bug->dtable->fieldList['resolvedDate']['type']     = 'date';
+$config->release->bug->dtable->fieldList['resolvedDate']['show']     = true;
+$config->release->bug->dtable->fieldList['resolvedDate']['sortType'] = 'date';
+
+$config->release->bug->dtable->fieldList['resolvedBuild']['title'] = $lang->bug->resolvedBuild;
+$config->release->bug->dtable->fieldList['resolvedBuild']['name']  = 'resolvedBuild';
+$config->release->bug->dtable->fieldList['resolvedBuild']['type']  = 'text';
+$config->release->bug->dtable->fieldList['resolvedBuild']['show']  = true;
+
+$config->release->bug->dtable->fieldList['os']['title']    = $lang->bug->os;
+$config->release->bug->dtable->fieldList['os']['name']     = 'os';
+$config->release->bug->dtable->fieldList['os']['type']     = 'category';
+$config->release->bug->dtable->fieldList['os']['map']      = $lang->bug->osList;
+$config->release->bug->dtable->fieldList['os']['control']  = 'multiple';
+$config->release->bug->dtable->fieldList['os']['sortType'] = true;
+
+$config->release->bug->dtable->fieldList['browser']['title']    = $lang->bug->browser;
+$config->release->bug->dtable->fieldList['browser']['name']     = 'browser';
+$config->release->bug->dtable->fieldList['browser']['type']     = 'category';
+$config->release->bug->dtable->fieldList['browser']['map']      = $lang->bug->browserList;
+$config->release->bug->dtable->fieldList['browser']['control']  = 'multiple';
+$config->release->bug->dtable->fieldList['browser']['sortType'] = true;
+
+$config->release->bug->dtable->fieldList['activatedCount']['title']    = $lang->bug->abbr->activatedCount;
+$config->release->bug->dtable->fieldList['activatedCount']['name']     = 'activatedCount';
+$config->release->bug->dtable->fieldList['activatedCount']['type']     = 'count';
+$config->release->bug->dtable->fieldList['activatedCount']['sortType'] = true;
+
+$config->release->bug->dtable->fieldList['activatedDate']['title']    = $lang->bug->activatedDate;
+$config->release->bug->dtable->fieldList['activatedDate']['name']     = 'activatedDate';
+$config->release->bug->dtable->fieldList['activatedDate']['type']     = 'date';
+$config->release->bug->dtable->fieldList['activatedDate']['sortType'] = 'date';
+
+$config->release->bug->dtable->fieldList['story']['title']    = $lang->bug->story;
+$config->release->bug->dtable->fieldList['story']['name']     = 'story';
+$config->release->bug->dtable->fieldList['story']['type']     = 'text';
+$config->release->bug->dtable->fieldList['story']['link']     = array('module' => 'story', 'method' => 'view', 'params' => 'storyID={story}');
+$config->release->bug->dtable->fieldList['story']['sortType'] = true;
+
+$config->release->bug->dtable->fieldList['task']['title']    = $lang->bug->task;
+$config->release->bug->dtable->fieldList['task']['name']     = 'task';
+$config->release->bug->dtable->fieldList['task']['type']     = 'text';
+$config->release->bug->dtable->fieldList['task']['link']     = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={task}');
+$config->release->bug->dtable->fieldList['task']['sortType'] = true;
+
+$config->release->bug->dtable->fieldList['mailto']['title']     = $lang->bug->mailto;
+$config->release->bug->dtable->fieldList['mailto']['name']      = 'mailto';
+$config->release->bug->dtable->fieldList['mailto']['type']      = 'text';
+$config->release->bug->dtable->fieldList['mailto']['sortType']  = true;
+$config->release->bug->dtable->fieldList['mailto']['delimiter'] = ',';
+
+if(in_array($config->edition, array('max', 'ipd')))
+{
+    $config->release->bug->dtable->fieldList['injection']['title']   = $lang->bug->injection;
+    $config->release->bug->dtable->fieldList['injection']['name']    = 'injection';
+    $config->release->bug->dtable->fieldList['injection']['control'] = 'picker';
+    $config->release->bug->dtable->fieldList['injection']['type']    = 'text';
+    $config->release->bug->dtable->fieldList['injection']['map']     = $lang->bug->injectionList;
+
+    $config->release->bug->dtable->fieldList['identify']['title']   = $lang->bug->identify;
+    $config->release->bug->dtable->fieldList['identify']['name']    = 'identify';
+    $config->release->bug->dtable->fieldList['identify']['control'] = 'picker';
+    $config->release->bug->dtable->fieldList['identify']['type']    = 'text';
+    $config->release->bug->dtable->fieldList['identify']['map']     = $lang->bug->identifyList;
+}
+
+$config->release->bug->dtable->fieldList['keywords']['title']    = $lang->bug->keywords;
+$config->release->bug->dtable->fieldList['keywords']['name']     = 'keywords';
+$config->release->bug->dtable->fieldList['keywords']['type']     = 'text';
+$config->release->bug->dtable->fieldList['keywords']['sortType'] = true;
+
+$config->release->bug->dtable->fieldList['lastEditedBy']['title']    = $lang->bug->lastEditedBy;
+$config->release->bug->dtable->fieldList['lastEditedBy']['name']     = 'lastEditedBy';
+$config->release->bug->dtable->fieldList['lastEditedBy']['type']     = 'user';
+$config->release->bug->dtable->fieldList['lastEditedBy']['sortType'] = true;
+$config->release->bug->dtable->fieldList['lastEditedBy']['width']    = '90px';
+
+$config->release->bug->dtable->fieldList['lastEditedDate']['title']    = $lang->bug->abbr->lastEditedDate;
+$config->release->bug->dtable->fieldList['lastEditedDate']['name']     = 'lastEditedDate';
+$config->release->bug->dtable->fieldList['lastEditedDate']['type']     = 'date';
+$config->release->bug->dtable->fieldList['lastEditedDate']['sortType'] = 'date';
+
+$config->release->bug->dtable->fieldList['closedBy']['title']    = $lang->bug->closedBy;
+$config->release->bug->dtable->fieldList['closedBy']['name']     = 'closedBy';
+$config->release->bug->dtable->fieldList['closedBy']['type']     = 'user';
+$config->release->bug->dtable->fieldList['closedBy']['sortType'] = true;
+
+$config->release->bug->dtable->fieldList['closedDate']['title']    = $lang->bug->closedDate;
+$config->release->bug->dtable->fieldList['closedDate']['name']     = 'closedDate';
+$config->release->bug->dtable->fieldList['closedDate']['type']     = 'date';
+$config->release->bug->dtable->fieldList['closedDate']['sortType'] = 'date';
+
+$config->release->bug->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->release->bug->dtable->fieldList['actions']['name']     = 'actions';
+$config->release->bug->dtable->fieldList['actions']['type']     = 'actions';
+$config->release->bug->dtable->fieldList['actions']['width']    = 100;
+$config->release->bug->dtable->fieldList['actions']['minWidth'] = 60;
+$config->release->bug->dtable->fieldList['actions']['menu']     = array('unlinkBug');
+$config->release->bug->dtable->fieldList['actions']['list']     = $config->release->actionList;

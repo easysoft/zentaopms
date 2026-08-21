@@ -7,16 +7,18 @@ title=测试 pivotModel::checkAccess();
 timeout=0
 cid=0
 
-- 步骤1：管理员访问开放透视表 @access_granted
-- 步骤2：创建者访问私有透视表 @access_granted
-- 步骤3：白名单用户访问私有透视表 @access_granted
-- 步骤4：现有可见性配置下受限透视表也可访问 @access_granted
-- 步骤5：访问不存在的透视表 @access_denied
+- 执行pivotTest模块的checkAccessTest方法，参数是901  @access_granted
+- 执行pivotTest模块的checkAccessTest方法，参数是902  @access_granted
+- 执行pivotTest模块的checkAccessTest方法，参数是903  @access_granted
+- 执行pivotTest模块的checkAccessTest方法，参数是904  @access_denied
+- 执行pivotTest模块的checkAccessTest方法，参数是999  @access_denied
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
+
+zenData('user')->gen(5);
 
 global $tester;
 $dao = $tester->dao;
@@ -45,7 +47,7 @@ su('user2');
 r($pivotTest->checkAccessTest(903)) && p() && e('access_granted');
 
 su('user1');
-r($pivotTest->checkAccessTest(904)) && p() && e('access_granted');
+r($pivotTest->checkAccessTest(904)) && p() && e('access_denied');
 
 su('admin');
 r($pivotTest->checkAccessTest(999)) && p() && e('access_denied');

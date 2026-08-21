@@ -1,17 +1,43 @@
-title: zt_repo
-author: Shujie Tian
-version: 1.0.0
+title: ops_repo
+desc: 代码库表基础数据定义（对齐db/zentao.sql）
+author: Codex
+version: "2.0"
 fields:
-  - field: id
-    range: 1-100
-  - field: product
-    range: '`1,2,3,4,5,6,7,8,9,10`,[]'
-  - field: projects
-    range: '11,0'
-  - field: name
-    range: 1-100
-    prefix: '代码库'
-  - field: SCM
-    range: 'Gitlab,Subversion,Git'
-  - field: deleted
-    range: '0'
+- field: id
+  range: 1-100
+- field: spaceID
+  range: 1-10
+- field: product
+  range: "1"
+- field: name
+  range: repo{1-100}
+- field: desc
+  range: "测试代码库{1-100}"
+- field: scmType
+  range: git
+- field: gitUID
+  range: uid{1-100}
+- field: forkID
+  range: 0
+- field: mirror
+  range: 0
+- field: providerID
+  range: 0
+- field: connector
+  range: ""
+- field: defaultBranch
+  range: ""
+- field: acl
+  range: open
+- field: status
+  range: active
+- field: synced
+  range: 1
+- field: branchArchivable
+  range: 0
+- field: createdBy
+  range: admin
+- field: editedBy
+  range: admin
+- field: deleted
+  range: 0

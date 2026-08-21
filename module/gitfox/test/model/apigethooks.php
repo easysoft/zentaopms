@@ -24,10 +24,11 @@ su('admin');
 $gitfoxTest = new gitfoxModelTest();
 $hookURL    = 'http://example.com/list-hook-' . uniqid();
 $hook       = $gitfoxTest->apiCreateHookTest(1, (object)array('url' => $hookURL, 'displayName' => 'list-hook-' . uniqid()));
+$hookID     = is_object($hook) && isset($hook->id) ? (int)$hook->id : 0;
 
 r($gitfoxTest->apiGetHooksErrorTest(1)) && p() && e('0');
 r($gitfoxTest->apiGetHooksTypeTest(1)) && p() && e('array');
 r($gitfoxTest->apiGetHooksContainsUrlTest(1, $hookURL)) && p() && e('1');
-$gitfoxTest->apiDeleteWebhookTest(1, (int)$hook->id);
+$gitfoxTest->apiDeleteWebhookTest(1, $hookID);
 r($gitfoxTest->apiGetHooksContainsUrlTest(1, $hookURL)) && p() && e('0');
 r($gitfoxTest->apiGetHooksTypeTest(1)) && p() && e('array');

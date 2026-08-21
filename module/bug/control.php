@@ -220,6 +220,7 @@ class bug extends control
         $this->view->branchID    = $bug->branch;
         $this->view->product     = $product;
         $this->view->project     = $this->loadModel('project')->getByID($bug->project);
+        $this->view->execution   = $this->loadModel('execution')->fetchByID($bug->execution);
         $this->view->projects    = $projects;
         $this->view->executions  = $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (int)$projectID, 'noclosed');
         $this->view->bug         = $bug;
@@ -258,6 +259,17 @@ class bug extends control
         parse_str($extras, $params);
 
         $from = isset($params['from']) ? $params['from'] : '';
+
+        /* 项目型项目没有显式产品，创建 Bug 时自动使用项目的影子产品。For a non-product project, automatically use its shadow product when creating a bug. */
+        if(empty($productID) && !empty($params['projectID']))
+        {
+            $project = $this->loadModel('project')->getByID($params['projectID']);
+            if($project && empty($project->hasProduct))
+            {
+                $productID        = $this->loadModel('product')->getShadowProductByProject($params['projectID'])->id;
+                $_POST['product'] = $productID;
+            }
+        }
 
         if(!empty($_POST))
         {
@@ -889,10 +901,11 @@ class bug extends control
         /* Show the variables associated with the batch creation bugs. */
         $this->bugZen->assignBatchCreateVars($executionID, $product, $branch, $output, $bugImagesFile);
 
-        $this->view->title    = $this->products[$productID] . $this->lang->hyphen . $this->lang->bug->batchCreate;
-        $this->view->moduleID = $moduleID;
-        $this->view->product  = $product;
-        $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->title     = $this->products[$productID] . $this->lang->hyphen . $this->lang->bug->batchCreate;
+        $this->view->moduleID  = $moduleID;
+        $this->view->product   = $product;
+        $this->view->fromCases = $this->loadModel('testcase')->getPairsByProduct($productID, array(0, $branch));
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
         $this->display();
     }
 

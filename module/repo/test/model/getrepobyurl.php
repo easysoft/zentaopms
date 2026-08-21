@@ -18,47 +18,9 @@ cid=18075
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $dbh;
-$dbh->exec('DROP TABLE IF EXISTS `ops_provider`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_pipelinecontent`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_pipeline`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int NOT NULL DEFAULT 0,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_pipeline` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int NOT NULL DEFAULT 0,
-  `repoID` int unsigned NOT NULL DEFAULT 0,
-  `providerID` int unsigned NOT NULL DEFAULT 0,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `engine` varchar(30) NOT NULL DEFAULT '',
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_pipelinecontent` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `pipelineID` int unsigned NOT NULL DEFAULT 0,
-  `variables` text DEFAULT NULL,
-  `data` mediumtext DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_provider` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+zenData('ops_repo')->gen(0);
+zenData('ops_pipeline')->gen(0);
+zenData('ops_provider')->gen(0);
 
 // 模拟用户登录
 su('admin');

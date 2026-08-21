@@ -280,11 +280,11 @@ class artifactModel extends model
         }
 
         return $this->dao->select('t1.*')->from(TABLE_ARTIFACT)->alias('t1')
-            ->innerJoin(TABLE_REPO)->alias('t2')->on('t1.repoID = t2.id')
+            ->innerJoin(TABLE_REPO)->alias('t2')->on('t1.`repoID` = t2.id')
             ->andWhere("FIND_IN_SET({$productID}, t2.`product`)")
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.scope')->eq('repo')
-            ->beginIf(!empty($repoIdList))->andWhere('t1.repoID')->in($repoIdList)->fi()
+            ->beginIf(!empty($repoIdList))->andWhere('t1.`repoID`')->in($repoIdList)->fi()
             ->fetchAll('id');
     }
 
@@ -299,10 +299,10 @@ class artifactModel extends model
     public function getAssetByIdList(array $assetIdList = array()): array
     {
         return $this->dao->select('t1.*, t2.size, t3.name as groupName, t5.name as packageName, t4.version')->from(TABLE_ARTIFACTASSET)->alias('t1')
-            ->leftJoin(TABLE_ARTIFACTBLOBS)->alias('t2')->on('t1.id = t2.assetID')
-            ->leftJoin(TABLE_ARTIFACTGROUPS)->alias('t3')->on('t1.groupID = t3.id')
-            ->leftJoin(TABLE_ARTIFACTVERSIONS)->alias('t4')->on('t1.versionID = t4.id')
-            ->leftJoin(TABLE_ARTIFACTPACKAGES)->alias('t5')->on('t4.packageID = t5.id')
+            ->leftJoin(TABLE_ARTIFACTBLOBS)->alias('t2')->on('t1.id = t2.`assetID`')
+            ->leftJoin(TABLE_ARTIFACTGROUPS)->alias('t3')->on('t1.`groupID` = t3.id')
+            ->leftJoin(TABLE_ARTIFACTVERSIONS)->alias('t4')->on('t1.`versionID` = t4.id')
+            ->leftJoin(TABLE_ARTIFACTPACKAGES)->alias('t5')->on('t4.`packageID` = t5.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.id')->in($assetIdList)
             ->fetchAll();

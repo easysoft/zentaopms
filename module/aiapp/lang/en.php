@@ -45,8 +45,17 @@ $lang->aiapp->viewAiToolkit      = 'View AI Toolkit';
 
 $lang->aiapp->id                 = 'ID';
 $lang->aiapp->model              = 'Model Name';
+$lang->aiapp->modelID            = 'Model ID';
+$lang->aiapp->abilities          = 'Abilities';
 $lang->aiapp->converse           = 'Converse';
 $lang->aiapp->pageSummary        = 'Total %s items.';
+$lang->aiapp->searchModels       = 'Search Models';
+$lang->aiapp->abilityTypes       = [];
+
+$lang->aiapp->abilityTypes['chat']             = 'Chat';
+$lang->aiapp->abilityTypes['function-calling'] = 'Function Calling';
+$lang->aiapp->abilityTypes['reasoning']        = 'Reasoning';
+$lang->aiapp->abilityTypes['embedding']        = 'Embedding';
 
 $lang->aiapp->tips = new stdClass();
 $lang->aiapp->tips->noData = 'No data';
@@ -65,13 +74,10 @@ $lang->aiapp->langData->doc                = 'Document';
 $lang->aiapp->langData->design             = 'Design';
 $lang->aiapp->langData->feedback           = 'Feedback';
 $lang->aiapp->langData->currentDocContent  = 'Current Document';
-$lang->aiapp->langData->globalMemoryTitle  = 'ZenTao';
+$lang->aiapp->langData->globalMemoryTitle  = 'All';
 $lang->aiapp->langData->zaiConfigNotValid  = 'ZAI configuration has not been set up yet. Please contact the administrator to <a href="{zaiConfigUrl}">configure ZAI</a>.<br>If the configuration has been completed, please try reloading the page.';
 $lang->aiapp->langData->unauthorizedError  = 'Authorization failed, invalid API key. Please contact the administrator to <a href="{zaiConfigUrl}">configure ZAI</a>.<br>If the configuration has been completed, please try reloading the page.';
 $lang->aiapp->langData->processDataPrefix  = "The data to be processed is as follows:\n{data}";
-$lang->aiapp->langData->processedDataResult= "The processed data is as follows:\n```json\n{data}\n```";
-$lang->aiapp->langData->agentResultSummary = 'Explain the changes of the data in the solution, try to explain each changed attribute.';
-$lang->aiapp->langData->promptResultTitle  = 'Solution title, if no suitable title can be omitted';
 $lang->aiapp->langData->promptExtraLimit   = 'Usually tool `{toolName}` only needs to be called once, unless the user requires multiple solutions.';
 $lang->aiapp->langData->promptResultReturn = 'The processed data has been displayed on the interface. No need to repeat the display, nor further describe or explain it. Do not show the raw JSON data of the processed result to the user. Just remind me that I can use this data by clicking the "Apply to {formName} form" button.';
 $lang->aiapp->langData->goTesting          = 'Go Testing';
@@ -81,7 +87,28 @@ $lang->aiapp->langData->promptTestDataIntro= 'Here is the example {type} of {nam
 $lang->aiapp->langData->searchingKLibs     = 'Searching knowledge libraries...';
 $lang->aiapp->langData->recentChats        = 'Recent Chats';
 $lang->aiapp->langData->aiTeammateTasks    = 'Digital Teammate Tasks';
-$lang->aiapp->langData->searchTasks        = 'Search Digital Teammate Tasks';
+
+$lang->aiapp->langData->processedDataResult = "The processed data is as follows:\n```json\n{data}\n```";
+$lang->aiapp->langData->agentResultSummary  = 'Explain the changes of the data in the solution, try to explain each changed attribute.';
+$lang->aiapp->langData->promptResultTitle   = 'Solution title, if no suitable title can be omitted';
+$lang->aiapp->langData->searchTasks         = 'Search Digital Teammate Tasks';
+$lang->aiapp->langData->formFillTitle       = 'Form Filling';
+$lang->aiapp->langData->formFillUserMessage = 'Please fill in the form based on the current page information';
+$lang->aiapp->langData->formPageContext     = 'Current page context';
+$lang->aiapp->langData->formCurrentData     = 'Current form data';
+$lang->aiapp->langData->formFillableFields  = 'Fillable fields';
+$lang->aiapp->langData->formFieldDefinition = 'Field definitions';
+$lang->aiapp->langData->formRequiredField   = 'Required';
+$lang->aiapp->langData->formReturnJSONArray = 'Please return a JSON array, each array element corresponds to a row of data, keys correspond to the fillable field names. Required fields must have values.';
+$lang->aiapp->langData->formZentaoAPITip    = "Please first use the zentao-api-readonly tool to obtain the required context data, then use the submitFormData tool to return the filled form data. Required fields must have values.\nUsually submitFormData only needs to be called once, unless the user requires multiple solutions.";
+$lang->aiapp->langData->formResultGenerated = 'Form data has been generated.';
+$lang->aiapp->langData->formCurrentTarget   = 'Current';
+$lang->aiapp->langData->stepDescription     = 'Step description';
+$lang->aiapp->langData->expectDescription   = 'Expected result';
+
+$lang->aiapp->langData->submitFormDisplayName = 'Submit Form Data';
+$lang->aiapp->langData->submitFormDescription = 'Return the filled form data to the user';
+$lang->aiapp->langData->vectorizedData        = 'Vectorized Data';
 
 $lang->aiapp->toolkitTitle = 'ZenTao Toolkit';
 $lang->aiapp->toolkitItems = array();

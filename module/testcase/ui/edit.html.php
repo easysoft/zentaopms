@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace zin;
 
 data('testcase', $case);
-include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
 jsVar('tab', $this->app->tab);
 jsVar('isLibCase', $isLibCase);
@@ -21,6 +20,7 @@ if($app->tab == 'project')   jsVar('objectID', $case->project);
 if($app->tab == 'qa')        jsVar('objectID', 0);
 
 set::title($lang->testcase->edit);
+$config->file->dangers = 'phtml,jsp,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
 
 $rootID   = $isLibCase ? $case->lib : $case->product;
 $viewType = $isLibCase ? 'caselib' : 'case';

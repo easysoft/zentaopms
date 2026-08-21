@@ -26,6 +26,7 @@ class treeZen extends tree
         if($viewType == 'line') return (object)array('id' => 0, 'name' => $this->lang->tree->mangeLine, 'rootType' => 'line');
 
         if(in_array($viewType, array('host'))) return (object)array('id' => 0, 'name' => $this->lang->host->groupMaintenance, 'rootType' => 'line');
+        if(in_array($viewType, array('aiskill'))) return (object)array('id' => 0, 'name' => $this->lang->tree->Aiskill, 'rootType' => 'line');
         if(in_array($viewType, array('datasource')) || strpos($viewType, '_') !== false) return (object)array('id' => 0, 'name' => $this->lang->tree->manage, 'rootType' => 'line');
 
         /* 用例库的root是caselib，其他都是产品。 The root of caselib is caselib, others are product. */
@@ -60,7 +61,7 @@ class treeZen extends tree
 
         if(empty($root))
         {
-            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => 'No product.'));
+            if($this->viewType == 'json' or (helper::isApiRequest())) return $this->send(array('result' => 'fail', 'message' => 'No product.'));
             $this->locate($this->createLink('product', 'create'));
         }
 
@@ -112,10 +113,15 @@ class treeZen extends tree
      */
     protected function updateBrowseLang(string $viewType)
     {
+        $common = $this->lang->tree->common;
         switch($viewType)
         {
             case 'host':
                 $this->lang->tree->manage = $this->lang->tree->groupMaintenance;
+                break;
+            case 'aiskill':
+                $this->lang->navGroup->tree = 'aiapp';
+                $this->lang->tree->name = $this->lang->tree->cate;
                 break;
             case 'caselib':
                 $this->app->loadConfig('qa');
@@ -142,7 +148,7 @@ class treeZen extends tree
         }
 
         $viewType = ucfirst($viewType);
-        $this->lang->tree->manage = isset($this->lang->tree->$viewType) ? $this->lang->tree->$viewType : $this->lang->tree->common;
+        $this->lang->tree->manage = isset($this->lang->tree->$viewType) ? $this->lang->tree->$viewType : $common;
     }
 
     /**

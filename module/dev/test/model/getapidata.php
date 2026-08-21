@@ -29,8 +29,8 @@ su('admin');
 $devTest = new devModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r(count($devTest->getAPIDataTest(0, '16.0'))) && p() && e(3); // 步骤1：默认参数apiID=0测试，返回3个元素的数组
-r($devTest->getAPIDataTest(1, '16.0')) && p('0:id') && e(1); // 步骤2：指定存在的API ID测试
-r(count($devTest->getAPIDataTest(999999, '16.0'))) && p() && e(3); // 步骤3：不存在的API ID测试，返回3个元素的数组
-r(count($devTest->getAPIDataTest(0, '16.0')[1])) && p() && e(12); // 步骤4：验证typeList数组长度
-r(count($devTest->getAPIDataTest(0, '16.0')[2])) && p() && e(16); // 步骤5：验证treeMenu数组长度
+r(count($devTest->getAPIDataTest(0, 'v1'))) && p() && e(3); // 步骤1：默认参数apiID=0测试，返回3个元素的数组
+r($devTest->getAPIDataTest(1, 'v1')) && p('0:id') && e(1); // 步骤2：指定存在的API ID测试
+r(count($devTest->getAPIDataTest(999999, 'v1'))) && p() && e(3); // 步骤3：不存在的API ID测试，返回3个元素的数组
+r(count($devTest->getAPIDataTest(0, 'v1')[1])) && p() && e(12); // 步骤4：验证typeList数组长度
+r(count($devTest->getAPIDataTest(0, 'v1')[2])) && p() && e(16); // 步骤5：验证treeMenu数组长度

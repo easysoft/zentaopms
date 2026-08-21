@@ -966,19 +966,19 @@ class bugZen extends bug
 
         if(!empty($bug->allBuilds))
         {
-            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,noreplace', 0, '');
+            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,noreleased,noreplace', 0, '');
         }
         elseif($executionID)
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail', $executionID, 'execution');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,nowaitrelease,noreleased,nofail', $executionID, 'execution');
         }
         elseif($projectID)
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail', $projectID, 'project');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,nowaitrelease,noreleased,nofail', $projectID, 'project');
         }
         else
         {
-            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail');
+            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,nowaitrelease,noreleased,nofail');
         }
         $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
 
@@ -1338,7 +1338,7 @@ class bugZen extends bug
             $bug->openedBy    = $this->app->user->account;
             $bug->openedDate  = helper::now();
             $bug->product     = $productID;
-            $bug->steps       = nl2br($bug->steps);
+            $bug->steps       = helper::textarea2Html((string)$bug->steps);
 
             /* Assign the bug to the person in charge of the module. */
             if(!empty($moduleOwners[$bug->module]))
@@ -1615,8 +1615,13 @@ class bugZen extends bug
         /* Get custom Fields. */
         foreach(explode(',', $this->config->bug->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->bug->$field;
 
+        /* Set display fields. */
+        $showFields = $this->config->bug->custom->batchEditFields;
+        $showFields = trim($showFields, ',');
+
         $this->view->title        = ($productID ? (zget($products, $productID, '', $products[$productID]->name . $this->lang->hyphen) . "BUG") : '') . $this->lang->bug->batchEdit;
         $this->view->customFields = $customFields;
+        $this->view->showFields   = $showFields;
 
         /* Judge whether the editedBugs is too large and set session. */
         $countInputVars  = count($bugs) * (count(explode(',', $this->config->bug->custom->batchEditFields)) + 2);
@@ -1631,6 +1636,7 @@ class bugZen extends bug
         $branchTagOption = $this->assignProductRelatedVars($bugs, $products);
         $this->view->productID = $productID;
         $this->view->branch    = $branch;
+        $this->view->fromCases = $this->loadModel('testcase')->getPairsByProduct($productID, array(0, $branch));
 
         /* Assign project related variables. */
         $this->assignProjectRelatedVars($bugs, $products);
@@ -1967,7 +1973,7 @@ class bugZen extends bug
         $this->action->create('todo', $todoID, 'finished', '', "BUG:$bugID");
         if($this->config->edition != 'open')
         {
-            $todo = $this->dao->select('type, objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+            $todo = $this->dao->select('type, `objectID`')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
             if($todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done', '', $todoID);
         }
 
@@ -2123,7 +2129,7 @@ class bugZen extends bug
     protected function responseAfterOperate(int $bugID, array $changes = array(), string $message = '', bool $isInKanban = false): bool|int
     {
         if(!$message) $message = $this->lang->saveSuccess;
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'message' => $message, 'data' => $bugID));
+        if(helper::isApiRequest()) return $this->send(array('status' => 'success', 'message' => $message, 'data' => $bugID));
 
         /* 如果 bug 转任务并且 bug 的状态发生变化，提示是否更新任务状态。*/
         /* This bug has been converted to a task, update the status of the related task or not. */
@@ -2187,7 +2193,7 @@ class bugZen extends bug
         /* Return bug id when call the API. */
         if(!$message) $message = $this->lang->saveSuccess;
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $bug->id));
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bug->id));
+        if(helper::isApiRequest()) return $this->send(array('status' => 'success', 'data' => $bug->id));
 
         if(isInModal()) return $this->send($this->responseInModal());
 

@@ -49,7 +49,7 @@ class bugTao extends bugModel
         if($browseType == 'longlifebugs') $lastEditedDate = date(DT_DATE1, time() - $this->config->bug->longlife * 24 * 3600);
 
         $bugIdListAssignedByMe = array();
-        if($browseType == 'assignedbyme') $bugIdListAssignedByMe = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs();
+        if($browseType == 'assignedbyme') $bugIdListAssignedByMe = $this->dao->select('`objectID`')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs();
 
         $executionIdList[] = '0';
         $bugList = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
@@ -71,7 +71,7 @@ class bugTao extends bugModel
             ->beginIF($browseType == 'toclosed')->andWhere('status')->eq('resolved')->fi()
             ->beginIF($browseType == 'postponedbugs')->andWhere('resolution')->eq('postponed')->fi()
             ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
-            ->beginIF($browseType == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewedBy)")->fi()
+            ->beginIF($browseType == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewedBy`)")->fi()
             ->beginIF($browseType == 'feedback')->andWhere('feedback')->ne('0')->fi()
 
             ->beginIF($browseType == 'longlifebugs')

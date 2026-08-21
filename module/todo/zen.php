@@ -118,6 +118,7 @@ class todoZen extends todo
             ->setDefault('assignedTo', $this->app->user->account)
             ->setDefault('assignedBy', $this->app->user->account)
             ->setDefault('assignedDate', helper::now())
+            ->setDefault('pri', 3)
             ->cleanInt('pri')
             ->setIF($hasObject && $objectType,  'objectID', (int)$objectID)
             ->setIF(empty($rawData->date) || $this->post->switchDate, 'date', FUTURE_TIME)
@@ -143,7 +144,7 @@ class todoZen extends todo
     {
         /* Only handle cases where you add to the backlog by year. */
         if(empty($form->data->config)) return $form;
-        if(!empty($form->data->config) && $form->data->config['type'] != 'year') return $form;
+        if(!empty($form->data->config) && isset($form->data->config['type']) && $form->data->config['type'] != 'year') return $form;
 
         $form->data->config['type']          = 'day';
         $form->data->config['specifiedDate'] = 1;
@@ -219,7 +220,9 @@ class todoZen extends todo
 
         if(!empty($todo->cycle)) $this->todo->createByCycle(array($todo->id => $todo));
 
-        $this->loadModel('action')->create('todo', $todo->id, 'opened');
+        $actionID = $this->loadModel('action')->create('todo', $todo->id, 'opened');
+
+        $this->loadModel('message')->sendMentionNotice('todo', 'create', $actionID, $todo);
 
         return $todo;
     }
@@ -294,6 +297,7 @@ class todoZen extends todo
 
         /* Process todo. */
         $todo = $form->add('account', $oldTodo->account)
+            ->setDefault('pri', 3)
             ->cleanInt('pri')
             ->setIF(in_array($objectType, array('bug', 'task', 'story')), 'name', '')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
@@ -337,22 +341,6 @@ class todoZen extends todo
         if($todo->private) $todo->assignedTo = $todo->assignedBy = $this->app->user->account;
 
         return $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
-    }
-
-    /**
-     * 编辑完成待办后数据处理。
-     * Handle data after edit todo.
-     *
-     * @param  object    $todo
-     * @access protected
-     * @return void
-     */
-    protected function afterEdit(int $todoID, array $changes): void
-    {
-        if(empty($changes)) return;
-
-        $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
-        $this->action->logHistory($actionID, $changes);
     }
 
     /**

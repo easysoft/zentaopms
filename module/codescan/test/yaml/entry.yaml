@@ -14,9 +14,9 @@ fields:
 - field: code
   range: gitfox
 - field: key
-  range: 0123456789abcdef0123456789abcdef
+  range: gitfox
 - field: freePasswd
-  range: "0"
+  range: "1"
 - field: ip
   range: '*'
 - field: createdBy

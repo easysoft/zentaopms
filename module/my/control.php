@@ -101,6 +101,7 @@ class my extends control
         }
 
         if(in_array($mode, array('testcase', 'feedback')) && $browseType == 'assignedTo') $browseType = 'assigntome';
+        if($mode == 'mymeeting' && $browseType == 'assignedTo') $browseType = 'futureMeeting';
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][strtolower($mode)];
 
         echo $this->fetch('my', $mode, "browseType={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
@@ -559,7 +560,8 @@ class my extends control
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $pager    = pager::init($recTotal, $recPerPage, $pageID);
+        $queryID  = $browseType == 'bySearch' ? (int)$param : 0;
 
         /* Save session. */
         if($this->app->viewType != 'json')
@@ -569,13 +571,15 @@ class my extends control
             $this->session->set('reportList',   $uri, 'qa');
             $this->session->set('buildList',    $uri, 'execution');
         }
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=testtask&browseType=bySearch&queryID=myQueryID");
+        $this->my->buildTesttaskSearchForm($queryID, $actionURL);
 
         /* Append id for second sort. */
         $this->app->loadLang('project');
-        $sort  = common::appendOrder($orderBy);
-        $count = array('wait' => 0, 'doing' => 0, 'blocked' => 0);
-        $users = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $tasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $browseType == 'assignedTo' ? 'wait' : $browseType);
+        $sort   = common::appendOrder($orderBy);
+        $count  = array('wait' => 0, 'doing' => 0, 'blocked' => 0);
+        $users  = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $tasks  = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $browseType == 'assignedTo' ? 'wait' : $browseType, $queryID);
         foreach($tasks as $task)
         {
             if($task->status == 'wait' || $task->status == 'doing' || $task->status == 'blocked') $count[$task->status] ++;
@@ -625,7 +629,7 @@ class my extends control
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('caseList', $uri, 'qa');
+        $this->session->set('caseList', $uri, $this->app->tab);
         $this->session->set('bugList',  $uri . "#app={$this->app->tab}", 'qa');
 
         /* Load pager. */
@@ -1738,6 +1742,9 @@ class my extends control
      */
     public function ssh(int $repoID = 0, int $objectID = 0)
     {
+        $health = $this->loadModel('gitfox')->checkHealth();
+        if(!$health) return $this->sendError($this->lang->gitfox->serverFail);
+
         $tab = $this->app->tab;
         if($tab != 'my')
         {

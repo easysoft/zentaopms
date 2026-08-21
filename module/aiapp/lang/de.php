@@ -45,8 +45,17 @@ $lang->aiapp->viewAiToolkit      = 'View AI Toolkit';
 
 $lang->aiapp->id                 = 'ID';
 $lang->aiapp->model              = 'Model Name';
+$lang->aiapp->modelID            = 'Modell-ID';
+$lang->aiapp->abilities          = 'Fähigkeiten';
 $lang->aiapp->converse           = 'Converse';
 $lang->aiapp->pageSummary        = 'Total %s items.';
+$lang->aiapp->searchModels       = 'Modelle suchen';
+$lang->aiapp->abilityTypes       = [];
+
+$lang->aiapp->abilityTypes['chat']             = 'Chat';
+$lang->aiapp->abilityTypes['function-calling'] = 'Funktionsaufruf';
+$lang->aiapp->abilityTypes['reasoning']        = 'Reasoning';
+$lang->aiapp->abilityTypes['embedding']        = 'Embedding';
 
 $lang->aiapp->tips = new stdClass();
 $lang->aiapp->tips->noData = 'No data';
@@ -65,7 +74,7 @@ $lang->aiapp->langData->doc                = 'Dokument';
 $lang->aiapp->langData->design             = 'Design';
 $lang->aiapp->langData->feedback           = 'Rückmeldung';
 $lang->aiapp->langData->currentDocContent  = 'Aktuelles Dokument';
-$lang->aiapp->langData->globalMemoryTitle  = 'ZenTao';
+$lang->aiapp->langData->globalMemoryTitle  = 'All';
 $lang->aiapp->langData->zaiConfigNotValid  = 'ZAI-Konfiguration wurde noch nicht eingerichtet. Bitte wenden Sie sich an den Administrator, um <a href="{zaiConfigUrl}">ZAI zu konfigurieren</a>.<br>Falls die Konfiguration bereits abgeschlossen wurde, versuchen Sie bitte, die Seite neu zu laden.';
 $lang->aiapp->langData->unauthorizedError  = 'Autorisierung fehlgeschlagen, ungültiger API-Schlüssel. Bitte wenden Sie sich an den Administrator, um <a href="{zaiConfigUrl}">ZAI zu konfigurieren</a>.<br>Falls die Konfiguration bereits abgeschlossen wurde, versuchen Sie bitte, die Seite neu zu laden.';
 $lang->aiapp->langData->processDataPrefix  = "Die zu verarbeitenden Daten lauten wie folgt:\n{data}";
@@ -81,7 +90,25 @@ $lang->aiapp->langData->promptTestDataIntro= 'Hier ist das Beispiel {type} von {
 $lang->aiapp->langData->searchingKLibs     = 'Suche nach Wissensdatenbanken...';
 $lang->aiapp->langData->recentChats        = 'Letzte Chats';
 $lang->aiapp->langData->aiTeammateTasks    = 'Digitale Mitarbeiter-Aufgaben';
-$lang->aiapp->langData->searchTasks        = 'Suche nach digitalen Mitarbeiter-Aufgaben';
+
+$lang->aiapp->langData->searchTasks         = 'Suche nach digitalen Mitarbeiter-Aufgaben';
+$lang->aiapp->langData->formFillTitle       = 'Formularausfüllung';
+$lang->aiapp->langData->formFillUserMessage = 'Bitte füllen Sie das Formular basierend auf den aktuellen Seiteninformationen aus';
+$lang->aiapp->langData->formPageContext     = 'Aktueller Seitenkontext';
+$lang->aiapp->langData->formCurrentData     = 'Aktuelle Formulardaten';
+$lang->aiapp->langData->formFillableFields  = 'Ausfüllbare Felder';
+$lang->aiapp->langData->formFieldDefinition = 'Felddefinitionen';
+$lang->aiapp->langData->formRequiredField   = 'Pflichtfeld';
+$lang->aiapp->langData->formReturnJSONArray = 'Bitte geben Sie ein JSON-Array zurück, jedes Array-Element entspricht einer Datenzeile, die Schlüssel entsprechen den ausfüllbaren Feldnamen. Pflichtfelder müssen Werte haben.';
+$lang->aiapp->langData->formZentaoAPITip    = "Bitte verwenden Sie zuerst das zentao-api-readonly-Tool, um die erforderlichen Kontextdaten abzurufen, und verwenden Sie dann das submitFormData-Tool, um die ausgefüllten Formulardaten zurückzugeben. Pflichtfelder müssen Werte haben.\nNormalerweise muss submitFormData nur einmal aufgerufen werden, es sei denn, der Benutzer benötigt mehrere Lösungen.";
+$lang->aiapp->langData->formResultGenerated = 'Formulardaten wurden generiert.';
+$lang->aiapp->langData->formCurrentTarget   = 'Aktuelles';
+$lang->aiapp->langData->stepDescription     = 'Schrittbeschreibung';
+$lang->aiapp->langData->expectDescription   = 'Erwartetes Ergebnis';
+
+$lang->aiapp->langData->submitFormDisplayName = 'Formulardaten einreichen';
+$lang->aiapp->langData->submitFormDescription = 'Die ausgefüllten Formulardaten an den Benutzer zurückgeben';
+$lang->aiapp->langData->vectorizedData        = 'Vektorisierte Daten';
 
 $lang->aiapp->toolkitTitle = 'ZenTao Toolkit';
 $lang->aiapp->toolkitItems = array();

@@ -14,6 +14,7 @@ cid=15022
 - 步骤5：有效参数但缺少模型配置测试 @-4
 - 步骤6：有效参数但数据序列化失败测试 @-3
 - 步骤7：有效参数但schema配置错误测试 @-5
+- 步骤8：详情位置不选择输入字段测试 @-6
 
 */
 
@@ -26,6 +27,7 @@ $promptTable->name->range('测试提示词1,测试提示词2,测试提示词3,�
 $promptTable->module->range('story,task,bug,project,testcase');
 $promptTable->source->range('story.title,task.name,bug.title,project.name,testcase.title');
 $promptTable->targetForm->range('story.create,task.edit,bug.edit,project.edit,invalid.form');
+$promptTable->actionPurpose->range('story.create,task.edit,bug.edit,project.edit,invalid.form');
 $promptTable->status->range('active,active,active,active,active');
 $promptTable->model->range('1,1,999,1,1');
 $promptTable->createdBy->range('admin');
@@ -63,3 +65,4 @@ r($aiTest->executePromptTest(1, 999)) && p() && e(-2);         // 步骤4：无�
 r($aiTest->executePromptTest(3, 1)) && p() && e(-4);           // 步骤5：有效参数但缺少模型配置测试
 r($aiTest->executePromptTest(2, 900)) && p() && e(-3);         // 步骤6：有效参数但数据序列化失败测试
 r($aiTest->executePromptTest(5, 1)) && p() && e(-5);           // 步骤7：有效参数但schema配置错误测试
+r($aiTest->executePromptTest(6, 1)) && p() && e(-6);           // 步骤8：详情位置不选择输入字段测试

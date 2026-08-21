@@ -28,8 +28,18 @@
   <td style='padding: 10px; border: none;'>
     <fieldset style='border: 1px solid #e5e5e5'>
       <legend style='color: #114f8e'><?php echo $this->lang->story->legendSpec;?></legend>
-      <div style='padding:5px;'><?php echo $object->spec;?></div>
+      <div style='padding:5px;'><?php echo zget($object, 'spec', '');?></div>
     </fieldset>
   </td>
 </tr>
+<?php if(isset($object->verify)):?>
+<tr>
+  <td style='padding: 10px; border: none;'>
+    <fieldset style='border: 1px solid #e5e5e5'>
+      <legend style='color: #114f8e'><?php echo $this->lang->story->verify;?></legend>
+      <div style='padding:5px;'><?php echo zget($object, 'verify', '');?></div>
+    </fieldset>
+  </td>
+</tr>
+<?php endif;?>
 <?php include $this->app->getModuleRoot() . 'common/view/mail.footer.html.php';?>

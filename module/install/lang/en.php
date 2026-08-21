@@ -129,6 +129,8 @@ $lang->install->dbEncoding     = 'Database Charset';
 $lang->install->dbUser         = 'Database Username';
 $lang->install->dbPassword     = 'Database Password';
 $lang->install->dbName         = 'Database Name';
+$lang->install->dbSchema       = 'Database Schema';
+$lang->install->dbSchemaNote   = 'Schema for Gauss/PostgreSQL; ignored by MySQL.';
 $lang->install->dbPrefix       = 'Table Prefix';
 $lang->install->clearDB        = 'Clean up existing data';
 $lang->install->importDemoData = 'Import Demo Data';
@@ -144,6 +146,7 @@ $lang->install->workingList['full']      = 'Application Lifecycle Management';
 
 $lang->install->errorConnectDB      = 'Database connection failed.';
 $lang->install->errorDBName         = ' “.” are not allowed in the database name';
+$lang->install->errorDBSchema       = 'Invalid schema name.';
 $lang->install->errorCreateDB       = 'Database creation failed.';
 $lang->install->errorTableExists    = 'The data table has existed. If ZenTao has been installed before, please return to the previous step and clear data, then continue the installation.';
 $lang->install->errorCreateTable    = 'Table creation failed.';

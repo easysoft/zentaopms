@@ -13,8 +13,9 @@ cid=18749
 - 默认修改应用 @1
 - 修改重名提示第name条的0属性 @『应用名称』已经有『应用2』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
 - 修改空提示第name条的0属性 @『应用名称』不能为空。
-- 修改非数字第product条的0属性 @『product』应当是数字。
+- 修改非数字第product条的0属性 @『所属产品』应当是数字。
 - 修改非法状态后保存status属性 @1
+
 */
 global $tester;
 $system = $tester->loadModel('system');
@@ -35,7 +36,7 @@ r(dao::getError()) && p('name:0') && e('『应用名称』不能为空。'); // 
 $default->name    = '应用11';
 $default->product = '字符串';
 $system->update(1, $default);
-r(dao::getError()) && p('product:0') && e('『product』应当是数字。'); // 修改非数字
+r(dao::getError()) && p('product:0') && e('『所属产品』应当是数字。'); // 修改非数字
 $default->status  = 1;
 $default->product = 1;
 $system->update(1, $default, false);

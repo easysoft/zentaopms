@@ -355,19 +355,21 @@ class deptModel extends model
      * @param  string $key     id|account
      * @param  string $type    inside|outside
      * @param  string $params  all
+     * @param  bool   $followShowOutside 
      * @access public
      * @return array
      */
-    public function getDeptUserPairs(int $deptID = 0, string $key = 'account', string $type = 'inside', string $params = ''): array
+    public function getDeptUserPairs(int $deptID = 0, string $key = 'account', string $type = 'inside', string $params = '', bool $followShowOutside = true): array
     {
         $childDepts = $this->getAllChildID($deptID);
         $keyField   = $key == 'id' ? 'id' : 'account';
         $type       = $type == 'outside' ? 'outside' : 'inside';
+        $showAll    = strpos($params, 'all') !== false || ($followShowOutside && !empty($this->config->user->showOutside));
 
         return $this->dao->select("$keyField, realname")->from(TABLE_USER)
             ->where('1=1')
             ->beginIF(strpos($params, 'queryAll') === false && empty($this->config->user->showDeleted))->andWhere('deleted')->eq(0)->fi()
-            ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
+            ->beginIF(!$showAll)->andWhere('type')->eq($type)->fi()
             ->beginIF($childDepts)->andWhere('dept')->in($childDepts)->fi()
             ->beginIF($this->config->vision)->andWhere("CONCAT(',', visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->orderBy('account')

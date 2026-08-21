@@ -11,17 +11,17 @@ timeout=0
 cid=18093
 
 - 开始任务
- - 第1条的status属性 @wait
- - 第1条的consumed属性 @3
- - 第1条的left属性 @0
+ - 第1条的status属性 @doing
+ - 第1条的consumed属性 @4.00
+ - 第1条的left属性 @3.00
 - 完成任务
- - 第2条的status属性 @doing
- - 第2条的consumed属性 @4
- - 第2条的left属性 @1
+ - 第2条的status属性 @done
+ - 第2条的consumed属性 @14.00
+ - 第2条的left属性 @0.00
 - 工时计算
  - 第8条的status属性 @doing
- - 第8条的consumed属性 @11
- - 第8条的left属性 @3
+ - 第8条的consumed属性 @11.00
+ - 第8条的left属性 @3.00
 - 修复bug1
  - 第1条的status属性 @resolved
  - 第1条的resolution属性 @fixed
@@ -30,34 +30,84 @@ cid=18093
  - 第2条的resolution属性 @fixed
 
 */
-global $tester;
-$tester->dao->delete()->from(TABLE_PROJECT)->where('id')->in('1,2,3')->exec();
-$tester->dao->delete()->from(TABLE_TASK)->where('id')->in('1,2,8')->exec();
-$tester->dao->delete()->from(TABLE_BUG)->where('id')->in('1,2')->exec();
-$tester->dao->delete()->from(TABLE_EFFORT)->where('objectType')->eq('task')->andWhere('objectID')->in('1,2,8')->exec();
-$tester->dao->delete()->from(TABLE_ACTION)->where('objectType')->in('task,bug')->andWhere('objectID')->in('1,2,8')->exec();
-$tester->dao->delete()->from(TABLE_HISTORY)->where('field')->eq('git')->exec();
-$tester->dao->delete()->from(TABLE_ACTION)->where('action')->eq('gitcommited')->exec();
+zenData('project')->gen(0);
+zenData('task')->gen(0);
+zenData('bug')->gen(0);
+zenData('effort')->gen(0);
+zenData('action')->gen(0);
+zenData('history')->gen(0);
 
-$executions = array(
-    array('id' => 1, 'name' => '项目集1', 'type' => 'program', 'status' => 'doing', 'model' => '',      'parent' => 0, 'project' => 0, 'path' => ',1,',     'grade' => 1, 'code' => 'program1', 'begin' => '2026-07-09', 'end' => '2026-07-16', 'acl' => 'open', 'openedBy' => 'admin', 'openedDate' => '2026-07-09 00:00:00', 'vision' => 'rnd'),
-    array('id' => 2, 'name' => '项目1',   'type' => 'project', 'status' => 'doing', 'model' => 'scrum', 'parent' => 1, 'project' => 0, 'path' => ',1,2,',   'grade' => 2, 'code' => 'project1', 'begin' => '2026-07-09', 'end' => '2026-07-16', 'acl' => 'open', 'openedBy' => 'admin', 'openedDate' => '2026-07-09 00:00:00', 'vision' => 'rnd'),
-    array('id' => 3, 'name' => '迭代1',   'type' => 'sprint',  'status' => 'doing', 'model' => '',      'parent' => 2, 'project' => 2, 'path' => ',1,2,3,', 'grade' => 3, 'code' => 'sprint1',  'begin' => '2026-07-09', 'end' => '2026-07-16', 'acl' => 'open', 'openedBy' => 'admin', 'openedDate' => '2026-07-09 00:00:00', 'vision' => 'rnd')
-);
-foreach($executions as $execution) $tester->dao->insert(TABLE_PROJECT)->data($execution)->exec();
+$project = zenData('project');
+$project->id->range('1-3');
+$project->project->range('0,0,2');
+$project->name->range('项目集1,项目1,迭代1');
+$project->code->range('program1,project1,sprint1');
+$project->type->range('program,project,sprint');
+$project->model->range('scrum{3}');
+$project->status->range('doing{3}');
+$project->parent->range('0,1,2');
+$project->grade->range('1-3');
+$project->begin->range('`2026-07-09`{3}');
+$project->end->range('`2026-07-16`{3}');
+$project->openedBy->range('admin{3}');
+$project->openedDate->range('20260709 000000:0')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+$project->acl->range('open{3}');
+$project->multiple->range('1{3}');
+$project->vision->range('rnd{3}');
+$project->deleted->range('0{3}');
+$project->gen(3);
 
-$tasks = array(
-    array('id' => 1, 'parent' => 0, 'project' => 11, 'execution' => 3, 'module' => 21, 'story' => 1,  'design' => 0, 'storyVersion' => 1, 'designVersion' => 1, 'fromBug' => 0, 'name' => '开发任务11', 'type' => 'design', 'pri' => 1, 'estimate' => 0, 'consumed' => 3,  'left' => 0, 'deadline' => '2026-07-16', 'status' => 'wait',  'subStatus' => '', 'color' => '', 'mailto' => '', 'desc' => '这里是任务描述1', 'version' => 1, 'openedBy' => 'admin', 'openedDate' => '2026-07-09 00:00:00', 'assignedTo' => '', 'assignedDate' => '2026-07-09 00:00:00', 'estStarted' => '2026-07-09', 'realStarted' => '2026-07-09 00:00:00', 'finishedBy' => '', 'finishedList' => '', 'canceledBy' => '', 'closedBy' => '', 'realDuration' => 1, 'planDuration' => 1, 'closedReason' => '', 'lastEditedBy' => '', 'deleted' => 0, 'mode' => 'linear'),
-    array('id' => 2, 'parent' => 0, 'project' => 12, 'execution' => 3, 'module' => 24, 'story' => 5,  'design' => 0, 'storyVersion' => 1, 'designVersion' => 1, 'fromBug' => 0, 'name' => '开发任务12', 'type' => 'devel',  'pri' => 2, 'estimate' => 1, 'consumed' => 4,  'left' => 1, 'deadline' => '2026-07-15', 'status' => 'doing', 'subStatus' => '', 'color' => '', 'mailto' => '', 'desc' => '这里是任务描述2', 'version' => 1, 'openedBy' => 'admin', 'openedDate' => '2026-07-09 00:00:00', 'assignedTo' => '', 'assignedDate' => '2026-07-09 00:00:00', 'estStarted' => '2026-07-09', 'realStarted' => '2026-07-09 00:00:00', 'finishedBy' => '', 'finishedList' => '', 'canceledBy' => '', 'closedBy' => '', 'realDuration' => 1, 'planDuration' => 1, 'closedReason' => '', 'lastEditedBy' => '', 'deleted' => 0, 'mode' => 'linear'),
-    array('id' => 8, 'parent' => 0, 'project' => 18, 'execution' => 3, 'module' => 42, 'story' => 29, 'design' => 0, 'storyVersion' => 1, 'designVersion' => 1, 'fromBug' => 0, 'name' => '开发任务18', 'type' => 'misc',   'pri' => 4, 'estimate' => 7, 'consumed' => 10, 'left' => 4, 'deadline' => '2026-07-09', 'status' => 'doing', 'subStatus' => '', 'color' => '', 'mailto' => '', 'desc' => '这里是任务描述8', 'version' => 1, 'openedBy' => 'admin', 'openedDate' => '2026-07-09 00:00:00', 'assignedTo' => '', 'assignedDate' => '2026-07-09 00:00:00', 'estStarted' => '2026-07-09', 'realStarted' => '2026-07-09 00:00:00', 'finishedBy' => '', 'finishedList' => '', 'canceledBy' => '', 'closedBy' => '', 'realDuration' => 1, 'planDuration' => 1, 'closedReason' => '', 'lastEditedBy' => '', 'deleted' => 0, 'mode' => 'linear')
-);
-foreach($tasks as $task) $tester->dao->insert(TABLE_TASK)->data($task)->exec();
+$task = zenData('task');
+$task->id->range('1,2,8');
+$task->parent->range('0{3}');
+$task->project->range('2{3}');
+$task->execution->range('3{3}');
+$task->module->range('21,24,42');
+$task->story->range('1,5,29');
+$task->name->range('开发任务11,开发任务12,开发任务18');
+$task->type->range('design,devel,misc');
+$task->pri->range('1,2,4');
+$task->estimate->range('0,1,7');
+$task->consumed->range('3,4,10');
+$task->left->range('0,1,4');
+$task->deadline->range('`2026-07-16`,`2026-07-15`,`2026-07-09`');
+$task->status->range('wait,doing,doing');
+$task->desc->range('这里是任务描述1,这里是任务描述2,这里是任务描述8');
+$task->version->range('1{3}');
+$task->openedBy->range('admin{3}');
+$task->openedDate->range('20260709 000000:0')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+$task->assignedDate->range('20260709 000000:0')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+$task->estStarted->range('`2026-07-09`{3}');
+$task->realStarted->range('20260709 000000:0')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+$task->planDuration->range('1{3}');
+$task->realDuration->range('1{3}');
+$task->mode->range('none{3}');
+$task->deleted->range('0{3}');
+$task->gen(3);
 
-$bugs = array(
-    array('id' => 1, 'project' => 11, 'product' => 1, 'module' => 1821, 'execution' => 0, 'plan' => 1, 'story' => 2, 'storyVersion' => 1, 'title' => 'BUG1', 'severity' => 1, 'pri' => 1, 'type' => 'codeerror', 'steps' => 'step1', 'status' => 'active', 'color' => '#3da7f5', 'openedBy' => 'admin', 'openedDate' => '2026-07-09 00:00:00', 'openedBuild' => '1', 'assignedTo' => 'admin', 'assignedDate' => '2026-07-09 00:00:00', 'deadline' => '2026-07-16', 'resolution' => '', 'deleted' => 0),
-    array('id' => 2, 'project' => 11, 'product' => 1, 'module' => 1822, 'execution' => 0, 'plan' => 1, 'story' => 6, 'storyVersion' => 1, 'title' => 'BUG2', 'severity' => 2, 'pri' => 2, 'type' => 'config',    'steps' => 'step2', 'status' => 'active', 'color' => '#75c941', 'openedBy' => 'admin', 'openedDate' => '2026-07-09 00:00:00', 'openedBuild' => '1', 'assignedTo' => 'admin', 'assignedDate' => '2026-07-09 00:00:00', 'deadline' => '2026-07-15', 'resolution' => '', 'deleted' => 0)
-);
-foreach($bugs as $bug) $tester->dao->insert(TABLE_BUG)->data($bug)->exec();
+$bug = zenData('bug');
+$bug->id->range('1-2');
+$bug->project->range('2{2}');
+$bug->product->range('1{2}');
+$bug->module->range('1821,1822');
+$bug->execution->range('3{2}');
+$bug->plan->range('1{2}');
+$bug->story->range('2,6');
+$bug->title->range('BUG1,BUG2');
+$bug->severity->range('1,2');
+$bug->pri->range('1,2');
+$bug->type->range('codeerror,config');
+$bug->steps->range('step1,step2');
+$bug->status->range('active{2}');
+$bug->color->range('#3da7f5,#75c941');
+$bug->openedBy->range('admin{2}');
+$bug->openedDate->range('20260709 000000:0')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+$bug->openedBuild->range('1{2}');
+$bug->assignedTo->range('admin{2}');
+$bug->assignedDate->range('20260709 000000:0')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+$bug->deadline->range('`2026-07-16`,`2026-07-15`');
+$bug->deleted->range('0{2}');
+$bug->gen(2);
 
 global $app;
 $app->rawModule = 'repo';
@@ -82,14 +132,9 @@ $log->files     = array('M' => array('/README.md'));
 $log->change    = array('/README.md' => array('action' => 'M', 'kind' => 'file', 'oldPath' => ''));
 
 $repo = new repoModelTest();
-$repo->saveAction2PMSTest($log, $repoID);
-$result = $tester->loadModel('task')->getByIdList(array(1,2,8));
-r($result) && p('1:status,consumed,left') && e('wait,3.00,0.00'); //开始任务
-r($result) && p('2:status,consumed,left') && e('doing,4.00,1.00'); //完成任务
-r($result) && p('8:status,consumed,left') && e('doing,11.00,3.00');  //工时计算
-
+r($repo->saveAction2PMSTaskListTest($log, $repoID, array(1, 2, 8))) && p('1:status,consumed,left') && e('doing,4.00,3.00'); //开始任务
+r($repo->saveAction2PMSTaskListTest($log, $repoID, array(1, 2, 8))) && p('2:status,consumed,left') && e('done,14.00,0.00'); //完成任务
+r($repo->saveAction2PMSTaskListTest($log, $repoID, array(1, 2, 8))) && p('8:status,consumed,left') && e('doing,11.00,3.00');  //工时计算
 $log->msg = $log->comment = 'Fix bug#1,2';
-$repo->saveAction2PMSTest($log, $repoID);
-$result = $tester->loadModel('bug')->getByIdList(array(1,2));
-r($result) && p('1:status,resolution') && e('resolved,fixed'); //修复bug1
-r($result) && p('2:status,resolution') && e('resolved,fixed'); //修复bug2
+r($repo->saveAction2PMSBugListTest($log, $repoID, array(1, 2))) && p('1:status,resolution') && e('resolved,fixed'); //修复bug1
+r($repo->saveAction2PMSBugListTest($log, $repoID, array(1, 2))) && p('2:status,resolution') && e('resolved,fixed'); //修复bug2

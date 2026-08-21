@@ -434,7 +434,10 @@ class project extends control
             $projectID = $this->project->create($project, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($project->model == 'kanban') $this->project->addTeamMembers($projectID, $project, (array)$this->post->teamMembers);
-            $this->loadModel('action')->create('project', $projectID, 'opened');
+            $actionID = $this->loadModel('action')->create('project', $projectID, 'opened');
+
+            $project->id = $projectID;
+            $this->loadModel('message')->sendMentionNotice('project', 'create', $actionID, $project);
 
             /* Link the plan stories. */
             if(($project->hasProduct) && $this->post->plans) $this->project->addPlans($projectID, $this->post->plans);
@@ -504,6 +507,9 @@ class project extends control
             {
                 $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
                 $this->action->logHistory($actionID, $changes);
+
+                $newProject->id = $projectID;
+                $this->loadModel('message')->sendMentionNotice('project', 'edit', $actionID, $newProject, $project);
             }
 
             $message = $this->executeHooks($projectID);
@@ -597,7 +603,7 @@ class project extends control
 
         $project = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getProject() : $this->project->fetchByID($projectID);
         if(!empty($project->deleted)) return $this->sendError($this->lang->project->deletedTip, $this->createLink('project', 'browse'));
-        if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->checkAccess((int)$projectID, $this->project->getPairsByProgram());
+        if(!helper::isApiRequest()) $projectID = $this->project->checkAccess((int)$projectID, $this->project->getPairsByProgram());
         if(is_bool($projectID)) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->project->accessDenied, 'locate' => $this->createLink('project', 'browse'))));
 
         $this->session->set('teamList', $this->app->getURI(true), 'project');
@@ -606,7 +612,7 @@ class project extends control
 
         if(empty($project) || strpos('scrum,waterfall,kanban,agileplus,waterfallplus,ipd', $project->model) === false)
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('project', 'browse'))));
         }
 
@@ -817,14 +823,14 @@ class project extends control
         if(!$project->multiple)
         {
             $executionID = $this->execution->getNoMultipleID($projectID);
-            if(defined('RUN_MODE') && RUN_MODE == 'api')
+            if(helper::isApiRequest())
             {
                 $this->view->executionStats = array($this->execution->getByID($executionID));
                 return $this->display();
             }
             return $this->locate($this->createLink('execution', 'task', "executionID=$executionID"));
         }
-        if(!empty($project->model) && $project->model == 'kanban' && !(defined('RUN_MODE') && RUN_MODE == 'api')) return $this->locate(inlink('index', "projectID=$projectID"));
+        if(!empty($project->model) && $project->model == 'kanban' && !(helper::isApiRequest())) return $this->locate(inlink('index', "projectID=$projectID"));
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', true);
@@ -959,6 +965,8 @@ class project extends control
      * @param  int    $projectID
      * @param  string $objectType   project|execution|product
      * @param  string $extra
+     * @param  string $browseType
+     * @param  int    $queryID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -966,9 +974,9 @@ class project extends control
      * @access public
      * @return void
      */
-    public function testreport(int $projectID = 0, string $objectType = 'project', string $extra = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testreport(int $projectID = 0, string $objectType = 'project', string $extra = '', string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        echo $this->fetch('testreport', 'browse', "objectID=$projectID&objectType=$objectType&extra=$extra&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('testreport', 'browse', "objectID=$projectID&objectType=$objectType&extra=$extra&browseType=$browseType&queryID=$queryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -977,6 +985,8 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  int    $productID
+     * @param  string $type
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -984,7 +994,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function testtask(int $projectID = 0, int $productID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testtask(int $projectID = 0, int $productID = 0, string $type = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->session->set('testtaskList', $this->app->getURI(true), 'project');
 
@@ -995,7 +1005,11 @@ class project extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $project = $this->project->getByID($projectID);
-        $tasks   = $this->loadModel('testtask')->getProjectTasks($projectID, $productID, $orderBy, $pager);
+        $tasks   = $this->loadModel('testtask')->getProjectTasks($projectID, $productID, $type, $param, $orderBy, $pager);
+        $products = $this->loadModel('product')->getProducts($projectID);
+        /* Build the search form. */
+        $actionURL = $this->createLink('project', 'testtask', "projectID=$projectID&productID=$productID&type=bysearch&queryID=myQueryID&orderBy=$orderBy");
+        $this->project->buildTesttaskSearchForm($projectID, $products, $param, $actionURL);
 
         $this->projectZen->assignTesttaskVars($tasks);
 
@@ -1003,6 +1017,8 @@ class project extends control
         $this->view->project   = $project;
         $this->view->productID = $productID;
         $this->view->projectID = $projectID;
+        $this->view->type      = $type;
+        $this->view->param     = $param;
         $this->view->pager     = $pager;
         $this->view->orderBy   = $orderBy;
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -1330,7 +1346,7 @@ class project extends control
         $group      = $this->group->getById($groupID);
         $project    = $this->project->getByID((int)$group->project);
         $groupUsers = $this->group->getUserPairs($groupID);
-        $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID);
+        $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'account', 'inside', '', false);
         $otherUsers = array_diff_assoc($allUsers, $groupUsers);
 
         if($project->acl != 'open')
@@ -1342,7 +1358,7 @@ class project extends control
             }
         }
 
-        $outsideUsers = $this->loadModel('user')->getPairs('outside|noclosed|noletter|noempty');
+        $outsideUsers = $this->loadModel('user')->getPairs('outside|noclosed|noletter|noempty', '', 0, '', false);
         if($project->acl != 'open')
         {
             foreach($outsideUsers as $account => $outsideUser)

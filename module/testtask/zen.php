@@ -68,7 +68,7 @@ class testtaskZen extends testtask
         $this->loadModel('testcase');
 
         $searchConfig = $this->config->testcase->search;
-        $searchConfig['module']    = 'testtask';
+        $searchConfig['module']    = 'testtaskTestcase';
         $searchConfig['queryID']   = $queryID;
         $searchConfig['actionURL'] = helper::createLink('testtask', 'cases', "taskID=$testtask->id&browseType=bysearch&queryID=myQueryID");
 
@@ -106,6 +106,7 @@ class testtaskZen extends testtask
             $searchConfig['params']['branch']['values'] = $this->testtask->getBranchesByTask($testtask);
         }
 
+        if(isset($_SESSION['testtaskSearchFunc'])) unset($_SESSION['testtaskSearchFunc']);
         $this->config->testcase->search = $searchConfig;
         $this->loadModel('search')->setSearchParams($searchConfig);
     }
@@ -573,16 +574,23 @@ class testtaskZen extends testtask
      * @access protected
      * @return array
      */
-    protected function prepareCasesForBatchRun(int $productID, string $orderBy, string $from, int $taskID, string $confirm, array $caseIdList): array
+    protected function prepareCasesForBatchRun(int $productID, string $orderBy, string $from, int $taskID, string $confirm, array $caseIdList, array $runIdList = array()): array
     {
         $this->setMenu($productID, 0, (int)$this->session->project, (int)$this->session->execution);
+        if($this->app->tab == 'my' && $from == 'work')
+        {
+            $this->loadModel('my');
+            $this->lang->my->menu->{$from}['subModule'] = 'testtask';
+            $this->lang->my->menu->{$from}['subMenu']->testcase['subModule'] = 'testtask';
+        }
+
         $menu = isset($this->lang->{$this->app->tab}->menu) ? $this->lang->{$this->app->tab}->menu : array();
         if($this->app->tab != 'qa')
         {
             $menu = isset($menu->qa) ? $menu->qa['subMenu'] : array();
             if(isset($menu->testtask)) $menu->testtask['subModule'] = '';
         }
-        $menu->{$from}['subModule'] .= ',testtask';
+        if($from != 'work') $menu->{$from}['subModule'] .= ',testtask';
 
         $orderBy = str_replace('caseID_', 'id_', $orderBy);
         $cases = $this->dao->select('*')->from(TABLE_CASE)
@@ -590,14 +598,38 @@ class testtaskZen extends testtask
             ->beginIF($confirm == 'yes')->andWhere('auto')->ne('auto')->fi()
             ->orderBy($orderBy)
             ->fetchAll('id', false);
-        if($from != 'testtask') return $cases;
+        if($from != 'testtask' && $from != 'work') return $cases;
+
+        /* 如果批量执行的用例来自我的地盘-待处理，检查这些用例的版本，如果不是最新版就移除它们。*/
+        /* If cases come from my, check the version of these cases, if not the latest version, remove them. */
+        if($from == 'work' && $runIdList)
+        {
+            $runs = $this->dao->select('t1.id, t1.`case`, t1.`caseVersion`, t1.version, t1.task, t2.name AS taskName')->from(TABLE_TESTRUN)->alias('t1')
+                ->leftJoin(TABLE_TESTTASK)->alias('t2')->on('t1.task = t2.id')
+                ->where('t1.id')->in($runIdList)
+                ->orderBy('t1.id_desc')
+                ->fetchAll('id');
+
+            $workCases = array();
+            foreach($runs as $runID => $run)
+            {
+                if($run->version < $run->caseVersion) continue;
+
+                $case = clone $cases[$run->case];
+                $case->caseID   = (int)$run->case;
+                $case->taskName = $run->taskName;
+                $workCases[$runID] = $case;
+            }
+            return $workCases;
+        }
 
         /* 如果批量执行的用例来自测试单，检查这些用例的版本，如果不是最新版就移除它们。*/
         /* If cases come from a testtask, check the version of these cases, if not the latest version, remove them. */
-        $runs = $this->dao->select('`case`, version')->from(TABLE_TESTRUN)->where('`case`')->in(array_keys($cases))->andWhere('task')->eq($taskID)->fetchPairs();
-        foreach($cases as $caseID => $case)
+        $runs = $this->dao->select('`case`,`caseVersion`,version')->from(TABLE_TESTRUN)->where('`case`')->in(array_keys($cases))->andWhere('task')->eq($taskID)->fetchAll('case');
+        foreach($runs as $caseID => $run)
         {
-            if(isset($runs[$caseID]) && $runs[$caseID] < $case->version) unset($cases[$caseID]);
+            if($run->caseVersion > $run->version) unset($cases[$caseID]);
+            $cases[$caseID]->version = $run->version;
         }
 
         $testtask = $this->testtask->fetchByID($taskID);

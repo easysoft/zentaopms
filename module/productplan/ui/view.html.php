@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
-
 $unlinkURL['story'] = helper::createLink('productplan', 'unlinkStory', "storyID=%s&planID={$plan->id}");
 $unlinkURL['bug']   = helper::createLink('productplan', 'unlinkBug',   "bugID=%s&planID={$plan->id}");
 
@@ -233,6 +231,16 @@ foreach($actions as $actionType => $typeActions)
     }
 }
 
+$suffixActions = null;
+if(!$isInModal && !$plan->deleted)
+{
+    $suffixActions = to::suffix
+    (
+        $actions ? btnGroup(set::items($actions['mainActions'])) : null,
+        $actions && !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? div(setClass('divider mx-2')) : null,
+        $actions ? btnGroup(set::items($actions['suffixActions'])) : null
+    );
+}
 $extendItems  = array();
 $extendFields = $this->printExtendFields($plan, 'items', 'position=all', false);
 foreach($extendFields as $field) $extendItems[] = item(set::name($field['text']), html($field['value']));
@@ -246,12 +254,7 @@ detailHeader
         span(setClass('label circle primary'), ($plan->begin == FUTURE_TIME || $plan->end == FUTURE_TIME) ? $lang->productplan->future : $plan->begin . '~' . $plan->end),
         $plan->deleted ? span(setClass('label danger'), $lang->product->deleted) : null
     ),
-    !$isInModal && !$plan->deleted && $actions ? to::suffix
-    (
-        btnGroup(set::items($actions['mainActions'])),
-        !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? div(setClass('divider mx-2')): null,
-        btnGroup(set::items($actions['suffixActions']))
-    ) : null
+    $suffixActions
 );
 
 detailBody

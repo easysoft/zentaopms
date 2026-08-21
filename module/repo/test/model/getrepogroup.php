@@ -9,117 +9,82 @@ title=测试 repoModel->getRepoGroup();
 timeout=0
 cid=18076
 
-- 按项目分组第4条的text属性 @正常产品4
-- 按项目分组对应的repo第0条的text属性 @testHtml
-- 指定projectID获取项目分组 @0
-- 指定存在的projectID获取项目分组 @1
-- 指定repoType获取项目分组个数 @4
+- 执行repoTest模块的getRepoGroupIsArrayTest方法，参数是$type  @1
+- 执行repoTest模块的getRepoGroupTest方法，参数是$type 第4条的text属性 @正常产品4
+- 执行repoTest模块的getRepoGroupItemsTest方法，参数是$type, 0, 1 第0条的text属性 @testHtml
+- 执行repoTest模块的getRepoGroupCountTest方法，参数是$type, $projectID  @0
+- 执行repoTest模块的getRepoGroupCountTest方法，参数是$type, $projectID  @1
+- 执行repoTest模块的getRepoGroupCountTest方法，参数是$type, 0  @4
 
 */
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_provider`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_spaceuser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int NOT NULL DEFAULT 0,
-  `product` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `gitUID` char(42) NOT NULL DEFAULT '',
-  `providerID` int unsigned NOT NULL DEFAULT 0,
-  `mirror` tinyint(1) NOT NULL DEFAULT 0,
-  `acl` varchar(30) NOT NULL DEFAULT 'open',
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_provider` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `type` varchar(30) NOT NULL DEFAULT '',
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_spaceuser` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `space` int unsigned NOT NULL DEFAULT 0,
-  `role` varchar(10) NOT NULL DEFAULT '',
-  `account` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+global $tester;
+zenData('ops_repo')->gen(0);
+zenData('ops_provider')->gen(0);
+zenData('ops_spaceuser')->gen(0);
 
-$tester->dao->delete()->from(TABLE_ENTRY)->where('code')->eq('gitfox')->exec();
-$tester->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in('1,11')->exec();
-$tester->dao->delete()->from(TABLE_PRODUCT)->where('id')->in('1,2,3,4')->exec();
-$tester->dao->insert(TABLE_ENTRY)->data((object)array(
-    'name'        => 'GitFox入口',
-    'account'     => 'admin',
-    'code'        => 'gitfox',
-    'key'         => 'testkey1234567890testkey1234567',
-    'freePasswd'  => 0,
-    'ip'          => '*',
-    'createdBy'   => 'admin',
-    'createdDate' => '2026-01-01 00:00:00',
-    'calledTime'  => 0,
-    'editedBy'    => 'admin',
-    'editedDate'  => '2026-01-01 00:00:00',
-    'deleted'     => 0,
-))->exec();
+zenData('ops_space')->gen(0);
+$spaceTable = zenData('ops_space');
+$spaceTable->id->range('1');
+$spaceTable->name->range('repo-test-space');
+$spaceTable->code->range('repo-test-space');
+$spaceTable->acl->range('open');
+$spaceTable->auth->range('extend');
+$spaceTable->deleted->range('0');
+$spaceTable->gen(1);
 
-foreach(range(1, 4) as $productID)
-{
-    $tester->dao->insert(TABLE_PRODUCT)->data((object)array(
-        'id'      => $productID,
-        'name'    => '正常产品' . $productID,
-        'code'    => 'product' . $productID,
-        'shadow'  => 0,
-        'deleted' => 0,
-    ))->exec();
-}
+zenData('projectproduct')->gen(0);
+$projectProductTable = zenData('projectproduct');
+$projectProductTable->project->range('11');
+$projectProductTable->product->range('1');
+$projectProductTable->branch->range('0');
+$projectProductTable->plan->range('');
+$projectProductTable->roadmap->range('');
+$projectProductTable->gen(1);
 
-$repos = array(
-    array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => 'testHtml', 'gitUID' => 'uid1', 'acl' => 'open', 'status' => 'active', 'deleted' => 0),
-    array('id' => 2, 'spaceID' => 1, 'product' => '2', 'name' => 'project1', 'gitUID' => 'uid2', 'acl' => 'open', 'status' => 'active', 'deleted' => 0),
-    array('id' => 3, 'spaceID' => 1, 'product' => '3', 'name' => 'unittest', 'gitUID' => 'uid3', 'acl' => 'open', 'status' => 'active', 'deleted' => 0),
-    array('id' => 4, 'spaceID' => 1, 'product' => '4', 'name' => 'testSvn', 'gitUID' => 'uid4', 'acl' => 'open', 'status' => 'active', 'deleted' => 0),
-);
-foreach($repos as $repoData) $tester->dao->insert(TABLE_REPO)->data((object)$repoData)->exec();
-$tester->dao->insert('ops_spaceuser')->data((object)array('space' => 1, 'role' => 'manager', 'account' => 'admin'))->exec();
-$tester->dao->insert(TABLE_PROJECTPRODUCT)->data((object)array('project' => 11, 'product' => 1, 'branch' => 0, 'plan' => '', 'roadmap' => ''))->exec();
+zenData('product')->gen(0);
+$productTable = zenData('product');
+$productTable->id->range('1-4');
+$productTable->name->range('正常产品1,正常产品2,正常产品3,正常产品4');
+$productTable->code->range('product1,product2,product3,product4');
+$productTable->shadow->range('0{4}');
+$productTable->deleted->range('0{4}');
+$productTable->gen(4);
+
+$repoTable = zenData('ops_repo');
+$repoTable->id->range('1-4');
+$repoTable->spaceID->range('1{4}');
+$repoTable->product->range('1,2,3,4');
+$repoTable->name->range('testHtml,project1,unittest,testSvn');
+$repoTable->scmType->range('git,git,git,svn');
+$repoTable->gitUID->range('uid1,uid2,uid3,uid4');
+$repoTable->providerID->range('0{4}');
+$repoTable->mirror->range('0{4}');
+$repoTable->acl->range('open{4}');
+$repoTable->status->range('active{4}');
+$repoTable->deleted->range('0{4}');
+$repoTable->gen(4);
+
+$spaceUserTable = zenData('ops_spaceuser');
+$spaceUserTable->space->range('1');
+$spaceUserTable->role->range('manager');
+$spaceUserTable->account->range('admin');
+$spaceUserTable->gen(1);
 
 su('admin');
 
 $repo       = $tester->loadModel('repo');
 $repoTest   = new repoModelTest();
-$httpClient = $repoTest->resetHttpClient();
-$httpClient->setResponse('/spaces', json_encode((object)array(
-    'code'     => 'success',
-    'data'     => array((object)array('id' => 1, 'name' => 'space1', 'createdDate' => '2026-01-01T00:00:00+08:00')),
-    'listArgs' => (object)array('pageSize' => 1),
-)));
+$repoTest->seedGitFoxEntry();
 
 $type      = 'project';
 $projectID = 1;
 
-$result = $repo->getRepoGroup($type);
-r($result)             && p('4:text') && e('正常产品4');
-r($result[1]['items']) && p('0:text') && e('testHtml');
-
-$result = $repo->getRepoGroup($type, $projectID);
-r(count($result)) && p() && e(0);
+r($repoTest->getRepoGroupIsArrayTest($type)) && p() && e('1');
+r($repoTest->getRepoGroupTest($type)) && p('4:text') && e('正常产品4');
+r($repoTest->getRepoGroupItemsTest($type, 0, 1)) && p('0:text') && e('testHtml');
+r($repoTest->getRepoGroupCountTest($type, $projectID)) && p() && e('0');
 
 $projectID = 11;
-$result    = $repo->getRepoGroup($type, $projectID);
-r(count($result)) && p() && e(1);
-
-$result = $repo->getRepoGroup($type, 0, $repo->config->repo->gitServiceTypeList);
-r(count($result)) && p() && e(4);
-
-$repoTest->restoreHttpClient();
+r($repoTest->getRepoGroupCountTest($type, $projectID)) && p() && e('1');
+r($repoTest->getRepoGroupCountTest($type, 0)) && p() && e('4');

@@ -19,15 +19,11 @@ cid=18122
 
 $repo = new repoModelTest();
 
-$result = $repo->parseRepoAclTest();
-r($result) && p('acl') && e('private');
-r($result['members']) && p('0') && e('dev1');
+r($repo->parseRepoAclTest()) && p('acl') && e('private');
+r($repo->parseRepoAclMembersTest()) && p('0') && e('dev1');
 
-$result = $repo->parseRepoAclTest('{"acl":"private","users":["dev1"," dev2 ",""],"groups":["1"]}', array(1 => array('qa1', ' qa2 ', '')));
-r($result['members']) && p('2') && e('qa1');
+r($repo->parseRepoAclMembersTest('{"acl":"private","users":["dev1"," dev2 ",""],"groups":["1"]}', array(1 => array('qa1', ' qa2 ', '')))) && p('2') && e('qa1');
 
-$result = $repo->parseRepoAclTest('{bad json}', array(1 => array('qa1', ' qa2 ', '')));
-r($result) && p('acl') && e('open');
+r($repo->parseRepoAclTest('{bad json}', array(1 => array('qa1', ' qa2 ', '')))) && p('acl') && e('open');
 
-$result = $repo->parseRepoAclTest('', array(1 => array('qa1', ' qa2 ', '')));
-r($result) && p('acl') && e('open');
+r($repo->parseRepoAclTest('', array(1 => array('qa1', ' qa2 ', '')))) && p('acl') && e('open');

@@ -835,4 +835,116 @@ class zaiModelTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test getUserAgent method.
+     *
+     * @access public
+     * @return string
+     */
+    public function getUserAgentTest(): string
+    {
+        $result = $this->instance->getUserAgent();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Get user agent record from database.
+     *
+     * @param  string $account
+     * @access public
+     * @return string
+     */
+    public function getUserAgentRecordTest(string $account): string
+    {
+        $agent = $this->instance->dao->select('agent')->from(TABLE_AI_USERAGENT)->where('account')->eq($account)->fetch('agent');
+        if(dao::isError()) return dao::getError();
+
+        return $agent ? $agent : '0';
+    }
+
+    /**
+     * 构造mock api 供单测调用。
+     * Build mock api for unit test.
+     *
+     * @param  string|false|null $httpResponse
+     * @param  string            $agentId
+     * @access protected
+     * @return void
+     */
+    protected function mockAiForCreateUserAgent($httpResponse = null, string $agentId = 'agent-new-001'): void
+    {
+        $realAi = $this->instance->loadModel('ai');
+        $mockAi = new class($realAi, $httpResponse, $agentId)
+        {
+            public object $realAi;
+            public $httpResponse;
+            public string $agentId;
+
+            public function __construct(object $realAi, $httpResponse, string $agentId)
+            {
+                $this->realAi       = $realAi;
+                $this->httpResponse = $httpResponse;
+                $this->agentId      = $agentId;
+            }
+
+            public function generateToken(object $setting): string
+            {
+                return $this->realAi->generateToken($setting);
+            }
+
+            public function getZaiBaseUrl(object $setting): string
+            {
+                return $this->realAi->getZaiBaseUrl($setting);
+            }
+
+            public function getSkills(string $scope, string $status): array
+            {
+                return array();
+            }
+
+            public function http(string $method, string $url, array $data = array(), array $header = array())
+            {
+                if($this->httpResponse === false) return false;
+                if(is_string($this->httpResponse)) return $this->httpResponse;
+
+                return json_encode(array('agent' => array('id' => $this->agentId)));
+            }
+        };
+
+        $reflection = new ReflectionClass('router');
+        $property   = $reflection->getProperty('loadedTargets');
+        $property->setAccessible(true);
+        $loaded = $property->getValue();
+        $loaded['model']['']['ai'] = $mockAi;
+        $property->setValue(null, $loaded);
+        $this->instance->ai = $mockAi;
+    }
+
+    /**
+     * Test createUserAgent method.
+     *
+     * @param  string            $account
+     * @param  string|false|null $httpResponse
+     * @param  string            $agentId
+     * @access public
+     * @return string
+     */
+    public function createUserAgentTest(string $account = 'admin', $httpResponse = null, string $agentId = 'agent-new-001'): string
+    {
+        try
+        {
+            $this->mockAiForCreateUserAgent($httpResponse, $agentId);
+            $result = $this->instance->createUserAgent($account);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            return '';
+        }
+    }
 }

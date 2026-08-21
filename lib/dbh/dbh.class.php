@@ -458,7 +458,8 @@ class dbh
         if(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
             $this->useDB($this->dbConfig->name);
-            $sql = "SELECT * FROM information_schema.tables WHERE table_catalog = '{$this->dbConfig->name}' AND table_name='{$tableName}'";
+            $schema = $this->dbConfig->schema ?? 'public';
+            $sql = "SELECT * FROM information_schema.tables WHERE table_catalog = '{$this->dbConfig->name}' AND table_schema = '{$schema}' AND table_name='{$tableName}'";
             return $this->rawQuery($sql)->fetch();
         }
 
@@ -591,7 +592,9 @@ class dbh
         $sql = $this->processDmTableIndex($sql);
         $sql = $this->formatLimitOffset($sql);
 
-        $actionPos = strpos($sql, ' ');
+        if(stripos($sql, 'CURDATE()') !== false) $sql = str_replace('CURDATE()', 'CURRENT_DATE', $sql);
+
+        $actionPos = strcspn($sql, " \t\n\r\0\v");
         $action    = strtoupper(substr($sql, 0, $actionPos));
         $setPos    = 0;
         switch($action)
@@ -611,7 +614,6 @@ class dbh
                 if(strpos($sql, "\\'") !== false) $sql = str_replace("\\'", "''''", $sql);
                 if(strpos($sql, '\"') !== false) $sql = str_replace('\"', '"', $sql);
                 if(strpos($sql, '\\\\') !== false) $sql = str_replace('\\\\', '\\', $sql);
-                if(stripos($sql, 'CURDATE()')) $sql = str_replace('CURDATE()', 'CURRENT_DATE', $sql);
             case 'DELETE':
             case 'TRUNCATE':
                 if(strpos($sql, '`') !== false) $sql = str_replace('`', '"', $sql);
@@ -702,7 +704,7 @@ class dbh
         $sql = $this->processDmChangeColumn($sql);
         $sql = $this->processDmTableIndex($sql);
 
-        $actionPos = strpos($sql, ' ');
+        $actionPos = strcspn($sql, " \t\n\r\0\v");
         $action    = strtoupper(substr($sql, 0, $actionPos));
         $setPos    = 0;
         switch($action)
@@ -844,7 +846,7 @@ class dbh
         if($this->dbConfig->driver == 'dm' || in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
             $sql = str_replace('`', '"', $sql);
-            $sql = preg_replace('/(?<!\w)if\(/i', '"IF"(', $sql);
+            $sql = preg_replace('/(?<!\w)if\s*\(/i', '"IF"(', $sql);
         }
         if($this->dbConfig->driver == 'gauss') $sql = self::formatGaussFunctions($sql);
 
@@ -864,13 +866,22 @@ class dbh
             'YEAR',
             'DATEDIFF',
             'DATE_FORMAT',
+            'DATE',
+            'DATE_SUB',
             'INSTR',
-            'LEFT',
+            'TRUNCATE',
+            'CURDATE',
+            'DATE_ADD',
+            'ADDDATE',
+            'QUARTER',
+            'WEEK',
+            'YEARWEEK',
+            'TO_DAYS'
         );
 
         foreach($gaussCompatibleFunctions as $function)
         {
-            $sql = preg_replace("/(?<![\\w\"'])(?<!\"){$function}(?=\s*\()/i", '"' . $function . '"', $sql);
+            $sql = preg_replace("/(?<![\\w.\"']){$function}(?=\s*\()/i", '"' . $function . '"', $sql);
         }
 
         return $sql;
@@ -935,7 +946,14 @@ class dbh
             $pos = stripos($sql, ' ENGINE');
             if($pos > 0) $sql = substr($sql, 0, $pos);
 
-            $sql = preg_replace('/\(\ *\d+\ *\)/', '', $sql);
+            if($this->dbConfig->driver == 'dm')
+            {
+                $sql = preg_replace('/\(\ *\d+\ *\)/', '', $sql);
+            }
+            else
+            {
+                $sql = preg_replace('/\b(?:char|varchar)\s*\(\s*\d+\s*\)(*SKIP)(*F)|\(\ *\d+\ *\)/i', '', $sql);
+            }
 
             $replace = array(
                 " int "                     => ' integer ',
@@ -1166,7 +1184,7 @@ class dbh
         $allowedActions = array('insert', 'update', 'delete', 'replace');
 
         $sql       = str_replace(array('\r', '\n'), ' ', trim($sql));
-        $actionPos = strpos($sql, ' ');
+        $actionPos = strcspn($sql, " \t\n\r\0\v");
         $action    = strtolower(substr($sql, 0, $actionPos));
 
         if(!in_array($action, $allowedActions)) return null;

@@ -7,11 +7,11 @@ title=测试 ppmModel::merge();
 timeout=0
 cid=0
 
-- 执行ppmModel模块的mergeTest方法，参数是81, 'merge'  @0
-- 执行ppmModel模块的mergeTest方法，参数是81, 'fast'  @0
-- 执行ppmModel模块的mergeTest方法，参数是81, 'rebase'  @0
-- 执行ppmModel模块的mergeTest方法，参数是81, 'merge', true  @0
-- 执行ppmModel模块的mergeTest方法，参数是81, 'merge', false, true  @0
+- 执行ppmModel模块的mergeTest方法，参数是81, 'merge' 属性apiMessage @仓库不存在。
+- 执行ppmModel模块的mergeTest方法，参数是81, 'fast' 属性apiMessage @仓库不存在。
+- 执行ppmModel模块的mergeTest方法，参数是81, 'rebase' 属性apiMessage @仓库不存在。
+- 执行ppmModel模块的mergeTest方法，参数是81, 'merge', true 属性apiMessage @仓库不存在。
+- 执行ppmModel模块的mergeTest方法，参数是81, 'merge', false, true 属性apiMessage @仓库不存在。
 
 */
 
@@ -55,8 +55,8 @@ $cache = $repos->getValue($gitfox);
 $cache[42] = (object)array('id' => 42, 'path' => 'space/ppm-repo-42', 'gitURL' => 'http://gitfox.local/space/ppm-repo-42.git');
 $repos->setValue($gitfox, $cache);
 
-r($ppmModel->mergeTest(81, 'merge')) && p() && e('0');
-r($ppmModel->mergeTest(81, 'fast')) && p() && e('0');
-r($ppmModel->mergeTest(81, 'rebase')) && p() && e('0');
-r($ppmModel->mergeTest(81, 'merge', true)) && p() && e('0');
-r($ppmModel->mergeTest(81, 'merge', false, true)) && p() && e('0');
+r($ppmModel->mergeTest(81, 'merge')) && p('apiMessage') && e('仓库不存在。');
+r($ppmModel->mergeTest(81, 'fast')) && p('apiMessage') && e('仓库不存在。');
+r($ppmModel->mergeTest(81, 'rebase')) && p('apiMessage') && e('仓库不存在。');
+r($ppmModel->mergeTest(81, 'merge', true)) && p('apiMessage') && e('仓库不存在。');
+r($ppmModel->mergeTest(81, 'merge', false, true)) && p('apiMessage') && e('仓库不存在。');

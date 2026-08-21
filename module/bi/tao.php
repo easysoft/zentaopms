@@ -14,10 +14,12 @@ class biTao extends biModel
         $excludes = $this->config->bi->duckdbExcludeTables;
         foreach($excludes as $index => $table) $excludes[$index] = $prefix . $table;
 
+        $schema = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? ($this->config->db->schema ?? 'public') : $this->config->db->name;
+
         return $this->dao->select("table_name as 'table'")
             ->from('information_schema.tables')
             ->where('table_type')->eq('BASE TABLE')
-            ->andWhere('table_schema')->eq($this->config->db->name)
+            ->andWhere('table_schema')->eq($schema)
             ->andWhere('table_name')->notin($excludes)
             ->fetchPairs();
     }
@@ -36,8 +38,8 @@ class biTao extends biModel
 
         return $this->dao->select('object')->from(TABLE_DUCKDBQUEUE)
             ->where('object')->notin($excludes)
-            ->andWhere('updatedTime >= syncTime', true)
-            ->orWhere('syncTime IS NULL')
+            ->andWhere('`updatedTime` >= `syncTime`', true)
+            ->orWhere('`syncTime` IS NULL')
             ->markRight(1)
             ->fetchPairs();
     }

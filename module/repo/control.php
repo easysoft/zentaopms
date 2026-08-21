@@ -149,48 +149,6 @@ class repo extends control
     }
 
     /**
-     * 创建版本库（关联代码库）。
-     * Create a repo(Associate with an existing repo).
-     *
-     * @param  int    $objectID  projectID|executionID
-     * @access public
-     * @return void
-     */
-    public function create(int $objectID = 0, int $spaceID = 0)
-    {
-        if($_POST)
-        {
-            /* Prepare data. */
-            $formData         = form::data($this->config->repo->form->create);
-            $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList);
-            $repo             = $this->repoZen->prepareCreate($formData, $isPipelineServer);
-
-            /* Create a repo. */
-            if($repo) $repoID = $this->repo->create($repo, $isPipelineServer);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if(in_array($this->post->SCM, $this->config->repo->notSyncSCM))
-            {
-                /* Add webhook. */
-                $repo = $this->repo->getByID($repoID);
-                $this->loadModel($this->post->SCM)->updateCodePath($repo->serviceHost, (int)$repo->serviceProject, (int)$repo->id);
-                $this->repo->updateCommitDate($repoID);
-            }
-
-            $this->loadModel('action')->create('repo', $repoID, 'created');
-
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
-            $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link, 'callback' => "importJob($repoID)"));
-        }
-
-        $this->commonAction(0, $objectID, $spaceID);
-        $this->repoZen->buildCreateForm($objectID);
-
-        $this->display();
-    }
-
-    /**
      * 创建版本库，同步创建远程版本库。
      * Create a repo.
      *
@@ -1147,11 +1105,12 @@ class repo extends control
      * @param  string $type
      * @param  int    $providerID
      * @param  string $groupID
+     * @param  string $acl
      * @param  int    $isTryAgain
      * @access public
      * @return void
      */
-    public function import(int $spaceID = 0, string $type = 'GitLab', int $providerID = 0, string $groupID = '', int $isTryAgain = 0)
+    public function import(int $spaceID = 0, string $type = 'GitLab', int $providerID = 0, string $groupID = '', string $acl = 'open', int $isTryAgain = 0)
     {
         if($this->viewType !== 'json') $this->commonAction(0, 0, $spaceID);
         if($_POST)
@@ -1176,8 +1135,9 @@ class repo extends control
             $type       = zget($importRepo, 'origin', 'GitLab');
             $providerID = zget($importRepo, 'providerID', 0);
             $groupID    = $type == 'Subversion' ? '' : zget($importRepo, 'organize', '');
-            $groupID    = urlencode($groupID);
+            $groupID    = helper::safe64Encode($groupID);
             $type       = zget($importRepo, 'origin', 'GitLab');
+            $acl        = zget($importRepo, 'acl', 'open');
         }
         $this->repoZen->buildImportForm($providerID, $groupID, $type);
 
@@ -1186,6 +1146,7 @@ class repo extends control
         $this->view->spaces     = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account, true);
         $this->view->type       = $type;
         $this->view->importRepo = $isTryAgain ? json_decode($this->session->importRepo) : array();
+        $this->view->acl        = $acl;
         $this->view->tryAgain   = $isTryAgain;
         $this->view->spaceID    = $spaceID;
         $this->view->inSpace    = !empty($spaceID);

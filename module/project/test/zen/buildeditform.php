@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 projectZen::buildEditForm();
@@ -21,6 +22,9 @@ cid=17928
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
+global $app, $config, $lang;
+$app->loadLang('project');
+$config->project->unitList = 'CNY,USD';
 zenData('project')->loadYaml('execution')->gen(5);
 zenData('product')->loadYaml('product')->gen(5);
 zenData('projectproduct')->loadYaml('projectproduct')->gen(10);

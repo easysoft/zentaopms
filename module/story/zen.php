@@ -31,6 +31,16 @@ class storyZen extends story
             if(!empty($products)) $productID = key($products);
         }
 
+        /* 项目型项目没有显式产品，创建需求时自动使用项目的影子产品。For a non-product project, automatically use its shadow product when creating a story. */
+        if(empty($productID) && !empty($objectID))
+        {
+            $object = $this->project->fetchByID($objectID);
+            if($object && empty($object->hasProduct))
+            {
+                $productID = $this->loadModel('product')->getShadowProductByProject($objectID)->id;
+            }
+        }
+
         /* Get objectID by tab. */
         if(empty($objectID))
         {
@@ -324,9 +334,11 @@ class storyZen extends story
      */
     public function initStoryForCreate(int $planID, int $storyID, int $bugID, int $todoID, string $extra = ''): object
     {
+        $output = $this->story->parseExtra($extra);
+
         $initStory = new stdclass();
         $initStory->source     = '';
-        $initStory->sourceNote = '';
+        $initStory->sourceNote = zget($output, 'sourceNote', '');
         $initStory->pri        = 3;
         $initStory->estimate   = '';
         $initStory->title      = '';
@@ -1566,6 +1578,9 @@ class storyZen extends story
 
             !empty($story->assignedTo) && $story->assignedDate = $now;
             if($this->post->uploadImage && $this->post->uploadImage[$i]) $story->uploadImage = $this->post->uploadImage[$i];
+
+            $story->spec   = helper::textarea2Html((string)$story->spec);
+            $story->verify = helper::textarea2Html((string)$story->verify);
         }
 
         return $stories;
@@ -1973,6 +1988,42 @@ class storyZen extends story
         }
 
         return form::data($this->config->story->form->submitReview, $storyID)->get();
+    }
+
+    /**
+     * Build stories for batch submit review.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function buildStoriesForBatchSubmitReview(): array
+    {
+        $data       = form::batchData($this->config->story->form->batchSubmitReview)->get();
+        $idList     = array();
+        foreach($data as $item) if(isset($item->id)) $idList[] = $item->id;
+        $oldStories = $this->story->getByList($idList);
+        $stories    = array();
+
+        foreach($data as $item)
+        {
+            $storyID  = $item->id;
+            if(!isset($oldStories[$storyID])) continue;
+
+            $oldStory  = $oldStories[$storyID];
+            $storyType = $oldStory->type;
+
+            if(isset($item->reviewer)) $item->reviewer = array_filter((array)$item->reviewer);
+            $needNotReview = !empty($item->needNotReview);
+
+            $forceReview = $this->story->checkForceReview($storyType);
+            if(!$needNotReview && empty($item->reviewer) && $forceReview)
+            {
+                dao::$errors["reviewer[{$storyID}]"] = $this->lang->story->errorEmptyReviewedBy;
+                continue;
+            }
+            $stories[$storyID] = $item;
+        }
+        return $stories;
     }
 
     /**

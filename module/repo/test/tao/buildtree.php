@@ -32,10 +32,10 @@ $files2 = array(array('id' => 'UkVBRE1F', 'parent' => '0', 'name' => 'README', '
 
 $repo = new repoTaoTest();
 $result = $repo->buildTreeTest($files);
-r($result)            && p('0:parent,name,path') && e('0,LICENSE,LICENSE'); //获取代码文件得提交信息第一个文件
-r(count($result) > 1) && p()                     && e('1'); //获取代码文件得提交信息数量
+r($repo->buildTreeTest($files)) && p('0:parent,name,path') && e('0,LICENSE,LICENSE'); //获取代码文件得提交信息第一个文件
+r($repo->buildTreeCountGreaterThanTest($files, 1)) && p() && e('1'); //获取代码文件得提交信息数量
 
 $result = $repo->buildTreeTest($files2);
-r($result)                          && p('0:id,name,parent') && e('dGFn,tag,0'); //获取svn代码文件得提交信息第一个文件夹信息
-r($result[0]['children'])           && p('0:id,name,parent') && e('dGFnJTJGUkVBRE1FLm1k,README.md,dGFn'); //获取svn代码文件得提交信息第一个文件夹信息
-r(count($result) > 2)               && p()                   && e('1'); //获取svn代码文件得提交信息数量
+r($repo->buildTreeTest($files2)) && p('0:id,name,parent') && e('dGFn,tag,0'); //获取svn代码文件得提交信息第一个文件夹信息
+r($repo->buildTreeChildrenTest($files2, 0)) && p('0:id,name,parent') && e('dGFnJTJGUkVBRE1FLm1k,README.md,dGFn'); //获取svn代码文件得提交信息第一个文件夹信息
+r($repo->buildTreeCountGreaterThanTest($files2, 2)) && p() && e('1'); //获取svn代码文件得提交信息数量

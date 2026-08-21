@@ -9,18 +9,22 @@
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        https://www.zentao.net
  */
-$lang->testsuite->create           = "Créer un Cahier";
-$lang->testsuite->delete           = "Supprimer un Cahier";
-$lang->testsuite->view             = "Détail du Cahier";
-$lang->testsuite->edit             = "Editer Cahier";
-$lang->testsuite->browse           = "Liste des Cahiers de Recette";
-$lang->testsuite->linkCase         = "Incorporer CasTest";
-$lang->testsuite->linkVersion      = "Version";
-$lang->testsuite->unlinkCase       = "Retirer";
-$lang->testsuite->unlinkCaseAction = "Retirer CasTest";
-$lang->testsuite->batchUnlinkCases = "Retirer par Lot";
-$lang->testsuite->deleted          = 'Supprimé';
-$lang->testsuite->successSaved     = 'Sauvé';
+$lang->testsuite->create                 = "Créer un Cahier";
+$lang->testsuite->delete                 = "Supprimer un Cahier";
+$lang->testsuite->view                   = "Détail du Cahier";
+$lang->testsuite->edit                   = "Editer Cahier";
+$lang->testsuite->browse                 = "Liste des Cahiers de Recette";
+$lang->testsuite->linkCase               = "Incorporer CasTest";
+$lang->testsuite->linkVersion            = "Version";
+$lang->testsuite->unlinkCase             = "Retirer";
+$lang->testsuite->unlinkCaseAction       = "Retirer CasTest";
+$lang->testsuite->batchUnlinkCases       = "Retirer par Lot";
+$lang->testsuite->deleted                = 'Supprimé';
+$lang->testsuite->successSaved           = 'Sauvé';
+$lang->testsuite->confirmCaseChange      = 'Confirm Case Change';
+$lang->testsuite->ignoreCaseChange       = 'Ignore Case Change';
+$lang->testsuite->batchConfirmCaseChange = 'Batch Confirm Case Change';
+$lang->testsuite->batchIgnoreCaseChange  = 'Batch Ignore Case Change';
 
 $lang->testsuite->id             = 'ID';
 $lang->testsuite->pri            = 'Priority';

@@ -4,6 +4,10 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
+global $lang;
+$lang->SRCommon = '研发需求';
+$lang->task->story = '相关研发需求';
+
 zenData('task')->gen(0);
 zenData('taskspec')->gen(0);
 zenData('taskteam')->gen(0);

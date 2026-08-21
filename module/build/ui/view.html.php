@@ -136,6 +136,20 @@ if(!$canBeChanged)
 $stories = initTableData($stories, $config->build->story->dtable->fieldList, $this->build);
 $bugs    = initTableData($bugs,    $config->build->bug->dtable->fieldList,   $this->build);
 
+$generatedBugCols = $this->loadModel('datatable')->getSetting('build', 'generatedBug');
+if(isset($generatedBugCols['branch']))         $generatedBugCols['branch']['map']         = array(BRANCH_MAIN => $lang->trunk) + $generatedBugBranchPairs;
+if(isset($generatedBugCols['module']))         $generatedBugCols['module']['map']         = $generatedBugModulePairs;
+if(isset($generatedBugCols['project']))        $generatedBugCols['project']['map']        = array('') + $generatedBugProjectPairs;
+if(isset($generatedBugCols['execution']))      $generatedBugCols['execution']['map']      = array('') + $executions;
+if(isset($generatedBugCols['plan']))           $generatedBugCols['plan']['map']           = $generatedBugPlans;
+if(isset($generatedBugCols['story']))          $generatedBugCols['story']['map']          = array('') + $generatedBugStories;
+if(isset($generatedBugCols['task']))           $generatedBugCols['task']['map']           = array('') + $generatedBugTasks;
+if(isset($generatedBugCols['toTask']))         $generatedBugCols['toTask']['map']         = array('') + $generatedBugTasks;
+if(isset($generatedBugCols['activatedCount'])) $generatedBugCols['activatedCount']['map'] = array('');
+
+$bugModel      = $this->loadModel('bug');
+$generatedBugs = initTableData($generatedBugs, $generatedBugCols, $bugModel);
+
 $onlyNoCheckCount = 0;
 if(!empty($build->builds))
 {
@@ -264,12 +278,19 @@ detailBody
                 set::active($type == 'generatedBug'),
                 dtable
                 (
+                    setID('table-build-generatedBug'),
                     set::style(array('min-width' => '100%')),
                     set::userMap($users),
-                    set::cols(array_values($config->build->generatedBug->dtable->fieldList)),
+                    set::cols($generatedBugCols),
                     set::data(array_values($generatedBugs)),
                     set::sortLink(createLink($buildModule, 'view', "buildID={$build->id}&type=generatedBug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
+                    set::customCols(array(
+                        'url'            => createLink('datatable', 'ajaxcustom', 'module=build&method=generatedBug'),
+                        'globalUrl'      => createLink('datatable', 'ajaxsaveglobal', 'module=build&method=generatedBug'),
+                        'resetUrl'       => createLink('datatable', 'ajaxreset', 'module=build&method=generatedBug'),
+                        'resetGlobalUrl' => createLink('datatable', 'ajaxreset', 'module=build&method=generatedBug&system=1')
+                    )),
                     set::footPager(usePager('generatedBugPager', '', array(
                         'recPerPage'  => $generatedBugPager->recPerPage,
                         'recTotal'    => $generatedBugPager->recTotal,

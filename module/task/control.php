@@ -47,6 +47,23 @@ class task extends control
         $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
         parse_str($cardPosition, $output);
 
+        /*
+         * 项目创建任务时，无执行项目自动使用内部默认执行；有执行项目必须传 executionID。
+         * When creating a project task, automatically use the internal default execution for a no-execution project, and require executionID for a project with executions.
+         */
+        if(empty($executionID) && !empty($this->post->project))
+        {
+            $project = $this->project->getByID($this->post->project);
+            if(empty($project->multiple))
+            {
+                $executionID = $this->execution->getNoMultipleID($project->id);
+            }
+            else
+            {
+                return $this->sendError('Need execution id.');
+            }
+        }
+
         $this->session->set('executionStoryList', $this->app->getURI(true), 'execution');
 
         /* Set menu and get execution information. */
@@ -373,7 +390,7 @@ class task extends control
         $task = $this->task->getById($taskID, true, $vision = 'all'); // TODO: $vision is for compatibling with viewing drill data.
         if(!$task)
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->sendError($this->lang->notFound, $this->config->vision == 'lite' ? $this->createLink('project', 'index') : $this->createLink('execution', 'all'));
         }
         if(!$this->loadModel('common')->checkPrivByObject('execution', $task->execution)) return $this->sendError($this->lang->execution->accessDenied, $this->createLink('execution', 'all'));
@@ -385,7 +402,7 @@ class task extends control
         $this->session->set('executionList', $this->app->getURI(true), 'execution'); // This allow get var of session as `$_SESSION['app-execution']['executionList']`.
 
         $execution    = $this->view->execution ?? $this->execution->getById($task->execution);
-        $isModalOrApi = helper::isAjaxRequest('modal') || (defined('RUN_MODE') && RUN_MODE == 'api');
+        $isModalOrApi = helper::isAjaxRequest('modal') || (helper::isApiRequest());
         if(!$isModalOrApi && $execution->type == 'kanban')
         {
             helper::setcookie('taskToOpen', (string)$taskID);
@@ -736,6 +753,12 @@ class task extends control
             {
                 $actionID = $this->loadModel('action')->create('task', $taskID, 'Paused', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                if($this->post->comment)
+                {
+                    $oldTask->comment = $this->post->comment;
+                    $this->loadModel('message')->sendMentionNotice('task', 'pause', $actionID, $oldTask);
+                }
             }
 
             $message = $this->executeHooks($taskID);
@@ -812,11 +835,22 @@ class task extends control
      *
      * @param  int    $taskID
      * @param  string $cardPosition
+     * @param  string $confirm      no|yes
      * @access public
      * @return void
      */
-    public function close(int $taskID, string $cardPosition = '')
+    public function close(int $taskID, string $cardPosition = '', string $confirm = 'no')
     {
+        if($confirm == 'no')
+        {
+            $childIdList = $this->task->getAllChildId($taskID, false, 'closed');
+            if(!empty($childIdList))
+            {
+                $confirmURL = $this->createLink('task', 'close', "taskID=$taskID&cardPosition=$cardPosition&confirm=yes");
+                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message:'" . sprintf($this->lang->task->closeParentTips, '#' . implode(',#', $childIdList)) . "'}).then((res) => {if(res) openUrl({url: '{$confirmURL}', load: 'modal'});});"));
+            }
+        }
+
         $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
         parse_str($cardPosition, $output);
 

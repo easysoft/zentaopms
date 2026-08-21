@@ -65,7 +65,7 @@ class productModel extends model
      */
     public function getListByAcl(string $acl): array
     {
-        return $this->dao->select('id, program, PO, QD, RD, feedback, ticket, acl, whitelist, reviewer, PMT, createdBy')->from(TABLE_PRODUCT)->where('acl')->in($acl)->fetchAll('id');
+        return $this->dao->select('id, program, `PO`, `QD`, `RD`, feedback, ticket, acl, whitelist, reviewer, `PMT`, `createdBy`')->from(TABLE_PRODUCT)->where('acl')->in($acl)->fetchAll('id');
     }
 
     /**
@@ -380,12 +380,20 @@ class productModel extends model
         $this->dao->update(TABLE_PRODUCT)->data($fixData)->where('id')->eq($productID)->exec();
 
         /* Update and create linked data. */
-        $this->loadModel('action')->create('product', $productID, 'opened');
+        $actionID = $this->loadModel('action')->create('product', $productID, 'opened');
+
+        $product->id = $productID;
+        $this->loadModel('message')->sendMentionNotice('product', 'create', $actionID, $product);
+
         $uid = empty($this->post->uid) ? '' : $this->post->uid;
         $this->loadModel('file')->updateObjectID($uid, $productID, 'product');
+
         $this->productTao->createMainLib($productID);
         if($product->whitelist)     $this->loadModel('personnel')->updateWhitelist(explode(',', $product->whitelist), 'product', $productID);
         if($product->acl != 'open') $this->loadModel('user')->updateUserView(array($productID), 'product');
+
+        /* Create system with same name. */
+        $this->createSystem($productID, $product->name);
 
         return $productID;
     }
@@ -423,6 +431,8 @@ class productModel extends model
         {
             $actionID = $this->loadModel('action')->create('product', $productID, 'edited');
             $this->action->logHistory($actionID, $changes);
+
+            $this->loadModel('message')->sendMentionNotice('product', 'edit', $actionID, $product, $oldProduct);
         }
 
         return $changes;
@@ -497,12 +507,12 @@ class productModel extends model
      * @access public
      * @return array|false
      */
-    public function close(int $productID, object $product, string|false $comment = ''): array|false
+    public function close(int $productID, object $product): array|false
     {
         $oldProduct = $this->getByID($productID);
         if(empty($product)) return false;
 
-        $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
+        $this->dao->update(TABLE_PRODUCT)->data($product, 'comment')->autoCheck()
             ->checkFlow()
             ->where('id')->eq($productID)
             ->exec();
@@ -510,10 +520,16 @@ class productModel extends model
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldProduct, $product);
-        if(!empty($comment) or !empty($changes))
+        if(!empty($product->comment) or !empty($changes))
         {
-            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', $comment);
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', $product->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if(!empty($product->comment))
+            {
+                $oldProduct->comment = $product->comment;
+                $this->loadModel('message')->sendMentionNotice('product', 'close', $actionID, $oldProduct);
+            }
         }
         return $changes;
     }
@@ -528,12 +544,12 @@ class productModel extends model
      * @access public
      * @return array|false
      */
-    public function activate(int $productID, object $product, string|false $comment = ''): array|false
+    public function activate(int $productID, object $product): array|false
     {
         $oldProduct = $this->getByID($productID);
         if(empty($product)) return false;
 
-        $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
+        $this->dao->update(TABLE_PRODUCT)->data($product, 'comment')->autoCheck()
             ->checkFlow()
             ->where('id')->eq($productID)
             ->exec();
@@ -541,10 +557,16 @@ class productModel extends model
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldProduct, $product);
-        if(!empty($comment) or !empty($changes))
+        if(!empty($product->comment) or !empty($changes))
         {
-            $actionID = $this->loadModel('action')->create('product', $productID, 'Activated', $comment);
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Activated', $product->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if(!empty($product->comment))
+            {
+                $oldProduct->comment = $product->comment;
+                $this->loadModel('message')->sendMentionNotice('product', 'activate', $actionID, $oldProduct);
+            }
         }
         return $changes;
     }
@@ -678,14 +700,7 @@ class productModel extends model
         {
             $unclosedStatus = $this->lang->story->statusList;
             unset($unclosedStatus['closed']);
-            $stories = $this->story->getProductStories($productID, $branch, $modules, array_keys($unclosedStatus), $type, $sort, true, '', $pager);
-            foreach($stories as $storyID => $story)
-            {
-                if($story->type != 'story' && $story->stage == 'closed') unset($stories[$storyID]);
-            }
-            $this->app->loadClass('pager', true);
-            $pager = new pager(count($stories), $pager ? $pager->recPerPage : 20, $pager ? $pager->pageID : 1);
-            return $stories ? current(array_chunk($stories, $pager->recPerPage, true)) : array();
+            return $this->story->getProductStories($productID, $branch, $modules, array_keys($unclosedStatus), $type, $sort, true, '', $pager);
         }
 
         /* Set default function called, when browseType is (draftstory, activestory, changingstory, reviewingstory, closedstory, developingstory, launchedstory). */
@@ -2228,5 +2243,33 @@ class productModel extends model
         }
 
         return $searchConfig;
+    }
+
+    /**
+     * Create system for product.
+     * 创建同名应用.
+     *
+     * @param  int    $productID
+     * @param  string $productName
+     * @access public
+     * @return void
+     */
+    public function createSystem(int $productID, string $productName)
+    {
+        if($this->config->vision != 'rnd') return;
+
+        $hasSameName = $this->dao->select('name')->from(TABLE_SYSTEM)->where('name')->eq($productName)->fetch('name');
+
+        $systemData = new stdClass();
+        $systemData->name        = $productName;
+        $systemData->product     = $productID;
+        $systemData->createdBy   = $this->app->user->account;
+        $systemData->createdDate = helper::now();
+        $this->dao->insert(TABLE_SYSTEM)->data($systemData)->exec();
+
+        $systemID = $this->dao->lastInsertID();
+        if($hasSameName) $this->dao->update(TABLE_SYSTEM)->set('name')->eq($productName . $systemID)->where('id')->eq($systemID)->exec();
+
+        $this->loadModel('action')->create('system', $systemID, 'created', '', '', $this->app->user->account);
     }
 }

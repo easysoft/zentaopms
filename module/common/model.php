@@ -150,7 +150,7 @@ class commonModel extends model
         $today = helper::today();
         if($project->status == 'wait')
         {
-            $realBegan = helper::isZeroDate($project->realBegan) ? $this->dao->select('realBegan')->from(TABLE_PROJECT)->where('id')->eq($execution->id)->fetch('realBegan') : $project->realBegan;
+            $realBegan = helper::isZeroDate($project->realBegan) ? $this->dao->select('`realBegan`')->from(TABLE_PROJECT)->where('id')->eq($execution->id)->fetch('realBegan') : $project->realBegan;
             $this->dao->update(TABLE_PROJECT)
                  ->set('status')->eq('doing')
                  ->set('realBegan')->eq($realBegan)
@@ -522,9 +522,9 @@ class commonModel extends model
         }
         else
         {
-            header("Location: $denyLink");
+            $open = helper::safe64Encode($denyLink);
+            helper::header('location', helper::createLink('index', 'index', "open=$open"));
         }
-
 
         helper::end();
     }
@@ -967,7 +967,7 @@ class commonModel extends model
             if(in_array($check, array('lastediteddate', 'lasteditedby', 'assigneddate', 'editedby', 'editeddate', 'editingdate', 'uid', 'prevstatus', 'prevassignedto'))) continue;
             if(in_array($check, array('finisheddate', 'canceleddate', 'hangupeddate', 'lastcheckeddate', 'activateddate', 'closeddate', 'actualcloseddate')) && $value == '') continue;
 
-            if(isset($old->$key) && !is_object($old->$key) && !is_array($old->$key))
+            if(property_exists($old, $key) && !is_object($old->$key) && !is_array($old->$key))
             {
                 if($config->edition != 'open' && isset($dateFields[$key])) $old->$key = formatTime($old->$key);
 
@@ -1245,6 +1245,7 @@ eof;
                 {
                     static::$userPrivs = array();
                     $this->resetProjectPriv(); // 项目有继承和重新定义两种权限，在此处需要重置权限。
+                    if($this->isOpenMethod($module, $method)) return true; // ajax 依赖的权限在项目权限重置后才生效，需重新判断。
                     if(commonModel::hasPriv($module, $method)) return true;
                 }
 
@@ -1331,7 +1332,7 @@ eof;
          * The following pages can be allowed to open in non-iframe, so ignore these pages.
          */
         $module     = $this->app->getModuleName();
-        $whitelist  = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-viewdownload|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|integration-wopi|instance-terminal|conference-getconferencepermissions|instance-logs|';
+        $whitelist  = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-viewdownload|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|integration-wopi|instance-terminal|conference-getconferencepermissions|instance-logs|';
         $iframeList = '|cron-index|zanode-create|';
 
         if(strpos($iframeList, "|{$module}-{$method}|") === false && (strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false)) return;
@@ -1509,7 +1510,7 @@ eof;
             ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.`group`')
             ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group`=t3.`group`')
             ->where('t1.project')->eq($program->id)
-            ->andWhere('t1.devopsSpace')->eq(0)
+            ->andWhere('t1.`devopsSpace`')->eq(0)
             ->andWhere('t2.account')->eq($this->app->user->account)
             ->fetchAll();
 
@@ -1734,7 +1735,7 @@ eof;
      */
     public static function getSysURL(): string
     {
-        if(defined('RUN_MODE') && RUN_MODE == 'test') return '';
+        if(helper::isRunMode('test')) return '';
 
         $httpType = (isset($_SERVER["HTTPS"]) and $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
         if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') $httpType = 'https';
@@ -1936,7 +1937,7 @@ eof;
      */
     public static function canBeChanged(string $module, $object = null): bool
     {
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
+        if(helper::isApiRequest()) return true;
 
         if(empty($object)) return true;
 
@@ -2873,14 +2874,14 @@ eof;
         /* 如果当前账户是项目负责人，则可以修改团队成员日志。*/
         if(!empty($effort->project))
         {
-            $PM = $this->dao->select('PM')->from(TABLE_PROJECT)->where('id')->eq($effort->project)->fetch('PM');
+            $PM = $this->dao->select('`PM`')->from(TABLE_PROJECT)->where('id')->eq($effort->project)->fetch('PM');
             if($PM == $this->app->user->account) return true;
         }
 
         /* 如果当前账户是执行负责人，则可以修改团队成员日志。*/
         if(!empty($effort->execution))
         {
-            $PM = $this->dao->select('PM')->from(TABLE_PROJECT)->where('id')->eq($effort->execution)->fetch('PM');
+            $PM = $this->dao->select('`PM`')->from(TABLE_PROJECT)->where('id')->eq($effort->execution)->fetch('PM');
             if($PM == $this->app->user->account) return true;
         }
 

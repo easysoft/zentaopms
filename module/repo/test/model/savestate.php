@@ -18,63 +18,53 @@ cid=18101
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_spaceuser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int NOT NULL DEFAULT 0,
-  `product` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `gitUID` char(42) NOT NULL DEFAULT '',
-  `acl` varchar(30) NOT NULL DEFAULT 'open',
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_spaceuser` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `space` int unsigned NOT NULL DEFAULT 0,
-  `role` varchar(10) NOT NULL DEFAULT '',
-  `account` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+global $tester;
+zenData('ops_repo')->gen(0);
+zenData('ops_spaceuser')->gen(0);
 
-$tester->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq(11)->exec();
-$tester->dao->delete()->from(TABLE_ENTRY)->where('code')->eq('gitfox')->exec();
+zenData('ops_space')->gen(0);
+$spaceTable = zenData('ops_space');
+$spaceTable->id->range('1');
+$spaceTable->name->range('repo-test-space');
+$spaceTable->code->range('repo-test-space');
+$spaceTable->acl->range('open');
+$spaceTable->auth->range('extend');
+$spaceTable->deleted->range('0');
+$spaceTable->gen(1);
 
-$tester->dao->insert(TABLE_REPO)->data((object)array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => 'repo1', 'gitUID' => 'uid1', 'acl' => 'open', 'status' => 'active', 'deleted' => 0))->exec();
-$tester->dao->insert(TABLE_REPO)->data((object)array('id' => 2, 'spaceID' => 1, 'product' => '2', 'name' => 'repo2', 'gitUID' => 'uid2', 'acl' => 'open', 'status' => 'active', 'deleted' => 0))->exec();
-$tester->dao->insert('ops_spaceuser')->data((object)array('space' => 1, 'role' => 'manager', 'account' => 'admin'))->exec();
-$tester->dao->insert(TABLE_PROJECTPRODUCT)->data((object)array('project' => 11, 'product' => 1, 'branch' => 0, 'plan' => '', 'roadmap' => ''))->exec();
-$tester->dao->insert(TABLE_ENTRY)->data((object)array(
-    'name'        => 'GitFox入口',
-    'account'     => 'admin',
-    'code'        => 'gitfox',
-    'key'         => 'testkey1234567890testkey1234567',
-    'freePasswd'  => 0,
-    'ip'          => '*',
-    'createdBy'   => 'admin',
-    'createdDate' => '2026-01-01 00:00:00',
-    'calledTime'  => 0,
-    'editedBy'    => 'admin',
-    'editedDate'  => '2026-01-01 00:00:00',
-    'deleted'     => 0,
-))->exec();
+zenData('projectproduct')->gen(0);
+$projectProductTable = zenData('projectproduct');
+$projectProductTable->project->range('11');
+$projectProductTable->product->range('1');
+$projectProductTable->branch->range('0');
+$projectProductTable->plan->range('');
+$projectProductTable->roadmap->range('');
+$projectProductTable->gen(1);
+
+$repoTable = zenData('ops_repo');
+$repoTable->id->range('1,2');
+$repoTable->spaceID->range('1{2}');
+$repoTable->product->range('1,2');
+$repoTable->name->range('repo1,repo2');
+$repoTable->scmType->range('git{2}');
+$repoTable->gitUID->range('uid1,uid2');
+$repoTable->providerID->range('0{2}');
+$repoTable->mirror->range('0{2}');
+$repoTable->acl->range('open{2}');
+$repoTable->status->range('active{2}');
+$repoTable->deleted->range('0{2}');
+$repoTable->gen(2);
+
+$spaceUserTable = zenData('ops_spaceuser');
+$spaceUserTable->space->range('1');
+$spaceUserTable->role->range('manager');
+$spaceUserTable->account->range('admin');
+$spaceUserTable->gen(1);
 
 su('admin');
 
 $repo = new repoModelTest();
-$httpClient = $repo->resetHttpClient();
-$httpClient->setResponse('/spaces', json_encode((object)array(
-    'code'     => 'success',
-    'data'     => array((object)array('id' => 1, 'name' => 'Space 1', 'createdDate' => '2026-01-01T00:00:00+08:00')),
-    'listArgs' => (object)array('pageSize' => 1),
-)));
+$repo->seedGitFoxEntry();
 
 r($repo->saveStateTest(2)) && p() && e('2'); // 步骤1：正常设置有效的代码库ID
 r($repo->saveStateTest(10001)) && p() && e('1'); // 步骤2：设置无效的代码库ID
@@ -82,5 +72,3 @@ r($repo->saveStateTest()) && p() && e('1'); // 步骤3：不传入代码库ID且
 $repo->objectModel->app->tab = 'project';
 r($repo->saveStateTest(2, 11)) && p() && e('1'); // 步骤4：在project tab下设置代码库ID
 r($repo->saveStateTest(0)) && p() && e('1'); // 步骤5：测试边界值repoID为0的情况
-
-$repo->restoreHttpClient();

@@ -15,4 +15,3 @@ fields:
   - field: opinion
     range: 1-10
     prefix: "opinion"
-

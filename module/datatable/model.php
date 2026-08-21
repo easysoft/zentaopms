@@ -135,25 +135,12 @@ class datatableModel extends model
                     }
                 }
 
-                if($module == 'pipeline')
-                {
-                    if(!isset($fieldSetting[$field]['name'])) $fieldSetting[$field]['name'] = $field;
-                }
-                else
-                {
-                    if(!isset($set['name'])) $fieldSetting[$field]['name'] = $field;
-                }
+                if(!isset($fieldSetting[$field]['name'])) $fieldSetting[$field]['name'] = $field;
                 if($module == 'testcase' && $field == 'id') $fieldSetting[$field]['name'] = 'caseID';
                 if($field == 'actions' && empty($fieldSetting[$field]['width'])) $fieldSetting[$field]['width'] = $fieldList[$field]['width'];
+                if(!isset($fieldSetting[$field]['order'])) $fieldSetting[$field]['order'] = $order;
 
-                if($module == 'pipeline')
-                {
-                    if(!isset($fieldSetting[$field]['order'])) $fieldSetting[$field]['order'] = $order;
-                }
-                else
-                {
-                    if(!isset($set['order'])) $fieldSetting[$field]['order'] = $order;
-                }
+                if(!isset($fieldSetting[$field]['order'])) $fieldSetting[$field]['order'] = $order;
                 $order++;
             }
 

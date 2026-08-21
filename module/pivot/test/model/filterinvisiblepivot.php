@@ -7,16 +7,22 @@ title=测试 pivotModel::filterInvisiblePivot();
 timeout=0
 cid=0
 
-- 步骤1：管理员过滤结果包含全部可见透视表 @4
-- 步骤2：普通用户可见全部未删除透视表 @911;912;913;915
-- 步骤3：白名单用户同样可见全部未删除透视表 @911;912;913;915
-- 步骤4：空数组输入返回空数组 @0
-- 步骤5：全部不可见透视表被过滤为空 @0
+- 执行pivotTest模块的filterInvisiblePivotTest方法，参数是$allPivots  @4
+- 执行pivotTest模块的filterInvisiblePivotTest方法，参数是$allPivots 
+ - 第0条的id属性 @911
+ - 第1条的id属性 @912
+- 执行pivotTest模块的filterInvisiblePivotTest方法，参数是$allPivots 
+ - 第0条的id属性 @911
+ - 第1条的id属性 @913
+- 执行pivotTest模块的filterInvisiblePivotTest方法，参数是array  @0
+- 执行pivotTest模块的filterInvisiblePivotTest方法，参数是$deletedPivots  @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
+
+zenData('user')->gen(5);
 
 global $tester;
 $dao = $tester->dao;
@@ -43,10 +49,10 @@ su('admin');
 r(count($pivotTest->filterInvisiblePivotTest($allPivots))) && p() && e('4');
 
 su('user1');
-r($pivotTest->filterInvisiblePivotTest($allPivots)) && p('0:id;1:id;2:id;3:id') && e('911;912;913;915');
+r($pivotTest->filterInvisiblePivotTest($allPivots)) && p('0:id;1:id') && e('911;912');
 
 su('user2');
-r($pivotTest->filterInvisiblePivotTest($allPivots)) && p('0:id;1:id;2:id;3:id') && e('911;912;913;915');
+r($pivotTest->filterInvisiblePivotTest($allPivots)) && p('0:id;1:id') && e('911;913');
 
 su('admin');
 r(count($pivotTest->filterInvisiblePivotTest(array()))) && p() && e('0');

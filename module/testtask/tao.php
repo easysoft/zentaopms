@@ -14,13 +14,17 @@ class testtaskTao extends testtaskModel
      * @param  string    $status
      * @param  string    $begin
      * @param  string    $end
+     * @param  string    $browseType
+     * @param  int       $queryID
      * @param  string    $orderBy
      * @param  object    $pager
      * @access protected
      * @return array
      */
-    public function fetchTesttaskList(int $productID, string $branch = '', int $projectID = 0, string $unit = 'no', string $scope = '', string $status = '', string $begin = '', string $end = '', string $orderBy = '', ?object $pager = null): array
+    public function fetchTesttaskList(int $productID, string $branch = '', int $projectID = 0, string $unit = 'no', string $scope = '', string $status = '', string $begin = '', string $end = '', string $browseType = 'all', int $queryID = 0, string $orderBy = '', ?object $pager = null): array
     {
+        $testtaskQuery = '';
+        if($browseType == 'bysearch') $testtaskQuery = $this->processSearchQuery($productID, $queryID, 'testtask');
         return $this->dao->select("t1.*, t5.multiple, IF(t2.shadow = 1, t5.name, t2.name) AS productName, t3.name AS executionName, t4.name AS buildName, t4.branch AS branch, t5.name AS projectName")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
@@ -60,6 +64,7 @@ class testtaskTao extends testtaskModel
             ->beginIF($begin)->andWhere('t1.end')->ge($begin)->fi()
             ->beginIF($end)->andWhere('t1.end')->le($end)->fi()
             ->fi()
+            ->beginIF($testtaskQuery)->andWhere($testtaskQuery)->fi()
             ->beginIF($branch !== 'all' && $branch)->andWhere("CONCAT(',', t4.branch, ',')")->like("%,$branch,%")->fi()
             ->beginIF($branch == BRANCH_MAIN)
             ->orWhere('(t1.build')->eq('trunk')
@@ -70,4 +75,59 @@ class testtaskTao extends testtaskModel
             ->page($pager)
             ->fetchAll('id', false);
     }
+
+     /**
+     * 通过搜索获取测试单。
+     * Get testtasks by search.
+     *
+     * @param  int    $productID
+     * @param  int    $paramID
+     * @param  string $module
+     * @access public
+     * @return string
+     * */
+    public function processSearchQuery(int $productID = 0, int $paramID = 0, string $module = ''): string
+    {
+        $defaultQuery = '( 1 = 1)';
+        $queryName = $module . 'Query';
+        $formName  = $module . 'Form';
+        if(!empty($module))
+        {
+            if($paramID)
+            {
+                $query = $this->loadModel('search')->getQuery($paramID);
+                if($query)
+                {
+                    $this->session->set($queryName, $query->sql);
+                    $this->session->set($formName, $query->form);
+                }
+            }
+            if($this->session->$queryName === false) $this->session->set($queryName, ' 1 = 1');
+
+            $testtaskQuery = '(' . $this->session->$queryName;
+            /* 处理查询中的产品条件。*/
+            if(strpos($this->session->$queryName, "`product` = 'all'") !== false)
+            {
+                $testtaskQuery  = str_replace("`product` = 'all'", '1 = 1', $testtaskQuery);
+                $testtaskQuery .= ' AND `product` ' . helper::dbIN($this->app->user->view->products);
+            }
+            elseif($productID)
+	        {
+                $testtaskQuery .= " AND `product` ='$productID'";
+            }
+            /* 处理查询中的项目条件。*/
+            if(strpos($this->session->$queryName, "`project` = 'all'") !== false)
+            {
+                $testtaskQuery  = str_replace("`project` = 'all'", '1 = 1', $testtaskQuery);
+                $testtaskQuery .= ' AND `project` ' . helper::dbIN($this->app->user->view->projects);
+            }
+
+            /* 处理查询中的版本条件。*/
+            $testtaskQuery = str_replace(array('`id`', '`name`', '`type`', '`status`', '`owner`', '`pri`', '`begin`','`end`', '`createdDate`', '`realBegan`', '`realFinishedDate`', '`product`', '`project`', '`execution`'), array('t1.`id`', 't1.`name`', 't1.`type`', 't1.`status`', 't1.`owner`', 't1.`pri`', 't1.`begin`', 't1.`end`', 't1.`createdDate`', 't1.`realBegan`', 't1.`realFinishedDate`', 't1.`product`', 't1.`project`', 't1.`execution`'), $testtaskQuery);
+            $testtaskQuery .= ')';
+
+            return $testtaskQuery;
+        }
+        return $defaultQuery;
+	}
 }

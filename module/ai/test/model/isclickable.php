@@ -17,6 +17,7 @@ cid=15055
 - 步骤8：助手编辑动作，对象已enabled状态 @0
 - 步骤9：助手编辑动作，对象disabled状态 @1
 - 步骤10：未知动作，返回默认true @1
+- 步骤11：已发布但配置不完整的智能体允许下架 @1
 
 */
 
@@ -52,3 +53,14 @@ r($aiTest->isClickableTest($disabledObject, 'assistantwithdraw')) && p() && e('0
 r($aiTest->isClickableTest($enabledObject, 'assistantedit'))      && p() && e('0'); // 步骤8：助手编辑动作，对象已enabled状态
 r($aiTest->isClickableTest($disabledObject, 'assistantedit'))     && p() && e('1'); // 步骤9：助手编辑动作，对象disabled状态
 r($aiTest->isClickableTest($enabledObject, 'unknownaction'))      && p() && e('1'); // 步骤10：未知动作，返回默认true
+
+$app->rawMethod = 'prompts';
+$publishedIncompletePrompt = new stdClass();
+$publishedIncompletePrompt->status          = 'active';
+$publishedIncompletePrompt->displayPosition = 'detail';
+$publishedIncompletePrompt->name            = 'prompt';
+$publishedIncompletePrompt->module          = 'story';
+$publishedIncompletePrompt->purpose         = '';
+$publishedIncompletePrompt->actionPurpose   = 'empty.empty';
+
+r($aiTest->isClickableTest($publishedIncompletePrompt, 'promptunpublish')) && p() && e('1'); // 步骤11：已发布但配置不完整的智能体允许下架

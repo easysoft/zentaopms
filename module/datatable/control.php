@@ -158,6 +158,10 @@ class datatable extends control
             unset($cols['product']);
             unset($cols['module']);
         }
+        if($module == 'my' && $method == 'testcase' && $extra == 'openedbyme')
+        {
+            unset($cols['taskName']);
+        }
         if($module == 'bug')
         {
             unset($cols['product']);

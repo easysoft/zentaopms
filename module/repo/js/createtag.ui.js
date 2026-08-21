@@ -49,4 +49,3 @@ $(document).on('click', '.modal-actions > button', function()
 {
     loadCurrentPage();
 })
-

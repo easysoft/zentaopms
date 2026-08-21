@@ -7,11 +7,13 @@ $config->bug->removeFields = 'objectTypeList,productList,executionList,gitlabID,
 $config->bug->create      = new stdclass();
 $config->bug->edit        = new stdclass();
 $config->bug->resolve     = new stdclass();
+$config->bug->confirm     = new stdclass();
 $config->bug->batchcreate = new stdclass();
 $config->bug->create->requiredFields      = 'title,openedBuild';
 $config->bug->batchcreate->requiredFields = 'title,openedBuild';
 $config->bug->edit->requiredFields        = 'title,openedBuild';
 $config->bug->resolve->requiredFields     = 'resolution';
+$config->bug->confirm->requiredFields     = '';
 
 $config->bug->actions = new stdclass();
 $config->bug->actions->view = array();
@@ -35,13 +37,15 @@ $config->bug->list->allFields = 'id, module, execution, story, task,
 
 $config->bug->list->defaultFields           = 'id,title,severity,pri,openedBy,assignedTo,resolvedBy,resolution';
 $config->bug->list->customCreateFields      = 'execution,noticefeedbackBy,story,task,pri,severity,os,browser,deadline,mailto,keywords';
-$config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,deadline,resolvedBy,resolution,os,browser,keywords';
-$config->bug->list->customBatchCreateFields = 'project,execution,plan,steps,type,assignedTo,pri,deadline,severity,os,browser,keywords';
+$config->bug->list->customBatchEditFields   = 'project,execution,plan,case,type,assignedTo,pri,deadline,severity,os,browser,resolvedBy,resolution,keywords';
+$config->bug->list->customBatchCreateFields = 'project,execution,plan,steps,type,assignedTo,pri,deadline,severity,os,browser,case,keywords';
+
+if(in_array($config->edition, array('max', 'ipd'))) $config->bug->list->customBatchCreateFields .= ',identify,injection';
 
 $config->bug->custom = new stdclass();
 $config->bug->custom->createFields      = $config->bug->list->customCreateFields;
 $config->bug->custom->batchCreateFields = 'project,execution,deadline,steps,type,pri,severity,os,browser,assignedTo,%s';
-$config->bug->custom->batchEditFields   = 'type,severity,pri,assignedTo,deadline,status,resolvedBy,resolution';
+$config->bug->custom->batchEditFields   = 'type,assignedTo,pri,deadline,severity,resolvedBy,resolution';
 
 $config->bug->exportFields = 'id, product, branch, module, project, execution, plan, story, task,
     title, keywords, severity, pri, type, os, browser,

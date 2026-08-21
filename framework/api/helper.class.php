@@ -10,7 +10,7 @@
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
  */
-include dirname(__FILE__, 2) . '/base/helper.class.php';
+include_once dirname(__FILE__, 2) . '/base/helper.class.php';
 class helper extends baseHelper
 {
     public static function getViewType(bool $source = false)
@@ -267,7 +267,7 @@ class helper extends baseHelper
      * @access public
      * @return string
      */
-    static public function response(mixed $data = '', int $code = 200)
+    static public function response(mixed $data = '', int $code = 200): string
     {
         $statusCode = array(
             100 => "100 Continue",
@@ -395,6 +395,46 @@ function getVisions(): array
     $visions    = array_flip(array_unique(array_filter(explode(',', trim($config->visions, ',')))));
     $visionList = $lang->visionList;
     return array_intersect_key($visionList, $visions);
+}
+
+/**
+ * Init page title based on the module name and the method name.
+ *
+ * @access public
+ * @return string
+ */
+function initPageTitle(): string
+{
+    global $app, $lang;
+    $module = $app->rawModule;
+    $method = $app->rawMethod;
+
+    if(empty($lang->$module)) $app->loadLang($module);
+
+    if(!empty($lang->$module->{$method . 'Action'})) return $lang->$module->{$method . 'Action'};
+    if(!empty($lang->$module->$method)) return $lang->$module->$method;
+    return zget($lang, $method);
+}
+
+/**
+ * Init page entity based on configuration of objectNameFields.
+ *
+ * @param  object $object
+ * @access public
+ * @return array
+ */
+function initPageEntity(object $object): array
+{
+    if(empty($object)) return array();
+
+    global $app, $config;
+    $app->loadModuleConfig('action');
+
+    $module     = $app->getModuleName();
+    $idField    = isset($config->action->objectIdFields[$module])   ? $config->action->objectIdFields[$module]   : 'id';
+    $titleField = isset($config->action->objectNameFields[$module]) ? $config->action->objectNameFields[$module] : 'title';
+
+    return array(zget($object, $titleField, ''), zget($object, $idField, 0));
 }
 
 /**

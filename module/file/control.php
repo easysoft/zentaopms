@@ -75,7 +75,7 @@ class file extends control
         {
             if($file['size'] == 0)
             {
-                if(defined('RUN_MODE') && RUN_MODE == 'api') return print(json_encode(array('status' => 'error', 'message' => $this->lang->file->errorFileUpload)));
+                if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'message' => $this->lang->file->errorFileUpload));
                 return $this->send(array('error' => 1, 'message' => $this->lang->file->errorFileUpload));
             }
 
@@ -100,7 +100,7 @@ class file extends control
 
                 $url    = $this->createLink('file', 'read', "fileID=$fileID", $file['extension']);
                 if($uid) $_SESSION['album'][$uid][] = $fileID;
-                if($api || (defined('RUN_MODE') && RUN_MODE == 'api'))
+                if($api || (helper::isApiRequest()))
                 {
                     if($uid) $_SESSION['album']['used'][$uid][$fileID] = $fileID;
                     $_SERVER['SCRIPT_NAME'] = 'index.php';
@@ -111,7 +111,7 @@ class file extends control
             else
             {
                 $error = strip_tags(sprintf($this->lang->file->errorCanNotWrite, $this->file->savePath, $this->file->savePath));
-                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'error', 'message' => $error));
+                if(helper::isApiRequest()) return $this->send(array('status' => 'error', 'message' => $error));
                 return print(json_encode(array('error' => 1, 'message' => $error)));
             }
         }
@@ -145,7 +145,7 @@ class file extends control
         if(empty($file) || !$this->file->fileExists($file))
         {
             $this->view->error = $this->lang->file->fileNotFound;
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => $this->view->error));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'code' => 404, 'message' => $this->view->error));
             if(isInModal()) return $this->display();
             return print($this->view->error);
         }

@@ -865,7 +865,9 @@ class myTaoTest extends baseTest
         $method = $reflection->getMethod('buildReviewingFlows');
         $method->setAccessible(true);
 
+        ob_start();
         $result = $method->invokeArgs($this->instance, [$objectGroup, $flows, $objectNameFields]);
+        ob_end_clean();
         if(dao::isError()) return dao::getError();
 
         return $result;

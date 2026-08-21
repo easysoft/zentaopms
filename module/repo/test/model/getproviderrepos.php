@@ -23,18 +23,18 @@ $repoTest = new repoModelTest();
 
 $emptyProvider = new stdclass();
 $emptyProvider->type = '';
-r(is_array($repoTest->getProviderReposTest($emptyProvider))) && p() && e('1');
+r($repoTest->getProviderReposIsArrayTest($emptyProvider)) && p() && e('1');
 
 $gitlabProvider = new stdclass();
 $gitlabProvider->type = 'Gitlab';
 $gitlabProvider->id = 1;
 $gitlabProvider->url = 'https://gitlab.example.com';
-r(is_array($repoTest->getProviderReposTest($gitlabProvider))) && p() && e('1');
+r($repoTest->getProviderReposIsArrayTest($gitlabProvider)) && p() && e('1');
 
-r(is_array($repoTest->getProviderReposTest($gitlabProvider, true))) && p() && e('1');
+r($repoTest->getProviderReposIsArrayTest($gitlabProvider, true)) && p() && e('1');
 
 $invalidProvider = new stdclass();
 $invalidProvider->type = 'Invalid';
-r(is_array($repoTest->getProviderReposTest($invalidProvider))) && p() && e('1');
+r($repoTest->getProviderReposIsArrayTest($invalidProvider)) && p() && e('1');
 
-r(is_array($repoTest->getProviderReposTest($gitlabProvider, true))) && p() && e('1');
+r($repoTest->getProviderReposIsArrayTest($gitlabProvider, true)) && p() && e('1');

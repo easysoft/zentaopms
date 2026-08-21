@@ -1526,7 +1526,7 @@ class taskZen extends task
 
         /* Get related objects title or names. */
         $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
-        $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+        $relatedFiles   = $this->dao->select('id, `objectID`, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
         $relatedModules = $this->loadModel('tree')->getAllModulePairs('task');
 
         $bugs = $this->loadModel('bug')->getByIdList($relatedBugIdList);
@@ -1735,7 +1735,7 @@ class taskZen extends task
      */
     protected function responseAfterEdit(int $taskID, string $from, array $changes, string $message = ''): array
     {
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $taskID);
+        if(helper::isApiRequest()) return array('status' => 'success', 'data' => $taskID);
 
         $response['result']     = 'success';
         $response['message']    = $message ?: $this->lang->saveSuccess;
@@ -1806,7 +1806,7 @@ class taskZen extends task
      */
     protected function responseAfterAssignTo(int $taskID, string $from, string $message = ''): array
     {
-        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
+        if($this->viewType == 'json' || (helper::isApiRequest())) return array('result' => 'success');
 
         $task = $this->task->getById($taskID);
         if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from, $message);
@@ -1871,7 +1871,7 @@ class taskZen extends task
         $response['closeModal'] = true;
 
         /* Return task id when call the API. */
-        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $task->id);
+        if($this->viewType == 'json' || (helper::isApiRequest())) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $task->id);
 
         /* Processing the return information of pop-up windows. */
         if(helper::isAjaxRequest('modal') || isonlybody())
@@ -1917,7 +1917,7 @@ class taskZen extends task
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         /* Return task id when call the API. */
-        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList);
+        if($this->viewType == 'json' || (helper::isApiRequest())) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList);
 
         $response['result']  = 'success';
         $response['message'] = $this->lang->saveSuccess;
@@ -1953,7 +1953,7 @@ class taskZen extends task
     protected function responseAfterChangeStatus(object $task, string $from, string $message = ''): array
     {
         $message = $message ?: $this->lang->saveSuccess;
-        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
+        if($this->viewType == 'json' || (helper::isApiRequest())) return array('result' => 'success');
         if(isInModal()) return $this->responseModal($task, $from, $message);
         return array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true);
     }
@@ -2158,7 +2158,7 @@ class taskZen extends task
         if(empty($pathPairs)) return array();
 
         $allParentIdList = array_filter(array_unique(explode(',', implode(',', $pathPairs))));
-        $allParents      = $this->dao->select('id,estStarted,deadline')->from(TABLE_TASK)->where('id')->in($allParentIdList)->fetchAll('id');
+        $allParents      = $this->dao->select('id,`estStarted`,deadline')->from(TABLE_TASK)->where('id')->in($allParentIdList)->fetchAll('id');
         $parents         = array();
         foreach($pathPairs as $parentID => $path)
         {

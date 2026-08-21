@@ -1555,7 +1555,7 @@ class taskZenTest
             // 模拟方法的核心逻辑而不是直接调用复杂的protected方法
 
             // 模拟API模式检查
-            if(defined('RUN_MODE') && RUN_MODE == 'api') {
+            if(helper::isApiRequest()) {
                 return array('status' => 'success', 'data' => $taskID);
             }
 
@@ -1675,7 +1675,7 @@ class taskZenTest
             // 模拟方法的核心逻辑而不是直接调用复杂的protected方法
 
             // 模拟JSON视图或API模式检查
-            if(defined('RUN_MODE') && RUN_MODE == 'api') {
+            if(helper::isApiRequest()) {
                 return array('result' => 'success');
             }
 
@@ -1812,7 +1812,7 @@ class taskZenTest
             $response['closeModal'] = true;
 
             // 模拟API模式检查
-            if($tester->app->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api'))
+            if($tester->app->viewType == 'json' || (helper::isApiRequest()))
             {
                 return array('result' => 'success', 'message' => '保存成功', 'id' => $task->id);
             }
@@ -1905,7 +1905,7 @@ class taskZenTest
             $response['message'] = '保存成功';
 
             // 模拟JSON/API模式
-            if($tester->app->getViewType() == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api'))
+            if($tester->app->getViewType() == 'json' || (helper::isApiRequest()))
             {
                 $response['idList'] = $taskIdList;
                 return $response;
@@ -1969,7 +1969,7 @@ class taskZenTest
         try
         {
             // 模拟JSON视图类型的响应
-            if($viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api'))
+            if($viewType == 'json' || (helper::isApiRequest()))
             {
                 return array('result' => 'success');
             }

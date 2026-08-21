@@ -19,8 +19,8 @@ cid=0
 */
 
 $repoTest = new repoTaoTest();
-r(method_exists($repoTest, 'getlatestcommittimeTest')) && p() && e('1');
-r(class_exists('repoTaoTest')) && p() && e('1');
-r(class_exists('repoTao')) && p() && e('1');
-r(method_exists($repoTest, 'getlatestcommittimeTest')) && p() && e('1');
-r(class_exists('repoTaoTest')) && p() && e('1');
+r($repoTest->getLatestCommitTimeAvailableTest(0))                   && p() && e('1');
+r($repoTest->getLatestCommitTimeAvailableTest(1, 'HEAD'))           && p() && e('1');
+r($repoTest->getLatestCommitTimeAvailableTest(1, '1'))              && p() && e('1');
+r($repoTest->getLatestCommitTimeAvailableTest(-1, 'HEAD'))          && p() && e('1');
+r($repoTest->getLatestCommitTimeAvailableTest(1, 'HEAD', 'master')) && p() && e('1');

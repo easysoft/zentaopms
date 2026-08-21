@@ -57,8 +57,8 @@ $fullModuleMap = array(
 );
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($apiTest->createDemoApiSpecTest('16.0', $fullApiMap, $fullModuleMap, 'admin')) && p() && e(1); // 步骤1：正常情况，使用完整的映射关系
-r($apiTest->createDemoApiSpecTest('16.0', $fullApiMap, array(2949 => 3949), 'admin')) && p() && e(1); // 步骤2：使用完整apiMap和部分moduleMap
-r($apiTest->createDemoApiSpecTest('16.0', $fullApiMap, array(2949 => 4949, 2950 => 4950), 'user1')) && p() && e(1); // 步骤3：完整apiMap和部分moduleMap
-r($apiTest->createDemoApiSpecTest('16.0', $fullApiMap, array(), 'admin')) && p() && e(1); // 步骤4：空的moduleMap，但有完整apiMap应该成功
-r($apiTest->createDemoApiSpecTest('16.0', $fullApiMap, $fullModuleMap, 'manager')) && p() && e(1); // 步骤5：不同用户角色创建
+r($apiTest->createDemoApiSpecTest('v1', $fullApiMap, $fullModuleMap, 'admin')) && p() && e(1); // 步骤1：正常情况，使用完整的映射关系
+r($apiTest->createDemoApiSpecTest('v1', $fullApiMap, array(2949 => 3949), 'admin')) && p() && e(1); // 步骤2：使用完整apiMap和部分moduleMap
+r($apiTest->createDemoApiSpecTest('v1', $fullApiMap, array(2949 => 4949, 2950 => 4950), 'user1')) && p() && e(1); // 步骤3：完整apiMap和部分moduleMap
+r($apiTest->createDemoApiSpecTest('v1', $fullApiMap, array(), 'admin')) && p() && e(1); // 步骤4：空的moduleMap，但有完整apiMap应该成功
+r($apiTest->createDemoApiSpecTest('v1', $fullApiMap, $fullModuleMap, 'manager')) && p() && e(1); // 步骤5：不同用户角色创建

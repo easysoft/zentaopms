@@ -1,21 +1,6 @@
 .menu-item.selected {background: var(--menu-selected-bg); color: var(--menu-selected-color);}
 .menu-item .item-content {overflow:hidden; text-overflow:clip; justify-content: space-between;}
-.menu-item .item-actions {min-width: 55px; justify-content: center;}
+.menu-item .item-actions {justify-content: center;}
 .menu-item .item-title {flex:none;}
-.menu-item .item-text
-{
-    padding-left: .5rem;
-    padding-right: .5rem;
-    flex: none;
-    border: 1px solid rgba(var(--color-gray-500-rgb), var(--tw-border-opacity, 1));;
-    border-radius: var(--radius-full);
-    font-size: .75rem;
-    line-height: 1rem;
-    --btn-height: 1.5rem;
-    text-align: center;
-    min-width:55px;
-    margin-right:1px;
-    overflow: hidden;
-}
 #versionBox, #nextBox{max-width:150px;}
 #versionBox .text, #nextBox .text{overflow:hidden}

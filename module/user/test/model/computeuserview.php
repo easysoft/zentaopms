@@ -37,7 +37,7 @@ zenData('stakeholder')->loadYaml('stakeholder')->gen(100);
 zenData('product')->gen(20);
 zenData('project')->gen(0);
 zenData('project')->gen(20);
-zenData('project')->loadYaml('execution')->gen(20, false);
+zenData('project')->loadYaml('execution')->gen(20, false, false);
 zenData('projectadmin')->loadYaml('projectadmin')->gen(30);
 
 $time = time();

@@ -6,6 +6,18 @@ $(function()
     initialOptions = $.extend(true, {}, options);
 });
 
+function getGroupCaseColspan(options)
+{
+    let visibleCols = 0;
+    $.each(options.cols || [], function(index, col)
+    {
+        if(!col || col.hidden === true || col.show === false) return;
+        visibleCols++;
+    });
+
+    return Math.max(1, visibleCols - 1);
+}
+
 /**
  * 需求列显示展开收起的图标。
  * Display show icon in the story column.
@@ -29,7 +41,7 @@ window.onRenderCell = function(result, {row, col})
             result.push({outer: false, style: {alignItems: 'start', 'padding-top': '8px'}})
         }
     }
-    if(result && col.name == 'id' && row.data.hidden)
+    if(result && (col.name == 'id' || col.name == 'case') && row.data.hidden)
     {
         result.push({outer: false, style: {alignItems: 'center', justifyContent: 'start'}})
     }
@@ -51,7 +63,7 @@ window.getCellSpan = function(cell)
     {
         return {rowSpan: cell.row.data.rowspan};
     }
-    if(cell.col.name == 'id' && cell.row.data.colspan)
+    if((cell.col.name == 'id' || cell.col.name == 'case') && cell.row.data.colspan)
     {
         return {colSpan: cell.row.data.colspan};
     }
@@ -99,7 +111,7 @@ window.deformation = function(event)
             {
                 options.data[index].id      = {html: '<span class="text-gray">' + allTestcases + ' ' + '<strong>' + options.data[index].rowspan + '</strong></span>'};
                 options.data[index].rowspan = 1;
-                options.data[index].colspan = 12;
+                options.data[index].colspan = getGroupCaseColspan(options);
                 options.data[index].hidden  = 1;
             }
         });

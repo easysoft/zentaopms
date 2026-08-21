@@ -19,25 +19,30 @@ if(empty($myConfig))
     return;
 }
 
+$dbSchema = trim($myConfig['dbSchema'] ?? 'public');
+$schemaConfig = $dbSchema != 'public' ? "\$config->db->schema = '{$dbSchema}';" : '';
+
 $configContent = <<<EOT
 <?php
-\$config->installed     = true;
-\$config->debug         = false;
-\$config->requestType   = '$config->requestType';
-\$config->timezone      = '$config->timezone';
-\$config->db->driver    = '{$myConfig['dbDriver']}';
-\$config->db->host      = '{$myConfig['dbHost']}';
-\$config->db->port      = '{$myConfig['dbPort']}';
-\$config->db->name      = '{$myConfig['dbName']}';
-\$config->db->user      = '{$myConfig['dbUser']}';
-\$config->db->encoding  = '{$myConfig['dbEncoding']}';
-\$config->db->collation = '{$myConfig['dbCollation']}';
-\$config->db->password  = '{$myConfig['dbPassword']}';
-\$config->db->prefix    = '{$myConfig['dbPrefix']}';
-\$config->webRoot       = getWebRoot();
-\$config->default->lang = '{$myConfig['defaultLang']}';
+\$config->installed      = true;
+\$config->debug          = false;
+\$config->requestType    = '$config->requestType';
+\$config->timezone       = '$config->timezone';
+\$config->db->driver     = '{$myConfig['dbDriver']}';
+\$config->db->host       = '{$myConfig['dbHost']}';
+\$config->db->port       = '{$myConfig['dbPort']}';
+\$config->db->name       = '{$myConfig['dbName']}';
+\$config->db->user       = '{$myConfig['dbUser']}';
+\$config->db->encoding   = '{$myConfig['dbEncoding']}';
+\$config->db->collation  = '{$myConfig['dbCollation']}';
+\$config->db->password   = '{$myConfig['dbPassword']}';
+\$config->db->prefix     = '{$myConfig['dbPrefix']}';
+\$config->db->strictMode = false;
+$schemaConfig
+\$config->webRoot        = getWebRoot();
+\$config->default->lang  = '{$myConfig['defaultLang']}';
 EOT;
-if($customSession) $configContent .= "\n\$config->customSession   = true;";
+if($customSession) $configContent .= "\n\$config->customSession  = true;";
 
 $configRoot   = $this->app->getConfigRoot();
 $myConfigFile = $configRoot . 'my.php';

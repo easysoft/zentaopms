@@ -16,13 +16,14 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version       = '22.4';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version       = '22.5';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->liteVersion   = '1.2';                // 迅捷版版本。      The version of Lite.
 $config->charset       = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The cookie life time.
 $config->timezone      = 'Asia/Shanghai';      // 时区设置。        The time zone setting, for more see http://www.php.net/manual/en/timezones.php.
 $config->webRoot       = '';                   // URL根目录。       The root path of the url.
 $config->customSession = false;                // 是否开启自定义session的存储路径。Whether custom the session save path.
+$config->sessionLife   = 86400;                // Session超时时间，单位秒，默认1天。Session timeout in seconds, default 1 day.
 $config->edition       = 'open';               // 设置系统的edition，可选值：open|biz|max。Set edition, optional: open|biz|max.
 $config->tabSession    = false;                // 是否开启浏览器新标签独立session.
 $config->clientCache   = false;                // 是否开启客户端缓存。Whether enable client cache or not.
@@ -68,6 +69,7 @@ $config->default->method = 'index';       //默认方法。 Default method.
 $config->db = new stdclass();
 $config->db->persistent    = false;        // 是否为持续连接。                                   Whether use persistent connection or not.
 $config->db->driver        = 'mysql';      // 默认使用的数据库驱动。                             The default database driver.
+$config->db->schema        = 'public';     // PostgreSQL/Gauss schema。                          The PostgreSQL/Gauss schema.
 $config->db->encoding      = 'UTF8';       // 数据库编码。                                       The database encoding.
 $config->db->strictMode    = true;         // 是否开启MySQL的严格模式。                          Whether enable MySQL strict mode or not.
 $config->db->defaultName   = 'zentao';     // 默认数据库名称，安装时的推荐值。                   The default database name, recommended when install.
@@ -162,7 +164,7 @@ $config->file = new stdclass();
 $config->file->dangers        = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
 $config->file->allowed        = 'txt,md,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql,xmind,mm';
 $config->file->storageType    = 'fs';       // fs or s3
-$config->file->allowedModules = 'artifact'; // 设置上传文件时不需要过滤文件类型的模块。
+$config->file->allowedModules = 'artifact,testcase'; // 设置上传文件时不需要过滤文件类型的模块。
 
 /* 文档多人协同配置。 Document Hocus Pocus. */
 $config->docHocuspocus = new stdclass();
@@ -228,6 +230,7 @@ if($config->inContainer || $config->inQuickon)
     $config->requestType   = getenv('ZT_REQUEST_TYPE');
     $config->timezone      = getEnvData('ZT_TIMEZONE', 'Asia/Shanghai');
     $config->db->driver    = getenv('ZT_DB_DRIVER');
+    $config->db->schema    = getEnvData('ZT_DB_SCHEMA', 'public');
     $config->db->host      = getenv('ZT_DB_HOST');
     $config->db->port      = getenv('ZT_DB_PORT');
     $config->db->name      = getenv('ZT_DB_NAME');

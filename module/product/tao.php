@@ -29,7 +29,7 @@ class productTao extends productModel
 
         $viewType = $this->app->getViewType();
         if($viewType == 'mhtml') return false;  //If client device is mobile, then not locate.
-        if($viewType == 'json' or (defined('RUN_MODE') and RUN_MODE == 'api')) return false; //If request type is api, then not locate.
+        if($viewType == 'json' or (helper::isApiRequest())) return false; //If request type is api, then not locate.
 
         return true;
     }

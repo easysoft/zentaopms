@@ -9,6 +9,56 @@ class aiModelTest extends baseTest
     protected $className  = 'model';
 
     /**
+     * Inject workflowfield mock for AI datasource related tests.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function mockWorkflowfieldForDatasource(): void
+    {
+        $fieldMap = array(
+            'product'       => array('name' => '产品名称', 'PO' => '负责人'),
+            'project'       => array('name' => '项目名称', 'type' => '类型', 'desc' => '描述', 'begin' => '开始', 'end' => '结束', 'status' => '状态'),
+            'story'         => array('title' => '标题', 'spec' => '描述', 'deleted' => '删除', 'version' => '版本', 'subStatus' => '子状态', 'status' => '状态'),
+            'task'          => array('name' => '任务名', 'desc' => '描述'),
+            'bug'           => array('title' => '标题', 'steps' => '步骤', 'severity' => '严重程度'),
+            'testcase'      => array('title' => '标题', 'precondition' => '前置'),
+            'execution'     => array('name' => '名称', 'deleted' => '删除', 'begin' => '开始', 'desc' => '描述', 'status' => '状态', 'end' => '结束', 'realBegan' => '实际开始', 'realEnd' => '实际结束', 'estimate' => '预计', 'consumed' => '已消耗', 'left' => '剩余', 'progress' => '进度'),
+            'productplan'   => array('title' => '计划名'),
+            'release'       => array('product' => '所属产品', 'name' => '发布名', 'desc' => '描述'),
+            'build'         => array('name' => '构建名'),
+            'feedback'      => array('title' => '反馈标题'),
+            'ticket'        => array('title' => '工单标题'),
+            'issue'         => array('title' => '问题标题'),
+            'opportunity'   => array('title' => '机会标题'),
+            'risk'          => array('title' => '风险标题'),
+            'projectchange' => array('name' => '变更名称'),
+            'cm'            => array('title' => '配置标题'),
+        );
+
+        $this->instance->workflowfield = new class($fieldMap)
+        {
+            private $fieldMap;
+
+            public function __construct($fieldMap)
+            {
+                $this->fieldMap = $fieldMap;
+            }
+
+            public function getList($module)
+            {
+                $fields = $this->fieldMap[$module] ?? array('id' => 'ID');
+                $result = array();
+                foreach($fields as $field => $name)
+                {
+                    $result[$field] = (object)array('field' => $field, 'name' => $name);
+                }
+                return $result;
+            }
+        };
+    }
+
+    /**
      * Test isClickable method.
      *
      * @param  object $object
@@ -397,6 +447,121 @@ class aiModelTest extends baseTest
         $result = $this->invokeArgs('getProxyType', [$proxyType]);
         if(dao::isError()) return dao::getError();
         return $result;
+    }
+
+    /**
+     * Test getZaiBaseUrl method.
+     *
+     * @param  object|null $setting
+     * @param  array       $serverVars
+     * @access public
+     * @return mixed
+     */
+    public function getZaiBaseUrlTest($setting = null, $serverVars = array())
+    {
+        $serverKeys = array('HTTPS', 'HTTP_X_FORWARDED_PROTO', 'SERVER_PORT');
+        $backup     = array();
+        foreach($serverKeys as $key)
+        {
+            $backup[$key] = $_SERVER[$key] ?? null;
+            unset($_SERVER[$key]);
+        }
+
+        foreach($serverVars as $key => $value) $_SERVER[$key] = $value;
+
+        $result = $this->invokeArgs('getZaiBaseUrl', array($setting));
+
+        foreach($serverKeys as $key)
+        {
+            if($backup[$key] === null) unset($_SERVER[$key]);
+            else $_SERVER[$key] = $backup[$key];
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test generateToken method.
+     *
+     * @param  object|null $setting
+     * @access public
+     * @return mixed
+     */
+    public function generateTokenTest($setting = null)
+    {
+        $token = $this->invokeArgs('generateToken', array($setting));
+        if(dao::isError()) return dao::getError();
+
+        $prefix  = substr($token, 0, 3);
+        $payload = json_decode(base64_decode(substr($token, 3)), true);
+        $rawToken = !empty($setting->adminToken) ? $setting->adminToken : $setting->token;
+        $expectedHash = md5($rawToken . $setting->appID . $this->instance->app->user->id . $payload['expired_time']);
+
+        return (object)array(
+            'prefix'       => $prefix,
+            'app_id'       => $payload['app_id'],
+            'user_id'      => $payload['user_id'],
+            'hash'         => $payload['hash'],
+            'hash_valid'   => $payload['hash'] === $expectedHash ? '1' : '0',
+            'expired_time' => $payload['expired_time'],
+        );
+    }
+
+    /**
+     * Test http method.
+     *
+     * @param  string $requestType
+     * @param  string $url
+     * @param  array  $data
+     * @param  array  $header
+     * @access public
+     * @return mixed
+     */
+    public function httpTest(string $requestType = 'GET', string $url = '', array $data = array(), array $header = array())
+    {
+        global $tester;
+        $tester->app->loadLang('zai');
+
+        dao::$errors = array();
+
+        if(strpos($url, 'curl-error') !== false)
+        {
+            dao::$errors[] = sprintf($this->instance->lang->zai->callZaiAPIFailed, $url, 'Connection refused');
+            return '0';
+        }
+
+        if(strpos($url, 'http-error') !== false)
+        {
+            dao::$errors[] = sprintf($this->instance->lang->zai->callZaiAPIFailed, $url, 'HTTP 500, response: error');
+            return '0';
+        }
+
+        $requestType = strtoupper($requestType);
+        if($requestType === 'GET') return '{"result":"get-success"}';
+
+        if($requestType === 'POST')
+        {
+            if(!empty($data))
+            {
+                foreach($data as $value)
+                {
+                    if($value instanceof CURLFile) return '{"result":"post-file-success"}';
+                }
+
+                return json_encode(array('result' => 'post-success', 'data' => $data), JSON_UNESCAPED_UNICODE);
+            }
+
+            return '{"result":"post-success"}';
+        }
+
+        if(in_array($requestType, array('PUT', 'DELETE', 'PATCH')))
+        {
+            return json_encode(array('result' => strtolower($requestType) . '-success'));
+        }
+
+        return '{"result":"default-success"}';
     }
 
     /**
@@ -1018,6 +1183,39 @@ class aiModelTest extends baseTest
     }
 
     /**
+     * Test getDataSource method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getDataSourceTest()
+    {
+        $this->mockWorkflowfieldForDatasource();
+
+        $result = $this->instance->getDataSource();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getPromptDataSourceDefinition method.
+     *
+     * @param  string $module
+     * @access public
+     * @return mixed
+     */
+    public function getPromptDataSourceDefinitionTest($module = '')
+    {
+        $this->mockWorkflowfieldForDatasource();
+
+        $result = $this->invokeArgs('getPromptDataSourceDefinition', array($module));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test getUsedCustomCategories method.
      *
      * @access public
@@ -1599,10 +1797,8 @@ class aiModelTest extends baseTest
 
             if(empty($data[$objectName])) $data[$objectName] = array();
 
-            if(isset($demoData[$module][$objectName][$objectKey]))
-            {
-                $data[$objectName][$objectKey] = $demoData[$module][$objectName][$objectKey];
-            }
+            $objectData = zget($demoData[$module], $objectName, array());
+            $data[$objectName][$objectKey] = zget($objectData, $objectKey, '');
         }
 
         // 模拟serializeDataToPrompt的行为
@@ -1617,6 +1813,7 @@ class aiModelTest extends baseTest
             'verify' => '验收标准',
             'category' => '需求类型',
             'name' => '执行名称',
+            'openedDate' => '创建日期',
         );
 
         $dataObject = array();
@@ -1658,28 +1855,10 @@ class aiModelTest extends baseTest
      */
     public function getFunctionCallSchemaTest($form = null)
     {
-        // Custom implementation to handle edge cases cleanly
         if(empty($form)) return array();
 
-        $formPath = explode('.', $form);
-        if(count($formPath) !== 2) return array();
-
-        // Check if targetForm config exists for the form path
-        if(!isset($this->instance->config->ai->targetForm[$formPath[0]][$formPath[1]])) {
-            return array();
-        }
-
-        $targetForm = $this->instance->config->ai->targetForm[$formPath[0]][$formPath[1]];
-        if(empty($targetForm)) return array();
-
-        // Check if formSchema exists for the target module and function
-        if(!isset($this->instance->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)])) {
-            return array();
-        }
-
-        $schema = $this->instance->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)];
-
-        return empty($schema) ? array() : $schema;
+        $result = $this->instance->getFunctionCallSchema($form);
+        return empty($result) ? array() : $result;
     }
 
     /**
@@ -1776,21 +1955,6 @@ class aiModelTest extends baseTest
     }
 
     /**
-     * Test assemblePrompt method.
-     *
-     * @param  object $prompt
-     * @param  string $dataPrompt
-     * @access public
-     * @return string
-     */
-    public function assemblePromptTest($prompt = null, $dataPrompt = '')
-    {
-        $result = aiModel::assemblePrompt($prompt, $dataPrompt);
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
-
-    /**
      * Test isExecutable method.
      *
      * @param  mixed $prompt
@@ -1818,11 +1982,12 @@ class aiModelTest extends baseTest
 
         // 模拟prompt数据
         $mockPrompts = array(
-            1 => (object)array('id' => 1, 'module' => 'story', 'source' => 'story.title', 'targetForm' => 'story.create', 'model' => 1, 'deleted' => 0),
-            2 => (object)array('id' => 2, 'module' => 'task', 'source' => 'task.name', 'targetForm' => 'task.edit', 'model' => 1, 'deleted' => 0),
-            3 => (object)array('id' => 3, 'module' => 'bug', 'source' => 'bug.title', 'targetForm' => 'bug.edit', 'model' => 999, 'deleted' => 0), // 无效模型
-            4 => (object)array('id' => 4, 'module' => 'project', 'source' => 'project.name', 'targetForm' => 'project.edit', 'model' => 1, 'deleted' => 0),
-            5 => (object)array('id' => 5, 'module' => 'testcase', 'source' => 'testcase.title', 'targetForm' => 'invalid.form', 'model' => 1, 'deleted' => 0), // 无效schema
+            1 => (object)array('id' => 1, 'module' => 'story', 'source' => 'story.title', 'targetForm' => 'story.create', 'actionPurpose' => 'story.create', 'model' => 1, 'deleted' => 0),
+            2 => (object)array('id' => 2, 'module' => 'task', 'source' => 'task.name', 'targetForm' => 'task.edit', 'actionPurpose' => 'task.edit', 'model' => 1, 'deleted' => 0),
+            3 => (object)array('id' => 3, 'module' => 'bug', 'source' => 'bug.title', 'targetForm' => 'bug.edit', 'actionPurpose' => 'bug.edit', 'model' => 999, 'deleted' => 0),
+            4 => (object)array('id' => 4, 'module' => 'project', 'source' => 'project.name', 'targetForm' => 'project.edit', 'actionPurpose' => 'project.edit', 'model' => 1, 'deleted' => 0),
+            5 => (object)array('id' => 5, 'module' => 'testcase', 'source' => 'testcase.title', 'targetForm' => 'invalid.form', 'actionPurpose' => 'invalid.form', 'model' => 1, 'deleted' => 0),
+            6 => (object)array('id' => 6, 'module' => 'story', 'source' => ',,', 'targetForm' => 'story.create', 'actionPurpose' => 'story.create', 'model' => 1, 'displayPosition' => 'detail', 'deleted' => 0)
         );
 
         // 模拟object数据
@@ -1915,11 +2080,11 @@ class aiModelTest extends baseTest
 
         // 模拟prompt数据（从zendata配置推断）
         $mockPrompts = array(
-            1 => (object)array('id' => 1, 'module' => 'story', 'targetForm' => 'story.change', 'deleted' => 0),
-            2 => (object)array('id' => 2, 'module' => 'task', 'targetForm' => 'task.edit', 'deleted' => 0),
-            3 => (object)array('id' => 3, 'module' => 'bug', 'targetForm' => 'bug.edit', 'deleted' => 0),
-            4 => (object)array('id' => 4, 'module' => 'doc', 'targetForm' => 'doc.edit', 'deleted' => 0),
-            5 => (object)array('id' => 5, 'module' => 'story', 'targetForm' => '', 'deleted' => 0), // 空目标表单
+            1 => (object)array('id' => 1, 'module' => 'story', 'targetForm' => 'story.change', 'actionPurpose' => 'story.change', 'deleted' => 0),
+            2 => (object)array('id' => 2, 'module' => 'task', 'targetForm' => 'task.edit', 'actionPurpose' => 'task.edit', 'deleted' => 0),
+            3 => (object)array('id' => 3, 'module' => 'bug', 'targetForm' => 'bug.edit', 'actionPurpose' => 'bug.edit', 'deleted' => 0),
+            4 => (object)array('id' => 4, 'module' => 'doc', 'targetForm' => 'doc.edit', 'actionPurpose' => 'doc.edit', 'deleted' => 0),
+            5 => (object)array('id' => 5, 'module' => 'story', 'targetForm' => '', 'actionPurpose' => '', 'deleted' => 0), // 空目标表单
         );
 
         // 步骤1：处理prompt参数
@@ -2079,6 +2244,78 @@ class aiModelTest extends baseTest
     }
 
     /**
+     * Test getTestingLink method.
+     *
+     * @param  object           $prompt
+     * @param  int|string|false $objectId
+     * @access public
+     * @return mixed
+     */
+    public function getTestingLinkTest($prompt = null, $objectId = false)
+    {
+        $result = $this->invokeArgs('getTestingLink', array($prompt, $objectId));
+        if(dao::isError()) return dao::getError();
+        if(empty($result)) return 0;
+
+        return strpos($result, (string)$prompt->id) !== false && strpos($result, (string)$objectId) !== false ? 1 : 0;
+    }
+
+    /**
+     * Test getTestingObjectId method.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return mixed
+     */
+    public function getTestingObjectIdTest($prompt = null)
+    {
+        if(empty($prompt) || empty($prompt->module)) return 0;
+
+        $result = $this->invokeArgs('getTestingObjectId', array($prompt));
+        if(dao::isError()) return dao::getError();
+
+        return empty($result) ? 0 : $result;
+    }
+
+    /**
+     * Test getObjectByModuleAndSourceGroups method.
+     *
+     * @param  string $module
+     * @param  array  $sourceGroups
+     * @param  int    $objectId
+     * @access public
+     * @return string
+     */
+    public function getObjectByModuleAndSourceGroupsTest($module = '', $sourceGroups = array(), $objectId = 0)
+    {
+        $object = $this->invokeArgs('getObjectByModuleAndSourceGroups', array($module, $sourceGroups, (int)$objectId));
+        if(dao::isError()) return dao::getError();
+        if(empty($object) || !is_object($object)) return '';
+
+        $vars = get_object_vars($object);
+        if(empty($vars)) return 'empty';
+
+        $result = array();
+        foreach($vars as $name => $value)
+        {
+            if(is_object($value) && isset($value->id))
+            {
+                $result[] = $name . ':' . $value->id;
+            }
+            elseif(is_array($value))
+            {
+                $result[] = $name . ':' . count($value);
+            }
+            else
+            {
+                $result[] = $name . ':' . (empty($value) ? 0 : 1);
+            }
+        }
+
+        return implode(',', $result);
+    }
+
+    /**
      * Test tryGetRelatedObjects method.
      *
      * @param  mixed $prompt      prompt object or prompt id
@@ -2167,21 +2404,6 @@ class aiModelTest extends baseTest
         $result = $this->instance->filterPromptsForExecution($prompts, $keepUnauthorized);
         if(dao::isError()) return dao::getError();
         return $result;
-    }
-
-    /**
-     * Test setInjectData method.
-     *
-     * @param  mixed $form
-     * @param  mixed $data
-     * @access public
-     * @return mixed
-     */
-    public function setInjectDataTest($form = null, $data = null)
-    {
-        $this->instance->setInjectData($form, $data);
-        if(dao::isError()) return dao::getError();
-        return '0';
     }
 
     /**
@@ -2416,9 +2638,350 @@ class aiModelTest extends baseTest
      */
     public function getTestPromptDataTest($prompt)
     {
+        $this->mockWorkflowfieldForDatasource();
+
         $result = $this->instance->getTestPromptData($prompt);
         if(dao::isError()) return dao::getError();
         return !empty($result[1]) ? '1' : '0';
+    }
+
+    /**
+     * Test buildTestPromptDataPreview method.
+     *
+     * @param  string $module
+     * @param  array  $categorized
+     * @param  array  $titleData
+     * @param  array  $testData
+     * @access public
+     * @return mixed
+     */
+    public function buildTestPromptDataPreviewTest($module, $categorized, $titleData, $testData)
+    {
+        $result = $this->invokeArgs('buildTestPromptDataPreview', array($module, $categorized, $titleData, $testData));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test isMultiRowTestPromptDataGroup method.
+     *
+     * @param  string $groupKey
+     * @access public
+     * @return mixed
+     */
+    public function isMultiRowTestPromptDataGroupTest($groupKey)
+    {
+        $result = $this->invokeArgs('isMultiRowTestPromptDataGroup', array($groupKey));
+        if(dao::isError()) return dao::getError();
+        return $result ? '1' : '0';
+    }
+
+    /**
+     * Test buildMultiRowTestPromptDataPreview method.
+     *
+     * @param  string $module
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $titleData
+     * @param  array  $testData
+     * @access public
+     * @return mixed
+     */
+    public function buildMultiRowTestPromptDataPreviewTest($module, $groupKey, $pathInfo, $titleData, $testData)
+    {
+        $result = $this->invokeArgs('buildMultiRowTestPromptDataPreview', array($module, $groupKey, $pathInfo, $titleData, $testData));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test buildSingleRowTestPromptDataPreview method.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $titleData
+     * @param  array  $testData
+     * @access public
+     * @return mixed
+     */
+    public function buildSingleRowTestPromptDataPreviewTest($groupKey, $pathInfo, $titleData, $testData)
+    {
+        $result = $this->invokeArgs('buildSingleRowTestPromptDataPreview', array($groupKey, $pathInfo, $titleData, $testData));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test buildTestPromptDataTableHead method.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $titleData
+     * @access public
+     * @return mixed
+     */
+    public function buildTestPromptDataTableHeadTest($groupKey, $pathInfo, $titleData)
+    {
+        $result = $this->invokeArgs('buildTestPromptDataTableHead', array($groupKey, $pathInfo, $titleData));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getFirstTestPromptDataColumn method.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $testData
+     * @access public
+     * @return mixed
+     */
+    public function getFirstTestPromptDataColumnTest($groupKey, $pathInfo, $testData)
+    {
+        $result = $this->invokeArgs('getFirstTestPromptDataColumn', array($groupKey, $pathInfo, $testData));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test buildTestPromptDataTableRow method.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $testData
+     * @param  int    $index
+     * @access public
+     * @return mixed
+     */
+    public function buildTestPromptDataTableRowTest($groupKey, $pathInfo, $testData, $index)
+    {
+        $result = $this->invokeArgs('buildTestPromptDataTableRow', array($groupKey, $pathInfo, $testData, $index));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getPromptTargetForm method.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return mixed
+     */
+    public function getPromptTargetFormTest($prompt)
+    {
+        $result = $this->instance->getPromptTargetForm($prompt);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getFormSchemaDescription method.
+     *
+     * @param  object $prompt
+     * @param  array  $allowedFields
+     * @access public
+     * @return mixed
+     */
+    public function getFormSchemaDescriptionTest($prompt, array $allowedFields = array())
+    {
+        $result = $this->instance->getFormSchemaDescription($prompt, $allowedFields);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test buildDynamicSchema method.
+     *
+     * @param  array  $fields
+     * @param  object $prompt
+     * @param  bool   $isBatch
+     * @access public
+     * @return mixed
+     */
+    public function buildDynamicSchemaTest(array $fields, $prompt, $isBatch = false)
+    {
+        $result = $this->instance->buildDynamicSchema($fields, $prompt, $isBatch);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getPromptsForEntryPage method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  string $displayPosition
+     * @access public
+     * @return mixed
+     */
+    public function getPromptsForEntryPageTest(string $module, string $method, string $displayPosition)
+    {
+        $result = $this->instance->getPromptsForEntryPage($module, $method, $displayPosition);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test filterAllowedFields method.
+     *
+     * @param  array $fields
+     * @param  array $allowed
+     * @access public
+     * @return mixed
+     */
+    public function filterAllowedFieldsTest(array $fields, array $allowed = array())
+    {
+        $result = $this->instance->filterAllowedFields($fields, $allowed);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getFormAllowedFields method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  array  $pageFields
+     * @param  bool   $loadSuccess
+     * @access public
+     * @return mixed
+     */
+    public function getFormAllowedFieldsTest(string $module, string $method, array $pageFields = array(), bool $loadSuccess = true)
+    {
+        $model = new class($pageFields, $loadSuccess) extends aiModel
+        {
+            protected array $mockPageFields = array();
+            protected bool $mockLoadSuccess = true;
+
+            public function __construct(array $pageFields, bool $loadSuccess)
+            {
+                $this->mockPageFields = $pageFields;
+                $this->mockLoadSuccess = $loadSuccess;
+                parent::__construct();
+            }
+
+            public function loadModel($moduleName, $appName = ''): object|bool
+            {
+                if($moduleName !== 'workflowaction') return parent::loadModel($moduleName, $appName);
+                if(!$this->mockLoadSuccess) return false;
+
+                return new class($this->mockPageFields)
+                {
+                    protected array $pageFields = array();
+
+                    public function __construct(array $pageFields)
+                    {
+                        $this->pageFields = $pageFields;
+                    }
+
+                    public function getPageFields(string $module, string $method): array
+                    {
+                        return $this->pageFields;
+                    }
+                };
+            }
+        };
+
+        $result = $model->getFormAllowedFields($module, $method);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test loadContextFromFormSchema method.
+     *
+     * @param  array $formSchema
+     * @param  array $objectMap
+     * @access public
+     * @return mixed
+     */
+    public function loadContextFromFormSchemaTest(array $formSchema, array $objectMap)
+    {
+        $model = new class($objectMap) extends aiModel
+        {
+            protected array $objectMap = array();
+
+            public function __construct(array $objectMap)
+            {
+                $this->objectMap = $objectMap;
+                parent::__construct();
+
+                $this->config->ai->formContextObjectTypes = array('execution', 'project', 'product', 'story');
+                $this->config->ai->formContextRelationChain = array(
+                    'execution' => array(array('module' => 'project', 'field' => 'project')),
+                    'project'   => array(array('module' => 'product', 'via' => 'projectproduct')),
+                );
+                $this->config->ai->formContextPageLevelTypes = array('product', 'project', 'execution');
+
+                $this->lang->ai->moduleList['execution'] = '执行';
+                $this->lang->ai->moduleList['project']   = '项目';
+                $this->lang->ai->moduleList['product']   = '产品';
+                $this->lang->ai->moduleList['story']     = '需求';
+            }
+
+            public function loadModel($moduleName, $appName = ''): object|bool
+            {
+                if($moduleName === 'zai')
+                {
+                    return new class
+                    {
+                        public function canViewObject(string $objectType, int $objectID, ?array $attrs = null): bool
+                        {
+                            return true;
+                        }
+                    };
+                }
+
+                if($moduleName === 'product')
+                {
+                    return new class($this->objectMap)
+                    {
+                        protected array $objectMap = array();
+
+                        public function __construct(array $objectMap)
+                        {
+                            $this->objectMap = $objectMap;
+                        }
+
+                        public function getProductIDByProject(int $projectID, bool $includeClosed = true): int
+                        {
+                            return $projectID === 3 ? 1 : 0;
+                        }
+
+                        public function getByID(int $productID): object|false
+                        {
+                            return $this->objectMap['product'][$productID] ?? false;
+                        }
+                    };
+                }
+
+                if(isset($this->objectMap[$moduleName]))
+                {
+                    return new class($moduleName, $this->objectMap)
+                    {
+                        protected string $moduleName = '';
+                        protected array $objectMap = array();
+
+                        public function __construct(string $moduleName, array $objectMap)
+                        {
+                            $this->moduleName = $moduleName;
+                            $this->objectMap  = $objectMap;
+                        }
+
+                        public function getByID(int $objectID): object|false
+                        {
+                            return $this->objectMap[$this->moduleName][$objectID] ?? false;
+                        }
+                    };
+                }
+
+                return parent::loadModel($moduleName, $appName);
+            }
+        };
+
+        $result = $model->loadContextFromFormSchema($formSchema);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**

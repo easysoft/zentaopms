@@ -9,18 +9,28 @@ title=测试 repoModel->getlistbypriv();
 timeout=0
 cid=0
 
-- 方法存在性检查 >> 1
-- repoModelTest 类存在 >> 1
-- repoModel 类存在 >> 1
-- 再次方法存在检查 >> 1
-- 类存在性确认 >> 1
+- 执行repoTest模块的getListByPrivTest方法，参数是'all'  @0
+- 执行repoTest模块的getListByPrivTest方法，参数是'browse'  @0
+- 执行repoTest模块的getListByPrivTest方法，参数是'active'  @0
+- 执行repoTest模块的getListByPrivTest方法，参数是'closed'  @0
+- 执行repoTest模块的getListByPrivTest方法，参数是'private'  @0
 
 */
 
 su('admin');
+$repo = zenData('ops_repo');
+$repo->id->range('1');
+$repo->name->range('private-list-repo');
+$repo->gitUID->range('private-list-uid');
+$repo->status->range('active');
+$repo->acl->range('open');
+$repo->synced->range('0');
+$repo->deleted->range('0');
+$repo->gen(1);
+
 $repoTest = new repoModelTest();
-r(method_exists($repoTest, 'getlistbyprivTest')) && p() && e('1');
-r(class_exists('repoModelTest')) && p() && e('1');
-r(class_exists('repoModel')) && p() && e('1');
-r(method_exists($repoTest, 'getlistbyprivTest')) && p() && e('1');
-r(class_exists('repoModelTest')) && p() && e('1');
+r($repoTest->getListByPrivTest('all'))     && p() && e('0');
+r($repoTest->getListByPrivTest('browse'))  && p() && e('0');
+r($repoTest->getListByPrivTest('active'))  && p() && e('0');
+r($repoTest->getListByPrivTest('closed'))  && p() && e('0');
+r($repoTest->getListByPrivTest('private')) && p() && e('0');

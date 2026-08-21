@@ -698,6 +698,7 @@ r($tasks) && p('13:product,productName,project,projectName,execution,executionNa
 r($tasks) && p('14:product,productName,project,projectName,execution,executionName,executionMultiple,build,buildName,id,name,owner,desc,status,auto') && e('1,正常产品1,1,项目1,3,执行2,1,1,项目1版本1,14,测试单14,user4,这是测试单描述14,doing,no'); // 获取 ID 为 14 的测试单的详细信息。
 r($tasks) && p('15:product,productName,project,projectName,execution,executionName,executionMultiple,build,buildName,id,name,owner,desc,status,auto') && e('1,正常产品1,1,项目1,4,执行3,1,1,项目1版本1,15,测试单15,user4,这是测试单描述15,doing,no'); // 获取 ID 为 15 的测试单的详细信息。
 
+$app->rawMethod = 'work';
 $tasks = $testtask->getByUser('user4', null, 'id_desc', 'wait');
 r(count($tasks)) && p() && e(9);
 r($tasks) && p('24:product,productName,project,projectName,execution,executionName,executionMultiple,build,buildName,id,name,owner,desc,status,auto') && e('1,正常产品1,1,项目1,5,执行4,1,1,项目1版本1,24,测试单24,user4,这是测试单描述24,blocked,no'); // 获取 ID 为 24 的测试单的详细信息。
@@ -710,14 +711,17 @@ r($tasks) && p('12:product,productName,project,projectName,execution,executionNa
 r($tasks) && p('13:product,productName,project,projectName,execution,executionName,executionMultiple,build,buildName,id,name,owner,desc,status,auto') && e('1,正常产品1,1,项目1,2,执行1,1,1,项目1版本1,13,测试单13,user4,这是测试单描述13,doing,no'); // 获取 ID 为 13 的测试单的详细信息。
 r($tasks) && p('14:product,productName,project,projectName,execution,executionName,executionMultiple,build,buildName,id,name,owner,desc,status,auto') && e('1,正常产品1,1,项目1,3,执行2,1,1,项目1版本1,14,测试单14,user4,这是测试单描述14,doing,no'); // 获取 ID 为 14 的测试单的详细信息。
 
+$app->rawMethod = 'contribute';
 $tasks = $testtask->getByUser('user4', null, 'id_desc', 'done');
 r(count($tasks)) && p() && e(1);
 r($tasks) && p('20:product,productName,project,projectName,execution,executionName,executionMultiple,build,buildName,id,name,owner,desc,status,auto') && e('1,正常产品1,1,项目1,5,执行4,1,1,项目1版本1,20,测试单20,user4,这是测试单描述20,done,no');  // 获取 ID 为 20 的测试单的详细信息。
 
+$app->rawMethod = 'contribute';
 $tasks = $testtask->getByUser('user4', null, 'id_asc', 'done');
 r(count($tasks)) && p() && e(1);
 r($tasks) && p('20:product,productName,project,projectName,execution,executionName,executionMultiple,build,buildName,id,name,owner,desc,status,auto') && e('1,正常产品1,1,项目1,5,执行4,1,1,项目1版本1,20,测试单20,user4,这是测试单描述20,done,no');  // 获取 ID 为 20 的测试单的详细信息。
 
+$app->rawMethod = 'work';
 $tasks = $testtask->getByUser('user4', $pager, 'id_desc', 'wait');
 r(count($tasks)) && p() && e(5);
 r($tasks) && p('24:product,productName,project,projectName,execution,executionName,executionMultiple,build,buildName,id,name,owner,desc,status,auto') && e('1,正常产品1,1,项目1,5,执行4,1,1,项目1版本1,24,测试单24,user4,这是测试单描述24,blocked,no'); // 获取 ID 为 24 的测试单的详细信息。
@@ -730,10 +734,12 @@ r($tasks) && p('12:product,productName,project,projectName,execution,executionNa
 r($tasks) && p('13:product,productName,project,projectName,execution,executionName,executionMultiple,build,buildName,id,name,owner,desc,status,auto') && e('1,正常产品1,1,项目1,2,执行1,1,1,项目1版本1,13,测试单13,user4,这是测试单描述13,doing,no'); // 获取 ID 为 13 的测试单的详细信息。
 r($tasks) && p('14:product,productName,project,projectName,execution,executionName,executionMultiple,build,buildName,id,name,owner,desc,status,auto') && e('1,正常产品1,1,项目1,3,执行2,1,1,项目1版本1,14,测试单14,user4,这是测试单描述14,doing,no'); // 获取 ID 为 14 的测试单的详细信息。
 
+$app->rawMethod = 'contribute';
 $tasks = $testtask->getByUser('user4', $pager, 'id_desc', 'done');
 r(count($tasks)) && p() && e(1);
 r($tasks) && p('20:product,productName,project,projectName,execution,executionName,executionMultiple,build,buildName,id,name,owner,desc,status,auto') && e('1,正常产品1,1,项目1,5,执行4,1,1,项目1版本1,20,测试单20,user4,这是测试单描述20,done,no');  // 获取 ID 为 20 的测试单的详细信息。
 
+$app->rawMethod = 'contribute';
 $tasks = $testtask->getByUser('user4', $pager, 'id_asc', 'done');
 r(count($tasks)) && p() && e(1);
 r($tasks) && p('20:product,productName,project,projectName,execution,executionName,executionMultiple,build,buildName,id,name,owner,desc,status,auto') && e('1,正常产品1,1,项目1,5,执行4,1,1,项目1版本1,20,测试单20,user4,这是测试单描述20,done,no');  // 获取 ID 为 20 的测试单的详细信息。

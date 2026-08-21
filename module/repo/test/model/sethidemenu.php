@@ -18,94 +18,62 @@ cid=18103
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('entry')->loadYaml('entry')->gen(1);
+$entry = zenData('entry');
+$entry->name->range('GitFox');
+$entry->account->range('admin');
+$entry->code->range('gitfox');
+$entry->key->range('gitfox');
+$entry->freePasswd->range('1');
+$entry->ip->range('*');
+$entry->gen(1);
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_spaceuser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_space`');
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_space` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(200) NOT NULL DEFAULT '',
-  `code` varchar(50) NOT NULL DEFAULT '',
-  `acl` varchar(30) NOT NULL DEFAULT 'open',
-  `auth` varchar(30) NOT NULL DEFAULT 'extend',
-  `desc` varchar(500) NOT NULL DEFAULT '',
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime DEFAULT NULL,
-  `editedBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate` datetime DEFAULT NULL,
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_spaceuser` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `space` int unsigned NOT NULL DEFAULT 0,
-  `role` varchar(10) NOT NULL DEFAULT '',
-  `account` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_space_account` (`space`, `account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+$space = zenData('ops_space');
+$space->id->range('1-5');
+$space->name->range('space1,space2,space3,space4,space5');
+$space->code->range('space1,space2,space3,space4,space5');
+$space->acl->range('open{5}');
+$space->auth->range('extend{5}');
+$space->createdBy->range('admin{5}');
+$space->deleted->range('0{5}');
+$space->gen(5);
 
-$tester->dao->delete()->from(TABLE_REPO)->where('id')->in('1,2,3,4,5')->exec();
-$tester->dao->delete()->from(TABLE_PROJECT)->where('id')->in('101,102,103,104,105')->exec();
-$tester->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in('101,102,103,104,105')->exec();
+$spaceUser = zenData('ops_spaceuser');
+$spaceUser->space->range('1-5');
+$spaceUser->account->range('admin{5}');
+$spaceUser->role->range('manager{5}');
+$spaceUser->gen(5);
 
-$spaces = array(
-    array('id' => 1, 'name' => 'space1', 'code' => 'space1', 'acl' => 'open', 'auth' => 'extend', 'createdBy' => 'admin', 'deleted' => 0),
-    array('id' => 2, 'name' => 'space2', 'code' => 'space2', 'acl' => 'open', 'auth' => 'extend', 'createdBy' => 'admin', 'deleted' => 0),
-    array('id' => 3, 'name' => 'space3', 'code' => 'space3', 'acl' => 'open', 'auth' => 'extend', 'createdBy' => 'admin', 'deleted' => 0),
-    array('id' => 4, 'name' => 'space4', 'code' => 'space4', 'acl' => 'open', 'auth' => 'extend', 'createdBy' => 'admin', 'deleted' => 0),
-    array('id' => 5, 'name' => 'space5', 'code' => 'space5', 'acl' => 'open', 'auth' => 'extend', 'createdBy' => 'admin', 'deleted' => 0)
-);
-foreach($spaces as $space) $tester->dao->insert('ops_space')->data($space)->exec();
+$repo = zenData('ops_repo');
+$repo->id->range('1-5');
+$repo->spaceID->range('1{5}');
+$repo->product->range('1-5');
+$repo->name->range('repo1,repo2,repo3,repo4,repo5');
+$repo->scmType->range('git{5}');
+$repo->gitUID->range('sethidemenu-gituid-1,sethidemenu-gituid-2,sethidemenu-gituid-3,sethidemenu-gituid-4,sethidemenu-gituid-5');
+$repo->acl->range('open{5}');
+$repo->status->range('active{5}');
+$repo->deleted->range('0{5}');
+$repo->gen(5);
 
-foreach(range(1, 5) as $spaceID)
-{
-    $tester->dao->insert('ops_spaceuser')->data((object)array('space' => $spaceID, 'role' => 'manager', 'account' => 'admin'))->exec();
-}
+$project = zenData('project');
+$project->id->range('101-105');
+$project->name->range('项目1,项目2,项目3,项目4,项目5');
+$project->type->range('project{5}');
+$project->status->range('doing{5}');
+$project->deleted->range('0{5}');
+$project->gen(5);
 
-$repos = array(
-    array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => 'repo1', 'gitUID' => 'uid1', 'acl' => 'open', 'status' => 'active', 'deleted' => 0),
-    array('id' => 2, 'spaceID' => 1, 'product' => '2', 'name' => 'repo2', 'gitUID' => 'uid2', 'acl' => 'open', 'status' => 'active', 'deleted' => 0),
-    array('id' => 3, 'spaceID' => 1, 'product' => '3', 'name' => 'repo3', 'gitUID' => 'uid3', 'acl' => 'open', 'status' => 'active', 'deleted' => 0),
-    array('id' => 4, 'spaceID' => 1, 'product' => '4', 'name' => 'repo4', 'gitUID' => 'uid4', 'acl' => 'open', 'status' => 'active', 'deleted' => 0),
-    array('id' => 5, 'spaceID' => 1, 'product' => '5', 'name' => 'repo5', 'gitUID' => 'uid5', 'acl' => 'open', 'status' => 'active', 'deleted' => 0)
-);
-foreach($repos as $repo) $tester->dao->insert(TABLE_REPO)->data($repo)->exec();
-
-$projects = array(
-    array('id' => 101, 'name' => '项目1', 'type' => 'project', 'status' => 'doing', 'deleted' => 0),
-    array('id' => 102, 'name' => '项目2', 'type' => 'project', 'status' => 'doing', 'deleted' => 0),
-    array('id' => 103, 'name' => '项目3', 'type' => 'project', 'status' => 'doing', 'deleted' => 0),
-    array('id' => 104, 'name' => '项目4', 'type' => 'project', 'status' => 'doing', 'deleted' => 0),
-    array('id' => 105, 'name' => '项目5', 'type' => 'project', 'status' => 'doing', 'deleted' => 0)
-);
-foreach($projects as $project) $tester->dao->insert(TABLE_PROJECT)->data($project)->exec();
-foreach(range(1, 5) as $index)
-{
-    $tester->dao->insert(TABLE_PROJECTPRODUCT)->data((object)array('project' => 100 + $index, 'product' => $index, 'branch' => 0, 'plan' => '', 'roadmap' => ''))->exec();
-}
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('101-105');
+$projectProduct->product->range('1-5');
+$projectProduct->branch->range('0{5}');
+$projectProduct->plan->range('{5}');
+$projectProduct->roadmap->range('{5}');
+$projectProduct->gen(5);
 
 su('admin');
 
 $repoTest = new repoModelTest();
-$httpClient = $repoTest->resetHttpClient();
-$httpClient->setResponse('/spaces', json_encode((object)array(
-    'code'     => 'success',
-    'data'     => array(
-        (object)array('id' => 1, 'name' => 'space1', 'createdDate' => '2026-01-01T00:00:00+08:00'),
-        (object)array('id' => 2, 'name' => 'space2', 'createdDate' => '2026-01-01T00:00:00+08:00'),
-        (object)array('id' => 3, 'name' => 'space3', 'createdDate' => '2026-01-01T00:00:00+08:00'),
-        (object)array('id' => 4, 'name' => 'space4', 'createdDate' => '2026-01-01T00:00:00+08:00'),
-        (object)array('id' => 5, 'name' => 'space5', 'createdDate' => '2026-01-01T00:00:00+08:00'),
-    ),
-    'listArgs' => (object)array('pageSize' => 5),
-)));
 
 $tester->session->set('repoID', 1);
 r($repoTest->setHideMenuTest('execution', 101)) && p() && e('101');
@@ -121,5 +89,3 @@ r($repoTest->setHideMenuTest('waterfall', 104)) && p() && e('104');
 
 $tester->session->set('repoID', 5);
 r($repoTest->setHideMenuTest('execution', 105)) && p() && e('105');
-
-$repoTest->restoreHttpClient();

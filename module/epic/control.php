@@ -274,6 +274,17 @@ class epic extends control
     }
 
     /**
+     * Batch submit review.
+     *
+     * @access public
+     * @return void
+     */
+    public function batchSubmitReview(int $productID = 0, string $storyType = 'epic', string $storyIdList = '')
+    {
+        echo $this->fetch('story', 'batchSubmitReview', "productID=$productID&storyType=$storyType&storyIdList=$storyIdList");
+    }
+
+    /**
      * Recall the epic review or epic change.
      *
      * @param  int    $storyID

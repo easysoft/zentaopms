@@ -13,7 +13,7 @@ class projectModel extends model
      */
     public function getAclListByObjectType(string $objectType, string $account = ''): array
     {
-        return $this->dao->select('id, account, objectType, objectID')->from(TABLE_ACL)->where('objectType')->in($objectType)
+        return $this->dao->select('id, account, `objectType`, `objectID`')->from(TABLE_ACL)->where('objectType')->in($objectType)
             ->beginIF($account)->andWhere('account')->eq($account)->fi()
             ->fetchAll('id');
     }
@@ -47,7 +47,7 @@ class projectModel extends model
      */
     public function getListByAclAndType(string $acl, string $type = ''): array
     {
-        return $this->dao->select('id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)
+        return $this->dao->select('id, project, type, parent, path, `openedBy`, `PO`, `PM`, `QD`, `RD`, acl')->from(TABLE_PROJECT)
             ->where('acl')->in($acl)
             ->beginIF($type)->andWhere('type')->in($type)->fi()
             ->filterTpl('skip')
@@ -230,7 +230,7 @@ class projectModel extends model
         }
 
         /* 项目模板不校验访问权限。 */
-        $isTpl = $this->dao->select('isTpl')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('isTpl');
+        $isTpl = $this->dao->select('`isTpl`')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('isTpl');
         if(empty($isTpl) && !isset($projects[$projectID]))
         {
             if($projectID && strpos(",{$this->app->user->view->projects},", ",{$projectID},") === false && !empty($projects))
@@ -485,8 +485,8 @@ class projectModel extends model
      */
     public function getWaterfallPVEVAC(int $projectID): array
     {
-        $executions = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
-        $stmt       = $this->dao->select('id,status,estimate,consumed,`left`,closedReason')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("isParent")->eq(0)->andWhere("deleted")->eq(0)->andWhere('status')->ne('cancel')->query();
+        $executions = $this->dao->select('id,begin,end,`realEnd`,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
+        $stmt       = $this->dao->select('id,status,estimate,consumed,`left`,`closedReason`')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("isParent")->eq(0)->andWhere("deleted")->eq(0)->andWhere('status')->ne('cancel')->query();
 
         $PV   = 0;
         $EV   = 0;
@@ -1102,6 +1102,43 @@ class projectModel extends model
 
         $this->loadModel('search')->setSearchParams($this->config->build->search);
         return true;
+    }
+
+    /**
+     * 构造测试单列表的搜索表单。
+     * Build testtask search form.
+     *
+     * @param  array  $projectID
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildTesttaskSearchForm(int $projectID, array $products, int $queryID, string $actionURL, bool $cacheSearchFunc = true)
+    {
+        $searchConfig           = $this->config->testtask->search;
+        $searchConfig['module'] = 'projectTesttask';
+        if($cacheSearchFunc)
+        {
+            $this->cacheSearchFunc('projectTesttask', __METHOD__, func_get_args());
+            return $searchConfig;
+        }
+        $searchConfig['actionURL'] = $actionURL;
+        $searchConfig['queryID']   = $queryID;
+
+        unset($searchConfig['fields']['project']);
+        unset($searchConfig['params']['project']);
+
+        $executionPairs = $this->loadModel('execution')->getPairs($projectID);
+        $searchConfig['params']['execution']['values'] = $executionPairs;
+
+        $productPairs = array(0 => '');
+        foreach($products as $product) $productPairs[$product->id] = $product->name;
+        $searchConfig['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
+
+        $this->loadModel('search')->setSearchParams($searchConfig);
+        return $searchConfig;
     }
 
     /**
@@ -2253,7 +2290,7 @@ class projectModel extends model
         $project = $this->projectTao->fetchProjectInfo($projectID);
         if(empty($project)) return array();
 
-        return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as userID, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
+        return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as `userID`, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$projectID)
             ->andWhere('t1.type')->eq($project->type)

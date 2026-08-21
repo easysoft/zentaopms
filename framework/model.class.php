@@ -17,7 +17,7 @@
  *
  * @package framework
  */
-include __DIR__ . '/base/model.class.php';
+include_once __DIR__ . '/base/model.class.php';
 
 #[AllowDynamicProperties]
 class model extends baseModel

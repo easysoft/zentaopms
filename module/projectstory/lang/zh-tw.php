@@ -17,6 +17,7 @@ $lang->projectstory->story             = "{$lang->SRCommon}列表";
 $lang->projectstory->track             = '矩陣';
 $lang->projectstory->linkStory         = '關聯' . $lang->SRCommon;
 $lang->projectstory->unlinkStory       = '移除' . $lang->SRCommon;
+$lang->projectstory->batchSubmitReview = '批量提交評審';
 $lang->projectstory->batchUnlinkStory  = '批量移除' . $lang->SRCommon;
 $lang->projectstory->importplanstories = '按計劃關聯' . $lang->SRCommon;
 $lang->projectstory->trackAction       = '跟蹤矩陣';

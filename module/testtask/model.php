@@ -36,7 +36,11 @@ class testtaskModel extends model
         if(dao::isError()) return false;
 
         $taskID = $this->dao->lastInsertID();
-        $this->loadModel('action')->create('testtask', $taskID, 'opened');
+
+        $actionID = $this->loadModel('action')->create('testtask', $taskID, 'opened');
+
+        $testtask->id = $taskID;
+        $this->loadModel('message')->sendMentionNotice('testtask', 'create', $actionID, $testtask);
 
         return $taskID;
     }
@@ -50,23 +54,61 @@ class testtaskModel extends model
      * @param  string $type
      * @param  string $begin
      * @param  string $end
+     * @param  string $browseType
+     * @param  int    $queryID
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getProductTasks(int $productID, string $branch = 'all', string $type = '', string $begin = '', string $end = '', string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getProductTasks(int $productID, string $branch = 'all', string $type = '', string $begin = '', string $end = '', string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTesttasks();
-
         $scopeAndStatus = explode(',', $type);
         $scope          = !empty($scopeAndStatus[0]) ? $scopeAndStatus[0] : '';
         $status         = !empty($scopeAndStatus[1]) ? $scopeAndStatus[1] : '';
         $branch         = $scope == 'all' ? 'all' : $branch;
-        $tasks = $this->fetchTesttaskList($productID, $branch, 0, '', $scope, $status, $begin, $end, $orderBy, $pager);
+        $tasks = $this->fetchTesttaskList($productID, $branch, 0, '', $scope, $status, $begin, $end, $browseType, $queryID, $orderBy, $pager);
         return $this->processExecutionName($tasks);
     }
 
+    /**
+     * 构造测试单列表的搜索表单。
+     * Build testtask search form.
+     *
+     * @param  int    $productID
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildTesttaskSearchForm(int $productID, int $queryID, string $actionURL, bool $cacheSearchFunc = true)
+    {
+        $searchConfig           = $this->config->testtask->search;
+        $searchConfig['module'] = 'testtask';
+        if($cacheSearchFunc)
+        {
+            $this->cacheSearchFunc('testtask', __METHOD__, func_get_args());
+            return $searchConfig;
+        }
+        $searchConfig['actionURL'] = $actionURL;
+        $searchConfig['queryID']   = $queryID;
+
+        $products  = $this->loadModel('product')->getPairs('', 0, '', 'all');
+
+        /* Get params. */
+        $productParams   = ($productID && isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
+        $productParams   = $productParams + array('all' => $this->lang->all);
+        $projectParams   = $this->loadModel('product')->getProjectPairsByProduct($productID) + array('all' => $this->lang->testtask->allProject);
+        $executionParams = $this->loadModel('product')->getExecutionPairsByProduct($productID);
+
+        $searchConfig['params']['product']['values']   = $productParams;
+        $searchConfig['params']['project']['values']   = $projectParams;
+        $searchConfig['params']['execution']['values'] = $executionParams;
+
+        $this->loadModel('search')->setSearchParams($searchConfig);
+        return $searchConfig;
+    }
     /**
      * 根据项目名称和执行名称来更新执行名称。
      * Update the execution name based on the project name and execution name.
@@ -116,7 +158,7 @@ class testtaskModel extends model
         if($browseType == 'newest') $orderBy = 'end_desc,' . $orderBy;
 
         $projectID = $this->lang->navGroup->testtask != 'qa' ? $this->session->project : 0;
-        $tasks     = $this->fetchTesttaskList($productID, '', $projectID, 'unit', 'local', '', $begin, $end, $orderBy, $pager);
+        $tasks     = $this->fetchTesttaskList($productID, '', $projectID, 'unit', 'local', '', $begin, $end, 'all', 0, $orderBy, $pager);
 
         $resultGroups = $this->dao->select('t1.task, t2.*')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_TESTRESULT)->alias('t2')->on('t1.id=t2.run')
@@ -148,13 +190,17 @@ class testtaskModel extends model
      *
      * @param  int    $projectID
      * @param  int    $productID
+     * @param  string $browseType
+     * @param  int    $queryID
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getProjectTasks(int $projectID, int $productID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getProjectTasks(int $projectID, int $productID = 0, string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
+        $testtaskQuery = '';
+        if($browseType == 'bysearch') $testtaskQuery = $this->testtaskTao->processSearchQuery($productID, $queryID, 'projectTesttask');
         $tasks = $this->dao->select('t1.*, t1.id AS idName, t5.multiple, IF(t4.shadow = 1, t5.name, t4.name) AS productName, t3.name AS executionName, t2.name AS buildName, t2.branch AS branch, t5.name AS projectName, t4.`order` AS productOrder')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
@@ -165,6 +211,7 @@ class testtaskModel extends model
             ->andWhere('t1.auto')->ne('unit')
             ->andWhere('t1.deleted')->eq('0')
             ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
+            ->beginIF($testtaskQuery)->andWhere($testtaskQuery)->fi()
             ->orderBy('productOrder_asc, ' . $orderBy)
             ->page($pager)
             ->fetchAll('id', false);
@@ -179,14 +226,18 @@ class testtaskModel extends model
      * @param  int    $executionID
      * @param  int    $productID
      * @param  string $objectType
+     * @param  string $browseType
+     * @param  int    $queryID
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getExecutionTasks(int $executionID, int $productID = 0, string $objectType = 'execution', string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getExecutionTasks(int $executionID, int $productID = 0, string $objectType = 'execution', string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTesttasks();
+        $testtaskQuery = '';
+        if($browseType == 'bysearch') $testtaskQuery = $this->testtaskTao->processSearchQuery($productID, $queryID, 'executionTesttask');
 
         return $this->dao->select('t1.*, t2.name AS buildName, t3.name AS productName')
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -196,6 +247,7 @@ class testtaskModel extends model
             ->beginIF($objectType == 'execution')->andWhere('t1.execution')->eq((int)$executionID)->fi()
             ->beginIF($objectType == 'project')->andWhere('t1.project')->eq((int)$executionID)->fi()
             ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
+            ->beginIF($testtaskQuery)->andWhere($testtaskQuery)->fi()
             ->andWhere('t1.auto')->ne('unit')
             ->orderBy($orderBy)
             ->page($pager)
@@ -309,11 +361,14 @@ class testtaskModel extends model
      * @param   object $pager
      * @param   string $orderBy
      * @param   string $type
+     * @param   int    $queryID
      * @access  public
      * @return  array
      */
-    public function getByUser(string $account, ?object $pager = null, string $orderBy = 'id_desc', string $type = ''): array
+    public function getByUser(string $account, ?object $pager = null, string $orderBy = 'id_desc', string $type = '', int $queryID = 0): array
     {
+        $testtaskQuery = '';
+        if($type == 'bySearch') $testtaskQuery = $this->testtaskTao->processSearchQuery(0, $queryID, 'myTesttask');
         return $this->dao->select("t1.*, t2.name AS executionName, t2.multiple AS executionMultiple, t5.name AS projectName, t3.name AS buildName, t4.name AS productName, CONCAT(t2.name, '/', t3.name) as executionBuild")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
@@ -326,8 +381,9 @@ class testtaskModel extends model
             ->andWhere('(t1.owner')->eq($account)
             ->orWhere("FIND_IN_SET('$account', t1.members)")
             ->markRight(1)
-            ->beginIF($type == 'wait')->andWhere('t1.status')->ne('done')->fi()
-            ->beginIF($type == 'done')->andWhere('t1.status')->eq('done')->fi()
+            ->beginIF($this->app->rawMethod == 'work')->andWhere('t1.status')->ne('done')->fi()
+            ->beginIF($this->app->rawMethod == 'contribute')->andWhere('t1.status')->eq('done')->fi()
+            ->beginIF($testtaskQuery)->andWhere($testtaskQuery)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
@@ -682,7 +738,7 @@ class testtaskModel extends model
      */
     public function update(object $task, object $oldTask): array|bool
     {
-        $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles,renameFiles,files')
+        $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles,renameFiles,files,comment')
             ->autoCheck()
             ->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')
             ->checkIF($task->end != '', 'end', 'ge', $task->begin)
@@ -1026,7 +1082,7 @@ class testtaskModel extends model
     {
         $orderBy = $this->addPrefixToOrderBy($orderBy);
 
-        $runs = $this->dao->select("t2.*, t1.*, t2.version AS caseVersion, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select("t2.*, t1.*, IF(t1.caseVersion = 0, t2.version, t1.caseVersion) AS caseVersion, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.`case` = t4.`case` AND t1.version = t4.version')
@@ -1155,7 +1211,7 @@ class testtaskModel extends model
             {
                 if(str_contains($scene->path, $displayScene . ','))
                 {
-                    $displayScenes += explode(',', trim($scene->path, ','));
+                    $displayScenes = array_merge($displayScenes, explode(',', trim($scene->path, ',')));
                 }
             }
         }
@@ -1202,21 +1258,21 @@ class testtaskModel extends model
 
         if($browseType == 'bysearch')
         {
-            if($this->session->testtaskQuery == false) $this->session->set('testtaskQuery', ' 1 = 1');
+            if($this->session->testtaskTestcaseQuery == false) $this->session->set('testtaskTestcaseQuery', ' 1 = 1');
             if($queryID)
             {
                 $query = $this->loadModel('search')->getQuery($queryID);
                 if($query)
                 {
-                    $this->session->set('testtaskQuery', $query->sql);
-                    $this->session->set('testtaskForm', $query->form);
+                    $this->session->set('testtaskTestcaseQuery', $query->sql);
+                    $this->session->set('testtaskTestcaseForm', $query->form);
                 }
             }
 
             /* 预处理搜索表单生成的查询 SQL。*/
             /* Preprocess the query SQL generated by the search form. */
             $allProduct     = "`product` = 'all'";
-            $caseQuery      = $this->session->testtaskQuery;
+            $caseQuery      = $this->session->testtaskTestcaseQuery;
             $isQueryProduct = strpos($caseQuery, "`product` = '");
             if(strpos($caseQuery, $allProduct) !== false) $caseQuery = str_replace($allProduct, '1', $caseQuery) . ' AND `product` ' . helper::dbIN($this->app->user->view->products);
             $caseQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $caseQuery);
@@ -1435,7 +1491,21 @@ class testtaskModel extends model
             $runs = $this->dao->select('`case`, id')->from(TABLE_TESTRUN)
                 ->where('`case`')->in($caseIdList)
                 ->beginIF($taskID)->andWhere('task')->eq($taskID)->fi()
+                ->orderBy('id_desc')
                 ->fetchPairs();
+        }
+        elseif($runCaseType == 'work')
+        {
+            /* 从我的地盘执行时，数组的键是 runID，需要从隐藏字段获取真实的用例ID。*/
+            $caseIdList = array();
+            foreach($cases as $postCase)
+            {
+                if(isset($postCase->caseID)) $caseIdList[] = (int)$postCase->caseID;
+            }
+            $caseIdList = array_unique($caseIdList);
+
+            $runIdKeys    = array_keys($cases);
+            $runTaskPairs = $this->dao->select('id, task')->from(TABLE_TESTRUN)->where('id')->in($runIdKeys)->fetchPairs();
         }
 
         $now    = helper::now();
@@ -1452,9 +1522,19 @@ class testtaskModel extends model
         $run->lastRunDate = $now;
 
         $this->loadModel('action');
-        foreach($cases as $caseID => $postCase)
+        foreach($cases as $caseKey => $postCase)
         {
-            $runID       = zget($runs, $caseID, 0);
+            if($runCaseType == 'work')
+            {
+                $runID  = $caseKey;
+                $caseID = (int)$postCase->caseID;
+            }
+            else
+            {
+                $caseID = $caseKey;
+                $runID  = zget($runs, $caseID, 0);
+            }
+
             $postSteps   = zget($postCase, 'steps', array());
             $postReals   = zget($postCase, 'reals', array());
             $caseResult  = $postCase->results ? $postCase->results : 'pass';
@@ -1467,9 +1547,15 @@ class testtaskModel extends model
             $result->stepResults = serialize($stepResults);
             $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
 
+            /* 把上传的文件关联到到执行结果的用例步骤中。*/
+            /* Associated the uploaded files to the test case steps of the execution results. */
+            $resultID = $this->dao->lastInsertID();
+            foreach($stepResults as $stepID => $stepResult) $this->loadModel('file')->saveUpload('stepResult', $resultID, $stepID, "files{$stepID}", "labels{$stepID}");
+
             $case->lastRunResult = $caseResult;
             $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
 
+            $taskID = $runCaseType == 'work' ? (isset($runTaskPairs[$runID]) ? (int)$runTaskPairs[$runID] : 0) : $taskID;
             $this->action->create('case', $caseID, 'run', '', $taskID . ',' . $caseResult);
 
             if(!$runID) continue;
@@ -1481,6 +1567,16 @@ class testtaskModel extends model
             if(dao::isError()) return false;
         }
 
+        /* 从我的地盘执行时需更新关联测试单的状态。*/
+        if($runCaseType == 'work')
+        {
+            $runIdList = array_keys($cases);
+            if($runIdList)
+            {
+                $taskIdList = $this->dao->select('distinct task')->from(TABLE_TESTRUN)->where('id')->in($runIdList)->fetchPairs();
+                foreach($taskIdList as $taskID) $this->updateStatus((int)$taskID);
+            }
+        }
         return true;
     }
 

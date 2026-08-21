@@ -43,7 +43,7 @@ class execution extends control
         if($this->app->upgrading || !isset($this->app->user)) return false;
 
         $mode = $this->app->tab == 'execution' ? 'multiple' : '';
-        if((defined('RUN_MODE') and RUN_MODE == 'api') or $this->viewType == 'json') $mode = '';
+        if((helper::isApiRequest()) or $this->viewType == 'json') $mode = '';
 
         $this->executions = $this->execution->getPairs(0, 'all', "nocode,noprefix,{$mode}");
         $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all', 'ajaxgetcopyprojectexecutions');
@@ -692,6 +692,8 @@ class execution extends control
      * @param  int    $executionID
      * @param  string $objectType   project|execution|product
      * @param  string $extra
+     * @param  string $browseType
+     * @param  int    $queryID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -699,9 +701,9 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testreport(int $executionID = 0, string $objectType = 'execution', string $extra = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testreport(int $executionID = 0, string $objectType = 'execution', string $extra = '', string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        echo $this->fetch('testreport', 'browse', "objectID=$executionID&objectType=$objectType&extra=$extra&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('testreport', 'browse', "objectID=$executionID&objectType=$objectType&extra=$extra&browseType=$browseType&queryID=$queryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -765,6 +767,8 @@ class execution extends control
      *
      * @param  int    $executionID
      * @param  int    $productID
+     * @param  string $type
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -772,7 +776,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testtask(int $executionID = 0, int $productID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testtask(int $executionID = 0, int $productID = 0, string $type = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('testtask');
         $this->app->loadLang('testreport');
@@ -788,7 +792,12 @@ class execution extends control
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-        $tasks = $this->testtask->getExecutionTasks($executionID, $productID, 'execution', 'product_asc,' . $sort, $pager);
+        $tasks = $this->testtask->getExecutionTasks($executionID, $productID, 'execution', $type, $param, 'product_asc,' . $sort, $pager);
+
+        $products = $this->product->getProducts($executionID);
+        /* Build the search form. */
+        $actionURL = $this->createLink('execution', 'testtask', "executionID=$executionID&productID=$productID&type=bysearch&queryID=myQueryID&orderBy=$orderBy");
+        $this->execution->buildTesttaskSearchForm($products, $param, $actionURL);
 
         $this->executionZen->assignTesttaskVars($tasks);
 
@@ -799,6 +808,8 @@ class execution extends control
         $this->view->productID     = $productID;
         $this->view->executionName = $this->executions[$executionID];
         $this->view->pager         = $pager;
+        $this->view->param         = $param;
+        $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
         $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->products      = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
@@ -1094,7 +1105,9 @@ class execution extends control
             $executionID = $this->execution->create($execution, isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array());
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', $project->hasProduct ? implode(',', $_POST['products']) : '');
+            $actionID = $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', $project->hasProduct ? implode(',', $_POST['products']) : '');
+            $execution->id = $executionID;
+            $this->loadModel('message')->sendMentionNotice('execution', 'create', $actionID, $execution);
             if(!empty($projectID) and strpos(',kanban,agileplus,waterfallplus,ipd,', ",$project->model,") !== false and $execution->type == 'kanban')
             {
                 $execution = $this->execution->fetchByID($executionID);
@@ -1242,6 +1255,9 @@ class execution extends control
             {
                 $actionID = $this->action->create($this->objectType, $executionID, 'edited', '', $products);
                 $this->action->logHistory($actionID, $changes);
+
+                $formData->id = $executionID;
+                $this->loadModel('message')->sendMentionNotice('execution', 'edit', $actionID, $formData, $oldExecution);
             }
 
             if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->programplan->computeProgress($executionID, 'edit');
@@ -1742,6 +1758,7 @@ class execution extends control
                 ->setDefault('lastEditedBy', $this->app->user->account)
                 ->setDefault('lastEditedDate', $now)
                 ->stripTags($this->config->execution->editor->close['id'], $this->config->allowedTags)
+                ->remove('verifyPassword')
                 ->get();
 
             $this->execution->computeBurn($executionID);
@@ -1796,7 +1813,7 @@ class execution extends control
 
         if(empty($execution) || strpos($type, $execution->type) === false) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->config->vision == 'lite' ? $this->createLink('project', 'index') : $this->createLink('execution', 'all'))));
 
-        if($execution->type == 'kanban' and defined('RUN_MODE') and RUN_MODE == 'api') return print($this->fetch('execution', 'kanban', "executionID=$executionID"));
+        if($execution->type == 'kanban' and helper::isApiRequest()) return print($this->fetch('execution', 'kanban', "executionID=$executionID"));
 
         /* Load lang and set session. */
         $this->app->loadLang('program');
@@ -2519,7 +2536,7 @@ class execution extends control
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $object);
 
         $project   = (strpos('sprint,stage,kanban', $object->type) !== false) ? $this->loadModel('project')->getByID($object->project) : $object;
-        $storyType = (($object->type == 'stage' && in_array($object->attribute, array('mix', 'request', 'design'))) || $object->type == 'project' || !$object->multiple) ? ($project->storyType ?? 'story') : 'story';
+        $storyType = (($object->type == 'stage' && in_array($project->model, (array)$this->config->project->waterfallList)) || $object->type == 'project' || !$object->multiple) ? ($project->storyType ?? 'story') : 'story';
 
         if($browseType == 'bysearch') $allStories = $this->story->getBySearch('all', '', $queryID, $orderBy, $objectID, $storyType);
         if($browseType != 'bysearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active,launched', $storyType, $orderBy, true, '', null);

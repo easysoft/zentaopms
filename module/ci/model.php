@@ -32,7 +32,7 @@ class ciModel extends model
             if(!$repo) unset($this->lang->devops->menu->branch);
             $this->session->set('devopsSpace', empty($repo) ? 0 : $repo->spaceID);
             $this->loadModel('common')->resetDevOpsPriv(empty($repo) ? 0 : $repo->spaceID);
-            
+
             if($repo && $this->repo->isSvn($repo))
             {
                 unset($this->lang->devops->menu->branch);
@@ -51,7 +51,7 @@ class ciModel extends model
                 unset($this->lang->devops->menu->settings);
             }
         }
-        
+
         if($this->app->rawModule == 'pullreq') $this->lang->repo->menu->review['subMenu']->ppm['exclude'] = 'ppm-browse';
     }
 

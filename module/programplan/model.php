@@ -955,7 +955,7 @@ class programplanModel extends model
 
         $begin         = $end = helper::today();
         $deadlineList  = array();
-        $taskDateLimit = $this->dao->select('taskDateLimit')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('taskDateLimit');
+        $taskDateLimit = $this->dao->select('`taskDateLimit`')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('taskDateLimit');
         foreach($tasks as $taskID => $task)
         {
             if(!$isGantt && helper::isZeroDate($task->deadline)) continue;
@@ -1025,9 +1025,9 @@ class programplanModel extends model
     public function getGanttVersions(int $projectID, int $productID = 0, string $category = '', string $type = 'project'): array
     {
         /* 1. 甘特图创建的版本。 Gantt version. */
-        $ganttVersions = $this->dao->select("*, 'gantt' AS reviewType")->from(TABLE_OBJECT)
+        $ganttVersions = $this->dao->select("*, 'gantt' AS `reviewType`")->from(TABLE_OBJECT)
             ->where('type')->eq('taged')
-            ->andWhere('status')->eq('gantt')
+            ->andWhere('status')->in('gantt,tmpGantt')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($category))->andWhere('category')->eq($category)->fi()
             ->beginIF($type == 'project')->andWhere('project')->eq($projectID)->fi()
@@ -1046,7 +1046,7 @@ class programplanModel extends model
             ->fetch('disabledFeatures');
 
         /* 2. 交付物的项目计划。 Project plan of deliverable. */
-        $deliverableVersions = strpos(",{$disabledFeatures},", ',deliverable,') !== false ? array() : $this->dao->select('t1.*, t2.type AS reviewType')->from(TABLE_OBJECT)->alias('t1')
+        $deliverableVersions = strpos(",{$disabledFeatures},", ',deliverable,') !== false ? array() : $this->dao->select('t1.*, t2.type AS `reviewType`, t2.deliverable, t2.id AS reviewID')->from(TABLE_OBJECT)->alias('t1')
             ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
             ->leftJoin(TABLE_DELIVERABLE)->alias('t3')->on('t1.category = t3.id')
             ->where('t1.project')->eq($projectID)
@@ -1056,16 +1056,13 @@ class programplanModel extends model
             ->andWhere('t2.type')->eq('deliverable')
             ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
             ->fetchAll('id', false);
+        $deliverableIdList = array_unique(array_column($deliverableVersions, 'deliverable'));
+
         /* 3. 基线评审的版本。 Project plan of baseline. */
         $baselineVersions = array();
         if(strpos(",{$disabledFeatures},", ',cm,') === false)
         {
-            $ppCategories = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
-                ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
-                ->where('t1.project')->eq($projectID)
-                ->andWhere('t2.category')->eq('PP')
-                ->fetchPairs();
-            $baselineVersions = $this->dao->select('t1.*, t2.type AS reviewType')->from(TABLE_OBJECT)->alias('t1')
+            $baselineVersions = $this->dao->select('t1.id, t1.version, t1.category, t1.`categoryVersion`')->from(TABLE_OBJECT)->alias('t1')
                 ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
                 ->where('t1.project')->eq($projectID)
                 ->andWhere('t2.status')->eq('pass')
@@ -1075,18 +1072,27 @@ class programplanModel extends model
                 ->fetchAll('id', false);
             foreach($baselineVersions as $baselineVersion)
             {
-                if(isset($ppCategories[$baselineVersion->category])) continue;
                 foreach(explode(',', $baselineVersion->category) as $category)
                 {
-                    if(isset($ppCategories[$category])) continue 2;
-                }
+                    if(!in_array($category, $deliverableIdList))
+                    {
+                        unset($baselineVersions[$baselineVersion->id]);
+                        continue 2;
+                    }
 
-                unset($baselineVersions[$baselineVersion->id]);
+                    $categoryVersion     = json_decode($baselineVersion->categoryVersion, true);
+                    $deliverableReviewID = $categoryVersion[$category];
+                    foreach($deliverableVersions as $deliverable)
+                    {
+                        if(!isset($deliverable->baselineList)) $deliverable->baselineList = '';
+                        if($deliverable->reviewID == $deliverableReviewID) $deliverable->baselineList .= "$baselineVersion->version ";
+                    }
+                }
             }
         }
 
         /* 4. 合并版本。 Merge versions. */
-        $versions = arrayUnion($deliverableVersions, $baselineVersions, $ganttVersions);
+        $versions = arrayUnion($deliverableVersions, $ganttVersions);
         ksort($versions, SORT_NUMERIC);
 
         return $versions;
@@ -1105,7 +1111,7 @@ class programplanModel extends model
         $object = $this->dao->select('*')->from(TABLE_OBJECT)->where('id')->eq($versionID)->fetch();
         if(empty($object)) return array();
 
-        if($object->status == 'gantt') return (array)json_decode($object->data); // 如果是个甘特图直接创建的版本，直接返回数据。 If it is a gantt version created directly, return the data directly.
+        if($object->status == 'gantt' || $object->status == 'tmpGantt') return (array)json_decode($object->data); // 如果是个甘特图直接创建的版本，直接返回数据。 If it is a gantt version created directly, return the data directly.
 
         /* 如果是基线关联的甘特图版本，需要找到基线对应的交付物的甘特图版本。 If it is a gantt version related to a baseline, find the gantt version corresponding to the deliverable. */
         if(empty($object->data) && !empty($object->categoryVersion))
@@ -1157,7 +1163,7 @@ class programplanModel extends model
         $pausedTasksDate = array();
         if($pausedTasks)
         {
-            $pausedTasksDate = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('task')
+            $pausedTasksDate = $this->dao->select('`objectID`,`date`')->from(TABLE_ACTION)->where('objectType')->eq('task')
                 ->andWhere('action')->eq('paused')
                 ->andWhere('objectID')->in($pausedTasks)
                 ->orderBy('id')
@@ -1195,5 +1201,425 @@ class programplanModel extends model
             $data->duration   = helper::diffDate($data->endDate, $data->start_date) + 1;
             return true;
         }));
+    }
+
+    /**
+     * 保存甘特图临时版本。
+     * Save tmp gantt version.
+     *
+     * @param  int    $projectID
+     * @param  string $type
+     * @param  string $data
+     * @access public
+     * @return void
+     */
+    public function saveTmpGanttVersion(int $projectID = 0, string $type = '', string $data = '')
+    {
+        $status  = 'tmpGantt';
+        $project = $this->loadModel('project')->fetchByID($projectID);
+
+        $oldVersions = $this->dao->select('id')->from(TABLE_OBJECT)
+            ->where('status')->eq($status)
+            ->andWhere('type')->eq('taged')
+            ->beginIF($project->type == 'project')->andWhere('project')->eq($projectID)->fi()
+            ->beginIF(in_array($project->type, array('stage', 'sprint', 'kanban')))->andWhere('execution')->eq($projectID)->fi()
+            ->orderBy('id_asc')
+            ->fetchAll();
+
+        if(count($oldVersions) >= 5)
+        {
+            $oldestVersion = reset($oldVersions);
+            if(!empty($oldestVersion->id)) $this->dao->delete()->from(TABLE_OBJECT)->where('id')->eq($oldestVersion->id)->exec();
+        }
+
+        $version = new stdClass();
+        $version->version  = date(DT_DATE3 . ' H:i:s');
+        $version->title    = date(DT_DATE3 . ' H:i:s');
+        $version->product  = 0;
+        $version->type     = 'taged';
+        $version->category = $type;
+        $version->status   = $status;
+        $version->data     = $data;
+
+        if($project->type == 'project') $version->project = $projectID;
+        if(in_array($project->type, array('stage', 'sprint', 'kanban'))) $version->execution = $projectID;
+        $this->dao->insert(TABLE_OBJECT)->data($version)->exec();
+    }
+
+    /**
+     * Rollback stage.
+     * 回滚阶段。
+     *
+     * @param  object $stage
+     * @access public
+     * @return bool
+     */
+    public function rollbackStage(object $stage): bool
+    {
+        $updateStage = new stdClass();
+        $updateStage->name           = $stage->name;
+        $updateStage->milestone      = $stage->milestonecode;
+        $updateStage->status         = $stage->rawStatus;
+        $updateStage->begin          = date('Y-m-d', strtotime($stage->begin)) ?: null;
+        $updateStage->end            = date('Y-m-d', strtotime($stage->deadline)) ?: null;
+        $updateStage->realBegan      = $stage->realBegan ?: null;
+        $updateStage->realEnd        = $stage->realEnd ?: null;
+        $updateStage->progress       = $stage->progress;
+        $updateStage->closedBy       = $stage->closedBy;
+        $updateStage->closedDate     = $stage->closedDate ?: null;
+        $updateStage->canceledBy     = $stage->canceledBy;
+        $updateStage->canceledDate   = $stage->canceledDate ?: null;
+        $updateStage->lastEditedBy   = $this->app->user->account;
+        $updateStage->lastEditedDate = helper::now();
+        $updateStage->estimate       = $stage->estimate;
+        $updateStage->consumed       = $stage->consumed;
+        $updateStage->left           = $stage->left;
+        $updateStage->deleted        = 0;
+
+        $this->app->loadLang('stage');
+        $oldStage = $this->fetchByID($stage->id, 'project');
+        $project  = $this->fetchByID($oldStage->project, 'project');
+        $updateAttribute = array_search($stage->attribute, $project->model == 'ipd' ? $this->lang->stage->ipdTypeList : $this->lang->stage->typeList, true);
+        if($updateAttribute) $updateStage->attribute = $updateAttribute;
+        $updateStage->parent = $stage->parent ?: $project->id;
+
+        $this->dao->update(TABLE_PROJECT)->data($updateStage)->where('id')->eq($stage->id)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
+        if($oldStage->deleted == '1')
+        {
+            $this->loadModel('user');
+
+            /* 恢复用户的执行权限。 */
+            $this->user->updateUserView(array($stage->id), 'sprint');
+
+            /* 恢复用户的产品权限。 */
+            $products = $this->loadModel('product')->getProducts($stage->id, 'all', '', false);
+            if(!empty($products)) $this->user->updateUserView(array_keys($products), 'product');
+
+            /* 恢复文档库。*/
+            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where('execution')->eq($stage->id)->exec();
+
+            /* 标记为已还原。*/
+            $deleteActionID = $this->dao->select('id')->from(TABLE_ACTION)
+                ->where('objectType')->eq('execution')
+                ->andWhere('objectID')->eq($oldStage->id)
+                ->andWhere('project')->eq($oldStage->project)
+                ->andWhere('execution')->eq($oldStage->id)
+                ->andWhere('action')->eq('deleted')
+                ->fetchPairs('id');
+            $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->in($deleteActionID)->exec();
+            $this->action->create('execution', (int)$oldStage->id, 'undeletedbyrollback');
+        }
+        else
+        {
+            $changes = common::createChanges($oldStage, $updateStage);
+            if(!empty($changes))
+            {
+                $actionID = $this->action->create('execution', (int)$oldStage->id, 'editedbyrollback');
+                if($actionID) $this->action->logHistory($actionID, $changes);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Rollback task.
+     * 回滚任务。
+     *
+     * @param  object $task
+     * @access public
+     * @return bool
+     */
+    public function rollbackTask(object $task): bool
+    {
+        list($executionID, $taskID) = explode('-', $task->id);
+
+        $updateTask = new stdclass();
+        $updateTask->execution      = $executionID;
+        $updateTask->story          = (int)trim($task->story, '#') ?: 0;
+        $updateTask->estStarted     = date('Y-m-d', strtotime($task->begin)) ?: null;
+        $updateTask->deadline       = date('Y-m-d', strtotime($task->deadline)) ?: null;
+        $updateTask->estimate       = $task->estimate;
+        $updateTask->consumed       = $task->consumed;
+        $updateTask->left           = $task->left;
+        $updateTask->status         = $task->rawStatus;
+        $updateTask->pri            = $task->pri ?: 0;
+        $updateTask->mailto         = $task->mailto;
+        $updateTask->keywords       = $task->keywords;
+        $updateTask->finishedBy     = $task->finishedBy;
+        $updateTask->closedBy       = $task->closedBy;
+        $updateTask->closedDate     = $task->closedDate ?: null;
+        $updateTask->closedReason   = $task->closedReason;
+        $updateTask->canceledBy     = $task->canceledBy;
+        $updateTask->canceledDate   = $task->canceledDate ?: null;
+        $updateTask->activatedDate  = $task->activatedDate ?: null;
+        $updateTask->lastEditedBy   = $this->app->user->account;
+        $updateTask->lastEditedDate = helper::now();
+        $updateTask->deleted        = 0;
+
+        $this->app->loadLang('task');
+        $updateTask->type = array_search($task->taskType, $this->lang->task->typeList, true);
+
+        /* parent带-的代表任务，不带-的代表阶段，当记录的为阶段时任务的parent为0。*/
+        $updateTask->parent = strpos((string)$task->parent, '-') !== false ? explode('-', $task->parent)[1] : 0;
+
+        if(preg_match('/<span[^>]*class=[\'"]gantt_title[\'"]>(.+?)<\/span>/', $task->text, $taskName))
+        {
+            $updateTask->name = preg_replace('/^#\d+\s+/', '', $taskName[1]);
+        }
+
+        /* 当任务名称、计划开始、截止时间被修改时，增加一个版本。*/
+        $oldTask = $this->fetchByID((int)$taskID, 'task');
+        if($oldTask->name != $updateTask->name || $oldTask->estStarted != $updateTask->estStarted || $oldTask->deadline != $updateTask->deadline)
+        {
+            $updateTask->version = $oldTask->version + 1;
+
+            $taskSpec = new stdclass();
+            $taskSpec->task       = $taskID;
+            $taskSpec->version    = $updateTask->version;
+            $taskSpec->name       = $updateTask->name;
+            $taskSpec->estStarted = $updateTask->estStarted;
+            $taskSpec->deadline   = $updateTask->deadline;
+            $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->exec();
+        }
+
+        $this->dao->update(TABLE_TASK)->data($updateTask)->where('id')->eq($taskID)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
+        if($oldTask->deleted == '1')
+        {
+            /* 标记为已还原。*/
+            $deleteActionID = $this->dao->select('id')->from(TABLE_ACTION)
+                ->where('objectType')->eq('task')
+                ->andWhere('objectID')->eq($oldTask->id)
+                ->andWhere('project')->eq($oldTask->project)
+                ->andWhere('execution')->eq($oldTask->execution)
+                ->andWhere('action')->eq('deleted')
+                ->fetchPairs('id');
+            $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->in($deleteActionID)->exec();
+            $this->action->create('task', (int)$taskID, 'undeletedbyrollback');
+        }
+        else
+        {
+            $changes = common::createChanges($oldTask, $updateTask);
+            if(!empty($changes))
+            {
+                $actionID = $this->action->create('task', (int)$taskID, 'editedbyrollback');
+                if($actionID) $this->action->logHistory($actionID, $changes);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Rollback point.
+     * 回滚评审点。
+     *
+     * @param  object $targetPoint
+     * @param  object $currentPoint
+     * @access public
+     * @return bool
+     */
+    public function rollbackPoint(object $targetPoint, ?object $currentPoint = null): bool
+    {
+        $pointObjectID = explode('-', $targetPoint->id)[2];
+        $this->dao->update(TABLE_OBJECT)->set('enabled')->eq(1)->where('id')->eq($pointObjectID)->exec();
+        if(dao::isError()) return false;
+
+        /* 当前版本中没有评审点，目标版本的评审回滚到待评审。*/
+        if(empty($currentPoint)) return $this->recallReview((int)$targetPoint->reviewID);
+
+        /* 目标版本与当前版本评审状态一致时，评审信息用最新的评审信息，不用改动直接返回。*/
+        if($targetPoint->rawStatus == $currentPoint->rawStatus) return true;
+
+        /* 目标版本为未提交时，将评审点对应的review都删除。*/
+        if(empty($targetPoint->reviewID))
+        {
+            $this->dao->update(TABLE_REVIEW)->set('deleted')->eq(1)->where('object')->eq($pointObjectID)->andWhere('type')->eq('decision')->exec();
+            return !dao::isError();
+        }
+
+        /* 目标版本与当前版本评审状态不一致的情况，还原目标版本的评审并回滚到待评审，删除当前版本的评审。*/
+        if($targetPoint->reviewID != $currentPoint->reviewID) $this->dao->update(TABLE_REVIEW)->set('deleted')->eq(1)->where('id')->eq($currentPoint->reviewID)->exec();
+        return $this->recallReview((int)$targetPoint->reviewID);
+    }
+
+    /**
+     * Recall review.
+     * 撤销评审。
+     *
+     * @param  int    $reviewID
+     * @access public
+     * @return bool
+     */
+    public function recallReview(int $reviewID): bool
+    {
+        if(empty($reviewID)) return true;
+
+        /* 已删除的评审还原。*/
+        $this->dao->update(TABLE_REVIEW)->set('deleted')->eq(0)->where('id')->eq($reviewID)->exec();
+        if(dao::isError()) return false;
+
+        /* 评审状态回滚为待评审。*/
+        $this->dao->update(TABLE_REVIEW)->set('status')->eq('draft')->set('result')->eq('')->where('id')->eq($reviewID)->exec();
+        if(dao::isError()) return false;
+
+        /* 评审节点更新为done。*/
+        $approvalID = $this->dao->select('approval')->from(TABLE_APPROVALOBJECT)
+            ->where('objectType')->eq('review')
+            ->andWhere('objectID')->eq($reviewID)
+            ->orderBy('id_desc')
+            ->limit(1)
+            ->fetch('approval');
+
+        $this->dao->update(TABLE_APPROVALNODE)
+            ->set('status')->eq('done')
+            ->set('result')->eq('ignore')
+            ->where('approval')->eq($approvalID)
+            ->andWhere('status')->notin('done,forward,reverted')
+            ->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * Rollback task relation.
+     * 回滚任务依赖关系。
+     *
+     * @param  int    $projectID
+     * @param  array  $relations
+     * @access public
+     * @return bool
+     */
+    public function rollbackTaskRelation(int $projectID, array $relations): bool
+    {
+        if(empty($relations))
+        {
+            $this->dao->delete()->from(TABLE_RELATIONOFTASKS)->where('project')->eq($projectID)->exec();
+            return !dao::isError();
+        }
+
+        $projectRelationIdList = $this->dao->select('id')->from(TABLE_RELATIONOFTASKS)->where('project')->eq($projectID)->fetchPairs('id');
+        foreach($relations as $relation)
+        {
+            list($sourceExecution, $sourceTaskID) = explode('-', $relation->source);
+            list($targetExecution, $targetTaskID) = explode('-', $relation->target);
+
+            /* 0-完成开始; 1-开始开始; 2-完成完成; 3-开始完成 */
+            $condition = array(0 => 'end',   1 => 'begin', 2 => 'end', 3 => 'begin');
+            $action    = array(0 => 'begin', 1 => 'begin', 2 => 'end', 3 => 'end');
+
+            $updateRelation = new stdclass();
+            $updateRelation->execution = "{$targetExecution},{$sourceExecution}";
+            $updateRelation->pretask   = $sourceTaskID;
+            $updateRelation->condition = $condition[$relation->type];
+            $updateRelation->task      = $targetTaskID;
+            $updateRelation->action    = $action[$relation->type];
+
+            if(!isset($projectRelationIdList[$relation->id]))
+            {
+                $updateRelation->project = $projectID;
+                $this->dao->insert(TABLE_RELATIONOFTASKS)->data($updateRelation)->exec();
+            }
+            else
+            {
+                $this->dao->update(TABLE_RELATIONOFTASKS)->data($updateRelation)->where('id')->eq($relation->id)->exec();
+                unset($projectRelationIdList[$relation->id]);
+            }
+
+            if(dao::isError()) return false;
+        }
+
+        if(!empty($projectRelationIdList))
+        {
+            $this->dao->delete()->from(TABLE_RELATIONOFTASKS)->where('id')->in($projectRelationIdList)->exec();
+            if(dao::isError()) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Delete extra stage and task.
+     * 删除多余的阶段和任务。
+     *
+     * @param  array  $stages
+     * @param  array  $tasks
+     * @access public
+     * @return bool
+     */
+    public function deleteExtraStageAndTask(array $stages, array $tasks): bool
+    {
+        if(empty($stages) && empty($tasks)) return true;
+
+        /* 删除回滚版本中没有的阶段。*/
+        if(!empty($stages))
+        {
+            $this->loadModel('execution');
+            $this->loadModel('action');
+            foreach($stages as $stageID)
+            {
+                $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($stageID)->exec();
+                if(dao::isError()) return false;
+
+                $this->action->create('execution', (int)$stageID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+                $this->action->create('execution', (int)$stageID, 'deletedbyrollback');
+                $this->execution->updateUserView($stageID);
+            }
+        }
+
+        /* 删除回滚版本中没有的任务。*/
+        if(!empty($tasks))
+        {
+            $this->loadModel('task');
+            $this->loadModel('story');
+            $this->loadModel('action');
+            foreach($tasks as $taskID)
+            {
+                $this->dao->update(TABLE_TASK)->set('deleted')->eq(1)->where('id')->eq($taskID)->exec();
+                if(dao::isError()) return false;
+
+                $this->action->create('task', (int)$taskID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+                $this->action->create('task', (int)$taskID, 'deletedbyrollback');
+
+                $task = $this->task->fetchByID((int)$taskID);
+                if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
+                if($task->story) $this->story->setStage($task->story);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 设置任务的路径。
+     * Set task path.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return bool
+     */
+    public function setTaskPath(int $taskID): bool
+    {
+        $task   = $this->dao->select('parent,path')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $parent = $this->dao->select('id,parent,path')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch();
+        $path   = empty($parent) ? ",{$taskID}," : "{$parent->path}{$taskID},";
+
+        $this->dao->update(TABLE_TASK)->set('path')->eq($path)->where('id')->eq($taskID)->exec();
+        if(dao::isError()) return false;
+
+        $children = $this->dao->select('id')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('parent')->eq($taskID)->fetchPairs('id');
+        if(empty($children))
+        {
+            $this->dao->update(TABLE_TASK)->set('isParent')->eq(0)->where('id')->eq($taskID)->exec();
+            return true;
+        }
+
+        $this->dao->update(TABLE_TASK)->set('isParent')->eq(1)->where('id')->eq($taskID)->exec();
+
+        foreach($children as $id) $this->setTaskPath($id);
+        return true;
     }
 }

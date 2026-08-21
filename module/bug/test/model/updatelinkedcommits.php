@@ -21,7 +21,7 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zendata('bug')->loadYaml('bug', false, 2)->gen(10);
-zendata('repohistory')->loadYaml('repohistory', false, 2)->gen(20);
+zendata('ops_repohistory')->loadYaml('repohistory', false, 2)->gen(20);
 
 $bugTest = new bugModelTest();
 

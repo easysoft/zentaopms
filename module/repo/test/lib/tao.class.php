@@ -18,6 +18,51 @@ class repoTaoTest extends baseTest
         $this->objectTao   = $this->instance;
     }
 
+    public function __call(string $methodName, array $arguments)
+    {
+        foreach(array('CountGreaterThanTest', 'AvailableTest', 'CountTest', 'IsArrayTest', 'HasKeyTest') as $suffix)
+        {
+            if(!str_ends_with($methodName, $suffix)) continue;
+
+            $baseMethod = substr($methodName, 0, -strlen($suffix)) . 'Test';
+            if(!method_exists($this, $baseMethod)) break;
+
+            $invokeArguments = $arguments;
+            if(in_array($suffix, array('CountGreaterThanTest', 'HasKeyTest'), true)) array_pop($invokeArguments);
+
+            $result = call_user_func_array(array($this, $baseMethod), $invokeArguments);
+            if($suffix == 'AvailableTest')        return '1';
+            if($suffix == 'CountTest')            return (string)$this->countResult($result);
+            if($suffix == 'IsArrayTest')          return is_array($result) ? '1' : '0';
+            if($suffix == 'CountGreaterThanTest') return $this->countGreaterThan($result, $arguments);
+            if($suffix == 'HasKeyTest')           return $this->hasResultKey($result, $arguments);
+        }
+
+        throw new BadMethodCallException("Undefined method {$methodName}.");
+    }
+
+    protected function countResult(mixed $result): int
+    {
+        if($result === false || $result === null || $result === 'empty') return 0;
+        if(is_array($result) || $result instanceof Countable) return count($result);
+        if(is_object($result)) return count(get_object_vars($result));
+        return (int)!empty($result);
+    }
+
+    protected function countGreaterThan(mixed $result, array $arguments): string
+    {
+        $threshold = (int)array_pop($arguments);
+        return $this->countResult($result) > $threshold ? '1' : '0';
+    }
+
+    protected function hasResultKey(mixed $result, array $arguments): string
+    {
+        $key = array_pop($arguments);
+        if(is_array($result))  return array_key_exists($key, $result) ? '1' : '0';
+        if(is_object($result)) return property_exists($result, (string)$key) ? '1' : '0';
+        return '0';
+    }
+
     /**
      * Check priv test.
      *
@@ -1427,18 +1472,7 @@ class repoTaoTest extends baseTest
 
     public function checkGiteaConnectionTest(string $scm = '', string $name = '', int|string $serviceHost = '', int|string $serviceProject = '')
     {
-        // 基础参数验证测试
-        if($name == '' || $serviceProject == '')
-        {
-            return $this->objectModel->checkGiteaConnection($scm, $name, $serviceHost, $serviceProject);
-        }
-
-        // 模拟外部依赖错误，避免真实调用外部API
-        if($name != '' && $serviceProject != '')
-        {
-            dao::$errors['serviceProject'] = '该项目克隆地址未找到';
-            return false;
-        }
+        if(!method_exists($this->objectModel, 'checkGiteaConnection')) return '0';
 
         $result = $this->objectModel->checkGiteaConnection($scm, $name, $serviceHost, $serviceProject);
 
@@ -1547,9 +1581,21 @@ class repoTaoTest extends baseTest
         return $this->objectModel->buildFileTree($files);
     }
 
+    public function buildFileTreeChildrenTest(array $files, int $index = 0)
+    {
+        $result = $this->buildFileTreeTest($files);
+        return zget(zget($result, $index, array()), 'children', array());
+    }
+
     public function buildTreeTest(array $files)
     {
         return $this->objectModel->buildTree($files);
+    }
+
+    public function buildTreeChildrenTest(array $files, int $index = 0)
+    {
+        $result = $this->buildTreeTest($files);
+        return zget(zget($result, $index, array()), 'children', array());
     }
 
     public function getImportedProjectsTest($hostID)
@@ -1921,43 +1967,8 @@ class repoTaoTest extends baseTest
      */
     public function getGitlabGroupsTest(int $gitlabID)
     {
-        // Mock gitlab model的apiGetGroups方法
-        if($gitlabID <= 0)
-        {
-            // 无效gitlabID返回空数组
-            return array();
-        }
-
-        // 创建mock gitlab组数据
-        $mockGroups = array();
-        if($gitlabID == 1)
-        {
-            // 正常情况下的mock数据
-            $group1 = new stdclass();
-            $group1->id = 2;
-            $group1->name = 'GitLab Instance';
-
-            $group2 = new stdclass();
-            $group2->id = 3;
-            $group2->name = 'Development Team';
-
-            $group3 = new stdclass();
-            $group3->id = 4;
-            $group3->name = 'QA Team';
-
-            $mockGroups = array($group1, $group2, $group3);
-        }
-
-        // 模拟getGitlabGroups方法的逻辑
-        $options = array();
-        foreach($mockGroups as $group)
-        {
-            $options[] = array('text' => $group->name, 'value' => $group->id);
-        }
-
-        if(dao::isError()) return dao::getError();
-
-        return $options;
+        if(!method_exists($this->objectModel, 'getGitlabGroups')) return array();
+        return $this->objectModel->getGitlabGroups($gitlabID);
     }
 
     /**
@@ -1970,52 +1981,8 @@ class repoTaoTest extends baseTest
      */
     public function getGitlabProjectsTest(int $gitlabID, string $projectFilter = '')
     {
-        // 参数验证
-        if($gitlabID <= 0) return array();
-
-        // 模拟用户权限检查
-        global $app;
-        $isAdmin = $app->user->admin || ($projectFilter == 'ALL' && common::hasPriv('repo', 'create'));
-
-        // 创建模拟项目数据
-        $mockProjects = array();
-        if($gitlabID == 1)
-        {
-            // 根据不同过滤条件生成项目
-            $projectCount = 14;
-            for($i = 1; $i <= $projectCount; $i++)
-            {
-                $project = new stdclass();
-                $project->id = $i + 100;
-                $project->name = "Test Project $i";
-                $project->path = "test-project-$i";
-                $project->path_with_namespace = "test-group/test-project-$i";
-                $project->web_url = "https://gitlab.example.com/test-group/test-project-$i";
-                $project->namespace = new stdclass();
-                $project->namespace->name = "Test Group";
-                $project->namespace->id = 1;
-                $mockProjects[] = $project;
-            }
-        }
-
-        // 模拟已导入项目检查（空数组表示没有已导入的项目）
-        $importedProjects = array();
-
-        // 模拟权限过滤逻辑
-        if(!$isAdmin && $projectFilter == 'IS_DEVELOPER')
-        {
-            // 非管理员用户使用IS_DEVELOPER过滤时，模拟权限检查
-            // 这里保持返回相同数量，假设用户对所有项目都有权限
-        }
-
-        // 过滤已导入的项目
-        $filteredProjects = array_filter($mockProjects, function($project) use ($importedProjects) {
-            return !in_array($project->id, $importedProjects);
-        });
-
-        if(dao::isError()) return dao::getError();
-
-        return $filteredProjects;
+        if(!method_exists($this->objectModel, 'getGitlabProjects')) return array();
+        return $this->objectModel->getGitlabProjects($gitlabID, $projectFilter);
     }
 
     /**

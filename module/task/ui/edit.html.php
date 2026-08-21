@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
-
 $taskStatus = isset($task->rawStatus) ? $task->rawStatus : $task->status;
 
 /* ====== Preparing and processing page data ====== */
@@ -129,6 +127,15 @@ detailHeader
             set::level(1),
             set::text($task->name),
             set::reverse(true)
+        )
+    ),
+    to::suffix
+    (
+        aiAgentEntry
+        (
+            set::module('task'),
+            set::method('edit'),
+            set::type('form')
         )
     )
 );

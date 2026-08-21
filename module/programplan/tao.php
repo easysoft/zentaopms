@@ -48,7 +48,7 @@ class programplanTao extends programplanModel
 
         if($projectModel == 'ipd')
         {
-            $stagePointGroup = $this->dao->select('execution,category,categoryTitle')->from(TABLE_OBJECT)
+            $stagePointGroup = $this->dao->select('execution,category,`categoryTitle`')->from(TABLE_OBJECT)
                 ->where('execution')->in(array_keys($stageList))
                 ->andWhere('type')->eq('decision')
                 ->andWhere('enabled')->eq('1')
@@ -262,10 +262,16 @@ class programplanTao extends programplanModel
             /* Determines if the object is delay. */
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
-            if($today > $data->endDate and $plan->status != 'closed')
+            $planEndDate     = $plan->status == 'closed' ? $data->realEnd : $today;
+            if($planEndDate > $data->endDate && $plan->status != 'suspended')
             {
-                $data->delay     = $this->lang->programplan->delayList[1];
-                $data->delayDays = helper::diffDate($today, $data->endDate);
+                $workingDays = $this->loadModel('holiday')->getActualWorkingDays($data->endDate, $planEndDate);
+                $delayDays   = count($workingDays) - 1;
+                if($delayDays > 0)
+                {
+                    $data->delay     = $this->lang->programplan->delayList[1];
+                    $data->delayDays = $delayDays;
+                }
             }
 
             $datas['data'][$plan->id] = $data;
@@ -297,7 +303,7 @@ class programplanTao extends programplanModel
 
         $firstTask     = reset($tasks);
         $projectID     = $firstTask ? $firstTask->project : 0;
-        $taskDateLimit = $this->dao->select('taskDateLimit')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('taskDateLimit');
+        $taskDateLimit = $this->dao->select('`taskDateLimit`')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('taskDateLimit');
         foreach($tasks as $task)
         {
             $plan             = zget($plans, $task->execution, null);
@@ -486,13 +492,7 @@ class programplanTao extends programplanModel
     {
         if($this->config->edition != 'ipd') return $datas;
 
-        $this->loadModel('review');
-        $reviewPoints = $this->dao->select('t1.*, t2.status, t2.`lastReviewedDate`,t2.id as reviewID')->from(TABLE_OBJECT)->alias('t1')
-            ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
-            ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.project')->eq($projectID)
-            ->andWhere('t1.enabled')->eq(1)
-            ->fetchAll('id', false);
+        $reviewPoints = $this->loadModel('review')->getPointsByProjectID($projectID);
 
         foreach($datas['data'] as $plan)
         {
@@ -742,7 +742,7 @@ class programplanTao extends programplanModel
         $end  = $this->getPointEndDate($planID, $point, $reviewDeadline);
         $data = new stdclass();
         $data->id             = $planID . '-point' . $point->category . '-' . $point->id;
-        $data->reviewID       = $point->reviewID;
+        $data->reviewID       = $point->review;
         $data->type           = 'point';
         $data->text           = "<i class='icon-seal'></i> " . $point->title;
         $data->name           = $point->title;

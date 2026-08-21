@@ -68,6 +68,8 @@ class testtask extends control
      * @param  int    $productID
      * @param  string $branch
      * @param  string $type
+     * @param  string $browseType
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -77,7 +79,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $branch = '0', string $type = 'local,totalStatus', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $beginTime = '', string $endTime = '')
+    public function browse(int $productID = 0, string $branch = '0', string $type = 'local,totalStatus', string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $beginTime = '', string $endTime = '')
     {
         /* 检查是否有权限访问测试单所属产品。*/
         /* Check if user have permission to access the product to which the testtask belongs. */
@@ -107,9 +109,13 @@ class testtask extends control
         /* Set 1.5 level menu. */
         $this->loadModel('qa')->setMenu($productID, $branch);
 
+        /* Build the search form. */
+        $actionURL = $this->createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=$type&browseType=bysearch&queryID=myQueryID&orderBy=$orderBy");
+        $this->testtask->buildTesttaskSearchForm($productID, $param, $actionURL);
+
         /* 从数据库中查询符合条件的测试单。*/
         /* Query the testtasks from the database. */
-        $testtasks = $this->testtask->getProductTasks($productID, $branch, $type, $beginTime, $endTime, $sort, $pager);
+        $testtasks = $this->testtask->getProductTasks($productID, $branch, $type, $beginTime, $endTime, $browseType, $param, $sort, $pager);
 
         /* Process testtask members. */
         $users = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -133,6 +139,8 @@ class testtask extends control
         $this->view->product         = $product;
         $this->view->branch          = $branch;
         $this->view->type            = $type;
+        $this->view->browseType      = $browseType;
+        $this->view->param           = $param;
         $this->view->orderBy         = $orderBy;
         $this->view->pager           = $pager;
         $this->view->beginTime       = $beginTime;
@@ -591,6 +599,8 @@ class testtask extends control
             {
                 $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'edited', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                $this->loadModel('message')->sendMentionNotice('testtask', 'edit', $actionID, $task, $oldTask);
             }
 
             $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
@@ -625,6 +635,7 @@ class testtask extends control
      */
     public function start(int $testtaskID)
     {
+        $testtask = $this->testtask->getByID($testtaskID);
         if(!empty($_POST))
         {
             $task = $this->testtaskZen->buildTaskForStart($testtaskID);
@@ -636,6 +647,12 @@ class testtask extends control
             {
                 $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                if($this->post->comment)
+                {
+                    $testtask->comment = $this->post->comment;
+                    $this->loadModel('message')->sendMentionNotice('testtask', 'start', $actionID, $testtask);
+                }
             }
 
             $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
@@ -643,7 +660,6 @@ class testtask extends control
         }
 
         /* Set menu. */
-        $testtask  = $this->testtask->getByID($testtaskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
         $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
@@ -664,6 +680,8 @@ class testtask extends control
      */
     public function close(int $testtaskID)
     {
+        $testtask = $this->testtask->getByID($testtaskID);
+
         if(!empty($_POST))
         {
             $task = $this->testtaskZen->buildTaskForClose($testtaskID);
@@ -675,6 +693,12 @@ class testtask extends control
             {
                 $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'Closed', $this->post->comment);
                 if($changes) $this->action->logHistory($actionID, $changes);
+
+                if($this->post->comment)
+                {
+                    $testtask->comment = $this->post->comment;
+                    $this->loadModel('message')->sendMentionNotice('testtask', 'close', $actionID, $testtask);
+                }
             }
 
             $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
@@ -682,7 +706,6 @@ class testtask extends control
         }
 
         /* Set menu. */
-        $testtask  = $this->testtask->getByID($testtaskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
         $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
@@ -703,6 +726,7 @@ class testtask extends control
      */
     public function block(int $testtaskID)
     {
+        $testtask = $this->testtask->getByID($testtaskID);
         if(!empty($_POST))
         {
             $task = $this->testtaskZen->buildTaskForBlock($testtaskID);
@@ -714,6 +738,12 @@ class testtask extends control
             {
                 $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'Blocked', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                if($this->post->comment)
+                {
+                    $testtask->comment = $this->post->comment;
+                    $this->loadModel('message')->sendMentionNotice('testtask', 'block', $actionID, $testtask);
+                }
             }
 
             $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
@@ -721,7 +751,6 @@ class testtask extends control
         }
 
         /* Set menu. */
-        $testtask  = $this->testtask->getByID($testtaskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
         $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
@@ -742,6 +771,8 @@ class testtask extends control
      */
     public function activate(int $testtaskID)
     {
+        $testtask  = $this->testtask->getByID($testtaskID);
+
         if(!empty($_POST))
         {
             $task = $this->testtaskZen->buildTaskForActivate($testtaskID);
@@ -753,6 +784,12 @@ class testtask extends control
             {
                 $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                if($this->post->comment)
+                {
+                    $testtask->comment = $this->post->comment;
+                    $this->loadModel('message')->sendMentionNotice('testtask', 'activate', $actionID, $testtask);
+                }
             }
 
             $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
@@ -760,7 +797,6 @@ class testtask extends control
         }
 
         /* Set menu. */
-        $testtask  = $this->testtask->getByID($testtaskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
         $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
@@ -789,7 +825,7 @@ class testtask extends control
 
         $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
+        if(helper::isApiRequest()) return $this->send(array('status' => 'success'));
 
         $browseList = inlink('browse', "productID=$task->product");
         if($this->app->tab == 'execution') $browseList = $this->createLink('execution', 'testtask', "executionID=$task->execution");
@@ -956,6 +992,11 @@ class testtask extends control
         if($this->post->results)
         {
             $cases = form::batchData($this->config->testtask->form->batchRun)->get();
+            if($from == 'work')
+            {
+                $postCaseID = (array)$this->post->caseID;
+                foreach($cases as $runID => $case) $case->caseID = isset($postCaseID[$runID]) ? (int)$postCaseID[$runID] : 0;
+            }
             $this->testtask->batchRun($cases, $from, $testtaskID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(!empty($testtaskID)) $this->testtask->updateStatus((int)$testtaskID);
@@ -964,12 +1005,13 @@ class testtask extends control
         }
 
         $caseIdList = (array)$this->post->caseIdList;
+        $runIdList  = (array)$this->post->runIdList;
         if(empty($caseIdList)) $this->locate($url);
 
-        $cases = $this->testtaskZen->prepareCasesForBatchRun($productID, $orderBy, $from, $testtaskID, $confirm, $caseIdList);
+        $cases = $this->testtaskZen->prepareCasesForBatchRun($productID, $orderBy, $from, $testtaskID, $confirm, $caseIdList, $runIdList);
         if(empty($cases)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->skipChangedCases, 'locate' => $url)));
 
-        $steps = $this->loadModel('testcase')->getStepGroupByIdList($caseIdList);
+        $steps = $this->loadModel('testcase')->getStepGroupByIdList(array_keys($cases));
 
         $emptyCases = '';
         foreach($cases as $caseID => $case)
@@ -979,6 +1021,11 @@ class testtask extends control
                 unset($cases[$caseID]);
 
                 $emptyCases .= empty($emptyCases) ? "{$case->id}" : ",{$case->id}";
+            }
+            elseif(!empty($steps[$case->id]))
+            {
+                $firstStep = reset($steps[$case->id]);
+                if($firstStep->version != $case->version) $steps[$case->id] = $this->testcase->getSteps($case->id, $case->version);
             }
         }
 
@@ -991,7 +1038,7 @@ class testtask extends control
         foreach($cases as $case) $modules += $this->tree->getModulesName((array)$case->module);
 
         $this->view->title      = $this->lang->testtask->batchRun;
-        $this->view->steps      = $this->loadModel('testcase')->getStepGroupByIdList($caseIdList);
+        $this->view->steps      = $steps;
         $this->view->modules    = $modules;
         $this->view->cases      = $cases;
         $this->view->caseIdList = $caseIdList;
@@ -1237,12 +1284,12 @@ class testtask extends control
     {
         if($objectType && ($objectType == 'project' || $objectType == 'execution') && $objectID)
         {
-            $testtasks = $objectType == 'project' ? $this->testtask->getProjectTasks($objectID, 0, 'id_desc', null) : $this->testtask->getExecutionTasks($objectID, 0, 'execution', 'id_desc', null);
+            $testtasks = $objectType == 'project' ? $this->testtask->getProjectTasks($objectID, 0, 'all', 0, 'id_desc', null) : $this->testtask->getExecutionTasks($objectID, 0, 'execution', 'all', 0, 'id_desc', null);
         }
         else
         {
             $scope     = empty($objectType) ? 'local' : 'all';
-            $testtasks = $this->testtask->getProductTasks($productID, $branch, "$scope,totalStatus", '', '', 'id_desc', null);
+            $testtasks = $this->testtask->getProductTasks($productID, $branch, "$scope,totalStatus", '', '', 'all', 0, 'id_desc', null);
         }
 
         $namePairs = array();
@@ -1289,5 +1336,66 @@ class testtask extends control
     {
         $execution = $this->loadModel('execution')->getByBuild($buildID);
         return print($execution ? $execution->id : 0);
+    }
+
+    /**
+     * 忽略用例的更新。
+     * Ignore case changed in testtask.
+     *
+     * @param  int    $caseID
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
+    public function ignoreCaseChange(int $caseID, int $taskID)
+    {
+        $testtaskCaseVersion = $this->dao->select('version')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('case')->eq($caseID)->fetch('version');
+        $this->dao->update(TABLE_TESTRUN)->set('caseVersion')->eq($testtaskCaseVersion)->where('case')->eq($caseID)->andWhere('task')->eq($taskID)->exec();
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+    }
+
+    /**
+     * 批量确认用例的更新。
+     * Batch confirm case changed in testtask.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
+    public function batchConfirmCaseChange(int $taskID)
+    {
+        $caseIdList  = zget($_POST, 'caseIdList',  array());
+        $caseList    = $this->loadModel('testcase')->getByList($caseIdList);
+        $versionList = $this->dao->select('`case`,caseVersion,version')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('case')->in($caseIdList)->fetchAll('case');
+        foreach($caseList as $case)
+        {
+            $versionInfo = $versionList[$case->id];
+            if(empty($versionInfo)) continue;
+            if($versionInfo->caseVersion == $versionInfo->version) continue;
+
+            $this->dao->update(TABLE_TESTRUN)
+                ->set('version')->eq($case->version)
+                ->where('`case`')->eq($case->id)
+                ->beginIF(!empty($taskID))->andWhere('task')->eq($taskID)->fi()
+                ->exec();
+        }
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+    }
+
+    /**
+     * 批量忽略用例的更新。
+     * Batch ignore case changed in testtask.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
+    public function batchIgnoreCaseChange(int $taskID)
+    {
+        $caseIdList  = zget($_POST, 'caseIdList',  array());
+        $versionList = $this->dao->select('`case`,version')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('case')->in($caseIdList)->fetchPairs('case');
+        foreach($versionList as $caseID => $taskCaseVersion) $this->dao->update(TABLE_TESTRUN)->set('caseVersion')->eq($taskCaseVersion)->where('case')->eq($caseID)->andWhere('task')->eq($taskID)->exec();
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 }

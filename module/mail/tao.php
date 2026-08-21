@@ -111,6 +111,7 @@ class mailTao extends mailModel
             $file = $this->file->getById((int)$fileID);
             if(!$file) continue;
             if(!in_array($file->extension, $this->config->file->imageExtensions)) continue;
+            if(empty($file->realPath) || !file_exists($file->realPath)) continue;
 
             $images[$matches[1][$key]] = $file->realPath;
         }
@@ -257,6 +258,8 @@ class mailTao extends mailModel
     protected function getMailContent(string $objectType, object $object, object $action): string
     {
         if(empty($objectType) || empty($object) || empty($action)) return '';
+
+        $this->loadModel('action');
 
         $domain     = zget($this->config->mail, 'domain', common::getSysURL());
         $domain     = rtrim($domain, '/');

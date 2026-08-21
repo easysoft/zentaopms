@@ -20,14 +20,8 @@ cid=0
 su('admin');
 $test = new repoZenTest();
 
-$r1 = $test->getBrowseInfoTest();
-$r2 = $test->getBrowseInfoTest();
-$r3 = $test->getBrowseInfoTest();
-$r4 = $test->getBrowseInfoTest();
-$r5 = $test->getBrowseInfoTest();
-
-r(isset($r1) || is_null($r1) ? '1' : '0') && p() && e('1');
-r(isset($r2) || is_null($r2) ? '1' : '0') && p() && e('1');
-r(isset($r3) || is_null($r3) ? '1' : '0') && p() && e('1');
-r(isset($r4) || is_null($r4) ? '1' : '0') && p() && e('1');
-r(isset($r5) || is_null($r5) ? '1' : '0') && p() && e('1');
+r($test->getBrowseInfoAvailableTest()) && p() && e('1');
+r($test->getBrowseInfoAvailableTest()) && p() && e('1');
+r($test->getBrowseInfoAvailableTest()) && p() && e('1');
+r($test->getBrowseInfoAvailableTest()) && p() && e('1');
+r($test->getBrowseInfoAvailableTest()) && p() && e('1');

@@ -372,11 +372,14 @@ class docZen extends doc
      * 在创建文档后的返回。
      * Return after create a document.
      *
-     * @param  array     $docResult
+     * @param  array       $docResult
+     * @param  string      $objectType
+     * @param  string      $from
+     * @param  object|null $docData
      * @access protected
      * @return void
      */
-    protected function responseAfterCreate(array $docResult, string $objectType = 'doc')
+    protected function responseAfterCreate(array $docResult, string $objectType = 'doc', $from = '', ?object $docData = null)
     {
         $docID = $docResult['id'];
         $files = zget($docResult, 'files', '');
@@ -384,9 +387,23 @@ class docZen extends doc
         $fileAction = '';
         if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
 
-        $this->action->create($objectType, $docID, 'Created', $fileAction, '', '', false);
+        $actionID = $this->action->create($objectType, $docID, 'Created', $fileAction, '', '', false);
+
+        /* 普通文档创建时发送 @ 通知；模板创建不发送。 */
+        /* Send @ mention notices when creating a normal doc; skip for templates. */
+        if($docData && $actionID && $objectType == 'doc')
+        {
+            $docData->id = $docID;
+            $this->loadModel('message')->sendMentionNotice('doc', 'create', $actionID, $docData);
+        }
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
+
+        if($from == 'deliverable')
+        {
+            $newDoc = $this->dao->select('id,title,version')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "selectNewDoc(" . json_encode($newDoc) . ")"));
+        }
 
         $response = array(
             'result'  => 'success',
@@ -566,7 +583,7 @@ class docZen extends doc
         if(!$libID && !empty($libPairs)) $libID = key($libPairs);
         if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
 
-        $this->setObjectsForCreate(empty($lib->type) ? '' : $lib->type, empty($lib) ? null : $lib, $unclosed, $objectID);
+        $this->setObjectsForCreate($objectType, empty($lib) ? null : $lib, $unclosed, $objectID);
 
         $this->view->objectType = $objectType;
         $this->view->spaceType  = $objectType;
@@ -692,6 +709,7 @@ class docZen extends doc
             {
                 $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment, '', '', false);
                 $this->action->logHistory($actionID, $changes);
+                $this->doc->createAction($doc->id, 'edited');
             }
         }
 
@@ -715,10 +733,10 @@ class docZen extends doc
             $link   = $this->createLink($moduleName, $methodName, $params);
         }
 
-        if(isInModal()) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link);
+        if(isInModal()) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'actionID' => $actionID ?? 0);
 
         $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc, 'actionID' => $actionID ?? 0);
     }
 
     /**

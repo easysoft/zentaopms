@@ -22,6 +22,7 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zendata('product')->loadYaml('buildbugsforbatchcreate/product', false, 2)->gen(3);
 zendata('module')->loadYaml('buildbugsforbatchcreate/module', false, 2)->gen(10);
+zenData('user')->gen(5);
 
 su('admin');
 

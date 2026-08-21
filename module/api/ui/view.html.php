@@ -162,10 +162,10 @@ div
     $apiQuery,
     $apiParams,
     $api->paramsExample ? h3($lang->api->paramsExample) : null,
-    $api->paramsExample ? html("<pre><code>" . $api->paramsExample . "</code></pre>") : null,
+    $api->paramsExample ? h::pre(h::code($api->paramsExample)) : null,
     $apiResponse,
     $api->responseExample ? h3($lang->api->responseExample) : null,
-    $api->responseExample ? html("<pre><code>" . $api->responseExample . "</code></pre>") : null,
+    $api->responseExample ? h::pre(h::code($api->responseExample)) : null,
     on::init()->do(
         'const docApp = zui.DocApp.query("#api-content");',
         'if(!docApp) return;',

@@ -253,7 +253,7 @@ class designModel extends model
             ->exec();
 
         /* Update linked commit in the design table. */
-        $commit = $this->dao->select('BID')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->andWhere('BType')->eq('commit')->andwhere('relation')->eq('completedin')->fetchAll('BID');
+        $commit = $this->dao->select('`BID`')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->andWhere('BType')->eq('commit')->andwhere('relation')->eq('completedin')->fetchAll('BID');
         $commit = implode(",", array_keys($commit));
 
         $this->dao->update(TABLE_DESIGN)->set('commit')->eq($commit)->where('id')->eq($designID)->exec();
@@ -280,7 +280,7 @@ class designModel extends model
 
         $this->app->loadLang('product');
         $this->loadModel('file');
-        $spec = $this->dao->select('name,`desc`,files,docs,docVersions')->from(TABLE_DESIGNSPEC)->where('design')->eq($designID)->andWhere('version')->eq($version)->fetch();
+        $spec = $this->dao->select('name,`desc`,files,docs,`docVersions`')->from(TABLE_DESIGNSPEC)->where('design')->eq($designID)->andWhere('version')->eq($version)->fetch();
         $design->name        = !empty($spec->name)   ? $spec->name  : $design->name;
         $design->desc        = !empty($spec->desc)   ? $spec->desc  : '';
         $design->files       = !empty($spec->files)  ? $this->file->getByIdList($spec->files) : array();

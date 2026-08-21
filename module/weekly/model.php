@@ -237,7 +237,7 @@ class weeklyModel extends model
         $tasks = $this->dao->select('*')
             ->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
-            ->andWhere("(status = 'done' or closedReason = 'done')")
+            ->andWhere("(status = 'done' or `closedReason` = 'done')")
             ->andWhere('finishedDate')->ge($monday)
             ->andWhere('finishedDate')->le($sunday)
             ->andWhere('deleted')->eq(0)
@@ -306,7 +306,7 @@ class weeklyModel extends model
         $tasks = $this->dao->select('*')
             ->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
-            ->andWhere("((deadline >= '$nextMonday' and deadline < '$sencondMondy') or (estStarted >= '$nextMonday' and  estStarted < '$sencondMondy') or (estStarted < '$nextMonday' and deadline > '$sencondMondy'))")
+            ->andWhere("((deadline >= '$nextMonday' and deadline < '$sencondMondy') or (`estStarted` >= '$nextMonday' and  `estStarted` < '$sencondMondy') or (`estStarted` < '$nextMonday' and deadline > '$sencondMondy'))")
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
@@ -386,7 +386,7 @@ class weeklyModel extends model
         $monday  = $this->getThisMonday($date);
         if(empty($lastDay)) $lastDay = $monday;
 
-        $executions = $this->dao->select('id,begin,end,realBegan,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
+        $executions = $this->dao->select('id,begin,end,`realBegan`,`realEnd`,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
         $stmt       = $this->dao->select('*')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
             ->andWhere("isParent")->eq(0)
@@ -475,7 +475,7 @@ class weeklyModel extends model
         $monday  = $this->getThisMonday($date);
         if(empty($lastDay)) $lastDay = $monday;
 
-        $executions = $this->dao->select('id,begin,end,realBegan,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
+        $executions = $this->dao->select('id,begin,end,`realBegan`,`realEnd`,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
         $stmt       = $this->dao->select('*')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
             ->andWhere('isParent')->eq('0')

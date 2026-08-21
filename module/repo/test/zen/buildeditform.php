@@ -9,25 +9,72 @@ title=测试 repoZen->buildeditform();
 timeout=0
 cid=0
 
-- 调用buildEditFormTest验证返回 @1
-- 第二次调用返回一致 @1
-- 第三次调用返回一致 @1
-- 第四次调用返回一致 @1
-- 第五次调用返回一致 @1
+- 执行test模块的buildEditFormTest方法，参数是1  @1
+- 执行test模块的buildEditFormTest方法，参数是1  @1
+- 执行test模块的buildEditFormTest方法，参数是1  @1
+- 执行test模块的buildEditFormTest方法，参数是1  @1
+- 执行test模块的buildEditFormTest方法，参数是1  @1
 
 */
 
+zenData('ops_repo')->gen(0);
+zenData('ops_repouser')->gen(0);
+zenData('ops_spaceuser')->gen(0);
+zenData('entry')->gen(0);
+
+$repo = zenData('ops_repo');
+$repo->id->range('1');
+$repo->spaceID->range('1');
+$repo->product->range('1');
+$repo->name->range('repo-zen-edit');
+$repo->scmType->range('git');
+$repo->gitUID->range('repo-zen-edit-gituid');
+$repo->acl->range('private');
+$repo->status->range('active');
+$repo->deleted->range('0');
+$repo->gen(1);
+
+$repoUser = zenData('ops_repouser');
+$repoUser->repo->range('1');
+$repoUser->account->range('admin');
+$repoUser->gen(1);
+
+$spaceUser = zenData('ops_spaceuser');
+$spaceUser->space->range('1');
+$spaceUser->account->range('admin');
+$spaceUser->role->range('manager');
+$spaceUser->gen(1);
+
+$entry = zenData('entry');
+$entry->name->range('GitFox');
+$entry->account->range('admin');
+$entry->code->range('gitfox');
+$entry->key->range('gitfox');
+$entry->freePasswd->range('1');
+$entry->ip->range('*');
+$entry->gen(1);
+
+class repoZenBuildEditHttpClient
+{
+    public function request($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = true)
+    {
+        $space = (object)array('id' => 1, 'name' => 'repo test space', 'acl' => 'private', 'auth' => 'extend', 'createdDate' => '2026-08-06 00:00:00');
+        if(strpos($url, '/spaces/1') !== false) return json_encode(array('code' => 'success', 'data' => $space));
+        if(strpos($url, '/spaces') !== false)   return json_encode(array('code' => 'success', 'data' => array($space), 'listArgs' => (object)array('pageSize' => 1)));
+
+        return json_encode(array('code' => 'success', 'data' => (object)array('id' => 1, 'path' => 'space/repo-zen-edit', 'gitURL' => 'http://gitfox.test/space/repo-zen-edit.git', 'gitSSHURL' => 'ssh://git@gitfox.test/space/repo-zen-edit.git', 'importing' => false)));
+    }
+}
+
 su('admin');
 $test = new repoZenTest();
+$oldHttpClient = common::$httpClient;
+common::$httpClient = new repoZenBuildEditHttpClient();
 
-$r1 = $test->buildEditFormTest();
-$r2 = $test->buildEditFormTest();
-$r3 = $test->buildEditFormTest();
-$r4 = $test->buildEditFormTest();
-$r5 = $test->buildEditFormTest();
+r($test->buildEditFormTest(1)) && p() && e('1');
+r($test->buildEditFormTest(1)) && p() && e('1');
+r($test->buildEditFormTest(1)) && p() && e('1');
+r($test->buildEditFormTest(1)) && p() && e('1');
+r($test->buildEditFormTest(1)) && p() && e('1');
 
-r(isset($r1) || is_null($r1) ? '1' : '0') && p() && e('1');
-r(isset($r2) || is_null($r2) ? '1' : '0') && p() && e('1');
-r(isset($r3) || is_null($r3) ? '1' : '0') && p() && e('1');
-r(isset($r4) || is_null($r4) ? '1' : '0') && p() && e('1');
-r(isset($r5) || is_null($r5) ? '1' : '0') && p() && e('1');
+common::$httpClient = $oldHttpClient;
