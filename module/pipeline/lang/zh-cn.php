@@ -5,6 +5,7 @@ $lang->pipeline->createBtn     = '创建流水线';
 $lang->pipeline->importBtn     = '导入流水线';
 $lang->pipeline->importAction  = '导入流水线';
 $lang->pipeline->cancelBtn     = '取消';
+$lang->pipeline->cancel        = '取消流水线';
 $lang->pipeline->pipelineName  = '流水线名称';
 $lang->pipeline->noProvider    = '没有可用的服务器';
 $lang->pipeline->importFailed  = '导入失败';

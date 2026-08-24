@@ -673,6 +673,7 @@ $lang->group->package->browseReviewRequest   = 'Browse Review Request';
 $lang->group->package->submitReviewRequest   = 'Submit Review Request';
 $lang->group->package->codeReview            = 'Code Review';
 $lang->group->package->execPipeline          = 'Execution Pipeline';
+$lang->group->package->pipelineActions       = 'Pipeline Actions';
 $lang->group->package->browseRunner          = 'Browse Runner';
 $lang->group->package->manageRunner          = 'Manage Runner';
 $lang->group->package->browseScanInfo        = 'Browse Scan Info';

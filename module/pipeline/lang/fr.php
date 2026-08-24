@@ -5,6 +5,7 @@ $lang->pipeline->createBtn     = 'Create Pipeline';
 $lang->pipeline->importBtn     = 'Import Pipeline';
 $lang->pipeline->importAction  = 'Import Pipeline';
 $lang->pipeline->cancelBtn     = 'Cancel';
+$lang->pipeline->cancel        = 'Cancel Pipeline';
 $lang->pipeline->pipelineName  = 'Pipeline Name';
 $lang->pipeline->noProvider    = 'No available server';
 $lang->pipeline->importFailed  = 'Import failed';

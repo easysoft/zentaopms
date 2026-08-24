@@ -674,6 +674,7 @@ $lang->group->package->browseReviewRequest   = '浏览评审请求';
 $lang->group->package->submitReviewRequest   = '提交评审请求';
 $lang->group->package->codeReview            = '代码评审';
 $lang->group->package->execPipeline          = '执行流水线';
+$lang->group->package->pipelineActions       = '操作流水线';
 $lang->group->package->browseRunner          = '浏览Runner';
 $lang->group->package->manageRunner          = '管理Runner';
 $lang->group->package->browseScanInfo        = '浏览扫描信息';
