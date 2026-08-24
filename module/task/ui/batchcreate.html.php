@@ -46,7 +46,7 @@ if($execution->type == 'kanban')
 }
 $items[] = array('name' => 'name', 'control' => 'colorInput', 'label' => $lang->task->name, 'width' => '240px');
 $items[] = array('name' => 'isParent', 'control' => 'hidden', 'value' => '0');
-$items[] = array('name' => 'type', 'label' => $lang->task->type, 'control' => 'picker', 'items' => $lang->task->typeList, 'value' => 'devel', 'width' => '160px', 'ditto' => true, 'data-on' => 'change', 'data-call' => 'changeType', 'data-params' => 'event');
+$items[] = array('name' => 'type', 'label' => $lang->task->type, 'control' => 'picker', 'items' => $lang->task->typeList, 'value' => 'devel', 'width' => '160px', 'ditto' => true, 'defaultDitto' => !empty($_POST['deliverableIdList']) ? false : true, 'data-on' => 'change', 'data-call' => 'changeType', 'data-params' => 'event');
 $items[] = array('name' => 'assignedTo', 'label' => $lang->task->assignedTo, 'control' => array('control' => 'taskAssignedTo', 'manageLink' => ($manageLink ? $manageLink : '')), 'items' => $members, 'width' => '128px', 'ditto' => true);
 $items[] = array('name' => 'pri', 'label' => $lang->task->pri, 'control' => array('control' => 'priPicker', 'required' => true), 'value' => 3, 'ditto' => true, 'items' => $lang->task->priList, 'width' => '110px');
 $items[] = array('name' => 'estimate', 'label' => $lang->task->estimateAB, 'width' => '110px', 'ditto' => true, 'control' => array('type' => 'inputControl', 'suffix' => $lang->task->suffixHour, 'suffixWidth' => 20));
@@ -81,6 +81,7 @@ formBatchPanel
         )
     ),
     set::items($items),
+    set::data(!empty($tasks) ? $tasks : array()),
     on::change('[data-name="type"]', 'changeType'),
     on::change('[data-name="module"]', 'setStories'),
     on::change('input[name^=story]', 'setStoryRelated'),

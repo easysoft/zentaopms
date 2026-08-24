@@ -1993,6 +1993,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `fromBug` int unsigned NOT NULL DEFAULT 0,
   `feedback` int unsigned NOT NULL DEFAULT 0,
   `fromIssue` int unsigned NOT NULL DEFAULT 0,
+  `fromDeliverable` int unsigned NOT NULL DEFAULT 0 COMMENT '由交付物转的任务',
   `docs` text DEFAULT NULL,
   `docVersions` text DEFAULT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
