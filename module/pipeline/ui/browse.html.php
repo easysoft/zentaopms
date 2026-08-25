@@ -14,6 +14,8 @@ namespace zin;
 global $app;
 $app->loadLang('runner');
 
+h::css('.status-canceled, .status-killed {color: var(--color-gray-400, #b2b9c5);}');
+
 jsVar('repoID', $repoID);
 jsVar('type', $type);
 

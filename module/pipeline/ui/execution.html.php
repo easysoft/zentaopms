@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-h::css('.status-canceled, .status-killed {color: var(--color-status-cancel);}');
+h::css('.status-failure, .status-create_fail {color: var(--color-danger-600, #fb2b2b);} .status-canceled, .status-killed {color: var(--color-gray-400, #b2b9c5);}');
 
 jsVar('repoID', $repoID);
 
