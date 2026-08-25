@@ -631,22 +631,7 @@ class mailModel extends model
      */
     public function getSubject(string $objectType, object $object, string $title, string $actionType): string
     {
-        $suffix    = '';
-        $subject   = '';
-        $titleType = 'edit';
-
-        if($objectType == 'story' or $objectType == 'bug')
-        {
-            $product = empty($object->product) ? false : $this->loadModel('product')->getById($object->product);
-            $suffix  = $product ? ' - ' . $product->name : '';
-        }
-        if($objectType == 'task')
-        {
-            $execution = empty($object->execution) ? false : $this->loadModel('execution')->getById($object->execution);
-            $suffix    = $execution ? ' - ' . $execution->name : '';
-        }
-
-        return ' #' . $object->id . ' ' . $title . $suffix;
+        return ' #' . $object->id . ' ' . $title;
     }
 
     /**
