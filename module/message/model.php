@@ -655,7 +655,7 @@ class messageModel extends model
         $actorRealname   = zget($user, 'realname', $actor);
         $objectNameField = zget($this->config->action->objectNameFields, $objectType, 'title');
         $objectTypeName  = zget($this->lang->action->objectTypes, $settingObjectType, zget($this->lang->action->objectTypes, $objectType, strtoupper($objectType)));
-        $objectTitle     = '#' . sprintf("%03d", $object->id) . ($objectType != 'auditplan' ? zget($object, $objectNameField, '') : '');
+        $objectTitle     = '#' . sprintf("%03d", $object->id) . ' ' . ($objectType != 'auditplan' ? zget($object, $objectNameField, '') : '');
         $viewLink        = $objectType == 'kanbancard' ? helper::createLink('kanban', 'viewCard', "cardID={$object->id}") : helper::createLink($linkModule, 'view', "id={$object->id}");
 
         $notifyData = str_replace(array('{actor}', '{objectType}', '{objectTitle}'), array($actorRealname, $objectTypeName, $objectTitle), $this->lang->message->noticeText->mentioned);
