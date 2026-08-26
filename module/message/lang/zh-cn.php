@@ -102,10 +102,10 @@ $lang->message->noticeTitle->minuted        = $lang->message->noticeTitle->gener
 $lang->message->noticeTitle->extend['assigned']['cc']    = '{assignedTo}被指派处理{objectType}';
 $lang->message->noticeTitle->extend['assigned']['other'] = $lang->message->noticeTitle->extend['assigned']['cc'];
 
-$lang->message->reviewResultList['pass']    = '通过';
+$lang->message->reviewResultList['pass']    = '确认通过';
 $lang->message->reviewResultList['reject']  = '拒绝';
 $lang->message->reviewResultList['revert']  = '撤销';
-$lang->message->reviewResultList['clarify'] = '待澄清';
+$lang->message->reviewResultList['clarify'] = '有待明确';
 
 $lang->message->notice = new stdclass();
 $lang->message->notice->allMarkRead = '一键已读';

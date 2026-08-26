@@ -364,8 +364,8 @@ class messageModel extends model
         if($actionType == 'reviewed')
         {
             $result  = (string)$action->extra;
-            if(strpos($result, '|') !== false) $result = strtolower(explode('|', $result)[0]);
-            $reviewResult  = zget($this->lang->message->reviewResultList, $result, '');
+            if(strpos($result, '|') !== false) $result = explode('|', $result)[0];
+            $reviewResult  = zget($this->lang->message->reviewResultList, strtolower($result), '');
             $reviewComment = trim(strip_tags((string)$action->comment));
             $noticeText    = str_replace(array('{reviewResult}', '{reviewComment}', '{submitter}'), array($reviewResult, $reviewComment, $submitter), $noticeText);
         }
