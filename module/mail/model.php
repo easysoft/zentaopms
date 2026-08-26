@@ -591,17 +591,17 @@ class mailModel extends model
         $action     = $this->mailTao->getActionForMail($actionID);
         $objectType = $action->objectType;
         $object     = $this->mailTao->getObjectForMail($objectType, $objectID);
-        $title      = $this->mailTao->getObjectTitle($object, $objectType);
-        $subject    = $this->getSubject($objectType, $object, $title, $action->action);
+        $title      = $object ? $this->mailTao->getObjectTitle($object, $objectType) : '';
+        $subject    = $object ? $this->getSubject($objectType, $object, $title, $action->action) : '';
         $domain     = zget($this->config->mail, 'domain', common::getSysURL());
         $domain     = rtrim($domain, '/');
 
         if(empty($title)) $action->appendLink = '';
         if($title and $action->appendLink) $action->appendLink = html::a($domain . helper::createLink($action->objectType, 'view', "id={$action->appendLink}"), "#{$action->appendLink} {$title}");
 
-        if($objectType == 'story') $objectType = $object->type;
+        if($objectType == 'story' && isset($object->type)) $objectType = $object->type;
         if($objectType == 'kanbancard') $objectType = 'kanban';
-        $addressees = $this->mailTao->getAddressees($objectType, $object, $action);
+        $addressees = $object ? $this->mailTao->getAddressees($objectType, $object, $action) : '';
         if(!$addressees) return;
         list($toList, $ccList) = $addressees;
 
