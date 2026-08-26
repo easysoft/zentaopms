@@ -100,11 +100,13 @@ class messageModel extends model
             if($story) $objectType = $story->type;
             if($story && $story->status == 'draft') return;
         }
+        $settingObjectType = in_array($objectType, array('review', 'projectchange')) ? 'waterfall' : $objectType;
+        $settingObjectType = $objectType == 'testcase' ? 'case' : $settingObjectType;
 
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
-            if(isset($actions[$objectType]) && in_array($actionType, $actions[$objectType]))
+            if(isset($actions[$settingObjectType]) && in_array($actionType, $actions[$settingObjectType]))
             {
                 /* If it is an api call, get the request method set by the user. */
                 global $config;
@@ -131,7 +133,7 @@ class messageModel extends model
         if(isset($messageSetting['webhook']))
         {
             $actions = $messageSetting['webhook']['setting'];
-            if(isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID, $actor);
+            if(isset($actions[$settingObjectType]) && in_array($actionType, $actions[$settingObjectType])) $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID, $actor);
         }
         if(isset($messageSetting['message']))
         {
@@ -144,7 +146,7 @@ class messageModel extends model
             }
 
             $actions = $messageSetting['message']['setting'];
-            if($isBuiltinMethod && isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
+            if($isBuiltinMethod && isset($actions[$settingObjectType]) && in_array($actionType, $actions[$settingObjectType])) $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
         }
     }
 
@@ -645,6 +647,7 @@ class messageModel extends model
         if($objectType == 'kanban')   $objectType = 'kanbancard';
 
         $settingObjectType = in_array($objectType, array('review', 'projectchange')) ? 'waterfall' : $objectType;
+        if($settingObjectType == 'testcase') $settingObjectType = 'case';
 
         $linkModule = $objectType;
         if($objectType == 'case')       $linkModule = 'testcase';
