@@ -353,6 +353,7 @@ class messageModel extends model
         $objectTypeName = zget($this->lang->action->objectTypes, $objectType);
         $actionName     = zget($this->lang->action->label, $actionType);
 
+        $actionType = $objectType == 'story' && $actionType == 'reviewed' ? 'storyreviewed' : $actionType;
         $noticeText = zget($this->lang->message->noticeText, $actionType, $this->lang->message->noticeText->generic);
         if(isset($this->lang->message->noticeText->extend[$actionType][$role])) $noticeText = $this->lang->message->noticeText->extend[$actionType][$role];
         if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed'))) $noticeText = zget($this->lang->message->noticeText, $objectType . $actionType, $this->lang->message->noticeText->generic);
@@ -362,6 +363,12 @@ class messageModel extends model
         if($role == 'cc' && !$skipCCSuffix && $appendCCSuffix) $noticeText .= $this->lang->message->noticeText->ccSuffix;
 
         if(isset($assignedTo)) $noticeText = str_replace(array('{assignedTo}'), array($assignedTo), $noticeText);
+        if($objectType == 'story' && $actionType == 'storyreviewed')
+        {
+            $reviewResult = zget($this->lang->message->storyReviewResultList, strtolower($action->extra), '');
+            $noticeText   = str_replace(array('{submitter}', '{reviewResult}'), array($submitter, $reviewResult), $noticeText);
+        }
+
         if($actionType == 'reviewed')
         {
             $result  = (string)$action->extra;

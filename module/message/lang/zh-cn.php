@@ -42,6 +42,7 @@ $lang->message->noticeText->commented      = '{actor} 在{objectType}《{objectT
 $lang->message->noticeText->changed        = '{actor} 变更了{objectType}《{objectTitle}》的内容。';
 $lang->message->noticeText->submitreview   = '{actor} 提交了{objectType}《{objectTitle}》的评审，请您及时审批。';
 $lang->message->noticeText->reviewed       = '您提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。审批意见：{reviewComment}。';
+$lang->message->noticeText->storyreviewed  = '您提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。';
 $lang->message->noticeText->reverted       = '{actor} 将{objectType}《{objectTitle}》回退，请您修改后重新提交。';
 $lang->message->noticeText->forwarded      = '{actor} 将{objectType}《{objectTitle}》转交给了您，请及时处理。';
 $lang->message->noticeText->assigned       = '{actor} 将{objectType}《{objectTitle}》指派给了您，请及时处理。';
@@ -62,14 +63,16 @@ $lang->message->noticeText->minuted        = '{actor}记录了会议纪要《{ob
 $lang->message->noticeText->generic        = '{actor} {action}{objectType}《{objectTitle}》。';
 $lang->message->noticeText->ccSuffix       = '您已被抄送。';
 
-$lang->message->noticeText->extend['submitreview']['cc']    = '{actor} 提交了{objectType}《{objectTitle}》的评审，您已被抄送。';
-$lang->message->noticeText->extend['submitreview']['other'] = '{actor} 提交了{objectType}《{objectTitle}》的评审。';
-$lang->message->noticeText->extend['reviewed']['cc']        = '{submitter} 提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。审批意见：{reviewComment}，您已被抄送。';
-$lang->message->noticeText->extend['reviewed']['other']     = '{submitter} 提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。审批意见：{reviewComment}。';
-$lang->message->noticeText->extend['reverted']['cc']        = '{actor} 将{objectType}《{objectTitle}》回退，您已被抄送。';
-$lang->message->noticeText->extend['forwarded']['cc']       = '{actor} 将{objectType}《{objectTitle}》转交给 {assignedTo} 处理，您已被抄送。';
-$lang->message->noticeText->extend['assigned']['cc']        = '{actor} 将{objectType}《{objectTitle}》指派给了{assignedTo}，您已被抄送。';
-$lang->message->noticeText->extend['assigned']['other']     = '{actor} 将{objectType}《{objectTitle}》指派给了{assignedTo}。';
+$lang->message->noticeText->extend['submitreview']['cc']     = '{actor} 提交了{objectType}《{objectTitle}》的评审，您已被抄送。';
+$lang->message->noticeText->extend['submitreview']['other']  = '{actor} 提交了{objectType}《{objectTitle}》的评审。';
+$lang->message->noticeText->extend['reviewed']['cc']         = '{submitter} 提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。审批意见：{reviewComment}，您已被抄送。';
+$lang->message->noticeText->extend['reviewed']['other']      = '{submitter} 提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。审批意见：{reviewComment}。';
+$lang->message->noticeText->extend['storyreviewed']['cc']    = '{submitter} 提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。您已被抄送。';
+$lang->message->noticeText->extend['storyreviewed']['other'] = '{submitter} 提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。';
+$lang->message->noticeText->extend['reverted']['cc']         = '{actor} 将{objectType}《{objectTitle}》回退，您已被抄送。';
+$lang->message->noticeText->extend['forwarded']['cc']        = '{actor} 将{objectType}《{objectTitle}》转交给 {assignedTo} 处理，您已被抄送。';
+$lang->message->noticeText->extend['assigned']['cc']         = '{actor} 将{objectType}《{objectTitle}》指派给了{assignedTo}，您已被抄送。';
+$lang->message->noticeText->extend['assigned']['other']      = '{actor} 将{objectType}《{objectTitle}》指派给了{assignedTo}。';
 
 $lang->message->noticeTitle = new stdclass();
 $lang->message->noticeTitle->opened         = '新的{objectType}已创建';
@@ -106,6 +109,11 @@ $lang->message->reviewResultList['pass']    = '通过';
 $lang->message->reviewResultList['reject']  = '拒绝';
 $lang->message->reviewResultList['revert']  = '撤销';
 $lang->message->reviewResultList['clarify'] = '待澄清';
+
+$lang->message->storyReviewResultList['pass']    = '确认通过';
+$lang->message->storyReviewResultList['revert']  = '撤销变更';
+$lang->message->storyReviewResultList['clarify'] = '有待明确';
+$lang->message->storyReviewResultList['reject']  = '拒绝';
 
 $lang->message->notice = new stdclass();
 $lang->message->notice->allMarkRead = '一键已读';
