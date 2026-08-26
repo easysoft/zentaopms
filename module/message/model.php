@@ -318,10 +318,11 @@ class messageModel extends model
      * @param  string $objectTitle
      * @param  string $role        to|cc|other
      * @param  array  $users
+     * @param  bool   $skipCCSuffix
      * @access public
      * @return string
      */
-    public function buildNoticeTextByAccount(string $account, object $object, string $actionType, int $actionID, string $objectType, string $objectTitle, string $role = 'to', array $users = array()): string
+    public function buildNoticeTextByAccount(string $account, object $object, string $actionType, int $actionID, string $objectType, string $objectTitle, string $role = 'to', array $users = array(), bool $skipCCSuffix = false): string
     {
         if($actionType == 'assigned' || $actionType == 'forwarded')
         {
@@ -352,15 +353,22 @@ class messageModel extends model
         $objectTypeName = zget($this->lang->action->objectTypes, $objectType);
         $actionName     = zget($this->lang->action->label, $actionType);
 
+        $actionType = $objectType == 'story' && $actionType == 'reviewed' ? 'storyreviewed' : $actionType;
         $noticeText = zget($this->lang->message->noticeText, $actionType, $this->lang->message->noticeText->generic);
         if(isset($this->lang->message->noticeText->extend[$actionType][$role])) $noticeText = $this->lang->message->noticeText->extend[$actionType][$role];
         if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed'))) $noticeText = zget($this->lang->message->noticeText, $objectType . $actionType, $this->lang->message->noticeText->generic);
 
         $noticeText     = str_replace(array('{actor}', '{action}', '{objectType}', '{objectTitle}'), array($actorName, $actionName, $objectTypeName, $objectTitle), $noticeText);
         $appendCCSuffix = !isset($this->lang->message->noticeText->extend[$actionType]['cc']);
-        if($role == 'cc' && $appendCCSuffix) $noticeText .= $this->lang->message->noticeText->ccSuffix;
+        if($role == 'cc' && !$skipCCSuffix && $appendCCSuffix) $noticeText .= $this->lang->message->noticeText->ccSuffix;
 
         if(isset($assignedTo)) $noticeText = str_replace(array('{assignedTo}'), array($assignedTo), $noticeText);
+        if($objectType == 'story' && $actionType == 'storyreviewed')
+        {
+            $reviewResult = zget($this->lang->message->storyReviewResultList, strtolower($action->extra), '');
+            $noticeText   = str_replace(array('{submitter}', '{reviewResult}'), array($submitter, $reviewResult), $noticeText);
+        }
+
         if($actionType == 'reviewed')
         {
             $result  = (string)$action->extra;

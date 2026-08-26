@@ -591,24 +591,25 @@ class mailModel extends model
         $action     = $this->mailTao->getActionForMail($actionID);
         $objectType = $action->objectType;
         $object     = $this->mailTao->getObjectForMail($objectType, $objectID);
-        $title      = $this->mailTao->getObjectTitle($object, $objectType);
-        $subject    = $this->getSubject($objectType, $object, $title, $action->action);
+        $title      = $object ? $this->mailTao->getObjectTitle($object, $objectType) : '';
+        $subject    = $object ? $this->getSubject($objectType, $object, $title, $action->action) : '';
         $domain     = zget($this->config->mail, 'domain', common::getSysURL());
         $domain     = rtrim($domain, '/');
 
         if(empty($title)) $action->appendLink = '';
         if($title and $action->appendLink) $action->appendLink = html::a($domain . helper::createLink($action->objectType, 'view', "id={$action->appendLink}"), "#{$action->appendLink} {$title}");
 
-        if($objectType == 'story') $objectType = $object->type;
+        if($objectType == 'story' && isset($object->type)) $objectType = $object->type;
         if($objectType == 'kanbancard') $objectType = 'kanban';
-        $addressees = $this->mailTao->getAddressees($objectType, $object, $action);
+        $addressees = $object ? $this->mailTao->getAddressees($objectType, $object, $action) : '';
         if(!$addressees) return;
         list($toList, $ccList) = $addressees;
 
         if($objectType == 'review') $this->app->loadLang('baseline');
 
         $users       = $this->loadModel('user')->getPairs('noletter|noclosed|noempty');
-        $subject     = $this->loadModel('message')->buildNoticeTextByAccount(explode(',', $toList)[0], $object, $action->action, $action->id, $objectType, $subject, 'other', $users);
+        $account     = !empty($ccList) ? $ccList[0] : explode(',', $toList)[0];
+        $subject     = $this->loadModel('message')->buildNoticeTextByAccount($account, $object, $action->action, $action->id, $objectType, $subject, 'other', $users, true);
         $emails      = array();
         $mailContent = $this->mailTao->getMailContent($objectType, $object, $action);
 
@@ -631,7 +632,7 @@ class mailModel extends model
      */
     public function getSubject(string $objectType, object $object, string $title, string $actionType): string
     {
-        return ' #' . $object->id . ' ' . $title;
+        return ' #' . $object->id . '::' . $title;
     }
 
     /**
