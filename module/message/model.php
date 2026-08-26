@@ -364,8 +364,8 @@ class messageModel extends model
         if($actionType == 'reviewed')
         {
             $result  = (string)$action->extra;
-            if(strpos($result, '|') !== false) $result = strtolower(explode('|', $result)[0]);
-            $reviewResult  = zget($this->lang->message->reviewResultList, $result, '');
+            if(strpos($result, '|') !== false) $result = explode('|', $result)[0];
+            $reviewResult  = zget($this->lang->message->reviewResultList, strtolower($result), '');
             $reviewComment = trim(strip_tags((string)$action->comment));
             $noticeText    = str_replace(array('{reviewResult}', '{reviewComment}', '{submitter}'), array($reviewResult, $reviewComment, $submitter), $noticeText);
         }
@@ -633,7 +633,6 @@ class messageModel extends model
         $action = $this->loadModel('action')->getByID($actionID);
         if(!$action) return;
 
-
         if($objectType == 'testcase') $objectType = 'case';
         if($objectType == 'kanban')   $objectType = 'kanbancard';
 
@@ -651,7 +650,7 @@ class messageModel extends model
         $objectTitle     = $objectTypeName . '#' . sprintf("%03d", $object->id) . ($objectType != 'auditplan' ? zget($object, $objectNameField, '') : '');
         $viewLink        = $objectType == 'kanbancard' ? helper::createLink('kanban', 'viewCard', "cardID={$object->id}") : helper::createLink($linkModule, 'view', "id={$object->id}");
 
-        $notifyData = str_replace(array('{actor}', '{objectType}', '{objectTitle}'), array($actorRealname, $objectTypeName, $objectTypeName, html::a($viewLink, $objectTitle)), $this->lang->message->noticeText->mentioned);
+        $notifyData = str_replace(array('{actor}', '{objectType}', '{objectTitle}'), array($actorRealname, $objectTypeName, html::a($viewLink, $objectTitle)), $this->lang->message->noticeText->mentioned);
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
