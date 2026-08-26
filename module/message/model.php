@@ -658,7 +658,7 @@ class messageModel extends model
         $objectTitle     = $objectTypeName . '#' . sprintf("%03d", $object->id) . ($objectType != 'auditplan' ? zget($object, $objectNameField, '') : '');
         $viewLink        = $objectType == 'kanbancard' ? helper::createLink('kanban', 'viewCard', "cardID={$object->id}") : helper::createLink($linkModule, 'view', "id={$object->id}");
 
-        $notifyData = str_replace(array('{actor}', '{objectType}', '{objectTitle}'), array($actorRealname, $objectTypeName, html::a($viewLink, $objectTitle)), $this->lang->message->noticeText->mentioned);
+        $notifyData = str_replace(array('{actor}', '{objectType}', '{objectTitle}'), array($actorRealname, $objectTypeName, $objectTitle), $this->lang->message->noticeText->mentioned);
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
@@ -691,7 +691,7 @@ class messageModel extends model
                     $notify->action      = $actionID;
                     $notify->toList      = ",{$mentionUser},";
                     $notify->subject     = str_replace('{objectType}', $objectTypeName, $this->lang->message->noticeTitle->mentioned);
-                    $notify->data        = $notifyData;
+                    $notify->data        = str_replace(array('{actor}', '{objectType}', '{objectTitle}'), array($actorRealname, $objectTypeName, html::a($viewLink, $objectTitle)), $this->lang->message->noticeText->mentioned);
                     $notify->status      = 'wait';
                     $notify->createdBy   = $actor;
                     $notify->createdDate = $now;
