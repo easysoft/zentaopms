@@ -318,10 +318,11 @@ class messageModel extends model
      * @param  string $objectTitle
      * @param  string $role        to|cc|other
      * @param  array  $users
+     * @param  bool   $skipCCSuffix
      * @access public
      * @return string
      */
-    public function buildNoticeTextByAccount(string $account, object $object, string $actionType, int $actionID, string $objectType, string $objectTitle, string $role = 'to', array $users = array()): string
+    public function buildNoticeTextByAccount(string $account, object $object, string $actionType, int $actionID, string $objectType, string $objectTitle, string $role = 'to', array $users = array(), bool $skipCCSuffix = false): string
     {
         if($actionType == 'assigned' || $actionType == 'forwarded')
         {
@@ -358,7 +359,7 @@ class messageModel extends model
 
         $noticeText     = str_replace(array('{actor}', '{action}', '{objectType}', '{objectTitle}'), array($actorName, $actionName, $objectTypeName, $objectTitle), $noticeText);
         $appendCCSuffix = !isset($this->lang->message->noticeText->extend[$actionType]['cc']);
-        if($role == 'cc' && $appendCCSuffix) $noticeText .= $this->lang->message->noticeText->ccSuffix;
+        if($role == 'cc' && !$skipCCSuffix && $appendCCSuffix) $noticeText .= $this->lang->message->noticeText->ccSuffix;
 
         if(isset($assignedTo)) $noticeText = str_replace(array('{assignedTo}'), array($assignedTo), $noticeText);
         if($actionType == 'reviewed')
