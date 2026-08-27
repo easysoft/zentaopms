@@ -100,6 +100,8 @@ class messageModel extends model
             if($story) $objectType = $story->type;
             if($story && $story->status == 'draft') return;
         }
+        $settingObjectType = in_array($objectType, array('review', 'projectchange')) ? 'waterfall' : $objectType;
+        $settingObjectType = $objectType == 'testcase' ? 'case' : $settingObjectType;
 
         /* 如果是文档且状态为草稿，不发送消息通知。 */
         if($objectType == 'doc')
@@ -111,7 +113,7 @@ class messageModel extends model
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
-            if(isset($actions[$objectType]) && in_array($actionType, $actions[$objectType]))
+            if(isset($actions[$settingObjectType]) && in_array($actionType, $actions[$settingObjectType]))
             {
                 /* If it is an api call, get the request method set by the user. */
                 global $config;
@@ -138,7 +140,7 @@ class messageModel extends model
         if(isset($messageSetting['webhook']))
         {
             $actions = $messageSetting['webhook']['setting'];
-            if(isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID, $actor);
+            if(isset($actions[$settingObjectType]) && in_array($actionType, $actions[$settingObjectType])) $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID, $actor);
         }
         if(isset($messageSetting['message']))
         {
@@ -151,7 +153,7 @@ class messageModel extends model
             }
 
             $actions = $messageSetting['message']['setting'];
-            if($isBuiltinMethod && isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
+            if($isBuiltinMethod && isset($actions[$settingObjectType]) && in_array($actionType, $actions[$settingObjectType])) $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
         }
     }
 
@@ -413,6 +415,7 @@ class messageModel extends model
             return array('to' => trim($toList, ','), 'cc' => '');
         }
         if($objectType == 'case') $objectType = 'testcase';
+        if($objectType == 'kanbancard') $objectType = 'kanban';
 
         $action      = $this->loadModel('action')->getById($actionID);
         $objectModel = $this->loadModel($objectType);
@@ -659,6 +662,7 @@ class messageModel extends model
         if($objectType == 'kanban')   $objectType = 'kanbancard';
 
         $settingObjectType = in_array($objectType, array('review', 'projectchange')) ? 'waterfall' : $objectType;
+        if($settingObjectType == 'testcase') $settingObjectType = 'case';
 
         $linkModule = $objectType;
         if($objectType == 'case')       $linkModule = 'testcase';
@@ -669,7 +673,7 @@ class messageModel extends model
         $actorRealname   = zget($user, 'realname', $actor);
         $objectNameField = zget($this->config->action->objectNameFields, $objectType, 'title');
         $objectTypeName  = zget($this->lang->action->objectTypes, $settingObjectType, zget($this->lang->action->objectTypes, $objectType, strtoupper($objectType)));
-        $objectTitle     = $objectTypeName . '#' . sprintf("%03d", $object->id) . ($objectType != 'auditplan' ? zget($object, $objectNameField, '') : '');
+        $objectTitle     = '#' . sprintf("%03d", $object->id) . ' ' . ($objectType != 'auditplan' ? zget($object, $objectNameField, '') : '');
         $viewLink        = $objectType == 'kanbancard' ? helper::createLink('kanban', 'viewCard', "cardID={$object->id}") : helper::createLink($linkModule, 'view', "id={$object->id}");
 
         $notifyData = str_replace(array('{actor}', '{objectType}', '{objectTitle}'), array($actorRealname, $objectTypeName, $objectTitle), $this->lang->message->noticeText->mentioned);
