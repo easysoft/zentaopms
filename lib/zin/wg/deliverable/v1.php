@@ -40,7 +40,9 @@ class deliverable extends wg
         jsVar('canDownload',      hasPriv('file', 'download'));
         jsVar('canCreateDoc',     hasPriv('doc', 'create'));
         jsVar('canViewTask',      hasPriv('task', 'view'));
-        jsVar('sourceTaskLabel',  $lang->deliverable->sourceTask);
+        jsVar('sourceTaskLabel',  $lang->deliverable->source . $lang->task->common);
+        jsVar('canViewExecution', hasPriv('execution', 'task'));
+        jsVar('sourceExecLabel',  $lang->deliverable->source . $lang->execution->common);
 
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
@@ -75,6 +77,7 @@ class deliverable extends wg
         $formName         = $this->prop('formName') ? $this->prop('formName') : 'deliverable';
         $isTemplate       = $this->prop('isTemplate') ? $this->prop('isTemplate') : false;
         $onlyShow         = $this->prop('onlyShow') ? $this->prop('onlyShow') : false;
+        $closeProject     = $this->prop('closeProject') ? $this->prop('closeProject') : false;
         $extraCategory    = $this->prop('extraCategory') ? $this->prop('extraCategory') : array_column($this->prop('items'), 'category');
         $categories       = $this->prop('categories');
         $projectID        = $this->prop('projectID');
@@ -89,6 +92,7 @@ class deliverable extends wg
         jsVar('uploadDocUrl', $uploadDocUrl);
         jsVar('isTemplate', $isTemplate);
         jsVar('onlyShow', $onlyShow);
+        jsVar('closeProject', $closeProject);
 
         if(!$this->hasProp('maxFileSize'))
         {
