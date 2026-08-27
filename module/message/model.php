@@ -341,16 +341,18 @@ class messageModel extends model
         }
         if($actionType == 'reviewed')
         {
+            $actionObjectType = in_array($objectType, array('requirement', 'epic')) ? 'story' : $objectType;
             $submitter = $this->dao->select('actor')->from(TABLE_ACTION)
                 ->where('id')->lt($actionID)
                 ->andWhere('action')->eq('submitreview')
-                ->andWhere('objectType')->eq($objectType)
+                ->andWhere('objectType')->eq($actionObjectType)
                 ->andWhere('objectID')->eq($object->id)
                 ->orderBy('id desc')
                 ->limit(1)
                 ->fetch('actor');
             if($submitter != $account && $role == 'to') $role = 'other';
             if($submitter == $account && $role != 'to') $role = 'to';
+            if($objectType == 'case' && $role != 'other') $role = 'other';
 
             $submitter = zget($users, $submitter);
         }
@@ -360,7 +362,7 @@ class messageModel extends model
         $objectTypeName = zget($this->lang->action->objectTypes, $objectType);
         $actionName     = zget($this->lang->action->label, $actionType);
 
-        $actionType = in_array($objectType, array('story', 'requirement', 'epic')) && $actionType == 'reviewed' ? 'storyreviewed' : $actionType;
+        $actionType = in_array($objectType, array('story', 'requirement', 'epic', 'case')) && $actionType == 'reviewed' ? 'otherreviewed' : $actionType;
         $noticeText = zget($this->lang->message->noticeText, $actionType, $this->lang->message->noticeText->generic);
         if(isset($this->lang->message->noticeText->extend[$actionType][$role])) $noticeText = $this->lang->message->noticeText->extend[$actionType][$role];
         if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed'))) $noticeText = zget($this->lang->message->noticeText, $objectType . $actionType, $this->lang->message->noticeText->generic);
@@ -370,7 +372,7 @@ class messageModel extends model
         if($role == 'cc' && !$skipCCSuffix && $appendCCSuffix) $noticeText .= $this->lang->message->noticeText->ccSuffix;
 
         if(isset($assignedTo)) $noticeText = str_replace(array('{assignedTo}'), array($assignedTo), $noticeText);
-        if(in_array($objectType, array('story', 'requirement', 'epic')) && $actionType == 'storyreviewed')
+        if(in_array($objectType, array('story', 'requirement', 'epic')) && $actionType == 'otherreviewed')
         {
             $storyResult  = (string)$action->extra;
             if(strpos($storyResult, ',') !== false) $storyResult = explode(',', $storyResult)[0];
@@ -378,7 +380,7 @@ class messageModel extends model
             $noticeText   = str_replace(array('{submitter}', '{reviewResult}'), array($submitter, $reviewResult), $noticeText);
         }
 
-        if($actionType == 'reviewed')
+        if($actionType == 'reviewed' || $actionType == 'otherreviewed')
         {
             $result  = (string)$action->extra;
             if(strpos($result, '|') !== false) $result = explode('|', $result)[0];
