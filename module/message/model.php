@@ -101,6 +101,13 @@ class messageModel extends model
             if($story && $story->status == 'draft') return;
         }
 
+        /* 如果是文档且状态为草稿，不发送消息通知。 */
+        if($objectType == 'doc')
+        {
+            $docStatus = $this->dao->select('status')->from(TABLE_DOC)->where('id')->eq($objectID)->fetch('status');
+            if($docStatus == 'draft') return;
+        }
+
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
@@ -612,6 +619,9 @@ class messageModel extends model
      */
     public function sendMentionNotice(string $objectType, string $method, int $actionID, object $object, ?object $oldObject = null)
     {
+        /* 草稿文档不发送@通知。 */
+        if($objectType == 'doc' && zget($object, 'status') == 'draft') return;
+
         /* 文档正文用 rawContent 提取 @；备注等场景没有 rawContent，走表单提取。 */
         $isBlocksuite = $objectType == 'doc' && isset($object->rawContent);
         if($isBlocksuite)
