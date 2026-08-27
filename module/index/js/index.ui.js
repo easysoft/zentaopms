@@ -1533,6 +1533,15 @@ window.browserNotify = function()
 
                             const boxMaxHeight = (window.innerHeight - 53);
                             $('.messagers').css('max-height', (boxMaxHeight - 40) + 'px');
+
+                            const $messagerBox = document.getElementById('messagerBox');
+
+                            // 检查消息变动，如果没有消息则移除消息框。
+                            const resizeObserver = new ResizeObserver((entries) => {
+                                  if($('#messagerBox .messagers .messager-holder').length == 0) $('#messagerBox').remove();
+                            });
+
+                            resizeObserver.observe($messagerBox);
                         }
 
                         const scrollContainer = document.querySelector('.messagers');
