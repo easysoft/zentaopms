@@ -347,7 +347,8 @@ class webhookModel extends model
         {
             $toCcList   = array('to' => '');
             $openIdList = array();
-            if(in_array($webhook->type, array('dinguser', 'wechatuser', 'feishuuser')))
+            $isUserHook = in_array($webhook->type, array('dinguser', 'wechatuser', 'feishuuser'));
+            if($isUserHook)
             {
 
                 $toCcList   = $this->loadModel('message')->getToAndCcList((object)$object, $action->objectType, $actionID);
@@ -361,7 +362,9 @@ class webhookModel extends model
             $messageGroups = array();
             foreach($toCcList as $role => $userList)
             {
-                foreach(array_unique(array_filter(explode(',', $userList))) as $account)
+                $userList = array_unique(array_filter(explode(',', $userList)));
+                if(!$isUserHook) $userList = array('');
+                foreach($userList as $account)
                 {
                     /* 用户没有绑定，跳过 */
                     if(!empty($openIdList) && !isset($openIdList[$account]) && $account == $this->app->user->account) continue;
