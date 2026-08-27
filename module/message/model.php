@@ -341,12 +341,13 @@ class messageModel extends model
 
             $assignedTo = zget($users, $assignedTo);
         }
-        if($actionType == 'reviewed')
+        if($actionType == 'reviewed' || $actionType == 'approvalreview')
         {
+            $submitAction     = $actionType == 'approvalreview' ? 'approvalsubmit' : 'submitreview';
             $actionObjectType = in_array($objectType, array('requirement', 'epic')) ? 'story' : $objectType;
             $submitter = $this->dao->select('actor')->from(TABLE_ACTION)
                 ->where('id')->lt($actionID)
-                ->andWhere('action')->eq('submitreview')
+                ->andWhere('action')->eq($submitAction)
                 ->andWhere('objectType')->eq($actionObjectType)
                 ->andWhere('objectID')->eq($object->id)
                 ->orderBy('id desc')
@@ -382,7 +383,7 @@ class messageModel extends model
             $noticeText   = str_replace(array('{submitter}', '{reviewResult}'), array($submitter, $reviewResult), $noticeText);
         }
 
-        if($actionType == 'reviewed' || $actionType == 'otherreviewed')
+        if(in_array($actionType, array('reviewed', 'approvalreview', 'otherreviewed')))
         {
             $result  = (string)$action->extra;
             if(strpos($result, '|') !== false) $result = explode('|', $result)[0];
