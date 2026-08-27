@@ -3924,7 +3924,7 @@ class storyModel extends model
             if($teamMembers)
             {
                 $ccList .= ',' . implode(',', $teamMembers);
-                $ccList = ltrim($ccList, ',');
+                $ccList  = ltrim($ccList, ',');
             }
         }
 
@@ -3933,7 +3933,8 @@ class storyModel extends model
             $reviewerList = $this->getReviewerPairs($story->id, $story->version);
             unset($reviewerList[$story->assignedTo]);
 
-            $ccList .= ',' . implode(',', array_keys($reviewerList));
+            $toList .= ',' . implode(',', array_keys($reviewerList));
+            $toList  = trim($toList, ',');
         }
 
         if(empty($toList))
@@ -3954,6 +3955,7 @@ class storyModel extends model
         elseif($story->status == 'closed')
         {
             $ccList .= ',' . $story->openedBy;
+            $ccList  = ltrim($ccList, ',');
         }
 
         return array($toList, $ccList);
