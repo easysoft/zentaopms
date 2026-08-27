@@ -103,6 +103,13 @@ class messageModel extends model
         $settingObjectType = in_array($objectType, array('review', 'projectchange')) ? 'waterfall' : $objectType;
         $settingObjectType = $objectType == 'testcase' ? 'case' : $settingObjectType;
 
+        /* 如果是文档且状态为草稿，不发送消息通知。 */
+        if($objectType == 'doc')
+        {
+            $docStatus = $this->dao->select('status')->from(TABLE_DOC)->where('id')->eq($objectID)->fetch('status');
+            if($docStatus == 'draft') return;
+        }
+
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
@@ -334,18 +341,21 @@ class messageModel extends model
 
             $assignedTo = zget($users, $assignedTo);
         }
-        if($actionType == 'reviewed')
+        if($actionType == 'reviewed' || $actionType == 'approvalreview')
         {
+            $submitAction     = $actionType == 'approvalreview' ? 'approvalsubmit' : 'submitreview';
+            $actionObjectType = in_array($objectType, array('requirement', 'epic')) ? 'story' : $objectType;
             $submitter = $this->dao->select('actor')->from(TABLE_ACTION)
                 ->where('id')->lt($actionID)
-                ->andWhere('action')->eq('submitreview')
-                ->andWhere('objectType')->eq($objectType)
+                ->andWhere('action')->eq($submitAction)
+                ->andWhere('objectType')->eq($actionObjectType)
                 ->andWhere('objectID')->eq($object->id)
                 ->orderBy('id desc')
                 ->limit(1)
                 ->fetch('actor');
             if($submitter != $account && $role == 'to') $role = 'other';
             if($submitter == $account && $role != 'to') $role = 'to';
+            if($objectType == 'case' && $role != 'other') $role = 'other';
 
             $submitter = zget($users, $submitter);
         }
@@ -355,7 +365,7 @@ class messageModel extends model
         $objectTypeName = zget($this->lang->action->objectTypes, $objectType);
         $actionName     = zget($this->lang->action->label, $actionType);
 
-        $actionType = $objectType == 'story' && $actionType == 'reviewed' ? 'storyreviewed' : $actionType;
+        $actionType = in_array($objectType, array('story', 'requirement', 'epic', 'case')) && $actionType == 'reviewed' ? 'otherreviewed' : $actionType;
         $noticeText = zget($this->lang->message->noticeText, $actionType, $this->lang->message->noticeText->generic);
         if(isset($this->lang->message->noticeText->extend[$actionType][$role])) $noticeText = $this->lang->message->noticeText->extend[$actionType][$role];
         if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed'))) $noticeText = zget($this->lang->message->noticeText, $objectType . $actionType, $this->lang->message->noticeText->generic);
@@ -365,13 +375,15 @@ class messageModel extends model
         if($role == 'cc' && !$skipCCSuffix && $appendCCSuffix) $noticeText .= $this->lang->message->noticeText->ccSuffix;
 
         if(isset($assignedTo)) $noticeText = str_replace(array('{assignedTo}'), array($assignedTo), $noticeText);
-        if($objectType == 'story' && $actionType == 'storyreviewed')
+        if(in_array($objectType, array('story', 'requirement', 'epic')) && $actionType == 'otherreviewed')
         {
-            $reviewResult = zget($this->lang->message->storyReviewResultList, strtolower($action->extra), '');
+            $storyResult  = (string)$action->extra;
+            if(strpos($storyResult, ',') !== false) $storyResult = explode(',', $storyResult)[0];
+            $reviewResult = zget($this->lang->message->storyReviewResultList, strtolower($storyResult), '');
             $noticeText   = str_replace(array('{submitter}', '{reviewResult}'), array($submitter, $reviewResult), $noticeText);
         }
 
-        if($actionType == 'reviewed')
+        if(in_array($actionType, array('reviewed', 'approvalreview', 'otherreviewed')))
         {
             $result  = (string)$action->extra;
             if(strpos($result, '|') !== false) $result = explode('|', $result)[0];
@@ -613,6 +625,9 @@ class messageModel extends model
      */
     public function sendMentionNotice(string $objectType, string $method, int $actionID, object $object, ?object $oldObject = null)
     {
+        /* 草稿文档不发送@通知。 */
+        if($objectType == 'doc' && zget($object, 'status') == 'draft') return;
+
         /* 文档正文用 rawContent 提取 @；备注等场景没有 rawContent，走表单提取。 */
         $isBlocksuite = $objectType == 'doc' && isset($object->rawContent);
         if($isBlocksuite)
