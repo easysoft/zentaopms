@@ -1210,8 +1210,9 @@ $config->group->package->manageTask->privs['task-recordWorkhour']         = arra
 $config->group->package->manageTask->privs['task-editEffort']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 21, 'depend' => array('execution-task', 'task-recordWorkhour'), 'recommend' => array('task-deleteWorkhour'));
 $config->group->package->manageTask->privs['task-deleteWorkhour']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 22, 'depend' => array('execution-task', 'task-recordWorkhour'), 'recommend' => array('task-editEffort'));
 $config->group->package->manageTask->privs['task-batchChangeModule']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 23, 'depend' => array('execution-task'), 'recommend' => array('task-edit'));
-$config->group->package->manageTask->privs['task-createBranch']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 24,  'depend' => array('task-view'), 'recommend' => array('task-unlinkBranch'));
-$config->group->package->manageTask->privs['task-unlinkBranch']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 25,  'depend' => array('task-view', 'task-createBranch'), 'recommend' => array());
+$config->group->package->manageTask->privs['task-createBranch']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 24, 'depend' => array('task-view'), 'recommend' => array('task-unlinkBranch'));
+$config->group->package->manageTask->privs['task-unlinkBranch']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 25, 'depend' => array('task-view', 'task-createBranch'), 'recommend' => array());
+$config->group->package->manageTask->privs['task-importdeliverable']      = array('edition' => 'max,ipd',          'vision' => 'rnd,lite', 'order' => 26, 'depend' => array('execution-task'), 'recommend' => array());
 
 $config->group->package->deleteTask = new stdclass();
 $config->group->package->deleteTask->order  = 20;
