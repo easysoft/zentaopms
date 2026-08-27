@@ -404,6 +404,7 @@ class messageModel extends model
             return array('to' => trim($toList, ','), 'cc' => '');
         }
         if($objectType == 'case') $objectType = 'testcase';
+        if($objectType == 'kanbancard') $objectType = 'kanban';
 
         $action      = $this->loadModel('action')->getById($actionID);
         $objectModel = $this->loadModel($objectType);
