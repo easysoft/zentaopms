@@ -648,7 +648,9 @@ class messageModel extends model
             if($oldObject) $oldMentionUsers = $this->extractMentionUsersFromForm($formConfig, $oldObject);
         }
 
-        if(!empty($oldMentionUsers)) $mentionUsers = array_diff($mentionUsers, $oldMentionUsers);
+        /* 草稿发布为正式文档时，旧草稿中的 @ 用户从未收到过通知，不排除。 */
+        /* Do not exclude old draft mention users when a draft doc is released, since they never got the notice. */
+        if(!empty($oldMentionUsers) && zget($oldObject, 'status') != 'draft') $mentionUsers = array_diff($mentionUsers, $oldMentionUsers);
 
         if(empty($mentionUsers)) return;
 
