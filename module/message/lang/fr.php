@@ -76,8 +76,8 @@ $lang->message->noticeText->extend['assigned']['other']      = '{actor} has assi
 
 $lang->message->noticeTitle = new stdclass();
 $lang->message->noticeTitle->opened         = 'The new {objectType} has been created';
-$lang->message->noticeTitle->created        = $lang->message->noticeText->opened;
-$lang->message->noticeTitle->added          = $lang->message->noticeText->opened;
+$lang->message->noticeTitle->created        = $lang->message->noticeTitle->opened;
+$lang->message->noticeTitle->added          = $lang->message->noticeTitle->opened;
 $lang->message->noticeTitle->edited         = '{objectType} information has been updated';
 $lang->message->noticeTitle->commented      = 'New note on {objectType}';
 $lang->message->noticeTitle->changed        = 'Change in {objectType}';
