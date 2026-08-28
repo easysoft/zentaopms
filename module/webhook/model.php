@@ -430,8 +430,9 @@ class webhookModel extends model
         static $users = array();
         if(empty($users)) $users = $this->loadModel('user')->getPairs('nodeleted|noclosed|noletter');
 
-        $host     = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
-        $viewLink = $this->getViewLink($objectType == 'kanbancard' ? 'kanban' : $objectType, $objectType == 'kanbancard' ? $object->kanban : $action->objectID);
+        $host        = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
+        $viewLink    = $this->getViewLink($objectType == 'kanbancard' ? 'kanban' : $objectType, $objectType == 'kanbancard' ? $object->kanban : $action->objectID);
+        $objectTitle = $this->loadModel('mail')->getObjectTitle($object, $objectType);
 
         if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed')))
         {
@@ -442,7 +443,7 @@ class webhookModel extends model
         {
             $field = $this->config->action->objectNameFields[$objectType];
             $title = $this->loadModel('message')->buildNoticeTitle($objectType, $actionType, $account, $object, $role, $users);
-            $text  = $this->loadModel('message')->buildNoticeTextByAccount($account, $object, $actionType, $actionID, $objectType, "[#{$object->id}::{$object->$field}]({$host}{$viewLink})", $role, $users);
+            $text  = $this->loadModel('message')->buildNoticeTextByAccount($account, $object, $actionType, $actionID, $objectType, "[#{$object->id}::{$objectTitle}]({$host}{$viewLink})", $role, $users);
         }
         $action->text = $text;
 
