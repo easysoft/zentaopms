@@ -1,5 +1,13 @@
 .deliverable-category-name>.text:after { right: -0.5rem !important; }
 .deliverable-item .form-tip { padding-left: 0.5rem; }
-.deliverable-item-doc-picker { width: 18rem; }
+.deliverable-item-doc-picker { width: 20rem; margin-left: 2rem; }
 .deliverable-item-empty-actions { gap: 0rem; }
-.submitTip { min-width: 200px; }
+.submitTip { width: 20rem;}
+.deliverable-check-icon { flex: none; width: 1rem; }
+.deliverable-submit-status { gap: 1rem; }
+.deliverable-item-doc,
+.deliverable-item-file { width: 20rem; flex: none; }
+.deliverable-item-doc>span:first-of-type,
+.deliverable-item-file>span:first-of-type { min-width: 0; overflow-wrap: anywhere; }
+.deliverable-item-doc>i,
+.deliverable-item-file>i { flex: none; }
