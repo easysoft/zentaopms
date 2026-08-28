@@ -212,7 +212,6 @@ class messageModel extends model
 
         $this->loadModel('action');
         $table  = $this->config->objectTables[$objectType];
-        $field  = $this->config->action->objectNameFields[$objectType];
         $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
         if(!$object) return false;
 
@@ -235,7 +234,8 @@ class messageModel extends model
         if(in_array($objectType, array('story', 'task')) && $this->app->tab == 'project') $url .= '#app=project'; // 无迭代项目要跳转到项目下
 
         $objectUrl   = (strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url;
-        $objectTitle = html::a($objectUrl, "#{$objectID}::" . zget($object, $field, ''), '_self', '', false);
+        $objectTitle = $this->loadModel('mail')->getObjectTitle($object, $objectType);
+        $objectTitle = html::a($objectUrl, "#{$objectID}::{$objectTitle}", '_self', '', false);
 
         $sendTime = null;
         if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed')))
@@ -674,9 +674,9 @@ class messageModel extends model
         $actor           = zget($action, 'actor', '');
         $user            = $this->loadModel('user')->getByID($actor);
         $actorRealname   = zget($user, 'realname', $actor);
-        $objectNameField = zget($this->config->action->objectNameFields, $objectType, 'title');
         $objectTypeName  = zget($this->lang->action->objectTypes, $settingObjectType, zget($this->lang->action->objectTypes, $objectType, strtoupper($objectType)));
-        $objectTitle     = '#' . sprintf("%03d", $object->id) . ' ' . ($objectType != 'auditplan' ? zget($object, $objectNameField, '') : '');
+        $objectTitle     = $this->loadModel('mail')->getObjectTitle($object, $objectType);
+        $objectTitle     = '#' . sprintf("%03d", $object->id) . ' ' . $objectTitle;
         $viewLink        = $objectType == 'kanbancard' ? helper::createLink('kanban', 'viewCard', "cardID={$object->id}") : helper::createLink($linkModule, 'view', "id={$object->id}");
 
         $notifyData = str_replace(array('{actor}', '{objectType}', '{objectTitle}'), array($actorRealname, $objectTypeName, $objectTitle), $this->lang->message->noticeText->mentioned);

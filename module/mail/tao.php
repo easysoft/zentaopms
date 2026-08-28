@@ -307,9 +307,14 @@ class mailTao extends mailModel
     protected function getObjectTitle(object $object, string $objectType): string
     {
         $this->loadModel('action');
-        if($objectType == 'auditplan') return $this->lang->auditplan->common . ' #' . $object->id;
+        if($objectType == 'auditplan')
+        {
+            $table = $object->objectType == 'activity' ? TABLE_ACTIVITY : TABLE_DELIVERABLE;
+            $object->title = $this->dao->select('name')->from($table)->where('id')->eq($object->objectID)->fetch('name');
+        }
 
-        $nameFields = zget($this->config->action->objectNameFields, $objectType, array());
+        $nameFields = zget($this->config->action->objectNameFields, $objectType, '');
+        if(empty($nameFields)) return '';
         return zget($object, $nameFields, '');
     }
 }

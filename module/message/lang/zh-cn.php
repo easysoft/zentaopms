@@ -76,8 +76,8 @@ $lang->message->noticeText->extend['assigned']['other']      = '{actor} 将{obje
 
 $lang->message->noticeTitle = new stdclass();
 $lang->message->noticeTitle->opened         = '新的{objectType}已创建';
-$lang->message->noticeTitle->created        = $lang->message->noticeText->opened;
-$lang->message->noticeTitle->added          = $lang->message->noticeText->opened;
+$lang->message->noticeTitle->created        = $lang->message->noticeTitle->opened;
+$lang->message->noticeTitle->added          = $lang->message->noticeTitle->opened;
 $lang->message->noticeTitle->edited         = '{objectType}信息已更新';
 $lang->message->noticeTitle->commented      = '{objectType}有新备注';
 $lang->message->noticeTitle->changed        = '{objectType}发生变更';
