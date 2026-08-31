@@ -387,7 +387,7 @@ class messageModel extends model
         {
             $result  = (string)$action->extra;
             if(strpos($result, '|') !== false) $result = explode('|', $result)[0];
-            $reviewResult  = zget($this->lang->message->reviewResultList, strtolower($result), '');
+            $reviewResult  = $objectType == 'projectchange' ? $action->extra : zget($this->lang->message->reviewResultList, strtolower($result), '');
             $reviewComment = trim(strip_tags((string)$action->comment));
             $noticeText    = str_replace(array('{reviewResult}', '{reviewComment}', '{submitter}'), array($reviewResult, $reviewComment, $submitter), $noticeText);
         }
