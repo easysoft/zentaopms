@@ -608,8 +608,7 @@ class mailModel extends model
         if($objectType == 'review') $this->app->loadLang('baseline');
 
         $users       = $this->loadModel('user')->getPairs('noletter|noclosed|noempty');
-        $account     = !empty($ccList) ? $ccList[0] : explode(',', $toList)[0];
-        $subject     = $this->loadModel('message')->buildNoticeTextByAccount($account, $object, $action->action, $action->id, $objectType, $subject, 'other', $users, true);
+        $subject     = $this->loadModel('message')->buildNoticeTextByAccount('', $object, $action->action, $action->id, $objectType, $subject, 'other', $users, true);
         $emails      = array();
         $mailContent = $this->mailTao->getMailContent($objectType, $object, $action);
 
