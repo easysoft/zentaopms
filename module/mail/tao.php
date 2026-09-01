@@ -315,6 +315,6 @@ class mailTao extends mailModel
 
         $nameFields = zget($this->config->action->objectNameFields, $objectType, '');
         if(empty($nameFields)) return '';
-        return zget($object, $nameFields, '');
+        return (string)zget($object, $nameFields, '');
     }
 }
