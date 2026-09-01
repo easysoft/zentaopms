@@ -106,7 +106,7 @@ $lang->message->noticeTitle->extend['assigned']['cc']    = '{assignedTo}被指�
 $lang->message->noticeTitle->extend['assigned']['other'] = $lang->message->noticeTitle->extend['assigned']['cc'];
 
 $lang->message->reviewResultList['pass']    = '通过';
-$lang->message->reviewResultList['reject']  = '拒绝';
+$lang->message->reviewResultList['reject']  = '不通过';
 $lang->message->reviewResultList['revert']  = '撤销';
 $lang->message->reviewResultList['clarify'] = '有待明确';
 
