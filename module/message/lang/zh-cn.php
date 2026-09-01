@@ -31,7 +31,7 @@ $lang->message->all    = '全部消息';
 $lang->message->timeLabel['minute'] = '%s分钟前';
 $lang->message->timeLabel['hour']   = '1小时前';
 
-$lang->message->mention = '%s在%s中@了你，请及时查看。';
+$lang->message->mention = '%s在%s《%s》中@了你，请及时查看。';
 
 $lang->message->noticeText = new stdclass();
 $lang->message->noticeText->opened         = '{actor} 创建了新的{objectType}《{objectTitle}》。';

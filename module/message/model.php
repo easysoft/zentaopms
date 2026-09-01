@@ -762,7 +762,7 @@ class messageModel extends model
                         if(empty($openIdList)) continue;
 
                         $host = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
-                        $text = sprintf($this->lang->message->mention, $actorRealname, "[{$objectTitle}]({$host}{$viewLink})");
+                        $text = sprintf($this->lang->message->mention, $actorRealname, $objectTypeName, "[{$objectTitle}]({$host}{$viewLink})");
                         $data = $this->webhook->getDataByType($webhook, $action, $title, $text, '', '', $objectType, (int)$object->id);
                         if(!$data) continue;
 
