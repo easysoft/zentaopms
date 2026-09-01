@@ -3867,8 +3867,9 @@ class kanbanModel extends model
     {
         /* Set toList and ccList. */
         $toList = $card->createdBy;
-        $ccList = trim($card->assignedTo, ',');
+        $ccList = '';
 
+        if($card->assignedTo) $toList .= ',' . trim($card->assignedTo, ',');
         if(empty($toList))
         {
             if(empty($ccList)) return false;
