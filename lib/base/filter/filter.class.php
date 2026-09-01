@@ -513,6 +513,21 @@ class baseValidater
     }
 
     /**
+     * 检查 SQL 字段名是否合法，只允许标识符字符，防止拼接 SQL 时注入。
+     * Check field name, only accept SQL identifier characters to prevent SQL injection.
+     *
+     * @param  mixed $var
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function checkFieldName($var): bool
+    {
+        if(!is_string($var)) return false;
+        return preg_match('/^[A-Za-z_][A-Za-z0-9_.]*$/', $var) === 1;
+    }
+
+    /**
      * 检查敏感词。
      * Check sensitive words.
      *

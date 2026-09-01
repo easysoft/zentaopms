@@ -28,11 +28,12 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $module = zenData('module');
-$module->id->range(1);
-$module->name->range('父模块1');
+$module->id->range('100');
+$module->name->range('父模块100');
 $module->grade->range('1');
 $module->root->range('1');
 $module->type->range('doc');
+$module->branch->range('0');
 $module->order->range('10');
 $module->gen(1);
 
@@ -40,12 +41,12 @@ $nameList       = array('', '模块1', '模块1的子模块1', 'api的模块1');
 $createTypeList = array('','same', 'child');
 $moduleTypeList = array('','doc', 'api');
 
-$emptyData       = array('name' => $nameList[0], 'createType' => $createTypeList[0], 'moduleType' => $moduleTypeList[0], 'parentID' => 0);
-$nameEmptyData   = array('name' => $nameList[0], 'createType' => $createTypeList[0], 'moduleType' => $moduleTypeList[0], 'parentID' => 0);
-$docModuleData   = array('name' => $nameList[1], 'createType' => $createTypeList[2], 'moduleType' => $moduleTypeList[1], 'parentID' => 0);
-$repeatNameData  = array('name' => $nameList[1], 'createType' => $createTypeList[1], 'moduleType' => $moduleTypeList[1], 'parentID' => 0);
-$childModuleData = array('name' => $nameList[2], 'createType' => $createTypeList[2], 'moduleType' => $moduleTypeList[1], 'parentID' => 1);
-$apiModuleData   = array('name' => $nameList[3], 'createType' => $createTypeList[1], 'moduleType' => $moduleTypeList[2], 'parentID' => 0);
+$emptyData       = array('name' => $nameList[0], 'createType' => $createTypeList[0], 'moduleType' => $moduleTypeList[0], 'parentID' => 0, 'libID' => 1, 'objectID' => 0);
+$nameEmptyData   = array('name' => $nameList[0], 'createType' => $createTypeList[0], 'moduleType' => $moduleTypeList[0], 'parentID' => 0, 'libID' => 1, 'objectID' => 0);
+$docModuleData   = array('name' => $nameList[1], 'createType' => $createTypeList[2], 'moduleType' => $moduleTypeList[1], 'parentID' => 0, 'libID' => 1, 'objectID' => 0);
+$repeatNameData  = array('name' => $nameList[1], 'createType' => $createTypeList[1], 'moduleType' => $moduleTypeList[1], 'parentID' => 0, 'libID' => 1, 'objectID' => 0);
+$childModuleData = array('name' => $nameList[2], 'createType' => $createTypeList[2], 'moduleType' => $moduleTypeList[1], 'parentID' => 100, 'libID' => 1, 'objectID' => 0);
+$apiModuleData   = array('name' => $nameList[3], 'createType' => $createTypeList[1], 'moduleType' => $moduleTypeList[2], 'parentID' => 0, 'libID' => 1, 'objectID' => 0);
 
 $treeTester = new treeModelTest();
 

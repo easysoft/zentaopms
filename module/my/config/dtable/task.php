@@ -203,7 +203,6 @@ if($config->edition != 'open')
     $config->my->task->dtable->fieldList['relatedObject']['group']       = 'deadline';
     $config->my->task->dtable->fieldList['relatedObject']['sortType']    = false;
     $config->my->task->dtable->fieldList['relatedObject']['width']       = '70';
-    $config->my->task->dtable->fieldList['relatedObject']['link']        = common::hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={id}&objectType=task') . "'; }>RAWJS" : null;
     $config->my->task->dtable->fieldList['relatedObject']['data-toggle'] = 'modal';
     $config->my->task->dtable->fieldList['relatedObject']['data-size']   = 'lg';
     $config->my->task->dtable->fieldList['relatedObject']['flex']        = false;

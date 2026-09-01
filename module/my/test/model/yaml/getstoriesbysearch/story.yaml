@@ -1,0 +1,25 @@
+---
+title: zt_story - getStoriesBySearch 测试数据
+desc: 固定需求创建人、指派人与删除状态，保证 contribute/work 查询结果独立于其他用例
+author: Codex
+version: "1.0"
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-20
+- field: product
+  note: 所属产品
+  range: 1{20}
+- field: type
+  note: 需求类型
+  range: story{20}
+- field: openedBy
+  note: 创建人
+  range: admin,user{11},admin,user{3},admin,user{3}
+- field: assignedTo
+  note: 指派给
+  range: admin,user{5},admin,user{5},admin,user{2},admin,user{4}
+- field: deleted
+  note: 是否删除
+  range: 0{20}

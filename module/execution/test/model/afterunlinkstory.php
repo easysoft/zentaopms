@@ -2,6 +2,29 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
+/**
+
+title=测试executionModel->afterUnlinkStory();
+timeout=0
+cid=16262
+
+- 测试迭代取消关联需求1
+ - 第0条的execution属性 @101
+ - 第0条的story属性 @1
+ - 第0条的status属性 @cancel
+- 测试阶段取消关联需求2
+ - 第0条的execution属性 @108
+ - 第0条的story属性 @2
+ - 第0条的status属性 @cancel
+- 测试看板取消关联需求3
+ - 第0条的execution属性 @124
+ - 第0条的story属性 @3
+ - 第0条的status属性 @cancel
+- 测试迭代取消关联需求1的任务数量 @5
+- 测试阶段取消关联需求2的任务数量 @5
+- 测试看板取消关联需求3的任务数量 @5
+
+*/
 
 zenData('user')->gen(5);
 su('admin');
@@ -14,14 +37,6 @@ $task->execution->range('[101,108,124]{5}');
 $task->project->range('[11,60,100]{5}');
 $task->parent->range('0');
 $task->gen(30);
-
-/**
-
-title=测试executionModel->afterUnlinkStory();
-timeout=0
-cid=16262
-
-*/
 
 $executionIdList = array(101, 108, 124);
 $storyIdList     = array(1, 2, 3);

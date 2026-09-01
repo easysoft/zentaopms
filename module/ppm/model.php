@@ -253,7 +253,7 @@ class ppmModel extends model
                 $response = json_decode(commonModel::http($apiURL, null, array(), $apiRoot->header));
                 if(empty($response) || empty($response->data)) break;
                 $commitList = array_merge($commitList, $response->data);
-                if(!empty($response->listArgs) && $response->listArgs->pageSize < 100) break;
+                if(count($response->data) < 100) break;
             }
 
             return $commitList;
@@ -1165,11 +1165,20 @@ class ppmModel extends model
 
         $commitList = array_column($commits, 'sha');
 
-        return $this->dao->select('*, concat("code") as source')->from(TABLE_BUG)
+        $bugs = $this->dao->select('*, `entry`, concat("code") as source')->from(TABLE_BUG)
             ->where('repo')->eq($repoID)
-            ->andWhere('v2')->in($commitList)
+            ->andWhere('(v2')->in($commitList)
+            ->orWhere('mr')->eq($ppmID)
+            ->markRight()
             ->andWhere('deleted')->eq(0)
             ->page($pager)
             ->fetchAll('id');
+
+        $this->loadModel('repo');
+        foreach($bugs as $bug)
+        {
+            $bug->file = $this->repo->decodePath($bug->entry);
+        }
+        return $bugs;
     }
 }

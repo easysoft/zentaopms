@@ -44,6 +44,13 @@ $story->status->range('active{10},draft{5},reviewing{2},closed{2},changing');
 $story->gen(20);
 
 zenData('user')->gen(30);
+$company = zenData('company');
+$company->admins->range('`,admin,`');
+$company->gen(1);
+zenData('userview')->gen(0);
+zenData('group')->gen(0);
+global $app;
+$app->company->admins = ',admin,';
 su('admin');
 
 $taskTeam = zenData('taskteam');
@@ -80,6 +87,8 @@ cid=18876
 
 */
 $task = new taskTaoTest();
+$task->instance->mao->cache = null;
+restoreObjectTables();
 
 r($task->fetchUserTasksByTypeTest('user1', 'assignedTo'))                               && p('20:name') && e('任务20'); // 查看指派给用户1的任务
 r(count($task->fetchUserTasksByTypeTest('user1', 'assignedTo')))                        && p()          && e('10');     // 检查指派给用户1的任务数量

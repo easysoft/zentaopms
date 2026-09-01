@@ -1244,8 +1244,9 @@ $lang->ai->formSchema['testcase']['create']->properties->precondition           
 $lang->ai->formSchema['testcase']['create']->properties->steps                            = new stdclass();
 $lang->ai->formSchema['testcase']['create']->properties->steps->items                     = new stdclass();
 $lang->ai->formSchema['testcase']['create']->properties->steps->items->properties         = new stdclass();
-$lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->steps   = new stdclass();
-$lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->expects = new stdclass();
+$lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->name   = new stdclass();
+$lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->step   = new stdclass();
+$lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->expect = new stdclass();
 $lang->ai->formSchema['testcase']['create']->properties->type->type                                     = 'string';
 $lang->ai->formSchema['testcase']['create']->properties->type->description                              = 'Type of test case';
 $lang->ai->formSchema['testcase']['create']->properties->type->enum                                     = array('feature', 'performance', 'config', 'install', 'security', 'interface', 'unit', 'other');
@@ -1259,10 +1260,12 @@ $lang->ai->formSchema['testcase']['create']->properties->precondition->descripti
 $lang->ai->formSchema['testcase']['create']->properties->steps->type                                    = 'array';
 $lang->ai->formSchema['testcase']['create']->properties->steps->description                             = 'Steps of test case';
 $lang->ai->formSchema['testcase']['create']->properties->steps->items->type                             = 'object';
-$lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->steps->type          = 'string';
-$lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->steps->description   = 'Step description';
-$lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->expects->type        = 'string';
-$lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->expects->description = 'Expectation of step';
+$lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->name->type           = 'string';
+$lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->name->description    = 'Hierarchy number using dot-separated numbers to express nesting: "1" for a first-level group, "1.1" for a second level, "1.1.1" for a third level, at most two child levels, sibling numbers start from 1';
+$lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->step->type           = 'string';
+$lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->step->description    = 'Step description';
+$lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->expect->type         = 'string';
+$lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->expect->description  = 'Expectation of step';
 $lang->ai->formSchema['testcase']['create']->required = array('type', 'title', 'steps');
 $lang->ai->formSchema['testcase']['edit'] = $lang->ai->formSchema['testcase']['create'];
 

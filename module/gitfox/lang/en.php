@@ -143,12 +143,18 @@ $lang->gitfox->devopsDescription  = <<<EOD
 </p>
 EOD;
 
-$lang->gitfox->installGitFox    = 'Install GitFox';
-$lang->gitfox->installGitFoxTip = 'Before using ZenTao DevOps, GitFox needs to be installed. Please run the following installation script on the host machine to complete the setup. Once the script finishes executing, click "Completed Installation".';
-$lang->gitfox->checkInstall     = 'I have completed the above installation steps';
-$lang->gitfox->execScript       = 'Execute installation script';
-$lang->gitfox->copySuccess      = 'Copy successful';
-$lang->gitfox->copyFail         = 'Browser does not support copy function, please copy manually';
-$lang->gitfox->startUse         = 'Start Use';
-$lang->gitfox->completedInstall = 'Completed Install';
-$lang->gitfox->InstallScript    = 'Install Script';
+$lang->gitfox->installGitFox     = 'Install GitFox';
+$lang->gitfox->installGitFoxTip  = 'Before using ZenTao DevOps, GitFox needs to be installed. Please run the following installation script on the host machine to complete the setup. Once the script finishes executing, click "Completed Installation".';
+$lang->gitfox->checkInstall      = 'I have completed the above installation steps';
+$lang->gitfox->execScript        = 'Execute installation script';
+$lang->gitfox->copySuccess       = 'Copy successful';
+$lang->gitfox->copyFail          = 'Browser does not support copy function, please copy manually';
+$lang->gitfox->startUse          = 'Start Use';
+$lang->gitfox->completedInstall  = 'Completed Install';
+$lang->gitfox->InstallScript     = 'Install Script';
+$lang->gitfox->upgradeGitFox     = 'Upgrade GitFox';
+$lang->gitfox->upgradeGitFoxTip  = 'The currently installed GitFox engine version (%s) is lower than the minimum version (%s) required by ZenTao DevOps. Please run the upgrade script below on the host machine to upgrade GitFox.';
+$lang->gitfox->completedUpgrade  = 'Completed Upgrade';
+$lang->gitfox->laterUpgrade      = 'Upgrade Later';
+$lang->gitfox->UpgradeScript     = 'Upgrade Script';
+$lang->gitfox->upgradeGitFoxFail = 'GitFox upgrade is not complete. Please run the upgrade script on the host machine first, then click "Completed Upgrade".';

@@ -36,6 +36,9 @@ su('admin');
 // 3. 创建测试实例（变量名与模块名一致）
 $metricTest = new metricModelTest();
 
+$logDir = dirname($metricTest->instance->getLogFile());
+if(!is_dir($logDir)) mkdir($logDir, 0777, true);
+
 // 4. 强制要求：必须包含至少5个测试步骤
 r($metricTest->saveLogsTest('Test log message')) && p('fileExists,hasTimestamp,hasLogContent') && e('1,1,1'); // 步骤1：正常情况
 r($metricTest->saveLogsTest('')) && p('fileExists,hasTimestamp') && e('1,1'); // 步骤2：空字符串

@@ -33,10 +33,16 @@ cid=19160
 
 - 名称为空的时候插入是否成功 @0
 
+- 测试类型为空时的错误信息第type条的0属性 @『测试类型』不能为空。
+
+- 参与人为空时的错误信息第members条的0属性 @『参与人』不能为空。
+
  */
 
 global $tester;
 $tester->loadModel('testtask');
+$oldRequiredFields = $tester->config->testtask->create->requiredFields;
+$tester->config->testtask->create->requiredFields = 'product,status,build,begin,end,name,type,members';
 
 $formData = new stdclass();
 $formData->product = 1;
@@ -45,6 +51,8 @@ $formData->begin   = date('Y-m-d');
 $formData->end     = date('Y-m-d');
 $formData->status  = 'wait';
 $formData->name    = '测试单';
+$formData->type    = 'feature';
+$formData->members = 'admin';
 r((bool)$tester->testtask->create($formData)) && p() && e('1'); // 新增一个正常的测试单是否成功
 
 $formData->product = 0;
@@ -84,3 +92,15 @@ $formData->status = 'wait';
 $formData->name = '';
 r((bool)$tester->testtask->create($formData)) && p() && e('0'); // 名称为空的时候插入是否成功
 $formData->name = '测试单';
+
+$formData->type = '';
+$tester->testtask->create($formData);
+r(dao::getError()) && p('type:0') && e('『测试类型』不能为空。'); // 测试类型为空时的错误信息
+$formData->type = 'feature';
+
+$formData->members = '';
+$tester->testtask->create($formData);
+r(dao::getError()) && p('members:0') && e('『参与人』不能为空。'); // 参与人为空时的错误信息
+$formData->members = 'admin';
+
+$tester->config->testtask->create->requiredFields = $oldRequiredFields;

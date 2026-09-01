@@ -14,7 +14,7 @@ $config->screen->chart->default->line->request     = json_decode('{"requestDataT
 $config->screen->chart->default->line->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
 $config->screen->chart->default->line->key         = "LineCommon";
 $config->screen->chart->default->line->chartConfig = json_decode('{"key":"LineCommon","chartKey":"VLineCommon","conKey":"VCLineCommon","title":"折线图","category":"Lines","categoryName":"折线图","package":"Charts","chartFrame":"echarts","image":"/static/png/line-e714bc74.png"}');
-$config->screen->chart->default->line->option      = json_decode('{"legend":{"show":true,"top":"5%","textStyle":{"color":"#B9B8CE"}},"xAxis":{"type":"category"},"yAxis":{"show":true,"axisLine":{"show":true},"type":"value"},"backgroundColor":"rgba(0,0,0,0)"}');
+$config->screen->chart->default->line->option      = json_decode('{"legend":{"show":true,"top":"5%","textStyle":{"color":"#B9B8CE"}},"xAxis":{"type":"category"},"yAxis":{"show":true,"axisLine":{"show":true},"type":"value"},"series":[{"type":"line"}],"backgroundColor":"rgba(0,0,0,0)"}');
 
 $config->screen->chart->default->table = new stdclass();
 $config->screen->chart->default->table->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');

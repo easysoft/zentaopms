@@ -9,20 +9,6 @@ class systemModelTest extends baseTest
     protected $className  = 'model';
 
     /**
-     * Test updateMinioDomain method.
-     *
-     * @access public
-     * @return mixed
-     */
-    public function updateMinioDomainTest()
-    {
-        $result = $this->instance->updateMinioDomain();
-        if(dao::isError()) return dao::getError();
-
-        return is_null($result) ? '0' : $result;
-    }
-
-    /**
      * Test getBackupStatus method.
      *
      * @param  object $instance
@@ -121,34 +107,6 @@ class systemModelTest extends baseTest
         // 检查维护模式配置是否被删除
         $maintenance = $this->instance->loadModel('setting')->getItem('owner=system&module=system&key=maintenance');
         return empty($maintenance) ? 'deleted' : 'exists';
-    }
-
-    /**
-     * Test getLatestRelease method.
-     *
-     * @access public
-     * @return mixed
-     */
-    public function getLatestReleaseTest()
-    {
-        $result = $this->instance->getLatestRelease();
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test isUpgradeable method.
-     *
-     * @access public
-     * @return mixed
-     */
-    public function isUpgradeableTest()
-    {
-        $result = $this->instance->isUpgradeable();
-        if(dao::isError()) return dao::getError();
-
-        return $result;
     }
 
     /**

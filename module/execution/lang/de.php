@@ -251,6 +251,7 @@ $lang->execution->manageProducts            = 'Verküpfe ' . $lang->productCommo
 $lang->execution->linkStory                 = 'Link Stories';
 $lang->execution->linkStoryByPlan           = 'Verküpfe Story aus Plan';
 $lang->execution->linkPlan                  = 'Verküpfe Plan';
+$lang->execution->plans                     = $lang->execution->linkPlan;
 $lang->execution->unlinkStoryTasks          = 'Verknüpfung aufheben';
 $lang->execution->linkedProducts            = 'Verküpfte Produkte';
 $lang->execution->unlinkedProducts          = 'Produkt verknüpfung aufheben';

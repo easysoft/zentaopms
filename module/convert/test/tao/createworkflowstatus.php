@@ -67,3 +67,17 @@ r($convertTest->createWorkflowStatusTest($relations5)) && p() && e('a:3:{s:12:"z
 
 // 恢复版本设置
 $config->edition = $originalEdition;
+
+/* 清理本用例创建的流程数据，避免残留空 table 的 workflow 污染 objectTables。 */
+zenData('workflow')->gen(0);
+zenData('workflowaction')->gen(0);
+zenData('workflowfield')->gen(0);
+zenData('workflowlayout')->gen(0);
+zenData('workflowlabel')->gen(0);
+zenData('workflowrule')->gen(0);
+zenData('workflowdatasource')->gen(0);
+zenData('workflowrelation')->gen(0);
+zenData('workflowlinkdata')->gen(0);
+zenData('workflowversion')->gen(0);
+zenData('workflowreport')->gen(0);
+zenData('workflowsql')->gen(0);

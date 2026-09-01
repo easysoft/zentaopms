@@ -397,8 +397,16 @@ class projectModel extends model
         $taskSummary   = $this->projectTao->getTotalTaskByProject($projectIdList);
         $storySummary  = $this->projectTao->getTotalStoriesByProject($projectIdList);
 
+        /* Get workingDays. */
+        $today       = helper::today();
+        $earliestEnd = $today;
+        foreach($projects as $project)
+        {
+            if(!empty($project->end) && !helper::isZeroDate($project->end) && $project->end < $earliestEnd) $earliestEnd = $project->end;
+        }
+        $workingDays = $this->loadModel('holiday')->getActualWorkingDays($earliestEnd, $today);
+
         /* Set project attribute. */
-        $today = helper::today();
         foreach($projects as $projectID => $project)
         {
             $project->leftBugs      = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->leftBugs             : 0;
@@ -417,8 +425,13 @@ class projectModel extends model
             /* Judge whether the project is delayed. */
             if($project->status != 'done' && $project->status != 'closed' && $project->status != 'suspended')
             {
-                $delay = helper::diffDate($today, $project->end);
-                if($delay > 0) $project->delay = $delay;
+                $betweenDays = $this->holiday->getDaysBetween($project->end, $today);
+                if($betweenDays)
+                {
+                    $delayDays = array_intersect($betweenDays, $workingDays);
+                    $delay     = count($delayDays) - 1;
+                    if($delay > 0) $project->delay = $delay;
+                }
             }
         }
 

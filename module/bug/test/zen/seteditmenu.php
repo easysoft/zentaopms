@@ -24,6 +24,17 @@ zenData('bug')->gen(10);
 zenData('product')->gen(3);
 zenData('ops_repo')->gen(3);
 
+$project = zenData('project');
+$project->id->range('1,101');
+$project->name->range('项目1,迭代101');
+$project->type->range('project,sprint');
+$project->model->range('scrum,scrum');
+$project->project->range('0,1');
+$project->status->range('doing');
+$project->multiple->range('1');
+$project->deleted->range('0');
+$project->gen(2);
+
 // 3. 用户登录（选择合适角色）
 su('admin');
 

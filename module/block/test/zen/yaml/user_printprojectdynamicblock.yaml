@@ -1,6 +1,8 @@
 ---
 title: printProjectDynamicBlock方法用户测试数据
 desc: 为blockZen::printProjectDynamicBlock()方法提供user表测试数据
+author: Codex
+version: "1.0"
 
 fields:
 - field: id

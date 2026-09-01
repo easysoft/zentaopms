@@ -13,6 +13,11 @@ window.loadReviewers = function()
 
     var targetBranch = safe64Encode(targetBranch);
     var sourceBranch = safe64Encode(sourceBranch);
+    if(!sourceBranch || !targetBranch)
+    {
+        $('#createCheckList').addClass('hidden');
+        return;
+    }
 
     if(!canMerge)
     {
@@ -33,6 +38,7 @@ window.loadReviewers = function()
         $('button[type=submit]').removeClass('disabled');
         $('button[type=submit]').removeAttr('disabled');
         $('#createCheckList').removeClass('hidden');
+
         loadTarget($.createLink('ppm', 'ajaxGetCreateCheckList', 'repoID=' + repo + '&sourceBranch=' + sourceBranch + '&targetBranch=' + targetBranch), 'createCheckList');
     }
 }

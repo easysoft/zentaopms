@@ -48,7 +48,7 @@ $user->gen(20);
 
 $company = zenData('company');
 $company->id->range('1');
-$company->admins->range(',admin,');
+$company->admins->range('`,admin,`');
 $company->gen(1);
 
 su('admin');

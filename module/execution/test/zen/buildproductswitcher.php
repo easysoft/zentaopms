@@ -38,6 +38,16 @@ $branch->status->range('active,closed,active,active,closed,active');
 $branch->deleted->range('0{6}');
 $branch->gen(6);
 
+$execution = zenData('project');
+$execution->id->range('1');
+$execution->name->range('迭代1');
+$execution->type->range('sprint');
+$execution->project->range('0');
+$execution->status->range('doing');
+$execution->multiple->range('1');
+$execution->deleted->range('0');
+$execution->gen(1);
+
 // 3. 用户登录（选择合适角色）
 su('admin');
 

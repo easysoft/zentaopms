@@ -129,7 +129,7 @@ $(function()
             /* 更新版本列表状态为正在升级 */
             const $versionItem = $('#versionsBox .version-item[data-version="' + currentVersion + '"]');
             $versionItem[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});
-            $versionItem.find('.icon-clock').replaceWith('<i class="icon icon-spinner-indicator text-gray-400 w-4 h-4"></i>');
+            $versionItem.find('.icon-clock').replaceWith('<i class="icon icon-spinner-indicator animate-spin text-gray-400 w-4 h-4"></i>');
 
             /* 启动轮询获取升级进度 */
             const pollPromise = fetchProgress(currentVersion);

@@ -14,6 +14,13 @@ $config->runner->dtable->fieldList['name']['show']        = true;
 $config->runner->dtable->fieldList['name']['required']    = true;
 $config->runner->dtable->fieldList['name']['checkbox']    = false;
 
+$config->runner->dtable->fieldList['labels']['title']    = $lang->runner->labels;
+$config->runner->dtable->fieldList['labels']['type']     = 'text';
+$config->runner->dtable->fieldList['labels']['sortType'] = false;
+$config->runner->dtable->fieldList['labels']['hint']     = true;
+$config->runner->dtable->fieldList['labels']['show']     = true;
+$config->runner->dtable->fieldList['labels']['width']    = 120;
+
 $config->runner->dtable->fieldList['runnerStatus']['title']     = $lang->runner->status;
 $config->runner->dtable->fieldList['runnerStatus']['name']      = 'runnerStatus';
 $config->runner->dtable->fieldList['runnerStatus']['type']      = 'status';
@@ -40,6 +47,7 @@ $config->runner->dtable->fieldList['runtime']['name']     = 'runtime';
 $config->runner->dtable->fieldList['runtime']['sortType'] = true;
 $config->runner->dtable->fieldList['runtime']['hint']     = true;
 $config->runner->dtable->fieldList['runtime']['show']     = true;
+$config->runner->dtable->fieldList['runtime']['type']     = 'text';
 
 $config->runner->dtable->fieldList['version']['title']    = $lang->runner->version;
 $config->runner->dtable->fieldList['version']['name']     = 'version';
@@ -52,6 +60,7 @@ $config->runner->dtable->fieldList['ip']['name']     = 'ip';
 $config->runner->dtable->fieldList['ip']['sortType'] = false;
 $config->runner->dtable->fieldList['ip']['hint']     = true;
 $config->runner->dtable->fieldList['ip']['show']     = true;
+$config->runner->dtable->fieldList['ip']['type']     = 'text';
 
 $config->runner->dtable->fieldList['actions']['name']  = 'actions';
 $config->runner->dtable->fieldList['actions']['title'] = $lang->actions;

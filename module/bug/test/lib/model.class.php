@@ -419,6 +419,21 @@ class bugModelTest extends baseTest
     }
 
     /**
+     * Test merge task actions converted from a bug.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return array
+     */
+    public function mergeTaskActionsTest(int $bugID): array
+    {
+        $actions = $this->instance->loadModel('action')->getList('bug', $bugID);
+        $actions = $this->instance->mergeTaskActions($actions);
+        if(dao::isError()) return dao::getError();
+        return $actions;
+    }
+
+    /**
      * 测试获取用户的 bugs。
      * Test get user bugs.
      *

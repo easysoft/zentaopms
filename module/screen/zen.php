@@ -62,6 +62,10 @@ class screenZen extends screen
 
         foreach($filters as $filter)
         {
+            /* 只接受合法的字段标识符，防止通过 selectFilter 字段注入 SQL。Only accept valid field identifiers. */
+            if(!isset($filter['type']) || !isset($filter['field'])) continue;
+            if(!validater::checkFieldName($filter['field'])) continue;
+
             if(!isset($chartFilters[$sourceID])) $chartFilters[$sourceID] = array();
             $chartFilters[$sourceID][$filter['type']] = $filter['field'];
         }

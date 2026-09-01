@@ -19,7 +19,7 @@ cid=15458
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
-su('admin');
+$tester->app->setModuleName('bug');
 
 $product = zenData('product');
 $product->id->range('1-10');
@@ -46,7 +46,16 @@ $projectProduct->project->range('1-10');
 $projectProduct->product->range('1,2,3,4,5,6,7,8,9,10');
 $projectProduct->gen(10);
 
-zenData('user')->gen(5);
+$user = zenData('user');
+$user->id->range('1-5');
+$user->account->range('admin,user1,user2,user3,user4');
+$user->realname->range('管理员,用户1,用户2,用户3,用户4');
+$user->password->range('e10adc3949ba59abbe56e057f20f883e');
+$user->visions->range('rnd');
+$user->deleted->range('0');
+$user->gen(5);
+
+su('admin');
 
 $bugTest = new bugZenTest();
 

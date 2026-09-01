@@ -913,4 +913,17 @@ class upgradeModelTest extends baseTest
         $this->instance->computeDefaultSchedule();
         return $this->instance->dao->select('*')->from(TABLE_PROJECT)->fetchAll();
     }
+
+    /**
+     * 处理项目组下的风险数据。
+     * Process PI's risk data.
+     *
+     * @access public
+     * @return array
+     */
+    public function processPIRiskDataTest(): array
+    {
+        $this->instance->processPIRiskData();
+        return $this->instance->dao->select('*')->from(TABLE_RISK)->where('PI')->ne('0')->fetchAll();
+    }
 }

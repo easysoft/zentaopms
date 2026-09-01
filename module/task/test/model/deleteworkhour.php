@@ -18,15 +18,15 @@ cid=18786
 
 - 根据estimateID查看消耗工时
  - 第0条的field属性 @consumed
- - 第0条的old属性 @3
+ - 第0条的old属性 @3.00
  - 第0条的new属性 @2
 - 根据estimateID查看消耗工时
  - 第0条的field属性 @consumed
- - 第0条的old属性 @2
+ - 第0条的old属性 @2.00
  - 第0条的new属性 @1
 - 根据estimateID查看消耗工时
  - 第0条的field属性 @consumed
- - 第0条的old属性 @1
+ - 第0条的old属性 @1.00
  - 第0条的new属性 @0
 
 */

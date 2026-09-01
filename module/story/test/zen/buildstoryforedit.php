@@ -9,8 +9,8 @@ cid=18672
 - 步骤1：不存在需求ID应返回异常属性name @0
 - 步骤2：无效需求ID应返回异常属性name @0
 - 步骤3：负数需求ID应返回异常属性name @0
-- 步骤4：非数字需求ID应返回异常属性name @~~
-- 步骤5：空需求ID应返回异常属性name @~~
+- 步骤4：非数字需求ID应返回异常属性name @0
+- 步骤5：空需求ID应返回异常属性name @0
 
 */
 
@@ -57,6 +57,6 @@ r($storyTest->buildStoryForEditTest(0)) && p('name') && e('0'); // 步骤2：无
 
 r($storyTest->buildStoryForEditTest(-1)) && p('name') && e('0'); // 步骤3：负数需求ID应返回异常
 
-r($storyTest->buildStoryForEditTest(1)) && p('name') && e('~~'); // 步骤4：非数字需求ID应返回异常
+r($storyTest->buildStoryForEditTest('abc')) && p('name') && e('0'); // 步骤4：非数字需求ID应返回异常
 
-r($storyTest->buildStoryForEditTest(2)) && p('name') && e('~~'); // 步骤5：空需求ID应返回异常
+r($storyTest->buildStoryForEditTest('')) && p('name') && e('0'); // 步骤5：空需求ID应返回异常

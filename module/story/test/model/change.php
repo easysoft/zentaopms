@@ -14,7 +14,7 @@ cid=18479
 - 变更时不填写需求名称，给出提示 @1
 - 测试存在relievedTwins。属性title @测试需求1变更标题
 - 测试变成需求。属性title @名称修改
-- 测试变更时在 spec 中 @用户发送 mention 通知
+- 测试变更时在 spec 中提到的用户发送 mention 通知
  - 属性notifyCount @1
  - 属性mentionUser @user1
 - 测试变更时 spec 无 mention 不发送通知 @0

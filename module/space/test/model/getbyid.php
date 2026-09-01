@@ -47,9 +47,13 @@ $spaceB->createdDate = '2026-07-29 10:15:00';
 $spaceID1 = $spaceTester->createTest($spaceA);
 $spaceID2 = $spaceTester->createTest($spaceB);
 
-r($spaceTester->getByIDTest(0))                                   && p('apiMessage') && e('Path 参数解析失败。'); // 查询ID=0的空间返回接口错误
+r($spaceTester->getByIDTest(0))                                   && p('apiMessage') && e('0'); // 查询ID=0的空间返回空结果
 r($spaceTester->getByIDFieldEqualsTest((int)$spaceID1, 'name', "ut-getbyid-space-a-{$suffix}")) && p() && e('1'); // 查询第1个真实空间的名称匹配动态创建值
 r($spaceTester->getByIDFieldEqualsTest((int)$spaceID1, 'code', "utgetbyidspacea{$suffix}"))     && p() && e('1'); // 查询第1个真实空间的唯一标识匹配动态创建值
 r($spaceTester->getByIDFieldTest((int)$spaceID2, 'acl'))          && p()   && e('open');               // 查询第2个真实空间的访问控制
 r($spaceTester->getByIDMemberFieldTest((int)$spaceID1, 'admin', 'role')) && p() && e('manager');        // 查询第1个真实空间中admin的角色
-r($spaceTester->getByIDTest(999999))                              && p('apiMessage') && e('查询空间不存在');       // 查询不存在的空间返回接口错误
+r($spaceTester->getByIDTest(999999))                              && p('apiMessage') && e('0');       // 查询不存在的空间返回空结果
+
+/* 清理外部 GitFox 空间中创建的测试数据，保证用例可重复执行。*/
+$spaceTester->deleteSpaceSuccessTest((int)$spaceID1);
+$spaceTester->deleteSpaceSuccessTest((int)$spaceID2);

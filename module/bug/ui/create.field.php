@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-global $lang, $app;
+global $lang, $app, $config;
 
 $isShadowProduct   = data('product.shadow');
 $noMultipleProject = (string)data('project.multiple') === '0';
@@ -10,10 +10,27 @@ $resultFiles       = data('resultFiles');
 $copyFiles         = data('bug.files');
 $files             = $copyFiles ? array_values($copyFiles) : array_values($resultFiles);
 
+$productID   = (int)data('bug.productID');
+$branchID    = data('bug.branch');
+$branchID    = ($branchID === '' || $branchID === null || $branchID === 'all') ? 0 : $branchID;
+$moduleID    = (int)data('bug.moduleID');
+$storyID     = (int)data('bug.storyID');
+$caseID      = (int)data('bug.caseID');
+$executionID = (int)data('executionID');
+$projectID   = (int)data('projectID');
+$objectID    = $executionID ? $executionID : $projectID;
+$storyItems  = createLink('story', 'ajaxGetProductStories', "productID={$productID}&branch={$branchID}&moduleID={$moduleID}&storyID={$storyID}&onlyOption=false&status=active&limit=0&type=full&hasParent=0&objectID={$objectID}");
+$caseItems   = createLink('bug', 'ajaxGetProductCases', "productID={$productID}&branchID={$branchID}&search={search}&limit=0&caseID={$caseID}");
+
 if($files)
 {
     foreach($files as $key => $fileInfo)
     {
+        if($fileInfo->objectType == 'stepResult')
+        {
+            $fileInfo->extra = '';
+            continue;
+        }
         if($fileInfo->extra != '') unset($files[$key]);
     }
 }
@@ -71,9 +88,17 @@ $fields->field('files')
     ->width('full')
     ->control(array('control' => 'fileSelector', 'defaultFiles' => array_values($files)));
 
-$fields->field('case')->foldable();
+$fields->field('case')
+    ->control(array('control' => 'picker', 'items' => $caseItems))
+    ->items(false)
+    ->value($caseID)
+    ->foldable();
 
-$fields->field('story')->foldable();
+$fields->field('story')
+    ->control(array('control' => 'picker', 'items' => $storyItems))
+    ->items(false)
+    ->value($storyID)
+    ->foldable();
 
 $fields->field('task')->foldable();
 

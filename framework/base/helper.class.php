@@ -360,7 +360,7 @@ class baseHelper
      */
     static public function safe64Encode($string)
     {
-        return str_replace(array('/', '+'), array('.', '_'), base64_encode($string));
+        return str_replace(array('/', '+'), array('.', '_'), base64_encode((string)$string));
     }
 
     /**

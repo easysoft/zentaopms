@@ -74,38 +74,47 @@ foreach($pipelines as $pipeline)
 
 $checkAI     = true;
 $checkScan   = $scanSevereIssue <= $config->ppm->scanSevereIssue && $scanOrdinaryIssue <= $config->ppm->scanOrdinaryIssue && $scanPassRate >= $config->ppm->scanPassRate;
-$hasConflict = empty($checkResult->conflictFiles) ? 'no' : 'yes'; // 是否有代码冲突
+$hasConflict = !empty($checkResult->conflictFiles); // 是否有代码冲突
+$checkResult->conflictFiles[] = '/app/public/test/sae2sd2/test2.php';
+
+$conflictFiles = array();
+if($hasConflict)
+{
+    foreach($checkResult->conflictFiles as $file)
+    {
+        $conflictFiles[] = div(setClass('flex items-center'), icon('file mr-1'), span($file));
+    }
+}
 
 $domBox = div
 (
     $ppm->status == 'opened' ? div
     (
-        $canMerge ? section
+        section
         (
             setClass('flex w-full checkMerge'),
-            $defaultMergeType == 'fast' && $ppm->mergeBaseSHA != $ppm->mergeTargetSHA ? div(setClass('py-6 border-l-4 border-r-4 border-danger')) : div(setClass('py-6 border-l-4 border-r-4 border-success')),
+            !$canMerge ? div(setClass('py-6 border-l-4 border-r-4 border-danger')) : div(setClass('py-6 border-l-4 border-r-4 border-success')),
             div
             (
-                $defaultMergeType == 'fast' && $ppm->mergeBaseSHA != $ppm->mergeTargetSHA ? setClass('flex flex-auto items-center pl-4 bg-danger bg-opacity-5 items-center') :
+                !$canMerge ? setClass('flex flex-auto items-center pl-4 bg-danger bg-opacity-5 items-center') :
                 setClass('flex flex-auto items-center pl-4 bg-success bg-opacity-5 items-center success-box'),
                 set::style(array('justify-content' => 'space-between')),
-                $defaultMergeType == 'fast' && $ppm->mergeBaseSHA != $ppm->mergeTargetSHA ?
+                !$canMerge ?
                 div
                 (
-                    setClass('flex flex-auto items-center pl-4 bg-danger bg-opacity-5 items-center'),
-                    span(setClass('text-danger font-bold'), $lang->ppm->notice->fastNotice)
+                    setClass('flex flex-auto items-center pl-4 bg-opacity-5 items-center'),
+                    span(setClass('text-danger font-bold'), $lang->ppm->checkFailed . ($checkMessage ? "({$checkMessage})" : ''))
                 ) : div(span(setClass('text-success font-bold'), $lang->ppm->checkSuccess)),
                 hasPriv('ppm', 'merge') && !empty($mergeBtnItems) && $ppm->status == 'opened' ? div(btnGroup
                 (
                     setClass('merge-btn-group'),
                     btn
                     (
-                        setClass('btn primary ajax-submit'),
-                        set::disabled($defaultMergeType == 'fast' && $ppm->mergeBaseSHA != $ppm->mergeTargetSHA),
+                        $canMerge ? setClass('btn ajax-submit primary') : setClass('btn bg-gray-100 text-black'),
+                        set::disabled(!$canMerge),
                         set::url(createLink('ppm', 'merge', "ppmID={$ppm->id}&type={$defaultMergeType}")),
                         $lang->reporeviewflow->mergeOptionList[$defaultMergeType]
                     ),
-
                     count($mergeBtnItems) > 1 ? dropDown
                     (
                         btn(setClass('btn primary dropdown-toggle'),
@@ -115,16 +124,7 @@ $domBox = div
                     ) : null
                 )) : null
             )
-        ) : section
-        (
-            setClass('flex w-full mt-2 checkMerge'),
-            div(setClass('py-6 border-l-4 border-r-4 border-danger')),
-            div
-            (
-                setClass('flex flex-auto items-center pl-4 bg-danger bg-opacity-5 items-center'),
-                span(setClass('text-danger font-bold'), $lang->ppm->checkFailed . ($checkMessage ? "({$checkMessage})" : '')),
-            )
-        ),
+        )
     ) : null,
     section
     (
@@ -132,21 +132,25 @@ $domBox = div
         (
             setClass('border px-4 h-12 flex items-center'),
             span(setClass('font-bold'), $lang->ppm->codeConflict),
-            $hasConflict == 'yes' ? label(setClass('danger ml-4'), $lang->ppm->checkStatusList['fail']) : label(setClass('success ml-4'), $lang->ppm->checkStatusList['success']),
+            $hasConflict ? label(setClass('danger ml-4'), $lang->ppm->checkStatusList['fail']) : label(setClass('success ml-4'), $lang->ppm->checkStatusList['success']),
             //div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->ppm->locateView)))
         ),
-        div
+        $hasConflict ? div
         (
             setClass('border px-4 py-4'),
             setStyle(array('margin-top' => '-1px')),
             div
             (
-                setClass('flex items-center'),
-                $hasConflict == 'yes' ? icon(setClass('text-danger font-bold mr-1'), 'close') : icon(setClass('text-success font-bold mr-1'), 'check'),
-                span("{$lang->ppm->hasConflict}: ", $lang->ppm->hasConflictList[$hasConflict]),
-                div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: {$lang->ppm->hasConflictList['no']})"))
+                div
+                (
+                    setClass('flex items-center'),
+                    icon(setClass('text-danger font-bold mr-1'), 'close'),
+                    span("{$lang->ppm->conflictFiles}: "),
+                    div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: {$lang->ppm->hasConflictList['no']})"))
+                ),
+                $conflictFiles,
             )
-        )
+        ) : null
     ),
     //section
     //(
@@ -191,8 +195,9 @@ $domBox = div
             setClass('border px-4 h-12 flex items-center'),
             span(setClass('font-bold'), $lang->ppm->manualReview),
             $reviewResult == 'approved' ? label(setClass('success ml-4'), $lang->ppm->approvalStatusList[$reviewResult]) : null,
-            $reviewResult == 'rejected' ? label(setClass('danger ml-4'),  $lang->ppm->approvalStatusList[$reviewResult]) : null,
-            $reviewResult == 'inProgress' ? label(setClass('secondary ml-4'),  $lang->ppm->approvalStatusList[$reviewResult]) : null
+            $reviewResult == 'rejected' && !empty($reviewers) ? label(setClass('danger ml-4'),  $lang->ppm->approvalStatusList[$reviewResult]) : null,
+            $reviewResult == 'inProgress' ? label(setClass('secondary ml-4'),  $lang->ppm->approvalStatusList[$reviewResult]) : null,
+            $reviewResult == 'rejected' && empty($reviewers) ? label(setClass('secondary ml-4'),  $lang->ppm->approvalStatusList['inProgress']) : null
         ),
         div
         (
@@ -202,7 +207,7 @@ $domBox = div
             (
                 setClass('flex items-center py-1'),
                 $reviewResult == 'approved' ? icon(setClass('text-success font-bold mr-1 reviewResultIcon'), 'check') : icon(setClass('text-danger font-bold mr-1 reviewResultIcon'), 'close'),
-                span("{$lang->ppm->reviewStatus}: ", $lang->ppm->approvalStatusList[$reviewResult]),
+                span("{$lang->ppm->reviewStatus}: ", $reviewResult == 'rejected' && empty($reviewers) ? $lang->ppm->notice->noHasReviewer : $lang->ppm->approvalStatusList[$reviewResult]),
                 div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: {$lang->ppm->approvalStatusList['approved']})"))
             ),
             div

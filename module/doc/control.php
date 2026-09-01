@@ -1065,6 +1065,7 @@ class doc extends control
                 $this->loadModel('message')->sendMentionNotice('doc', 'edit', $response['actionID'], $docData, $doc);
             }
 
+            $response['changes'] = array('type' => 'update', 'objectType' => 'doc', 'objectList' => array($docID));
             return $this->send($response);
         }
 
@@ -2513,7 +2514,16 @@ class doc extends control
         if(is_string($docID) && strpos($docID, 'api.') === 0)
         {
             $apiID = (int)str_replace('api.', '', $docID);
-            echo $this->fetch('api', 'ajaxGetApi', "apiID=$apiID&version=$version");
+            $api   = $this->loadModel('api')->getByID($apiID, $version);
+            if($api)
+            {
+                $api->originTitle = $api->title;
+                $api->icon        = "api is-$api->method";
+                $api->title       = "$api->method $api->path $api->title";
+                $api->api         = true;
+                $api->editable    = common::hasPriv('api', 'edit');
+            }
+            $this->send(array('result' => 'success', 'doc' => $api));
             return;
         }
 
@@ -2606,13 +2616,14 @@ class doc extends control
      * Get lib summaries by space type and space list.
      *
      * @param  string $spaceType
-     * @param  string $spaceList
      * @access public
      * @return void
      */
-    public function ajaxGetLibSummaries(string $spaceType, string $spaceList)
+    public function ajaxGetLibSummaries(string $spaceType)
     {
-        $libsMap = $this->doc->getLibsOfSpaces($spaceType, $spaceList, 0);
+        $spaceList = !empty($_POST['spaceList']) ? $_POST['spaceList'] : array();
+        $spaceList = is_array($spaceList) ? implode(',', $spaceList) : $spaceList;
+        $libsMap   = $this->doc->getLibsOfSpaces($spaceType, $spaceList, 0);
         echo json_encode($libsMap);
     }
 

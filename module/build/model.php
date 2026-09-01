@@ -382,7 +382,7 @@ class buildModel extends model
         $branches = strpos($params, 'separate') === false ? "0,$branch" : $branch;
         foreach($releases as $release)
         {
-            if(strpos($params, 'noterminate') !== false && in_array($release->id, $excludedReleaseIdList)) continue;
+            if(strpos($params, 'noterminate') !== false && $release->status == 'terminate') continue;
 
             if($branch !== 'all')
             {

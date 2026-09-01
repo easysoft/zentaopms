@@ -93,8 +93,8 @@ if(isset($bugCols['story']))       $bugCols['story']['map']      = array('') + $
 if(isset($bugCols['task']))        $bugCols['task']['map']       = array('') + $bugTasks;
 if(isset($bugCols['toTask']))      $bugCols['toTask']['map']     = array('') + $bugTasks;
 
-if(!common::hasPriv($releaseModule, 'unlinkStory')) unset($config->release->dtable->story->fieldList['actions']['list']['unlinkStory']);
-if(!common::hasPriv($releaseModule, 'unlinkBug'))   unset($bugCols['actions']['list']['unlinkBug']);
+if(!common::hasPriv($releaseModule, 'unlinkStory') || $release->status == 'terminate') unset($config->release->dtable->story->fieldList['actions']['list']['unlinkStory']);
+if(!common::hasPriv($releaseModule, 'unlinkBug') || $release->status == 'terminate')   unset($config->release->dtable->bug->fieldList['actions']['list']['unlinkBug'], $config->release->dtable->leftBug->fieldList['actions']['list']['unlinkLeftBug']);
 
 /* Table data and setting for finished stories tab. */
 jsVar('storyCases', $storyCases);
@@ -103,8 +103,8 @@ jsVar('checkedSummary', $lang->product->checkedSRSummary);
 jsVar('unlinkstoryurl', helper::createLink($releaseModule, 'unlinkStory', "releaseID={$release->id}&storyID=%s"));
 $storyTableData = initTableData($stories, $config->release->dtable->story->fieldList, $this->release);
 
-$canBatchUnlinkStory = !$isInModal && $canBeChanged && common::hasPriv($releaseModule, 'batchUnlinkStory');
-$canBatchCloseStory  = !$isInModal && $canBeChanged && common::hasPriv('story', 'batchClose');
+$canBatchUnlinkStory = !$isInModal && $canBeChanged && common::hasPriv($releaseModule, 'batchUnlinkStory') && $release->status != 'terminate';
+$canBatchCloseStory  = !$isInModal && $canBeChanged && common::hasPriv('story', 'batchClose') && $release->status != 'terminate';
 
 $storyFootToolbar = array();
 if($canBatchUnlinkStory) $storyFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'story', 'data-url' => createLink($releaseModule, 'batchUnlinkStory', "release={$release->id}"));
@@ -122,8 +122,8 @@ $bugTableData = array_map(function($bug)
     return $bug;
 }, $bugTableData);
 
-$canBatchUnlinkBug = !$isInModal && $canBeChanged && common::hasPriv($releaseModule, 'batchUnlinkBug');
-$canBatchCloseBug  = !$isInModal && $canBeChanged && common::hasPriv('bug', 'batchClose');
+$canBatchUnlinkBug = !$isInModal && $canBeChanged && common::hasPriv($releaseModule, 'batchUnlinkBug') && $release->status != 'terminate';
+$canBatchCloseBug  = !$isInModal && $canBeChanged && common::hasPriv('bug', 'batchClose') && $release->status != 'terminate';
 
 $bugFootToolbar = array();
 if($canBatchUnlinkBug) $bugFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'bug', 'data-url' => createLink($releaseModule, 'batchUnlinkBug', "release={$release->id}"));
@@ -212,7 +212,7 @@ $linkStoryBtn = $linkBugBtn = $linkLeftBtn = null;
 jsVar('linkParams', $decodeParam);
 jsVar('releaseModule', $releaseModule);
 
-if(!$release->deleted && $canBeChanged && empty($release->releases))
+if(!$release->deleted && $canBeChanged && empty($release->releases) && $release->status != 'terminate')
 {
     if(!$isInModal && common::hasPriv($releaseModule, 'linkStory'))
     {

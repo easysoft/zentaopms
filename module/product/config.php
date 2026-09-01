@@ -79,7 +79,6 @@ $config->product->actionList['delete']['icon']         = 'trash';
 $config->product->actionList['delete']['hint']         = $lang->product->delete;
 $config->product->actionList['delete']['url']          = helper::createLink('product', 'delete', 'productID={id}');
 $config->product->actionList['delete']['class']        = 'ajax-submit';
-$config->product->actionList['delete']['data-confirm'] = array('message' => $lang->product->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->product->actions = new stdclass();
 $config->product->actions->view = array();

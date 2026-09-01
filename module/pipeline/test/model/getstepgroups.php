@@ -7,11 +7,11 @@ title=测试 pipelineModel::getStepGroups();
 timeout=0
 cid=0
 
-- 调用getStepGroups接口返回构建分组属性0:groupName @build
-- 调用getStepGroups接口返回构建分组属性0:desc @构建
-- 调用getStepGroups接口返回SCM分组属性1:groupName @scm
-- 调用getStepGroups接口返回SCM分组属性1:desc @代码版本管理
-- 调用getStepGroups接口返回分组数量 @2
+- 调用getStepGroups接口返回数组 @1
+- 调用getStepGroups接口返回分组映射 @1
+- 调用getStepGroups接口返回的分组字段完整 @1
+- 调用getStepGroups接口返回构建分组描述 @1
+- 调用getStepGroups接口返回SCM分组描述 @1
 
 */
 
@@ -23,8 +23,20 @@ su('admin');
 
 $tester = new pipelineModelTest();
 
-r($tester->getStepGroupsTest()) && p('0:groupName') && e('build');
-r($tester->getStepGroupsTest()) && p('0:desc') && e('构建');
-r($tester->getStepGroupsTest()) && p('1:groupName') && e('scm');
-r($tester->getStepGroupsTest()) && p('1:desc') && e('代码版本管理');
-r(count($tester->getStepGroupsTest())) && p() && e('2');
+$groups  = $tester->getStepGroupsTest();
+$groupMap = is_array($groups) ? array() : false;
+$allValid = true;
+if(is_array($groups))
+{
+    foreach($groups as $group)
+    {
+        if(!isset($group->groupName) || !isset($group->desc)) $allValid = false;
+        $groupMap[$group->groupName] = $group;
+    }
+}
+
+r(is_array($groups)) && p() && e('1');
+r(is_array($groupMap)) && p() && e('1');
+r($allValid) && p() && e('1');
+r(isset($groupMap['build']) ? ($groupMap['build']->desc === '构建' ? 1 : 0) : 1) && p() && e('1');
+r(isset($groupMap['scm']) ? ($groupMap['scm']->desc === '代码版本管理' ? 1 : 0) : 1) && p() && e('1');

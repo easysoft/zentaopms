@@ -415,6 +415,8 @@ class bugZenTest extends baseTest
             'resultFilesCount'      => !empty($instance->view->resultFiles) ? count($instance->view->resultFiles) : 0,
             'plansCount'            => !empty($instance->view->plans) ? count($instance->view->plans) : 0,
             'casesCount'            => !empty($instance->view->cases) ? count($instance->view->cases) : 0,
+            'storiesCount'          => !empty($instance->view->bug->stories) ? count($instance->view->bug->stories) : 0,
+            'releasedBuildsCount'   => !empty($instance->view->releasedBuilds) ? count($instance->view->releasedBuilds) : 0,
         );
     }
 

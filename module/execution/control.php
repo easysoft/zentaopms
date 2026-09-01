@@ -466,6 +466,7 @@ class execution extends control
             $this->config->product->search['fields']['title'] = $this->lang->story->title;
             unset($this->config->product->search['fields']['plan']);
             unset($this->config->product->search['params']['plan']);
+            unset($this->config->product->search['fields']['release'], $this->config->product->search['params']['release']);
             unset($this->config->product->search['fields']['stage']);
             unset($this->config->product->search['params']['stage']);
         }
@@ -667,7 +668,6 @@ class execution extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         unset($this->config->testcase->dtable->fieldList['title']['nestedToggle']);
-        if($productID && $products[$productID]->type == 'normal') unset($this->config->testcase->dtable->fieldList['branch']);
 
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'testcase', "executionID=$executionID&productID=$productID&branchID=$branchID&browseType=bysearch&queryID=myQueryID&moduleID=0&orderBy=$orderBy");
@@ -1117,10 +1117,11 @@ class execution extends control
             $message = $this->executeHooks($executionID);
             if(empty($message)) $message = $this->lang->saveSuccess;
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $executionID));
+            $objectChanges = array('type' => 'add', 'objectType' => 'execution', 'objectList' => array($executionID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $executionID, 'changes' => $objectChanges));
 
             $location = $this->executionZen->getAfterCreateLocation($projectID, $executionID, $project->model);
-            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location, 'changes' => $objectChanges));
         }
 
         list($this->view->pmUsers, $this->view->poUsers, $this->view->qdUsers, $this->view->rdUsers) = $this->executionZen->setUserMoreLink();
@@ -1283,18 +1284,19 @@ class execution extends control
                         $cancelLink   = 'zui.Modal.hide(); ' . ($execution->type == 'kanban' ? 'loadCurrentPage(' . json_encode($kanbanLoad) . ');' : 'loadCurrentPage();');
                     }
                     $taskScheduleLink = $this->createLink('task', 'autoSchedule', 'executionID=' . $executionID);
-                    $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$this->lang->execution->dateConflictTip}', 'actions': [{key: 'confirm', text: '{$this->lang->execution->toAdjust}', btnType: 'primary'}, {key: 'cancel', text: '{$this->lang->execution->know}'}]}).then((res) => {if(res){{$toAdjustLink} openPage('$taskScheduleLink'); window.reload();} else {$cancelLink}});"));
+                    $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$this->lang->execution->dateConflictTip}', 'actions': [{key: 'confirm', text: '{$this->lang->execution->toAdjust}', btnType: 'primary'}, {key: 'cancel', text: '{$this->lang->execution->know}'}]}).then((res) => {if(res){{$toAdjustLink} openPage('$taskScheduleLink'); window.reload();} else {$cancelLink}});", 'changes' => array('type' => 'update', 'objectType' => 'execution', 'objectList' => array($executionID))));
                 }
             }
 
             /* If link from no head then reload. */
+            $objectChanges = array('type' => 'update', 'objectType' => 'execution', 'objectList' => array($executionID));
             if(isInModal())
             {
                 $kanbanLoad = array('selector' => '#main>*');
-                return $this->sendSuccess(array('closeModal' => true, 'callback' => $execution->type == 'kanban' ? 'loadCurrentPage(' . json_encode($kanbanLoad) . ');' : 'loadCurrentPage()'));
+                return $this->sendSuccess(array('closeModal' => true, 'callback' => $execution->type == 'kanban' ? 'loadCurrentPage(' . json_encode($kanbanLoad) . ');' : 'loadCurrentPage()', 'changes' => $objectChanges));
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "executionID=$executionID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "executionID=$executionID"), 'changes' => $objectChanges));
         }
 
         $executions = $this->executions;
@@ -2027,7 +2029,7 @@ class execution extends control
                 $cardList = !empty($laneData[$columnKey]) ? $laneData[$columnKey] : array();
                 foreach($cardList as $card)
                 {
-                    $items[$laneKey][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => $card->name, 'status' => $card->status, 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => $card->progress);
+                    $items[$laneKey][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => $card->name, 'status' => $card->status, 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => $card->progress, 'begin' => !helper::isZeroDate($card->begin) ? $card->begin : '', 'end' => !helper::isZeroDate($card->end) ? $card->end : '');
 
                     if(!isset($columnCards[$columnKey])) $columnCards[$columnKey] = 0;
                     $columnCards[$columnKey] ++;

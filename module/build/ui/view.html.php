@@ -134,21 +134,37 @@ if(!$canBeChanged)
 }
 
 $stories = initTableData($stories, $config->build->story->dtable->fieldList, $this->build);
-$bugs    = initTableData($bugs,    $config->build->bug->dtable->fieldList,   $this->build);
 
+$bugCols          = $this->loadModel('datatable')->getSetting('build', 'bug');
 $generatedBugCols = $this->loadModel('datatable')->getSetting('build', 'generatedBug');
-if(isset($generatedBugCols['branch']))         $generatedBugCols['branch']['map']         = array(BRANCH_MAIN => $lang->trunk) + $generatedBugBranchPairs;
-if(isset($generatedBugCols['module']))         $generatedBugCols['module']['map']         = $generatedBugModulePairs;
-if(isset($generatedBugCols['project']))        $generatedBugCols['project']['map']        = array('') + $generatedBugProjectPairs;
+if(isset($bugCols['branch']))         $bugCols['branch']['map']         = array(BRANCH_MAIN => $lang->trunk) + $bugBranchPairs;
+if(isset($bugCols['module']))         $bugCols['module']['map']         = $bugModulePairs;
+if(isset($bugCols['project']))        $bugCols['project']['map']        = array('') + $bugProjectPairs;
+if(isset($bugCols['execution']))      $bugCols['execution']['map']      = array('') + $executions;
+if(isset($bugCols['plan']))           $bugCols['plan']['map']           = $bugPlans;
+if(isset($bugCols['story']))          $bugCols['story']['map']          = array('') + $bugStories;
+if(isset($bugCols['task']))           $bugCols['task']['map']           = array('') + $bugTasks;
+if(isset($bugCols['toTask']))         $bugCols['toTask']['map']         = array('') + $bugTasks;
+if(isset($bugCols['activatedCount'])) $bugCols['activatedCount']['map'] = array('');
+
+if(isset($generatedBugCols['branch']))         $generatedBugCols['branch']['map']         = array(BRANCH_MAIN => $lang->trunk) + $bugBranchPairs;
+if(isset($generatedBugCols['module']))         $generatedBugCols['module']['map']         = $bugModulePairs;
+if(isset($generatedBugCols['project']))        $generatedBugCols['project']['map']        = array('') + $bugProjectPairs;
 if(isset($generatedBugCols['execution']))      $generatedBugCols['execution']['map']      = array('') + $executions;
-if(isset($generatedBugCols['plan']))           $generatedBugCols['plan']['map']           = $generatedBugPlans;
-if(isset($generatedBugCols['story']))          $generatedBugCols['story']['map']          = array('') + $generatedBugStories;
-if(isset($generatedBugCols['task']))           $generatedBugCols['task']['map']           = array('') + $generatedBugTasks;
-if(isset($generatedBugCols['toTask']))         $generatedBugCols['toTask']['map']         = array('') + $generatedBugTasks;
+if(isset($generatedBugCols['plan']))           $generatedBugCols['plan']['map']           = $bugPlans;
+if(isset($generatedBugCols['story']))          $generatedBugCols['story']['map']          = array('') + $bugStories;
+if(isset($generatedBugCols['task']))           $generatedBugCols['task']['map']           = array('') + $bugTasks;
+if(isset($generatedBugCols['toTask']))         $generatedBugCols['toTask']['map']         = array('') + $bugTasks;
 if(isset($generatedBugCols['activatedCount'])) $generatedBugCols['activatedCount']['map'] = array('');
 
 $bugModel      = $this->loadModel('bug');
+$bugs          = initTableData($bugs, $bugCols, $this->build);
 $generatedBugs = initTableData($generatedBugs, $generatedBugCols, $bugModel);
+if(isset($bugCols['actions']))
+{
+    $bugCols['actions']['width']    = $config->build->bug->dtable->fieldList['actions']['width'];
+    $bugCols['actions']['minWidth'] = $config->build->bug->dtable->fieldList['actions']['minWidth'];
+}
 
 $onlyNoCheckCount = 0;
 if(!empty($build->builds))
@@ -253,12 +269,18 @@ detailBody
                     setID('bugDTable'),
                     set::style(array('min-width' => '100%')),
                     set::userMap($users),
-                    set::cols(array_values($config->build->bug->dtable->fieldList)),
+                    set::cols($bugCols),
                     set::data($bugs),
                     set::checkable(($canBatchUnlinkBug || $canBatchCloseBug) && $onlyNoCheckCount != count($bugs)),
                     set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.noCheckBox ? 'disabled' : true;}")),
                     set::sortLink(createLink($buildModule, 'view', "buildID={$build->id}&type=bug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
+                    set::customCols(array(
+                        'url'            => createLink('datatable', 'ajaxcustom', 'module=build&method=bug'),
+                        'globalUrl'      => createLink('datatable', 'ajaxsaveglobal', 'module=build&method=bug'),
+                        'resetUrl'       => createLink('datatable', 'ajaxreset', 'module=build&method=bug'),
+                        'resetGlobalUrl' => createLink('datatable', 'ajaxreset', 'module=build&method=bug&system=1')
+                    )),
                     set::extraHeight('+144'),
                     set::footToolbar($bugFootToolbar),
                     set::footPager(usePager('bugPager', '', array(

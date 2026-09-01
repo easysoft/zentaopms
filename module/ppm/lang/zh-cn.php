@@ -26,7 +26,7 @@ $lang->ppm->removeAction      = '%s, 由 <strong>%s</strong> 删除了 <a href="
 $lang->ppm->submitType        = '提交方式';
 $lang->ppm->linkedObject      = '关联项';
 $lang->ppm->object            = '对象';
-$lang->ppm->mergeInfo         = '合并概览';
+$lang->ppm->mergeInfo         = '检查项';
 $lang->ppm->locateView        = '查看详情';
 $lang->ppm->codeConflict      = '代码冲突检查';
 $lang->ppm->hasConflict       = '是否有代码冲突';
@@ -287,7 +287,7 @@ $lang->ppm->notDelbranch      = "源分支为受保护分支时不可删除";
 $lang->ppm->addForApp         = "该服务器下没有项目，是否前往添加？";
 $lang->ppm->checkSuccess      = '检查已通过，此分支允许合并';
 $lang->ppm->checkFailed       = '检查未通过，此分支无法合并';
-$lang->ppm->MRHistory         = "本次合并由 <strong>%s</strong> 于 <strong>%s</strong> 创建，申请将 <label class='label primary size-sm px-2 cursor-pointer' data-on='click' data-call='copy' data-params='event'>%s<icon class='icon-copy ml-1'/></label> 的 <strong>%s</strong> 次提交，合并到 <label class='label primary size-sm px-2 cursor-pointer' data-on='click' data-call='copy' data-params='event'>%s<icon class='icon-copy ml-1'/></label> 。";
+$lang->ppm->MRHistory         = "本次合并由 <strong>%s</strong> 于 <strong>%s</strong> 创建，申请将 <icon class='icon-code-fork mr-1'/><strong>%s</strong> 的 <strong>%s</strong> 次提交，合并到 <icon class='icon-code-fork mr-1'><strong>%s</strong> 。";
 
 $lang->ppm->checkStatusList = array();
 $lang->ppm->checkStatusList['fail']    = '未通过';
@@ -326,6 +326,7 @@ $lang->ppm->notice->userNotAllowMerge            = '只允许以下用户合并�
 $lang->ppm->notice->userNotAllowCreate           = '只允许以下用户创建：%s';
 $lang->ppm->notice->hasUnresolvedIssues          = '有未解决的问题，请先解决。';
 $lang->ppm->notice->hasUnresolvedSpecifiedIssues = '有未解决的%s类型的问题，请先解决。';
+$lang->ppm->notice->noHasReviewer                = '未添加评审人';
 
 $lang->ppm->featureBar['view']['all']   = '全部';
 $lang->ppm->featureBar['view']['story'] = '需求';

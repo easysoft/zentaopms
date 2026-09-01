@@ -46,7 +46,7 @@ $table->createdBy->range('creator1,creator2,creator3,creator4,creator5');
 $table->gen(5);
 
 $companyTable = zenData('company');
-$companyTable->admins->range('admin1,admin2');
+$companyTable->admins->range('`,admin1,admin2,`');
 $companyTable->gen(1);
 
 // 3. 用户登录
@@ -103,3 +103,8 @@ r($userTest->checkProductPrivTest($product2, 'team1', $teams, $stakeholders, $wh
 r($userTest->checkProductPrivTest($product2, 'whitelist1', $teams, $stakeholders, $whiteList, $admins)) && p() && e('1'); // 步骤13：产品白名单用户权限检查
 r($userTest->checkProductPrivTest($product2, 'productadmin1', $teams, $stakeholders, $whiteList, $admins)) && p() && e('1'); // 步骤14：产品管理员权限检查
 r($userTest->checkProductPrivTest($product2, 'normaluser', $teams, $stakeholders, $whiteList, $admins)) && p() && e('0'); // 步骤15：普通用户访问私有产品
+
+/* 恢复公司管理员，避免影响后续用例。*/
+global $tester, $app;
+$tester->dao->update(TABLE_COMPANY)->set('admins')->eq(',admin,')->where('id')->eq(1)->exec();
+$app->company->admins = ',admin,';

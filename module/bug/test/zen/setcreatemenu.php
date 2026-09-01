@@ -26,6 +26,17 @@ $table->status->range('normal{5}');
 $table->deleted->range('0{5}');
 $table->gen(5);
 
+$project = zenData('project');
+$project->id->range('1,11,101');
+$project->name->range('项目1,项目11,迭代101');
+$project->type->range('project,project,sprint');
+$project->model->range('scrum,scrum,scrum');
+$project->project->range('0,0,1');
+$project->status->range('doing');
+$project->multiple->range('1');
+$project->deleted->range('0');
+$project->gen(3);
+
 su('admin');
 
 $bugTest = new bugZenTest();

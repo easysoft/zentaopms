@@ -65,6 +65,17 @@ if($browseType == 'assignedTo') unset($config->my->task->dtable->fieldList['assi
 if($browseType == 'openedBy')   unset($config->my->task->dtable->fieldList['openedBy']);
 if($browseType == 'finishedBy') unset($config->my->task->dtable->fieldList['finishedBy']);
 
+if(isset($config->my->task->dtable->fieldList['relatedObject']))
+{
+    $config->my->task->dtable->fieldList['relatedObject']['link'] = hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={id}&objectType=task') . "'; }>RAWJS" : null;
+}
+
+if($config->edition != 'open' && !empty($tasks))
+{
+    $relatedObjectList = $this->loadModel('custom')->getRelatedObjectList(array_keys($tasks), 'task', 'byRelation', true);
+    foreach($tasks as $task) $task->relatedObject = zget($relatedObjectList, $task->id, 0);
+}
+
 $tasks = initTableData($tasks, $config->my->task->dtable->fieldList, $this->task);
 $cols = $this->loadModel('datatable')->getSetting('my', 'task');
 $lang->task->statusList['changed'] = $lang->task->storyChange;

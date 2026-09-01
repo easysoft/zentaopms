@@ -34,7 +34,7 @@ include dirname(__FILE__, 2) . '/lib/tao.class.php';
 $companyTable = zenData('company');
 $companyTable->id->range('1');
 $companyTable->name->range('Test Company');
-$companyTable->admins->range(',admin,');
+$companyTable->admins->range('`,admin,`');
 $companyTable->guest->range('1');
 $companyTable->deleted->range('0');
 $companyTable->gen(1);

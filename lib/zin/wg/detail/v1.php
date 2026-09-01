@@ -121,6 +121,7 @@ class detail extends wg
         .detail-section-title, .detail-section.panel .panel-heading {background: var(--color-canvas); position: sticky; top: 0; z-index: 2}
         .detail-section.panel .panel-heading {z-index: 1}
         .detail-section .detail-section .detail-section-title {z-index: 0}
+        .detail-section .toolbar:has(button.ai-styled) {margin-left: auto}
         .detail-side > * + * {margin-top: 8px}
         .detail-side .tabs {padding: 12px 8px 12px 16px}
         .detail-side .tabs-header {position: sticky; top: 0;}
@@ -133,6 +134,7 @@ class detail extends wg
         .no-width {padding: 0!important; width: 0!important; overflow: hidden!important;}
         .detail-toggle {margin: 0!important; z-index: 1}
         .detail-toggle:hover {background-color: rgba(var(--color-border-rgb), var(--tw-bg-opacity)); transition-duration: .15s; transition-property: background-color; transition-timing-function: cubic-bezier(.4,0,.2,1);}
+        .detail-toggle > .btn {position: relative; top: min(calc((100% - 3px) / 2), calc((100vh - 142px) / 2))}
         .article > .files-list > li.file{white-space:normal;}
         .ai-task-status .status-doing {color: #FAAE1A;}
         .ai-task-status .status-done {color: #3883FA;}
@@ -226,11 +228,11 @@ CSS;
             set::id($objectID),
             set::object($object),
             set::title($title),
-            set::titleClass('text-lg text-clip font-bold'),
+            set::titleClass('text-lg font-bold'),
             set::titleProps(array('title' => empty($titleProps) ? $title : $titleProps)),
             set::type($objectType),
             set::color($color),
-            set::parentTitleClass('text-lg text-clip font-bold'),
+            set::parentTitleClass('text-lg font-bold'),
             set::parent($parent),
             set::parentID($parentID),
             set::parentUrl($parentUrl),
@@ -293,7 +295,7 @@ CSS;
         if($titleActions) unset($item['titleActions']);
 
         $titleActionNode = null;
-        if($titleActions) $titleActionNode = div(setClass('ml-auto'), toolbar::create($titleActions));
+        if($titleActions) $titleActionNode = toolbar::create($titleActions);
 
         return div
         (
@@ -462,7 +464,8 @@ CSS;
     {
         global $config;
 
-        $mainSections = $this->buildMainSections();
+        $mainSections    = $this->buildMainSections();
+        $enableProcedure = !empty($config->enableAITeammate) && $config->edition != 'open';
         return div
         (
             setClass('detail-main flex-auto col gap-2 min-w-0'),
@@ -476,6 +479,14 @@ CSS;
             $this->block('sections'),
             !empty($config->enableAITeammate) && hasPriv('aitask', 'browse') ? $this->buildAITasks() : null,
             $this->children(),
+            $enableProcedure ? createWg
+            (
+                'aiprocedureentry',
+                [
+                    set::objectType($this->prop('objectType')),
+                    set::objectID((int)$this->prop('objectID'))
+                ]
+            ) : null,
             $this->buildHistory(),
             $this->buildActions()
         );
@@ -544,7 +555,7 @@ CSS;
             $this->buildTabsList(),
             $this->block('side'),
             div(
-                setClass('detail-toggle h-full w-2 absolute top-0 flex justify-center items-center'),
+                setClass('detail-toggle h-full w-2 absolute top-0 flex justify-center'),
                 setStyle('left', '-.5rem'),
                 btn(
                     setClass('w-4 rounded-lg'),

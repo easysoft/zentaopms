@@ -2343,4 +2343,47 @@ class bugModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->fetchAll('id');
     }
+
+    /**
+     * 合并由Bug转化的任务动作到Bug。
+     * Merge converted task actions to bug actions
+     *
+     * @param  array  $actions
+     * @access public
+     * @return array
+     */
+    public function mergeTaskActions(array $actions): array
+    {
+        $this->loadModel('action');
+
+        /* 合并由Bug转化的任务动作到Bug。 */
+        $totalActions  = array();
+        $storyIdList   = array();
+        $sourceActions = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->in(array_keys($actions))->fetchAll('id', false);
+        foreach($sourceActions as $actionID => $action)
+        {
+            $totalActions[$actionID] = $actions[$actionID];
+
+            if($action->action != 'converttotask' || empty($action->extra)) continue;
+
+            $taskActions = $this->action->getList('task', (int)$action->extra);
+            foreach($taskActions as $taskActionID => $taskAction)
+            {
+                if($taskAction->action == 'opened') continue;
+                $taskAction->from = 'feedback';
+                $totalActions[$taskActionID] = $taskAction;
+            }
+        }
+
+        /* 重新排序。 */
+        $actions   = array();
+        $orderList = $this->dao->select('id')->from(TABLE_ACTION)->where('id')->in(array_keys($totalActions))->orderBy('date,id')->fetchPairs('id', 'id');
+        foreach($orderList as $orderID)
+        {
+            if(!isset($totalActions[$orderID])) continue;
+            $actions[$orderID] = $totalActions[$orderID];
+        }
+
+        return $actions;
+    }
 }

@@ -22,10 +22,10 @@ su('admin');
 
 $ci = new ciModelTest();
 
-$validUrl   = 'https://jenkinsdev.qc.oop.cc/job/paramsJob/buildWithParameters/api/json';
+$validUrl   = 'https://httpbin.org/redirect-to?url=http://example.com/item/123/';
 $invalidUrl = 'https://invalid.example.com/invalid/path';
 
-$validPWD   = 'jenkins:11eb8b38c99143c7c6d872291e291abff4';
+$validPWD   = 'jenkins:secret';
 $invalidPWD = 'invalid:password';
 
 $emptyData = new stdclass();
@@ -41,5 +41,5 @@ $tagData->PARAM_REVISION = 'should_be_cleared';
 r($ci->sendRequestTest($validUrl, $normalData, $validPWD))   && p() && e('1');  // 步骤1：正常情况
 r($ci->sendRequestTest($validUrl, $emptyData, $validPWD))    && p() && e('1');  // 步骤2：空数据
 r($ci->sendRequestTest($invalidUrl, $normalData, $validPWD)) && p() && e('0');  // 步骤3：无效URL
-r($ci->sendRequestTest($validUrl, $normalData, $invalidPWD)) && p() && e('0');  // 步骤4：错误认证
+r($ci->sendRequestTest('https://httpbin.org/basic-auth/jenkins/secret', $normalData, $invalidPWD)) && p() && e('0');  // 步骤4：错误认证
 r($ci->sendRequestTest($validUrl, $tagData, $validPWD))      && p() && e('1');  // 步骤5：PARAM_TAG处理

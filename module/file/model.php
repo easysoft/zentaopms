@@ -429,7 +429,13 @@ class fileModel extends model
     public function getRealPathName(string $pathName): string
     {
         $realPath = $this->savePath . $pathName;
-        if(file_exists($realPath)) return $pathName;
+        if(file_exists($realPath))
+        {
+            /* 解析后的真实路径必须位于上传目录内，防止目录穿越。The resolved path must stay under the upload root. */
+            $rootPath     = realpath($this->savePath);
+            $realFilePath = realpath($realPath);
+            if($rootPath !== false && $realFilePath !== false && strpos($realFilePath, $rootPath . DIRECTORY_SEPARATOR) === 0) return $pathName;
+        }
 
         return $this->getSaveName($pathName);
     }
@@ -1468,10 +1474,24 @@ class fileModel extends model
             $fileIdList = '';
             foreach($fileList as $file)
             {
+                /* 只接受服务端生成格式的 pathname，防止目录穿越。Only accept server-generated path names. */
+                $pathName = zget($file, 'pathname', '');
+                if(!is_string($pathName) || !preg_match('/^(?:\d{6}\/[0-9A-Za-z]+\.[A-Za-z0-9]+|[0-9a-f]{32}(?:\.notAllowed)?)$/', $pathName)) continue;
+
                 unset($file['id']);
                 $file['objectType'] = $objectType;
                 $file['objectID']   = $objectID;
-                $file['extra']      = $extra ?: zget($file, 'extra', '');
+                /* extra 仅允许空值或数字：
+                 * 1. 数字 extra 是服务端使用的关联标记——需求创建时通过 saveUpload($story->type, $storyID, 1) 写入 extra=1，
+                 *    表示"需求规格附件"，下方 is_numeric 分支收集其文件 id 追加到 zt_storyspec.files；测试步骤结果附件的
+                 *    extra 为步骤 id，读取时按 extra IN (步骤id) 取回（objectType=stepResult）。
+                 * 2. editor 只能由服务端写入（updateObjectID 统一标记编辑器上传的图片），合法 fileList 来源(getByObject)
+                 *    已排除 extra=editor 的文件；若允许客户端伪造 editor，会经 checkPriv 的 editor 分支绕过对象 ACL。
+                 * Only allow empty or numeric extra: numeric marks story-spec attachments (extra=1, collected into
+                 * zt_storyspec.files) or test-step result files (extra=step id); editor is server-only and must not be
+                 * forgeable from fileList, otherwise checkPriv would bypass the object ACL. */
+                $fileExtra   = $extra ?: zget($file, 'extra', '');
+                $file['extra'] = is_numeric($fileExtra) ? $fileExtra : '';
 
                 $fileID = $this->fileTao->saveFile($file, 'url,deleted,realPath,webPath,name,url');
                 if(is_numeric($file['extra'])) $fileIdList .= ',' . $fileID;

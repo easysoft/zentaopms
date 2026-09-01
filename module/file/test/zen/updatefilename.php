@@ -20,10 +20,28 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/filezen.unittest.class.php';
 
 // 2. zendata数据准备
-zenData('file')->loadYaml('file_updatefilename', false, 2)->gen(5);
+$fileTable = zenData('file');
+$fileTable->id->range('1-5');
+$fileTable->pathname->range('202309/081234561.txt,202309/081234562.doc,202309/081234563.pdf,202309/081234564.jpg,202309/081234565.zip');
+$fileTable->title->range('test1.txt,test2.doc,test3.pdf,test4.jpg,test5.zip');
+$fileTable->extension->range('txt,doc,pdf,jpg,zip');
+$fileTable->objectType->range('story,task,bug,testcase,product');
+$fileTable->objectID->range('1-5');
+$fileTable->deleted->range('0{5}');
+$fileTable->gen(5);
 zenData('action')->gen(0);
 zenData('history')->gen(0);
 zenData('user')->gen(5);
+zenData('story')->gen(5);
+zenData('task')->gen(5);
+zenData('bug')->gen(5);
+zenData('case')->gen(5);
+zenData('product')->gen(5);
+$company = zenData('company');
+$company->admins->range('`,admin,`');
+$company->gen(1);
+global $app;
+$app->company->admins = ',admin,';
 
 // 3. 用户登录（选择合适角色）
 su('admin');

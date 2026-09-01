@@ -33,7 +33,7 @@ $project->gen(10);
 
 $company = zenData('company');
 $company->id->range('1');
-$company->admins->range('admin,superuser');
+$company->admins->range('`,admin,superuser,`');
 $company->gen(1);
 
 // 3. 用户登录（选择合适角色）
@@ -48,3 +48,8 @@ r(count($userTest->getProgramAuthedUsersTest((object)array('id' => 2, 'openedBy'
 r(count($userTest->getProgramAuthedUsersTest((object)array('id' => 3, 'openedBy' => 'user2', 'PM' => 'pm3', 'parent' => 0, 'acl' => 'open', 'path' => ',3,'), array(), array('whitelist1' => 'whitelist1'), array()))) && p() && e('4'); // 步骤3：包含白名单用户
 r(count($userTest->getProgramAuthedUsersTest((object)array('id' => 4, 'openedBy' => 'user3', 'PM' => 'pm4', 'parent' => 1, 'acl' => 'program', 'path' => ',1,4,')))) && p() && e('4'); // 步骤4：父项目集内部公开
 r(count($userTest->getProgramAuthedUsersTest((object)array('id' => 5, 'openedBy' => 'user4', 'PM' => 'pm5', 'parent' => 4, 'acl' => 'program', 'path' => ',1,4,5,')))) && p() && e('6'); // 步骤5：多层父项目集权限
+
+/* 恢复公司管理员，避免影响后续用例。*/
+global $tester, $app;
+$tester->dao->update(TABLE_COMPANY)->set('admins')->eq(',admin,')->where('id')->eq(1)->exec();
+$app->company->admins = ',admin,';

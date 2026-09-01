@@ -29,6 +29,9 @@ $bug->plan->range('0{5},1{3},2{2}');
 $bug->resolvedBy->range('[]{5},admin{3},user1{2}');
 $bug->relatedBug->range('[]{10}');
 $bug->feedback->range('0{10}');
+$bug->title->range('bug{10}');
+$bug->openedBy->range('admin{10}');
+$bug->deleted->range('0{10}');
 $bug->gen(10);
 
 // 准备build测试数据
@@ -59,11 +62,22 @@ $execution->gen(5);
 $action = zenData('action');
 $action->gen(0);
 
+zenData('history')->gen(0);
+zenData('feedback')->gen(0);
+zenData('release')->gen(0);
+zenData('story')->gen(5);
 zenData('user')->gen(5);
+$company = zenData('company');
+$company->admins->range('`,admin,`');
+$company->gen(1);
+global $app;
+$app->company->admins = ',admin,';
 su('admin');
 
 global $tester;
 $bugTest = new bugZenTest();
+$bugTest->instance->mao->cache = null;
+restoreObjectTables();
 
 // 测试1:更新resolvedBuild字段,验证build关联
 $bug1 = new stdclass();

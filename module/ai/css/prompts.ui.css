@@ -6,13 +6,17 @@
 .prompts-container .prompt-card:hover a { border-color: #007AFF; }
 .prompts-container .card-title { margin: 0; padding-right: 24px; display: flex; align-items: center; gap: 8px; overflow: hidden; font-weight: normal; }
 .prompts-container .card-title .icon { font-size: 24px; color: var(--color-primary-500); flex-shrink: 0; }
-.prompts-container .card-title span { font-size: 13px; font-weight: 400; color: #3C4353; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.prompts-container .card-title .draft-tag { margin-left: 2px; border-radius: 2px; padding: 1px 6px; background-color: #DCEBFE; font-size: 11px; line-height: 15px; color: #007AFF; flex-shrink: 0; }
-.prompts-container .card-description { color: #8F8FA0; font-size: 12px; line-height: 16px; height: 32px; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; }
+.prompts-container .card-title .prompt-name { min-width: 0; font-size: 13px; font-weight: 400; color: #3C4353; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: hidden; }
+.prompts-container .card-title .draft-tag,
+.prompts-container .card-title .timer-tag { margin-left: 2px; border-radius: 2px; padding: 1px 6px; background-color: #DCEBFE; font-size: 11px; line-height: 15px; color: #007AFF; flex-shrink: 0; white-space: nowrap; }
+.prompts-container .card-description { color: #8F8FA0; font-size: 12px; line-height: 16px; height: 32px; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: hidden; }
 .prompts-container .card-meta { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #838A9D; gap: 8px; flex: none; }
 .prompts-container .creator { display: flex; align-items: center; flex: none; }
 .prompts-container .creator img { width: 20px; height: 20px; border-radius: 50%; background-color: #EDEEF2; }
 .prompts-container .created-date { min-width: 0; font-size: 12px; line-height: 13px; color: #8F8FA0; }
+.dtable-cell[data-col="name"] .dtable-cell-content { display: flex; align-items: center; min-width: 0; }
+.dtable-cell[data-col="name"] .dtable-cell-content > a { min-width: 0; overflow: hidden; text-overflow: hidden; }
+.dtable-cell[data-col="name"] .timer-tag { flex: 0 0 40px; width: 40px; white-space: nowrap; text-align: center; }
 .pager-container { padding-top: 8px; display: flex; justify-content: flex-end; background: #FFF; padding: 12px; }
 @media (max-width: 768px) {
   .prompts-container { grid-template-columns: 1fr; padding: 8px; }

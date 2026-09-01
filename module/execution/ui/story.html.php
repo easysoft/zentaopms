@@ -295,12 +295,12 @@ if($product && !$isFromDoc && !$isFromAI) toolbar
         'class'     => 'ghost',
         'url'       => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$browseType}&moduleID={$param}&chartType=pie&projectID={$execution->id}") . "#app={$app->tab}"
     ))) : null,
-    hasPriv('story', 'export') && ($linkedProductCount < 2 || $browseType == 'byproduct' || $browseType == 'bymodule') ? item(set(array
+    hasPriv('story', 'export') ? item(set(array
     (
         'text'        => $lang->export,
         'icon'        => 'export',
         'class'       => 'ghost',
-        'url'         => createLink('story', 'export', "productID={$product->id}&orderBy=$orderBy&executionID=$execution->id&browseType=$browseType&storyType=$storyType"),
+        'url'         => createLink('story', 'export', "productID=" . ($browseType == 'all' || ($browseType == 'bymodule' && $param == 0) ? 0 : $product->id) . "&orderBy=$orderBy&executionID=$execution->id&browseType=$browseType&storyType=$storyType"),
         'data-toggle' => 'modal'
     ))) : null,
 

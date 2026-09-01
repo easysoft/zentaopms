@@ -1,6 +1,8 @@
 ---
 title: action数据定义
 desc: 用于测试产品仪表盘获取操作记录
+author: Codex
+version: "1.0"
 
 fields:
 - field: id

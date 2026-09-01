@@ -41,6 +41,33 @@ window.renderCell = function(result, info)
         if(story.color) result[0].props.style = 'color: ' + story.color;
         if(html) result.unshift({html});
     }
+    if(info.col.name == 'taskCount' && !info.row.data.taskCount)
+    {
+        if(result[0]['type']) result[0]['type'] = 'text';
+        if(result[0]['props'])
+        {
+            delete result[0]['props']['data-toggle'];
+            delete result[0]['props']['href'];
+        }
+    }
+    if(info.col.name == 'bugCount' && !info.row.data.bugCount)
+    {
+        if(result[0]['type']) result[0]['type'] = 'text';
+        if(result[0]['props'])
+        {
+            delete result[0]['props']['data-toggle'];
+            delete result[0]['props']['href'];
+        }
+    }
+    if(info.col.name == 'caseCount' && !info.row.data.caseCount)
+    {
+        if(result[0]['type']) result[0]['type'] = 'text';
+        if(result[0]['props'])
+        {
+            delete result[0]['props']['data-toggle'];
+            delete result[0]['props']['href'];
+        }
+    }
     return result;
 }
 

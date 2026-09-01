@@ -66,6 +66,9 @@ class file extends control
      */
     public function ajaxUpload(string $uid = '', string $objectType = '', int $objectID = 0, string $extra = '', string $field = 'imgFile', bool $api = false, string $gid = '')
     {
+        /* extra 只允许空值或 editor，editor 由文档应用(docApp)编辑器图片上传使用，禁止客户端写入其他值。Only allow empty or editor extra. */
+        if(!in_array($extra, array('', 'editor'))) $extra = '';
+
         $file = $this->file->getUpload($field);
 
         if(!isset($file[0]) or strpos(",{$this->config->file->allowed},", ",{$file[0]['extension']},") === false) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat));
@@ -723,7 +726,12 @@ class file extends control
         $handle = fopen($file->realPath, "r");
         if($handle)
         {
-            while(!feof($handle)) echo fgets($handle);
+            while(!feof($handle))
+            {
+                $line = fgets($handle);
+                if($line && $mime == 'text/plain') $line = helper::convertEncoding($line, '');
+                echo $line;
+            }
             fclose($handle);
         }
     }

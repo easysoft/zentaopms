@@ -17,6 +17,7 @@ cid=0
 - step3 >> 0
 - step4 >> 4,page|limit,2,0
 - step5 >> 0
+- step6 >> 0
 
 */
 
@@ -26,3 +27,4 @@ r($test->getscanissuelistTest(1, array())) && p() && e('0');
 r($test->getscanissuelistTest(2, array('page' => 1))) && p() && e('0');
 r($test->getscanissuelistTest(3, array('limit' => 10))) && p() && e('0');
 r($test->getscanissuelistTest(4, array('page' => 1, 'limit' => 5))) && p() && e('0');
+r($test->getscanissuelistTest(999, array('repoID' => 1, 'ruleID' => 2))) && p() && e('0');

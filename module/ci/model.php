@@ -23,7 +23,7 @@ class ciModel extends model
         if($repoID) $this->session->set('repoID', $repoID);
 
         $homeMenuModule = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube', 'space');
-        $homeMenuMethod = array('modelsetting', 'reviewrules');
+        $homeMenuMethod = array('modelsetting', 'reviewrules', 'createocrrule', 'editocrrule');
         if(!in_array("{$this->app->moduleName}", $homeMenuModule) && !in_array($this->app->methodName, $homeMenuMethod)) common::setMenuVars($this->config->vision == 'devops' ? 'repo' : 'devops', (int)$this->session->repoID);
 
         if($this->session->repoID)
@@ -149,7 +149,6 @@ class ciModel extends model
             $this->loadModel('action')->create('testtask', $taskID, 'opened');
         }
 
-        if($compileID) $this->dao->update(TABLE_COMPILE)->set('testtask')->eq($taskID)->where('id')->eq($compileID)->exec();
         if(dao::isError()) return dao::isError();
         return $taskID;
     }

@@ -25,6 +25,7 @@ panel
         set::data($queueList),
         set::userMap($users),
         set::checkable($canBatchDelete),
+        set::sortType(false),
         set::onRenderCell(jsRaw('window.renderCell')),
         $canBatchDelete ? set::footToolbar(array
         (

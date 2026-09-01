@@ -21,8 +21,41 @@ $lang->admin->captcha         = '验证码';
 $lang->admin->getCaptcha      = '获取验证码';
 $lang->admin->register        = '登记';
 $lang->admin->resetPWDSetting = '重置密码设置';
-$lang->admin->tableEngine     = '表引擎';
 $lang->admin->setModuleIndex  = '系统功能配置';
+
+/* 数据处理公共。Common data processing. */
+$lang->admin->database     = '数据处理';
+$lang->admin->startUpdate  = '开始更新';
+$lang->admin->noNeedUpdate = '没有数据表需要更新。';
+
+/* 表引擎。Table engine. */
+$lang->admin->tableEngine     = '表引擎';
+$lang->admin->tableEngineTips = '检测到 %s 个数据表需要更新。';
+$lang->admin->tableEngineFail = '数据表 %s 的引擎更新失败。';
+$lang->admin->changingTable   = '正在更新数据表 %s ...';
+$lang->admin->changeSuccess   = '数据表 %s 的引擎已更新为 InnoDB。';
+$lang->admin->changeFail      = "更新数据表 %s 的引擎失败，原因：<span class='text-red'>%s</span>。";
+$lang->admin->changeFinished  = "数据库引擎更新完成，成功 %s 个，共 %s 个。";
+$lang->admin->errorInnodb     = '您当前的数据库不支持使用 InnoDB 数据表引擎。';
+$lang->admin->engineSummary   = "有 %s 个数据表不是 InnoDB 引擎";
+
+/* 字符集。Charset. */
+$lang->admin->charset         = '字符集';
+$lang->admin->charsetHasDiff  = '检测到 %s 个数据表需要更新。';
+$lang->admin->charsetChanging = '正在更新数据表 %s ...';
+$lang->admin->charsetSuccess  = '数据表 %s 的字符集已更新。';
+$lang->admin->charsetFail     = '数据表 %s 字符集更新失败，原因：%s。';
+$lang->admin->charsetFailed   = '更新失败';
+$lang->admin->charsetFinished = '字符集更新完成，成功 %s 个，共 %s 个。';
+
+/* 数据库视图。Database views. */
+$lang->admin->dbView           = '数据库视图';
+$lang->admin->dbViewTips       = '检测到 %s 个数据库视图可以更新。';
+$lang->admin->dbViewRegenerate = '正在更新数据库视图 %s ...';
+$lang->admin->dbViewSuccess    = '数据库视图 %s 已更新。';
+$lang->admin->dbViewFail       = '数据库视图 %s 更新失败。';
+$lang->admin->dbViewResult     = '数据库视图更新完成，成功 %s 个，共 %s 个。';
+$lang->admin->dbViewFailed     = '部分数据库视图更新失败，请稍后重试。';
 
 $lang->admin->mon              = '月';
 $lang->admin->day              = '天';
@@ -43,16 +76,6 @@ $lang->admin->days                 = '日志保存天数';
 $lang->admin->resetPWDByMail       = '通过邮箱重置密码';
 $lang->admin->followUs             = '扫码关注公众号';
 $lang->admin->followUsContent      = '随时查看禅道动态、活动信息、也可获取帮助支持';
-
-$lang->admin->changeEngine               = "更换到InnoDB";
-$lang->admin->changingTable              = '正在更换数据表%s引擎...';
-$lang->admin->changeSuccess              = '已经更换数据表%s引擎为InnoDB。';
-$lang->admin->changeFail                 = "更换数据表%s引擎失败，原因：<span class='text-red'>%s</span>。";
-$lang->admin->errorInnodb                = '您当前的数据库不支持使用InnoDB数据表引擎。';
-$lang->admin->changeFinished             = "更换数据库引擎完毕。";
-$lang->admin->engineInfo                 = "表<strong>%s</strong>的引擎是<strong>%s</strong>。";
-$lang->admin->engineSummary['hasMyISAM'] = "有%s个表不是InnoDB引擎";
-$lang->admin->engineSummary['allInnoDB'] = "所有的表都是InnoDB引擎了";
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = '当前系统的版本是%s，';
@@ -85,17 +108,17 @@ $lang->admin->bind->success = "关联账户成功";
 $lang->admin->bind->submit  = "绑定";
 
 $lang->admin->setModule = new stdclass();
-$lang->admin->setModule->module         = '功能点';
-$lang->admin->setModule->optional       = '可选功能';
-$lang->admin->setModule->opened         = '已开启';
-$lang->admin->setModule->closed         = '已关闭';
+$lang->admin->setModule->module   = '功能点';
+$lang->admin->setModule->optional = '可选功能';
+$lang->admin->setModule->opened   = '已开启';
+$lang->admin->setModule->closed   = '已关闭';
 
-$lang->admin->setModule->my             = '地盘';
-$lang->admin->setModule->product        = $lang->productCommon;
-$lang->admin->setModule->project        = $lang->projectCommon;
-$lang->admin->setModule->qa             = '测试';
-$lang->admin->setModule->assetlib       = '资产库';
-$lang->admin->setModule->other          = '其他功能';
+$lang->admin->setModule->my       = '地盘';
+$lang->admin->setModule->product  = $lang->productCommon;
+$lang->admin->setModule->project  = $lang->projectCommon;
+$lang->admin->setModule->qa       = '测试';
+$lang->admin->setModule->assetlib = '资产库';
+$lang->admin->setModule->other    = '其他功能';
 
 $lang->admin->setModule->program        = '项目集';
 $lang->admin->setModule->testsuite      = '套件';

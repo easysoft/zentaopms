@@ -40,6 +40,7 @@ class buildTao extends buildModel
             ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF(strpos($params, 'hasproject') !== false)->andWhere('t1.project')->ne(0)->fi()
             ->beginIF(strpos($params, 'singled') !== false)->andWhere('t1.execution')->ne(0)->fi()
+            ->beginIF(strpos($params, 'noterminate') !== false)->andWhere('(t3.status')->ne('terminate')->orWhere('t5.release')->isNULL()->markRight(1)->fi()
             ->beginIF(!empty($productIdList))->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF($objectType === 'execution' && $objectID)->andWhere('t1.execution')->eq($objectID)->fi()
             ->beginIF($objectType === 'project' && $objectID)->andWhere('t1.project')->eq($objectID)->fi()

@@ -17,7 +17,7 @@ cid=18593
  - 属性pri @2
  - 属性sourceNote @来源备注2
  - 属性estimate @2.00
-- 测试编辑时在 spec 中 @用户发送 mention 通知
+- 测试编辑时在 spec 中提到的用户发送 mention 通知
  - 属性notifyCount @1
  - 属性mentionUser @user1
 - 测试编辑时 spec 无 mention 不发送通知 @0

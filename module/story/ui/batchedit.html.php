@@ -48,9 +48,11 @@ $items['title']['inputClass']        = 'filter-none';
 $items['assignedTo']['ditto']        = true;
 $items['source']['ditto']            = true;
 $items['stage']['ditto']             = true;
+$items['pri']['ditto']               = true;
 $items['assignedTo']['defaultDitto'] = 'off';
 $items['source']['defaultDitto']     = 'off';
 $items['stage']['defaultDitto']      = 'off';
+$items['pri']['defaultDitto']        = 'off';
 if(!empty($fields['plan'])) $items['plan']['tip'] = $lang->story->planTip;
 
 if(!$branchProduct) unset($items['branch'], $customFields['branch']);

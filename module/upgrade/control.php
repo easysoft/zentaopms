@@ -577,10 +577,12 @@ class upgrade extends control
      * @param  string $skipUpdateDocs
      * @param  string $skipUpdateDocTemplates
      * @param  string $skipUpdateProjectReports
+     * @param  string $skipInstallGitFox
+     * @param  string $skipUpgradeGitFox
      * @access public
      * @return void
      */
-    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no', $skipUpdateDocs = 'no', $skipUpdateDocTemplates = 'no', $skipUpdateProjectReports = 'no', $skipInstallGitFox = 'no')
+    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no', $skipUpdateDocs = 'no', $skipUpdateDocTemplates = 'no', $skipUpdateProjectReports = 'no', $skipInstallGitFox = 'no', $skipUpgradeGitFox = 'no')
     {
         /* 如果数据库有冲突，显示更改的 sql。*/
         /* If there is a conflict with the standard database, display the changed sql. */
@@ -598,6 +600,10 @@ class upgrade extends control
         $command = $this->upgrade->removeEncryptedDir($script);
         if($command) return $this->displayCommand($command);
         if(is_file($script)) unlink($script);
+
+        /* 一致性检查、文件迁移和加密目录移除完成后，进入数据处理页面，执行表引擎、字符集、数据库视图的处理，之后再处理文档、报告和 GitFox。*/
+        /* After consistency check, file migration and encrypted directory removal, enter the data process page to handle table engine, charset and database views, then process docs, reports and GitFox. */
+        if($processed == 'no' && !$this->upgrade->dataProcessFinished()) $this->locate(inlink('dataProcess', "fromVersion={$fromVersion}"));
 
         /* 如果有需要升级的文档，显示升级文档界面。*/
         /* If there are documents that need to be upgraded, display upgrade docs ui. */
@@ -648,6 +654,11 @@ class upgrade extends control
             $this->locate($this->createLink('gitfox', 'installGitFox', "inPage=upgrade&skipInstall=0&fromVersion={$fromVersion}"));
         }
 
+        if($checkGitFox == 'upgrade' && $skipUpgradeGitFox == 'no' )
+        {
+            $this->locate($this->createLink('gitfox', 'upgradeGitFox', "inPage=upgrade&skipUpgrade=0&fromVersion={$fromVersion}"));
+        }
+
         unset($_SESSION['user']);
 
         /**
@@ -665,6 +676,231 @@ class upgrade extends control
         if($processed == 'no') return $this->displayExecuteProcess($fromVersion, $needProcess);
 
         if(empty($needProcess) || $processed == 'yes') $this->processAfterExecSuccessfully();
+    }
+
+    /**
+     * 升级数据处理页面。
+     * Data process page after upgrade.
+     *
+     * @param  string $fromVersion
+     * @param  string $step
+     * @access public
+     * @return void
+     */
+    public function dataProcess(string $fromVersion = '')
+    {
+        if($this->upgrade->dataProcessFinished()) $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no"));
+
+        $this->view->title         = $this->lang->upgrade->dataProcess;
+        $this->view->fromVersion   = $fromVersion;
+        $this->view->finishedSteps = $this->upgrade->getFinishedDataProcessSteps();
+        $this->display();
+    }
+
+    /**
+     * 修改表引擎步骤页。
+     * Table engine step page.
+     *
+     * @access public
+     * @return void
+     */
+    public function tableEngine()
+    {
+        $this->view->title        = $this->lang->upgrade->tableEngine->common;
+        $this->view->myisamTables = $this->config->db->driver == 'mysql' ? $this->upgrade->getMyISAMTables() : array();
+        $this->display();
+    }
+
+    /**
+     * 修改字符集步骤页。
+     * Charset step page.
+     *
+     * @access public
+     * @return void
+     */
+    public function charset()
+    {
+        /* 字符集需要转换的表，先转换数据库字符集。*/
+        $charsetTables = array();
+        $charsetSQLs   = array();
+        if($this->config->db->driver == 'mysql')
+        {
+            try
+            {
+                $this->upgrade->convertDatabaseCharset();
+                $charsetTables = $this->upgrade->getCharsetDiffTables();
+            }
+            catch(Throwable $e)
+            {
+                $charsetTables = array();
+            }
+
+            /* 字符集转换 SQL。*/
+            $target = $this->upgrade->getCharsetTarget();
+            if(!empty($target))
+            {
+                foreach($charsetTables as $table) $charsetSQLs[$table] = "ALTER TABLE `{$table}` CONVERT TO CHARACTER SET {$target['charset']} COLLATE {$target['collation']}";
+            }
+        }
+
+        $this->view->title         = $this->lang->upgrade->charset->common;
+        $this->view->charsetTables = $charsetTables;
+        $this->view->charsetSQLs   = $charsetSQLs;
+        $this->display();
+    }
+
+    /**
+     * 重建数据库视图步骤页。
+     * Database view step page.
+     *
+     * @access public
+     * @return void
+     */
+    public function dbView()
+    {
+        $this->view->title     = $this->lang->upgrade->dbView->common;
+        $this->view->viewList  = $this->upgrade->getViews();
+        $this->view->viewCount = count($this->upgrade->getViewSQLs());
+        $this->display();
+    }
+
+    /**
+     * 通过 ajax 请求更换表引擎。
+     * Ajax change table engine.
+     *
+     * @param  string $table
+     * @access public
+     * @return void
+     */
+    public function ajaxChangeTableEngine(string $table = '')
+    {
+        session_write_close();
+
+        $response = array('result' => 'success', 'message' => '');
+        $table    = str_replace('`', '', $table);
+        if(empty($table) || $this->config->db->driver != 'mysql') return $this->send($response);
+
+        /* 白名单校验，避免传入任意表名执行 ALTER。Whitelist check to avoid arbitrary ALTER. */
+        if(!$this->upgrade->isTable($table)) return $this->send($response);
+
+        /* 表引擎已经不是 MyISAM 时直接返回成功。*/
+        if(strtolower($this->upgrade->getTableEngine($table)) != 'myisam') return $this->send($response);
+
+        /* 检测表是否正在被使用，被占用时稍后重试。*/
+        try
+        {
+            $dbProcesses = $this->dbh->query('SHOW PROCESSLIST')->fetchAll();
+            foreach($dbProcesses as $dbProcess)
+            {
+                if($dbProcess->db != $this->config->db->name) continue;
+                if(!empty($dbProcess->Info) && strpos($dbProcess->Info, " {$table} ") !== false)
+                {
+                    $response['result']  = 'busy';
+                    $response['message'] = sprintf($this->lang->upgrade->tableEngine->busy, $table);
+                    return $this->send($response);
+                }
+            }
+        }
+        catch(PDOException $e){}
+
+        try
+        {
+            $sql = "ALTER TABLE `{$table}` ENGINE='InnoDB'";
+            $this->dbh->exec($sql);
+            $response['message'] = sprintf($this->lang->upgrade->tableEngine->success, $table);
+        }
+        catch(PDOException $e)
+        {
+            $response['result']  = 'fail';
+            $response['message'] = sprintf($this->lang->upgrade->tableEngine->fail, $table, htmlspecialchars($e->getMessage()));
+        }
+
+        return $this->send($response);
+    }
+
+    /**
+     * 通过 ajax 请求转换表字符集。
+     * Ajax convert table charset.
+     *
+     * @param  string $table
+     * @access public
+     * @return void
+     */
+    public function ajaxConvertCharset(string $table = '')
+    {
+        session_write_close();
+
+        $response = array('result' => 'success', 'message' => '');
+        $table    = str_replace('`', '', $table);
+        if(empty($table) || $this->config->db->driver != 'mysql') return $this->send($response);
+
+        /* 白名单校验，避免传入任意表名执行 ALTER。Whitelist check to avoid arbitrary ALTER. */
+        if(!$this->upgrade->isTable($table)) return $this->send($response);
+
+        if($this->upgrade->convertTableCharset($table))
+        {
+            $response['message'] = sprintf($this->lang->upgrade->charset->success, $table);
+        }
+        else
+        {
+            $response['result']  = 'fail';
+            $response['message'] = sprintf($this->lang->upgrade->charset->fail, $table, implode("\n", $this->upgrade->getError()));
+        }
+
+        return $this->send($response);
+    }
+
+    /**
+     * 字符集转换完成后记录配置。
+     * Finish charset conversion.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxFinishCharset()
+    {
+        session_write_close();
+        $this->upgrade->finishCharset();
+        return $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * 记录单个数据处理步骤的完成标记。
+     * Finish one data process step.
+     *
+     * @param  string $step
+     * @access public
+     * @return void
+     */
+    public function ajaxFinishDataProcessStep(string $step = '')
+    {
+        session_write_close();
+
+        $valid = false;
+        foreach($this->config->upgrade->dataProcessSteps as $stepCode)
+        {
+            if(strtolower($stepCode) == strtolower($step)) $valid = true;
+        }
+        if(!$valid) return $this->send(array('result' => 'fail'));
+
+        $this->loadModel('setting')->setItem("system.upgrade.dataProcessStep.{$step}", $this->config->version);
+        return $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * 通过 ajax 请求重建单个数据库视图。
+     * Ajax regenerate a single database view.
+     *
+     * @param  string $view
+     * @access public
+     * @return void
+     */
+    public function ajaxRegenerateView(string $view = '')
+    {
+        session_write_close();
+
+        if(empty($view) || !$this->upgrade->regenerateView($view)) return $this->send(array('result' => 'fail'));
+        return $this->send(array('result' => 'success'));
     }
 
     /**

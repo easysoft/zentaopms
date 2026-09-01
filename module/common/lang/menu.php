@@ -687,7 +687,7 @@ $lang->subject->menu->storyConcept = array('link' => "{$lang->storyConcept}|cust
 
 /* System menu. */
 $lang->system->menu          = new stdclass();
-$lang->system->menu->team    = array('link' => "{$lang->team->common}|my|team|", 'subModule' => 'user');
+$lang->system->menu->team    = array('link' => "{$lang->dept->common}|my|team|", 'subModule' => 'user');
 $lang->system->menu->dynamic = array('link' => "$lang->dynamic|company|dynamic|");
 $lang->system->menu->view    = array('link' => "{$lang->company->common}|company|view");
 
@@ -700,7 +700,7 @@ $lang->system->menuOrder[20] = 'view';
 /* AI menu. */
 $lang->aiapp->menu = new stdclass();
 $lang->aiapp->menu->conversation = array('link' => "{$lang->aiapp->conversation}|aiapp|conversation|");
-$lang->aiapp->menu->zentaoAgent  = array('link' => "{$lang->aiapp->zentaoAgent}|ai|prompts|", 'alias' => 'createprompt,promptview,promptbasicinfo,promptselectdatasource,promptsetinputfields,promptsetpurpose,promptsetinputform,promptsettargetform,promptfinalize');
+$lang->aiapp->menu->zentaoAgent  = array('link' => "{$lang->aiapp->zentaoAgent}|ai|prompts|", 'alias' => 'createprompt,promptview,promptbasicinfo,promptselectdatasource,promptsetinputfields,promptsetpurpose,promptsetinputform,promptsettargetform,promptfinalize,timerbasicinfo');
 $lang->aiapp->menu->generalAgent = array('link' => "{$lang->aiapp->generalAgent}|aiapp|square|", 'alias' => 'view,miniprograms,editMiniProgramCategory,miniprogramview,createMiniProgram,editminiprogram,configuredMiniProgram');
 $lang->aiapp->menu->models       = array('link' => "{$lang->aiapp->models}|aiapp|models|");
 $lang->aiapp->menu->config       = array('link' => "{$lang->aiapp->config}|zai|setting|", 'alias' => 'vectorized');

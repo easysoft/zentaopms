@@ -3587,7 +3587,15 @@ class blockZen extends block
             $project->sv = isset($SVGroup[$projectID]['value']) ? sprintf('%.4f', $SVGroup[$projectID]['value']) * 100 : 0;
             $project->cv = isset($CVGroup[$projectID]['value']) ? sprintf('%.4f', $CVGroup[$projectID]['value']) * 100 : 0;
         }
-        if($project->end != LONG_TIME) $project->remainingDays = helper::diffDate($project->end, helper::today());
+        if($project->end != LONG_TIME && !in_array($project->status, array('suspended', 'done', 'closed')))
+        {
+            $delayDays = $this->loadModel('holiday')->getActualWorkingDays($project->end, helper::today());
+            if(!empty($delayDays))
+            {
+                $delay = count($delayDays) - 1;
+                if($delay > 0) $project->remainingDays = $delay;
+            }
+        }
         $project->risks  = isset($riskCountGroup[$projectID]['value']) ? (int)$riskCountGroup[$projectID]['value'] : 0;
         $project->issues = isset($issueCountGroup[$projectID]['value']) ? (int)$issueCountGroup[$projectID]['value'] : 0;
 

@@ -40,6 +40,12 @@ cid=14932
 - 检查运营界面下需求动态
  - 属性objectLabel @需求
  - 属性objectLink @/projectstory-view-1.html
+- 检查禅道智能体创建动态带详情链接
+ - 属性objectLabel @禅道智能体
+ - 属性objectLink @/ai-promptview-1.html
+- 检查禅道智能体删除动态不带链接
+ - 属性objectLabel @禅道智能体
+ - 属性objectLink @~~
 
 */
 
@@ -99,3 +105,17 @@ $action->objectLabel = '需求|story|view|id=%s';
 $action->objectType  = 'story';
 $config->vision      = 'lite';
 r($actionModel->setObjectLink($action, $deptUsers, array(), '', array())) && p('objectLabel,objectLink') && e('需求,/projectstory-view-1.html'); // 检查运营界面下需求动态
+
+$app->user->admin    = true;
+$config->vision      = 'rnd';
+$action->objectLabel = '禅道智能体|ai|promptview|id=%s';
+$action->objectType  = 'prompt';
+$action->action      = 'created';
+$action->product     = '';
+$action->project     = 0;
+$action->execution   = 0;
+r($actionModel->setObjectLink($action, $deptUsers, array(), '', array())) && p('objectLabel,objectLink') && e('禅道智能体,/ai-promptview-1.html'); // 检查禅道智能体创建动态带详情链接
+
+$action->objectLabel = '禅道智能体|ai|promptview|id=%s';
+$action->action      = 'deleted';
+r($actionModel->setObjectLink($action, $deptUsers, array(), '', array())) && p('objectLabel,objectLink') && e('禅道智能体,~~'); // 检查禅道智能体删除动态不带链接

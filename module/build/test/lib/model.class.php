@@ -508,7 +508,7 @@ class buildModelTest extends baseTest
     {
         $allBuilds = $this->instance->fetchBuilds(array(), '', 11, 'project');
         list($builds, $excludedReleaseIdList) = $this->instance->setBuildDateGroup($allBuilds, $branch, $params);
-        $releases = $this->instance->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
+        $releases = $this->instance->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t1.status,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('FIND_IN_SET(t2.id, t1.build)')
             ->leftJoin(TABLE_BRANCH)->alias('t3')->on('FIND_IN_SET(t3.id, t1.branch)')
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product=t4.id')

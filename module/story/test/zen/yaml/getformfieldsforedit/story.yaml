@@ -1,0 +1,29 @@
+---
+title: getFormFieldsForEdit 需求测试数据
+desc: 固定需求类型、产品、分支、状态与父需求，保证表单字段断言独立
+author: Codex
+version: "1.0"
+
+fields:
+- field: id
+  range: 1-20
+- field: product
+  range: 1{10},3,1{9}
+- field: branch
+  range: 0{10},1,0{9}
+- field: type
+  range: story{5},requirement,story{9},epic,story{4}
+- field: status
+  range: active{7},closed,active{12}
+- field: stage
+  range: wait{20}
+- field: parent
+  range: 0,1,0{18}
+- field: isParent
+  range: 0{20}
+- field: version
+  range: 1{20}
+- field: deleted
+  range: 0{20}
+- field: vision
+  range: rnd{20}

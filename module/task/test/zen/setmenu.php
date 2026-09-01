@@ -15,6 +15,25 @@ $execution->path->range('1,2,`1,3`,`1,4`,`2,5`')->prefix(',')->postfix(',');
 $execution->begin->range('20230102 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(5);
+$zd_company = zenData('company');
+$zd_company->id->range('1');
+$zd_company->name->range('禅道软件');
+$zd_company->admins->range('admin');
+$zd_company->guest->range('0');
+$zd_company->gen(1);
+$dbh->exec("UPDATE zt_company SET admins = ',admin,' WHERE id = 1");
+global $app;
+$app->company = $dbh->query('SELECT * FROM zt_company WHERE id = 1')->fetch(PDO::FETCH_OBJ);
+
+$zd_user = zenData('user');
+$zd_user->id->range('1-1');
+$zd_user->account->range('admin');
+$zd_user->realname->range('admin');
+$zd_user->password->range('e10adc3949ba59abbe56e057f20f883e');
+$zd_user->visions->range('rnd');
+$zd_user->deleted->range('0');
+$zd_user->gen(1);
+
 su('admin');
 
 /**

@@ -23,7 +23,8 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zenData('user')->gen(20);
 zenData('dept')->gen(10);
-$actionTable = zenData('action');
+$actionTable = zenData('action')->loadYaml('action_assignannualbasedata', false, 2);
+$actionTable->id->range('1-100');
 $actionTable->date->range('(-2Y)-(w):1D')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
 $actionTable->gen(100);
 zenData('todo')->gen(50);
@@ -34,10 +35,17 @@ zenData('bug')->gen(25);
 zenData('case')->gen(30);
 zenData('product')->gen(5);
 zenData('project')->gen(10);
+$company = zenData('company');
+$company->admins->range('`,admin,`');
+$company->gen(1);
+global $app;
+$app->company->admins = ',admin,';
 
 su('admin');
 
 $reportTest = new reportZenTest();
+$reportTest->instance->mao->cache = null;
+restoreObjectTables();
 
 r($reportTest->assignAnnualReportTest('2025', '1', 'admin')) && p('year') && e('2025'); // 测试带有account参数的正常情况,返回year
 r($reportTest->assignAnnualReportTest('2025', '1', '')) && p('dept') && e('1'); // 测试带有dept参数的正常情况,返回dept

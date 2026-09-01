@@ -427,9 +427,9 @@ class taskTao extends taskModel
      * @param  object    $oldTask
      * @param  string    $source   parent|child
      * @access protected
-     * @return void
+     * @return string
      */
-    protected function createAutoUpdateTaskAction(object $oldTask, string $source = 'parent') :void
+    protected function createAutoUpdateTaskAction(object $oldTask, string $source = 'parent') :string
     {
         $newTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->id)->fetch();
 
@@ -448,10 +448,11 @@ class taskTao extends taskModel
         if($newTask->status == 'wait'   && $oldTask->status != 'wait')   $action = 'Adjusttasktowait';
         if($newTask->status == 'doing'  && $oldTask->status != 'wait' && $oldTask->status != 'pause') $action = 'Activated';
 
-        if(!$action) return;
+        if(!$action) return '';
 
         $actionID = $this->loadModel('action')->create('task', $oldTask->id, $action, '', 'autoby' . $source, '', false);
         $this->action->logHistory($actionID, $changes);
+        return $action;
     }
 
     /**

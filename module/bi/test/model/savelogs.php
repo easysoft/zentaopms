@@ -24,6 +24,9 @@ su('admin');
 // 3. 创建测试实例（变量名与模块名一致）
 $biTest = new biModelTest();
 
+$logDir = dirname($biTest->instance->getLogFile());
+if(!is_dir($logDir)) mkdir($logDir, 0777, true);
+
 // 4. 强制要求：必须包含至少5个测试步骤
 r($biTest->saveLogsTest('Test log message')) && p('fileExists,hasPhpHeader,hasDieStatement,hasLogContent,hasTimestamp') && e('1,1,1,1,1'); // 步骤1：正常情况
 r($biTest->saveLogsTest('')) && p('fileExists,hasPhpHeader,hasDieStatement,hasTimestamp') && e('1,1,1,1'); // 步骤2：空字符串

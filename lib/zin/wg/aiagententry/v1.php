@@ -86,8 +86,6 @@ class aiAgentEntry extends wg
                 $promptIds     = array_column($prompts, 'id');
                 $teammateItems = $this->fetchTeammates($promptIds, $app, $config);
 
-                $this->buildSuggestions($prompts, $teammateItems, $module, $method, $type, $config);
-
                 $entryNode = $this->buildEntry($prompts, $teammateItems, $module, $method, $type, $app, $config);
             }
         }
@@ -114,6 +112,7 @@ class aiAgentEntry extends wg
                 $promptFields  = $app->control->ai->getPromptFields((int)$singlePrompt->id);
                 $fieldsData    = $promptFields ? helper::jsonEncode(array_values($promptFields)) : '[]';
                 $allowedFields = $app->control->ai->getFormAllowedFields($module, $method);
+                $fieldLabels   = $type === 'form' ? $app->control->ai->getFormFieldLabels($module) : array();
                 $agentRole     = helper::jsonEncode(($singlePrompt->role ?? '') . (!empty($singlePrompt->characterization) ? "\n{$singlePrompt->characterization}" : ''));
                 $agentPurpose  = helper::jsonEncode($singlePrompt->purpose ?? '');
                 $agentSkills   = ($config->edition != 'open' && method_exists($app->control->ai, 'getPromptSkillIDs'))
@@ -128,6 +127,7 @@ class aiAgentEntry extends wg
                     set('data-call', $clickHandler),
                     set('data-prompt-fields', $fieldsData),
                     set('data-allowed-fields', helper::jsonEncode($allowedFields)),
+                    set('data-field-labels', helper::jsonEncode($fieldLabels)),
                     set('data-agent-role', $agentRole),
                     set('data-agent-purpose', $agentPurpose),
                     set('data-agent-skills', helper::jsonEncode($agentSkills)),

@@ -173,7 +173,7 @@ class duckdb
     {
         $sql = trim($sql);
         $sql = trim($sql, ';');
-        $sql = str_replace(array('`', '"'), array('', '\"'), $sql);
+        $sql = str_replace('`', '', $sql);
 
         return $sql;
     }
@@ -251,8 +251,23 @@ class duckdb
      */
     public function getResult()
     {
-        $exec   = "$this->binPath :memory: \"$this->sql\" -json 2>&1";
-        $output = shell_exec($exec);
+        /* PHP 7.0 兼容：proc_open 仅支持字符串命令。SQL 经 escapeshellarg 引用后进入 shell 也不会造成命令注入。 */
+        /* PHP 7.0 compatible: proc_open only accepts a string command, so the SQL must be safely quoted with escapeshellarg. */
+        $exec        = $this->binPath . ' :memory: ' . escapeshellarg($this->sql) . ' -json 2>&1';
+        $descriptors = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
+        $process     = proc_open($exec, $descriptors, $pipes);
+        if(!is_resource($process))
+        {
+            $output = '';
+        }
+        else
+        {
+            fclose($pipes[0]);
+            $output = stream_get_contents($pipes[1]) . stream_get_contents($pipes[2]);
+            fclose($pipes[1]);
+            fclose($pipes[2]);
+            proc_close($process);
+        }
 
         if(empty($output)) $output = '';
         $rows = json_decode($output);

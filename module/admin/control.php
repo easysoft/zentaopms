@@ -362,7 +362,50 @@ EOT;
     public function tableEngine()
     {
         $this->view->title        = $this->lang->admin->tableEngine;
-        $this->view->tableEngines = $this->dao->getTableEngines();
+        $this->view->tableEngines = $this->config->db->driver == 'mysql' ? $this->loadModel('upgrade')->getMyISAMTables(false) : array();
+        $this->display();
+    }
+
+    /**
+     * 字符集。
+     * Convert table charset.
+     *
+     * @access public
+     * @return void
+     */
+    public function charset()
+    {
+        $charsetTables = [];
+        if($this->config->db->driver == 'mysql')
+        {
+            try
+            {
+                $this->loadModel('upgrade')->convertDatabaseCharset();
+                $charsetTables = $this->upgrade->getCharsetDiffTables(false);
+            }
+            catch(Throwable $e)
+            {
+                $charsetTables = [];
+            }
+        }
+        $this->view->title         = $this->lang->admin->charset;
+        $this->view->charsetTables = $charsetTables;
+        $this->display();
+    }
+
+    /**
+     * 数据库视图。
+     * Regenerate database views.
+     *
+     * @access public
+     * @return void
+     */
+    public function dbview()
+    {
+        $viewNames = array_column($this->loadModel('upgrade')->getViews(), 'name');
+        $this->view->title     = $this->lang->admin->dbView;
+        $this->view->viewNames = $viewNames;
+        $this->view->viewCount = count($viewNames);
         $this->display();
     }
 
@@ -396,78 +439,122 @@ EOT;
     }
 
     /**
-     * 更换表引擎为InnoDB。
-     * Ajax change table engine.
+     * 更换单表引擎为InnoDB。
+     * Ajax change one table engine.
      *
+     * @param  string $table
      * @access public
      * @return void
      */
-    public function ajaxChangeTableEngine()
+    public function ajaxChangeTableEngine(string $table = '')
     {
-        $response = array();
-        $response['result']    = 'success';
-        $response['message']   = '';
-        $response['thisTable'] = '';
-        $response['nextTable'] = '';
+        session_write_close();
 
-        $tableEngines = $this->dao->getTableEngines();
+        $response = array('result' => 'success', 'message' => '');
+        if(empty($table) || $this->config->db->driver != 'mysql') return $this->send($response);
 
-        $thisTable = '';
-        $nextTable = '';
-        foreach($tableEngines as $table => $engine)
-        {
-            if($engine == 'InnoDB') continue;
-            if(strpos(",{$this->session->errorTables},", ",{$table},") !== false) continue;
+        $table = str_replace('`', '', $table);
 
-            if(stripos($table, 'searchindex') !== false)
-            {
-                $mysqlVersion = $this->loadModel('install')->getDatabaseVersion();
-                if($mysqlVersion < 5.6) continue;
-            }
+        $this->loadModel('upgrade');
 
-            if($thisTable && empty($nextTable)) $nextTable = $table;
-            if(empty($thisTable)) $thisTable = $table;
-            if($thisTable && $nextTable) break;
-        }
+        /* 白名单校验，避免传入任意表名执行 ALTER。Whitelist check to avoid arbitrary ALTER. */
+        if(!$this->upgrade->isTable($table)) return $this->send($response);
 
-        if(empty($thisTable))
-        {
-            unset($_SESSION['errorTables']);
-            $response['result'] = 'finished';
-            return $this->send($response);
-        }
+        /* 已非 MyISAM 直接成功。Already converted. */
+        if(strtolower($this->upgrade->getTableEngine($table)) != 'myisam') return $this->send($response);
 
+        /* MySQL 5.6 以下跳过 searchindex 表，避免全文索引失效。Skip searchindex tables on MySQL below 5.6. */
+        if(stripos($table, 'searchindex') !== false && $this->loadModel('install')->getDatabaseVersion() < 5.6) return $this->send($response);
+
+        /* 检查表是否被占用。Check whether the table is busy. */
         try
         {
-            /* Check process this table or not. */
             $dbProcesses = $this->dbh->query("SHOW PROCESSLIST")->fetchAll();
             foreach($dbProcesses as $dbProcess)
             {
                 if($dbProcess->db != $this->config->db->name) continue;
-                if(!empty($dbProcess->Info) && strpos($dbProcess->Info, " {$thisTable} ") !== false)
+                if(!empty($dbProcess->Info) && strpos($dbProcess->Info, " {$table} ") !== false)
                 {
-                    $response['message'] = sprintf($this->lang->admin->changingTable, $thisTable);
+                    $response['message'] = sprintf($this->lang->admin->changingTable, $table);
                     return $this->send($response);
                 }
             }
         }
         catch(PDOException $e){}
 
-        $response['thisTable'] = $thisTable;
-        $response['nextTable'] = $nextTable;
-
         try
         {
-            $sql = "ALTER TABLE `$thisTable` ENGINE='InnoDB'";
-            $this->dbh->exec($sql);
-            $response['message'] = sprintf($this->lang->admin->changeSuccess, $thisTable);
+            if($this->upgrade->getTableEngine($table) == 'MyISAM')
+            {
+                $sql = "ALTER TABLE `{$table}` ENGINE='InnoDB'";
+                $this->dbh->exec($sql);
+            }
+            $response['message'] = sprintf($this->lang->admin->changeSuccess, $table);
         }
         catch(PDOException $e)
         {
-            $this->session->set('errorTables', $this->session->errorTables . ',' . $thisTable);
-
             $response['result']  = 'fail';
-            $response['message'] = sprintf($this->lang->admin->changeFail, $thisTable, htmlspecialchars($e->getMessage()));
+            $response['message'] = sprintf($this->lang->admin->changeFail, $table, htmlspecialchars($e->getMessage()));
+        }
+
+        return $this->send($response);
+    }
+
+    /**
+     * 通过 ajax 请求转换表字符集。
+     * Ajax convert table charset.
+     *
+     * @param  string $table
+     * @access public
+     * @return void
+     */
+    public function ajaxChangeCharset(string $table = '')
+    {
+        session_write_close();
+
+        $response = array('result' => 'success', 'message' => '');
+        if(empty($table) || $this->config->db->driver != 'mysql') return $this->send($response);
+
+        $table = str_replace('`', '', $table);
+
+        $this->loadModel('upgrade');
+        /* 白名单校验，避免传入任意表名执行 ALTER。Whitelist check to avoid arbitrary ALTER. */
+        if(!$this->upgrade->isTable($table)) return $this->send($response);
+
+        if($this->upgrade->convertTableCharset($table))
+        {
+            $response['message'] = sprintf($this->lang->admin->charsetSuccess, $table);
+        }
+        else
+        {
+            $errors = $this->upgrade->getError();
+            $response['result']  = 'fail';
+            $response['message'] = sprintf($this->lang->admin->charsetFail, $table, htmlspecialchars((string)end($errors)));
+        }
+
+        return $this->send($response);
+    }
+
+    /**
+     * 通过 ajax 请求重建单个数据库视图。
+     * Ajax regenerate one database view.
+     *
+     * @param  string $view
+     * @access public
+     * @return void
+     */
+    public function ajaxRegenerateView(string $view = '')
+    {
+        session_write_close();
+
+        $response = array('result' => 'success', 'message' => '');
+        if(empty($view)) return $this->send($response);
+
+        $this->loadModel('upgrade');
+        if(!$this->upgrade->regenerateView($view))
+        {
+            $response['result']  = 'fail';
+            $response['message'] = sprintf($this->lang->admin->dbViewFail, $view);
         }
 
         return $this->send($response);

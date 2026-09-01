@@ -22,7 +22,7 @@ cid=0
 
 $repoTest = new repoModelTest();
 
-$apiRoot = 'https://giteadev.qc.oop.cc/api/v1%s?token=6149a6013047301b116389d50db5cbf599772082';
+$apiRoot = 'https://giteadev.oop.cc/api/v1%s?token=ee10133181d8d10f473079f7f2d9c83c796a3994';
 r($repoTest->getGiteaReposIsArrayTest($apiRoot))              && p() && e('1');
 r($repoTest->getGiteaReposFirstFieldTest($apiRoot, 'id'))    && p() && e('1');
 r($repoTest->getGiteaReposFirstFieldTest($apiRoot, 'name'))  && p() && e('1');

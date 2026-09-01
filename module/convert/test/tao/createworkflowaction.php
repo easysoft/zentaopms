@@ -40,3 +40,17 @@ global $tester;
 r($tester->loadModel('workflowaction')->fetchByID(1)) && p('module') && e('task');            // 查询创建后的动作模块
 r($tester->loadModel('workflowaction')->fetchByID(1)) && p('action') && e('taskaction10001'); // 查询创建后的动作字段
 r($tester->loadModel('workflowaction')->fetchByID(1)) && p('name')   && e('动作A');           // 查询创建后的动作名称
+
+/* 清理本用例创建的流程数据，避免残留空 table 的 workflow 污染 objectTables。 */
+zenData('workflow')->gen(0);
+zenData('workflowaction')->gen(0);
+zenData('workflowfield')->gen(0);
+zenData('workflowlayout')->gen(0);
+zenData('workflowlabel')->gen(0);
+zenData('workflowrule')->gen(0);
+zenData('workflowdatasource')->gen(0);
+zenData('workflowrelation')->gen(0);
+zenData('workflowlinkdata')->gen(0);
+zenData('workflowversion')->gen(0);
+zenData('workflowreport')->gen(0);
+zenData('workflowsql')->gen(0);

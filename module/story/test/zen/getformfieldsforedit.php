@@ -32,15 +32,31 @@ include dirname(__FILE__, 2) . '/lib/storyzen.unittest.class.php';
 
 zenData('product')->loadYaml('product')->gen(3);
 zenData('story')->loadYaml('story')->gen(20);
+zenData('storyspec')->gen(20);
+zenData('storyreview')->gen(0);
 zenData('user')->gen(5);
 zenData('productplan')->gen(5);
 zenData('module')->gen(5);
+$branch = zenData('branch');
+$branch->id->range('1');
+$branch->product->range('3');
+$branch->name->range('分支1');
+$branch->status->range('active');
+$branch->deleted->range('0');
+$branch->gen(1);
+$company = zenData('company');
+$company->admins->range('`,admin,`');
+$company->gen(1);
+global $app;
+$app->company->admins = ',admin,';
 
 su('admin');
 
 $storyIDs = array(1, 11, 6, 16, 8, 2);
 
 $storyTester = new storyZenTest();
+$storyTester->objectModel->mao->cache = null;
+restoreObjectTables();
 r($storyTester->getFormFieldsForEditTest($storyIDs[0])) && p('product:control,title')    && e('select,所属产品');   // 测试获取普通产品的软件需求编辑表单字段
 r($storyTester->getFormFieldsForEditTest($storyIDs[1])) && p('branch:control,title')     && e('select,平台/分支');  // 测试获取多分支产品的软件需求编辑表单字段
 r($storyTester->getFormFieldsForEditTest($storyIDs[2])) && p('assignedTo:control,title') && e('select,指派给');     // 测试获取用户需求的编辑表单字段

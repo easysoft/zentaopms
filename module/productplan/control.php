@@ -91,12 +91,13 @@ class productplan extends control
             if($parent > 0) $this->productplan->updateParentStatus($parent);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $planID));
+            $objectChanges = array('type' => 'add', 'objectType' => 'productplan', 'objectList' => array($planID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $planID, 'changes' => $objectChanges));
             if(isInModal())
             {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadProductPlans($productID, $branchID);"));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadProductPlans($productID, $branchID);", 'changes' => $objectChanges));
             }
-            return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'browse', "productID=$productID")));
+            return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'browse', "productID=$productID"), 'changes' => $objectChanges));
         }
 
         $this->commonAction($productID, $branchID);
@@ -160,7 +161,7 @@ class productplan extends control
             }
             $message = $this->executeHooks($planID);
             if($message) $this->lang->saveSuccess = $message;
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($this->app->rawModule, 'view', "planID=$planID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($this->app->rawModule, 'view', "planID=$planID"), 'changes' => array('type' => 'update', 'objectType' => 'productplan', 'objectList' => array($planID))));
         }
 
         $oldBranch = array($planID => $plan->branch);

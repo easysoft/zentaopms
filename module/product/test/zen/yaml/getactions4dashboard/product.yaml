@@ -1,6 +1,8 @@
 ---
 title: product数据定义
 desc: 用于测试产品仪表盘
+author: Codex
+version: "1.0"
 
 fields:
 - field: id

@@ -42,12 +42,15 @@ $config->project->dtable->fieldList['status']['statusMap'] = $lang->project->sta
 $config->project->dtable->fieldList['status']['group']     = 2;
 $config->project->dtable->fieldList['status']['show']      = true;
 
-$config->project->dtable->fieldList['hasProduct']['title']    = $lang->project->type;
-$config->project->dtable->fieldList['hasProduct']['name']     = 'hasProduct';
-$config->project->dtable->fieldList['hasProduct']['type']     = 'category';
-$config->project->dtable->fieldList['hasProduct']['sortType'] = true;
-$config->project->dtable->fieldList['hasProduct']['map']      = $lang->project->projectTypeList;
-$config->project->dtable->fieldList['hasProduct']['group']    = 2;
+if($config->vision == 'rnd')
+{
+    $config->project->dtable->fieldList['hasProduct']['title']    = $lang->project->type;
+    $config->project->dtable->fieldList['hasProduct']['name']     = 'hasProduct';
+    $config->project->dtable->fieldList['hasProduct']['type']     = 'category';
+    $config->project->dtable->fieldList['hasProduct']['sortType'] = true;
+    $config->project->dtable->fieldList['hasProduct']['map']      = $lang->project->projectTypeList;
+    $config->project->dtable->fieldList['hasProduct']['group']    = 2;
+}
 
 $config->project->dtable->fieldList['PM']['title']       = $lang->project->PM;
 $config->project->dtable->fieldList['PM']['name']        = 'PM';
@@ -103,7 +106,7 @@ $config->project->dtable->fieldList['invested']['show']     = true;
 $config->project->dtable->fieldList['invested']['sortType'] = false;
 if($isEn) $config->project->dtable->fieldList['invested']['width'] = '120px';
 
-if(helper::hasFeature('deliverable') && in_array($config->edition, array('max', 'ipd')))
+if($config->vision == 'rnd' && helper::hasFeature('deliverable') && in_array($config->edition, array('max', 'ipd')))
 {
     $config->project->dtable->fieldList['deliverable']['title']    = $lang->project->deliverableAbbr;
     $config->project->dtable->fieldList['deliverable']['name']     = 'deliverable';
@@ -164,7 +167,7 @@ $config->project->dtable->fieldList['progress']['group'] = 7;
 $config->project->dtable->fieldList['progress']['show']  = true;
 if($isEn) $config->project->dtable->fieldList['progress']['width'] = '100px';
 
-if($config->edition != 'open')
+if($config->vision == 'rnd' && $config->edition != 'open')
 {
     $config->project->dtable->fieldList['workflowGroup']['title']    = $lang->project->workflowGroup;
     $config->project->dtable->fieldList['workflowGroup']['name']     = 'workflowGroup';

@@ -27,20 +27,19 @@ $taskNavs['closedBy']   = array('text' => sprintf($lang->user->closedBy,   $that
 $taskNavs['canceledBy'] = array('text' => sprintf($lang->user->canceledBy, $that), 'url' => inlink('task', "userID={$user->id}&browseType=canceledBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
 if(isset($taskNavs[$browseType])) $taskNavs[$browseType]['active'] = true;
 
-$this->loadModel('my');
-$cols = array();
-foreach($config->user->defaultFields['task'] as $field) $cols[$field] = $config->my->task->dtable->fieldList[$field];
-$cols['id']['checkbox']       = false;
-$cols['name']['data-toggle']  = 'modal';
-$cols['name']['data-size']    = 'lg';
-
-$cols = array_map(function($col)
+if(isset($config->user->task->dtable->fieldList['relatedObject']))
 {
-    unset($col['fixed'], $col['group']);
-    return $col;
-}, $cols);
+    $config->user->task->dtable->fieldList['relatedObject']['link'] = hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={id}&objectType=task') . "'; }>RAWJS" : null;
+}
+$cols = $this->loadModel('datatable')->getSetting('user', 'task');
 
-$tasks = initTableData($tasks, $cols, $this->task);
+if($config->edition != 'open' && !empty($tasks))
+{
+    $relatedObjectList = $this->loadModel('custom')->getRelatedObjectList(array_keys($tasks), 'task', 'byRelation', true);
+    foreach($tasks as $task) $task->relatedObject = zget($relatedObjectList, $task->id, 0);
+}
+
+$tasks = initTableData($tasks, $config->user->task->dtable->fieldList, $this->task);
 foreach($tasks as $task)
 {
     $task->rawStatus     = $task->status;
@@ -61,6 +60,8 @@ div
         set::bordered(true),
         set::cols($cols),
         set::data(array_values($tasks)),
+        set::customCols(true),
+        set::priList($lang->task->priList),
         set::orderBy($orderBy),
         set::sortLink(inlink('task', "userID={$user->id}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
         set::onRenderCell(jsRaw('window.renderCell')),

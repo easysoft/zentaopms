@@ -163,6 +163,23 @@ $config->my->requirement->dtable->fieldList['assignedDate']['sortType'] = true;
 $config->my->requirement->dtable->fieldList['assignedDate']['type']     = 'date';
 $config->my->requirement->dtable->fieldList['assignedDate']['group']    = 6;
 
+if($config->edition != 'open')
+{
+    $config->my->requirement->dtable->fieldList['relatedObject']['name']            = 'relatedObject';
+    $config->my->requirement->dtable->fieldList['relatedObject']['title']           = $lang->custom->relateObject;
+    $config->my->requirement->dtable->fieldList['relatedObject']['sortType']        = false;
+    $config->my->requirement->dtable->fieldList['relatedObject']['width']           = '70';
+    $config->my->requirement->dtable->fieldList['relatedObject']['type']            = 'text';
+    $config->my->requirement->dtable->fieldList['relatedObject']['link']            = common::hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={id}&objectType={type}') . "'; }>RAWJS" : null;
+    $config->my->requirement->dtable->fieldList['relatedObject']['data-toggle']     = 'modal';
+    $config->my->requirement->dtable->fieldList['relatedObject']['data-size']       = 'lg';
+    $config->my->requirement->dtable->fieldList['relatedObject']['show']            = true;
+    $config->my->requirement->dtable->fieldList['relatedObject']['group']           = 7;
+    $config->my->requirement->dtable->fieldList['relatedObject']['flex']            = false;
+    $config->my->requirement->dtable->fieldList['relatedObject']['align']           = 'center';
+    if($isEn) $config->my->requirement->dtable->fieldList['relatedObject']['width'] = '120';
+}
+
 $config->my->requirement->dtable->fieldList['closedBy']['name']     = 'closedBy';
 $config->my->requirement->dtable->fieldList['closedBy']['title']    = $lang->story->closedBy;
 $config->my->requirement->dtable->fieldList['closedBy']['sortType'] = true;

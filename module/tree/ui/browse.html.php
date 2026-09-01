@@ -54,7 +54,8 @@ if($viewType == 'story' && $allProduct)
 foreach($sons as $son)
 {
     if($son->order > $maxOrder) $maxOrder = $son->order;
-    $disabled = $son->type != $viewType;
+    $disabled    = $son->type != $viewType;
+    $actionClass = $disabled ? 'action-group child-hidden' : 'action-group existing-actions';
 
     $moduleRows[] = formRow
     (
@@ -99,7 +100,7 @@ foreach($sons as $son)
                     set::control('hidden')
                 )
             ),
-            batchActions(set::actionClass('action-group child-hidden'))
+            batchActions(set::actionClass($actionClass))
         )
     );
 }

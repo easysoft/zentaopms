@@ -43,6 +43,14 @@ $projectProduct->product->range('1-3,4-5');
 $projectProduct->branch->range('0{5}');
 $projectProduct->gen(5);
 
+$story = zenData('story');
+$story->id->range('1-3');
+$story->product->range('1,2,4');
+$story->title->range('需求1,需求2,需求3');
+$story->status->range('active');
+$story->deleted->range('0');
+$story->gen(3);
+
 $projectStory = zenData('projectstory');
 $projectStory->project->range('1{2},2{1}');
 $projectStory->product->range('1-2,4');

@@ -20,7 +20,7 @@ cid=0
 
 $repoTest = new repoModelTest();
 
-$apiRoot = 'https://gitlabdev.qc.oop.cc/api/v4%s?private_token=glpat-b8Sa1pM9k9ygxMZYPN6w';
+$apiRoot = 'https://gitlabdev.oop.cc/api/v4%s?private_token=glpat-U3zV-zBBm-3PnbVbersM';
 r($repoTest->getGitLabReposIsArrayTest($apiRoot))              && p() && e('1');
 r($repoTest->getGitLabReposFirstFieldTest($apiRoot, 'id'))    && p() && e('1');
 r($repoTest->getGitLabReposFirstFieldTest($apiRoot, 'name'))  && p() && e('1');

@@ -65,4 +65,4 @@ r($userTest->checkProgramPrivTest($privateProgram, 'stakeholder1', $stakeholders
 r($userTest->checkProgramPrivTest($privateProgram, 'whitelist1', array(), $whiteList, array())) && p() && e('1'); // 步骤6：白名单用户访问项目集
 r($userTest->checkProgramPrivTest($privateProgram, 'testadmin', array(), array(), $admins)) && p() && e('1'); // 步骤7：项目集管理员访问项目集
 r($userTest->checkProgramPrivTest($privateProgram, 'guest', array(), array(), array())) && p() && e('1'); // 步骤8：普通用户访问私有项目集（创建者有权限）
-r($userTest->checkProgramPrivTest($childProgram, 'admin', array(), array(), array())) && p() && e('0'); // 步骤9：子项目集访问测试（当前数据条件下预期为0）
+r($userTest->checkProgramPrivTest($childProgram, 'guest', array(), array(), array())) && p() && e('0'); // 步骤9：子项目集访问测试（当前数据条件下预期为0）

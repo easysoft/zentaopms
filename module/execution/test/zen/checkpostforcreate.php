@@ -14,6 +14,8 @@ cid=16422
 - 执行executionzenTest模块的checkPostForCreateTest方法  @1
 - 执行executionzenTest模块的checkPostForCreateTest方法 属性days @可用工作日不能超过『-180』天
 - 执行executionzenTest模块的checkPostForCreateTest方法  @1
+- 执行executionzenTest模块的checkPostForCreateTest方法 属性products[0] @『关联产品』不能为空。
+- 执行executionzenTest模块的checkPostForCreateTest方法 属性plans[0][] @『关联计划』不能为空。
 
 */
 
@@ -26,6 +28,7 @@ $project->name->range('敏捷项目1,敏捷项目2,瀑布项目1,瀑布项目2,�
 $project->model->range('scrum{2},waterfall{3},waterfallplus{2},kanban{3}');
 $project->type->range('project{10}');
 $project->status->range('doing{10}');
+$project->hasProduct->range('1{10}');
 $project->begin->range('`2020-01-01`');
 $project->end->range('`2030-12-31`');
 $project->deleted->range('0{10}');
@@ -91,3 +94,15 @@ $_POST['end'] = '2024-06-30';
 $_POST['products'] = array(8);
 $_POST['branch'] = array(array());
 r($executionzenTest->checkPostForCreateTest()) && p() && e('1');
+
+$tester->config->execution->create->requiredFields .= ',products';
+$_POST['project'] = 1;
+$_POST['name'] = '测试执行7';
+$_POST['begin'] = '2024-02-01';
+$_POST['end'] = '2024-06-30';
+unset($_POST['products'], $_POST['branch']);
+r($executionzenTest->checkPostForCreateTest()) && p('products[0]') && e('『关联产品』不能为空。');
+
+$tester->config->execution->create->requiredFields .= ',plans';
+$_POST['products'] = array(1);
+r($executionzenTest->checkPostForCreateTest()) && p('plans[0][]') && e('『关联计划』不能为空。');

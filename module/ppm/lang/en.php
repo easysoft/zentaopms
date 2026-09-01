@@ -26,7 +26,7 @@ $lang->ppm->removeAction      = '%s, <strong>%s</strong> deleted <a href="%s">Me
 $lang->ppm->submitType        = 'Submit type';
 $lang->ppm->linkedObject      = 'Linked items';
 $lang->ppm->object            = 'Object';
-$lang->ppm->mergeInfo         = 'Merge View';
+$lang->ppm->mergeInfo         = 'Check Info';
 $lang->ppm->locateView        = 'View';
 $lang->ppm->codeConflict      = 'Conflict';
 $lang->ppm->hasConflict       = 'Check Conflict';
@@ -287,7 +287,7 @@ $lang->ppm->notDelbranch      = "The source branch cannot be deleted when it is 
 $lang->ppm->addForApp         = "There are no projects under this server, do you want to go to add?";
 $lang->ppm->checkSuccess      = 'The inspection has been passed, and this branch is allowed to be merged';
 $lang->ppm->checkFailed       = 'The check failed, and this branch cannot be merged';
-$lang->ppm->MRHistory         = "This merge was created by <strong>%s</strong> on <strong>%s</strong>，merging <label class='label primary size-sm px-2 cursor-pointer' data-on='click' data-call='copy' data-params='event'>%s<icon class='icon-copy ml-1'/></label> <strong>%s</strong> commits，Merge into <label class='label primary size-sm px-2 cursor-pointer' data-on='click' data-call='copy' data-params='event'>%s<icon class='icon-copy ml-1'/></label> 。";
+$lang->ppm->MRHistory         = "This merge was created by <strong>%s</strong> on <strong>%s</strong>，merging <icon class='icon-code-fork ml-1'/><strong>%s</strong> <strong>%s</strong> commits，Merge into <icon class='icon-code-fork mr-1'/><strong>%s</strong> 。";
 
 $lang->ppm->checkStatusList = array();
 $lang->ppm->checkStatusList['fail']    = 'Not passed';
@@ -326,6 +326,7 @@ $lang->ppm->notice->userNotAllowMerge            = 'Only the following users are
 $lang->ppm->notice->userNotAllowCreate           = 'Only the following users are allowed to create: %s';
 $lang->ppm->notice->hasUnresolvedIssues          = 'There are unresolved issues, please resolve them first.';
 $lang->ppm->notice->hasUnresolvedSpecifiedIssues = 'There are unresolved %s type issues, please resolve them first.';
+$lang->ppm->notice->noHasReviewer                = 'No reviewers have been added';
 
 $lang->ppm->featureBar['view']['all']   = 'All';
 $lang->ppm->featureBar['view']['story'] = 'Story';

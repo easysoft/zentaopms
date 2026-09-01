@@ -14,11 +14,14 @@ namespace zin;
 
 jsVar('storyType', $story->type);
 jsVar('storyID', $story->id);
+jsVar('undoneTasks', $undoneTasks);
+jsVar('confirmCloseTips', sprintf($lang->story->undoneTasksTips, $undoneTasks));
 
 modalHeader();
 formPanel
 (
     set::submitBtnText($lang->story->closeAction),
+    set::ajax(array('beforeSubmit' => jsRaw('checkSubmit'))),
     formGroup
     (
         setID('closedReason'),

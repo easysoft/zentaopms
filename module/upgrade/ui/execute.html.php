@@ -73,7 +73,7 @@ $buildChanges = function() use ($app, $lang, $upgradeChanges)
             (
                 setClass("label gray-pale text-gray-400 px-2.5 py-1 {$width}"),
                 setData(['text' => $lang->upgrade->changeModes[$change['mode']]]),
-                icon('spinner-indicator')
+                icon(setClass('animate-spin'), 'spinner-indicator')
             ),
             span
             (
@@ -111,7 +111,7 @@ div
         ),
         row
         (
-            setClass('bg-gray-100 gap-2 p-2'),
+            setClass('bg-gray-100 gap-2 p-2 flex-1 min-h-0'),
             setStyle(['max-height' => 'calc(100% - 6rem)']),
             col
             (

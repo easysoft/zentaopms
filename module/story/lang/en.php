@@ -54,6 +54,7 @@ $lang->story->setting            = "Settings";
 $lang->story->tasks              = "Linked Tasks";
 $lang->story->bugs               = "Linked Bugs";
 $lang->story->cases              = "Linked  Test Cases";
+$lang->story->docs               = "Linked Docs";
 $lang->story->taskCount          = 'Tasks';
 $lang->story->bugCount           = 'Bugs';
 $lang->story->caseCount          = 'Test Cases';
@@ -76,6 +77,7 @@ $lang->story->batchAssignTo      = "Batch Assign";
 $lang->story->batchChangeModule  = "Batch Change Modules";
 $lang->story->batchChangeParent  = "Batch Change Parent";
 $lang->story->batchChangeGrade   = "Batch Change Hierarchy";
+$lang->story->errorInvalidGrade  = 'The selected story hierarchy is not available.';
 $lang->story->changeParent       = "Change Parent";
 $lang->story->viewAll            = "Show All";
 $lang->story->toTask             = 'Convert to Task';
@@ -212,6 +214,7 @@ $lang->story->draft            = 'Draft';
 $lang->story->unclosed         = 'Open';
 $lang->story->deleted          = 'Deleted';
 $lang->story->released         = 'Released Stories';
+$lang->story->release          = 'Linked Release';
 $lang->story->URChanged        = 'Change Feature';
 $lang->story->design           = 'Design';
 $lang->story->case             = 'Test Cases';
@@ -365,6 +368,7 @@ $lang->story->childTaskTitle         = 'Contains %s subtasks, of which %s are co
 $lang->story->successSaved           = "Story is saved!";
 $lang->story->confirmDelete          = "Are you sure you want to delete this {$lang->SRCommon}?";
 $lang->story->confirmRecall          = "Are you sure you want to revoke this {$lang->SRCommon}?";
+$lang->story->confirmChange          = "You have modified the basic information. Would you like to save the modified content before entering the change page?";
 $lang->story->errorEmptyChildStory   = "The field Split {$lang->SRCommon} cannot be empty.";
 $lang->story->errorNotSubdivide      = "{$lang->SRCommon} in review, closed, or a substory cannot be split.";
 $lang->story->errorMaxGradeSubdivide = "The hierarchy level of this story has reached the maximum level set in the system; stories of the same type cannot be split further.";
@@ -401,6 +405,9 @@ $lang->story->batchParentError       = "%s cannot have itself or any of its desc
 $lang->story->errorNoGradeSplit      = "No story levels are available to split.";
 $lang->story->errorRecordMinus       = '[%s] must not be negative.';
 $lang->story->closeParentTips        = 'There are still unclosed child stories under this parent story: %s. If the parent story is closed, the child stories will also be closed. Are you sure you want to close the parent story?';
+$lang->story->undoneTasksTips        = "This story has %s undone tasks. Please confirm whether to close the story?";
+$lang->story->undoneTasksBatchTips   = "Story %s has %s undone tasks.";
+$lang->story->confirmCloseTips       = "Please confirm whether to close the story?";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Scope';
@@ -443,6 +450,7 @@ $lang->story->action->syncgrade             = array('main' => '$date, the system
 $lang->story->action->linked2roadmap        = array('main' => '$date, linked to Roadmap <strong>$extra</strong> by <strong>$actor</strong>.');
 $lang->story->action->unlinkedfromroadmap   = array('main' => '$date, unlinked from Roadmap <strong>$extra</strong> by <strong>$actor</strong>.');
 $lang->story->action->changedbycharter      = array('main' => '$date, charter proposal <strong>$extra</strong> was approved by <strong>$actor</strong>. The story phase was automatically updated to Charter.');
+$lang->story->action->changedstorystage     = array('main' => '$date, by <strong>$actor</strong> $extra.');
 
 /* Statistical statement. */
 $lang->story->report = new stdclass();

@@ -10,6 +10,11 @@ zenData('project')->loadYaml('execution')->gen(300, false);
 zenData('build')->gen(500);
 zenData('testtask')->gen(500);
 zenData('user')->gen(5);
+$company = zenData('company');
+$company->admins->range('`,admin,`');
+$company->gen(1);
+global $app;
+$app->company->admins = ',admin,';
 
 su('admin');
 
@@ -107,6 +112,8 @@ cid=19222
 
 global $tester;
 $tester->loadModel('testtask');
+$tester->testtask->mao->cache = null;
+restoreObjectTables();
 
 $localTotal     = 'local,totalstatus';
 $yesterday      = date('Y-m-d', strtotime('-1 day'));

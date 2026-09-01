@@ -251,6 +251,7 @@ $lang->execution->manageProducts            = '关联' . $lang->productCommon;
 $lang->execution->linkStory                 = "关联需求";
 $lang->execution->linkStoryByPlan           = "按照计划关联";
 $lang->execution->linkPlan                  = "关联计划";
+$lang->execution->plans                     = $lang->execution->linkPlan;
 $lang->execution->unlinkStoryTasks          = "未关联{$lang->SRCommon}任务";
 $lang->execution->linkedProducts            = '已关联';
 $lang->execution->unlinkedProducts          = '未关联';

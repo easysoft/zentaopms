@@ -21,7 +21,13 @@ foreach($lang->{$storyType}->reasonList as $key => $value)
     if($key == 'cancel') continue;
     $reasonList[] = array('text' => $value, 'value' => $key);
 }
+
+$confirmUndoneTasks = '';
+foreach($undoneTasks as $storyID => $count) $confirmUndoneTasks .= sprintf($lang->story->undoneTasksBatchTips, "#{$storyID}", $count) . "\n";
+if($confirmUndoneTasks) $confirmUndoneTasks .= $lang->story->confirmCloseTips;
+
 jsVar('reasonList', $reasonList);
+jsVar('confirmUndoneTasks', $confirmUndoneTasks);
 
 /* Build form field value for batch edit. */
 $data = array();
@@ -37,6 +43,7 @@ formBatchPanel
     set::title($lang->story->batchClose),
     set::mode('edit'),
     set::data(array_values($data)),
+    set::ajax(array('beforeSubmit' => jsRaw('checkSubmit'))),
     set::onRenderRow(jsRaw('renderRowData')),
     on::change('[data-name="closedReason"]', 'toggleDuplicateBox'),
     /* Field of id. */

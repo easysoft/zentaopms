@@ -21,6 +21,7 @@ $lang->repo->download        = '下载';
 $lang->repo->mirror = new stdclass();
 $lang->repo->mirror->syncing             = '代码同步中...';
 $lang->repo->mirror->refreshSync         = '刷新同步状态';
+$lang->repo->mirror->nextSync            = '下次同步时间：';
 $lang->repo->mirror->lastUpdated         = '最后更新于：';
 $lang->repo->mirror->failedTitle         = '代码同步失败';
 $lang->repo->mirror->detail              = '查看详情';
@@ -198,6 +199,7 @@ $lang->repo->openedDate = '创建日期';
 $lang->repo->actionInfo     = "由%s在%s添加";
 $lang->repo->changes        = "修改记录";
 $lang->repo->reviewLocation = "%s@%s，%s行 - %s行";
+$lang->repo->ppmLocation    = "评审请求#%s";
 $lang->repo->commentEdit    = '<i class="icon-pencil"></i>';
 $lang->repo->commentDelete  = '<i class="icon-remove"></i>';
 $lang->repo->allChanges     = "其他改动";
@@ -533,7 +535,7 @@ $lang->repo->sourceList['Gogs']       = 'Gogs';
 $lang->repo->sourceList['Subversion'] = 'Subversion';
 
 $lang->repo->accessList = array();
-$lang->repo->accessList['writable'] = '可读、可写、可管理';
+$lang->repo->accessList['writable'] = '可读、可写、可管理（导入为GitFox代码仓库，在GitFox代码库进行管理）';
 $lang->repo->accessList['readonly'] = '只读（做镜像导入，在第三方代码库进行管理，由DevOps定期自动同步）';
 
 $lang->repo->importProgress = new stdclass();

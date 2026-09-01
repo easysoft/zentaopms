@@ -243,6 +243,7 @@ class product extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $response = $this->productZen->responseAfterCreate($productID, !empty($productData->program) ? $productData->program : 0);
+            $response['changes'] = array('type' => 'add', 'objectType' => 'product', 'objectList' => array($productID));
             return $this->send($response);
         }
 
@@ -289,7 +290,9 @@ class product extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($action == 'undelete') $this->loadModel('action')->undelete((int)$extra);
+
             $response = $this->productZen->responseAfterEdit($productID, $programID);
+            $response['changes'] = array('type' => 'update', 'objectType' => 'product', 'objectList' => array($productID));
             return $this->send($response);
         }
 
@@ -460,11 +463,22 @@ class product extends control
      * Delete a product.
      *
      * @param  int    $productID
+     * @param  string $confirm   no|yes
      * @access public
      * @return void
      */
-    public function delete(int $productID)
+    public function delete(int $productID, string $confirm = 'no')
     {
+        if($confirm == 'no')
+        {
+            $confirmMessage   = $this->lang->product->confirmDelete;
+            $unclosedProjects = $this->product->getUnclosedProjectsByProduct($productID);
+            if($unclosedProjects) $confirmMessage = sprintf($this->lang->product->confirmDeleteWithProjects, '#' . implode(', #', array_keys($unclosedProjects)));
+
+            $confirmURL = $this->createLink('product', 'delete', "productID={$productID}&confirm=yes");
+            return $this->send(array('result' => 'success', 'load' => array('confirm' => $confirmMessage, 'confirmed' => $confirmURL)));
+        }
+
         /* Delete product. */
         $this->product->deleteByID($productID);
 

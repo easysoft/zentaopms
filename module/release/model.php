@@ -75,15 +75,39 @@ class releaseModel extends model
      * 获取发布列表。
      * Get release list.
      *
-     * @param  array  $idList
+     * @param  array            $idList
+     * @param  int|array        $productIdList
+     * @param  int|string|array $branch
+     * @param  int              $project
      * @access public
      * @return array
      */
-    public function getPairs(array $idList = array()): array
+    public function getPairs(array $idList = array(), int|array $productIdList = 0, int|string|array $branch = '', int $project = 0): array
     {
+        /* Get the query condition for the branch. */
+        $branchQuery = '';
+        if($branch !== '' && $branch != 'all')
+        {
+            if(is_int($branch)) $branchQuery = "branch = '$branch'";
+            if(is_string($branch)) $branch = array_unique(explode(',', trim($branch, ',')));
+            if(is_array($branch) && !empty($branch))
+            {
+                if(count($branch) == 1) $branchQuery = "FIND_IN_SET('$branch[0]', branch)";
+                if(count($branch) > 1)
+                {
+                    foreach($branch as $key => $branchID) $branch[$key] = "FIND_IN_SET('$branchID', branch)";
+                    $branchQuery = '(' . implode(' OR ', $branch) . ')';
+                }
+            }
+        }
+
         return $this->dao->select('id, name')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
             ->beginIF($idList)->andWhere('id')->in($idList)->fi()
+            ->beginIF($productIdList)->andWhere('product')->in($productIdList)->fi()
+            ->beginIF(!empty($branchQuery))->andWhere($branchQuery)->fi()
+            ->beginIF(!empty($project))->andWhere("FIND_IN_SET($project, `project`)")->fi()
+            ->orderBy('id_desc')
             ->fetchPairs();
     }
 
@@ -427,8 +451,8 @@ class releaseModel extends model
             foreach($storyIdList as $storyID)
             {
                 $storyID = (int)$storyID;
-                $this->story->setStage($storyID);
                 $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
+                $this->story->setStage($storyID, array('type' => 'linkRelease', 'objectID' => $releaseID));
             }
         }
 
@@ -540,7 +564,7 @@ class releaseModel extends model
 
         if(dao::isError()) return false;
 
-        if($oldRelease->status != $release->status && $release->status == 'normal') $this->setStoriesStage($oldRelease->id);
+        if($oldRelease->status != $release->status && $release->status == 'normal') $this->setStoriesStage($oldRelease->id, array('type' => 'editRelease', 'objectID' => $oldRelease->id));
 
         $shadowBuild = array();
         if($release->name != $oldRelease->name)   $shadowBuild['name']   = $release->name;
@@ -680,9 +704,8 @@ class releaseModel extends model
                 $this->dao->update(TABLE_STORY)->set('stagedBy')->eq('')->where('id')->eq($storyID)->exec();
                 if($product->type != 'normal') $this->dao->update(TABLE_STORYSTAGE)->set('stagedBy')->eq('')->where('story')->eq($storyID)->andWhere('branch')->in(explode(',', (string)$release->branch))->exec();
 
-                if($release->status == 'normal') $this->story->setStage($storyID);
-
                 $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
+                if($release->status == 'normal') $this->story->setStage($storyID, array('type' => 'linkRelease', 'objectID' => $releaseID));
             }
 
             $this->updateRelated($releaseID, 'story', $release->stories);
@@ -709,7 +732,7 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
 
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromrelease', '', $releaseID);
-        $this->loadModel('story')->setStage($storyID);
+        $this->loadModel('story')->setStage($storyID, array('type' => 'unlinkRelease', 'objectID' => $releaseID));
 
         $this->deleteRelated($releaseID, 'story', $storyID);
 
@@ -742,7 +765,7 @@ class releaseModel extends model
         {
             $unlinkStoryID = (int)$unlinkStoryID;
             $this->action->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
-            $this->loadModel('story')->setStage($unlinkStoryID);
+            $this->loadModel('story')->setStage($unlinkStoryID, array('type' => 'unlinkRelease', 'objectID' => $releaseID));
         }
 
         $this->deleteRelated($releaseID, 'story', $storyIdList);
@@ -855,7 +878,7 @@ class releaseModel extends model
 
         $this->dao->update(TABLE_RELEASE)->data($release, 'comment')->where('id')->eq($releaseID)->exec();
 
-        if($status == 'normal') $this->setStoriesStage($releaseID);
+        if($status == 'normal') $this->setStoriesStage($releaseID, array('type' => 'publishRelease', 'objectID' => $releaseID));
         return !dao::isError();
     }
 
@@ -877,6 +900,7 @@ class releaseModel extends model
 
         $action = strtolower($action);
 
+        if($release->status == 'terminate' && !in_array($action, array('play', 'delete'))) return false;
         if($action == 'notify')  return ($release->bugs || $release->stories) && $release->status == 'normal';
         if($action == 'play')    return $release->status == 'terminate';
         if($action == 'pause')   return $release->status == 'normal';
@@ -1398,11 +1422,12 @@ class releaseModel extends model
      * 当发布的状态变为正常时，设置需求的阶段。
      * Set the stage of the stories when the release status is normal.
      *
-     * @param  int $releaseID
+     * @param  int   $releaseID
+     * @param  array $trigger
      * @access public
      * @return void
      */
-    public function setStoriesStage(int $releaseID): void
+    public function setStoriesStage(int $releaseID, array $trigger = array()): void
     {
         $release = $this->getByID($releaseID);
         if(!$release) return;
@@ -1414,7 +1439,7 @@ class releaseModel extends model
         $this->dao->update(TABLE_STORY)->set('stagedBy')->eq('')->where('id')->in($storyIdList)->exec();
 
         $this->loadModel('story');
-        foreach($storyIdList as $storyID) $this->story->setStage((int)$storyID);
+        foreach($storyIdList as $storyID) $this->story->setStage((int)$storyID, $trigger);
     }
 
     /**

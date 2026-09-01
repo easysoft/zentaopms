@@ -242,6 +242,30 @@ class my extends control
 
         foreach($stories as $story) $story->estimate = $story->estimate . $this->config->hourUnit;
 
+        /* 补充TBC、关联对象列数据。 */
+        if(!empty($stories))
+        {
+            $storyIdList = array_keys($stories);
+            $storyTasks  = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
+            $storyBugs   = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
+            $storyCases  = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+
+            $relatedObjectList = array();
+            if($this->config->edition != 'open')
+            {
+                $this->loadModel('custom');
+                $relatedObjectList = $this->custom->getRelatedObjectList($storyIdList, 'story', 'byRelation', true);
+            }
+
+            foreach($stories as $story)
+            {
+                $story->taskCount     = zget($storyTasks, $story->id, 0);
+                $story->bugCount      = zget($storyBugs,  $story->id, 0);
+                $story->caseCount     = zget($storyCases, $story->id, 0);
+                $story->relatedObject = zget($relatedObjectList, $story->id, 0);
+            }
+        }
+
          /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=story&browseType=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
@@ -309,6 +333,24 @@ class my extends control
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
         foreach($stories as $story) $story->estimate = $story->estimate . $this->config->hourUnit;
+
+        /* 补充关联对象列数据。 */
+        if(!empty($stories))
+        {
+            $storyIdList = array_keys($stories);
+
+            $relatedObjectList = array();
+            if($this->config->edition != 'open')
+            {
+                $this->loadModel('custom');
+                $relatedObjectList = $this->custom->getRelatedObjectList($storyIdList, 'epic', 'byRelation', true);
+            }
+
+            foreach($stories as $story)
+            {
+                $story->relatedObject = zget($relatedObjectList, $story->id, 0);
+            }
+        }
 
          /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
@@ -378,6 +420,24 @@ class my extends control
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
         foreach($stories as $story) $story->estimate = $story->estimate . $this->config->hourUnit;
+
+        /* 补充关联对象列数据。 */
+        if(!empty($stories))
+        {
+            $storyIdList = array_keys($stories);
+
+            $relatedObjectList = array();
+            if($this->config->edition != 'open')
+            {
+                $this->loadModel('custom');
+                $relatedObjectList = $this->custom->getRelatedObjectList($storyIdList, 'requirement', 'byRelation', true);
+            }
+
+            foreach($stories as $story)
+            {
+                $story->relatedObject = zget($relatedObjectList, $story->id, 0);
+            }
+        }
 
          /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
@@ -1381,7 +1441,7 @@ class my extends control
         $users  = $this->loadModel('company')->getUsers('inside', 'bydept', 0, $deptID, $sort, $pager);
         foreach($users as $user) unset($user->password); // Remove passwd.
 
-        $this->view->title     = $this->lang->my->team;
+        $this->view->title     = $this->lang->dept->common;
         $this->view->users     = $users;
         $this->view->userPairs = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->deptID    = $deptID;
@@ -1573,6 +1633,7 @@ class my extends control
         if($this->app->user->account == 'guest') return print(js::alert('guest') . js::locate('back'));
 
         $user = $this->user->getById($this->app->user->account);
+        unset($user->password);
 
         $this->view->title    = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->profile;
         $this->view->user     = $user;
@@ -1744,6 +1805,7 @@ class my extends control
     {
         $health = $this->loadModel('gitfox')->checkHealth();
         if(!$health) return $this->sendError($this->lang->gitfox->serverFail);
+        if($health == 'upgrade') return $this->locate($this->createLink('gitfox', 'upgradeGitFox'));
 
         $tab = $this->app->tab;
         if($tab != 'my')

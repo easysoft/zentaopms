@@ -492,9 +492,33 @@ EOT;
 
         $changes = [];
         $clearDB = $this->session->myConfig['clearDB'] ?? 0;
-        $dbFile  = $this->app->getAppRoot() . 'db' . DS . $file;
-        $sqls    = explode(';', file_get_contents($dbFile));
 
+        /* 主 SQL 之后追加执行数据库视图 SQL，保证先建表后建视图。*/
+        $sqls = array_merge
+        (
+            $this->getInstallSQLs($file, $changes, $clearDB),
+            $this->getInstallSQLs('dbviews.sql', $changes, $clearDB)
+        );
+
+        return ['sqls' => $sqls, 'changes' => $changes];
+    }
+
+    /**
+     * 读取安装 SQL 文件并生成语义化变更。
+     * Read an install SQL file and generate semantic changes.
+     *
+     * @param  string $file
+     * @param  array  $changes
+     * @param  int    $clearDB
+     * @access private
+     * @return array
+     */
+    private function getInstallSQLs(string $file, array &$changes, int $clearDB): array
+    {
+        $dbFile = $this->app->getAppRoot() . 'db' . DS . $file;
+        if(!file_exists($dbFile)) return array();
+
+        $sqls = explode(';', file_get_contents($dbFile));
         foreach($sqls as $key => $sql)
         {
             $sql = trim($sql);
@@ -517,6 +541,6 @@ EOT;
 
             $sqls[$key] = $sql;
         }
-        return ['sqls' => array_values($sqls), 'changes' => $changes];
+        return array_values($sqls);
     }
 }

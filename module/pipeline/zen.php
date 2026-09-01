@@ -233,4 +233,44 @@ class pipelineZen extends pipeline
         }
         return $result;
     }
+
+    /**
+     * 渲染关键字链接。
+     * Render keywords link.
+     *
+     * @param  object|bool $pipeline
+     * @param  string      $params
+     * @access public
+     * @return array
+     */
+    public function renderSchemaKeywords(object|bool $pipeline, string $params = ''): array
+    {
+        $jsonSchemaKeywords = $this->config->pipeline->jsonSchemaKeywords;
+
+        $renderResult = array();
+        $params       = array_filter(explode(',', trim(urldecode($params))));
+
+        $pramList = array();
+        foreach($params as $param)
+        {
+            list($key, $value) = explode('=', $param);
+            $pramList[$key] = $value;
+        }
+
+        foreach($jsonSchemaKeywords as $key => $link)
+        {
+            $linkParams = array();
+            if(isset($link['params']))
+            {
+                foreach($link['params'] as $linkParam)
+                {
+                    if(!empty($pipeline) && isset($pipeline->{$linkParam})) $linkParams[$linkParam] = $pipeline->{$linkParam};
+                    if(isset($pramList[$linkParam])) $linkParams[$linkParam] = $pramList[$linkParam];
+                }
+            }
+
+            $renderResult[$key] = $this->createLink($link['module'], $link['method'], $linkParams);
+        }
+        return $renderResult;
+    }
 }

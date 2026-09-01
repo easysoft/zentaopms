@@ -355,8 +355,15 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
 
     foreach($lang->story->stageList as $key => $stageName)
     {
-        if(!str_contains('|tested|verified|rejected|released|closed|', "|$key|")) continue;
-        $stageItems[] = array('text' => $stageName,  'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeStage', "stage=$key"));
+        if($key == 'closed' && $canBatchClose)
+        {
+            $stageItems[] = array('text' => $stageName, 'class' => 'batch-btn', 'data-page' => 'batch', 'data-formaction' => $this->createLink('story', 'batchClose', "productID={$productID}&executionID=0"));
+        }
+        else
+        {
+            if(!str_contains('|tested|verified|rejected|released|closed|', "|$key|")) continue;
+            $stageItems[] = array('text' => $stageName,  'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeStage', "stage=$key"));
+        }
     }
 
     $pinyinItems = common::convert2Pinyin($users);
@@ -546,7 +553,7 @@ if($isFromDoc || $isFromAI)
     div(setID('docSearchForm'));
 }
 
-$canExport = $isProjectStory ? hasPriv('projectstory', 'export') && $productID : hasPriv($storyType, 'export');
+$canExport = $isProjectStory ? hasPriv('projectstory', 'export') : hasPriv($storyType, 'export');
 $canReport = $isProjectStory ? hasPriv('projectstory', 'report') : hasPriv($storyType, 'report');
 $reportUrl = $isProjectStory ? helper::createLink('projectstory', 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie&projectID=$projectID") : helper::createLink($storyType, 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID");
 $exportUrl = $isProjectStory ? helper::createLink('projectstory', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType") : helper::createLink($storyType, 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType");

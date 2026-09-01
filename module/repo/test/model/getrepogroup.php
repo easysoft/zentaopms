@@ -24,15 +24,6 @@ zenData('ops_provider')->gen(0);
 zenData('ops_spaceuser')->gen(0);
 
 zenData('ops_space')->gen(0);
-$spaceTable = zenData('ops_space');
-$spaceTable->id->range('1');
-$spaceTable->name->range('repo-test-space');
-$spaceTable->code->range('repo-test-space');
-$spaceTable->acl->range('open');
-$spaceTable->auth->range('extend');
-$spaceTable->deleted->range('0');
-$spaceTable->gen(1);
-
 zenData('projectproduct')->gen(0);
 $projectProductTable = zenData('projectproduct');
 $projectProductTable->project->range('11');
@@ -51,9 +42,40 @@ $productTable->shadow->range('0{4}');
 $productTable->deleted->range('0{4}');
 $productTable->gen(4);
 
+su('admin');
+
+$repo       = $tester->loadModel('repo');
+$repoTest   = new repoModelTest();
+$repoTest->seedGitFoxEntry();
+
+$spaceForm = new stdclass();
+$spaceForm->name        = 'repo-test-space';
+$spaceForm->code        = 'repo-test-space';
+$spaceForm->desc        = 'repo getRepoGroup test space';
+$spaceForm->acl         = 'open';
+$spaceForm->auth        = 'extend';
+$spaceForm->createdBy   = 'admin';
+$spaceForm->createdDate = helper::now();
+$spaceID = $tester->loadModel('space')->create($spaceForm);
+
+$spaceTable = zenData('ops_space');
+$spaceTable->id->range((string)$spaceID);
+$spaceTable->name->range('repo-test-space');
+$spaceTable->code->range('repo-test-space');
+$spaceTable->acl->range('open');
+$spaceTable->auth->range('extend');
+$spaceTable->deleted->range('0');
+$spaceTable->gen(1);
+
+$spaceUserTable = zenData('ops_spaceuser');
+$spaceUserTable->space->range((string)$spaceID);
+$spaceUserTable->role->range('manager');
+$spaceUserTable->account->range('admin');
+$spaceUserTable->gen(1);
+
 $repoTable = zenData('ops_repo');
 $repoTable->id->range('1-4');
-$repoTable->spaceID->range('1{4}');
+$repoTable->spaceID->range("{$spaceID}{4}");
 $repoTable->product->range('1,2,3,4');
 $repoTable->name->range('testHtml,project1,unittest,testSvn');
 $repoTable->scmType->range('git,git,git,svn');
@@ -64,19 +86,6 @@ $repoTable->acl->range('open{4}');
 $repoTable->status->range('active{4}');
 $repoTable->deleted->range('0{4}');
 $repoTable->gen(4);
-
-$spaceUserTable = zenData('ops_spaceuser');
-$spaceUserTable->space->range('1');
-$spaceUserTable->role->range('manager');
-$spaceUserTable->account->range('admin');
-$spaceUserTable->gen(1);
-
-su('admin');
-
-$repo       = $tester->loadModel('repo');
-$repoTest   = new repoModelTest();
-$repoTest->seedGitFoxEntry();
-
 $type      = 'project';
 $projectID = 1;
 
@@ -88,3 +97,5 @@ r($repoTest->getRepoGroupCountTest($type, $projectID)) && p() && e('0');
 $projectID = 11;
 r($repoTest->getRepoGroupCountTest($type, $projectID)) && p() && e('1');
 r($repoTest->getRepoGroupCountTest($type, 0)) && p() && e('4');
+
+$tester->loadModel('space')->deleteSpace((int)$spaceID);

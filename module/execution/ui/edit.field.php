@@ -156,7 +156,9 @@ $fields->field('productsBox')
         'project'           => data('project'),
         'isStage'           => isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus')),
         'errorSameProducts' => $lang->execution->errorSameProducts,
-        'from'              => 'execution'
+        'from'              => 'execution',
+        'required'          => !empty($project->hasProduct) && strpos(",{$config->execution->edit->requiredFields},", ',products,') !== false,
+        'requiredPlan'      => strpos(",{$config->execution->edit->requiredFields},", ',plans,') !== false
     ));
 
 if($execution->attribute != 'review')

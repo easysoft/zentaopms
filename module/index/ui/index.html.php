@@ -257,6 +257,7 @@ if($config->edition != 'open' && $zaiConfig)
     $this->app->loadLang('ai');
     $zaiLang->knowledgeLib = $lang->ai->knowledgeLib;
 
+    $zaiConfig->workbench   = hasPriv('aiprocedure', 'workbench');
     $zaiConfig->teammateMap = array();
     if($enableAITeammate)
     {

@@ -206,3 +206,53 @@ window.checkGrade = function(e)
         }
     });
 }
+
+window.locateChange = function(obj)
+{
+    const $this    = $(obj);
+    const $form    = $(obj).closest('form');
+    const formData = new FormData($form[0]);
+    let   changed  = false;
+
+    $this.parent().find('.toolbar-item').attr('disabled', 'disabled');
+    for(let entry of formData.entries())
+    {
+        const key   = entry[0];
+        const value = entry[1];
+
+        let field   = key;
+        let isArray = false;
+        if(key.indexOf('[]') > 0)
+        {
+            isArray = true;
+            field   = key.replace('[]', '');
+        }
+        if(field == 'comment' && value != '') changed = true;
+        if(storyData[field] == undefined || field == 'title' || field == 'reviewer') continue;
+
+        if(!isArray)
+        {
+            const dbValue = storyData[field];
+            if(dbValue == value) continue;
+            if(dbValue == '') changed = true;
+            if(!changed && !isNaN(dbValue) && parseFloat(dbValue) != value) changed = true;
+            if(!changed && isNaN(dbValue) && dbValue != value) changed = true;
+        }
+        if(isArray && (',' + storyData[field] + ',').indexOf(`,${value},`) == -1) changed = true;
+        if(changed) break;
+    }
+
+    if(!changed) return loadPage($.createLink(config.rawModule, 'change', 'storyID=' + storyData.id));
+
+    zui.Modal.confirm(langConfirmChange).then((result) =>
+    {
+        if(!result) return loadPage($.createLink(config.rawModule, 'change', 'storyID=' + storyData.id));
+
+        formData.append('locate', 'change');
+        $.ajaxSubmit({url: $form.attr('action'), data: formData, onFail: (error) =>
+        {
+            if(error?.message) showValidateMessage(error.message);
+            $this.parent().find('.toolbar-item').removeAttr('disabled');
+        }});
+    });
+}

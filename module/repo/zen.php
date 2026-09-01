@@ -1010,6 +1010,47 @@ class repoZen extends repo
     }
 
     /**
+     * 根据步骤生成标题。
+     * Generate a title from steps.
+     *
+     * @param  string $steps
+     * @access public
+     * @return string
+     */
+    public function generateTitleFromSteps(string $steps = ''): string
+    {
+        if(trim($steps) === '') return '';
+
+        $text = preg_replace(array('#<br\s*/?>#i', '#</(p|div|li|tr|table|h[1-6])>#i'), "\n", $steps);
+        $text = strip_tags((string)$text);
+        $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $text = str_replace(array("\xc2\xa0", "\r"), ' ', $text);
+
+        $title = '';
+        foreach(preg_split('/\n+/u', $text) as $line)
+        {
+            $line = trim($line);
+            $line = preg_replace('/^(?:\d+[\.、．)）]|[-•*])\s*/u', '', $line);
+            $line = preg_replace('/^(?:步骤|重现步骤|操作步骤|Step)\s*\d*[:：]\s*/iu', '', $line);
+            $line = trim($line);
+            if($line === '' || mb_strlen($line, 'UTF-8') < 2) continue;
+
+            $title = $line;
+            break;
+        }
+
+        if($title === '') return '';
+
+        $title = preg_replace('/\s+/u', ' ', $title);
+        if(mb_strlen($title, 'UTF-8') > 100)
+        {
+            $title = mb_substr($title, 0, 100, 'UTF-8') . '...';
+        }
+
+        return $title;
+    }
+
+    /**
      * 获取详情页面目录树。
      * Get view tree.
      *
@@ -1470,7 +1511,7 @@ class repoZen extends repo
         $provider = $this->provider->getByID($providerID);
 
         $repos   = !$provider ? array() : $this->repo->getProviderRepos($provider);
-        $groupID = urldecode($groupID);
+        $groupID = helper::safe64Decode($groupID);
         $groups  = $groupRepos = array();
         foreach($repos as $repo)
         {

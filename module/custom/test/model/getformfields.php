@@ -36,18 +36,9 @@ cid=15897
 - 测试moduleName值为story，method为review
  - 属性reviewedDate @评审时间
  - 属性comment @备注
-- 测试moduleName值为productplan，method为空
- - 属性begin @开始日期
- - 属性end @结束日期
- - 属性desc @描述
-- 测试moduleName值为productplan，method为create
- - 属性begin @开始日期
- - 属性end @结束日期
- - 属性desc @描述
-- 测试moduleName值为productplan，method为edit
- - 属性begin @开始日期
- - 属性end @结束日期
- - 属性desc @描述
+- 测试moduleName值为productplan，method为空属性desc @描述
+- 测试moduleName值为productplan，method为create属性desc @描述
+- 测试moduleName值为productplan，method为edit属性desc @描述
 - 测试moduleName值为release，method为空 @0
 - 测试moduleName值为release，method为create属性desc @描述
 - 测试moduleName值为release，method为edit属性desc @描述
@@ -57,6 +48,8 @@ cid=15897
  - 属性desc @执行描述
 - 测试moduleName值为execution，method为edit
  - 属性days @可用工作日
+ - 属性products @关联产品
+ - 属性plans @关联计划
  - 属性desc @执行描述
  - 属性PO @产品负责人
  - 属性PM @执行负责人
@@ -75,10 +68,7 @@ cid=15897
 - 测试moduleName值为task，method为activate
  - 属性assignedTo @指派给
  - 属性comment @备注
-- 测试moduleName值为build，method为空
- - 属性scmPath @源代码地址
- - 属性filePath @下载地址
- - 属性desc @描述
+- 测试moduleName值为build，method为空 @0
 - 测试moduleName值为build，method为create
  - 属性scmPath @源代码地址
  - 属性filePath @下载地址
@@ -102,10 +92,10 @@ cid=15897
  - 属性comment @备注
 - 测试moduleName值为testcase，method为空 @0
 - 测试moduleName值为testcase，method为create
- - 属性stage @适用阶段
+ - 属性stage @适用环节
  - 属性pri @优先级
 - 测试moduleName值为testcase，method为edit
- - 属性stage @适用阶段
+ - 属性stage @适用环节
  - 属性pri @优先级
 - 测试moduleName值为testsuite，method为空属性desc @描述
 - 测试moduleName值为testsuite，method为create属性desc @描述
@@ -128,16 +118,20 @@ cid=15897
 - 测试moduleName值为caselib，method为空属性desc @描述
 - 测试moduleName值为caselib，method为create属性desc @描述
 - 测试moduleName值为caselib，method为edit属性desc @描述
-- 测试moduleName值为caselib，method为空
+- 测试moduleName值为testtask，method为空
  - 属性owner @负责人
  - 属性pri @优先级
  - 属性desc @描述
 - 测试moduleName值为testtask，method为create
  - 属性owner @负责人
+ - 属性type @测试类型
+ - 属性members @参与人
  - 属性pri @优先级
  - 属性desc @描述
 - 测试moduleName值为testtask，method为edit
  - 属性owner @负责人
+ - 属性type @测试类型
+ - 属性members @参与人
  - 属性pri @优先级
  - 属性desc @描述
 - 测试moduleName值为testtask，method为importUnit
@@ -186,8 +180,8 @@ r($customTester->getFormFieldsTest($moduleName[3], $method[0]))   && p()        
 r($customTester->getFormFieldsTest($moduleName[3], $method[1]))   && p('desc')                     && e('描述');                                           // 测试moduleName值为release，method为create
 r($customTester->getFormFieldsTest($moduleName[3], $method[2]))   && p('desc')                     && e('描述');                                           // 测试moduleName值为release，method为edit
 r($customTester->getFormFieldsTest($moduleName[4], $method[0]))   && p()                           && e('0');                                              // 测试moduleName值为execution，method为空
-r($customTester->getFormFieldsTest($moduleName[4], $method[1]))   && p('days,desc')                && e('可用工作日,执行描述');                            // 测试moduleName值为execution，method为create
-r($customTester->getFormFieldsTest($moduleName[4], $method[2]))   && p('days,desc,PO,PM')          && e('可用工作日,执行描述,产品负责人,执行负责人');      // 测试moduleName值为execution，method为edit
+r($customTester->getFormFieldsTest($moduleName[4], $method[1]))   && p('days,products,plans,desc') && e('可用工作日,关联产品,关联计划,执行描述');              // 测试moduleName值为execution，method为create
+r($customTester->getFormFieldsTest($moduleName[4], $method[2]))   && p('days,products,plans,desc,PO,PM') && e('可用工作日,关联产品,关联计划,执行描述,产品负责人,执行负责人'); // 测试moduleName值为execution，method为edit
 r($customTester->getFormFieldsTest($moduleName[4], $method[4]))   && p()                           && e('0');                                              // 测试moduleName值为execution，method为close
 r($customTester->getFormFieldsTest($moduleName[4], $method[6]))   && p()                           && e('0');                                              // 测试moduleName值为execution，method为start
 r($customTester->getFormFieldsTest($moduleName[5], $method[0]))   && p()                           && e('0');                                              // 测试moduleName值为task，method为空
@@ -214,9 +208,9 @@ r($customTester->getFormFieldsTest($moduleName[10], $method[2]))  && p('begin,en
 r($customTester->getFormFieldsTest($moduleName[11], $method[0]))  && p('desc')                     && e('描述');                                           // 测试moduleName值为caselib，method为空
 r($customTester->getFormFieldsTest($moduleName[11], $method[1]))  && p('desc')                     && e('描述');                                           // 测试moduleName值为caselib，method为create
 r($customTester->getFormFieldsTest($moduleName[11], $method[2]))  && p('desc')                     && e('描述');                                           // 测试moduleName值为caselib，method为edit
-r($customTester->getFormFieldsTest($moduleName[12], $method[0]))  && p('owner,pri,desc')           && e('负责人,优先级,描述');                             // 测试moduleName值为caselib，method为空
-r($customTester->getFormFieldsTest($moduleName[12], $method[1]))  && p('owner,pri,desc')           && e('负责人,优先级,描述');                             // 测试moduleName值为testtask，method为create
-r($customTester->getFormFieldsTest($moduleName[12], $method[2]))  && p('owner,pri,desc')           && e('负责人,优先级,描述');                             // 测试moduleName值为testtask，method为edit
+r($customTester->getFormFieldsTest($moduleName[12], $method[0]))  && p('owner,pri,desc')              && e('负责人,优先级,描述');                          // 测试moduleName值为testtask，method为空
+r($customTester->getFormFieldsTest($moduleName[12], $method[1]))  && p('owner,type,members,pri,desc') && e('负责人,测试类型,参与人,优先级,描述');          // 测试moduleName值为testtask，method为create
+r($customTester->getFormFieldsTest($moduleName[12], $method[2]))  && p('owner,type,members,pri,desc') && e('负责人,测试类型,参与人,优先级,描述');             // 测试moduleName值为testtask，method为edit
 r($customTester->getFormFieldsTest($moduleName[12], $method[10])) && p('owner,pri,desc')           && e('负责人,优先级,描述');                             // 测试moduleName值为testtask，method为importUnit
 r($customTester->getFormFieldsTest($moduleName[13], $method[0]))  && p('keywords,content')         && e('关键字,文档正文');                                // 测试moduleName值为doc，method为空
 r($customTester->getFormFieldsTest($moduleName[13], $method[1]))  && p('keywords,content')         && e('关键字,文档正文');                                // 测试moduleName值为doc，method为create

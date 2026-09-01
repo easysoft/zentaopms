@@ -75,6 +75,35 @@ $lang->upgrade->confirm       = 'Confirm SQL';
 $lang->upgrade->sureExecute   = 'Execute';
 $lang->upgrade->upgradingTips = 'Upgrading in progress. Please wait. Do not refresh, power off, or shut down!';
 $lang->upgrade->executeFailed = 'The upgrade request was interrupted. Please refresh the page to retry. Completed changes will be skipped automatically and will not run again.';
+
+$lang->upgrade->dataProcess           = 'Data Process';
+$lang->upgrade->dataProcessTip        = 'Data processing is in progress. Please wait and do not refresh the page or close the browser!';
+$lang->upgrade->dataProcessStepsTitle = 'Steps';
+$lang->upgrade->dataProcessProcessed  = 'Processed: %s / %s';
+
+$lang->upgrade->tableEngine = new stdClass();
+$lang->upgrade->tableEngine->common  = 'Update Table Engine';
+$lang->upgrade->tableEngine->change  = 'Update the engine of database table %s to InnoDB';
+$lang->upgrade->tableEngine->todo    = 'To update';
+$lang->upgrade->tableEngine->done    = 'Updated';
+$lang->upgrade->tableEngine->failed  = 'Skipped';
+$lang->upgrade->tableEngine->success = 'The engine of table %s has been updated to InnoDB.';
+$lang->upgrade->tableEngine->fail    = 'The engine of table %s was skipped for update.';
+$lang->upgrade->tableEngine->busy    = 'Table %s is in use. Retrying...';
+
+$lang->upgrade->charset = new stdClass();
+$lang->upgrade->charset->common  = 'Update Charset';
+$lang->upgrade->charset->update  = 'Update';
+$lang->upgrade->charset->change  = 'Update the charset of database table %s';
+$lang->upgrade->charset->success = 'The charset of table %s has been updated.';
+$lang->upgrade->charset->fail    = 'The charset of table %s was skipped for update. Reason: %s.';
+
+$lang->upgrade->dbView = new stdClass();
+$lang->upgrade->dbView->common     = 'Update Database Views';
+$lang->upgrade->dbView->todo       = 'Update';
+$lang->upgrade->dbView->regenerate = 'Update database view %s';
+
+$lang->upgrade->noNeedProcess = 'Nothing to process';
 $lang->upgrade->forbiddenExt  = 'The following extensions are incompatible with the new version and have been automatically disabled:';
 $lang->upgrade->updateFile    = 'Attachment information update required.';
 $lang->upgrade->showSQLLog    = 'Database inconsistencies detected. Attempting to fix. Below are the SQL statements for repair:';
@@ -116,9 +145,9 @@ $lang->upgrade->list            = ' List';
 $lang->upgrade->next            = 'Next';
 $lang->upgrade->back            = 'Back';
 
-$lang->upgrade->upgradeDocs     = 'Upgrade Document Data';
-$lang->upgrade->upgradingDocs   = 'Upgrading documents, please wait...';
-$lang->upgrade->upgradeDocsTip  = 'Found %s document-related items to upgrade';
+$lang->upgrade->upgradeDocs    = 'Upgrade Document Data';
+$lang->upgrade->upgradingDocs  = 'Upgrading documents, please wait...';
+$lang->upgrade->upgradeDocsTip = 'Found %s document-related items to upgrade';
 
 $lang->upgrade->upgradeDocTemplates    = 'Upgrade Doc Template Data';
 $lang->upgrade->upgradingDocTemplates  = 'Upgrading document templates, please wait...';
@@ -139,7 +168,8 @@ $lang->upgrade->projectCount      = "%s {$lang->projectCommon}";
 $lang->upgrade->mergeByProject    = "There are 2 data migration methods available. If your historical {$lang->projectCommon} are long-term, we recommend upgrading them as Projects.</br>If they are short-term, we recommend upgrading them as {$lang->executionCommon}.";
 $lang->upgrade->mergeRepoTips     = "Merge selected repositories into the selected product.";
 $lang->upgrade->needBuild4Add     = 'This upgrade requires new indexes. Please go to [Admin -> System -> Rebuild Index] to re-create them.';
-$lang->upgrade->needChangeEngine  = 'Database engine updates are required for this upgrade. Please change it at [Admin -> System -> Table Engine].';
+$lang->upgrade->needChangeEngine  = 'Some tables have not been converted to the InnoDB engine yet. Please continue at [Admin -> System -> Database -> Table Engine].';
+$lang->upgrade->needChangeCharset = 'Some tables have not been converted to the target charset yet. Please continue at [Admin -> System -> Database -> Charset].';
 $lang->upgrade->errorEngineInnodb = 'The current database does not support the InnoDB engine. Please switch to MyISAM and try again.';
 $lang->upgrade->duplicateProject  = "Project names must be unique within a program. Please rename any duplicate projects.";
 $lang->upgrade->upgradeTips       = "Deleted historical data will not be migrated and cannot be restored after the upgrade.";

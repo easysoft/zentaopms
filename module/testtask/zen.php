@@ -341,7 +341,7 @@ class testtaskZen extends testtask
         $this->setDropMenu($product->id, $testtask);
         $showModule = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=testtask&section=cases&key=showModule");
         $runs       = $this->loadModel('testcase')->appendData($runs, 'run');
-        $runList    = array_merge($runs, $scenes);
+        $runList    = array_merge($scenes, $runs);
 
         if($this->config->edition != 'open')
         {

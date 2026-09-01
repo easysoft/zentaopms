@@ -254,7 +254,7 @@ class testtask extends control
             if($this->app->tab == 'project')   $link = $this->createLink('project', 'testtask', "projectID={$testtask->project}");
             if($this->app->tab == 'execution') $link = $this->createLink('execution', 'testtask', "executionID={$testtask->execution}");
             if($this->app->tab == 'qa')        $link = $this->createLink('testtask', 'browse', "productID={$this->post->product}");
-            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $link, 'id' => $testtaskID));
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $link, 'id' => $testtaskID, 'changes' => array('type' => 'add', 'objectType' => 'testtask', 'objectList' => array($testtaskID))));
         }
 
         $this->testtaskZen->setMenu($productID, 0, $projectID, $executionID);

@@ -22,11 +22,11 @@ su('admin');
 $editor = new editorModelTest();
 $extensionRoot = $editor->instance->app->getExtensionRoot();
 $testPath = $extensionRoot . 'custom' . DS . 'test' . DS . 'ext' . DS . 'model' . DS . 'test.php';
+if(!is_dir(dirname($testPath))) mkdir(dirname($testPath), 0777, true);
 $_POST['fileContent'] = "<?php\n// test content";
 $result = $editor->instance->save($testPath);
 r((int)($result === true && file_exists($testPath))) && p() && e('1');
 
-if(!is_dir(dirname($testPath))) mkdir(dirname($testPath), 0777, true);
 $_POST['fileContent'] = "<?php\nclass testModel extends model\n{\n    public function test() { return true; }\n}";
 $result = $editor->instance->save($testPath);
 r($result === true ? 1 : 0) && p() && e('1');

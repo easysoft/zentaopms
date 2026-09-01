@@ -1048,14 +1048,16 @@ class codescanModel extends model
      *
      * @param  int    $repoID
      * @param  int    $taskID
-     * @param  string $type      file|rule
+     * @param  string $type        file|rule
+     * @param  array  $scanMethods 扫描方法过滤，如 array('check', 'smell') 或 array('ai')
      * @access public
      * @return array
      */
-    public function getIssueTreeList(int $repoID, int $taskID, string $type = 'file'): array
+    public function getIssueTreeList(int $repoID, int $taskID, string $type = 'file', array $scanMethods = array()): array
     {
         $url    = "/scan/issues/{$type}-tree";
         $params = array('repoID' => $repoID, 'taskID' => $taskID);
+        if(!empty($scanMethods)) $params['scanMethods'] = $scanMethods;
         $result = $this->loadModel('gitfox')->request($url, 'GET', $params);
         return array($result);
     }

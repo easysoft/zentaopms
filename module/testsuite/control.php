@@ -146,8 +146,9 @@ class testsuite extends control
             $this->file->updateObjectID($this->post->uid, $suiteID, 'testsuite');
             $message = $this->executeHooks($suiteID) ? : $this->lang->testsuite->successSaved;
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $suiteID));
-            return $this->send(array('result' => 'success', 'message' => $message, 'locate' => $this->inlink('browse', "productID=$productID")));
+            $objectChanges = array('type' => 'add', 'objectType' => 'testsuite', 'objectList' => array($suiteID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $suiteID, 'changes' => $objectChanges));
+            return $this->send(array('result' => 'success', 'message' => $message, 'locate' => $this->inlink('browse', "productID=$productID"), 'changes' => $objectChanges));
         }
 
         /* 设置1.5级导航。 */

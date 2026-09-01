@@ -110,3 +110,17 @@ $result5 = $convertTest->createWorkflowFieldTest($relations5, $fields5, $fieldOp
 r(isset($result5['zentaoFieldBug']['customfield_10003']) && strpos($result5['zentaoFieldBug']['customfield_10003'], 'jirafield') === 0 ? 1 : 0) && p() && e('1');
 
 $config->edition = $originalEdition;
+
+/* 清理本用例创建的流程数据，避免残留空 table 的 workflow 污染 objectTables。 */
+zenData('workflow')->gen(0);
+zenData('workflowaction')->gen(0);
+zenData('workflowfield')->gen(0);
+zenData('workflowlayout')->gen(0);
+zenData('workflowlabel')->gen(0);
+zenData('workflowrule')->gen(0);
+zenData('workflowdatasource')->gen(0);
+zenData('workflowrelation')->gen(0);
+zenData('workflowlinkdata')->gen(0);
+zenData('workflowversion')->gen(0);
+zenData('workflowreport')->gen(0);
+zenData('workflowsql')->gen(0);

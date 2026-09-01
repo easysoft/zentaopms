@@ -1022,6 +1022,7 @@ class userModel extends model
         $user->view   = $this->grantUserView($user->account, $user->rights['acls']);
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
+        $this->regenerateSession();
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
         $this->loadModel('common')->loadConfigFromDB();
@@ -1048,6 +1049,7 @@ class userModel extends model
         $user->view   = $this->grantUserView($user->account, $user->rights['acls']);
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
+        $this->regenerateSession();
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
         $this->loadModel('common')->loadConfigFromDB();
@@ -1209,6 +1211,10 @@ class userModel extends model
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
 
+        /* 登录成功后轮换会话 ID，防止会话固定。*/
+        /* Regenerate session ID after login to prevent session fixation. */
+        $this->regenerateSession();
+
         /* 记录登录日志并发放积分。*/
         /* Save log and give login score. */
         if(isset($user->id) and $addAction) $this->loadModel('action')->create('user', $user->id, 'login');
@@ -1219,6 +1225,28 @@ class userModel extends model
         if($keepLogin) $this->keepLogin($user);
 
         return $user;
+    }
+
+    /**
+     * 登录成功后轮换会话 ID，并重发会话 cookie，防止会话固定攻击。
+     * Regenerate session ID after login and resend session cookie to prevent session fixation.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function regenerateSession(): void
+    {
+        if(empty(session_id()) or headers_sent()) return;
+
+        session_regenerate_id(true);
+
+        /* 同步 app->sessionID，避免 www/index.php 的还原逻辑把轮换后的会话还原回旧 ID。*/
+        /* Keep app->sessionID in sync to prevent the restore logic in www/index.php reverting the rotated session. */
+        if(isset($this->app->sessionID)) $this->app->sessionID = session_id();
+
+        /* 同步重发会话 cookie，确保浏览器和客户端使用新的会话 ID。*/
+        /* Resend the session cookie so clients use the new session ID. */
+        helper::setcookie($this->config->sessionVar, session_id(), 0);
     }
 
     /**
@@ -1316,13 +1344,26 @@ class userModel extends model
         $projectStoryCountAndEstimate = $this->userTao->fetchProjectStoryCountAndEstimate(array_keys($projects));
         $projectExecutionCount        = $this->userTao->fetchProjectExecutionCount(array_keys($projects));
 
+        /* Get workingDays. */
+        $today       = helper::today();
+        $earliestEnd = $today;
+        foreach($projects as $project)
+        {
+            if(!empty($project->end) && !helper::isZeroDate($project->end) && $project->end < $earliestEnd) $earliestEnd = $project->end;
+        }
+        $workingDays = $this->loadModel('holiday')->getActualWorkingDays($earliestEnd, $today);
         foreach($projects as $project)
         {
             /* Judge whether the project is delayed. */
             if($project->status != 'done' && $project->status != 'closed' && $project->status != 'suspended')
             {
-                $delay = helper::diffDate(helper::today(), $project->end);
-                if($delay > 0) $project->delay = $delay;
+                $betweenDays = $this->holiday->getDaysBetween($project->end, $today);
+                if($betweenDays)
+                {
+                    $delayDays = array_intersect($betweenDays, $workingDays);
+                    $delay     = count($delayDays) - 1;
+                    if($delay > 0) $project->delay = $delay;
+                }
             }
 
             $projectStory = zget($projectStoryCountAndEstimate, $project->id, '');

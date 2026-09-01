@@ -18,7 +18,7 @@ cid=15269
  - 属性docGroupCount @3
 - 测试多个产品多个文档的情况
  - 属性type @involved
- - 属性productsCount @0
+- 属性productsCount @0
 - 测试验证users数据加载属性usersCount @6
 
 */
@@ -26,7 +26,14 @@ cid=15269
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-zenData('user')->gen(5);
+$user = zenData('user');
+$user->id->range('1-6');
+$user->account->range('admin,user1,user2,user3,user4,user5');
+$user->realname->range('管理员,用户1,用户2,用户3,用户4,用户5');
+$user->password->range('e10adc3949ba59abbe56e057f20f883e');
+$user->visions->range('rnd');
+$user->deleted->range('0');
+$user->gen(6);
 
 $product = zenData('product');
 $product->id->range('1-5');
@@ -63,6 +70,23 @@ $team->type->range('project');
 $team->account->range('admin');
 $team->gen(2);
 
+$projectproduct = zenData('projectproduct');
+$projectproduct->id->range('1-2');
+$projectproduct->project->range('1-2');
+$projectproduct->product->range('1-2');
+$projectproduct->branch->range('0');
+$projectproduct->gen(2);
+
+$zd_company = zenData('company');
+$zd_company->id->range('1');
+$zd_company->name->range('禅道软件');
+$zd_company->admins->range('admin');
+$zd_company->guest->range('0');
+$zd_company->gen(1);
+$dbh->exec("UPDATE zt_company SET admins = ',admin,' WHERE id = 1");
+global $app;
+$app->company = $dbh->query('SELECT * FROM zt_company WHERE id = 1')->fetch(PDO::FETCH_OBJ);
+
 su('admin');
 
 $block = new stdClass();
@@ -78,5 +102,5 @@ $blockTest = new blockZenTest();
 r($blockTest->printProductDocBlockTest($block, array('type' => 'involved'))) && p('type,docGroupCount') && e('involved,3'); // 测试默认type参数(involved)
 r($blockTest->printProductDocBlockTest($block, array('type' => 'all'))) && p('type,docGroupCount') && e('all,3'); // 测试指定type为all
 r($blockTest->printProductDocBlockTest($blockWithCount5, array('type' => 'involved'))) && p('type,docGroupCount') && e('involved,3'); // 测试block对象设置count为5
-r($blockTest->printProductDocBlockTest($block, array('type' => 'involved'))) && p('type,productsCount') && e('involved,0'); // 测试多个产品多个文档的情况
-r($blockTest->printProductDocBlockTest($block, array('type' => 'involved'))) && p('usersCount') && e('6'); // 测试验证users数据加载
+r($blockTest->printProductDocBlockTest($block, array('type' => 'involved'))) && p('type,productsCount') && e('involved,2'); // 测试多个产品多个文档的情况
+r($blockTest->printProductDocBlockTest($block, array('type' => 'involved'))) && p('usersCount') && e('7'); // 测试验证users数据加载

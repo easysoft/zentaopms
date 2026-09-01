@@ -27,6 +27,7 @@ class productsBox extends wg
         'hasNewProduct?: bool=false',    // 是否有新产品。
         'errorSameProducts?: string',    // 选择同一个产品的提示。
         'required?: bool=false',         // 是否是必填。
+        'requiredPlan?: bool=false',     // 关联计划是否必填。
         'from?: string=project',         // 来源类型。
         'type?: string="plan"',          // 类型。 plan|roadmap
         'selectTip?: string=""',         // 产品下拉提示。
@@ -144,6 +145,7 @@ class productsBox extends wg
             (
                 set::width('1/2'),
                 set::label($typeLang),
+                set::required((bool)$this->prop('requiredPlan')),
                 set::className($typeClass),
                 inputGroup
                 (
@@ -193,7 +195,7 @@ class productsBox extends wg
             formGroup
             (
                 set::label($lang->execution->linkPlan),
-
+                set::required((bool)$this->prop('requiredPlan')),
                 set::className('planBox'),
                 picker
                 (
@@ -345,6 +347,7 @@ class productsBox extends wg
                 (
                     set::width('1/2'),
                     $i == 0 ? set::label($typeLang) : null,
+                    $i == 0 ? set::required((bool)$this->prop('requiredPlan')) : null,
                     $type == 'roadmap' ? set::checkbox(array('text' => $lang->project->linkStoryToProject, 'name' => 'isLinkStory', 'checked' => true)) : null,
                     set::className($typeClass),
                     inputGroup

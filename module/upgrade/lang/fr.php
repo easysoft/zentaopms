@@ -69,6 +69,35 @@ $lang->upgrade->confirm       = 'Confirmez SQL';
 $lang->upgrade->sureExecute   = 'Executez';
 $lang->upgrade->upgradingTips = 'La mise à jour est en cours, veuillez être patient. Ne pas actualiser la page ou éteindre votre ordinateur!';
 $lang->upgrade->executeFailed = 'La demande de mise à niveau a été interrompue. Veuillez actualiser la page pour réessayer. Les modifications déjà exécutées seront automatiquement ignorées et ne seront pas réexécutées.';
+
+$lang->upgrade->dataProcess           = 'Traitement des données';
+$lang->upgrade->dataProcessTip        = 'Traitement des données en cours. Veuillez patienter et ne pas actualiser la page !';
+$lang->upgrade->dataProcessStepsTitle = 'Étapes';
+$lang->upgrade->dataProcessProcessed  = 'Traité : %s / %s';
+
+$lang->upgrade->tableEngine = new stdClass();
+$lang->upgrade->tableEngine->common  = 'Mettre à jour le moteur des tables';
+$lang->upgrade->tableEngine->change  = 'Mettre à jour le moteur de la table %s en InnoDB';
+$lang->upgrade->tableEngine->todo    = 'À mettre à jour';
+$lang->upgrade->tableEngine->done    = 'Mis à jour';
+$lang->upgrade->tableEngine->failed  = 'Ignoré';
+$lang->upgrade->tableEngine->success = 'Le moteur de la table %s a été mis à jour en InnoDB.';
+$lang->upgrade->tableEngine->fail    = 'Le moteur de la table %s a été ignoré lors de la mise à jour.';
+$lang->upgrade->tableEngine->busy    = 'La table %s est en cours d\'utilisation. Nouvel essai...';
+
+$lang->upgrade->charset = new stdClass();
+$lang->upgrade->charset->common  = 'Mettre à jour le jeu de caractères';
+$lang->upgrade->charset->update  = 'Mettre à jour';
+$lang->upgrade->charset->change  = "Mettre à jour le jeu de caractères de la table %s";
+$lang->upgrade->charset->success = 'Le jeu de caractères de la table %s a été mis à jour.';
+$lang->upgrade->charset->fail    = 'Le jeu de caractères de la table %s a été ignoré lors de la mise à jour. Raison : %s.';
+
+$lang->upgrade->dbView = new stdClass();
+$lang->upgrade->dbView->common     = 'Mettre à jour les vues de base de données';
+$lang->upgrade->dbView->todo       = 'Mettre à jour';
+$lang->upgrade->dbView->regenerate = 'Mettre à jour la vue %s';
+
+$lang->upgrade->noNeedProcess = 'Rien à traiter';
 $lang->upgrade->forbiddenExt  = 'Cette extension est incompatible avec la version. Elle a été désactivée :';
 $lang->upgrade->updateFile    = "Le fichier information a besoin d'une mise à jour.";
 $lang->upgrade->showSQLLog    = 'Your database is inconsistent with the standard and try fix it.';
@@ -110,9 +139,9 @@ $lang->upgrade->list            = ' List';
 $lang->upgrade->next            = 'Next';
 $lang->upgrade->back            = 'Back';
 
-$lang->upgrade->upgradeDocs     = 'Mise à jour des données des documents';
-$lang->upgrade->upgradingDocs   = 'Mise à jour des données des documents, veuillez patienter...';
-$lang->upgrade->upgradeDocsTip  = 'Document de données détecté %s nécessitant une mise à jour'; // '检测到 %s 个文档相关数据需要升级';
+$lang->upgrade->upgradeDocs    = 'Mise à jour des données des documents';
+$lang->upgrade->upgradingDocs  = 'Mise à jour des données des documents, veuillez patienter...';
+$lang->upgrade->upgradeDocsTip = 'Document de données détecté %s nécessitant une mise à jour'; // '检测到 %s 个文档相关数据需要升级';
 
 $lang->upgrade->upgradeDocTemplates    = 'Upgrade templates data';
 $lang->upgrade->upgradingDocTemplates  = 'Upgrading templates data, please wait...';
@@ -133,7 +162,8 @@ $lang->upgrade->projectCount      = "%s {$lang->projectCommon}";
 $lang->upgrade->mergeByProject    = "Currently, the following two data migration methods are available. If the historical projects are long term, we suggest upgrading the historical projects as projects.</br>If the historical projects are short cycle, we suggest that the historical projects be upgraded as iterations.";
 $lang->upgrade->mergeRepoTips     = "Merge the selected version library under the selected product.";
 $lang->upgrade->needBuild4Add     = 'Full text retrieval has been added in this upgrade. Need create index. Please go [Admin->System->BuildIndex] page to build index.';
-$lang->upgrade->needChangeEngine  = 'The table engine needs to be replaced in this upgrade, Please go [Admin->System->TableEngine] page to replace engine.';
+$lang->upgrade->needChangeEngine  = 'Some tables have not been converted to the InnoDB engine yet. Please continue at [Admin -> System -> Database -> Table Engine].';
+$lang->upgrade->needChangeCharset = 'Some tables have not been converted to the target charset yet. Please continue at [Admin -> System -> Database -> Charset].';
 $lang->upgrade->errorEngineInnodb = 'Your MySQL does not support InnoDB data table engine. Please modify it to MyISAM and try again.';
 $lang->upgrade->duplicateProject  = "Project name in the same program cannot be duplicate. Please adjust the duplicate names.";
 $lang->upgrade->upgradeTips       = "Historically deleted data cannot be upgraded, and restoration is not supported after the upgrade. Please be aware.";

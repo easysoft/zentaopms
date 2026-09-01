@@ -177,7 +177,7 @@ else
         set::shadow(!isAjaxRequest('modal')),
         set::actions(array('submit')),
         set::actionsClass('btn-actions'),
-        set::maxRows(3),
+        set::minRows(3),
         formBatchItem
         (
             set::name('id'),

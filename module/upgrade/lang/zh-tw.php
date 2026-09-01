@@ -145,6 +145,7 @@ $lang->upgrade->mergeByMoreLink    = "關聯多個{$lang->productCommon}的{$lan
 $lang->upgrade->mergeRepoTips      = "將選中的版本庫歸併到所選產品下。";
 $lang->upgrade->needBuild4Add      = '本次升級需要創建索引。請到 [後台->系統->重建索引] 頁面，重新創建索引。';
 $lang->upgrade->errorEngineInnodb  = '您當前的資料庫不支持使用InnoDB數據表引擎，請修改為MyISAM後重試。';
+$lang->upgrade->needChangeCharset  = '檢測到部分表字元集仍未更新，請到 [後台->系統設定->資料庫->字元集] 頁面繼續處理。';
 $lang->upgrade->duplicateProject   = "同一個項目集內項目名稱不能重複，請調整重名的項目名稱";
 
 $lang->upgrade->projectType['project']   = "把歷史的{$lang->projectCommon}作為項目升級";

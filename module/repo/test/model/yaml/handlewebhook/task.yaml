@@ -1,0 +1,87 @@
+---
+title: zt_task 表数据 - handleWebhook 方法测试
+desc: 为测试 repoModel::handleWebhook() 方法提供任务数据
+author: Codex
+version: "1.0"
+
+fields:
+- field: id
+  range: 8
+- field: parent
+  range: 0
+- field: project
+  range: 18
+- field: execution
+  range: 108
+- field: module
+  range: 42
+- field: story
+  range: 29
+- field: design
+  range: 0
+- field: storyVersion
+  range: 1
+- field: designVersion
+  range: 0
+- field: fromBug
+  range: 0
+- field: name
+  range: 开发任务18
+- field: type
+  range: misc
+- field: pri
+  range: 4
+- field: estimate
+  range: 7.00
+- field: consumed
+  range: 10.00
+- field: left
+  range: 7.00
+- field: deadline
+  range: "[2026-07-28]"
+- field: status
+  range: doing
+- field: subStatus
+  range: 0
+- field: color
+  range: ''
+- field: mailto
+  range: ''
+- field: desc
+  range: 这里是任务描述8
+- field: version
+  range: 1
+- field: openedBy
+  range: admin
+- field: openedDate
+  range: "[2026-07-28 00:00:00]"
+- field: assignedTo
+  range: ''
+- field: assignedDate
+  range: "[2026-07-28 00:00:00]"
+- field: estStarted
+  range: "[2022-01-27]"
+- field: realStarted
+  range: "[2026-07-28 00:00:00]"
+- field: finishedBy
+  range: ''
+- field: finishedList
+  range: ''
+- field: canceledBy
+  range: ''
+- field: closedBy
+  range: ''
+- field: realDuration
+  range: 1
+- field: planDuration
+  range: 1
+- field: closedReason
+  range: ''
+- field: lastEditedBy
+  range: ''
+- field: vision
+  range: rnd
+- field: deleted
+  range: 0
+- field: mode
+  range: ''

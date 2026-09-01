@@ -70,6 +70,16 @@ window.getItem = function(info)
         info.item.content.push({html: "<div class='status-" + info.item.lastRunResult + "'>" + (langCaseResultList[info.item.lastRunResult] ? langCaseResultList[info.item.lastRunResult] : langUnexecuted) + "</div>"});
         info.item.content.push({html: (users[info.item.lastRunner] ? users[info.item.lastRunner] : info.item.lastRunner)});
     }
+    else if(col == 'doc')
+    {
+        titleHtml = `<span${color} class="title">${title}</span>`;
+        if(privs['doc']) titleHtml = "<a class='title' href='" + $.createLink('doc', 'view', `docID=${info.item.id}`) + "'" + color + ">" + title + "</a>";
+        info.item.title      = {html: `<div class="line-clamp-2">${titleHtml}</div>`}
+        info.item.titleAttrs = {'title' : title};
+
+        info.item.content.push({html: ''});
+        info.item.content.push({html: (users[info.item.addedBy] ? users[info.item.addedBy] : info.item.addedBy)});
+    }
     else if(col == 'design')
     {
         info.item.titleAttrs = {'class': 'line-clamp-3', 'title' : title};

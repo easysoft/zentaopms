@@ -32,24 +32,28 @@ $blockTest = new blockZenTest();
 $scrumProject = new stdclass();
 $scrumProject->id = 1;
 $scrumProject->model = 'scrum';
+$scrumProject->status = 'doing';
 $scrumProject->end = '2024-12-31';
 
 // 看板项目对象
 $kanbanProject = new stdclass();
 $kanbanProject->id = 2;
 $kanbanProject->model = 'kanban';
+$kanbanProject->status = 'doing';
 $kanbanProject->end = '2024-12-31';
 
 // 瀑布项目对象
 $waterfallProject = new stdclass();
 $waterfallProject->id = 3;
 $waterfallProject->model = 'waterfall';
+$waterfallProject->status = 'doing';
 $waterfallProject->end = '2024-12-31';
 
 // 无限期项目对象
 $longTimeProject = new stdclass();
 $longTimeProject->id = 4;
 $longTimeProject->model = 'scrum';
+$longTimeProject->status = 'doing';
 $longTimeProject->end = LONG_TIME;
 
 // 准备统计数据

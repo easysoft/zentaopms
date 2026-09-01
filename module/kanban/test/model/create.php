@@ -4,6 +4,13 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('kanban')->gen(1);
 zenData('kanbanregion')->gen(1);
+$kanbanspace = zenData('kanbanspace');
+$kanbanspace->id->range('1-3');
+$kanbanspace->name->range('协作空间,私人空间,公共空间');
+$kanbanspace->type->range('cooperation,private,public');
+$kanbanspace->owner->range('admin');
+$kanbanspace->deleted->range('0');
+$kanbanspace->gen(3);
 
 /**
 
@@ -86,6 +93,25 @@ $kanban6->team        = 'user5';
 $kanban6->fluidBoard  = '1';
 $kanban6->minColWidth = 300;
 $kanban6->desc        = '测试创建重名的公共看板的描述';
+
+$zd_company = zenData('company');
+$zd_company->id->range('1');
+$zd_company->name->range('禅道软件');
+$zd_company->admins->range('admin');
+$zd_company->guest->range('0');
+$zd_company->gen(1);
+$dbh->exec("UPDATE zt_company SET admins = ',admin,' WHERE id = 1");
+global $app;
+$app->company = $dbh->query('SELECT * FROM zt_company WHERE id = 1')->fetch(PDO::FETCH_OBJ);
+
+$zd_user = zenData('user');
+$zd_user->id->range('1-9');
+$zd_user->account->range('admin,po15,po16,po17,user1,user2,user3,user4,user5');
+$zd_user->realname->range('admin,po15,po16,po17,user1,user2,user3,user4,user5');
+$zd_user->password->range('e10adc3949ba59abbe56e057f20f883e');
+$zd_user->visions->range('rnd');
+$zd_user->deleted->range('0');
+$zd_user->gen(9);
 
 su('admin');
 $kanban = new kanbanModelTest();

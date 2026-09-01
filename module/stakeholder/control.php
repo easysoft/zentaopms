@@ -25,6 +25,12 @@ class stakeholder extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
         $stakeholders = $this->stakeholder->getStakeholders($projectID, $browseType, $orderBy, $pager);
+        foreach($stakeholders as $stakeholder)
+        {
+            $stakeholder->nature   = strip_tags($stakeholder->nature);
+            $stakeholder->analysis = strip_tags($stakeholder->analysis);
+            $stakeholder->strategy = strip_tags($stakeholder->strategy);
+        }
 
         /* Save SQL to session for previous and next buttons on the stakeholder detail page. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'stakeholder');

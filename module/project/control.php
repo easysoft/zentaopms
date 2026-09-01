@@ -445,7 +445,8 @@ class project extends control
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $projectID));
+            $objectChanges = array('type' => 'add', 'objectType' => 'project', 'objectList' => array($projectID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $projectID, 'changes' => $objectChanges));
 
             if(in_array($model, array('waterfall', 'waterfallplus', 'ipd')))
             {
@@ -453,10 +454,10 @@ class project extends control
                 $session   = $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', false, $projectID);
                 if(in_array($this->config->edition, array('max', 'ipd'))) $session = $this->createLink('project', 'execution', "browseType=undone&projectID=$projectID", '', false);
                 $this->session->set('projectPlanList', $session, 'project');
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('programplan', 'create', "projectID=$projectID&productID=0&planID=0&executionType=stage&from=projectCreate", '', false, $projectID)));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('programplan', 'create', "projectID=$projectID&productID=0&planID=0&executionType=stage&from=projectCreate", '', false, $projectID), 'changes' => $objectChanges));
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('create', "model=$model&programID=$programID&copyProjectID=$projectID&extra=showTips=1,project=$projectID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('create', "model=$model&programID=$programID&copyProjectID=$projectID&extra=showTips=1,project=$projectID"), 'changes' => $objectChanges));
         }
 
         $this->projectZen->buildCreateForm((string)$model, (int)$programID, (int)$copyProjectID, (string)$extra);
@@ -515,9 +516,10 @@ class project extends control
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
 
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+            $objectChanges = array('type' => 'update', 'objectType' => 'project', 'objectList' => array($projectID));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true, 'changes' => $objectChanges));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('project', 'view', "projectID=$projectID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('project', 'view', "projectID=$projectID"), 'changes' => $objectChanges));
         }
 
         if(!empty($output['workflowGroup'])) $project->workflowGroup = $workflowGroup;

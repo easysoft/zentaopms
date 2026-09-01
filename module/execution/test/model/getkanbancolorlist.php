@@ -12,6 +12,7 @@ cid=7
 - 测试步骤3：测试空颜色列表处理 @0
 - 测试步骤4：测试自定义颜色列表属性wait @#FF0000
 - 测试步骤5：验证所有预期状态键存在 @1
+- 测试步骤6：验证特定颜色wait @#7EC5FF
 
 */
 
@@ -30,3 +31,4 @@ r($execution->getKanbanColorListTest('count'))    && p()       && e('6');       
 r($execution->getKanbanColorListTest('empty'))    && p()       && e('0');        // 测试步骤3：测试空颜色列表处理
 r($execution->getKanbanColorListTest('custom'))   && p('wait') && e('#FF0000');  // 测试步骤4：测试自定义颜色列表
 r($execution->getKanbanColorListTest('all_keys')) && p()       && e('1');        // 测试步骤5：验证所有预期状态键存在
+r($execution->getKanbanColorListTest('specific_color')) && p() && e('#7EC5FF');  // 测试步骤6：验证特定颜色wait

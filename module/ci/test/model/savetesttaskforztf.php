@@ -31,7 +31,6 @@ zenData('ops_pipeline')->gen(3);
 zenData('testtask')->gen(5);
 zenData('project')->gen(5);
 zenData('projectproduct')->gen(5);
-zenData('compile')->loadYaml('compile')->gen(1);
 su('admin');
 
 $productID = 0;

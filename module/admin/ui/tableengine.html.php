@@ -10,51 +10,67 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('refresh', $lang->refresh);
-jsVar('changingTable', $lang->admin->changingTable);
-jsVar('changeFinished', $lang->admin->changeFinished);
-jsVar('allInnoDB', $lang->admin->engineSummary['allInnoDB']);
-jsVar('hasMyISAM', $lang->admin->engineSummary['hasMyISAM']);
+$isMysql = $config->db->driver == 'mysql';
+$count   = count($tableEngines);
 
-$MyISAMCount = 0;
-$engineList  = array();
-$isEn        = $app->getClientLang() == 'en';
-foreach($tableEngines as $tableName => $engine)
+jsVar('refresh', $lang->refresh);
+jsVar('tableEngines', $tableEngines);
+jsVar('changingTable', $lang->admin->changingTable);
+jsVar('changeSuccess', $lang->admin->changeSuccess);
+jsVar('changeFinished', $lang->admin->changeFinished);
+jsVar('tableEngineFail', $lang->admin->tableEngineFail);
+jsVar('hasMyISAM', $lang->admin->engineSummary);
+
+if(!$isMysql || empty($tableEngines))
 {
-    if($engine != 'InnoDB') $MyISAMCount++;
-    $engineList[] = div
+    panel
     (
-        setClass('flex items-center my-1 pl-5 h-5' . ($isEn ? ' gap-1' : '')),
-        set(array('data-table' => $tableName)),
+        setClass('m-auto w-2/3'),
+        set::title($lang->admin->tableEngine),
+        set::headingClass('border-b'),
         div
         (
-            setClass('rounded-full black mr-2 w-1 h-1')
-        ),
-        html(sprintf($lang->admin->engineInfo, $tableName, $engine))
+            setClass('flex items-center text-success'),
+            icon(setClass('mr-2'), 'check-circle'),
+            $lang->admin->noNeedUpdate
+        )
     );
 }
-
-$title = $MyISAMCount > 0 ? sprintf($lang->admin->engineSummary['hasMyISAM'], $MyISAMCount) : $lang->admin->engineSummary['allInnoDB'];
-
-panel
-(
-    set::title($title),
-    set::titleClass('table-engine'),
-    set::headingClass('justify-start border-b'),
-    $MyISAMCount > 0 ? to::headingActions
+else
+{
+    panel
     (
-        button
+        setClass('m-auto w-2/3'),
+        set::title($lang->admin->tableEngine),
+        set::headingClass('border-b'),
+        to::headingActions
         (
-            on::click('changeAllEngines'),
-            setClass('btn primary'),
-            $lang->admin->changeEngine
+            span(setID('engineProgress'), '0 / ' . $count)
+        ),
+        div
+        (
+            setClass('mb-4'),
+            sprintf($lang->admin->tableEngineTips, $count)
+        ),
+        div
+        (
+            setID('engineBox'),
+            setClass('mb-4 overflow-y-auto overflow-x-hidden'),
+            setStyle(['max-height' => 'calc(100vh - 16rem)'])
+        ),
+        div
+        (
+            setID('engineAction'),
+            setClass('center'),
+            a
+            (
+                setID('startUpdate'),
+                setClass('btn primary'),
+                on::click('changeTableEngines()'),
+                $lang->admin->startUpdate
+            )
         )
-    ) : null,
-    div
-    (
-        setID('engineBox'),
-        $engineList
-    )
-);
+    );
+}
 
 render();

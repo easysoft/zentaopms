@@ -15,10 +15,15 @@ $lang->zai->vectorizedAlreadyEnabled = 'Data vectorization is already enabled.';
 $lang->zai->vectorizedEnabled        = 'Data vectorization enabled.';
 $lang->zai->authenticationFailed     = 'Authentication failed!';
 $lang->zai->syncRequestFailed        = 'Sync request failed, please try again later';
-$lang->zai->syncingHint              = 'Closing this page during sync will pause the sync process.';
-$lang->zai->syncedWithFailedHint     = 'Some data sync failed, please try again later';
-$lang->zai->cannotFindMemoryInZai    = 'Cannot find knowledge base with specified key in ZAI, please reset sync target.';
+$lang->zai->syncingHint              = 'The vectorization data will be synced automatically.';
+$lang->zai->enqueueHint              = 'Keep this page open until enqueue finishes. If interrupted, click Continue Enqueue.';
+$lang->zai->enqueueResult            = "Enqueue %s, already queued <strong class='%scount'>%s</strong> records;";
+$lang->zai->enqueueFinished          = 'Historical data enqueue finished. The cron job will sync automatically.';
+$lang->zai->enqueueContinue          = 'Continue Enqueue';
+$lang->zai->syncedWithFailedHint     = 'Some data sync failed. The system will retry automatically.';
+$lang->zai->cannotFindMemoryInZai    = 'Cannot find knowledge base with specified key in ZAI, please enable vectorization again.';
 $lang->zai->confirmResetSync         = 'Do you want to reset sync status? This will create a new knowledge base in ZAI.';
+$lang->zai->lastFailReason           = 'Failure Reason';
 $lang->zai->settingTips              = 'Please install <a class="btn btn-link text-primary px-1" style="text-decoration: none;" href="%s" target="_blank">ZAI service</a> to get the key.';
 
 $lang->zai->zentaoVectorization       = 'Zentao Data Vectorization';
@@ -36,12 +41,13 @@ $lang->zai->totalSync        = 'Total';
 $lang->zai->lastSyncTime     = 'Last Sync Time';
 
 $lang->zai->syncActions = new stdClass();
-$lang->zai->syncActions->enable     = 'Enable Data Vectorization';
-$lang->zai->syncActions->startSync  = 'Start Sync';
-$lang->zai->syncActions->resync     = 'Resync';
-$lang->zai->syncActions->pauseSync  = 'Pause Sync';
-$lang->zai->syncActions->resumeSync = 'Resume Sync';
-$lang->zai->syncActions->resetSync  = 'Reset Sync';
+$lang->zai->syncActions->enable          = 'Enable Data Vectorization';
+$lang->zai->syncActions->startSync       = 'Start Sync';
+$lang->zai->syncActions->resync          = 'Resync';
+$lang->zai->syncActions->pauseSync       = 'Pause Sync';
+$lang->zai->syncActions->resumeSync      = 'Resume Sync';
+$lang->zai->syncActions->resetSync       = 'Reset Sync';
+$lang->zai->syncActions->continueEnqueue = 'Continue Enqueue';
 
 $lang->zai->syncingTypeList = array();
 $lang->zai->syncingTypeList['story']    = 'Story';

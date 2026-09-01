@@ -38,6 +38,9 @@ $table->gen(10);
 
 su('admin');
 
+global $config;
+$config->debug = 0;
+
 $aiTest = new aiModelTest();
 
 r($aiTest->getPromptByIdTest(1)) && p('name') && e('需求润色'); // 步骤1：正常情况

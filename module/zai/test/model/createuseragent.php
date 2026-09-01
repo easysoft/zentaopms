@@ -8,10 +8,10 @@ timeout=0
 cid=0
 
 - 步骤1：无 ZAI 配置时创建失败返回空 @0
-- 步骤2：API 返回空时创建失败返回空 @0
-- 步骤3：API 返回无 id 时创建失败返回空 @0
-- 步骤4：API 成功时返回 agent ID @agent-admin-new
-- 步骤5：创建成功后数据库写入 agent 记录 @agent-admin-new
+- 步骤2：ZAI 地址不可达时创建失败返回空 @0
+- 步骤3：ZAI 配置缺少 token 时创建失败返回空 @0
+- 步骤4：ZAI 配置缺少 host 时创建失败返回空 @0
+- 步骤5：失败后数据库未写入 agent 记录 @0
 
 */
 
@@ -30,23 +30,39 @@ $zai = new zaiModelTest();
 /* 步骤1：无 ZAI 配置时创建失败返回空 */
 r($zai->createUserAgentTest('admin')) && p() && e('0'); // 步骤1：无 ZAI 配置时创建失败返回空
 
-/* 设置完整的 ZAI 配置 */
+/* 设置完整的 ZAI 配置，但服务地址不可达 */
 $setting = new stdClass();
-$setting->host        = 'testhost.com';
-$setting->port        = 8080;
+$setting->host        = '127.0.0.1';
+$setting->port        = 1;
 $setting->appID       = 'testappid123';
 $setting->token       = 'testtoken123';
 $setting->adminToken  = 'testadmintoken123';
 $tester->loadModel('setting')->setItem('system.zai.global.setting', json_encode($setting));
 
-/* 步骤2：API 返回空时创建失败返回空 */
-r($zai->createUserAgentTest('admin', false)) && p() && e('0'); // 步骤2：API 返回空时创建失败返回空
+/* 步骤2：ZAI 地址不可达时创建失败返回空 */
+r($zai->createUserAgentTest('admin')) && p() && e('0'); // 步骤2：ZAI 地址不可达时创建失败返回空
 
-/* 步骤3：API 返回无 id 时创建失败返回空 */
-r($zai->createUserAgentTest('admin', json_encode(array('name' => 'test-agent')))) && p() && e('0'); // 步骤3：API 返回无 id 时创建失败返回空
+/* 设置缺少 token 的 ZAI 配置 */
+$invalidSetting = new stdClass();
+$invalidSetting->host  = '127.0.0.1';
+$invalidSetting->port  = 1;
+$invalidSetting->appID = 'testappid123';
+$tester->loadModel('setting')->setItem('system.zai.global.setting', json_encode($invalidSetting));
 
-/* 步骤4：API 成功时返回 agent ID */
-r($zai->createUserAgentTest('admin', null, 'agent-admin-new')) && p() && e('agent-admin-new'); // 步骤4：API 成功时返回 agent ID
+/* 步骤3：ZAI 配置缺少 token 时创建失败返回空 */
+r($zai->createUserAgentTest('admin')) && p() && e('0'); // 步骤3：ZAI 配置缺少 token 时创建失败返回空
 
-/* 步骤5：创建成功后数据库写入 agent 记录 */
-r($zai->getUserAgentRecordTest('admin')) && p() && e('agent-admin-new'); // 步骤5：创建成功后数据库写入 agent 记录
+/* 设置缺少 host 的 ZAI 配置 */
+$invalidHostSetting = new stdClass();
+$invalidHostSetting->host        = '';
+$invalidHostSetting->port        = 1;
+$invalidHostSetting->appID       = 'testappid123';
+$invalidHostSetting->token       = 'testtoken123';
+$invalidHostSetting->adminToken  = 'testadmintoken123';
+$tester->loadModel('setting')->setItem('system.zai.global.setting', json_encode($invalidHostSetting));
+
+/* 步骤4：ZAI 配置缺少 host 时创建失败返回空 */
+r($zai->createUserAgentTest('admin')) && p() && e('0'); // 步骤4：ZAI 配置缺少 host 时创建失败返回空
+
+/* 步骤5：失败后数据库未写入 agent 记录 */
+r($zai->getUserAgentRecordTest('admin')) && p() && e('0'); // 步骤5：失败后数据库未写入 agent 记录

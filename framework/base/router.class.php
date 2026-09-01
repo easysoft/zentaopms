@@ -3305,9 +3305,10 @@ class baseRouter
      */
     public function saveError(int $level, string $message, string $file, int $line)
     {
-        if(empty($this->config->debug))  return true;
-        if(!is_dir($this->logRoot))      return true;
-        if(!is_writable($this->logRoot)) return true;
+        if(empty($this->config->debug))   return true;
+        if(!is_dir($this->logRoot))       return true;
+        if(!is_writable($this->logRoot))  return true;
+        if(!(error_reporting() & $level)) return true; // 代码里使用错误抑制符(@)不输出错误日志
 
         /*
          * 删除设定时间之前的日志。
@@ -3876,7 +3877,7 @@ class ztSessionHandler implements SessionHandlerInterface
      */
     public function getSessionFile($id): string
     {
-        if(!empty($this->sessionFile)) return $this->sessionFile;
+        if(!empty($this->sessionFile) && $this->sessionID == $id) return $this->sessionFile;
         if(!preg_match('/^\w+$/', $id)) return false;
 
         $fileName = "sess_{$id}";
@@ -3946,7 +3947,12 @@ class ztSessionHandler implements SessionHandlerInterface
 
         if(!is_file($sessFile) && !touch($sessFile)) return true;
         if(!is_writable($sessFile)) return true;
-        if(md5_file($sessFile) == md5($sessData)) return true;
+        if(md5_file($sessFile) == md5($sessData))
+        {
+            /* 内容未变也要更新 mtime，否则心跳无法阻止 GC 回收 session。 */
+            touch($sessFile);
+            return true;
+        }
         if(file_put_contents($sessFile, $sessData, LOCK_EX)) return true;
         return true;
     }

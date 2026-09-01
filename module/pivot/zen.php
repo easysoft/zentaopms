@@ -495,7 +495,7 @@ class pivotZen extends pivot
      * @access public
      * @return string
      */
-    public function getFilterOptionUrl(array $filter, string $sql = '', array $fieldSettings = array()): object
+    public function getFilterOptionUrl(array $filter, string $sql = '', array $fieldSettings = array(), int $pivotID = 0): object
     {
         $field  = $filter['field'];
         $from   = zget($filter, 'from', 'result');
@@ -505,6 +505,7 @@ class pivotZen extends pivot
         $url = helper::createLink('pivot', 'ajaxGetSysOptions', "search={search:base64}");
         $data = array();
         $data['values'] = $values;
+        $data['pivotID'] = $pivotID;
         if($from == 'query')
         {
             $data['type'] = $filter['typeOption'];
@@ -519,7 +520,6 @@ class pivotZen extends pivot
             $data['object']        = $fieldSetting['object'];
             $data['field']         = $fieldType != 'options' && $fieldType != 'object' ? $field : $fieldSetting['field'];
             $data['saveAs']        = zget($filter, 'saveAs', $field);
-            $data['sql']           = $sql;
             $data['originalField'] = zget($fieldSetting, 'field', $data['field']);
         }
 

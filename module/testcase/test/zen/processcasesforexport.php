@@ -19,6 +19,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zenData('case')->gen(10);
+zenData('casestep')->gen(0);
+zenData('testresult')->gen(0);
+zenData('testrun')->gen(0);
 zenData('product')->gen(1);
 zenData('user')->gen(5);
 su('admin');

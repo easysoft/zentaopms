@@ -15,6 +15,10 @@ $config->pipeline->groupPrivs['import'] = 'create';
 $config->pipeline->editor = new stdclass();
 $config->pipeline->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 
+$config->pipeline->jsonSchemaKeywords = array();
+$config->pipeline->jsonSchemaKeywords['repos']        = array('module' => 'pipeline', 'method' => 'ajaxGetRepos', 'params' => array('spaceID'));
+$config->pipeline->jsonSchemaKeywords['artifactLibs'] = array('module' => 'artifact', 'method' => 'ajaxGetArtifactLibs', 'params' => array('spaceID', 'repoID'));
+
 /* Search config. */
 $config->pipeline->search['module']           = 'pipeline';
 $config->pipeline->search['fields']['id']     = $lang->idAB;

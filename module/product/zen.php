@@ -1096,7 +1096,7 @@ class productZen extends product
                     $cardList = !empty($laneData->{$columnKey}) ? $laneData->{$columnKey} : array();
                     foreach($cardList as $card)
                     {
-                        $items[$laneKey][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => isset($card->name) ? $card->name : $card->title, 'status' => isset($card->status) ? $card->status : '', 'cardType' => $columnKey, 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => isset($card->progress) ? $card->progress : 0, 'marker' => isset($card->marker) ? $card->marker : 0);
+                        $items[$laneKey][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => isset($card->name) ? $card->name : $card->title, 'status' => isset($card->status) ? $card->status : '', 'cardType' => $columnKey, 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => isset($card->progress) ? $card->progress : 0, 'marker' => isset($card->marker) ? $card->marker : 0, 'begin' => !empty($card->begin) && !helper::isZeroDate($card->begin) ? $card->begin : '', 'end' => !empty($card->end) && !helper::isZeroDate($card->end) ? $card->end : '');
 
                         if(!isset($columnCards[$columnKey])) $columnCards[$columnKey] = 0;
                         $columnCards[$columnKey] ++;
@@ -1106,7 +1106,7 @@ class productZen extends product
                             if(!empty($latestExecutions[$card->id]))
                             {
                                 $execution = $latestExecutions[$card->id];
-                                $items[$laneKey]['doingExecution'][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'cardType' => 'doingExecution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress);
+                                $items[$laneKey]['doingExecution'][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'cardType' => 'doingExecution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress, 'begin' => !helper::isZeroDate($execution->begin) ? $execution->begin : '', 'end' => !helper::isZeroDate($execution->end) ? $execution->end : '');
 
                                 if(!isset($columnCards['doingExecution'])) $columnCards['doingExecution'] = 0;
                                 $columnCards['doingExecution'] ++;
@@ -1176,6 +1176,7 @@ class productZen extends product
      */
     protected function buildSearchFormForBrowse(object|null $project, int $projectID, int &$productID, string $branch, int $param, string $storyType, string $browseType, bool $isProjectStory, string $from, int $blockID): void
     {
+        $originProductID = $productID;
         if($isProjectStory && !$productID && !empty($this->products)) $productID = (int)key($this->products); // If toggle a project by the #swapper component on the story page of the projectstory module, the $productID may be empty. Make sure it has value.
 
         if($this->config->edition == 'ipd' && $storyType == 'story') unset($this->config->product->search['fields']['roadmap']);
@@ -1186,11 +1187,12 @@ class productZen extends product
             unset($this->config->product->search['fields']['product']);
             unset($this->config->product->search['params']['product']);
 
-            /* The none-product and none-scrum project don't need display the plan in the search form. */
+            /* The none-product and none-scrum project don't need display the plan and release in the search form. */
             if($project->model != 'scrum')
             {
                 unset($this->config->product->search['fields']['plan']);
                 unset($this->config->product->search['params']['plan']);
+                unset($this->config->product->search['fields']['release'], $this->config->product->search['params']['release']);
             }
         }
 
@@ -1207,7 +1209,7 @@ class productZen extends product
         $this->config->product->search['module']    = $storyType;
         if($this->app->rawModule != 'product') $this->config->product->search['module'] = $this->app->rawModule;
         $queryID = ($browseType == 'bysearch') ? $param : 0;
-        $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $storyType, $branch, $projectID);
+        $this->product->buildSearchForm($originProductID, $this->products, $queryID, $actionURL, $storyType, $branch, $projectID);
     }
 
     /**
@@ -1560,6 +1562,7 @@ class productZen extends product
         $listFields['task']        = $this->lang->story->tasks;
         $listFields['bug']         = $this->lang->story->bugs;
         $listFields['case']        = $this->lang->story->cases;
+        $listFields['doc']         = $this->lang->story->docs;
 
         if($storyType == 'requirement' || $storyType == 'story') unset($listFields['requirement']);
         if($storyType == 'story') unset($listFields['story']);

@@ -6,3 +6,16 @@ function setStory(event)
 
     $duplicateBox.toggleClass('hidden', closedReason != 'duplicate');
 }
+
+async function checkUndoneTasks()
+{
+    if(undoneTasks == 0) return true;
+
+     const confirmed = await zui.Modal.confirm(confirmCloseTips);
+    return confirmed;
+}
+
+window.checkSubmit = function()
+{
+    return checkUndoneTasks();
+};

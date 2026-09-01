@@ -21,6 +21,7 @@ $lang->repo->download        = 'Download File';
 $lang->repo->mirror = new stdclass();
 $lang->repo->mirror->syncing             = 'Syncing...';
 $lang->repo->mirror->refreshSync         = 'Refresh Sync Status';
+$lang->repo->mirror->nextSync            = 'Next Sync: ';
 $lang->repo->mirror->lastUpdated         = 'Last Updated: ';
 $lang->repo->mirror->failedTitle         = 'Sync Failed';
 $lang->repo->mirror->detail              = 'View Detail';
@@ -202,6 +203,7 @@ $lang->repo->openedDate = 'CreatedDate';
 $lang->repo->actionInfo     = "Add by %s in %s";
 $lang->repo->changes        = "Change Log";
 $lang->repo->reviewLocation = "File: %s@%s, Line: %s - %s";
+$lang->repo->ppmLocation    = "review request #%s";
 $lang->repo->commentEdit    = '<i class="icon-pencil"></i>';
 $lang->repo->commentDelete  = '<i class="icon-remove"></i>';
 $lang->repo->allChanges     = "Other Changes";
@@ -536,7 +538,7 @@ $lang->repo->sourceList['Gogs']       = 'Gogs';
 $lang->repo->sourceList['Subversion'] = 'Subversion';
 
 $lang->repo->accessList = array();
-$lang->repo->accessList['writable'] = 'Readable, Writable, Manageable';
+$lang->repo->accessList['writable'] = 'Readable, Writable, Manageable (import as GitFox code repository, managed in GitFox)';
 $lang->repo->accessList['readonly'] = 'Read-only (for image import, managed via third-party code repository, automatically synced regularly by DevOps)';
 
 $lang->repo->importProgress = new stdclass();

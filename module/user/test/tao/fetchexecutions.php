@@ -32,13 +32,20 @@ cid=19667
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
-zenData('user')->gen(3);
-zenData('company')->gen(1);
+$userTable = zenData('user');
+$userTable->account->range('admin,user1,user2');
+$userTable->gen(3);
+
+$companyTable = zenData('company');
+$companyTable->admins->range('`,admin,`');
+$companyTable->gen(1);
+global $app;
+$app->company->admins = ',admin,';
 
 $projectTable = zenData('project');
 $projectTable->type->range('sprint,kanban,stage');
 $projectTable->name->range('1-18')->prefix('执行');
-$projectTable->multiple->range('0, 1{4}');
+$projectTable->multiple->range('0,1{4}');
 $projectTable->status->range('wait,doing,suspended,closed');
 $projectTable->openedBy->range('user1{2},admin{10},user1{6}');
 $projectTable->vision->range('rnd{11},lite');
@@ -65,6 +72,8 @@ $app->loadClass('pager');
 $pager = new pager(0, 5, 1);
 
 $userTest = new userTaoTest();
+$userTest->instance->mao->cache = null;
+restoreObjectTables();
 
 r($userTest->fetchExecutionsTest(''))      && p() && e(0); // 用户名为空，返回空数组。
 r($userTest->fetchExecutionsTest('user2')) && p() && e(0); // 用户 user2 未参与任何执行，返回空数组。

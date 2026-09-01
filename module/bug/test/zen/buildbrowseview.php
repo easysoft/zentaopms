@@ -37,11 +37,20 @@ zenData('product')->loadYaml('buildbrowseview/product', false, 2)->gen(3);
 zenData('project')->loadYaml('buildbrowseview/project', false, 2)->gen(4);
 zenData('story')->loadYaml('buildbrowseview/story', false, 2)->gen(3);
 zenData('task')->loadYaml('buildbrowseview/task', false, 2)->gen(5);
+zenData('build')->gen(5);
+zenData('productplan')->gen(5);
 zenData('user')->gen(5);
+$company = zenData('company');
+$company->admins->range('`,admin,`');
+$company->gen(1);
+global $app;
+$app->company->admins = ',admin,';
 
 su('admin');
 
 $bugTest = new bugZenTest();
+$bugTest->instance->mao->cache = null;
+restoreObjectTables();
 
 $product1 = new stdClass();
 $product1->id = 1;

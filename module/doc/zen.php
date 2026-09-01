@@ -1869,6 +1869,20 @@ class docZen extends doc
             }
         }
 
+        if($spaceType == 'execution' || $lib->type == 'execution')
+        {
+            $spaceType = 'project';
+            if(!empty($lib->project))
+            {
+                $space = (string)$lib->project;
+            }
+            elseif(!empty($lib->execution))
+            {
+                $execution = $this->loadModel('execution')->getByID((int)$lib->execution);
+                if($execution) $space = (string)$execution->project;
+            }
+        }
+
         return $doc;
     }
 

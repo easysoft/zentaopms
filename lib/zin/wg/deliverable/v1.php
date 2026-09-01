@@ -37,6 +37,7 @@ class deliverable extends wg
         jsVar('uploadFile',       $lang->doc->uploadFile);
         jsVar('deleteItem',       $lang->delete);
         jsVar('otherLang',        $lang->other);
+        jsVar('canPreview',       hasPriv('file', 'preview'));
         jsVar('canDownload',      hasPriv('file', 'download'));
         jsVar('canCreateDoc',     hasPriv('doc', 'create'));
 

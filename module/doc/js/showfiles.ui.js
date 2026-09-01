@@ -52,11 +52,12 @@ window.renderCell = function(result, {col, row})
 window.downloadFile = function(fileID, extension, imageWidth)
 {
     if(!fileID) return;
+    if(!canPreviewFile) return true;
     var windowWidth = $(window).width();
 
-    var url = $.createLink('file', 'download', 'fileID=' + fileID + '&mouse=left');
+    var url = $.createLink('file', 'preview', 'fileID=' + fileID + '&mouse=left');
     url    += url.includes('?') ? '&' : '?';
-    url    += `'${sessionString}'`;
+    url    += sessionString;
 
     width = (windowWidth > imageWidth) ? ((imageWidth < windowWidth * 0.5) ? windowWidth * 0.5 : imageWidth) : windowWidth;
     loadModal(url);

@@ -427,6 +427,20 @@ class projectZen extends project
                             $productPlans[$productID][$branchID][$plan->id] = $plan->begin == $this->config->productplan->future && $plan->end == $this->config->productplan->future ? $plan->title . ' ' . $this->lang->productplan->future : $plan->title . " [{$plan->begin} ~ {$plan->end}]";
                         }
                     }
+
+                    /* 已关联的过期计划也需要展示在计划选项中，未关联的过期计划不展示。*/
+                    if(!empty($linkedProduct->plans))
+                    {
+                        foreach($linkedProduct->plans as $linkedPlans)
+                        {
+                            $planList = array_filter(explode(',', $linkedPlans));
+                            foreach($planList as $planID)
+                            {
+                                if(isset($productPlans[$productID][$branchID][$planID])) continue;
+                                $productPlans[$productID][$branchID][$planID] = '';
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1849,7 +1863,7 @@ class projectZen extends project
                     foreach($cardList as $card)
                     {
                         $cardColumnKey = $columnKey == 'doing' ? 'doingProjects' : $columnKey;
-                        $items["lane$laneKey"][$cardColumnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => $card->name, 'status' => $card->status, 'cardType' => 'project', 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => $card->progress);
+                        $items["lane$laneKey"][$cardColumnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => $card->name, 'status' => $card->status, 'cardType' => 'project', 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => $card->progress, 'begin' => !helper::isZeroDate($card->begin) ? $card->begin : '', 'end' => !helper::isZeroDate($card->end) ? $card->end : '');
 
                         if(!isset($columnCards[$cardColumnKey])) $columnCards[$cardColumnKey] = 0;
                         $columnCards[$cardColumnKey] ++;
@@ -1860,7 +1874,7 @@ class projectZen extends project
                             {
                                 $cardColumnKey = 'doingExecutions';
                                 $execution = $latestExecutions[$card->id];
-                                $items["lane$laneKey"][$cardColumnKey][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'cardType' => 'execution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress);
+                                $items["lane$laneKey"][$cardColumnKey][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'cardType' => 'execution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress, 'begin' => !helper::isZeroDate($execution->begin) ? $execution->begin : '', 'end' => !helper::isZeroDate($execution->end) ? $execution->end : '');
 
                                 if(!isset($columnCards[$cardColumnKey])) $columnCards[$cardColumnKey] = 0;
                                 $columnCards[$cardColumnKey] ++;

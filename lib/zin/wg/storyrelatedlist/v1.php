@@ -18,6 +18,11 @@ class storyRelatedList extends relatedList
         'story'         => '?object'           // 当前需求。
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     protected function created()
     {
         $data = $this->prop('data');
@@ -63,9 +68,21 @@ class storyRelatedList extends relatedList
             {
                 $data['testcase'] = array
                 (
-                    'title' => $lang->story->legendCases,
-                    'items' => $cases,
-                    'url'   => hasPriv('testcase', 'view') ? createLink('testcase', 'view', 'caseID={id}') : false
+                    'title'    => $lang->story->legendCases,
+                    'items'    => $cases,
+                    'url'      => hasPriv('testcase', 'view') ? createLink('testcase', 'view', 'caseID={id}') : false,
+                    'onRender' => function($item, $case) use($lang)
+                    {
+                        $resultClass = 'text-gray-900';
+                        $resultText  = $lang->testcase->unexecuted;
+                        if(!empty($case->lastRunResult))
+                        {
+                            $resultText  = zget($lang->testcase->resultList, $case->lastRunResult);
+                            $resultClass = "status-{$case->lastRunResult}";
+                        }
+                        $item['content'] = array('html' => '<span class="flex w-10 ' . $resultClass . '">' . $resultText . '</span>');
+                        return $item;
+                    }
                 );
             }
 

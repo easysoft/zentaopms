@@ -14,9 +14,9 @@ $lang->zai->vectorizedAlreadyEnabled = '數據向量化已經啟用。';
 $lang->zai->vectorizedEnabled        = '數據向量化已啟用。';
 $lang->zai->authenticationFailed     = '認證失敗！';
 $lang->zai->syncRequestFailed        = '同步請求失敗，請稍後再試';
-$lang->zai->syncingHint              = '同步過程中，關閉此頁面將會暫停同步。';
-$lang->zai->syncedWithFailedHint     = '一些數據同步失敗，請稍後再試';
-$lang->zai->cannotFindMemoryInZai    = '無法在 ZAI 中找到指定 key 的知識庫，請重置同步目標。';
+$lang->zai->syncingHint              = '數據正在後台自動同步，無需保持此頁面打開。';
+$lang->zai->syncedWithFailedHint     = '一些數據同步失敗，系統將自動重試';
+$lang->zai->cannotFindMemoryInZai    = '無法在 ZAI 中找到指定 key 的知識庫，請重新啟用向量化。';
 $lang->zai->confirmResetSync         = '是否重置同步狀態，這將在 ZAI 中創建新的知識庫。';
 $lang->zai->settingTips              = '請安裝<a class="btn btn-link text-primary px-1" style="text-decoration: none;" href="%s" target="_blank">ZAI服務</a>獲取金鑰。';
 

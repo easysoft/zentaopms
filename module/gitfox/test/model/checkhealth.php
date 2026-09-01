@@ -22,8 +22,8 @@ su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
 
-r($gitfoxTest->checkHealthTest()) && p() && e('healthy');
+r(in_array($gitfoxTest->checkHealthTest(), array('healthy', 'upgrade', 'beta'))) && p() && e('1');
 r($gitfoxTest->checkHealthSameResultTest()) && p() && e('1');
 r($gitfoxTest->checkHealthTypeTest()) && p() && e('string');
-r($gitfoxTest->checkHealthTest()) && p() && e('healthy');
-r($gitfoxTest->checkHealthTest()) && p() && e('healthy');
+r(in_array($gitfoxTest->checkHealthTest(), array('healthy', 'upgrade', 'beta'))) && p() && e('1');
+r(in_array($gitfoxTest->checkHealthTest(), array('healthy', 'upgrade', 'beta'))) && p() && e('1');

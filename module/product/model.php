@@ -522,7 +522,7 @@ class productModel extends model
         $changes = common::createChanges($oldProduct, $product);
         if(!empty($product->comment) or !empty($changes))
         {
-            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', $product->comment);
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', (string)$product->comment);
             $this->action->logHistory($actionID, $changes);
 
             if(!empty($product->comment))
@@ -559,7 +559,7 @@ class productModel extends model
         $changes = common::createChanges($oldProduct, $product);
         if(!empty($product->comment) or !empty($changes))
         {
-            $actionID = $this->loadModel('action')->create('product', $productID, 'Activated', $product->comment);
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Activated', (string)$product->comment);
             $this->action->logHistory($actionID, $changes);
 
             if(!empty($product->comment))
@@ -760,6 +760,8 @@ class productModel extends model
         $projectID = ($this->app->tab == 'project' && empty($projectID)) ? $this->session->project : $projectID;
         $searchConfig['params']['module']['values'] = empty($showAll) ? $this->productTao->getModulesForSearchForm($productID, $products, $branch, (int)$projectID) : $this->loadModel('tree')->getAllModulePairs('story');
 
+        if($storyType != 'story') unset($searchConfig['fields']['release'], $searchConfig['params']['release']);
+
         $gradePairs = $this->loadModel('story')->getGradePairs($storyType, 'all');
 
         if($projectID || $storyType == 'all')
@@ -793,6 +795,13 @@ class productModel extends model
         $productIdList = ($this->app->tab == 'project' && empty($productID)) || !empty($showAll) ? array_keys($products) : array($productID);
         $branchParam   = ($this->app->tab == 'project' && empty($productID)) || !empty($showAll) ? '' : $branch;
         $searchConfig['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, (empty($branchParam) || $branchParam == 'all') ? '' : $branchParam);
+
+        /* Get product release data. */
+        if(isset($searchConfig['fields']['release']))
+        {
+            $productParam = $this->app->rawMethod == 'relateobject' ? 0 : $productID;
+            $searchConfig['params']['release']['values'] = $this->loadModel('release')->getPairs(array(), $productParam, (empty($branchParam) || $branchParam == 'all') ? '' : $branchParam, $projectID);
+        }
 
         /* Get branch data. */
         if($productID && empty($showAll))
@@ -904,6 +913,25 @@ class productModel extends model
             ->markRight(1)
             ->beginIF($appendProject)->orWhere('t2.id')->in($appendProject)->fi()
             ->orderBy('`order`_asc')
+            ->fetchPairs('id', 'name');
+    }
+
+    /**
+     * 获取关联某产品的未关闭项目列表。
+     * Get unclosed projects linked to a product.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getUnclosedProjectsByProduct(int $productID): array
+    {
+        return $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.status')->ne('closed')
             ->fetchPairs('id', 'name');
     }
 
@@ -1183,6 +1211,18 @@ class productModel extends model
         $projectLatestExecutions = array();
         $latestExecutionList     = array();
         $today                   = helper::today();
+
+        /* Get workingDays. */
+        $earliestEnd = $today;
+        foreach($executionList as $executions)
+        {
+            foreach($executions as $execution)
+            {
+                if(!empty($execution->end) && !helper::isZeroDate($execution->end) && $execution->end < $earliestEnd) $earliestEnd = $execution->end;
+            }
+        }
+        $workingDays = $this->loadModel('holiday')->getActualWorkingDays($earliestEnd, $today);
+
         foreach($executionList as $projectID => $executions)
         {
             foreach($executions as &$execution)
@@ -1190,8 +1230,13 @@ class productModel extends model
                 /* Calculate delayed execution. */
                 if($execution->status != 'done' && $execution->status != 'closed' && $execution->status != 'suspended')
                 {
-                    $delay = helper::diffDate($today, $execution->end);
-                    if($delay > 0) $execution->delay = $delay;
+                    $betweenDays = $this->holiday->getDaysBetween($execution->end, $today);
+                    if($betweenDays)
+                    {
+                        $delayDays = array_intersect($betweenDays, $workingDays);
+                        $delay     = count($delayDays) - 1;
+                        if($delay > 0) $execution->delay = $delay;
+                    }
                 }
             }
 
@@ -2256,6 +2301,8 @@ class productModel extends model
      */
     public function createSystem(int $productID, string $productName)
     {
+        if($this->config->vision != 'rnd') return;
+
         $hasSameName = $this->dao->select('name')->from(TABLE_SYSTEM)->where('name')->eq($productName)->fetch('name');
 
         $systemData = new stdClass();

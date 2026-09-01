@@ -33,3 +33,17 @@ r($convertTest->createWorkflowGroupTest(array('test' => 'data'), array(), array(
 r($convertTest->createWorkflowGroupTest(array('test' => 'data'), array(1 => 1), array(), 'biz')) && p() && e('a:1:{s:4:"test";s:4:"data";}'); // 步骤3：企业版有项目关系无产品关系
 r($convertTest->createWorkflowGroupTest(array('test' => 'data'), array(1 => 1, 2 => 2), array(1 => 1), 'biz')) && p() && e('a:1:{s:4:"test";s:4:"data";}'); // 步骤4：企业版完整关系下创建工作流组
 r($convertTest->createWorkflowGroupTest(array('test' => 'data'), array(1 => 1), array(), 'biz', array(1 => 1))) && p() && e('a:1:{s:4:"test";s:4:"data";}'); // 步骤5：已存在工作流组关系时跳过
+
+/* 清理本用例创建的流程数据，避免残留空 table 的 workflow 污染 objectTables。 */
+zenData('workflow')->gen(0);
+zenData('workflowaction')->gen(0);
+zenData('workflowfield')->gen(0);
+zenData('workflowlayout')->gen(0);
+zenData('workflowlabel')->gen(0);
+zenData('workflowrule')->gen(0);
+zenData('workflowdatasource')->gen(0);
+zenData('workflowrelation')->gen(0);
+zenData('workflowlinkdata')->gen(0);
+zenData('workflowversion')->gen(0);
+zenData('workflowreport')->gen(0);
+zenData('workflowsql')->gen(0);

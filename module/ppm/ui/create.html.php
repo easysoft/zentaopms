@@ -14,8 +14,8 @@ jsVar('repoID', $repoID);
 
 $fields = defineFieldList('ppm');
 if($notInDevOps) $fields->field('repoID')->label($lang->ppm->repo)->required(true)->control('picker')->items($repoPairs)->value($repoID)->width('1/2')->wrapAfter(true);
-$fields->field('sourceBranch')->required(true)->control('picker')->items($branches)->value($activeBranch)->width('1/2');
-$fields->field('targetBranch')->required(true)->control('picker')->items($branches)->value($defaultBranch)->width('1/2');
+$fields->field('sourceBranch')->required(true)->control('picker')->items($branches)->width('1/2');
+$fields->field('targetBranch')->required(true)->control('picker')->items($branches)->width('1/2');
 $fields->field('title')->required(true)->value($commitMessage)->width('1/2');
 $fields->field('reviewer')->control(array('control' => 'picker', 'multiple' => true))->items($users)->required(true)->value($reviewers)->width('1/2');
 $fields->field('desc')->label($lang->ppm->description)->control(array('control' => 'editor', 'upload-url' => 'disabled', 'placeholder' => $lang->ppm->description))->width('full');

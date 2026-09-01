@@ -409,7 +409,7 @@ class repoModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $objects['product'];
     }
 
     public function getRepoGroupItemsTest(string $type, int $projectID = 0, int $index = 0)

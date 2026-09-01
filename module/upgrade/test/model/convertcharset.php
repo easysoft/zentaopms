@@ -10,7 +10,7 @@ zenData('docaction')->gen(0);
 
 /**
 
-title=测试 upgradeModel->convertCharset();
+title=测试 upgradeModel 字符集转换（convertDatabaseCharset + convertTableCharset + finishCharset）；
 cid=19507
 
 - 检查zt_task字符集信息 @utf8mb4_general_ci
@@ -23,7 +23,9 @@ cid=19507
 
 global $tester;
 $upgradeModel = new upgradeModelTest();
-$upgradeModel->convertCharset();
+$upgradeModel->convertDatabaseCharset();
+foreach($upgradeModel->getCharsetDiffTables() as $table) $upgradeModel->convertTableCharset($table);
+$upgradeModel->finishCharset();
 r($upgradeModel->convertCharsetTest('zt_task'))    && p() && e('utf8mb4_general_ci');  // 检查zt_task字符集信息
 r($upgradeModel->convertCharsetTest('zt_bug'))     && p() && e('utf8mb4_general_ci');  // 检查zt_bug字符集信息
 r($upgradeModel->convertCharsetTest('zt_story'))   && p() && e('utf8mb4_general_ci');  // 检查zt_story字符集信息息

@@ -128,6 +128,7 @@ class task extends control
 
             /* Get the information returned after a task is created. */
             $response = $this->taskZen->responseAfterCreate($taskData, $execution, $this->post->after ? $this->post->after : '');
+            $response['changes'] = array('type' => 'add', 'objectType' => 'task', 'objectList' => array_values($taskIdList));
             return $this->send($response);
         }
 
@@ -194,6 +195,7 @@ class task extends control
             if(!isset($output['laneID']) || !isset($output['columnID'])) $this->loadModel('kanban')->updateLane($executionID, 'task');
 
             $response = $this->taskZen->responseAfterbatchCreate($taskIdList, $execution);
+            $response['changes'] = array('type' => 'add', 'objectType' => 'task', 'objectList' => array_values($taskIdList));
             return $this->send($response);
         }
 
@@ -221,7 +223,7 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* For team task. */
-            $teamData = $this->post->team ? form::data($this->config->task->form->team->edit)->get() : new stdclass();
+            $teamData = in_array($task->mode, array('linear', 'multi')) && $this->post->team ? form::data($this->config->task->form->team->edit)->get() : new stdclass();
 
             /* Update task. */
             $changes = $this->task->update($task, $teamData);
@@ -233,6 +235,7 @@ class task extends control
             if($task->status == 'doing') $this->loadModel('common')->syncPPEStatus($taskID);
 
             $response = $this->taskZen->responseAfterEdit($taskID, $from, $changes, $message);
+            $response['changes'] = array('type' => 'update', 'objectType' => 'task', 'objectList' => array($taskID));
             return $this->send($response);
         }
 
@@ -267,6 +270,7 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $response = $this->taskZen->responseAfterBatchEdit($allChanges);
+            $response['changes'] = array('type' => 'update', 'objectType' => 'task', 'objectList' => array_keys($taskData));
             return $this->send($response);
         }
 
@@ -1075,7 +1079,7 @@ class task extends control
                 if(strpos(",{$childTask->path},", ",$taskID,") === false) continue;
                 $this->task->delete(TABLE_TASK, $childID);
                 if($childTask->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($childTask->fromBug)->exec();
-                if($childTask->story) $this->loadModel('story')->setStage($childTask->story);
+                if($childTask->story) $this->loadModel('story')->setStage($childTask->story, array('type' => 'deleteTask', 'objectID' => $childID));
             }
         }
 
@@ -1087,7 +1091,7 @@ class task extends control
             $this->loadModel('action')->create('task', $task->parent, 'deleteChildrenTask', '', $taskID);
         }
         if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
-        if($task->story) $this->loadModel('story')->setStage($task->story);
+        if($task->story) $this->loadModel('story')->setStage($task->story, array('type' => 'deleteTask', 'objectID' => $taskID));
 
         $this->loadModel('program')->refreshProjectStats($task->project);
 

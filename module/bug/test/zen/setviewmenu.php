@@ -21,6 +21,17 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 zenData('product')->gen(1);
 zenData('ops_repo')->gen(1);
 
+$project = zenData('project');
+$project->id->range('1,101');
+$project->name->range('项目1,迭代101');
+$project->type->range('project,sprint');
+$project->model->range('scrum,scrum');
+$project->project->range('0,1');
+$project->status->range('doing');
+$project->multiple->range('1');
+$project->deleted->range('0');
+$project->gen(2);
+
 su('admin');
 
 $bugTest = new bugZenTest();

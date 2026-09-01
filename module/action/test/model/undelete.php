@@ -44,9 +44,6 @@ cid=14934
 - 测试还原action 2, objectType execution 的数据。 @该执行没有所属的项目，请先还原项目再还原执行
 - 测试还原action 3, objectType execution 的数据,并且测试是否恢复了用户访问权限。 @1
 - 测试还原action 3, objectType execution 的数据,并且测试是否恢复了用户访问权限。 @1
-- 测试还原action 5, objectType repo 的数据。 @该代码库没有所属的服务器，请先还原服务器再还原代码库
-- 测试还原action 6, objectType repo 的数据。 @1
-- 测试还原action 7, objectType repo 的数据。 @1
 - 测试还原action 8, objectType program 的数据,并且测试是否恢复了用户访问权限。 @0
 - 测试还原action 9, objectType program 的数据,并且测试是否恢复了用户访问权限。 @1
 - 测试还原action 10, objectType project 的数据,并且测试是否恢复了用户访问权限。 @0
@@ -84,10 +81,6 @@ r($result && strpos($userView->products . ',', ',1,') !== false && !$doclib->del
 $result   = $action->undeleteTest($actionIDList[4]);
 $userView = $tester->dao->select('*')->from('zt_userview')->where('account')->eq('admin')->fetch();
 r($result && strpos($userView->products . ',', ',1,') !== false && strpos($userView->sprints . ',', ',4,') !== false) && p('') && e('1'); // 测试还原action 3, objectType execution 的数据,并且测试是否恢复了用户访问权限。
-
-r($action->undeleteTest($actionIDList[5])) && p('') && e('该代码库没有所属的服务器，请先还原服务器再还原代码库');                         // 测试还原action 5, objectType repo 的数据。
-r($action->undeleteTest($actionIDList[6])) && p('') && e('1');                                                                            // 测试还原action 6, objectType repo 的数据。
-r($action->undeleteTest($actionIDList[7])) && p('') && e('1');                                                                            // 测试还原action 7, objectType repo 的数据。
 
 $tester->dao->update('zt_userview')->set('sprints')->eq('')->set('programs')->eq('')->set('products')->eq('')->set('projects')->eq('')->where('account')->eq('admin')->exec();
 

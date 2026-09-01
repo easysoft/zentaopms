@@ -163,6 +163,23 @@ $config->my->epic->dtable->fieldList['assignedDate']['sortType'] = true;
 $config->my->epic->dtable->fieldList['assignedDate']['type']     = 'date';
 $config->my->epic->dtable->fieldList['assignedDate']['group']    = 6;
 
+if($config->edition != 'open')
+{
+    $config->my->epic->dtable->fieldList['relatedObject']['name']            = 'relatedObject';
+    $config->my->epic->dtable->fieldList['relatedObject']['title']           = $lang->custom->relateObject;
+    $config->my->epic->dtable->fieldList['relatedObject']['sortType']        = false;
+    $config->my->epic->dtable->fieldList['relatedObject']['width']           = '70';
+    $config->my->epic->dtable->fieldList['relatedObject']['type']            = 'text';
+    $config->my->epic->dtable->fieldList['relatedObject']['link']            = common::hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={id}&objectType={type}') . "'; }>RAWJS" : null;
+    $config->my->epic->dtable->fieldList['relatedObject']['data-toggle']     = 'modal';
+    $config->my->epic->dtable->fieldList['relatedObject']['data-size']       = 'lg';
+    $config->my->epic->dtable->fieldList['relatedObject']['show']            = true;
+    $config->my->epic->dtable->fieldList['relatedObject']['group']           = 7;
+    $config->my->epic->dtable->fieldList['relatedObject']['flex']            = false;
+    $config->my->epic->dtable->fieldList['relatedObject']['align']           = 'center';
+    if($isEn) $config->my->epic->dtable->fieldList['relatedObject']['width'] = '120';
+}
+
 $config->my->epic->dtable->fieldList['closedBy']['name']     = 'closedBy';
 $config->my->epic->dtable->fieldList['closedBy']['title']    = $lang->story->closedBy;
 $config->my->epic->dtable->fieldList['closedBy']['sortType'] = true;

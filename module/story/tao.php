@@ -145,9 +145,9 @@ class storyTao extends storyModel
     {
         $this->loadModel('user');
         $product   = $this->loadModel('product')->getByID($productID);
-        $reviewers = $product->reviewer;
+        $reviewers = $product ? $product->reviewer : '';
 
-        if(!$reviewers and $product->acl != 'open') $reviewers = $this->user->getProductViewListUsers($product);
+        if(!$reviewers && $product && $product->acl != 'open') $reviewers = $this->user->getProductViewListUsers($product);
         return $this->user->getPairs('noclosed|nodeleted|noletter', $storyReviewers, 0, $reviewers);
     }
 
@@ -395,6 +395,7 @@ class storyTao extends storyModel
         $storyQuery = $this->replaceRevertQuery($storyQuery, $productID);
         $storyQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $storyQuery);
         $storyQuery = preg_replace_callback("/t2.`grade` (=|!=) '(\w+)(\d+)'/", function($matches){return "t2.`grade` {$matches[1]} '" . $matches[3] . "' AND t2.`type` = '" . $matches[2] . "'";}, $storyQuery);
+        $storyQuery = preg_replace_callback("/t2\.`release`\s*(=|!=)\s*'(\d+)'/i", function($matches){$op = $matches[1] == '!=' ? 'NOT ' : ''; return "{$op}EXISTS (SELECT 1 FROM " . TABLE_RELEASE . " WHERE " . TABLE_RELEASE . ".id = '{$matches[2]}' AND " . TABLE_RELEASE . ".deleted = '0' AND FIND_IN_SET(t2.`id`, " . TABLE_RELEASE . ".stories))";}, $storyQuery);
         if(strpos($storyQuery, 'result') !== false) $storyQuery = str_replace('t2.`result`', 't4.`result`', $storyQuery);
 
         $hasExecution = strpos($storyQuery, 't2.`execution`') !== false;
@@ -1234,15 +1235,18 @@ class storyTao extends storyModel
      * @param  int       $storyID
      * @param  array     $linkedBranches
      * @param  array     $linkedProjects
+     * @param  array     $trigger         trigger info
+     * @param  string    $oldStage
      * @access protected
      * @return bool
      */
-    protected function setStageToClosed(int $storyID, array $linkedBranches = array(), array $linkedProjects = array()): bool
+    protected function setStageToClosed(int $storyID, array $linkedBranches = array(), array $linkedProjects = array(), array $trigger = array(), string $oldStage = ''): bool
     {
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         if(empty($story)) return false;
 
         $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
+        if($trigger && $oldStage != 'closed') $this->createStageChangeAction($storyID, $oldStage, 'closed', $trigger);
         foreach($linkedBranches as $branchID)
         {
             if(!empty($branchID)) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq((int)$branchID)->set('stage')->eq('closed')->exec();
@@ -1261,10 +1265,12 @@ class storyTao extends storyModel
      * @param  array     $stages
      * @param  array     $oldStages
      * @param  array     $linkedProjects
+     * @param  array     $trigger         trigger info
+     * @param  string    $oldStage
      * @access protected
      * @return bool
      */
-    protected function updateStage(int $storyID, array $stages, array $oldStages = array(), array $linkedProjects = array()): bool
+    protected function updateStage(int $storyID, array $stages, array $oldStages = array(), array $linkedProjects = array(), array $trigger = array(), string $oldStage = ''): bool
     {
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         if(empty($stages) && $oldStages) $stages = array_column($oldStages, 'stage', 'branch');
@@ -1306,7 +1312,12 @@ class storyTao extends storyModel
 
         $this->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq($storyID)->exec();
 
-        if($story->stage != $stage) $this->updateLinkedLane($storyID, $linkedProjects);
+        if($story->stage != $stage)
+        {
+            $this->updateLinkedLane($storyID, $linkedProjects);
+        }
+        /* 记录阶段变动动态。使用传入的oldStage而非从DB读取的stage，因为阶段可能已被setStageToPlanned等方法提前修改。 */
+        if($trigger && $oldStage && $oldStage != $stage) $this->createStageChangeAction($storyID, $oldStage, $stage, $trigger);
         $this->computeParentStage($story);
 
         return true;
@@ -2276,7 +2287,9 @@ class storyTao extends storyModel
      */
     public function getLeafNodes(array $stories, string $storyType = 'epic'): array
     {
-        $stmt = $this->dao->select('id,project,commit,name as title,status,story,type AS designType')->from(TABLE_DESIGN)->where('story')->in(array_keys($stories))->andWhere('deleted')->eq(0)->orderBy('project')->query();
+        $storyIdList = array_keys($stories);
+        $docsGroup   = $this->getDocsForTrack($storyIdList);
+        $stmt        = $this->dao->select('id,project,commit,name as title,status,story,type AS designType')->from(TABLE_DESIGN)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->query();
         $designGroup = array();
         while($design = $stmt->fetch()) $designGroup[$design->story][$design->id] = $design;
 
@@ -2287,7 +2300,7 @@ class storyTao extends storyModel
             if($storyType == 'story' && ($story->type == 'epic' || $story->type == 'requirement')) continue;
 
             if(empty($story->isParent)) $leafNodes[$story->id] = $story;
-            if(!isset($leafNodes[$story->id]) && isset($designGroup[$story->id])) $leafNodes[$story->id] = $story;
+            if(!isset($leafNodes[$story->id]) && (isset($designGroup[$story->id]) || isset($docsGroup[$story->id]))) $leafNodes[$story->id] = $story;
         }
 
         return $leafNodes;
@@ -2338,6 +2351,7 @@ class storyTao extends storyModel
         $cols['task']      = $this->buildTrackCol('task',      $this->lang->story->tasks);
         $cols['bug']       = $this->buildTrackCol('bug',       $this->lang->story->bugs);
         $cols['case']      = $this->buildTrackCol('case',      $this->lang->story->cases);
+        $cols['doc']       = $this->buildTrackCol('doc',       $this->lang->story->docs);
 
         foreach($storyGrade as $type => $grades)
         {
@@ -2388,6 +2402,7 @@ class storyTao extends storyModel
         $tasks      = $this->getTasksForTrack($storyIdList);
         $cases      = $this->dao->select('id,project,pri,status,color,title,story,`lastRunner`,`lastRunResult`')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->fetchGroup('story', 'id');
         $bugs       = $this->dao->select('id,project,pri,status,color,title,story,`assignedTo`,severity')->from(TABLE_BUG)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->fetchGroup('story', 'id');
+        $docs       = $this->getDocsForTrack($storyIdList);
         $storyGrade = $this->getGradeGroup();
 
         $items = array();
@@ -2416,6 +2431,7 @@ class storyTao extends storyModel
             $items[$laneName]['task']      = array_values(zget($tasks,      $node->id, array()));
             $items[$laneName]['bug']       = array_values(zget($bugs,       $node->id, array()));
             $items[$laneName]['case']      = array_values(zget($cases,      $node->id, array()));
+            $items[$laneName]['doc']       = array_values(zget($docs,       $node->id, array()));
         }
 
         return $items;
@@ -2532,6 +2548,25 @@ class storyTao extends storyModel
         if($preTask && $preTask->isParent) $preTask->isParent = 0;
 
         return $taskGroup;
+    }
+
+    /**
+     * 根据需求ID列表获取关联的文档。
+     * Get linked docs by story id list.
+     *
+     * @param  array  $storyIdList
+     * @access public
+     * @return array
+     */
+    public function getDocsForTrack(array $storyIdList): array
+    {
+        return $this->dao->select('t1.id,t1.title,t1.`addedBy`,t2.`AID`')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t1.`id`=t2.`BID` && t2.`BType`='doc'")
+            ->where('t2.`AID`')->in($storyIdList)
+            ->andWhere('t2.`AType`')->in('story,epic,requirement')
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy('t1.id')
+            ->fetchGroup('AID', 'id');
     }
 
     /**

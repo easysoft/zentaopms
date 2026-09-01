@@ -54,6 +54,7 @@ $lang->story->setting            = "Paramétrage";
 $lang->story->tasks              = "Tâches Associées";
 $lang->story->bugs               = "Bugs Associés";
 $lang->story->cases              = "CasTest Associés";
+$lang->story->docs               = "Documents Associés";
 $lang->story->taskCount          = 'Tâches';
 $lang->story->bugCount           = 'Bugs';
 $lang->story->caseCount          = 'CasTests';
@@ -76,6 +77,7 @@ $lang->story->batchAssignTo      = "Affecter par lot";
 $lang->story->batchChangeModule  = "Changer Modules par lot";
 $lang->story->batchChangeParent  = "Batch Change Parent";
 $lang->story->batchChangeGrade   = "Batch Change Grade";
+$lang->story->errorInvalidGrade  = 'The selected story hierarchy is not available.';
 $lang->story->changeParent       = "Change Parent";
 $lang->story->viewAll            = "Voir Tout";
 $lang->story->toTask             = 'Convert to Task';
@@ -212,6 +214,7 @@ $lang->story->draft            = 'Brouillon';
 $lang->story->unclosed         = 'Non Fermées';
 $lang->story->deleted          = 'Supprimé';
 $lang->story->released         = 'Stories Versionnées';
+$lang->story->release          = 'Linked Release';
 $lang->story->URChanged        = 'Feature Changed';
 $lang->story->design           = 'Designs';
 $lang->story->case             = 'Cases';
@@ -365,6 +368,7 @@ $lang->story->childTaskTitle         = 'Contains %s tasks, of which %s have been
 $lang->story->successSaved           = "Story est sauvegardée !";
 $lang->story->confirmDelete          = "Voulez-vous vraiment supprimer cette story ?";
 $lang->story->confirmRecall          = "Do you want to recall this story?";
+$lang->story->confirmChange          = "You have modified the basic information. Would you like to save the modified content before entering the change page?";
 $lang->story->errorEmptyChildStory   = '『Decomposed Stories』ne peuvent être vides.';
 $lang->story->errorNotSubdivide      = "If the status is reviewing/closed, or a sub story, it cannot be subdivided.";
 $lang->story->errorMaxGradeSubdivide = "The current story's grade exceeds the system setting, so it cannot be subdivided same type story.";
@@ -401,6 +405,9 @@ $lang->story->batchParentError       = "The parent requirement of %s requirement
 $lang->story->errorNoGradeSplit      = "There has no grade to split.";
 $lang->story->errorRecordMinus       = '『%s』should not be negative number.';
 $lang->story->closeParentTips        = 'There are still unclosed child stories under this parent story: %s. If the parent story is closed, the child stories will also be closed. Are you sure you want to close the parent story?';
+$lang->story->undoneTasksTips        = "This story has %s undone tasks. Please confirm whether to close the story?";
+$lang->story->undoneTasksBatchTips   = "Story %s has %s undone tasks.";
+$lang->story->confirmCloseTips       = "Please confirm whether to close the story?";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Périmètre';
@@ -442,6 +449,7 @@ $lang->story->action->syncgrade             = array('main' => "\$date, the syste
 $lang->story->action->linked2roadmap        = array('main' => '$date, linked by <strong>$actor</strong> to Roadmap <strong>$extra</strong>');
 $lang->story->action->unlinkedfromroadmap   = array('main' => '$date, unlinked by <strong>$actor</strong> from Roadmap <strong>$extra</strong>.');
 $lang->story->action->changedbycharter      = array('main' => '$date, launched by <strong>$actor</strong> for charter <strong>$extra</strong>, Synchronously adjust the story stage to In Charter.');
+$lang->story->action->changedstorystage     = array('main' => '$date, par <strong>$actor</strong> $extra.');
 
 /* Statistical statement. */
 $lang->story->report = new stdclass();

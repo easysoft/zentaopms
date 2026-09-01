@@ -12,6 +12,11 @@ $config->ai->actionList['promptbasicinfo']['text'] = $lang->ai->prompts->action-
 $config->ai->actionList['promptbasicinfo']['hint'] = $lang->ai->prompts->action->design;
 $config->ai->actionList['promptbasicinfo']['url']  = array('module' => 'ai', 'method' => 'promptbasicinfo', 'params' => 'promptID={id}');
 
+$config->ai->actionList['timerbasicinfo']['icon'] = 'design';
+$config->ai->actionList['timerbasicinfo']['text'] = $lang->ai->prompts->action->design;
+$config->ai->actionList['timerbasicinfo']['hint'] = $lang->ai->prompts->action->design;
+$config->ai->actionList['timerbasicinfo']['url']  = array('module' => 'ai', 'method' => 'timerbasicinfo', 'params' => 'promptID={id}');
+
 $config->ai->actionList['promptaudit']['icon'] = 'menu-backend ';
 $config->ai->actionList['promptaudit']['text'] = $lang->ai->prompts->action->test;
 $config->ai->actionList['promptaudit']['hint'] = $lang->ai->prompts->action->test;

@@ -21,8 +21,41 @@ $lang->admin->captcha         = 'Verification Code';
 $lang->admin->getCaptcha      = 'Send Code';
 $lang->admin->register        = 'Register';
 $lang->admin->resetPWDSetting = 'Reset Password';
-$lang->admin->tableEngine     = 'Table Engine';
 $lang->admin->setModuleIndex  = 'System Features';
+
+/* Common data processing. */
+$lang->admin->database     = 'Data Processing';
+$lang->admin->startUpdate  = 'Start Update';
+$lang->admin->noNeedUpdate = 'No database tables need updating.';
+
+/* Table engine. */
+$lang->admin->tableEngine     = 'Table Engine';
+$lang->admin->tableEngineTips = 'Detected %s tables that need to be updated.';
+$lang->admin->tableEngineFail = 'Failed to convert the engine of table %s.';
+$lang->admin->changingTable   = 'Converting storage engine for table %s...';
+$lang->admin->changeSuccess   = 'Table %s engine successfully converted to InnoDB.';
+$lang->admin->changeFail      = "Failed to convert table %s engine. Reason: <span class='text-red'>%s</span>.";
+$lang->admin->changeFinished  = "Database engine conversion completed: %s succeeded, %s total.";
+$lang->admin->errorInnodb     = 'Your current database does not support the InnoDB storage engine.';
+$lang->admin->engineSummary   = "%s tables are not using the InnoDB engine.";
+
+/* Charset. */
+$lang->admin->charset         = 'Charset';
+$lang->admin->charsetHasDiff  = '%s tables need to be updated.';
+$lang->admin->charsetChanging = 'Updating the charset of table %s...';
+$lang->admin->charsetSuccess  = 'The charset of table %s has been converted.';
+$lang->admin->charsetFail     = 'Failed to convert the charset of table %s. Reason: %s.';
+$lang->admin->charsetFailed   = 'Failed';
+$lang->admin->charsetFinished = 'Charset conversion completed: %s succeeded, %s total.';
+
+/* Database views. */
+$lang->admin->dbView           = 'Database Views';
+$lang->admin->dbViewTips       = 'Detected %s database views that can be updated.';
+$lang->admin->dbViewRegenerate = 'Updating database view %s...';
+$lang->admin->dbViewSuccess    = 'Database view %s has been updated.';
+$lang->admin->dbViewFail       = 'Failed to update database view %s.';
+$lang->admin->dbViewResult     = 'Database views updated: %s succeeded, %s total.';
+$lang->admin->dbViewFailed     = 'Some database views failed to update. Please retry later.';
 
 $lang->admin->mon              = 'month';
 $lang->admin->day              = 'day';
@@ -43,16 +76,6 @@ $lang->admin->days                 = 'Log Retention Days';
 $lang->admin->resetPWDByMail       = 'Reset Via Email';
 $lang->admin->followUs             = 'Follow Us';
 $lang->admin->followUsContent      = 'Stay updated on ZenTao news, events, and access support at any time.';
-
-$lang->admin->changeEngine               = "Switch to InnoDB";
-$lang->admin->changingTable              = 'Converting storage engine for table %s...';
-$lang->admin->changeSuccess              = 'Table %s engine successfully converted to InnoDB.';
-$lang->admin->changeFail                 = "Failed to convert table %s engine. Reason: <span class='text-red'>%s</span>.";
-$lang->admin->errorInnodb                = 'Your current database does not support the InnoDB storage engine.';
-$lang->admin->changeFinished             = "Database engine conversion completed.";
-$lang->admin->engineInfo                 = "The engine for table <strong>%s</strong> is <strong>%s</strong>.";
-$lang->admin->engineSummary['hasMyISAM'] = "%s tables are not using the InnoDB engine.";
-$lang->admin->engineSummary['allInnoDB'] = "All tables are now using the InnoDB engine.";
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'The current system version is %s, ';
@@ -85,17 +108,17 @@ $lang->admin->bind->success = "Account linked successfully.";
 $lang->admin->bind->submit  = "Link";
 
 $lang->admin->setModule = new stdclass();
-$lang->admin->setModule->module         = 'Modules';
-$lang->admin->setModule->optional       = 'Optional Features';
-$lang->admin->setModule->opened         = 'Enabled';
-$lang->admin->setModule->closed         = 'Disabled';
+$lang->admin->setModule->module   = 'Modules';
+$lang->admin->setModule->optional = 'Optional Features';
+$lang->admin->setModule->opened   = 'Enabled';
+$lang->admin->setModule->closed   = 'Disabled';
 
-$lang->admin->setModule->my             = 'Dashboard';
-$lang->admin->setModule->product        = $lang->productCommon;
-$lang->admin->setModule->project        = $lang->projectCommon;
-$lang->admin->setModule->qa             = 'Test';
-$lang->admin->setModule->assetlib       = 'Asset';
-$lang->admin->setModule->other          = 'General Modules';
+$lang->admin->setModule->my       = 'Dashboard';
+$lang->admin->setModule->product  = $lang->productCommon;
+$lang->admin->setModule->project  = $lang->projectCommon;
+$lang->admin->setModule->qa       = 'Test';
+$lang->admin->setModule->assetlib = 'Asset';
+$lang->admin->setModule->other    = 'General Modules';
 
 $lang->admin->setModule->program        = 'Program';
 $lang->admin->setModule->testsuite      = 'Test Suits';

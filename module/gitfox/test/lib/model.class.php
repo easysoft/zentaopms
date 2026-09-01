@@ -96,6 +96,60 @@ class gitfoxModelTest extends baseTest
     }
 
     /**
+     * Get the status field from getHealth.
+     *
+     * @access public
+     * @return string
+     */
+    public function getHealthStatusTest(): string
+    {
+        $result = $this->invokeForTest('getHealth');
+        return is_object($result) ? (string)zget($result, 'status', '') : '';
+    }
+
+    /**
+     * Get the version field from getHealth.
+     *
+     * @access public
+     * @return string
+     */
+    public function getHealthVersionTest(): string
+    {
+        $result = $this->invokeForTest('getHealth');
+        return is_object($result) ? (string)zget($result, 'version', '') : '';
+    }
+
+    /**
+     * Check that checkHealth returns upgrade when the required version is higher.
+     *
+     * @access public
+     * @return string
+     */
+    public function checkHealthUpgradeTest(): string
+    {
+        $requiredVersion = $this->instance->config->devops->gitfoxVersion;
+        $this->instance->config->devops->gitfoxVersion = '99.0';
+        $result = $this->invokeForTest('checkHealth');
+        $this->instance->config->devops->gitfoxVersion = $requiredVersion;
+        return $result;
+    }
+
+    /**
+     * Check that checkHealth returns healthy when the current version is newer than required.
+     *
+     * @access public
+     * @return string
+     */
+    public function checkHealthNewerVersionTest(): string
+    {
+        $requiredVersion = $this->instance->config->devops->gitfoxVersion;
+        $this->instance->config->devops->gitfoxVersion = '1.0';
+        $result = $this->invokeForTest('checkHealth');
+        $this->instance->config->devops->gitfoxVersion = $requiredVersion;
+        return $result;
+    }
+
+    /**
      * Check getApiRoot URL against the active test configuration.
      *
      * @access public

@@ -4,3 +4,4 @@
 .form .input-group .col-short {width: 110px; border-radius: 0 2px 2px 0;}
 .action-group {min-width: 76px;}
 .child-hidden {visibility: hidden;}
+.existing-actions .del-btn {display: none;}

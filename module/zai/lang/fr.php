@@ -15,9 +15,13 @@ $lang->zai->vectorizedAlreadyEnabled = 'La vectorisation des données est déjà
 $lang->zai->vectorizedEnabled        = 'Vectorisation des données activée.';
 $lang->zai->authenticationFailed     = 'Échec de l\'authentification !';
 $lang->zai->syncRequestFailed        = 'Échec de la demande de synchronisation, veuillez réessayer plus tard';
-$lang->zai->syncingHint              = 'Fermer cette page pendant la synchronisation mettra en pause le processus de synchronisation.';
-$lang->zai->syncedWithFailedHint     = 'Certaines données de synchronisation ont échoué, veuillez réessayer plus tard';
-$lang->zai->cannotFindMemoryInZai    = 'Impossible de trouver la base de connaissances avec la clé spécifiée dans ZAI, veuillez réinitialiser la cible de synchronisation.';
+$lang->zai->syncingHint              = 'Les données vectorisées seront synchronisées automatiquement.';
+$lang->zai->enqueueHint              = 'Gardez cette page ouverte jusqu\'à la fin de la mise en file. En cas d\'interruption, cliquez sur Continuer.';
+$lang->zai->enqueueResult            = "Mise en file %s, déjà <strong class='%scount'>%s</strong> enregistrements;";
+$lang->zai->enqueueFinished          = 'Mise en file des données historiques terminée. La tâche planifiée synchronisera automatiquement.';
+$lang->zai->enqueueContinue          = 'Continuer la mise en file';
+$lang->zai->syncedWithFailedHint     = 'Certaines données de synchronisation ont échoué. Le système réessayera automatiquement.';
+$lang->zai->cannotFindMemoryInZai    = 'Impossible de trouver la base de connaissances avec la clé spécifiée dans ZAI, veuillez réactiver la vectorisation.';
 $lang->zai->confirmResetSync         = 'Voulez-vous réinitialiser l\'état de synchronisation ? Cela créera une nouvelle base de connaissances dans ZAI.';
 $lang->zai->settingTips              = 'Please install <a class="btn btn-link text-primary px-1" style="text-decoration: none;" href="%s" target="_blank">ZAI service</a> to get the key.';
 
@@ -36,12 +40,13 @@ $lang->zai->totalSync        = 'Total';
 $lang->zai->lastSyncTime     = 'Dernière Synchronisation';
 
 $lang->zai->syncActions = new stdClass();
-$lang->zai->syncActions->enable     = 'Activer la Vectorisation des Données';
-$lang->zai->syncActions->startSync  = 'Démarrer la Synchronisation';
-$lang->zai->syncActions->resync     = 'Resynchroniser';
-$lang->zai->syncActions->pauseSync  = 'Suspendre la Synchronisation';
-$lang->zai->syncActions->resumeSync = 'Reprendre la Synchronisation';
-$lang->zai->syncActions->resetSync  = 'Réinitialiser la Synchronisation';
+$lang->zai->syncActions->enable          = 'Activer la Vectorisation des Données';
+$lang->zai->syncActions->startSync       = 'Démarrer la Synchronisation';
+$lang->zai->syncActions->resync          = 'Resynchroniser';
+$lang->zai->syncActions->pauseSync       = 'Suspendre la Synchronisation';
+$lang->zai->syncActions->resumeSync      = 'Reprendre la Synchronisation';
+$lang->zai->syncActions->resetSync       = 'Réinitialiser la Synchronisation';
+$lang->zai->syncActions->continueEnqueue = 'Continuer la mise en file';
 
 $lang->zai->syncingTypeList = array();
 $lang->zai->syncingTypeList['story']    = 'Histoire';

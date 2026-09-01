@@ -694,7 +694,7 @@ class executionZen extends execution
         }
 
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'executionStory', $execution);
+        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'executionStory', $execution, $productID);
     }
 
     /**
@@ -910,6 +910,30 @@ class executionZen extends execution
                 }
             }
         }
+
+        /* 关联产品和关联计划不在执行表中，单独校验。 */
+        $requiredFields = ",{$this->config->execution->create->requiredFields},";
+        if(strpos($requiredFields, ',products,') !== false && !empty($project->hasProduct))
+        {
+            $products = array_filter((array)zget($_POST, 'products', array()));
+            if(empty($products)) dao::$errors['products[0]'] = sprintf($this->lang->error->notempty, $this->lang->execution->manageProducts);
+        }
+        if(strpos($requiredFields, ',plans,') !== false)
+        {
+            $hasPlan = false;
+            $plans   = zget($_POST, 'plans', array());
+            foreach((array)$plans as $productPlans)
+            {
+                if(!empty(array_filter((array)$productPlans))) $hasPlan = true;
+            }
+            if(!$hasPlan)
+            {
+                $planErrorKey = 'plans[0][]';
+                if(!empty($plans) && is_array($plans)) $planErrorKey = 'plans[' . key($plans) . '][]';
+                dao::$errors[$planErrorKey] = sprintf($this->lang->error->notempty, $this->lang->execution->linkPlan);
+            }
+        }
+        if(dao::isError()) return false;
 
         /* Determine whether to add a sprint or a stage according to the model of the execution. */
         if($project->model == 'waterfall' || $project->model == 'waterfallplus')

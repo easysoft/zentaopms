@@ -52,3 +52,16 @@ window.getDuplicateStories = function(obj)
         });
     }
 };
+
+async function checkUndoneTasks()
+{
+    if(confirmUndoneTasks == '') return true;
+
+     const confirmed = await zui.Modal.confirm(confirmUndoneTasks);
+    return confirmed;
+}
+
+window.checkSubmit = function()
+{
+    return checkUndoneTasks();
+};

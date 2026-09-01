@@ -3053,4 +3053,26 @@ class storyModelTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test createStageChangeAction method.
+     *
+     * @param  int    $storyID
+     * @param  string $oldStage
+     * @param  string $newStage
+     * @param  array  $trigger
+     * @access public
+     * @return int|bool
+     */
+    public function createStageChangeActionTest(int $storyID, string $oldStage, string $newStage, array $trigger): int|bool
+    {
+        $this->instance->createStageChangeAction($storyID, $oldStage, $newStage, $trigger);
+        if(dao::isError()) return dao::getError();
+
+        /* 查询最后创建的一条changedstage action */
+        $action = $this->instance->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('action')->eq('changedstage')->orderBy('id_desc')->limit(1)->fetch();
+        if(!$action) return 0;
+
+        return (int)$action->id;
+    }
 }

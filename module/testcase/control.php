@@ -645,11 +645,12 @@ class testcase extends control
             $message = $this->executeHooks($caseID);
             if(!$message) $message = $this->lang->saveSuccess;
 
-            if(helper::isApiRequest()) return $this->send(array('status' => 'success', 'data' => $caseID));
-            if(isInModal() && $this->app->tab == 'my') return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
+            $objectChanges = array('type' => 'update', 'objectType' => 'testcase', 'objectList' => array($caseID));
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $caseID, 'changes' => $objectChanges));
+            if(isInModal() && $this->app->tab == 'my') return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'changes' => $objectChanges));
             $testtaskID = $from == 'testtask' && $this->session->testtaskID ? $this->session->testtaskID : 0;
             $locate     = $oldCase->lib ? $this->createLink('caselib', 'viewCase', "caseID={$caseID}") : $this->createLink('testcase', 'view', "caseID={$caseID}&version=0&from={$from}&testtaskID={$testtaskID}");
-            return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $locate));
+            return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $locate, 'changes' => $objectChanges));
         }
 
         $case = $this->testcaseZen->preProcessForEdit($oldCase);
@@ -720,7 +721,7 @@ class testcase extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('score')->create('ajax', 'batchEdit');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->caseList));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->caseList, 'changes' => array('type' => 'update', 'objectType' => 'testcase', 'objectList' => array_keys($cases))));
         }
 
         if($this->app->tab == 'project')

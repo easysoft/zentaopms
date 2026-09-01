@@ -277,6 +277,7 @@ class productplanZen extends productplan
         $this->config->product->search['fields']['title']             = $this->lang->productplan->storyTitle;
         $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values']    = $this->productplan->getPairs($plan->product, $plan->branch, 'withMainPlan', true);
+        $this->config->product->search['params']['release']['values'] = $this->loadModel('release')->getPairs(array(), $plan->product);
         $this->config->product->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
 
         $storyStatusList = $this->lang->story->statusList;

@@ -50,6 +50,7 @@ class ppmZen extends ppm
 
         unset($this->config->product->search['fields']['plan']);
         unset($this->config->product->search['params']['plan']);
+        unset($this->config->product->search['fields']['release'], $this->config->product->search['params']['release']);
         unset($this->config->product->search['fields']['module']);
         unset($this->config->product->search['params']['module']);
         unset($this->config->product->search['fields']['product']);

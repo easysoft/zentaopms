@@ -37,9 +37,26 @@ $kanbanCards = array();
 $today       = helper::today();
 if(!empty($kanbanList))
 {
+    /* Get workingDays. */
+    $earliestEnd = $today;
     foreach($kanbanList as $kanban)
     {
-        $status      = ($kanban->end < $today && !in_array($kanban->status, array('done', 'closed', 'suspended'))) ? 'delay' : $kanban->status;
+        if(!empty($kanban->end) && !helper::isZeroDate($kanban->end) && $kanban->end < $earliestEnd) $earliestEnd = $kanban->end;
+    }
+    $workingDays = $this->loadModel('holiday')->getActualWorkingDays($earliestEnd, $today);
+
+    foreach($kanbanList as $kanban)
+    {
+        /* Judge whether the execution is delayed. */
+        $delay       = 0;
+        $betweenDays = $this->holiday->getDaysBetween($kanban->end, $today);
+        if($betweenDays)
+        {
+            $delayDays = array_intersect($betweenDays, $workingDays);
+            $delay     = count($delayDays) - 1;
+        }
+
+        $status      = ($delay > 0 && !in_array($kanban->status, array('done', 'closed', 'suspended'))) ? 'delay' : $kanban->status;
         $statusLabel = $config->project->statusLabelList[$status];
 
         $count         = 0;
@@ -107,7 +124,7 @@ if(!empty($kanbanList))
                     span
                     (
                         setClass("project-status label rounded-full {$statusLabel} flex-none"),
-                        $status != 'delay' ? $lang->project->statusList[$status] : sprintf($lang->project->delayInfo, helper::diffDate($today, $kanban->end))
+                        $status != 'delay' ? $lang->project->statusList[$status] : sprintf($lang->project->delayInfo, $delay)
                     ),
                     a
                     (

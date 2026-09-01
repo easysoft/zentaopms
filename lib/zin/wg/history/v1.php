@@ -109,17 +109,23 @@ class history extends wg
         $app->control->loadModel('file');
 
         $previewLink   = $downloadLink = '';
+        $canPreview    = common::hasPriv('file', 'preview');
         $canDownload   = common::hasPriv('file', 'download');
         $fileListProps = array();
-        if($canDownload)
+        if($canPreview || $canDownload)
         {
-            $previewLink = helper::createLink('file', 'download', "fileID={id}&mouse=left");
-            $downloadLink  = helper::createLink('file', 'download', "fileID={id}");
-            $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
-            $downloadLink .= session_name() . '=' . session_id();
+            if($canPreview) $previewLink = helper::createLink('file', 'preview', "fileID={id}&mouse=left");
+            if($canDownload)
+            {
+                $downloadLink  = helper::createLink('file', 'download', "fileID={id}");
+                $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
+                $downloadLink .= session_name() . '=' . session_id();
+            }
 
             jsVar('previewLang', $lang->file->preview);
             jsVar('downloadLang', $lang->file->download);
+            jsVar('canPreviewFile', $canPreview);
+            jsVar('canDownloadFile', $canDownload);
             jsVar('previewLink', $previewLink);
             jsVar('downloadLink', $downloadLink);
             jsVar('libreOfficeTurnon', isset($config->file->libreOfficeTurnon) && $config->file->libreOfficeTurnon == 1);

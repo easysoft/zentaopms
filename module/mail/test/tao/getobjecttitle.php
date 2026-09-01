@@ -22,6 +22,15 @@ zenData('user')->gen(5);
 su('admin');
 $tester->loadModel('mail');
 
+global $config;
+if(!isset($config->action)) $config->action = new stdclass();
+if(!isset($config->action->objectNameFields)) $config->action->objectNameFields = array();
+$config->action->objectNameFields['story'] = 'title';
+$config->action->objectNameFields['task']  = 'name';
+$config->action->objectNameFields['bug']   = 'title';
+$config->action->objectNameFields['case']  = 'title';
+$config->action->objectNameFields['todo']  = 'name';
+
 $story = new stdclass();
 $story->title = '需求标题';
 
@@ -37,8 +46,12 @@ $case->title = '用例标题';
 $todo = new stdclass();
 $todo->name = '待办标题';
 
-r($tester->mail->getObjectTitle($story, 'story')) && p('title') && e('需求标题'); // 查看需求标题
-r($tester->mail->getObjectTitle($task, 'task'))   && p('name')  && e('任务标题'); // 查看任务标题
-r($tester->mail->getObjectTitle($bug, 'bug'))     && p('title') && e('Bug标题'); // 查看Bug标题
-r($tester->mail->getObjectTitle($case, 'case'))   && p('title') && e('用例标题'); // 查看用例标题
-r($tester->mail->getObjectTitle($todo, 'todo'))   && p('name')  && e('待办标题'); // 查看待办标题
+$mailTao   = $tester->mail->mailTao;
+$refMethod = new ReflectionMethod($mailTao, 'getObjectTitle');
+$refMethod->setAccessible(true);
+
+r($refMethod->invoke($mailTao, $story, 'story')) && p('title') && e('需求标题'); // 查看需求标题
+r($refMethod->invoke($mailTao, $task, 'task'))   && p('name')  && e('任务标题'); // 查看任务标题
+r($refMethod->invoke($mailTao, $bug, 'bug'))     && p('title') && e('Bug标题'); // 查看Bug标题
+r($refMethod->invoke($mailTao, $case, 'case'))   && p('title') && e('用例标题'); // 查看用例标题
+r($refMethod->invoke($mailTao, $todo, 'todo'))   && p('name')  && e('待办标题'); // 查看待办标题

@@ -1,7 +1,7 @@
 ---
 title: assignAnnualBaseData方法测试动作数据
 desc: 用于测试报告模块年度基础数据分配功能的动作历史数据
-author: Claude
+author: Codex
 version: 1.0
 
 fields:

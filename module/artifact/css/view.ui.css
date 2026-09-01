@@ -16,3 +16,17 @@
     opacity: 1;
     pointer-events: auto;
 }
+
+.artifact-image-tip-menu
+{
+    --menu-max-width: min(90vw, 60rem);
+    width: max-content;
+    max-width: min(90vw, 60rem);
+}
+
+.artifact-image-tip-menu .form-control
+{
+    width: max-content;
+    min-width: 8rem;
+    max-width: 100%;
+}

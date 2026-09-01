@@ -14,6 +14,8 @@ cid=15078
 - 执行aiTest模块的updatePromptTest方法，参数是$prompt5, null  @1
 - 执行aiTest模块的updatePromptTest方法，参数是$prompt6, null 第name条的0属性 @该名称已使用，请尝试其他名称。
 - 执行aiTest模块的updatePromptTest方法，参数是$prompt7, null 第name条的0属性 @『name』不能为空。
+- 执行aiTest模块的updatePromptTest方法，参数是$prompt8, null  @1
+- 执行aiTest模块的updatePromptKeepLastRunDateTest方法，参数是8, '2024-06-01 08:00:00'  @2024-06-01 08:00:00
 
 */
 
@@ -130,3 +132,18 @@ $prompt7->module = 'project';
 $prompt7->status = 'active';
 
 r($aiTest->updatePromptTest($prompt7, null)) && p('name:0') && e('『name』不能为空。');
+
+// 测试步骤8：lastRunDate为空字符串时更新不应报 datetime 错误
+$prompt8 = new stdClass();
+$prompt8->id          = 7;
+$prompt8->name        = '定时创建风险';
+$prompt8->desc        = '创建风险';
+$prompt8->module      = 'project';
+$prompt8->status      = 'draft';
+$prompt8->type        = 'timer';
+$prompt8->lastRunDate = '';
+
+r($aiTest->updatePromptTest($prompt8, null)) && p() && e('1');
+
+// 测试步骤9：更新时传入空 lastRunDate 不应覆盖已有执行时间
+r($aiTest->updatePromptKeepLastRunDateTest(8, '2024-06-01 08:00:00')) && p() && e('2024-06-01 08:00:00');

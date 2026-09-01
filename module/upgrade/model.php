@@ -132,7 +132,6 @@ class upgradeModel extends model
         $methods['upgradeScreenAndMetricData'] = [];
         $methods['upgradeBIData']              = [];
         $methods['disableFeaturesByMode']      = []; // 新增了一些功能，轻量级升级上来要禁用掉
-        $methods['convertCharset']             = [];
         $methods['program-refreshStats']       = [true];
         $methods['product-refreshStats']       = [true];
         $methods['deletePatch']                = [];
@@ -421,6 +420,104 @@ class upgradeModel extends model
         }
 
         return str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $confirmContent);
+    }
+
+    /**
+     * 获取数据库中表引擎为 MyISAM 的表。
+     * Get tables whose engine is MyISAM.
+     *
+     * @access public
+     * @return array
+     */
+    public function getMyISAMTables(bool $skipLarge = true): array
+    {
+        $myisamTables = array();
+        foreach($this->dao->getTableEngines() as $table => $engine)
+        {
+            if(strtolower((string)$engine) != 'myisam') continue;
+            /* MySQL 5.6 以下跳过 searchindex 表，避免全文索引失效。*/
+            if(stripos($table, 'searchindex') !== false && $this->loadModel('install')->getDatabaseVersion() < 5.6) continue;
+            if($skipLarge && $this->isLargeTable($table)) continue;
+            $myisamTables[] = $table;
+        }
+        return $myisamTables;
+    }
+
+    /**
+     * 判断是否为配置中需要跳过的大数据表。
+     * Judge whether the table is a configured large table to be skipped.
+     *
+     * @param  string $table
+     * @access private
+     * @return bool
+     */
+    private function isLargeTable(string $table): bool
+    {
+        $quotedTable = '`' . trim($table, '`') . '`';
+        return in_array($quotedTable, $this->config->upgrade->dataProcessSkipTables);
+    }
+
+    /**
+     * 获取已完成的数据处理步骤 key 列表。
+     * Get the keys of finished data process steps.
+     *
+     * @access public
+     * @return array
+     */
+    public function getFinishedDataProcessSteps(): array
+    {
+        $finished = array();
+        foreach($this->config->upgrade->dataProcessSteps as $step)
+        {
+            $finishedVersion = $this->setting->getItem("owner=system&module=upgrade&section=dataProcessStep&key={$step}");
+            if($finishedVersion == $this->config->version) $finished[] = $step;
+        }
+        return $finished;
+    }
+
+    /**
+     * 检查数据处理页的步骤是否全部完成。
+     * Check whether all data process steps are finished.
+     *
+     * @access public
+     * @return bool
+     */
+    public function dataProcessFinished(): bool
+    {
+        $finished = $this->getFinishedDataProcessSteps();
+        foreach($this->config->upgrade->dataProcessSteps as $step)
+        {
+            if(!in_array($step, $finished)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * 获取指定表的引擎。
+     * Get the engine of a table.
+     *
+     * @param  string $table
+     * @access public
+     * @return string
+     */
+    public function getTableEngine(string $table): string
+    {
+        $table = str_replace('`', '', $table);
+        $row   = $this->dbh->query("SHOW TABLE STATUS WHERE Name = '{$table}'")->fetch();
+        return $row ? (string)$row->Engine : '';
+    }
+
+    /**
+     * 判断数据表是否存在于当前数据库。
+     * Judge whether a table exists in the current database.
+     *
+     * @param  string $table
+     * @access public
+     * @return bool
+     */
+    public function isTable(string $table): bool
+    {
+        return isset($this->dao->getTableEngines()[$table]);
     }
 
     /**
@@ -2435,8 +2532,11 @@ class upgradeModel extends model
             }
         }
 
-        $openVersion = $this->getOpenVersion(str_replace('.', '_', $fromVersion));
-        if(version_compare($openVersion, '17_4', '<=')) $needProcess['changeEngine'] = 'notice';
+        /* 自动执行表引擎转换后，如果仍有 MyISAM 表残留（含跳过的数据大表）则提示到后台继续处理。*/
+        if($this->config->db->driver == 'mysql' && !empty($this->getMyISAMTables(false))) $needProcess['changeEngine'] = 'notice';
+
+        /* 自动执行字符集更新后，如果仍有表字符集残留（含跳过的数据大表）则提示到后台继续处理。*/
+        if($this->config->db->driver == 'mysql' && !empty($this->getCharsetDiffTables(false))) $needProcess['changeCharset'] = 'notice';
 
         return $needProcess;
     }
@@ -10935,18 +11035,18 @@ class upgradeModel extends model
     }
 
     /**
-     * 转换数据库的字符集。
-     * Convert database charset.
+     * 获取字符集转换的目标字符集和排序规则，不适用时返回空数组。
+     * Get the target charset and collation for charset conversion, empty when not applicable.
      *
      * @access public
-     * @return bool
+     * @return array
      */
-    public function convertCharset(): bool
+    public function getCharsetTarget(): array
     {
-        if($this->config->db->driver != 'mysql') return true;
+        if($this->config->db->driver != 'mysql') return array();
 
         $dbVersion = $this->loadModel('install')->getDatabaseVersion();
-        if(version_compare($dbVersion, '5.6', '<')) return true;
+        if(version_compare($dbVersion, '5.6', '<')) return array();
 
         /* 获取服务器的字符集和排序规则。Get server charset and collation. */
         $result          = $this->dbh->getServerCharsetAndCollation($this->config->db->name);
@@ -10954,58 +11054,191 @@ class upgradeModel extends model
         $serverCollation = $result['collation'];
 
         /* 如果服务器的字符集不支持配置的字符集，则不转换。If server charset does not support configured charset, do not convert. */
-        if($this->config->db->encoding != $serverCharset) return true;
+        if($this->config->db->encoding != $serverCharset) return array();
+
+        return array('charset' => $serverCharset, 'collation' => $serverCollation);
+    }
+
+    /**
+     * 转换数据库的字符集和排序规则。
+     * Convert database charset and collation.
+     *
+     * @access public
+     * @return bool
+     */
+    public function convertDatabaseCharset(): bool
+    {
+        $target = $this->getCharsetTarget();
+        if(empty($target)) return true;
 
         /* 获取当前数据库的字符集和排序规则。Get current database charset and collation. */
         $result      = $this->dbh->getDatabaseCharsetAndCollation($this->config->db->name);
         $dbCharset   = $result['charset'];
         $dbCollation = $result['collation'];
 
-        if($dbCharset != $serverCharset || $dbCollation != $serverCollation)
-        {
-            /* 转换数据库的字符集和排序规则。Convert database charset and collation. */
-            $this->dbh->exec("ALTER DATABASE `{$this->config->db->name}` CHARACTER SET={$serverCharset} COLLATE={$serverCollation}");
-        }
+        if($dbCharset == $target['charset'] && $dbCollation == $target['collation']) return true;
+
+        /* 转换数据库的字符集和排序规则。Convert database charset and collation. */
+        $sql = "ALTER DATABASE `{$this->config->db->name}` CHARACTER SET={$target['charset']} COLLATE={$target['collation']}";
+        $this->saveLogs($sql);
+        $this->dbh->exec($sql);
+        return true;
+    }
+
+    /**
+     * 获取字符集或排序规则与目标不一致、需要转换的表。
+     * Get tables whose charset or collation differs from the target.
+     *
+     * @access public
+     * @return array
+     */
+    public function getCharsetDiffTables(bool $skipLarge = true): array
+    {
+        $target = $this->getCharsetTarget();
+        if(empty($target)) return array();
 
         /* 获取当前数据库中所有表的排序规则。Get all tables collation in current database. */
         $tableCollations = $this->dao->select('TABLE_NAME AS name, TABLE_COLLATION AS collation')->from('information_schema.TABLES')
             ->where('TABLE_SCHEMA')->eq($this->config->db->name)
             ->andWhere('TABLE_TYPE')->eq('BASE TABLE')
+            ->orderBy('TABLE_NAME')
             ->fetchPairs();
-        $errors = [];
+
+        $tables = array();
         foreach($tableCollations as $tableName => $tableCollation)
         {
             if(strpos($tableName, $this->config->db->prefix) !== 0) continue;
-            if($tableCollation == $serverCollation) continue;
+            if($tableCollation == $target['collation']) continue;
 
-            $tableName = '`' . $tableName . '`';
-            if($tableName == TABLE_METRICLIB || $tableName == TABLE_ACTION || $tableName == TABLE_HISTORY) continue;
+            $quotedTable = '`' . $tableName . '`';
+            if($skipLarge && $this->isLargeTable($tableName)) continue;
 
-             /* 先修改字段长度，避免修改字符集报错。 Fix mysql error: Specified key was too long. */
-            if($tableName == TABLE_COMPILE || $tableName == TABLE_MEASQUEUE) $this->dbh->exec("ALTER TABLE {$tableName} MODIFY COLUMN `status` varchar(100)");
+            $tables[] = $tableName;
+        }
+        return $tables;
+    }
 
-            /* 转换表的字符集和排序规则。Convert table charset and collation. */
+    /**
+     * 转换单表的字符集和排序规则。
+     * Convert the charset and collation of a single table.
+     *
+     * @param  string $table
+     * @access public
+     * @return bool
+     */
+    public function convertTableCharset(string $table): bool
+    {
+        $target = $this->getCharsetTarget();
+        if(empty($target)) return true;
+
+        $tableName = '`' . str_replace('`', '', $table) . '`';
+
+        /* 先修改字段长度，避免修改字符集报错。Fix mysql error: Specified key was too long. */
+        if($tableName == TABLE_COMPILE || $tableName == TABLE_MEASQUEUE)
+        {
+            $sql = "ALTER TABLE {$tableName} MODIFY COLUMN `status` varchar(100) NOT NULL DEFAULT ''";
+            $this->saveLogs($sql);
+            $this->dbh->exec($sql);
+        }
+
+        /* 转换表的字符集和排序规则。Convert table charset and collation. */
+        try
+        {
+            $sql = "ALTER TABLE {$tableName} CONVERT TO CHARACTER SET {$target['charset']} COLLATE {$target['collation']}";
+            $this->saveLogs($sql);
+            $this->dbh->exec($sql);
+            return true;
+        }
+        catch(PDOException $e)
+        {
+            $message = sprintf('Convert table %s failed: %s', trim($tableName, '`'), $e->getMessage());
+            static::$errors[] = $message;
+            $this->saveLogs($message);
+            return false;
+        }
+    }
+
+    /**
+     * 记录字符集转换完成后的配置。
+     * Record the charset conversion config after completion.
+     *
+     * @access public
+     * @return bool
+     */
+    public function finishCharset(): bool
+    {
+        $target = $this->getCharsetTarget();
+        if(empty($target)) return true;
+
+        $this->loadModel('setting')->setItems('system.common.global', ['dbConvertedTime' => helper::now(), 'dbCharset' => $target['charset'], 'dbCollation' => $target['collation']]);
+        return true;
+    }
+
+    /**
+     * 获取数据库视图定义文件中的视图 SQL。
+     * Get the view SQLs from the database view definition file.
+     *
+     * @access public
+     * @return array
+     */
+    public function getViewSQLs(): array
+    {
+        $viewFile = $this->app->getAppRoot() . 'db' . DS . 'dbviews.sql';
+        if(!file_exists($viewFile)) return array();
+
+        $viewSQLs = array();
+        foreach(explode(';', file_get_contents($viewFile)) as $sql)
+        {
+            $sql = trim($sql);
+            if(empty($sql) || strpos($sql, '--') === 0) continue;
+            $viewSQLs[] = $sql;
+        }
+        return $viewSQLs;
+    }
+
+    /**
+     * 获取数据库视图列表（视图名与重建 SQL）。
+     * Get the database view list with names and regenerate SQLs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getViews(): array
+    {
+        $views = array();
+        foreach($this->getViewSQLs() as $sql)
+        {
+            if(preg_match('/CREATE OR REPLACE VIEW `([^`]+)`/i', $sql, $matches)) $views[] = array('name' => $matches[1], 'sql' => $sql);
+        }
+        return $views;
+    }
+
+    /**
+     * 重建单个数据库视图。
+     * Regenerate a single database view.
+     *
+     * @param  string $view
+     * @access public
+     * @return bool
+     */
+    public function regenerateView(string $view): bool
+    {
+        foreach($this->getViews() as $viewItem)
+        {
+            if($viewItem['name'] != $view) continue;
+
             try
             {
-                $this->dbh->exec("ALTER TABLE {$tableName} CONVERT TO CHARACTER SET {$serverCharset} COLLATE {$serverCollation}");
+                $this->dbh->exec($viewItem['sql']);
+                return true;
             }
             catch(PDOException $e)
             {
-                $message = sprintf('Convert table %s failed: %s', trim($tableName, '`'), $e->getMessage());
-                $errors[] = $message;
-                $this->saveLogs($message);
+                static::$errors[] = $e->getMessage();
+                return false;
             }
         }
-
-        if(!empty($errors))
-        {
-            static::$errors = array_merge(static::$errors, $errors);
-            return false;
-        }
-
-        $this->loadModel('setting')->setItems('system.common.global', ['dbConvertedTime' => helper::now(), 'dbCharset' => $serverCharset, 'dbCollation' => $serverCollation]);
-
-        return true;
+        return false;
     }
 
     /**
@@ -13690,6 +13923,40 @@ class upgradeModel extends model
             if(!isset($fieldDesc['company'])) continue;
 
             $this->dao->exec("ALTER TABLE {$table} DROP COLUMN `company`");
+        }
+    }
+
+    /**
+     * 处理项目组下的风险数据。
+     * Process PI's risk data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processPIRiskData(): bool
+    {
+        $PIData = $this->dao->select('id,teamkanban')->from(TABLE_PI)->where('deleted')->eq(0)->fetchPairs();
+        if(empty($PIData)) return true;
+
+        $kanbanCellGroup = $this->dao->select('id,kanban,cards')->from(TABLE_KANBANCELL)->where('kanban')->in(array_values($PIData))->andWhere('type')->eq('risk')->fetchGroup('kanban', 'id');
+        if(empty($kanbanCellGroup)) return true;
+
+        foreach($PIData as $PIID => $kanbanID)
+        {
+            $cellData = zget($kanbanCellGroup, $kanbanID, array());
+            if(empty($cellData)) continue;
+
+            $riskIdList = '';
+            foreach($cellData as $cell)
+            {
+                if(empty($cell->cards)) continue;
+                $riskIdList = trim($riskIdList, ',') . ',' . trim($cell->cards, ',');
+            }
+            $riskIdList = trim($riskIdList, ',');
+            if(empty($riskIdList)) continue;
+
+            $this->dao->update(TABLE_RISK)->set('PI')->eq($PIID)->where('id')->in($riskIdList)->exec();
+            if(dao::isError()) return false;
         }
         return true;
     }

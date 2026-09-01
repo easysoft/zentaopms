@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace zin;
 jsVar('copyMessage', $lang->artifact->copied);
+jsVar('copyFail', $lang->artifact->copyFail);
 if($repoID)
 {
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
@@ -77,6 +78,68 @@ $viewLink          = createLink('artifact', 'view', "artifactID={$artifact->id}&
 $canDeleteArtifact = hasPriv('artifact', 'deleteArtifact');
 $canCreateDir      = hasPriv('artifact', 'createDir') && $artifact->type == 'file' && !$leaf;
 $canUploadArtifact = hasPriv('artifact', 'uploadArtifact') && !empty($selectPath) && $artifact->type == 'file' && !$leaf;
+
+$gitfoxURL = str_replace(array('http://', 'https://'), '', $config->devops->gitfoxURL);
+if($config->devops->gitfoxPort) $gitfoxURL .= ":{$config->devops->gitfoxPort}";
+$typeCode  = '';
+if($artifact->scope == 'repo')
+{
+    $typeCode = 'repo' . $artifact->repoID;
+}
+else
+{
+    $typeCode = zget($space, 'code');
+}
+
+$imageNoticeDom   = array();
+$imageCommands    = array();
+$maxCommandLength = 0;
+if($artifact->type == 'container')
+{
+    foreach($lang->artifact->pushImageTip as $content)
+    {
+        $command           = str_replace(array('GITFOXURL', 'TYPECODE', 'LIBCODE', 'IMAGE'), array($gitfoxURL, $typeCode, zget($artifact, 'code')), $content['content']);
+        $imageCommands[]   = $command;
+        $maxCommandLength  = max($maxCommandLength, strlen($command));
+    }
+
+    foreach($imageCommands as $tipKey => $command)
+    {
+        $content = $lang->artifact->pushImageTip[$tipKey];
+        $imageNoticeDom[] = div
+        (
+            setClass('mb-2'),
+            p(setClass('mb-1 font-bold'), $content['title']),
+            div
+            (
+                setClass('flex space-between'),
+                div
+                (
+                    setClass('flex-1'),
+                    input
+                    (
+                        set::type('text'),
+                        set::value($command),
+                        set::size($maxCommandLength + 1),
+                        setStyle('width', 'max-content'),
+                        set::readOnly(true),
+                        set::title($command)
+                    )
+                ),
+                div
+                (
+                    set::width('50px'),
+                    btn
+                    (
+                        set::className('copy-btn'),
+                        set::icon('copy')
+                    )
+                )
+            )
+        );
+    }
+}
+
 div
 (
     setClass('surface-light row flex justify-between items-center border-l border-t border-r py-1.5 pl-1 pr-2'),
@@ -120,7 +183,25 @@ div
                 )
             )
         )
-    )
+    ),
+    $artifact->type == 'container' ? div
+    (
+        dropdown
+        (
+            set::staticMenu(true),
+            set::triggerProps(array('notHideOnClick' => '.dropdown-menu')),
+            set::menuClass('artifact-image-tip-menu'),
+            btn(setClass('ghost text-primary'), set::icon('help'), $lang->artifact->pushImageNotice),
+            to::items
+            (
+                div
+                (
+                    $imageNoticeDom,
+                    on::click('.copy-btn')->call('copyCommand', jsRaw('this'))
+                )
+            )
+        )
+    ) : null
 );
 
 div

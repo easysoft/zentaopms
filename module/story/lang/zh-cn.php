@@ -54,6 +54,7 @@ $lang->story->setting            = "设置";
 $lang->story->tasks              = "相关任务";
 $lang->story->bugs               = "相关Bug";
 $lang->story->cases              = "相关用例";
+$lang->story->docs               = "相关文档";
 $lang->story->taskCount          = '任务数';
 $lang->story->bugCount           = 'Bug数';
 $lang->story->caseCount          = '用例数';
@@ -76,6 +77,7 @@ $lang->story->batchAssignTo      = "批量指派";
 $lang->story->batchChangeModule  = "批量修改模块";
 $lang->story->batchChangeParent  = "批量修改父需求";
 $lang->story->batchChangeGrade   = "批量修改层级";
+$lang->story->errorInvalidGrade  = '所选需求层级不可用。';
 $lang->story->changeParent       = "修改父需求";
 $lang->story->viewAll            = '查看全部';
 $lang->story->toTask             = '转任务';
@@ -212,6 +214,7 @@ $lang->story->draft            = '草稿';
 $lang->story->unclosed         = '未关闭';
 $lang->story->deleted          = '已删除';
 $lang->story->released         = "已发布{$lang->SRCommon}数";
+$lang->story->release          = '所属发布';
 $lang->story->URChanged        = '用需变更';
 $lang->story->design           = '相关设计';
 $lang->story->case             = '相关用例';
@@ -365,6 +368,7 @@ $lang->story->childTaskTitle         = '包含%s个子任务，其中%s个已完
 $lang->story->successSaved           = "{$lang->SRCommon}成功添加，";
 $lang->story->confirmDelete          = "您确认删除该{$lang->SRCommon}吗?";
 $lang->story->confirmRecall          = "您确认撤销该{$lang->SRCommon}吗?";
+$lang->story->confirmChange          = "您修改了基本信息，是否保存修改的内容后再进入变更页面？";
 $lang->story->errorEmptyChildStory   = "『拆分{$lang->SRCommon}』不能为空。";
 $lang->story->errorNotSubdivide      = "状态在评审中、已关闭的{$lang->SRCommon}，或者是子需求，不能拆分。";
 $lang->story->errorMaxGradeSubdivide = "该需求的层级已经达到系统设置的最大层级，不能拆分同类型需求。";
@@ -401,6 +405,9 @@ $lang->story->batchParentError       = "%s需求的父需求不能为其本身�
 $lang->story->errorNoGradeSplit      = "没有可拆分的需求层级";
 $lang->story->errorRecordMinus       = '『%s』不能为负数';
 $lang->story->closeParentTips        = "该父需求下还有未关闭的子需求：%s。父需求关闭后，子需求也将同时关闭，您确定要关闭父需求吗？";
+$lang->story->undoneTasksTips        = "该需求还有 %s 个未完成的任务，请确认是否继续关闭需求？";
+$lang->story->undoneTasksBatchTips   = "%s 需求还有 %s 个未完成的任务。";
+$lang->story->confirmCloseTips       = "请确认是否继续关闭需求？";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = "该{$lang->SRCommon}所属范围";
@@ -442,6 +449,7 @@ $lang->story->action->syncgrade             = array('main' => "\$date, 系统判
 $lang->story->action->linked2roadmap        = array('main' => '$date, 由 <strong>$actor</strong> 关联到路标 <strong>$extra</strong>。');
 $lang->story->action->unlinkedfromroadmap   = array('main' => '$date, 由 <strong>$actor</strong> 从路标 <strong>$extra</strong> 移除。');
 $lang->story->action->changedbycharter      = array('main' => '$date, 由 <strong>$actor</strong> 通过立项申请 <strong>$extra</strong> ，需求阶段同步调整为Charter立项。');
+$lang->story->action->changedstorystage     = array('main' => '$date, 由 <strong>$actor</strong> $extra。');
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();

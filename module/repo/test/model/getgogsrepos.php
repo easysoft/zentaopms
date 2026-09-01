@@ -22,7 +22,7 @@ cid=0
 
 $repoTest = new repoModelTest();
 
-$apiRoot = 'https://gogsdev.qc.oop.cc/api/v1%s?token=0c37d25758930f24e955dd0307bd37e975e3b457';
+$apiRoot = 'https://giteadev.oop.cc/api/v1%s?token=ee10133181d8d10f473079f7f2d9c83c796a3994';
 r($repoTest->getGogsReposIsArrayTest($apiRoot))                && p() && e('1');
 r($repoTest->getGogsReposFirstFieldTest($apiRoot, 'id'))      && p() && e('1');
 r($repoTest->getGogsReposFirstFieldTest($apiRoot, 'full_name')) && p() && e('1');

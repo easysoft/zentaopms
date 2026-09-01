@@ -251,6 +251,7 @@ $lang->execution->manageProducts            = 'Linked ' . $lang->productCommon .
 $lang->execution->linkStory                 = 'Link Stories';
 $lang->execution->linkStoryByPlan           = 'Link Stories by Plan';
 $lang->execution->linkPlan                  = 'Linked Plans';
+$lang->execution->plans                     = $lang->execution->linkPlan;
 $lang->execution->unlinkStoryTasks          = 'Unlink';
 $lang->execution->linkedProducts            = "Linked {$lang->productCommon}s";
 $lang->execution->unlinkedProducts          = "Unlinked {$lang->productCommon}s";

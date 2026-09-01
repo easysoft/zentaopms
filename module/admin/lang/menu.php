@@ -43,9 +43,21 @@ $lang->admin->menuList->system['subMenu']['cache']       = array('link' => "{$la
 $lang->admin->menuList->system['subMenu']['cron']        = array('link' => "{$lang->admin->cron}|cron|index|", 'subModule' => 'cron');
 $lang->admin->menuList->system['subMenu']['timezone']    = array('link' => "{$lang->timezone}|custom|timezone|");
 $lang->admin->menuList->system['subMenu']['buildindex']  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
-$lang->admin->menuList->system['subMenu']['tableengine'] = array('link' => "{$lang->admin->tableEngine}|admin|tableengine|");
-if($config->edition != 'open' && $config->vision == 'rnd') $lang->admin->menuList->system['subMenu']['metriclib'] = array('link' => "{$lang->metriclib->common}|admin|metriclib|");
+$lang->admin->menuList->system['subMenu']['database']    = array('link' => "{$lang->admin->database}|admin|" . ($config->db->driver == 'mysql' ? 'tableengine' : 'dbview') . "|", 'alias' => 'tableengine,charset,dbview,metriclib');
 if(in_array($config->db->driver, $config->mysqlDriverList)) $lang->admin->menuList->system['subMenu']['backup'] = array('link' => "{$lang->backup->common}|backup|index|");
+
+if($config->db->driver == 'mysql')
+{
+    $lang->admin->menuList->system['tabMenu']['database']['tableengine'] = array('link' => "{$lang->admin->tableEngine}|admin|tableengine|");
+    $lang->admin->menuList->system['tabMenu']['database']['charset']     = array('link' => "{$lang->admin->charset}|admin|charset|");
+    $lang->admin->menuList->system['tabMenu']['menuOrder']['database']['5']  = 'tableengine';
+    $lang->admin->menuList->system['tabMenu']['menuOrder']['database']['10'] = 'charset';
+}
+$lang->admin->menuList->system['tabMenu']['database']['dbview']      = array('link' => "{$lang->admin->dbView}|admin|dbview|");
+if($config->edition != 'open' && $config->vision == 'rnd') $lang->admin->menuList->system['tabMenu']['database']['metriclib'] = array('link' => "{$lang->metriclib->common}|admin|metriclib|");
+
+$lang->admin->menuList->system['tabMenu']['menuOrder']['database']['15'] = 'dbview';
+if($config->edition != 'open' && $config->vision == 'rnd') $lang->admin->menuList->system['tabMenu']['menuOrder']['database']['20'] = 'metriclib';
 
 $lang->admin->menuList->system['menuOrder']['5']  = 'mode';
 if(in_array($config->db->driver, $config->mysqlDriverList)) $lang->admin->menuList->system['menuOrder']['10'] = 'backup';
@@ -55,7 +67,7 @@ $lang->admin->menuList->system['menuOrder']['35'] = 'cache';
 $lang->admin->menuList->system['menuOrder']['40'] = 'cron';
 $lang->admin->menuList->system['menuOrder']['45'] = 'timezone';
 $lang->admin->menuList->system['menuOrder']['50'] = 'buildindex';
-$lang->admin->menuList->system['menuOrder']['65'] = 'tableengine';  // The order 51-64 is reserved for extension.
+$lang->admin->menuList->system['menuOrder']['65'] = 'database';  // The order 51-64 is reserved for extension.
 
 $lang->admin->menuList->system['dividerMenu'] = ',safe,';
 
@@ -169,7 +181,9 @@ if($config->vision == 'lite')
 {
     unset($lang->admin->menuList->system['subMenu']['mode']);
     unset($lang->admin->menuList->system['subMenu']['buildindex']);
-    unset($lang->admin->menuList->system['subMenu']['tableengine']);
+    unset($lang->admin->menuList->system['subMenu']['database']);
+    unset($lang->admin->menuList->system['tabMenu']['database']);
+    unset($lang->admin->menuList->system['tabMenu']['menuOrder']['database']);
     unset($lang->admin->menuList->system['menuOrder']['5']);
     unset($lang->admin->menuList->system['menuOrder']['45']);
     unset($lang->admin->menuList->system['menuOrder']['50']);

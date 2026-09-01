@@ -30,10 +30,11 @@ $story->id->range('1-100');
 $story->title->range('teststory');
 $story->product->range('1');
 $story->parent->range('0,1,1,0,4,4,0,7,7');
-$story->path->range('`,1,`,`,1,2,`,`,1,3,`,`,4,`,`,4,5,`,`,4,6,`,`,7,`,`,7,8,`,`,7,9,`');
+$story->root->range('1,1,1,4,4,4,7,7,7');
 $story->type->range('story{3},requirement{3},epic{3}');
 $story->version->range('1,2');
 $story->gen(9);
+zenData('story')->fixPath();
 su('admin');
 
 $noParent = new stdClass();
@@ -64,6 +65,8 @@ $newStory9 = new stdClass();
 $newStory9->parent = 8;
 
 $story = new storyTaoTest();
+$story->instance->mao->cache = null;
+restoreObjectTables();
 r($story->doChangeParentTest(1, $noParent, $noParent))   && p('2:root;3:root')              && e('1;1'); //测试父需求不变的情况
 r($story->doChangeParentTest(3, $newStory3, $oldStory3)) && p('2:isParent;3:parentVersion') && e('1;2'); //测试将需求3的父需求修改为需求2
 r($story->doChangeParentTest(6, $newStory6, $oldStory6)) && p('5:isParent;6:parentVersion') && e('1;1'); //测试将用户需求6的父需求修改为用户需求5

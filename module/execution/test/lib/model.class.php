@@ -276,6 +276,37 @@ class executionModelTest extends baseTest
     }
 
     /**
+     * 测试编辑执行时关联产品、关联计划必填校验。
+     *
+     * @param  int    $executionID
+     * @param  array  $param
+     * @param  string $requiredFields
+     * @access public
+     * @return array|string
+     */
+    public function updateRequiredProductPlanTest(int $executionID, array $param, string $requiredFields): array|string
+    {
+        $oldRequired = $this->instance->config->execution->edit->requiredFields;
+        $this->instance->config->execution->edit->requiredFields = $requiredFields;
+        $result = $this->updateObject($executionID, $param);
+        $this->instance->config->execution->edit->requiredFields = $oldRequired;
+
+        if(is_array($result))
+        {
+            $errors = array();
+            foreach($result as $key => $value)
+            {
+                $message = is_array($value) ? reset($value) : $value;
+                if(strpos((string)$key, 'products') !== false) $errors['products'] = $message;
+                if(strpos((string)$key, 'plans') !== false)    $errors['plans']    = $message;
+            }
+            if($errors) return $errors;
+        }
+
+        return $result;
+    }
+
+    /**
      * function batchUpdate test by execution
      *
      * @param  array  $param

@@ -15,10 +15,15 @@ $lang->zai->vectorizedAlreadyEnabled = '数据向量化已经启用。';
 $lang->zai->vectorizedEnabled        = '数据向量化已启用。';
 $lang->zai->authenticationFailed     = '认证失败！';
 $lang->zai->syncRequestFailed        = '同步请求失败，请稍后再试';
-$lang->zai->syncingHint              = '同步过程中，关闭此页面将会暂停同步。';
-$lang->zai->syncedWithFailedHint     = '一些数据同步失败，请稍后再试';
-$lang->zai->cannotFindMemoryInZai    = '无法在 ZAI 中找到指定 key 的知识库，请重置同步目标。';
+$lang->zai->syncingHint              = '向量化数据会在后台自动同步。';
+$lang->zai->enqueueHint              = '检测到有未入队历史数据，点击「继续入队」开始入队。';
+$lang->zai->enqueueResult            = "创建 %s 入队, 已入队 <strong class='%scount'>%s</strong> 条；";
+$lang->zai->enqueueFinished          = '历史数据入队完成，将由计划任务自动同步。';
+$lang->zai->enqueueContinue          = '继续入队';
+$lang->zai->syncedWithFailedHint     = '一些数据同步失败，系统将自动重试';
+$lang->zai->cannotFindMemoryInZai    = '无法在 ZAI 中找到指定 key 的知识库，请重新启用向量化。';
 $lang->zai->confirmResetSync         = '是否重置同步状态，这将在 ZAI 中创建新的知识库。';
+$lang->zai->lastFailReason           = '失败原因';
 $lang->zai->settingTips              = '请安装<a class="btn btn-link text-primary px-1" style="text-decoration: none;" href="%s" target="_blank">ZAI服务</a>获取密钥。';
 
 $lang->zai->zentaoVectorization       = '禅道数据向量化';
@@ -36,12 +41,13 @@ $lang->zai->totalSync        = '总计';
 $lang->zai->lastSyncTime     = '上次同步时间';
 
 $lang->zai->syncActions = new stdClass();
-$lang->zai->syncActions->enable     = '启用数据向量化';
-$lang->zai->syncActions->startSync  = '开始同步';
-$lang->zai->syncActions->resync     = '重新同步';
-$lang->zai->syncActions->pauseSync  = '暂停同步';
-$lang->zai->syncActions->resumeSync = '继续同步';
-$lang->zai->syncActions->resetSync  = '重置同步';
+$lang->zai->syncActions->enable          = '启用数据向量化';
+$lang->zai->syncActions->startSync       = '开始同步';
+$lang->zai->syncActions->resync          = '重新同步';
+$lang->zai->syncActions->pauseSync       = '暂停同步';
+$lang->zai->syncActions->resumeSync      = '继续同步';
+$lang->zai->syncActions->resetSync       = '重置同步';
+$lang->zai->syncActions->continueEnqueue = '继续入队';
 
 $lang->zai->syncingTypeList = array();
 $lang->zai->syncingTypeList['story']    = '需求';

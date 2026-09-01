@@ -25,12 +25,25 @@ $actionTable->loadYaml('action_printprojectdynamicblock', false, 2)->gen(20);
 
 $userTable = zenData('user');
 $userTable->loadYaml('user_printprojectdynamicblock', false, 2)->gen(10);
+$company = zenData('company');
+$company->admins->range('`,admin,`');
+$company->gen(1);
+global $app;
+$app->company->admins = ',admin,';
+zenData('story')->gen(20);
+zenData('task')->gen(20);
+zenData('bug')->gen(20);
+zenData('project')->gen(20);
+zenData('product')->gen(10);
+zenData('build')->gen(20);
 
 // 3. 用户登录（选择合适角色）
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
 $blockTest = new blockZenTest();
+$blockTest->instance->mao->cache = null;
+restoreObjectTables();
 
 // 创建区块对象用于测试
 $normalBlock = new stdclass();

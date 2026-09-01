@@ -160,6 +160,7 @@ class artifact extends control
         $this->view->treeItems       = $this->artifactZen->getArtifactLibTreeData($artifactLib, '/', $selectPath, $spaceID, $repoID, $type, $leaf);
         $this->view->selectNode      = $selectNode;
         $this->view->spaceID         = $spaceID;
+        $this->view->space           = $this->loadModel('space')->fetchByID($spaceID);
         $this->view->repoID          = $repoID;
         $this->view->type            = $type;
         $this->view->repo            = $repo;

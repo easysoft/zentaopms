@@ -143,12 +143,18 @@ $lang->gitfox->devopsDescription  = <<<EOD
 </p>
 EOD;
 
-$lang->gitfox->installGitFox    = '安装 GitFox引擎';
-$lang->gitfox->installGitFoxTip = '使用禅道DevOps前您需要安装GitFox，请在宿主机内执行下列安装脚本进行安装，脚本执行完成后，点击“我已完成安装”。';
-$lang->gitfox->checkInstall     = '我已完成上述安装步骤';
-$lang->gitfox->execScript       = '执行安装脚本';
-$lang->gitfox->copySuccess      = '复制成功';
-$lang->gitfox->copyFail         = '浏览器不支持复制功能，请手动复制';
-$lang->gitfox->startUse         = '开始使用';
-$lang->gitfox->completedInstall = '我已完成安装';
-$lang->gitfox->InstallScript    = '安装脚本';
+$lang->gitfox->installGitFox     = '安装 GitFox引擎';
+$lang->gitfox->installGitFoxTip  = '使用禅道DevOps前您需要安装GitFox，请在宿主机内执行下列安装脚本进行安装，脚本执行完成后，点击“我已完成安装”。';
+$lang->gitfox->checkInstall      = '我已完成上述安装步骤';
+$lang->gitfox->execScript        = '执行安装脚本';
+$lang->gitfox->copySuccess       = '复制成功';
+$lang->gitfox->copyFail          = '浏览器不支持复制功能，请手动复制';
+$lang->gitfox->startUse          = '开始使用';
+$lang->gitfox->completedInstall  = '我已完成安装';
+$lang->gitfox->InstallScript     = '安装脚本';
+$lang->gitfox->upgradeGitFox     = '升级 GitFox引擎';
+$lang->gitfox->upgradeGitFoxTip  = '当前已安装的GitFox引擎版本（%s）低于当前禅道DevOps最低版本要求（%s），请在宿主机内执行下列升级脚本对GitFox进行升级。';
+$lang->gitfox->completedUpgrade  = '我已完成升级';
+$lang->gitfox->laterUpgrade      = '稍后进行升级';
+$lang->gitfox->UpgradeScript     = '升级脚本';
+$lang->gitfox->upgradeGitFoxFail = 'GitFox升级尚未完成，请先在宿主机执行升级脚本后再点击“我已完成升级”。';

@@ -710,7 +710,7 @@ class pipeline extends control
                 $task->name  = $plugin->name;
                 $task->type  = $plugin->kind;
                 $task->alias = $plugin->alias;
-                $task->icon  = 'code';
+                $task->image = '/static/svg/pipeline-' . $plugin->name . '.svg';
                 $tasks[] = $task;
             }
             $object->tasks = $tasks;
@@ -728,7 +728,7 @@ class pipeline extends control
      * @access public
      * @return void
      */
-    public function ajaxGetStepSchema(string $stepName)
+    public function ajaxGetStepSchema(string $stepName, int $pipelineID = 0, string $params = '')
     {
         $stepSchema = $this->pipeline->getStepSchema($stepName);
         if(dao::isError())
@@ -736,6 +736,15 @@ class pipeline extends control
             $error = dao::getError();
             return $this->sendError(zget($error, 'apiMessage', 'api error'));
         }
+
+        $pipeline = $this->pipeline->fetchByID($pipelineID);
+        $renderSchemaKeywords = $this->pipelineZen->renderSchemaKeywords($pipeline, $params);
+
+        foreach($renderSchemaKeywords as $key => $link)
+        {
+            $stepSchema = str_replace('%%' . $key . '%%', $link, $stepSchema);
+        }
+
         $this->send(array('result' => 'success', 'data' => $stepSchema));
     }
 
@@ -1234,5 +1243,27 @@ class pipeline extends control
         $this->view->repo     = $this->loadModel('repo')->getByID($repoID);
 
         $this->display();
+    }
+
+    /**
+     * 获取代码库列表。
+     * Get repo list.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetRepos(int $spaceID = 0)
+    {
+        $repos = $this->loadModel('gitfox')->apiGetRepos();
+        foreach($repos as $repo)
+        {
+            if($repo->scmType != 'git' || $repo->mirror) continue;
+            if($spaceID && $repo->spaceID != $spaceID) continue;
+
+            $repoList[] = array('value' => $repo->gitURL, 'text' => $repo->name, 'key' => $repo->name);
+        }
+
+        echo json_encode($repoList);
     }
 }

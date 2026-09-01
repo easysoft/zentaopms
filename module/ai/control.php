@@ -343,16 +343,18 @@ class ai extends control
      * Set basic info of prompt.
      *
      * @param  int    $promptID
+     * @param  string $module
      * @access public
      * @return void
      */
-    public function promptBasicInfo(int $promptID = 0)
+    public function promptBasicInfo(int $promptID = 0, string $module = '')
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
 
         $prompt = empty($promptID) ? new stdclass() : $this->ai->getPromptByID($promptID);
         if(empty($prompt)) $prompt = new stdclass();
         if(!empty($prompt->status) && $prompt->status == 'active') return $this->locate($this->inlink('promptView', "id={$prompt->id}"));
+        if(!empty($prompt->type) && $prompt->type == 'timer')      return $this->locate($this->inlink('timerBasicInfo', "promptID={$prompt->id}"));
 
         if($_POST)
         {
@@ -387,11 +389,12 @@ class ai extends control
 
         if(empty($prompt->id)) $prompt->id = 0;
         if(!isset($prompt->name)) $prompt->name = '';
-        if(!isset($prompt->module)) $prompt->module = '';
+        if(!isset($prompt->module)) $prompt->module = $module;
         if(!isset($prompt->actionPurpose)) $prompt->actionPurpose = '';
         if(!isset($prompt->displayPosition)) $prompt->displayPosition = '';
         if(!isset($prompt->model)) $prompt->model = '';
         if(!isset($prompt->desc)) $prompt->desc = '';
+        if(!isset($prompt->type)) $prompt->type = '';
 
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;

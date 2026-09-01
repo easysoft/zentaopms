@@ -16,6 +16,7 @@ $lang->artifact->deleteArtifact      = 'Delete Artifact';
 $lang->artifact->batchDeleteArtifact = 'Batch Delete Artifacts';
 $lang->artifact->copyCMD             = 'Copy Command';
 $lang->artifact->copied              = 'Copied Successfully';
+$lang->artifact->copyFail            = 'Copy failed, please copy manually';
 
 $lang->artifact->name          = 'Name';
 $lang->artifact->code          = 'Code';
@@ -101,3 +102,10 @@ $lang->artifact->formatList['container'] = 'Image Repository';
 //$lang->artifact->formatList['helm']      = 'Helm Repository';
 //$lang->artifact->formatList['maven']     = 'Maven Repository';
 //$lang->artifact->formatList['npm']       = 'NPM Repository';
+
+$lang->artifact->pushImageNotice = 'How to push an image';
+
+$lang->artifact->pushImageTip   = array();
+$lang->artifact->pushImageTip[] = array('title' => '1. Login to the registry',                                   'content' => 'docker login GITFOXURL');
+$lang->artifact->pushImageTip[] = array('title' => '2. Tag the image(replace the local image name and version)', 'content' => 'docker tag image-name:tag GITFOXURL/TYPECODE/LIBCODE/{image-name:tag}');
+$lang->artifact->pushImageTip[] = array('title' => '3. Push the image',                                          'content' => 'docker push GITFOXURL/TYPECODE/LIBCODE/{image-name:tag}');

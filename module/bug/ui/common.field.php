@@ -31,7 +31,7 @@ $fields->field('execution')
     ->value(data('executionID'));
 
 $fields->field('openedBuild')
-    ->checkbox(array('text' => $lang->bug->allBugs, 'name' => 'allBuilds', 'checked' => data('allBuilds') ? true : false))
+    ->checkbox(array('text' => $lang->bug->allBugs, 'name' => 'allBuilds', 'id' => 'allBuilds', 'checked' => data('allBuilds') ? true : false))
     ->control('inputGroup')
     ->itemBegin('openedBuild[]')->control('picker')->items(data('builds'))->value(data('bug.buildID'))->multiple()->menu(array('checkbox' => true))->itemEnd();
 

@@ -13,6 +13,10 @@ namespace zin;
 jsVar('projectID', $projectID);
 jsVar('multiple', isset($moMultipleExecutionID) ? false : true);
 $isEn = $app->getClientLang() == 'en';
+$isOwnerRequired   = strpos(",{$this->config->testtask->create->requiredFields},", ',owner,') !== false;
+$isTypeRequired    = strpos(",{$this->config->testtask->create->requiredFields},", ',type,') !== false;
+$isMembersRequired = strpos(",{$this->config->testtask->create->requiredFields},", ',members,') !== false;
+$isDescRequired    = strpos(",{$this->config->testtask->create->requiredFields},", ',desc,') !== false;
 
 $buildExecutionID = $executionID ? $executionID : (isset($noMultipleExecutionID) ? $noMultipleExecutionID : 0);
 $hideExecution    = false;
@@ -86,34 +90,39 @@ formPanel
     ),
     formGroup
     (
+        set::width('1/2'),
+        set::label($lang->testtask->owner),
+        set::required($isOwnerRequired),
+        set::name('owner'),
+        set::control(array('control' => 'picker', 'required' => $isOwnerRequired)),
+        set::items($users)
+    ),
+    formGroup
+    (
         setID('typeBox'),
         set::width('1/2'),
         set::label($lang->testtask->type),
+        set::required($isTypeRequired),
         picker
         (
             set::multiple(true),
             set::name('type[]'),
-            set::items($lang->testtask->typeList)
+            set::items($lang->testtask->typeList),
+            set::required($isTypeRequired)
         )
     ),
     formGroup
     (
         set::width('1/2'),
-        set::label($lang->testtask->owner),
-        set::name('owner'),
-        set::control('picker'),
-        set::items($users)
-    ),
-    formgroup
-    (
-        set::width('1/2'),
         set::label($lang->testtask->members),
+        set::required($isMembersRequired),
         picker
         (
-            setid('members'),
+            setID('members'),
             set::name('members[]'),
             set::items($users),
-            set::multiple(true)
+            set::multiple(true),
+            set::required($isMembersRequired)
         )
     ),
     formGroup
@@ -184,6 +193,7 @@ formPanel
     formGroup
     (
         set::label($lang->testtask->desc),
+        set::required($isDescRequired),
         set::control(array('control' => 'editor', 'templateType' => 'testtask')),
         set::name('desc'),
         set::rows(10)

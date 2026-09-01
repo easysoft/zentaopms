@@ -39,6 +39,19 @@ if(!empty($needProcess['changeEngine']))
         $lang->upgrade->needChangeEngine
     );
 }
+if(!empty($needProcess['changeCharset']))
+{
+    $tips[] = div
+    (
+        setClass('flex w-full justify-center items-center'),
+        icon
+        (
+            setClass('text-warning px-1'),
+            'help'
+        ),
+        $lang->upgrade->needChangeCharset
+    );
+}
 if(!empty($needProcess['search']))
 {
     $tips[] = div

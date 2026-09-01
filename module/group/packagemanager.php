@@ -2817,6 +2817,14 @@ $config->group->package->reviewCodeIssue->privs['repo-editBug']       = array('e
 $config->group->package->reviewCodeIssue->privs['repo-editComment']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-diff'), 'recommend' => array('repo-addBug', 'repo-addComment', 'repo-editBug', 'repo-review'));
 $config->group->package->reviewCodeIssue->privs['repo-deleteComment'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-diff'), 'recommend' => array('repo-addBug', 'repo-addComment', 'repo-editBug', 'repo-editComment', 'repo-review'));
 
+$config->group->package->processScanIssues = new stdclass();
+$config->group->package->processScanIssues->order  = 2610;
+$config->group->package->processScanIssues->subset = 'codereview';
+$config->group->package->processScanIssues->privs  = array();
+$config->group->package->processScanIssues->privs['codescan-ignoreIssue']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('codescan-issue'), 'recommend' => array('codescan-issueView', 'codescan-confirmIssue', 'codescan-activeIssue'));
+$config->group->package->processScanIssues->privs['codescan-confirmIssue'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('codescan-issue'), 'recommend' => array('codescan-issueView', 'codescan-ignoreIssue', 'codescan-activeIssue'));
+$config->group->package->processScanIssues->privs['codescan-activeIssue']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('codescan-issue'), 'recommend' => array('codescan-issueView', 'codescan-ignoreIssue', 'codescan-confirmIssue'));
+
 $config->group->package->editor = new stdclass();
 $config->group->package->editor->order  = 10;
 $config->group->package->editor->subset = 'dev';
@@ -2961,7 +2969,7 @@ $config->group->package->managePipeline->subset = 'pipeline';
 $config->group->package->managePipeline->privs  = array();
 $config->group->package->managePipeline->privs['pipeline-create']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-edit', 'pipeline-arrange'));
 $config->group->package->managePipeline->privs['pipeline-edit']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-create', 'pipeline-arrange'));
-$config->group->package->managePipeline->privs['pipeline-arrange'] = array('edition' => 'biz,max,ipd',      'vision' => 'rnd', 'order' => 15, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-create', 'pipeline-edit'));
+$config->group->package->managePipeline->privs['pipeline-arrange'] = array('edition' => 'open,biz,max,ipd',      'vision' => 'rnd', 'order' => 15, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-create', 'pipeline-edit'));
 $config->group->package->managePipeline->privs['pipeline-delete']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-create', 'pipeline-edit', 'pipeline-arrange'));
 
 $config->group->package->backup = new stdclass();
@@ -3033,6 +3041,8 @@ $config->group->package->systemSetting->privs  = array();
 $config->group->package->systemSetting->privs['cache-setting']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('admin-index'), 'recommend' => array());
 $config->group->package->systemSetting->privs['cache-flush']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('admin-index', 'cache-setting'), 'recommend' => array());
 $config->group->package->systemSetting->privs['admin-tableEngine']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('admin-index'), 'recommend' => array());
+$config->group->package->systemSetting->privs['admin-charset']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('admin-index'), 'recommend' => array());
+$config->group->package->systemSetting->privs['admin-dbview']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('admin-index'), 'recommend' => array());
 $config->group->package->systemSetting->privs['custom-timezone']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 45, 'depend' => array('admin-index'), 'recommend' => array());
 $config->group->package->systemSetting->privs['custom-libreoffice'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 100, 'depend' => array(), 'recommend' => array());
 $config->group->package->systemSetting->privs['search-buildIndex']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 35, 'depend' => array('admin-index'), 'recommend' => array());
@@ -4077,16 +4087,16 @@ $config->group->package->browseRunner = new stdclass();
 $config->group->package->browseRunner->order  = 2390;
 $config->group->package->browseRunner->subset = 'configure';
 $config->group->package->browseRunner->privs  = array();
-$config->group->package->browseRunner->privs['runner-browse'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array('runner-create', 'runner-changeState', 'runner-edit', 'runner-delete'));
+$config->group->package->browseRunner->privs['runner-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array('runner-create', 'runner-changeState', 'runner-edit', 'runner-delete'));
 
 $config->group->package->manageRunner = new stdclass();
 $config->group->package->manageRunner->order  = 2395;
 $config->group->package->manageRunner->subset = 'configure';
 $config->group->package->manageRunner->privs  = array();
-$config->group->package->manageRunner->privs['runner-create']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10,  'depend' => array('runner-browse'), 'recommend' => array('runner-edit', 'runner-changeState', 'runner-delete'));
-$config->group->package->manageRunner->privs['runner-changeState'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 15,  'depend' => array('runner-browse'), 'recommend' => array('runner-create', 'runner-edit', 'runner-delete'));
-$config->group->package->manageRunner->privs['runner-edit']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20,  'depend' => array('runner-browse'), 'recommend' => array('runner-create', 'runner-changeState', 'runner-delete'));
-$config->group->package->manageRunner->privs['runner-delete']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25,  'depend' => array('runner-browse'), 'recommend' => array('runner-create', 'runner-edit', 'runner-changeState'));
+$config->group->package->manageRunner->privs['runner-create']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10,  'depend' => array('runner-browse'), 'recommend' => array('runner-edit', 'runner-changeState', 'runner-delete'));
+$config->group->package->manageRunner->privs['runner-changeState'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15,  'depend' => array('runner-browse'), 'recommend' => array('runner-create', 'runner-edit', 'runner-delete'));
+$config->group->package->manageRunner->privs['runner-edit']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20,  'depend' => array('runner-browse'), 'recommend' => array('runner-create', 'runner-changeState', 'runner-delete'));
+$config->group->package->manageRunner->privs['runner-delete']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25,  'depend' => array('runner-browse'), 'recommend' => array('runner-create', 'runner-edit', 'runner-changeState'));
 
 $config->group->package->browseRepo = new stdclass();
 $config->group->package->browseRepo->order  = 2420;
@@ -4431,14 +4441,6 @@ $config->group->package->execScan->subset = 'codeScan';
 $config->group->package->execScan->privs  = array();
 $config->group->package->execScan->privs['codescan-exec']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('codescan-plan'), 'recommend' => array('codescan-createPlan', 'codescan-editPlan', 'codescan-deletePlan', 'codescan-task', 'codescan-trigger'));
 $config->group->package->execScan->privs['codescan-resend'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10,  'depend' => array('codescan-task'), 'recommend' => array());
-
-$config->group->package->processScanIssues = new stdclass();
-$config->group->package->processScanIssues->order  = 15;
-$config->group->package->processScanIssues->subset = 'codeScan';
-$config->group->package->processScanIssues->privs  = array();
-$config->group->package->processScanIssues->privs['codescan-ignoreIssue']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('codescan-issue'), 'recommend' => array('codescan-issueView', 'codescan-confirmIssue', 'codescan-activeIssue'));
-$config->group->package->processScanIssues->privs['codescan-confirmIssue'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('codescan-issue'), 'recommend' => array('codescan-issueView', 'codescan-ignoreIssue', 'codescan-activeIssue'));
-$config->group->package->processScanIssues->privs['codescan-activeIssue']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('codescan-issue'), 'recommend' => array('codescan-issueView', 'codescan-ignoreIssue', 'codescan-confirmIssue'));
 
 $config->group->package->codeScanMaintain = new stdclass();
 $config->group->package->codeScanMaintain->order  = 20;

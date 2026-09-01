@@ -44,7 +44,7 @@ $user->gen(10);
 $company = zenData('company');
 $company->id->range('1');
 $company->name->range('测试公司');
-$company->admins->range(',admin,');
+$company->admins->range('`,admin,`');
 $company->gen(1);
 
 // 直接通过DAO更新数据库确保admins字段格式正确

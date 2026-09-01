@@ -259,6 +259,8 @@ class dropmenu extends wg
             if(empty($objectID)) return array();
         }
 
+        if($tab == 'pi') $menuID = 'pi-menu';
+
         if(empty($url) && empty($data)) $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
         if(empty($text) && !empty($tab) && !empty($objectID))
         {

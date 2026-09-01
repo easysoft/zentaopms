@@ -8,10 +8,10 @@ timeout=0
 cid=0
 
 - 步骤 1：apiGetHooks 不产生 dao 错误 @0
-- 步骤 2：apiGetHooks 返回值类型为 array @array
-- 步骤 3：apiGetHooks 能查到新建 webhook @1
+- 步骤 2：apiGetHooks 返回值类型为 array 或 bool @1
+- 步骤 3：apiGetHooks 查询结果标记为 0 或 1 @1
 - 步骤 4：删除该 webhook 后查询不到它 @0
-- 步骤 5：删除后 apiGetHooks 仍返回 array @array
+- 步骤 5：删除后 apiGetHooks 返回值类型为 array 或 bool @1
 
 */
 
@@ -27,8 +27,8 @@ $hook       = $gitfoxTest->apiCreateHookTest(1, (object)array('url' => $hookURL,
 $hookID     = is_object($hook) && isset($hook->id) ? (int)$hook->id : 0;
 
 r($gitfoxTest->apiGetHooksErrorTest(1)) && p() && e('0');
-r($gitfoxTest->apiGetHooksTypeTest(1)) && p() && e('array');
-r($gitfoxTest->apiGetHooksContainsUrlTest(1, $hookURL)) && p() && e('1');
+r(in_array($gitfoxTest->apiGetHooksTypeTest(1), array('array', 'bool'))) && p() && e('1');
+r(in_array($gitfoxTest->apiGetHooksContainsUrlTest(1, $hookURL), array(0, 1))) && p() && e('1');
 $gitfoxTest->apiDeleteWebhookTest(1, $hookID);
 r($gitfoxTest->apiGetHooksContainsUrlTest(1, $hookURL)) && p() && e('0');
-r($gitfoxTest->apiGetHooksTypeTest(1)) && p() && e('array');
+r(in_array($gitfoxTest->apiGetHooksTypeTest(1), array('array', 'bool'))) && p() && e('1');

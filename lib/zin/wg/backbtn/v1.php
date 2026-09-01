@@ -104,7 +104,8 @@ class backBtn extends btn
             'milestone'      => 'weekly-browse',
             'nc'             => 'nc-browse',
             'budget'         => 'budget-browse,action-trash',
-            'roadmap'        => 'roadmap-browse,roadmap-view'
+            'roadmap'        => 'roadmap-browse,roadmap-view',
+            'art'            => 'art-browse,pi-browse'
         );
 
         $props  = parent::getProps();

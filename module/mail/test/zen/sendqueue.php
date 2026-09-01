@@ -9,9 +9,10 @@ cid=17042
 
 - 执行mailZenTest模块的sendQueueZenTest方法，参数是$queue1, false 属性result @success
 - 执行mailZenTest模块的sendQueueZenTest方法，参数是$queue2, false  @0
-- 执行mailZenTest模块的sendQueueZenTest方法，参数是$queue3, false  @0
+- 执行mailZenTest模块的sendQueueZenTest方法，参数是$queue3, false 属性result @success
 - 执行mailZenTest模块的sendQueueZenTest方法，参数是$queue4, true  @0
 - 执行mailZenTest模块的sendQueueZenTest方法，参数是$queue5, false 属性result @success
+- 执行mailZenTest模块的sendQueueZenTest方法，参数是$queueFail, false 属性result @success
 
 */
 
@@ -64,8 +65,17 @@ $queue5->data = '测试邮件内容';
 $queue5->ccList = '';
 $queue5->merge = false;
 
+$queueFail = new stdclass();
+$queueFail->id = 5;
+$queueFail->toList = 'admin@test.com';
+$queueFail->subject = '测试邮件主题';
+$queueFail->data = '测试邮件内容';
+$queueFail->ccList = '';
+$queueFail->merge = false;
+
 r($mailZenTest->sendQueueZenTest($queue1, false)) && p('result') && e('success');
 r($mailZenTest->sendQueueZenTest($queue2, false)) && p() && e(0);
-r($mailZenTest->sendQueueZenTest($queue3, false)) && p() && e(0);
+r($mailZenTest->sendQueueZenTest($queue3, false)) && p('result') && e('success');
 r($mailZenTest->sendQueueZenTest($queue4, true)) && p() && e(0);
 r($mailZenTest->sendQueueZenTest($queue5, false)) && p('result') && e('success');
+r($mailZenTest->sendQueueZenTest($queueFail, false)) && p('result') && e('success');

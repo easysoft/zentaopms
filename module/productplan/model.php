@@ -906,7 +906,7 @@ class productplanModel extends model
             $this->story->updateStoryOrderOfPlan($storyID, (string)$planID, $oldPlanID);
 
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
-            $this->story->setStage($storyID);
+            $this->story->setStage($storyID, array('type' => 'linkPlan', 'objectID' => $planID));
 
             /* If the story was linked to another plan of type 'story', record the unlink action on the old plan. */
             if($oldPlanID !== '' && (int)$oldPlanID !== $planID)
@@ -941,8 +941,8 @@ class productplanModel extends model
         /* Delete the story in the sort of the plan. */
         $this->loadModel('story')->updateStoryOrderOfPlan($storyID, '', (string)$planID);
 
-        $this->story->setStage($storyID);
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromplan', '', $planID);
+        $this->story->setStage($storyID, array('type' => 'unlinkPlan', 'objectID' => $planID));
 
         return !dao::isError();
     }

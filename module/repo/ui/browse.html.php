@@ -265,6 +265,7 @@ toolbar
         ) : div
         (
             setClass('flex items-center'),
+            $mirrorStatus == 'active' ? span(setClass('text-primary sync-next-executed mr-3'), $lang->repo->mirror->nextSync . (zget($this->view, 'mirrorNextExecuted', '') ?: '--')) : null,
             $mirrorStatus == 'active' ? span(setClass('text-primary sync-last-executed mr-3'), $lang->repo->mirror->lastUpdated . (zget($this->view, 'mirrorLastExecuted', '') ?: '--')) : null,
             btn
             (

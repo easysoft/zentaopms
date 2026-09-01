@@ -212,7 +212,7 @@ class programZen extends program
                     $cardList = !empty($laneData->{$columnKey}) ? $laneData->{$columnKey} : array();
                     foreach($cardList as $card)
                     {
-                        $items[$laneKey][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => isset($card->name) ? $card->name : $card->title, 'status' => isset($card->status) ? $card->status : '', 'cardType' => $columnKey, 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => isset($card->progress) ? $card->progress : 0, 'marker' => isset($card->marker) ? $card->marker : 0);
+                        $items[$laneKey][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => isset($card->name) ? $card->name : $card->title, 'status' => isset($card->status) ? $card->status : '', 'cardType' => $columnKey, 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => isset($card->progress) ? $card->progress : 0, 'marker' => isset($card->marker) ? $card->marker : 0, 'begin' => !empty($card->begin) && !helper::isZeroDate($card->begin) ? $card->begin : '', 'end' => !empty($card->end) && !helper::isZeroDate($card->end) ? $card->end : '');
 
                         if(!isset($columnCards[$columnKey])) $columnCards[$columnKey] = 0;
                         $columnCards[$columnKey] ++;
@@ -222,7 +222,7 @@ class programZen extends program
                             if(!empty($latestExecutions[$card->id]))
                             {
                                 $execution = $latestExecutions[$card->id];
-                                $items[$laneKey]['doingExecutions'][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'cardType' => 'doingExecution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress);
+                                $items[$laneKey]['doingExecutions'][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'cardType' => 'doingExecution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress, 'begin' => !helper::isZeroDate($execution->begin) ? $execution->begin : '', 'end' => !helper::isZeroDate($execution->end) ? $execution->end : '');
 
                                 if(!isset($columnCards['doingExecutions'])) $columnCards['doingExecutions'] = 0;
                                 $columnCards['doingExecutions'] ++;
@@ -273,6 +273,22 @@ class programZen extends program
 
         $programList = array();
         $today       = helper::today();
+
+        /* Get workingDays. */
+        $earliestEnd = $today;
+        foreach($projectGroup as $projects)
+        {
+            foreach($projects as $project)
+            {
+                if(!empty($project->end) && !helper::isZeroDate($project->end) && $project->end < $earliestEnd) $earliestEnd = $project->end;
+            }
+        }
+        foreach($doingExecutions as $doingExecution)
+        {
+            if(!empty($doingExecution->end) && !helper::isZeroDate($doingExecution->end) && $doingExecution->end < $earliestEnd) $earliestEnd = $doingExecution->end;
+        }
+        $workingDays = $this->loadModel('holiday')->getActualWorkingDays($earliestEnd, $today);
+
         foreach($productGroup as $programID => $productList)
         {
             foreach($productList as $product)
@@ -283,7 +299,16 @@ class programZen extends program
                 {
                     foreach($projectGroup[$product->id] as $project)
                     {
-                        if(helper::diffDate($today, $project->end) > 0) $project->delay = helper::diffDate($today, $project->end);
+                        if(!in_array($project->status, array('suspended', 'done', 'closed')))
+                        {
+                            $betweenDays = $this->holiday->getDaysBetween($project->end, $today);
+                            if($betweenDays)
+                            {
+                                $delayDays = array_intersect($betweenDays, $workingDays);
+                                $delay     = count($delayDays) - 1;
+                                if($delay > 0) $project->delay = $delay;
+                            }
+                        }
                         if($project->status == 'wait')
                         {
                             $product->waitingProjects[$project->id] = $project;
@@ -294,7 +319,13 @@ class programZen extends program
                             if(isset($doingExecutions[$project->id]))
                             {
                                 $doingExecution = $doingExecutions[$project->id];
-                                if(helper::diffDate($today, $doingExecution->end) > 0) $doingExecution->delay = helper::diffDate($today, $doingExecution->end);
+                                $betweenDays = $this->holiday->getDaysBetween($doingExecution->end, $today);
+                                if($betweenDays)
+                                {
+                                    $delayDays = array_intersect($betweenDays, $workingDays);
+                                    $delay     = count($delayDays) - 1;
+                                    if($delay > 0) $doingExecution->delay = $delay;
+                                }
                                 $product->doingExecutions[$doingExecution->id] = $doingExecution;
                             }
                         }

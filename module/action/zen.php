@@ -134,6 +134,11 @@ class actionZen extends action
                     $execution = zget($executionList, $trash->execution, '');
                     $tab       = $execution && empty($execution->multiple) ? " data-app='project'" : " data-app='execution'";
                 }
+                if($module == 'risk' && empty($trash->project) && empty($trash->execution))
+                {
+                    $tab     = "data-app='safe'";
+                    $params .= '&from=pi';
+                }
                 $trash->objectName = $canView ? html::a($this->createLink($module, $methodName, $params), $trash->objectName, '_self', "title='{$trash->objectName}' $tab") : "<span title='$trash->objectName'>$trash->objectName</span>";
             }
         }

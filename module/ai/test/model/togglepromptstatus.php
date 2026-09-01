@@ -35,11 +35,15 @@ $table->characterization->range('测试角色特征{10}');
 $table->status->range('draft{5},active{5}');
 $table->createdBy->range('admin,user1,user2');
 $table->createdDate->range('`2023-08-10 10:00:00`,`2023-08-11 11:00:00`,`2023-08-12 12:00:00`');
+$table->lastRunDate->range('`2024-01-01 00:00:00`');
 $table->deleted->range('0');
 $table->gen(10);
 
 // 3. 用户登录（选择合适角色）
 su('admin');
+
+global $config;
+$config->debug = 0;
 
 // 4. 创建测试实例（变量名与模块名一致）
 $aiTest = new aiModelTest();

@@ -12,6 +12,7 @@ $config->ai->dtable->prompts['id']['required'] = true;
 $config->ai->dtable->prompts['name']['title']    = $lang->ai->prompts->name;
 $config->ai->dtable->prompts['name']['sortType'] = true;
 $config->ai->dtable->prompts['name']['required'] = true;
+$config->ai->dtable->prompts['name']['hint']     = true;
 $config->ai->dtable->prompts['name']['link']     = array('module' => 'ai', 'method' => 'promptview', 'params' => "id={id}");
 
 $config->ai->dtable->prompts['status']['title']    = $lang->ai->prompts->stage;

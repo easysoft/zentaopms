@@ -115,6 +115,69 @@ $tester = $app->loadCommon();
 unset($config->userview->updateTime);
 unset($config->userview->relatedTablesUpdateTime);
 
+/* 恢复对象表映射，避免测试过程中被扩展配置或历史用例置空。 */
+function restoreObjectTables()
+{
+    global $config;
+    foreach(array(
+        'dept'         => 'TABLE_DEPT',
+        'product'      => 'TABLE_PRODUCT',
+        'productplan'  => 'TABLE_PRODUCTPLAN',
+        'epic'         => 'TABLE_STORY',
+        'story'        => 'TABLE_STORY',
+        'requirement'  => 'TABLE_STORY',
+        'release'      => 'TABLE_RELEASE',
+        'program'      => 'TABLE_PROJECT',
+        'project'      => 'TABLE_PROJECT',
+        'projectstory' => 'TABLE_PROJECTSTORY',
+        'execution'    => 'TABLE_PROJECT',
+        'programplan'  => 'TABLE_PROJECT',
+        'task'         => 'TABLE_TASK',
+        'build'        => 'TABLE_BUILD',
+        'bug'          => 'TABLE_BUG',
+        'case'         => 'TABLE_CASE',
+        'testcase'     => 'TABLE_CASE',
+        'testtask'     => 'TABLE_TESTTASK',
+        'testsuite'    => 'TABLE_TESTSUITE',
+        'testreport'   => 'TABLE_TESTREPORT',
+        'user'         => 'TABLE_USER',
+        'api'          => 'TABLE_API',
+        'doc'          => 'TABLE_DOC',
+        'doclib'       => 'TABLE_DOCLIB',
+        'docspace'     => 'TABLE_DOCLIB',
+        'doctemplate'  => 'TABLE_DOC',
+        'demand'       => 'TABLE_DEMAND',
+        'demandpool'   => 'TABLE_DEMANDPOOL',
+        'demandspec'   => 'TABLE_DEMANDSPEC',
+        'demandreview' => 'TABLE_DEMANDREVIEW',
+        'deliverable'  => 'TABLE_DELIVERABLE',
+        'todo'         => 'TABLE_TODO',
+        'custom'       => 'TABLE_LANG',
+        'branch'       => 'TABLE_BRANCH',
+        'module'       => 'TABLE_MODULE',
+        'caselib'      => 'TABLE_TESTSUITE',
+        'entry'        => 'TABLE_ENTRY',
+        'webhook'      => 'TABLE_WEBHOOK',
+        'stakeholder'  => 'TABLE_STAKEHOLDER',
+        'team'         => 'TABLE_TEAM',
+        'pipeline'     => 'TABLE_PIPELINE',
+        'artifact'     => 'TABLE_ARTIFACT',
+        'ppm'          => 'TABLE_PPM',
+        'kanban'       => 'TABLE_KANBAN',
+        'stage'        => 'TABLE_STAGE',
+        'apistruct'    => 'TABLE_APISTRUCT',
+        'repo'         => 'TABLE_REPO',
+        'dataview'     => 'TABLE_DATAVIEW',
+        'effort'       => 'TABLE_EFFORT',
+        'review'       => 'TABLE_REVIEW',
+        'file'         => 'TABLE_FILE',
+    ) as $type => $const)
+    {
+        if(defined($const)) $config->objectTables[$type] = constant($const);
+    }
+}
+restoreObjectTables();
+
 /* Set configs. */
 $config->zendataRoot = dirname(dirname(__FILE__)) . '/zendata';
 $config->ztfPath     = dirname(dirname(__FILE__)) . '/tools/ztf';

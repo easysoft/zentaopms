@@ -176,6 +176,51 @@ $config->my->story->dtable->fieldList['assignedDate']['sortType'] = true;
 $config->my->story->dtable->fieldList['assignedDate']['type']     = 'date';
 $config->my->story->dtable->fieldList['assignedDate']['group']    = 6;
 
+$config->my->story->dtable->fieldList['taskCount']['name']        = 'taskCount';
+$config->my->story->dtable->fieldList['taskCount']['title']       = 'T';
+$config->my->story->dtable->fieldList['taskCount']['sortType']    = false;
+$config->my->story->dtable->fieldList['taskCount']['width']       = '30';
+$config->my->story->dtable->fieldList['taskCount']['type']        = 'text';
+$config->my->story->dtable->fieldList['taskCount']['link']        = array('module' => 'story', 'method' => 'tasks', 'params' => 'storyID={id}');
+$config->my->story->dtable->fieldList['taskCount']['data-toggle'] = 'modal';
+$config->my->story->dtable->fieldList['taskCount']['show']        = true;
+$config->my->story->dtable->fieldList['taskCount']['group']       = 7;
+
+$config->my->story->dtable->fieldList['bugCount']['name']        = 'bugCount';
+$config->my->story->dtable->fieldList['bugCount']['title']       = 'B';
+$config->my->story->dtable->fieldList['bugCount']['sortType']    = false;
+$config->my->story->dtable->fieldList['bugCount']['width']       = '30';
+$config->my->story->dtable->fieldList['bugCount']['type']        = 'text';
+$config->my->story->dtable->fieldList['bugCount']['link']        = array('module' => 'story', 'method' => 'bugs', 'params' => 'storyID={id}');
+$config->my->story->dtable->fieldList['bugCount']['data-toggle'] = 'modal';
+$config->my->story->dtable->fieldList['bugCount']['group']       = 7;
+
+$config->my->story->dtable->fieldList['caseCount']['name']        = 'caseCount';
+$config->my->story->dtable->fieldList['caseCount']['title']       = 'C';
+$config->my->story->dtable->fieldList['caseCount']['sortType']    = false;
+$config->my->story->dtable->fieldList['caseCount']['width']       = '30';
+$config->my->story->dtable->fieldList['caseCount']['type']        = 'text';
+$config->my->story->dtable->fieldList['caseCount']['link']        = array('module' => 'story', 'method' => 'cases', 'params' => 'storyID={id}');
+$config->my->story->dtable->fieldList['caseCount']['data-toggle'] = 'modal';
+$config->my->story->dtable->fieldList['caseCount']['group']       = 7;
+
+if($config->edition != 'open')
+{
+    $config->my->story->dtable->fieldList['relatedObject']['name']            = 'relatedObject';
+    $config->my->story->dtable->fieldList['relatedObject']['title']           = $lang->custom->relateObject;
+    $config->my->story->dtable->fieldList['relatedObject']['sortType']        = false;
+    $config->my->story->dtable->fieldList['relatedObject']['width']           = '70';
+    $config->my->story->dtable->fieldList['relatedObject']['type']            = 'text';
+    $config->my->story->dtable->fieldList['relatedObject']['link']            = common::hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={id}&objectType={type}') . "'; }>RAWJS" : null;
+    $config->my->story->dtable->fieldList['relatedObject']['data-toggle']     = 'modal';
+    $config->my->story->dtable->fieldList['relatedObject']['data-size']       = 'lg';
+    $config->my->story->dtable->fieldList['relatedObject']['show']            = true;
+    $config->my->story->dtable->fieldList['relatedObject']['group']           = 7;
+    $config->my->story->dtable->fieldList['relatedObject']['flex']            = false;
+    $config->my->story->dtable->fieldList['relatedObject']['align']           = 'center';
+    if($isEn) $config->my->story->dtable->fieldList['relatedObject']['width'] = '120';
+}
+
 $config->my->story->dtable->fieldList['closedBy']['name']     = 'closedBy';
 $config->my->story->dtable->fieldList['closedBy']['title']    = $lang->story->closedBy;
 $config->my->story->dtable->fieldList['closedBy']['sortType'] = true;

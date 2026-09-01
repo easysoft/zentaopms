@@ -168,7 +168,27 @@ class pivot extends control
         $object = zget($_POST, 'object', '');
         $field  = zget($_POST, 'field', '');
         $saveAs = zget($_POST, 'saveAs', '');
-        $sql    = zget($_POST, 'sql', '');
+
+        /* SQL 必须来自服务端保存的透视表或设计缓存，忽略客户端传入的 sql，防止任意 SQL 执行。
+           The SQL is always loaded from the saved pivot or the design cache, client sql is ignored. */
+        $pivotID = (int)zget($_POST, 'pivotID', 0);
+        $pivot   = $this->pivot->getByID($pivotID, true, 'published', false);
+        if(empty($pivot)) return $this->send(array('result' => 'fail', 'message' => $this->lang->pivot->accessDenied));
+        $this->pivot->checkAccess($pivotID, 'preview');
+
+        /* 处理 SQL 中的过滤器变量，与 show 流程一致。Process filter vars as the show flow does. */
+        $sql = $this->loadModel('bi')->processVars($pivot->sql, (array)$pivot->filters);
+        /* 设计态优先使用当前用户的设计缓存 SQL（biz 扩展写入 tmp/bi/{id}_{account}.json）。Prefer the design cache SQL in design mode. */
+        $cacheFile = $this->app->getTmpRoot() . 'bi' . DS . $pivotID . '_' . $this->app->user->account . '.json';
+        if(is_file($cacheFile))
+        {
+            $cacheData = json_decode(file_get_contents($cacheFile));
+            if(!empty($cacheData->sql))
+            {
+                $cacheFilters = !empty($cacheData->filters) ? (array)$cacheData->filters : (array)$pivot->filters;
+                $sql = $this->loadModel('bi')->processVars($cacheData->sql, $cacheFilters);
+            }
+        }
 
         $options = $this->pivot->getSysOptions($type, $object, $field, $sql, $saveAs);
 

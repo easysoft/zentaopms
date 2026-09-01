@@ -1572,6 +1572,7 @@ $lang->resource->pipeline->browse    = 'browse';
 $lang->resource->pipeline->execution = 'executionAction';
 $lang->resource->pipeline->create    = 'create';
 $lang->resource->pipeline->edit      = 'edit';
+$lang->resource->pipeline->arrange   = 'arrange';
 $lang->resource->pipeline->delete    = 'delete';
 $lang->resource->pipeline->exec      = 'exec';
 $lang->resource->pipeline->cancel    = 'cancel';

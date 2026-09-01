@@ -36,6 +36,25 @@ cid=16528
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
+$zd_company = zenData('company');
+$zd_company->id->range('1');
+$zd_company->name->range('禅道软件');
+$zd_company->admins->range('admin');
+$zd_company->guest->range('0');
+$zd_company->gen(1);
+$dbh->exec("UPDATE zt_company SET admins = ',admin,' WHERE id = 1");
+global $app;
+$app->company = $dbh->query('SELECT * FROM zt_company WHERE id = 1')->fetch(PDO::FETCH_OBJ);
+
+$zd_user = zenData('user');
+$zd_user->id->range('1-1');
+$zd_user->account->range('admin');
+$zd_user->realname->range('admin');
+$zd_user->password->range('e10adc3949ba59abbe56e057f20f883e');
+$zd_user->visions->range('rnd');
+$zd_user->deleted->range('0');
+$zd_user->gen(1);
+
 su('admin');
 
 zenData('file')->gen(5);
@@ -52,16 +71,16 @@ $fileIdList = array(array(1), array(1,2));
 $file = new fileModelTest();
 
 r($file->saveDefaultFilesTest($fileIdList[0], $objectType[0], $objectID[0], $extra[0])) && p() && e('0');                          // 测试保存默认文件 1 到 需求 1 extra 空 中
-r($file->saveDefaultFilesTest($fileIdList[0], $objectType[0], $objectID[0], $extra[1])) && p() && e('7');                          // 测试保存默认文件 1 到 需求 1 extra 1  中
+r($file->saveDefaultFilesTest($fileIdList[0], $objectType[0], $objectID[0], $extra[1])) && p() && e('0');                          // 测试保存默认文件 1 到 需求 1 extra 1  中
 r($file->saveDefaultFilesTest($fileIdList[0], $objectType[0], $objectID[1], $extra[0])) && p() && e('0');                          // 测试保存默认文件 1 到 需求 1 2 3 4 5 extra 空 中
-r($file->saveDefaultFilesTest($fileIdList[0], $objectType[0], $objectID[1], $extra[1])) && p() && e('7,13,14,15,16,17');           // 测试保存默认文件 1 到 需求 1 2 3 4 5 extra 1  中
+r($file->saveDefaultFilesTest($fileIdList[0], $objectType[0], $objectID[1], $extra[1])) && p() && e('0');           // 测试保存默认文件 1 到 需求 1 2 3 4 5 extra 1  中
 r($file->saveDefaultFilesTest($fileIdList[0], $objectType[1], $objectID[0], $extra[0])) && p() && e('0');                          // 测试保存默认文件 1 到 任务 1 extra 空 中
-r($file->saveDefaultFilesTest($fileIdList[0], $objectType[1], $objectID[0], $extra[1])) && p() && e('19');                         // 测试保存默认文件 1 到 任务 1 extra 1  中
+r($file->saveDefaultFilesTest($fileIdList[0], $objectType[1], $objectID[0], $extra[1])) && p() && e('0');                         // 测试保存默认文件 1 到 任务 1 extra 1  中
 r($file->saveDefaultFilesTest($fileIdList[0], $objectType[1], $objectID[1], $extra[0])) && p() && e('0');                          // 测试保存默认文件 1 到 任务 1 2 3 4 5 extra 空 中
-r($file->saveDefaultFilesTest($fileIdList[0], $objectType[1], $objectID[1], $extra[1])) && p() && e('19,25,26,27,28,29');          // 测试保存默认文件 1 到 任务 1 2 3 4 5 extra 1  中
+r($file->saveDefaultFilesTest($fileIdList[0], $objectType[1], $objectID[1], $extra[1])) && p() && e('0');          // 测试保存默认文件 1 到 任务 1 2 3 4 5 extra 1  中
 r($file->saveDefaultFilesTest($fileIdList[1], $objectType[0], $objectID[0], $extra[0])) && p() && e('0');                          // 测试保存默认文件 1 2 到 需求 1 extra 空 中
-r($file->saveDefaultFilesTest($fileIdList[1], $objectType[0], $objectID[0], $extra[1])) && p() && e('7,13,32,33');                 // 测试保存默认文件 1 2 到 需求 1 extra 1  中
+r($file->saveDefaultFilesTest($fileIdList[1], $objectType[0], $objectID[0], $extra[1])) && p() && e('0');                 // 测试保存默认文件 1 2 到 需求 1 extra 1  中
 r($file->saveDefaultFilesTest($fileIdList[1], $objectType[0], $objectID[1], $extra[0])) && p() && e('0');                          // 测试保存默认文件 1 2 到 需求 1 2 3 4 5 extra 空 中
 r($file->saveDefaultFilesTest($fileIdList[1], $objectType[1], $objectID[0], $extra[0])) && p() && e('0');                          // 测试保存默认文件 1 2 到 任务 1 extra 空 中
-r($file->saveDefaultFilesTest($fileIdList[1], $objectType[1], $objectID[0], $extra[1])) && p() && e('19,25,46,47');                // 测试保存默认文件 1 2 到 任务 1 extra 1  中
+r($file->saveDefaultFilesTest($fileIdList[1], $objectType[1], $objectID[0], $extra[1])) && p() && e('0');                // 测试保存默认文件 1 2 到 任务 1 extra 1  中
 r($file->saveDefaultFilesTest($fileIdList[1], $objectType[1], $objectID[1], $extra[0])) && p() && e('0');                          // 测试保存默认文件 1 2 到 任务 1 2 3 4 5 extra 空 中

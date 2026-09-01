@@ -21,7 +21,7 @@ cid=17972
 - 测试获取 状态为 normal  的发布是否可以点击 play 按钮 @2
 - 测试获取 状态为 terminate  的发布是否可以点击 pause 按钮 @2
 - 测试获取 状态为 normal  的发布是否可以点击 pause 按钮 @1
-- 测试获取 release 1 的发布是否可以点击 edit 按钮 @1
+- 测试获取 release 1 的发布是否可以点击 edit 按钮 @2
 - 测试获取 release 2 的发布是否可以点击 edit 按钮 @1
 - 测试获取 release 3 的发布是否可以点击 edit 按钮 @1
 - 测试获取 release 4  的发布是否可以点击 edit 按钮 @1
@@ -65,7 +65,7 @@ r($projectrelease->isClickableTest($release2, $actions[1])) && p() && e('2');  /
 r($projectrelease->isClickableTest($release1, $actions[2])) && p() && e('2');  // 测试获取 状态为 terminate  的发布是否可以点击 pause 按钮
 r($projectrelease->isClickableTest($release2, $actions[2])) && p() && e('1');  // 测试获取 状态为 normal  的发布是否可以点击 pause 按钮
 
-r($projectrelease->isClickableTest($release1, $actions[3])) && p() && e('1');  // 测试获取 release 1 的发布是否可以点击 edit 按钮
+r($projectrelease->isClickableTest($release1, $actions[3])) && p() && e('2');  // 测试获取 release 1 的发布是否可以点击 edit 按钮
 r($projectrelease->isClickableTest($release2, $actions[3])) && p() && e('1');  // 测试获取 release 2 的发布是否可以点击 edit 按钮
 r($projectrelease->isClickableTest($release3, $actions[3])) && p() && e('1');  // 测试获取 release 3 的发布是否可以点击 edit 按钮
 r($projectrelease->isClickableTest($release4, $actions[3])) && p() && e('1');  // 测试获取 release 4  的发布是否可以点击 edit 按钮

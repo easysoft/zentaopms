@@ -1620,6 +1620,28 @@ class aiModelTest extends baseTest
     }
 
     /**
+     * Update a prompt with empty lastRunDate and return the stored lastRunDate.
+     *
+     * @param  int    $promptID
+     * @param  string $lastRunDate
+     * @access public
+     * @return mixed
+     */
+    public function updatePromptKeepLastRunDateTest($promptID = 0, $lastRunDate = '')
+    {
+        $this->instance->dao->update(TABLE_AI_AGENT)->set('lastRunDate')->eq($lastRunDate)->where('id')->eq($promptID)->exec();
+
+        $prompt = $this->instance->getPromptById($promptID);
+        $prompt->lastRunDate = '';
+        $prompt->purpose     = 'empty lastRunDate should not wipe timer run time';
+
+        $this->instance->updatePrompt($prompt);
+        if(dao::isError()) return dao::getError();
+
+        return $this->instance->dao->select('lastRunDate')->from(TABLE_AI_AGENT)->where('id')->eq($promptID)->fetch('lastRunDate');
+    }
+
+    /**
      * Test deletePrompt method.
      *
      * @param  mixed $id
@@ -2341,6 +2363,23 @@ class aiModelTest extends baseTest
     public function getLastActiveStepTest($prompt = null)
     {
         $result = $this->instance->getLastActiveStep($prompt);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getPromptDesignStepStatus method.
+     *
+     * @param  array  $stepSequence
+     * @param  string $currentStep
+     * @param  string $lastActiveStep
+     * @param  int    $promptID
+     * @access public
+     * @return mixed
+     */
+    public function getPromptDesignStepStatusTest($stepSequence = array(), $currentStep = 'basicinfo', $lastActiveStep = 'basicinfo', $promptID = 0)
+    {
+        $result = $this->instance->getPromptDesignStepStatus($stepSequence, $currentStep, $lastActiveStep, $promptID);
         if(dao::isError()) return dao::getError();
         return $result;
     }

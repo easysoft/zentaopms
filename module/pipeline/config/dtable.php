@@ -81,10 +81,10 @@ $config->pipeline->actionList['execution']['text'] = $lang->pipeline->execution;
 $config->pipeline->actionList['execution']['hint'] = $lang->pipeline->execution;
 $config->pipeline->actionList['execution']['url']  = array('module' => 'pipeline', 'method' => 'execution', 'params' => "spaceID={spaceID}&repoID={repoID}&type={scope}&pipelineID={id}");
 
-$config->pipeline->actionList['edit']['icon']        = 'edit';
-$config->pipeline->actionList['edit']['text']        = $lang->pipeline->edit;
-$config->pipeline->actionList['edit']['hint']        = $lang->pipeline->edit;
-$config->pipeline->actionList['edit']['url']         = helper::createLink('pipeline', 'edit', "id={id}");
+$config->pipeline->actionList['edit']['icon'] = 'edit';
+$config->pipeline->actionList['edit']['text'] = $lang->pipeline->edit;
+$config->pipeline->actionList['edit']['hint'] = $lang->pipeline->edit;
+$config->pipeline->actionList['edit']['url']  = helper::createLink('pipeline', 'edit', "id={id}");
 
 $config->pipeline->actionList['arrange']['icon'] = 'design';
 $config->pipeline->actionList['arrange']['text'] = $lang->pipeline->arrange;

@@ -69,7 +69,20 @@ $fnBuildPublishInfo = function() use ($actions, $prompt, $users, $lang)
     return $items;
 };
 
-if($prompt->status != 'draft' || !$this->ai->isExecutable($prompt)) unset($config->ai->actions->promptview['mainActions'][1]);
+$isTimerAgent = !empty($prompt->type) && $prompt->type == 'timer';
+if($isTimerAgent || $prompt->status != 'draft' || !$this->ai->isExecutable($prompt))
+{
+    $auditIndex = array_search('promptaudit', $config->ai->actions->promptview['mainActions']);
+    if($auditIndex !== false) unset($config->ai->actions->promptview['mainActions'][$auditIndex]);
+}
+$designAction = $this->ai->getPromptDesignAction($prompt);
+foreach($config->ai->actions->promptview as $menu => $actions)
+{
+    foreach($actions as $i => $actionName)
+    {
+        if($actionName == 'promptbasicinfo') $config->ai->actions->promptview[$menu][$i] = $designAction;
+    }
+}
 $actionList = $this->loadModel('common')->buildOperateMenu($prompt);
 
 $promptContent = $prompt->purpose;

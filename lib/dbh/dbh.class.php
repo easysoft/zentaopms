@@ -800,6 +800,8 @@ class dbh
         if($action == 'INSERT' and stripos($fields, '"id"') !== FALSE)
         {
             $tableBegin = strpos($sql, '"' . $this->dbConfig->prefix);
+            if($tableBegin === false) $tableBegin = strpos($sql, '"ops_');
+
             $tableEnd   = strpos($sql, '"', $tableBegin + 1);
             $tableName  = '' . $this->dbConfig->name . '."' . substr($sql, $tableBegin + 1, $tableEnd - $tableBegin - 1) . '"';
             return "SET IDENTITY_INSERT $tableName ON;" . $sql;

@@ -66,34 +66,6 @@ function syncProduct(obj)
     });
 }
 
-window.addItem = function(e)
-{
-    const obj     = e.target
-    const thisRow = $(obj).closest('.form-row');
-    const newItem = thisRow.clone();
-
-    newItem.find('.add-btn').on('click', addItem);
-    newItem.find('.del-btn').on('click', removeItem);
-    $newBranch = newItem.find('.picker-box [name^=branch]');
-    $pickerBox = null;
-    if($newBranch.length > 0)
-    {
-        $pickerBox = $newBranch.closest('.picker-box');
-        $pickerBox.removeAttr('id').removeAttr('data-zui-picker').empty();
-    }
-
-    $(obj).closest('.form-row').after(newItem);
-
-    newItem.find('input[id^=modules]').attr('id', 'modules[]').attr('name', 'modules[]').val('');
-    newItem.find('input[id^=shorts]').attr('id', 'shorts[]').attr('name', 'shorts[]').val('');
-
-    if($pickerBox)
-    {
-        options = thisRow.find('.picker-box [name^=branch]').zui('picker').options;
-        $pickerBox.picker($.extend({'name': 'branch[]'}, options));
-    }
-}
-
 window.toggleCopy = function()
 {
    $('.form-row.copyBox').toggleClass('hidden');

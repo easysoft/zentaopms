@@ -271,7 +271,8 @@ class releaseZen extends release
         $this->config->product->search['actionURL'] = $this->createLink($this->app->rawModule, 'view', "releaseID={$release->id}&type=story&link=true&param=" . helper::safe64Encode('&browseType=bysearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['style']     = 'simple';
-        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($release->product, $release->branch, 'withMainPlan', true);
+        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($release->product, $release->branch, 'withMainPlan', true);
+        $this->config->product->search['params']['release']['values'] = $this->loadModel('release')->getPairs(array(), $release->product);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
         $searchModules = array();

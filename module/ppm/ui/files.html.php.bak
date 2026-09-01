@@ -10,5 +10,5 @@ declare(strict_types=1);
  */
 namespace zin;
 $domBox = empty($diffText) ? p(setClass('detail-content'), $lang->ppm->noChanges) : div(
-    zui::codeDiff(set::diffText($diffText))
+    zui::diffHub(set::diffText($diffText))
 );

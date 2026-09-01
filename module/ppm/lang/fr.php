@@ -26,7 +26,7 @@ $lang->ppm->removeAction      = '%s, <strong>%s</strong> deleted <a href="%s">Me
 $lang->ppm->submitType        = 'Submit type';
 $lang->ppm->linkedObject      = 'Linked items';
 $lang->ppm->object            = 'Object';
-$lang->ppm->mergeInfo         = 'Merge View';
+$lang->ppm->mergeInfo         = 'check Info';
 $lang->ppm->locateView        = 'View';
 $lang->ppm->codeConflict      = 'Conflict';
 $lang->ppm->hasConflict       = 'Check Conflict';
@@ -326,6 +326,7 @@ $lang->ppm->notice->userNotAllowMerge            = 'Only the following users are
 $lang->ppm->notice->userNotAllowCreate           = 'Only the following users are allowed to create: %s';
 $lang->ppm->notice->hasUnresolvedIssues          = 'There are unresolved issues, please resolve them first.';
 $lang->ppm->notice->hasUnresolvedSpecifiedIssues = 'There are unresolved %s type issues, please resolve them first.';
+$lang->ppm->notice->noHasReviewer                = 'No reviewers have been added';
 
 $lang->ppm->featureBar['view']['all']   = 'All';
 $lang->ppm->featureBar['view']['story'] = 'Story';

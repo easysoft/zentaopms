@@ -14,6 +14,8 @@ cid=14939
 - 测试用户的登录操作，不需要打印链接，返回false @0
 - 测试合并请求的删除操作，不需要打印链接，返回false @0
 - 测试产品相关操作，打印产品详情，返回true @1
+- 测试禅道智能体创建动态，打印详情链接，返回true @1
+- 测试禅道智能体删除动态，无法从回收站还原，不打印链接，返回false @0
 
 */
 
@@ -65,3 +67,14 @@ $action->objectType = 'product';
 $action->action     = 'edit';
 
 r($actionTest->checkActionClickableTest($action, $deptUsers, $moduleName, $methodName)) && p() && e('1'); //测试产品相关操作，打印产品详情，返回true
+
+$moduleName = 'ai';
+$methodName = 'promptview';
+$action->objectType = 'prompt';
+$action->action     = 'created';
+
+r($actionTest->checkActionClickableTest($action, $deptUsers, $moduleName, $methodName)) && p() && e('1'); //测试禅道智能体创建动态，打印详情链接，返回true
+
+$action->action = 'deleted';
+
+r($actionTest->checkActionClickableTest($action, $deptUsers, $moduleName, $methodName)) && p() && e('0'); //测试禅道智能体删除动态，无法从回收站还原，不打印链接，返回false

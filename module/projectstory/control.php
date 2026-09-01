@@ -94,11 +94,12 @@ class projectStory extends control
                 unset($this->config->product->search['fields']['product']);
                 unset($this->config->product->search['params']['product']);
 
-                /* The none-product and none-scrum project don't need display the plan in the search form. */
+                /* The none-product and none-scrum project don't need display the plan and release in the search form. */
                 if($project->model != 'scrum')
                 {
                     unset($this->config->product->search['fields']['plan']);
                     unset($this->config->product->search['params']['plan']);
+                    unset($this->config->product->search['fields']['release'], $this->config->product->search['params']['release']);
                 }
             }
 

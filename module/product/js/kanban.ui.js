@@ -12,8 +12,8 @@ window.getItem = function(info)
 {
     if(info.item.delay)
     {
-        info.item.suffix      = delayed;
-        info.item.suffixClass = 'label danger rounded-xl' + (info.item.status == 'doing' ? ' mr-8' : '');
+        info.item.suffix      = delayInfo.replace('%s', info.item.delay);
+        info.item.suffixClass = 'label danger-pale circle size-sm nowrap' + (info.item.status == 'doing' ? ' mr-8' : '');
     }
     if(info.item.status == 'doing') info.item.prefix = {component: 'ProgressCircle', props: {percent: info.item.progress, size: 24}};
     if(info.item.cardType == 'doingExecution' && privs.canViewExecution)
@@ -34,4 +34,18 @@ window.getItem = function(info)
         if(info.item.marker == '1') info.item.suffix = {html: '<i class="icon icon-flag" style="color: var(--color-danger-500)"></i>'};
     }
     info.item.titleAttrs = {'class': 'text-black clip ' + (!info.item.delay ? 'mr-8' : ''), 'title' : info.item.title};
+
+    if(info.item.begin || info.item.end)
+    {
+        if(info.item.begin == FUTURE_DATE)
+        {
+            info.item.content = {html: '<div class="text-black">' + futureDateText + '</div>'};
+        }
+        else
+        {
+            var beginText = info.item.begin ? info.item.begin.replace(/-/g, '/') : '';
+            var endText   = info.item.end == LONG_TIME ? longTimeText : (info.item.end ? info.item.end.replace(/-/g, '/') : '');
+            info.item.content = {html: `<div class="text-black">${beginText} ${toText} ${endText}</div>`};
+        }
+    }
 }

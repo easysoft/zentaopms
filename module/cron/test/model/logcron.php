@@ -23,6 +23,7 @@ su('admin');
 $cron = new cronModelTest();
 $logRoot = $tester->app->getLogRoot();
 $dateStr = date('Ymd');
+if(!is_dir($logRoot)) mkdir($logRoot, 0777, true);
 
 $cliFile = $logRoot . 'cron_cli.' . $dateStr . '.log.php';
 $webFile = $logRoot . 'cron.' . $dateStr . '.log.php';

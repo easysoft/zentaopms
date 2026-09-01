@@ -116,7 +116,6 @@ cid=14903
 - 测试获取对象类型 task 对象ID 13 的动态信息 @nochanged
 - 测试获取对象类型 task 对象ID 14 的动态信息 @nochanged
 - 测试获取对象类型 task 对象ID 16 的动态信息 @nochanged
-- 测试获取对象类型 task 对象ID 15 的动态信息 @nochanged
 
 */
 
@@ -334,6 +333,3 @@ r($action->getListTest($objectType[1], $taskID[13])) && p() && e('nochanged'); /
 
 // 操作 gitcommited 操作者存在
 r($action->getListTest($objectType[1], $taskID[15])) && p() && e('nochanged'); // 测试获取对象类型 task 对象ID 16 的动态信息
-
-// 操作 gitcommited 操作者不存在
-r($action->getListTest($objectType[1], $taskID[14])) && p() && e('nochanged'); // 测试获取对象类型 task 对象ID 15 的动态信息

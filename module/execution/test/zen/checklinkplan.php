@@ -20,6 +20,16 @@ cid=16421
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/executionzen.unittest.class.php';
 
+$execution = zenData('project');
+$execution->id->range('1');
+$execution->name->range('迭代1');
+$execution->type->range('sprint');
+$execution->project->range('0');
+$execution->status->range('doing');
+$execution->multiple->range('1');
+$execution->deleted->range('0');
+$execution->gen(1);
+
 su('admin');
 
 $executionTest = new executionZenTest();

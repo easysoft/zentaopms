@@ -76,3 +76,7 @@ catch(EndResponseException $e)
     $error->message = $e->getContent();
 }
 r($error) && p('message') && e('No admin users.');
+
+/* 恢复公司管理员，避免影响后续用例。*/
+$tester->dao->update(TABLE_COMPANY)->set('admins')->eq(',admin,')->where('id')->eq($companyID)->exec();
+$app->company->admins = ',admin,';

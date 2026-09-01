@@ -82,8 +82,9 @@ class build extends control
 
             $message = $this->executeHooks($buildID);
             if($message) $this->lang->saveSuccess = $message;
-            if(helper::isAjaxRequest('modal')) return $this->sendSuccess(array('closeModal' => true, 'callback' => 'refreshExecutionBuild()'));
-            return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "buildID=$buildID"), 'id' => $buildID));
+            $objectChanges = array('type' => 'add', 'objectType' => 'build', 'objectList' => array($buildID));
+            if(helper::isAjaxRequest('modal')) return $this->sendSuccess(array('closeModal' => true, 'callback' => 'refreshExecutionBuild()', 'changes' => $objectChanges));
+            return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "buildID=$buildID"), 'id' => $buildID, 'changes' => $objectChanges));
         }
 
         if(in_array($this->app->tab, array('execution', 'project'))) $this->session->set('project', $projectID);
@@ -242,7 +243,7 @@ class build extends control
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild' )
         {
-            $params = $type == 'all' ? 'withbranch,noreleased,noreplace' : 'noterminate,nodone,withbranch,noreleased';
+            $params = $type == 'all' ? 'noterminate,withbranch,noreleased,noreplace' : 'noterminate,nodone,withbranch,noreleased';
             $builds = $this->build->getBuildPairs(array($productID), $branch, $params, 0, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
 
@@ -251,13 +252,13 @@ class build extends control
         }
         if($varName == 'openedBuilds' )
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noreleased', 0, 'project', $build);
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noreleased,noterminate', 0, 'project', $build);
             $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
             return $this->send($builds);
         }
         if($varName == 'resolvedBuild')
         {
-            $params = $type == 'all' ? 'withbranch,noreleased' : 'noterminate,nodone,withbranch,noreleased';
+            $params = $type == 'all' ? 'noterminate,withbranch,noreleased' : 'noterminate,nodone,withbranch,noreleased';
             $builds = $this->build->getBuildPairs(array($productID), $branch, $params, 0, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
 
@@ -265,7 +266,8 @@ class build extends control
             return print(json_encode($builds));
         }
 
-        $builds = $this->build->getBuildPairs(array($productID), $branch, $type, 0, 'project', $build, false);
+        $params = "noterminate,$type";
+        $builds = $this->build->getBuildPairs(array($productID), $branch, $params, 0, 'project', $build, false);
         if($isJsonView) return print(json_encode($builds));
 
         $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
@@ -292,7 +294,7 @@ class build extends control
         {
             if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);
 
-            $params = $type == 'all' ? 'noempty,withbranch,noreleased' : 'noempty,noterminate,nodone,withbranch,noreleased';
+            $params = $type == 'all' ? 'noempty,noterminate,withbranch,noreleased' : 'noempty,noterminate,nodone,withbranch,noreleased';
             $builds = $this->build->getBuildPairs(array($productID), $branch, $params, $projectID, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
 
@@ -303,7 +305,7 @@ class build extends control
         {
             if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);
 
-            $params = ($type == 'all') ? 'withbranch,noreleased' : 'noterminate,nodone,withbranch,noreleased';
+            $params = ($type == 'all') ? 'noterminate,withbranch,noreleased' : 'noterminate,nodone,withbranch,noreleased';
             $builds = $this->build->getBuildPairs(array($productID), $branch, $params, $projectID, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
 
@@ -313,7 +315,8 @@ class build extends control
 
         if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);
 
-        $builds = $this->build->getBuildPairs(array($productID), $branch, $type, $projectID, 'project', $build, false, (int)$system);
+        $params = "noterminate,$type";
+        $builds = $this->build->getBuildPairs(array($productID), $branch, $params, $projectID, 'project', $build, false, (int)$system);
         if($isJsonView) return print(json_encode($builds));
 
         $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
@@ -341,7 +344,7 @@ class build extends control
         {
             if(empty($executionID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);
 
-            $params = ($type == 'all') ? 'noempty,noreleased' : 'noempty,noterminate,nodone,noreleased';
+            $params = ($type == 'all') ? 'noempty,noterminate,noreleased' : 'noempty,noterminate,nodone,noreleased';
             $builds = $this->build->getBuildPairs(array($productID), $branch, $params, $executionID, 'execution', $build);
             if($isJsonView) return print(json_encode($builds));
 
@@ -352,7 +355,7 @@ class build extends control
         {
             if(empty($executionID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);
 
-            $builds    = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noreleased', $executionID, 'execution', $build);
+            $builds    = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,noreleased', $executionID, 'execution', $build);
             $buildList = array();
             foreach($builds as $buildID => $buildName) $buildList[] = array('value' => $buildID, 'text' => $buildName);
             return $this->send($buildList);
@@ -361,7 +364,7 @@ class build extends control
         {
             if(empty($executionID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);
 
-            $params = ($type == 'all') ? ',noreleased' : 'noterminate,nodone,noreleased';
+            $params = ($type == 'all') ? 'noterminate,noreleased' : 'noterminate,nodone,noreleased';
             $builds = $this->build->getBuildPairs(array($productID), $branch, $params, $executionID, 'execution', $build);
             if($isJsonView) return print(json_encode($builds));
             return print(html::select($varName, $builds, $build, "class='form-control'"));

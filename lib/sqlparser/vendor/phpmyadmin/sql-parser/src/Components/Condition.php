@@ -235,8 +235,9 @@ class Condition extends Component
             return implode(' ', $component);
         }
         $expr = (string)$component->expr;
-        $expr = str_replace('AND', PHP_EOL . 'AND' , $expr);
-        $expr = str_replace('OR', PHP_EOL . 'OR' , $expr);
+        /* Use word boundaries so AND/OR inside identifiers like DATE_FORMAT are not split. */
+        $expr = preg_replace('/\bAND\b/', PHP_EOL . 'AND', $expr);
+        $expr = preg_replace('/\bOR\b/', PHP_EOL . 'OR', $expr);
         return $expr;
     }
 }

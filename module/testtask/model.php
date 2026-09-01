@@ -1191,9 +1191,29 @@ class testtaskModel extends model
      */
     public function getSceneCases(int|array $productID, array $runs)
     {
+        foreach($runs as $run)
+        {
+            $run->parent  = 0;
+            $run->isScene = false;
+        }
+
+        /* 从用例所属场景的 path 中取出全部祖先场景。*/
+        /* Collect ancestor scenes from case scene paths. */
+        $caseScenes = array_unique(array_filter(array_column($runs, 'scene')));
+        if(!$caseScenes) return array($runs, array());
+
+        $pathList = $this->dao->select('path')->from(TABLE_SCENE)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->in($productID)
+            ->andWhere('id')->in($caseScenes)
+            ->fetchPairs();
+        $idList = array_unique(array_filter(explode(',', implode(',', $pathList))));
+        if(!$idList) return array($runs, array());
+
         $scenes = $this->dao->select('*')->from(TABLE_SCENE)
             ->where('deleted')->eq('0')
             ->andWhere('product')->in($productID)
+            ->andWhere('id')->in($idList)
             ->orderBy('grade_desc, sort_asc')
             ->fetchAll('id', false);
 
@@ -1201,7 +1221,8 @@ class testtaskModel extends model
         foreach($runs as $run)
         {
             if(!empty($run->scene)) $displayScenes[] = $run->scene;
-            $run->parent  = !empty($run->scene) ? 'scene-' . $scenes[$run->scene]->id : 0;
+            if(empty($run->scene) || !isset($scenes[$run->scene])) continue;
+            $run->parent  = 'scene-' . $run->scene;
             $run->isScene = false;
         }
 
@@ -1211,16 +1232,14 @@ class testtaskModel extends model
             {
                 if(str_contains($scene->path, $displayScene . ','))
                 {
-                    $displayScenes += explode(',', trim($scene->path, ','));
+                    $displayScenes = array_merge($displayScenes, explode(',', trim($scene->path, ',')));
                 }
             }
         }
 
-        $displayScenes = array_unique($displayScenes);
         foreach($scenes as $id => $scene)
         {
-            if(!in_array($id, $displayScenes)) unset($scenes[$id]);
-            $scene->parent  = !empty($scene->parent) ? 'scene-' . $scene->parent : 0;
+            $scene->parent  = !empty($scene->parent) && isset($scenes[$scene->parent]) ? 'scene-' . $scene->parent : 0;
             $scene->id      = 'scene-' . $scene->id;
             $scene->isScene = true;
         }

@@ -18,6 +18,13 @@ window.getItem = function(info)
     info.item.prefix     = {component: 'ProgressCircle', props: {percent: info.item.progress, size: 24}};
     info.item.titleAttrs = {'class': 'text-black clip ' + (info.item.delay ? '' : 'mr-8'), 'title' : info.item.title};
     if(privs.canViewExecution) info.item.titleUrl = $.createLink('execution', 'task', `id=${info.item.id}`);
+
+    if(info.item.begin || info.item.end)
+    {
+        var beginText = info.item.begin ? info.item.begin.replace(/-/g, '/') : '';
+        var endText   = info.item.end ? info.item.end.replace(/-/g, '/') : '';
+        info.item.content = {html: `<div class="text-black">${beginText} ${toText} ${endText}</div>`};
+    }
 }
 
 window.canDrop = function(dragInfo, dropInfo)

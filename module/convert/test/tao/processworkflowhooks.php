@@ -40,3 +40,17 @@ r($convertTest->processWorkflowHooksTest(array('results' => array()), array(), '
 r($convertTest->processWorkflowHooksTest(array('results' => array('unconditional-result' => array('@attributes' => array('step' => '1')))), array('1' => 'open'), 'bug')) && p('0:action,table,conditionType') && e('update,bug,data');
 r($convertTest->processWorkflowHooksTest(array('results' => array('unconditional-result' => array('@attributes' => array('step' => '2')))), array('2' => array('resolved', 'closed')), 'story')) && p('0:action,table') && e('update,story');
 r($convertTest->processWorkflowHooksTest(array('results' => array('unconditional-result' => array('@attributes' => array('step' => '3')))), array('3' => 'doing'), 'task')) && p('0:action,table,conditionType,sqlResult') && e('update,task,data,empty');
+
+/* 清理本用例创建的流程数据，避免残留空 table 的 workflow 污染 objectTables。 */
+zenData('workflow')->gen(0);
+zenData('workflowaction')->gen(0);
+zenData('workflowfield')->gen(0);
+zenData('workflowlayout')->gen(0);
+zenData('workflowlabel')->gen(0);
+zenData('workflowrule')->gen(0);
+zenData('workflowdatasource')->gen(0);
+zenData('workflowrelation')->gen(0);
+zenData('workflowlinkdata')->gen(0);
+zenData('workflowversion')->gen(0);
+zenData('workflowreport')->gen(0);
+zenData('workflowsql')->gen(0);

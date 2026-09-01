@@ -99,7 +99,8 @@ class story extends control
             $response = $this->storyZen->getResponseInModal($message);
             if($response) return $this->send($response);
 
-            $response = array('result' => 'success', 'message' => $message);
+            $objectChanges = array('type' => 'add', 'objectType' => $storyType, 'objectList' => array($storyID));
+            $response      = array('result' => 'success', 'message' => $message, 'changes' => $objectChanges);
             if($this->post->newStory)
             {
                 $response['message'] = $message . $this->lang->story->newStory;
@@ -133,7 +134,7 @@ class story extends control
         if(!isset($params['needNotReview'])) $extra .= ',needNotReview={needNotReview}';
         if(in_array($this->config->edition, array('max', 'ipd'))) $extra .= ",source={source},sourceNote={sourceNote}";
         $this->view->needNotReview = $params['needNotReview'] ?? !$this->view->forceReview;
-        $this->view->loadUrl       = $this->createLink($storyType, $this->app->rawMethod, "productID={product}&branch={branch}&moduleID=$moduleID&story=$storyID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=$storyType");
+        $this->view->loadUrl       = $this->createLink($this->app->rawModule, $this->app->rawMethod, "productID={product}&branch={branch}&moduleID=$moduleID&story=$storyID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=$storyType");
 
         $this->display();
     }
@@ -206,7 +207,8 @@ class story extends control
             if(isInModal()) return $this->send($this->storyZen->getResponseInModal($this->lang->saveSuccess));
 
             $locateLink = $this->storyZen->getAfterBatchCreateLocation($productID, $branch, $executionID, $storyID, $storyType, $plan);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
+            $objectChanges = array('type' => 'add', 'objectType' => $storyType, 'objectList' => array_values($storyIdList));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink, 'changes' => $objectChanges));
         }
 
         $this->storyZen->setMenuForBatchCreate($productID, $branch, $executionID, $extra, $storyType);
@@ -342,6 +344,7 @@ class story extends control
 
         if(!empty($_POST))
         {
+            if(isset($_POST['reviewer']) && !is_array($_POST['reviewer'])) $_POST['reviewer'] = array();
             $storyData = $this->storyZen->buildStoryForEdit($storyID);
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -356,8 +359,10 @@ class story extends control
             $response = $this->storyZen->getResponseInModal($message);
             if($response) return $this->send($response);
 
-            $response = array('result' => 'success', 'message' => $message);
+            $objectChanges = array('type' => 'update', 'objectType' => $storyType, 'objectList' => array($storyID));
+            $response      = array('result' => 'success', 'message' => $message, 'changes' => $objectChanges);
             $response['load'] = $this->storyZen->getAfterEditLocation($storyID, $storyType);
+            if($this->post->locate == 'change') $response['load'] = $this->createLink($this->app->rawModule, 'change', "storyID=$storyID&from=&storyType={$storyType}");
             return $this->send($response);
         }
 
@@ -406,7 +411,7 @@ class story extends control
             $this->story->batchUpdate($stories);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->storyList));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->storyList, 'changes' => array('type' => 'update', 'objectType' => $storyType, 'objectList' => array_keys($stories))));
         }
 
         $stories = $this->storyZen->getStoriesByChecked();
@@ -464,7 +469,8 @@ class story extends control
             $response = $this->storyZen->getResponseInModal($message);
             if($response) return $this->send($response);
 
-            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
+            $objectChanges = array('type' => 'update', 'objectType' => $storyType, 'objectList' => array($storyID));
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location, 'changes' => $objectChanges));
         }
 
         $this->commonAction($storyID);
@@ -715,7 +721,7 @@ class story extends control
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
             $locateLink = isInModal() ? true : $locateLink;
-            return $this->send(array('result' => 'success', 'load' => $locateLink, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'load' => $locateLink, 'closeModal' => true, 'changes' => array('type' => 'delete', 'objectType' => $story->type, 'objectList' => array($storyID))));
         }
     }
 
@@ -896,7 +902,7 @@ class story extends control
 
         /* Get story reviewer. */
         $reviewerList    = $this->story->getReviewerPairs($story->id, $story->version);
-        $story->reviewer = array_keys($reviewerList);
+        $story->reviewer = !empty($reviewerList) ? array_keys($reviewerList) : $story->prevReviewers;
 
         $this->view->story        = $story;
         $this->view->actions      = $this->action->getList('story', $storyID);
@@ -1088,12 +1094,13 @@ class story extends control
         if($story->status == 'draft') unset($reasonList['cancel']);
         unset($reasonList['subdivided']);
 
-        $this->view->title      = $this->lang->story->close . "STORY" . $this->lang->hyphen . $story->title;
-        $this->view->product    = $product;
-        $this->view->story      = $story;
-        $this->view->actions    = $this->action->getList('story', $storyID);
-        $this->view->users      = $this->loadModel('user')->getPairs();
-        $this->view->reasonList = $reasonList;
+        $this->view->title       = $this->lang->story->close . "STORY" . $this->lang->hyphen . $story->title;
+        $this->view->product     = $product;
+        $this->view->story       = $story;
+        $this->view->actions     = $this->action->getList('story', $storyID);
+        $this->view->users       = $this->loadModel('user')->getPairs();
+        $this->view->reasonList  = $reasonList;
+        $this->view->undoneTasks = $this->dao->select('count(id) as count')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('status')->in('wait,doing,pause')->andWhere('deleted')->eq(0)->fetch('count');
         $this->display();
     }
 
@@ -1165,11 +1172,12 @@ class story extends control
         $errorTips = '';
         if($closedStory) $errorTips .= sprintf($this->lang->story->closedStory, implode(',', $closedStory));
 
-        $this->view->productID  = $productID;
-        $this->view->stories    = $stories;
-        $this->view->storyType  = $storyType;
-        $this->view->twinsCount = $twinsCount;
-        $this->view->errorTips  = $errorTips;
+        $this->view->productID   = $productID;
+        $this->view->stories     = $stories;
+        $this->view->undoneTasks = $this->dao->select('story,count(id) as count')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('status')->in('wait,doing,pause')->andWhere('deleted')->eq(0)->groupBy('story')->fetchPairs('story', 'count');
+        $this->view->storyType   = $storyType;
+        $this->view->twinsCount  = $twinsCount;
+        $this->view->errorTips   = $errorTips;
         $this->display();
     }
 
@@ -1933,6 +1941,26 @@ class story extends control
         foreach($gradeOptions as $grade => $name) $items[] = array('text' => $name, 'value' => $grade);
 
         return $this->send(array('items' => array_values($items), 'default' => key($gradeOptions)));
+    }
+
+    /**
+     * 获取可用的需求层级。
+     * Get available story grades.
+     *
+     * @param  string $type story|requirement|epic
+     * @access public
+     * @return void
+     */
+    public function ajaxGetGradeList(string $type = 'story')
+    {
+        $grades = array();
+        foreach($this->story->getGradeList($type) as $grade)
+        {
+            if($grade->status != 'enable') continue;
+            $grades[] = $grade;
+        }
+
+        return $this->send(array('grades' => $grades));
     }
 
     /**

@@ -278,7 +278,7 @@ formPanel
             set::rows(6)
         )
     ),
-    formHidden('fromReversion', base64_decode($v1)),
+    formHidden('fromRevision', base64_decode($v1)),
     formHidden('revision', base64_decode($v2)),
     formHidden('file', $file)
 );
