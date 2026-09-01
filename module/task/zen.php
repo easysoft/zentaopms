@@ -1008,7 +1008,7 @@ class taskZen extends task
      * @access protected
      * @return object
      */
-    protected function buildTaskForClose(object $oldTask): object
+    public function buildTaskForClose(object $oldTask): object
     {
         $task = form::data($this->config->task->form->close, $oldTask->id)->add('id', $oldTask->id)
             ->setIF($oldTask->status == 'done',   'closedReason', 'done')
@@ -1912,7 +1912,7 @@ class taskZen extends task
      * @access protected
      * @return array
      */
-    protected function responseAfterbatchCreate(array $taskIdList, object $execution): array
+    public function responseAfterbatchCreate(array $taskIdList, object $execution): array
     {
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
