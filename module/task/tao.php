@@ -1007,7 +1007,7 @@ class taskTao extends taskModel
      * @access protected
      * @return void
      */
-    protected function autoUpdateTaskByStatus(object $task, object|null $childTask, string $status) :void
+    public function autoUpdateTaskByStatus(object $task, object|null $childTask, string $status) :void
     {
         $now     = helper::now();
         $account = $this->app->user->account;
