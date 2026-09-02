@@ -3931,10 +3931,9 @@ class storyModel extends model
         if(in_array(strtolower($actionType), array('changed', 'opened', 'submitreview')))
         {
             $reviewerList = $this->getReviewerPairs($story->id, $story->version);
-            unset($reviewerList[$story->assignedTo]);
 
-            $toList .= ',' . implode(',', array_keys($reviewerList));
-            $toList  = trim($toList, ',');
+            $toList = implode(',', array_keys($reviewerList));
+            if($story->assignedTo && !isset($reviewerList[$story->assignedTo])) $ccList = ltrim($ccList . ',' . $story->assignedTo, ',');
         }
 
         if(empty($toList))
