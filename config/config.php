@@ -18,6 +18,7 @@ if(!function_exists('getWebRoot')){function getWebRoot(){}}
 /* 基本设置。Basic settings. */
 $config->version       = '22.6';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->liteVersion   = '1.2';                // 迅捷版版本。      The version of Lite.
+$config->gitfoxVersion = '4.3';                // GitFox独立版版本。The version of GitFox.
 $config->charset       = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The cookie life time.
 $config->timezone      = 'Asia/Shanghai';      // 时区设置。        The time zone setting, for more see http://www.php.net/manual/en/timezones.php.
@@ -36,7 +37,7 @@ $config->methodVar   = 'f';                       // 请求类型为GET：模块
 $config->viewVar     = 't';                       // 请求类型为GET：视图变量名。            requestType=GET: the view var name.
 $config->sessionVar  = 'zentaosid';               // 请求类型为GET：session变量名。         requestType=GET: the session var name.
 $config->views       = ',html,json,mhtml,xhtml,'; // 支持的视图类型。                       Supported view formats.
-$config->visions     = ',rnd,lite,or,';     // 支持的界面类型。                       Supported vision formats.
+$config->visions     = ',rnd,lite,or,gitfox,';     // 支持的界面类型。                       Supported vision formats.
 
 /* ZIN 设置。 ZIN settings. */
 $config->zin         = new stdclass();
@@ -288,6 +289,7 @@ else
     unset($config->bizVersion);
     unset($config->maxVersion);
     unset($config->ipdVersion);
+    unset($config->gitfoxVersion);
 }
 
 if($config->db->driver == 'mysql')

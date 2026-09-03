@@ -25,6 +25,12 @@ class upgradeZen extends upgrade
         $currentEdition  = $this->config->edition;
         $fromEdition     = $this->upgrade->getEditionByVersion($fromVersion);
         $fromOpenVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $this->config->installedVersion));
+        $currentOpenVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $this->config->version));
+        if(version_compare($currentOpenVersion, $fromOpenVersion, '<'))
+        {
+            $this->upgrade->addError($this->lang->upgrade->notSupportDowngrade);
+            return [];
+        }
 
         if($currentEdition == 'open')
         {
@@ -41,6 +47,11 @@ class upgradeZen extends upgrade
 
                 $upgradeVersions[$version] = $label;
             }
+            if($fromEdition == 'gitfox' && empty($upgradeVersions))
+            {
+                $currentVersion = str_replace('.', '_', $this->config->version);
+                $upgradeVersions[$currentVersion] = $this->lang->upgrade->fromVersions[$currentVersion] ?? $this->config->version;
+            }
             return $upgradeVersions;
         }
 
@@ -52,9 +63,10 @@ class upgradeZen extends upgrade
              * If the current edition is the same as fromEdition, list all versions greater than fromVersion of the same edition.
              * For example, if fromVersion is biz12_6 and the current version is biz12_8, list biz12_7 and biz12_8.
              */
+            $versionPrefix = $currentEdition;
             foreach($this->lang->upgrade->fromVersions as $version => $label)
             {
-                if(strpos($version, $currentEdition) !== 0) continue;
+                if(strpos($version, $versionPrefix) !== 0) continue;
                 if(version_compare($version, $fromVersion, '<=')) continue;
 
                 $upgradeVersions[$version] = $label;
@@ -167,7 +179,7 @@ class upgradeZen extends upgrade
         $this->upgradeChanges = [];
 
         $currentVersion  = str_replace('.', '_', $this->config->installedVersion);
-        $fromEdition     = $this->upgrade->getEditionByVersion($fromVersion);
+        $fromEdition     = $this->upgrade->getUpgradeFromEdition($fromVersion);
         $fromOpenVersion = $this->upgrade->getOpenVersion($currentVersion);
         $toOpenVersion   = $this->upgrade->getOpenVersion($toVersion);
         $upgradeVersions = $this->upgrade->getVersionsToUpdate($fromOpenVersion, $fromEdition);
@@ -196,7 +208,7 @@ class upgradeZen extends upgrade
         /* 如果此次升级到最终版本，则执行额外的数据处理流程。*/
         if(version_compare($toVersion, $this->config->version, '='))
         {
-            $edition = $this->upgrade->getEditionByVersion($fromVersion);
+            $edition = $this->upgrade->getUpgradeFromEdition($fromVersion);
             $methods = $this->upgrade->getOtherMethods($edition);
             foreach(array_keys($methods) as $method)
             {

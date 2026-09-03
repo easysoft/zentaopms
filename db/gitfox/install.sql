@@ -1,0 +1,3 @@
+-- DevOps独立版初始化 SQL。
+-- DevOps standalone install SQL.
+-- 独立版版本号统一由 system/common/global/version 维护，此处不插入版本号。

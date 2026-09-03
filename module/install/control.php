@@ -54,7 +54,7 @@ class install extends control
         {
             $editionName = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
             if($this->config->edition === 'max') $editionName = '';
-            $this->view->versionName = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->view->versionName);
+            $this->view->versionName = $editionName . str_replace(array('max', 'biz', 'ipd', 'gitfox'), '', $this->view->versionName);
         }
         $this->display();
     }
@@ -421,7 +421,7 @@ class install extends control
         }
 
         $editionName           = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
-        $this->config->version = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
+        $this->config->version = $editionName . str_replace(array('max', 'biz', 'ipd', 'gitfox'), '', $this->config->version);
 
         $canDelFile  = is_writable($this->app->getAppRoot() . 'www');
         $installFile = $this->app->getAppRoot() . 'www/install.php';

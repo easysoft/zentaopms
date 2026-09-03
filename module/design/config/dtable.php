@@ -42,7 +42,7 @@ $config->design->dtable->fieldList['createdBy']['sortType'] = true;
 
 $config->design->dtable->fieldList['createdDate']['type'] = 'date';
 
-if($config->edition != 'open')
+if($config->edition != 'open' && $config->edition != 'gitfox')
 {
     $config->design->dtable->fieldList['relatedObject']['name']        = 'relatedObject';
     $config->design->dtable->fieldList['relatedObject']['title']       = $lang->custom->relateObject;

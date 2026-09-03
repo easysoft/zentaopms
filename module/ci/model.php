@@ -24,7 +24,7 @@ class ciModel extends model
 
         $homeMenuModule = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube', 'space');
         $homeMenuMethod = array('modelsetting', 'reviewrules', 'createocrrule', 'editocrrule');
-        if(!in_array("{$this->app->moduleName}", $homeMenuModule) && !in_array($this->app->methodName, $homeMenuMethod)) common::setMenuVars($this->config->vision == 'devops' ? 'repo' : 'devops', (int)$this->session->repoID);
+        if(!in_array("{$this->app->moduleName}", $homeMenuModule) && !in_array($this->app->methodName, $homeMenuMethod)) common::setMenuVars($this->config->vision == 'gitfox' ? 'repo' : 'devops', (int)$this->session->repoID);
 
         if($this->session->repoID)
         {

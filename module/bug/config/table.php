@@ -176,7 +176,7 @@ $config->bug->dtable->fieldList['activatedCount']['type']     = 'count';
 $config->bug->dtable->fieldList['activatedCount']['group']    = 8;
 $config->bug->dtable->fieldList['activatedCount']['sortType'] = true;
 
-if($config->edition != 'open')
+if($config->edition != 'open' && $config->edition != 'gitfox')
 {
     $app->loadLang('custom');
     $config->bug->dtable->fieldList['relatedObject']['name']        = 'relatedObject';

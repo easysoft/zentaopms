@@ -1262,7 +1262,7 @@ class myModel extends model
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll('id');
 
-        if($this->config->edition != 'open')
+        if(!in_array($this->config->edition, array('open', 'gitfox')))
         {
             $reviewAction = $this->loadModel('workflowaction')->getByModuleAndAction($type, 'review');
             if($reviewAction)
@@ -1323,7 +1323,7 @@ class myModel extends model
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll('id');
 
-        if($this->config->edition != 'open')
+        if(!in_array($this->config->edition, array('open', 'gitfox')))
         {
             $reviewAction = $this->loadModel('workflowaction')->getByModuleAndAction('testcase', 'review');
 
@@ -1524,7 +1524,7 @@ class myModel extends model
      */
     public function getReviewingFeedbacks(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
-        if($this->config->edition == 'open') return array();
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return array();
 
         $this->session->set('feedbackProduct', 'all');
         $feedbacks = $this->loadModel('feedback')->getList('review', $orderBy);
