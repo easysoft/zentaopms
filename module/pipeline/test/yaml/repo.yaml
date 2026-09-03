@@ -10,7 +10,7 @@ fields:
 - field: name
   range: testHtml,testHtml2
 - field: path
-  range: "http://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml"
+  range: "http://gitlabdev.oop.cc/gitlab-instance-76af86df/testhtml"
 - field: SCM
   range: Gitlab
 - field: client

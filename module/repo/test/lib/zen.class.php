@@ -390,6 +390,18 @@ class repoZenTest extends baseTest
     }
 
     /**
+     * Test generateTitleFromSteps method.
+     *
+     * @param  string $steps
+     * @access public
+     * @return string
+     */
+    public function generateTitleFromStepsTest(string $steps = '')
+    {
+        return $this->invokeArgs('generateTitleFromSteps', array($steps));
+    }
+
+    /**
      * Test getGitlabProjectsByApi method.
      *
      * @param  int $gitlabID

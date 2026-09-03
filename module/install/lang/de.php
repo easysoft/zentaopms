@@ -295,6 +295,7 @@ $lang->install->cronList['moduleName=backup&methodName=backup']         = 'Backu
 $lang->install->cronList['moduleName=mail&methodName=asyncSend']        = 'Async Nachrichten Sendung';
 $lang->install->cronList['moduleName=webhook&methodName=asyncSend']     = 'Async Webhook Sendung';
 $lang->install->cronList['moduleName=admin&methodName=deleteLog']       = 'Überfällige Logs löschen';
+$lang->install->cronList['moduleName=errorlog&methodName=deleteLog']    = 'Überfällige Fehler-Logs löschen';
 $lang->install->cronList['moduleName=todo&methodName=createCycle']      = 'Erstelle wiederkehrende ToDos';
 $lang->install->cronList['moduleName=ci&methodName=initQueue']          = 'Create recurring jenkins';
 $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = 'Synchronize Jenkins Status';

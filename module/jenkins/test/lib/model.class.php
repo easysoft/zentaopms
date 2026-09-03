@@ -230,8 +230,8 @@ class jenkinsModelTest extends baseTest
      */
     public function getDepthJobsTest(int $depth = 1): string
     {
-        $userPWD       = "jenkins:11eb8b38c99143c7c6d872291e291abff4";
-        $jenkinsServer = 'https://jenkinsdev.qc.oop.cc/';
+        $userPWD       = "jenkinsadmin:11484993390c1e49039219736a537c0c8a";
+        $jenkinsServer = 'https://jenkinsdev.oop.cc/';
         $response      = common::http($jenkinsServer . '/api/json/items/list' . ($depth ? "?depth=1" : ''), '', array(CURLOPT_USERPWD => $userPWD));
         $response      = json_decode($response);
 

@@ -23,6 +23,7 @@ su('admin');
 global $tester, $app;
 $appPath = $app->getAppRoot();
 $sqlFile = $appPath . 'test/data/pivot.sql';
+$tester->dbh->exec("CREATE OR REPLACE VIEW ztv_projectnotpl AS SELECT * FROM zt_project WHERE deleted = '0' AND isTpl = 0");
 $tester->dbh->exec(file_get_contents($sqlFile));
 
 $pivotTest = new pivotZenTest();

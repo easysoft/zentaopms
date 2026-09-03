@@ -52,6 +52,88 @@
         onChangeApp: null
     };
 
+    function generateRequestID()
+    {
+        return window.crypto && crypto.randomUUID ? crypto.randomUUID() : 'zid-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+    }
+
+    /**
+     * 为所有 ajax 请求补充请求ID请求头。
+     * Add request id header to all ajax requests.
+     *
+     * @param {Request} request
+     * @return {void}
+     */
+    function addRequestIDToAjax(request)
+    {
+        if(!request || !request.headers) return;
+
+        let hasHeader = false;
+        if(typeof request.headers.has === 'function') hasHeader = request.headers.has('X-ZIN-Request-ID');
+        else hasHeader = Object.prototype.hasOwnProperty.call(request.headers, 'X-ZIN-Request-ID');
+        if(hasHeader) return;
+
+        if(typeof request.headers.set === 'function') request.headers.set('X-ZIN-Request-ID', generateRequestID());
+        else request.headers['X-ZIN-Request-ID'] = generateRequestID();
+    }
+
+    if(zui.Ajax && zui.Ajax.globalBeforeSends) zui.Ajax.globalBeforeSends.push(addRequestIDToAjax);
+
+    const fetchedErrorLogIDs = new Set();
+
+    /**
+     * 根据请求ID获取并展示错误日志。
+     * Fetch and show error log by request id.
+     *
+     * @param {string} requestID
+     * @param {Object} options
+     * @return {void}
+     */
+    function fetchErrorLog(requestID, options)
+    {
+        if(!requestID || fetchedErrorLogIDs.has(requestID)) return;
+        fetchedErrorLogIDs.add(requestID);
+
+        const logURL = $.createLink('errorlog', 'ajaxGetLog', 'requestID=' + encodeURIComponent(requestID));
+        fetch(logURL, {headers: {'X-Zin-Request-ID': requestID, 'X-Requested-With': 'XMLHttpRequest'}}).then(res => res.json()).then(data =>
+        {
+            if(data && data.result === 'success' && data.data) showErrorLog(data.data);
+            else if(DEBUG) console.warn('[ZIN] ', 'Fetch error log failed', data);
+        }).catch(err =>
+        {
+            if(DEBUG) console.warn('[ZIN] ', 'Fetch error log failed', err);
+        });
+    }
+
+    /**
+     * 处理 ajax 请求错误：按请求ID拉取错误日志并展示。
+     * Handle ajax request error: fetch error log by request id and show it.
+     *
+     * @param {Error}  error
+     * @param {string} statusText
+     * @param {string} message
+     * @return {void}
+     */
+    function handleAjaxError(error, statusText, message)
+    {
+        if(this._abortError || this.errorLogHandled || !this.request || !this.request.headers) return;
+
+        const requestID = typeof this.request.headers.get === 'function' ? this.request.headers.get('X-ZIN-Request-ID') : this.request.headers['X-ZIN-Request-ID'];
+        if(!requestID) return;
+
+        fetchErrorLog(requestID, {url: this.url || ''});
+    }
+
+    if(zui.Ajax && zui.Ajax.prototype && typeof zui.Ajax.prototype._emit === 'function')
+    {
+        const origEmit = zui.Ajax.prototype._emit;
+        zui.Ajax.prototype._emit = function(type, ...args)
+        {
+            if(type === 'error') handleAjaxError.apply(this, args);
+            return origEmit.call(this, type, ...args);
+        };
+    }
+
     /**
      * 注册Zin回调函数。
      * Register a Zin callback function.
@@ -208,6 +290,16 @@
     {
         const isNormalPage = data.startsWith('<!DOCTYPE html');
         zui.Modal.showError({error: isNormalPage ? data : `<b>URL</b>: ${options.url}<br>${data}`, size: 'lg', html: !isNormalPage})
+    }
+
+    function showErrorLog(log)
+    {
+        if(!log) return;
+
+        console.groupCollapsed(`%c ZIN %c errorlog %c ${log.requestID}`, 'color:#fff;font-weight:bold;background:#dc2626', 'color:#dc2626;font-weight:bold', 'font-weight:bold');
+        console.log('[ErrorLog]', {level: log.levelName || log.level, module: log.module, method: log.method, message: log.message, file: log.file, line: log.line, url: log.url, account: log.account, createdDate: log.createdDate});
+        console.log('[ErrorLog] trace', log.trace);
+        console.groupEnd();
     }
 
     function initZinbar()
@@ -553,6 +645,7 @@
         const target    = options.target || '#main';
         const selectors = (Array.isArray(options.selector) ? options.selector : options.selector.split(',')).map(selector => selector.replace(':component', ':type=json&data=props'));
         const url       = options.url;
+        const requestID = options.requestID || generateRequestID();
         if(DEBUG && !selectors.includes('zinDebug()')) selectors.push('zinDebug()');
         const isDebugRequest = DEBUG && selectors.length === 1 || selectors[0] === 'zinDebug()';
         if(options.modal === undefined) options.modal = $(target[0] !== '#' && target[0] !== '.' ? `#${target}` : target).closest('.modal').length;
@@ -561,6 +654,7 @@
             'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)),
             'X-ZIN-App': currentCode,
             'X-Zin-Cache-Time': 0,
+            'X-ZIN-Request-ID': requestID,
             'X-ZIN-UID': zui.uid ? zui.uid() : ''
         };
         if(options.modal) headers['X-Zui-Modal'] = 'true';
@@ -645,6 +739,7 @@
                     return;
                 }
                 ajax.canceled = false;
+                if(!rawData) fetchErrorLog(requestID, options);
 
                 try
                 {
@@ -657,6 +752,7 @@
                     hasFatal = rawData.includes('Fatal error') || rawData.includes('Uncaught TypeError:') || rawData.startsWith('<!DOCTYPE html');
                     ;
                     data = [{name: hasFatal ? 'fatal' : 'html', data: rawData}];
+                    fetchErrorLog(requestID, options);
                 }
                 if(typeof options.success === 'function' && options.success.call(ajax, data, options) === false) return;
                 if(Array.isArray(data))
@@ -787,6 +883,7 @@
                     ajax.canceled = false;
                 }
 
+                if(data || ajax.sendedAgain) fetchErrorLog(requestID, options);
                 if(ajax.canceled) return;
                 updatePerfInfo(options, 'requestEnd', {error: error});
                 if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {type, error});
@@ -811,6 +908,7 @@
                 $(document).trigger('pageload.app');
             }
         });
+        ajax.errorLogHandled = true; // The error log of this request is handled by the zin fetch flow itself.
         ajax.sendedAgain = true; // Disable the request again.
         updatePerfInfo(options, 'requestBegin', {perf: {renderBegin: undefined, renderEnd: undefined}});
         if(DEBUG) showLog('Request', `${ajax.setting.type}:${options.id} ${getUrlID(url)} task ${rid}`, options, {cacheKey, ajax});

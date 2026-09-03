@@ -149,6 +149,7 @@ class datatable extends control
      */
     public function ajaxCustom(string $module, string $method, string $extra = '')
     {
+        $this->loadModel($module);
         $cols = $this->datatable->getSetting($module, $method, true, $extra);
         if(!$method) $method = $this->app->getMethodName();
 

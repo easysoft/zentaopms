@@ -63,9 +63,19 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 error_reporting(E_ERROR);
 
+zenData('branch')->gen(0);
+$productTable = zenData('product');
+$productTable->id->range('1-2');
+$productTable->name->range('正常产品1,正常产品2');
+$productTable->type->range('normal{2}');
+$productTable->status->range('normal{2}');
+$productTable->deleted->range('0{2}');
+$productTable->gen(2);
+
 $zd_user = zenData('user');
 $zd_user->id->range('1-1');
-$zd_user->account->range('1-1');
+$zd_user->account->range('admin');
+$zd_user->realname->range('admin');
 $zd_user->last->range('(M)-(w)')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
 $zd_user->feedback->range('0');
 $zd_user->scoreLevel->range('0');

@@ -337,7 +337,7 @@ class testsuite extends control
         unset($this->config->testcase->search['fields']['branch']);
         unset($this->config->testcase->search['params']['branch']);
 
-        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
+        if(!$this->config->testcase->needReview && empty($this->config->testcase->forceReview)) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         $this->view->title      = $suite->name . $this->lang->hyphen . $this->lang->testsuite->linkCase;

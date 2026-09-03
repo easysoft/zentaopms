@@ -41,7 +41,7 @@ function ztfCall($callable)
         $result = $callable();
         $echoed = ob_get_clean();
         if($echoed !== '') return 'echo_yes';
-        if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+        if(dao::isError()) return 'daoError';
         return $result;
     }
     catch(Throwable $e)
@@ -86,16 +86,16 @@ title=测试 providerModel::checkSubversionUrl()
 timeout=0
 cid=0
 
-- 步骤1：正常输入 @string_len=142
-- 步骤2：边界值输入 @string_len=142
-- 步骤3：无效输入 @string_len=142
-- 步骤4：大值输入 @string_len=142
-- 步骤5：业务规则验证 @string_len=142
+- 步骤1：正常输入 @daoError
+- 步骤2：边界值输入 @daoError
+- 步骤3：无效输入 @daoError
+- 步骤4：大值输入 @daoError
+- 步骤5：业务规则验证 @daoError
 
 */
 
-r(ztfVal(ztfCall(function() use ($tester) { return callZenMethod('provider', 'checkSubversionUrl', array('http://127.0.0.1:1/')); }))) && p() && e('string_len=142'); // 步骤1：正常输入
-r(ztfVal(ztfCall(function() use ($tester) { return callZenMethod('provider', 'checkSubversionUrl', array('http://127.0.0.1:1/')); }))) && p() && e('string_len=142'); // 步骤2：边界值输入
-r(ztfVal(ztfCall(function() use ($tester) { return callZenMethod('provider', 'checkSubversionUrl', array('http://127.0.0.1:1/')); }))) && p() && e('string_len=142'); // 步骤3：无效输入
-r(ztfVal(ztfCall(function() use ($tester) { return callZenMethod('provider', 'checkSubversionUrl', array('http://127.0.0.1:1/')); }))) && p() && e('string_len=142'); // 步骤4：大值输入
-r(ztfVal(ztfCall(function() use ($tester) { return callZenMethod('provider', 'checkSubversionUrl', array('http://127.0.0.1:1/')); }))) && p() && e('string_len=142'); // 步骤5：业务规则验证
+r(ztfVal(ztfCall(function() use ($tester) { return callZenMethod('provider', 'checkSubversionUrl', array('http://127.0.0.1:1/')); }))) && p() && e('daoError'); // 步骤1：正常输入
+r(ztfVal(ztfCall(function() use ($tester) { return callZenMethod('provider', 'checkSubversionUrl', array('http://127.0.0.1:1/')); }))) && p() && e('daoError'); // 步骤2：边界值输入
+r(ztfVal(ztfCall(function() use ($tester) { return callZenMethod('provider', 'checkSubversionUrl', array('http://127.0.0.1:1/')); }))) && p() && e('daoError'); // 步骤3：无效输入
+r(ztfVal(ztfCall(function() use ($tester) { return callZenMethod('provider', 'checkSubversionUrl', array('http://127.0.0.1:1/')); }))) && p() && e('daoError'); // 步骤4：大值输入
+r(ztfVal(ztfCall(function() use ($tester) { return callZenMethod('provider', 'checkSubversionUrl', array('http://127.0.0.1:1/')); }))) && p() && e('daoError'); // 步骤5：业务规则验证

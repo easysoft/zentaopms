@@ -2,7 +2,7 @@ window.checkZAIPanel = async function(showMessage)
 {
     const zaiPanel = zui.AIPanel.shared;
     const store = zaiPanel ? zaiPanel.store : null;
-    if(!store || !store.isConfigOK)
+    if(!store || !store.isConfigOK())
     {
         if(showMessage) zui.Modal.alert((store ? store.error : '') || {content: {html: zaiLang.zaiConfigNotValid}});
         return;

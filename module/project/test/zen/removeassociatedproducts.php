@@ -27,7 +27,7 @@ $project->type->range('project{10}');
 $project->hasProduct->range('1{5},0{5}');
 $project->status->range('wait{3},doing{4},closed{3}');
 $project->deleted->range('0{10}');
-$project->gen(10);
+$project->gen(10, true, false);
 
 $product = zenData('product');
 $product->id->range('1-10');
@@ -36,14 +36,32 @@ $product->shadow->range('0{5},1{5}');
 $product->status->range('normal{8},closed{2}');
 $product->deleted->range('0{10}');
 $product->type->range('normal{8},branch{2}');
-$product->gen(10);
+$product->gen(10, true, false);
 
 $projectproduct = zenData('projectproduct');
 $projectproduct->project->range('2,3,4,6,7,8,9,10');
 $projectproduct->product->range('2,3,4,6,7,8,9,10');
-$projectproduct->gen(8);
+$projectproduct->gen(8, true, false);
 
 // 3. 用户登录
+$zd_company = zenData('company');
+$zd_company->id->range('1');
+$zd_company->name->range('禅道软件');
+$zd_company->admins->range('admin');
+$zd_company->guest->range('0');
+$zd_company->gen(1);
+$dbh->exec("UPDATE zt_company SET admins = ',admin,' WHERE id = 1");
+global $app;
+$app->company = $dbh->query('SELECT * FROM zt_company WHERE id = 1')->fetch(PDO::FETCH_OBJ);
+
+$zd_user = zenData('user');
+$zd_user->id->range('1-1');
+$zd_user->account->range('admin');
+$zd_user->realname->range('admin');
+$zd_user->password->range('e10adc3949ba59abbe56e057f20f883e');
+$zd_user->visions->range('rnd');
+$zd_user->deleted->range('0');
+$zd_user->gen(1);
 su('admin');
 
 // 4. 创建测试实例

@@ -480,6 +480,7 @@ $lang->group->package->backup                = 'Backup';
 $lang->group->package->trash                 = 'Trash';
 $lang->group->package->security              = 'Security';
 $lang->group->package->cron                  = 'Cron';
+$lang->group->package->errorlog              = 'Journal des erreurs';
 $lang->group->package->ldap                  = 'Ldap';
 $lang->group->package->chat                  = 'Chat';
 $lang->group->package->jenkins               = 'Jenkins';

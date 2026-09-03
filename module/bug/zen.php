@@ -1302,10 +1302,14 @@ class bugZen extends bug
             ->get();
 
         /* If the resolved build is not the trunk, get test plan id. */
-        if(isset($bug->resolvedBuild) && $bug->resolvedBuild != 'trunk')
+        if(!empty($bug->resolvedBuild) && $bug->resolvedBuild != 'trunk')
         {
-            $testtaskID = (int)$this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
-            if($testtaskID and empty($oldBug->testtask)) $bug->testtask = $testtaskID;
+            $buildId = (int)$bug->resolvedBuild;
+            if($buildId)
+            {
+                $testtaskID = (int)$this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
+                if($testtaskID and empty($oldBug->testtask)) $bug->testtask = $testtaskID;
+            }
         }
 
         return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $this->post->uid);

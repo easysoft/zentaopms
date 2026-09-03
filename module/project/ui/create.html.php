@@ -54,6 +54,8 @@ $handleLongTimeChange = jsCallback()->do(<<<'JS'
     endPicker.render({disabled: isLongTime});
     if(isLongTime) endPicker.$.setValue('');
     $element.find('[name=days]').attr('disabled', isLongTime ? 'disabled' : null);
+    $element.find('[name=days]').closest('.form-group').toggleClass('hidden', isLongTime);
+    if(isLongTime) $element.find('#dateTip').addClass('hidden');
     checkProjectInfo();
 JS);
 
@@ -61,10 +63,12 @@ $toggleLongTime = jsCallback()->do(<<<'JS'
     const isMultiple = $('#form-project-create [name=multiple]').prop('checked');
     if(!isMultiple) $('#form-project-create [name=longTime]').prop('checked', false);
     $('#form-project-create [name=longTime]').closest('.checkbox-primary').toggleClass('hidden', !isMultiple);
+    const isLongTime = $('#form-project-create [name=longTime]').prop('checked');
 
     const $endPicker = $('#form-project-create [name=end]').closest('[data-zui-datepicker]').zui('datePicker');
-    $endPicker.render({disabled: false});
-    $('#form-project-create [name=days]').removeAttr('disabled');
+    $endPicker.render({disabled: isLongTime});
+    $('#form-project-create [name=days]').attr('disabled', isLongTime ? 'disabled' : null);
+    $('#form-project-create [name=days]').closest('.form-group').toggleClass('hidden', isLongTime);
 JS);
 
 formGridPanel

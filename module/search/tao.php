@@ -272,6 +272,33 @@ class searchTao extends searchModel
      */
     public function setWhere(string $where, string $field, string $operator, string $value, string $andOr, string $control = ''): string
     {
+        /* 下拉字段可以多选，拼接多个条件。*/
+        if($control == 'select')
+        {
+            $selectValues = array();
+            foreach(explode(',', $value) as $selectValue)
+            {
+                $selectValue = trim($selectValue);
+                if($selectValue === '') continue;
+                if($selectValue === 'null') $selectValue = '';
+                if($selectValue === 'ZERO') $selectValue = '0';
+                $selectValues[] = htmlspecialchars($selectValue, ENT_QUOTES);
+            }
+
+            if(count($selectValues) > 1)
+            {
+                if($operator == '=' || $operator == '!=')
+                {
+                    $glue       = $operator == '=' ? ' OR ' : ' AND ';
+                    $conditions = array();
+                    foreach($selectValues as $selectValue) $conditions[] = '`' . $field . '` ' . $operator . ' ' . $this->dbh->quote($selectValue);
+                    return $where . " $andOr (" . implode($glue, $conditions) . ")";
+                }
+
+                return $where . " $andOr (1 = 0)";
+            }
+        }
+
         $condition = $this->setCondition($field, $operator, $value, $control);
         if($operator == '=' && preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
         {

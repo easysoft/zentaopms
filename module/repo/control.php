@@ -2349,9 +2349,17 @@ class repo extends control
             $v1    = strpos($v1, '^') !== false ? substr($v1, 0, -1) : $v1;
             $v2    = strpos($v2, '^') !== false ? substr($v2, 0, -1) : $v2;
             if($v1 == '0000000000000000000000000000000000000000') $v1 = '';
-            if(!empty($ppmID)) $file = $this->repo->encodePath($file);
-            $bug   = form::data($config->repo->form->addBug)
+
+            $assignedTo = $this->post->assignedTo;
+            if(!empty($ppmID))
+            {
+                $file = $this->repo->encodePath($file);
+                $ppm  = $this->loadModel('ppm')->fetchByID((int)$ppmID);
+                if(empty($assignedTo)) $assignedTo = zget($ppm, 'createdBy', '');
+            }
+            $bug = form::data($config->repo->form->addBug)
                 ->setIF(!$this->post->entry, 'entry', $file)
+                ->setIF(!empty($assignedTo), 'assignedTo', $assignedTo)
                 ->add('openedBy', $this->app->user->account)
                 ->add('repo', $repoID)
                 ->add('mr', empty($ppmID) ? 0 : $ppmID)

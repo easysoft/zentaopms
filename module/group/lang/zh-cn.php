@@ -480,6 +480,7 @@ $lang->group->package->backup                = '系统备份';
 $lang->group->package->trash                 = '回收站';
 $lang->group->package->security              = '安全';
 $lang->group->package->cron                  = '定时';
+$lang->group->package->errorlog              = '错误日志';
 $lang->group->package->ldap                  = 'LDAP';
 $lang->group->package->chat                  = '聊天';
 $lang->group->package->jenkins               = 'jenkins';

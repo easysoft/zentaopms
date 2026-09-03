@@ -10,7 +10,7 @@ fields:
 - field: name
   range: testHtml,project1,unittest
 - field: path
-  range: "[http://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml],[],[/var/www/html/gitlab/test2/zentaopms/www/data/repo/unittest_gitea]"
+  range: "[http://gitlabdev.oop.cc/gitlab-instance-76af86df/testhtml],[],[/var/www/html/gitlab/test2/zentaopms/www/data/repo/unittest_gitea]"
 - field: SCM
   range: Gitlab{2},Gitea
 - field: client

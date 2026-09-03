@@ -6,3 +6,4 @@
 #mainContent .create-file .table tbody > tr > td div.text-danger.help-text {word-break: break-all;}
 
 #mainContent .reset-form {max-width: 500px; margin-top: 100px; padding-right: 10px; padding-left:10px; margin-right: auto; margin-left: auto;}
+#mainContent .reset-form .form-tip {word-break: break-all; overflow-wrap: break-word;}

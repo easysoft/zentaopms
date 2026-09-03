@@ -19,7 +19,7 @@ fields:
 
 - field: url
   note: 服务器URL
-  range: http://gitlabdev.qc.oop.cc,http://gitlab.test.com,http://localhost:8080
+  range: http://gitlabdev.oop.cc,http://gitlab.test.com,http://localhost:8080
 
 - field: account
   note: 账号

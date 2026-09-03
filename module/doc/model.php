@@ -2643,7 +2643,10 @@ class docModel extends model
             ->fetchAll('id', false);
         foreach($objects as $objectID => $object)
         {
-            $object->parent             = $this->program->getTopByID($object->parent);
+            /* 移除自身ID得到父级path，取顶级项目集作为父级。Remove self from path to get the top program. */
+            $objectParentPath = str_replace(",{$objectID},", ',', ',' . trim($object->path, ',') . ',');
+            $object->parent   = $this->program->getTopByPath($objectParentPath);
+
             $orderedProjects[$objectID] = $object;
             unset($objects[$object->id]);
         }

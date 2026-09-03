@@ -126,7 +126,7 @@ if($execution->type == 'kanban')
         set::control('picker'),
         set::value($regionID),
         set::items($regionPairs),
-        set::width('160px'),
+        set::width('166px'),
         set::ditto(true),
         set::required(true),
         set::hidden($config->vision == 'lite')
@@ -137,7 +137,7 @@ if($execution->type == 'kanban')
         set::control('picker'),
         set::value($laneID),
         set::items($lanePairs),
-        set::width('160px'),
+        set::width('166px'),
         set::ditto(true),
         set::required(true),
         set::hidden($config->vision == 'lite')

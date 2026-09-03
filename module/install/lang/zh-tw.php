@@ -199,6 +199,7 @@ $lang->install->cronList['moduleName=backup&methodName=backup']         = '備�
 $lang->install->cronList['moduleName=mail&methodName=asyncSend']        = '非同步發信';
 $lang->install->cronList['moduleName=webhook&methodName=asyncSend']     = '非同步發送Webhook';
 $lang->install->cronList['moduleName=admin&methodName=deleteLog']       = '刪除過期日誌';
+$lang->install->cronList['moduleName=errorlog&methodName=deleteLog']    = '刪除過期錯誤日誌';
 $lang->install->cronList['moduleName=todo&methodName=createCycle']      = '生成周期性待辦';
 $lang->install->cronList['moduleName=ci&methodName=initQueue']          = '創建周期性任務';
 $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = '同步Jenkins任務狀態';

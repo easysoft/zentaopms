@@ -31,7 +31,6 @@ $lang->ppm->locateView        = '查看详情';
 $lang->ppm->codeConflict      = '代码冲突检查';
 $lang->ppm->hasConflict       = '是否有代码冲突';
 $lang->ppm->request           = '要求';
-$lang->ppm->AIReview          = 'AI评审';
 $lang->ppm->AICodeScore       = '代码评分';
 $lang->ppm->AISevereIssue     = '高危问题';
 $lang->ppm->AIOrdinaryIssue   = '一般问题';
@@ -285,8 +284,8 @@ $lang->ppm->confirmUnlinkTask = "您确认移除该任务吗？";
 $lang->ppm->taskSummary       = "本页共 <strong>%s</strong> 个任务";
 $lang->ppm->notDelbranch      = "源分支为受保护分支时不可删除";
 $lang->ppm->addForApp         = "该服务器下没有项目，是否前往添加？";
-$lang->ppm->checkSuccess      = '检查已通过，此分支允许合并';
-$lang->ppm->checkFailed       = '检查未通过，此分支无法合并';
+$lang->ppm->checkSuccess      = '合并检查已通过，此分支允许合并';
+$lang->ppm->checkFailed       = '合并检查未通过，此分支无法合并';
 $lang->ppm->MRHistory         = "本次合并由 <strong>%s</strong> 于 <strong>%s</strong> 创建，申请将 <icon class='icon-code-fork mr-1'/><strong>%s</strong> 的 <strong>%s</strong> 次提交，合并到 <icon class='icon-code-fork mr-1'><strong>%s</strong> 。";
 
 $lang->ppm->checkStatusList = array();

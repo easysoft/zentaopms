@@ -12,6 +12,11 @@ declare(strict_types=1);
 
 namespace zin;
 
+$this->app->loadLang('program');
+$this->app->loadLang('task');
+jsVar('langManDay',   $lang->program->manDay);
+jsVar('delayWarning', $lang->task->delayWarning);
+
 dropmenu(set::text($product->name));
 
 /* Set feature bar. */
@@ -78,35 +83,27 @@ modal
     input(set::type('hidden'), set::name('branch'), set::value($branchID))
 );
 
-/* Get column settings of the data table. */
-foreach($config->productProject->showFields as $showField)
-{
-    if(isset($config->project->dtable->fieldList[$showField])) $cols[$showField] = $config->project->dtable->fieldList[$showField];
-    if($showField == 'program')
-    {
-        $cols[$showField]['name']     = 'programName';
-        $cols[$showField]['fixed']    = 'left';
-        $cols[$showField]['type']     = 'shortTitle';
-        $cols[$showField]['checkbox'] = false;
-        $cols[$showField]['title']    = $lang->project->program;
-    }
-    $cols[$showField]['sortType'] = false;
-    $cols[$showField]['group']    = 0;
-}
-$cols['id']['checkbox'] = false;
+if($config->edition != 'open') $config->project->dtable->fieldList['workflowGroup']['map'] = $this->loadModel('workflowGroup')->getPairs('project', 'all', 1, 'all');
+$settings = $this->loadModel('datatable')->getSetting('product', 'project');
+$settings['id']['checkbox'] = false;
 
-if(!in_array($this->config->systemMode, array('ALM', 'PLM'))) unset($cols['program']);
-if(!str_contains('all,undone', $status)) unset($cols['status']);
-
-/* Set extend fields for workflow. */
-$extendFieldList = $this->product->getFlowExtendFields();
-foreach($extendFieldList as $field => $name)
+if(in_array($this->config->systemMode, array('ALM', 'PLM')))
 {
-    $extCol = $config->product->dtable->extendField;
-    $extCol['name']  = $field;
-    $extCol['title'] = $name;
-    $cols[$field]    = $extCol;
+    $programCol = array(
+        'name'     => 'programName',
+        'title'    => $lang->project->program,
+        'type'     => 'shortTitle',
+        'sortType' => false,
+        'required' => true,
+        'show'     => true,
+        'group'    => 0,
+    );
+    $settings = array('program' => $programCol) + $settings;
 }
+
+if(!str_contains('all,undone', $status)) unset($settings['status']);
+
+$tableData = initTableData($projectStats, $settings, $this->project);
 
 /* Process data. */
 $waitCount      = 0;
@@ -123,11 +120,18 @@ foreach($projectStats as $project)
 $summary = sprintf($lang->project->summary, count($projectStats));
 if($status == 'all') $summary = sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount);
 
+$sortLink = createLink('product', 'project', "status={$status}&productID={$product->id}&branch={$branchID}&involved={$involved}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+
 dtable
 (
-    set::cols($cols),
-    set::data(array_values($projectStats)),
-    set::onRenderCell(jsRaw('function(result, data){return window.renderCustomCell(result, data);}')),
+    set::id('table-product-project'),
+    set::userMap($users),
+    set::cols($settings),
+    set::data(array_values($tableData)),
+    set::orderBy($orderBy),
+    set::sortLink($sortLink),
+    set::customCols(true),
+    set::onRenderCell(jsRaw('window.renderCell')),
     set::footer(array(array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
     set::footPager(usePager()),
     set::emptyTip($lang->project->empty),

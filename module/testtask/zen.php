@@ -93,7 +93,7 @@ class testtaskZen extends testtask
         $searchConfig['fields']['assignedTo'] = $this->lang->testtask->assignedTo;
         $searchConfig['params']['assignedTo'] = array('operator' => '=', 'control' => 'select', 'values' => 'users');
 
-        if(!$this->config->testcase->needReview) unset($searchConfig['params']['status']['values']['wait']);
+        if(!$this->config->testcase->needReview && empty($this->config->testcase->forceReview)) unset($searchConfig['params']['status']['values']['wait']);
         if($product->shadow) unset($searchConfig['fields']['product']);
         if($product->type == 'normal')
         {
@@ -157,7 +157,7 @@ class testtaskZen extends testtask
             $searchConfig['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             $searchConfig['params']['branch']['values'] = $this->testtask->getBranchesByTask($task);;
         }
-        if(!$this->config->testcase->needReview) unset($searchConfig['params']['status']['values']['wait']);
+        if(!$this->config->testcase->needReview && empty($this->config->testcase->forceReview)) unset($searchConfig['params']['status']['values']['wait']);
         unset($searchConfig['fields']['product']);
 
         $this->loadModel('search')->setSearchParams($searchConfig);

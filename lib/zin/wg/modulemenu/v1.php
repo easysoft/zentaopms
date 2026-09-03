@@ -83,10 +83,11 @@ class moduleMenu extends wg
 
         foreach($children as $child)
         {
+            $name = is_array($child->name) ? $child->name : htmlspecialchars_decode((string)$child->name, ENT_QUOTES);
             $item = array(
                 'key'          => $child->id,
-                'text'         => $child->name,
-                'hint'         => is_array($child->name) ? (isset($child->name['text']) ? $child->name['text'] : current($child->name)) : $child->name,
+                'text'         => $name,
+                'hint'         => is_array($name) ? (isset($name['text']) ? $name['text'] : current($name)) : $name,
                 'url'          => zget($child, 'url', ''),
                 'titleAttrs'   => $titleAttrs,
                 'contentClass' => 'overflow-x-hidden'

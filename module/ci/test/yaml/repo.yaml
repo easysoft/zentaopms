@@ -11,7 +11,7 @@ fields:
   - field: encoding
     range: '`utf-8`'
   - field: path
-    prefix: https://gitlabdev.qc.oop.cc/root/unittest1
+    prefix: https://gitlabdev.oop.cc/root/unittest1
     range: '[],1-9'
   - field: SCM
     range: Gitlab{4},Subversion

@@ -18,7 +18,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testcasezen.unittest.class.php';
 
-zenData('product')->loadYaml('product', false, 2)->gen(10);
+zenData('product')->loadYaml('product', false, 2)->gen(10, true, false);
 
 $projectTable = zenData('project');
 $projectTable->id->range('1-20');
@@ -26,9 +26,28 @@ $projectTable->name->range('项目1,项目2,项目3,项目4{2},项目5{15}');
 $projectTable->type->range('project{10},sprint{10}');
 $projectTable->hasProduct->range('1{15},0{5}');
 $projectTable->status->range('doing{15},closed{5}');
-$projectTable->gen(20);
+$projectTable->gen(20, true, false);
 
-zenData('projectproduct')->loadYaml('projectproduct', false, 2)->gen(30);
+zenData('projectproduct')->loadYaml('projectproduct', false, 2)->gen(30, true, false);
+
+$zd_company = zenData('company');
+$zd_company->id->range('1');
+$zd_company->name->range('禅道软件');
+$zd_company->admins->range('admin');
+$zd_company->guest->range('0');
+$zd_company->gen(1);
+$dbh->exec("UPDATE zt_company SET admins = ',admin,' WHERE id = 1");
+global $app;
+$app->company = $dbh->query('SELECT * FROM zt_company WHERE id = 1')->fetch(PDO::FETCH_OBJ);
+
+$zd_user = zenData('user');
+$zd_user->id->range('1-1');
+$zd_user->account->range('admin');
+$zd_user->realname->range('admin');
+$zd_user->password->range('e10adc3949ba59abbe56e057f20f883e');
+$zd_user->visions->range('rnd');
+$zd_user->deleted->range('0');
+$zd_user->gen(1);
 
 su('admin');
 

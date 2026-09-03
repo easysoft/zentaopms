@@ -883,6 +883,7 @@ $lang->navGroup->system        = 'system';
 $lang->navGroup->serverroom    = 'devops';
 $lang->navGroup->holiday       = 'admin';
 $lang->navGroup->cache         = 'admin';
+$lang->navGroup->errorlog      = 'admin';
 
 $lang->navGroup->aiapp = 'aiapp';
 

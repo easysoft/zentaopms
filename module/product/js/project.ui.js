@@ -5,9 +5,25 @@ $(document).off('click', '#involved').on('click', '#involved', function()
     loadCurrentPage();
 });
 
-window.renderCustomCell = function(result, {col, row})
+window.renderCell = function(result, {col, row})
 {
     if(!col || !row) return result;
+
+    if(col.name === 'name')
+    {
+        if(row.data.delay > 0)
+        {
+            result[0].props.className = 'overflow-hidden';
+            result[result.length] = {html:'<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', row.data.delay) + '</span>', className:'flex items-end', style:{flexDirection:"column"}};
+        }
+        return result;
+    }
+
+    if(col.name === 'invested')
+    {
+        result[result.length] = {html:'<span class="text-gray text-xs">' + langManDay + '</span>'};
+        return result;
+    }
 
     if(col.name == 'end')    result = [row.data.end];
     if(col.name == 'status') result = [row.data.statusTitle];

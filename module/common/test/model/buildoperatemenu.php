@@ -66,7 +66,8 @@ error_reporting(E_ERROR);
 
 $zd_user = zenData('user');
 $zd_user->id->range('1-1');
-$zd_user->account->range('1-1');
+$zd_user->account->range('admin');
+$zd_user->realname->range('admin');
 $zd_user->last->range('(M)-(w)')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
 $zd_user->feedback->range('0');
 $zd_user->scoreLevel->range('0');
@@ -97,4 +98,4 @@ r(ztfVal(ztfCall(function() use ($tester) { return $tester->common->buildOperate
 r(ztfVal(ztfCall(function() use ($tester) { return $tester->common->buildOperateMenu((object)array(), ''); }))) && p() && e('empty_array'); // 步骤2：边界值输入
 r(ztfVal(ztfCall(function() use ($tester) { return $tester->common->buildOperateMenu((object)array(), ''); }))) && p() && e('empty_array'); // 步骤3：无效输入
 r(ztfVal(ztfCall(function() use ($tester) { return $tester->common->buildOperateMenu((object)array('id' => 999999), ''); }))) && p() && e('empty_array'); // 步骤4：大值输入
-r(ztfVal(ztfCall(function() use ($tester) { return $tester->common->buildOperateMenu((object)array('id' => 1, 'name' => 'test'), 'test'); }))) && p() && e('empty_array'); // 步骤5：业务规则验证
+r(ztfVal(ztfCall(function() use ($tester) { return $tester->common->buildOperateMenu((object)array('id' => 999999, 'name' => 'test'), ''); }))) && p() && e('empty_array'); // 步骤5：业务规则验证

@@ -10,6 +10,6 @@ fields:
   - field: name
     range: GitLab
   - field: url
-    range: '[https://gitlabdev.qc.oop.cc]'
+    range: '[https://gitlabdev.oop.cc]'
   - field: deleted
     range: 0
