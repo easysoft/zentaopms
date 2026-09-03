@@ -13705,7 +13705,7 @@ class upgradeModel extends model
     {
         $this->app->loadLang('task');
 
-        $deliverables = $this->dao->select('t1.projectModel,t2.*')->from(TABLE_WORKFLOWGROUP)->alias('t1')
+        $deliverables = $this->dao->select('t1.`projectModel`,t2.*')->from(TABLE_WORKFLOWGROUP)->alias('t1')
             ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.id=t2.workflowGroup')
             ->where('t2.category')->eq('other')
             ->fetchAll();
