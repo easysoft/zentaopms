@@ -3921,19 +3921,15 @@ class storyModel extends model
         if((strtolower($actionType) == 'changed' or strtolower($actionType) == 'reviewed') && $story->type == 'story')
         {
             $teamMembers = $this->getTeamMembers($story->id, $actionType);
-            if($teamMembers)
-            {
-                $ccList .= ',' . implode(',', $teamMembers);
-                $ccList  = ltrim($ccList, ',');
-            }
+            if($teamMembers) $ccList = ltrim($ccList . ',' . implode(',', $teamMembers), ',');
         }
 
         if(in_array(strtolower($actionType), array('changed', 'opened', 'submitreview')))
         {
             $reviewerList = $this->getReviewerPairs($story->id, $story->version);
+            if($story->assignedTo && isset($reviewerList[$story->assignedTo])) unset($reviewerList[$story->assignedTo]);
 
-            $toList = implode(',', array_keys($reviewerList));
-            if($story->assignedTo && !isset($reviewerList[$story->assignedTo])) $ccList = ltrim($ccList . ',' . $story->assignedTo, ',');
+            $toList = ltrim($toList . ',' . implode(',', array_keys($reviewerList)), ',');
         }
 
         if(empty($toList))
