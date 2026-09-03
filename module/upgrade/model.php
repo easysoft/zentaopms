@@ -13693,4 +13693,63 @@ class upgradeModel extends model
         }
         return true;
     }
+
+    /**
+     * 修复其他交付物的检查环节。
+     * Modify other deliverable.
+     *
+     * @access public
+     * @return bool
+     */
+    public function modifyOtherDeliverable(): bool
+    {
+        $this->app->loadLang('task');
+
+        $deliverables = $this->dao->select('t1.projectModel,t2.*')->from(TABLE_WORKFLOWGROUP)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.id=t2.workflowGroup')
+            ->where('t2.category')->eq('other')
+            ->fetchAll();
+
+        $deliverableStage = new stdclass();
+        foreach($deliverables as $deliverable)
+        {
+            if($deliverable->projectModel != 'scrum' && $deliverable->projectModel != 'ipd')
+            {
+                foreach($this->lang->stage->typeList as $type => $label)
+                {
+                    if(!$type) continue;
+                    $deliverableStage->deliverable = $deliverable->id;
+                    $deliverableStage->type        = 'execution';
+                    $deliverableStage->stage       = $type;
+                    $deliverableStage->required    = 0;
+                    $this->dao->replace(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                }
+            }
+
+            if($deliverable->projectModel == 'ipd')
+            {
+                foreach($this->lang->stage->ipdTypeList as $type => $label)
+                {
+                    if(!$type) continue;
+                    $deliverableStage->deliverable = $deliverable->id;
+                    $deliverableStage->type        = 'execution';
+                    $deliverableStage->stage       = $type;
+                    $deliverableStage->required    = 0;
+                    $this->dao->replace(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                }
+            }
+
+            foreach($this->lang->task->typeList as $type => $label)
+            {
+                if(!$type) continue;
+                $deliverableStage->deliverable = $deliverable->id;
+                $deliverableStage->type        = 'task';
+                $deliverableStage->stage       = $type;
+                $deliverableStage->required    = 0;
+                $this->dao->replace(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
 }
