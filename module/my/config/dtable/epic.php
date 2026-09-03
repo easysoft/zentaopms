@@ -163,7 +163,7 @@ $config->my->epic->dtable->fieldList['assignedDate']['sortType'] = true;
 $config->my->epic->dtable->fieldList['assignedDate']['type']     = 'date';
 $config->my->epic->dtable->fieldList['assignedDate']['group']    = 6;
 
-if($config->edition != 'open')
+if(!in_array($config->edition, array('open', 'gitfox')))
 {
     $config->my->epic->dtable->fieldList['relatedObject']['name']            = 'relatedObject';
     $config->my->epic->dtable->fieldList['relatedObject']['title']           = $lang->custom->relateObject;

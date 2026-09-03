@@ -324,7 +324,7 @@ class dtable extends wg
 
         }
 
-        if($config->edition != 'open')
+        if(!in_array($config->edition, array('open', 'gitfox')))
         {
             $moduleName = $this->prop('moduleName') ? $this->prop('moduleName') : $app->moduleName;
             $methodName = $this->prop('methodName') ? $this->prop('methodName') : $app->methodName;

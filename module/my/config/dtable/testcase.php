@@ -46,7 +46,7 @@ $config->my->testcase->dtable->fieldList['lastRunResult'] = $config->testcase->d
 $config->my->testcase->dtable->fieldList['bugs']          = $config->testcase->dtable->fieldList['bugs'];
 $config->my->testcase->dtable->fieldList['results']       = $config->testcase->dtable->fieldList['results'];
 $config->my->testcase->dtable->fieldList['stepNumber']    = $config->testcase->dtable->fieldList['stepNumber'];
-if($config->edition != 'open')
+if(!in_array($config->edition, array('open', 'gitfox')))
 {
     $config->my->testcase->dtable->fieldList['relatedObject'] = $config->testcase->dtable->fieldList['relatedObject'];
     unset($config->my->testcase->dtable->fieldList['relatedObject']['show']);

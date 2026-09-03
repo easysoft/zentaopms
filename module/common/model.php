@@ -624,7 +624,8 @@ class commonModel extends model
         global $lang, $app, $config;
 
         $app->loadLang('my');
-        if($config->edition != 'open' && $app->isServing()) $app->control->loadModel('common')->mergePrimaryFlows();
+        $commonModel = $app->control->loadModel('common');
+        if(!in_array($config->edition, array('open', 'gitfox')) && $app->isServing()) $commonModel->mergePrimaryFlows();
 
         /* Ensure user has latest rights set. */
         $app->user->rights = $app->control->loadModel('user')->authorize($app->user->account);
@@ -3304,7 +3305,8 @@ eof;
 
         if(!$tab) return;
         if($tab == 'admin' and $app->control and method_exists($app->control, 'loadModel')) $app->control->loadModel('admin')->setMenu();
-        if($config->edition != 'open' && $app->isServing()) $app->control->loadModel('common')->mergeFlowMenuLang();
+        $commonModel = $app->control->loadModel('common');
+        if(!in_array($config->edition, array('open', 'gitfox')) && $app->isServing()) $commonModel->mergeFlowMenuLang();
         $icon = zget($lang->navIcons, $tab, '');
 
         if(!in_array($tab, array('program', 'product', 'project')))

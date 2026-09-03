@@ -493,10 +493,11 @@ EOT;
         $changes = [];
         $clearDB = $this->session->myConfig['clearDB'] ?? 0;
 
-        /* 主 SQL 之后追加执行数据库视图 SQL，保证先建表后建视图。*/
+        /* 主 SQL 之后追加执行 DevOps 独立版初始化 SQL，再执行数据库视图 SQL，保证先建表后建视图。*/
         $sqls = array_merge
         (
             $this->getInstallSQLs($file, $changes, $clearDB),
+            $this->config->edition == 'gitfox' ? $this->getInstallSQLs('gitfox' . DS . 'install.sql', $changes, $clearDB) : array(),
             $this->getInstallSQLs('dbviews.sql', $changes, $clearDB)
         );
 

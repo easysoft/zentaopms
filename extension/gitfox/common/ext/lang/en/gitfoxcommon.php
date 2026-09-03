@@ -17,5 +17,6 @@ $lang->devops->service      = 'Service';
 $lang->devops->store        = 'Store';
 $lang->devops->review       = 'Review';
 $lang->devops->issue        = 'Issue';
+$lang->devops->ppm          = 'Review';
 
-include dirname(dirname(__FILE__)) . DS . 'devopsmenu.php';
+include dirname(dirname(__FILE__)) . DS . 'gitfoxmenu.php';

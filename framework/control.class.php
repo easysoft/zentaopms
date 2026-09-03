@@ -525,7 +525,7 @@ class control extends baseControl
      */
     public function appendExtendFields(zin\fieldList $fields, string $moduleName = '', string $methodName = '', ?object $object = null): zin\fieldList
     {
-        if($this->config->edition == 'open') return $fields;
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return $fields;
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $fields;
 
         $moduleName = $moduleName ? $moduleName : $this->app->rawModule;
@@ -565,7 +565,7 @@ class control extends baseControl
      */
     public function appendExtendCssAndJS(string $moduleName = '', string $methodName = '', ?object $object = null): string
     {
-        if($this->config->edition == 'open') return '';
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return '';
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return '';
 
         $moduleName = $moduleName ? $moduleName : $this->app->rawModule;

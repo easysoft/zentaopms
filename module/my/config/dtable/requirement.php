@@ -163,7 +163,7 @@ $config->my->requirement->dtable->fieldList['assignedDate']['sortType'] = true;
 $config->my->requirement->dtable->fieldList['assignedDate']['type']     = 'date';
 $config->my->requirement->dtable->fieldList['assignedDate']['group']    = 6;
 
-if($config->edition != 'open')
+if(!in_array($config->edition, array('open', 'gitfox')))
 {
     $config->my->requirement->dtable->fieldList['relatedObject']['name']            = 'relatedObject';
     $config->my->requirement->dtable->fieldList['relatedObject']['title']           = $lang->custom->relateObject;

@@ -69,16 +69,23 @@ class upgradeModel extends model
     {
         $versions = array();
         /* pms20beta2 is a version released between pms18.11 and pms18.12, which was upgraded to pms20 and lost 18.11 upgrade sql. */
-        if($openVersion == '20_0_beta2') $versions['18_11'] = array('pro' => array(), 'biz' => array(), 'max' => array(), 'ipd' => array());
+        if($openVersion == '20_0_beta2') $versions['18_11'] = array('pro' => array(), 'biz' => array(), 'max' => array(), 'ipd' => array(), 'gitfox' => array());
 
         /* Always update open sql. */
         foreach($this->lang->upgrade->fromVersions as $version => $versionName)
         {
             if(!is_numeric($version[0])) continue;
             if(version_compare(str_replace('_', '.', $version), str_replace('_', '.', $openVersion)) < 0) continue;
-            $versions[$version] = array('pro' => array(), 'biz' => array(), 'max' => array(), 'ipd' => array());
+            $versions[$version] = array('pro' => array(), 'biz' => array(), 'max' => array(), 'ipd' => array(), 'gitfox' => array());
         }
         if($fromEdition == 'open') return $versions;
+
+        /* Update gitfox sql only from gitfox. */
+        foreach($this->config->upgrade->gitfoxVersion as $gitfox => $open)
+        {
+            if(isset($versions[$open])) $versions[$open]['gitfox'][] = $gitfox;
+        }
+        if($fromEdition == 'gitfox') return $versions;
 
         /* Update pro sql from pro|biz|max|ipd. */
         foreach($this->config->upgrade->proVersion as $pro => $open)
@@ -121,7 +128,7 @@ class upgradeModel extends model
     {
         $methods = [];
         /* Means open source/pro upgrade to biz or max. */
-        if($this->config->edition != 'open' && ($fromEdition == 'open' || $fromEdition == 'pro'))
+        if($this->config->edition != 'open' && $this->config->edition != 'gitfox' && ($fromEdition == 'open' || $fromEdition == 'pro'))
         {
             $methods['importBuildinModules'] = [];
             $methods['importLiteModules']    = [];
@@ -195,11 +202,17 @@ class upgradeModel extends model
         }
 
         $this->fromVersion     = $fromVersion;
-        $this->fromEdition     = $this->getEditionByVersion($fromVersion);
+        $this->fromEdition     = $this->getUpgradeFromEdition($fromVersion);
         $this->executedChanges = empty($this->config->upgrade->executedChanges) ? [] : json_decode($this->config->upgrade->executedChanges, true);
 
         /* Execute. */
         $fromOpenVersion = $this->getOpenVersion(str_replace('.', '_', $this->config->installedVersion));
+        $currentOpenVersion = $this->getOpenVersion(str_replace('.', '_', $this->config->version));
+        if(version_compare($currentOpenVersion, $fromOpenVersion, '<'))
+        {
+            static::$errors[] = $this->lang->upgrade->notSupportDowngrade;
+            return false;
+        }
         $toOpenVersion   = $this->getOpenVersion($toVersion);
         $upgradeVersions = $this->getVersionsToUpdate($fromOpenVersion, $this->fromEdition);
 
@@ -382,7 +395,7 @@ class upgradeModel extends model
     public function getConfirm(string $fromVersion): string
     {
         $confirmContent  = '';
-        $fromEdition     = $this->getEditionByVersion($fromVersion);
+        $fromEdition     = $this->getUpgradeFromEdition($fromVersion);
         $fromOpenVersion = $this->getOpenVersion($fromVersion);
         $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
         foreach($versions as $openVersion => $chargedVersions)
@@ -530,8 +543,36 @@ class upgradeModel extends model
      */
     public function getEditionByVersion(string $version): string
     {
-        $editions = array('p' => 'pro', 'b' => 'biz', 'm' => 'max', 'i' => 'ipd');
+        $editions = array('p' => 'pro', 'b' => 'biz', 'm' => 'max', 'i' => 'ipd', 'g' => 'gitfox');
         return is_numeric($version[0]) ? 'open' : $editions[$version[0]];
+    }
+
+    /**
+     * 添加升级错误信息。
+     * Add upgrade error.
+     *
+     * @param  string $message
+     * @access public
+     * @return void
+     */
+    public function addError(string $message): void
+    {
+        static::$errors[] = $message;
+    }
+
+    /**
+     * 获取升级来源版本类型。
+     * Get upgrade source edition. Treat gitfox as open when upgrading to open or paid editions.
+     *
+     * @param  string $fromVersion
+     * @access public
+     * @return string
+     */
+    public function getUpgradeFromEdition(string $fromVersion): string
+    {
+        $fromEdition = $this->getEditionByVersion($fromVersion);
+        if($fromEdition == 'gitfox' && $this->config->edition != 'gitfox') return 'open';
+        return $fromEdition;
     }
 
     /**
@@ -1293,6 +1334,11 @@ class upgradeModel extends model
      */
     public function getUpgradeFile(string $version): string
     {
+        if(str_starts_with($version, 'gitfox'))
+        {
+            $version = str_replace('gitfox', '', $version);
+            return $this->app->getAppRoot() . 'db' . DS . 'gitfox' . DS . 'upgrade' . $version . '.sql';
+        }
         return $this->app->getAppRoot() . 'db' . DS . 'update' . $version . '.sql';
     }
 

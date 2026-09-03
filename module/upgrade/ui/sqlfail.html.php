@@ -17,8 +17,8 @@ set::zui(true);
 $editionName = $lang->pmsName . $config->installedVersion;
 if(!is_numeric($config->installedVersion[0]))
 {
-    $edition     = substr($config->installedVersion, 0, 3);
-    $editionName = $lang->{$edition . 'Name'} . str_ireplace($edition, '', $config->installedVersion);
+    $edition     = str_starts_with($config->installedVersion, 'gitfox') ? 'gitfox' : (str_starts_with($config->installedVersion, 'devops') ? 'devops' : substr($config->installedVersion, 0, 3));
+    $editionName = ($edition == 'gitfox' ? ($lang->gitfoxName ?? 'GitFox') : $lang->{$edition . 'Name'}) . str_ireplace($edition, '', $config->installedVersion);
 }
 
 div
