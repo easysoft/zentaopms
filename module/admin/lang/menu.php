@@ -41,6 +41,7 @@ $lang->admin->menuList->system['subMenu']['trash']       = array('link' => "{$la
 $lang->admin->menuList->system['subMenu']['safe']        = array('link' => "{$lang->security}|admin|safe|", 'alias' => 'checkweak,resetpwdsetting', 'links' => array('admin|resetpwdsetting|', 'admin|checkweak|'));
 $lang->admin->menuList->system['subMenu']['cache']       = array('link' => "{$lang->cache->common}|cache|setting|");
 $lang->admin->menuList->system['subMenu']['cron']        = array('link' => "{$lang->admin->cron}|cron|index|", 'subModule' => 'cron');
+$lang->admin->menuList->system['subMenu']['errorlog']    = array('link' => "{$lang->errorlog->common}|errorlog|browse|", 'subModule' => 'errorlog');
 $lang->admin->menuList->system['subMenu']['timezone']    = array('link' => "{$lang->timezone}|custom|timezone|");
 $lang->admin->menuList->system['subMenu']['buildindex']  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
 $lang->admin->menuList->system['subMenu']['database']    = array('link' => "{$lang->admin->database}|admin|" . ($config->db->driver == 'mysql' ? 'tableengine' : 'dbview') . "|", 'alias' => 'tableengine,charset,dbview,metriclib');
@@ -67,6 +68,7 @@ $lang->admin->menuList->system['menuOrder']['35'] = 'cache';
 $lang->admin->menuList->system['menuOrder']['40'] = 'cron';
 $lang->admin->menuList->system['menuOrder']['45'] = 'timezone';
 $lang->admin->menuList->system['menuOrder']['50'] = 'buildindex';
+$lang->admin->menuList->system['menuOrder']['70'] = 'errorlog';
 $lang->admin->menuList->system['menuOrder']['65'] = 'database';  // The order 51-64 is reserved for extension.
 
 $lang->admin->menuList->system['dividerMenu'] = ',safe,';

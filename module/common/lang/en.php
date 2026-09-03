@@ -234,6 +234,7 @@ $lang->common->common       = 'Common Module';
 $lang->common->story        = 'Story';
 $lang->common->stories      = 'Stories';
 $lang->cache->common        = 'Cache';
+$lang->errorlog->common     = 'Error Log';
 $lang->my->common           = 'Dashboard';
 $lang->todo->common         = 'To-do';
 $lang->block->common        = 'Block';

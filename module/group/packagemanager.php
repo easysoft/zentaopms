@@ -1717,6 +1717,45 @@ $config->group->package->browseDeploy->privs['serverroom-view']        = array('
 $config->group->package->browseDeploy->privs['env-browse']             = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('deploy-browse'), 'recommend' => array('env-create', 'env-edit', 'env-delete'));
 $config->group->package->browseDeploy->privs['publishtemplate-browse'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('deploy-browse'), 'recommend' => array('publishtemplate-create', 'publishtemplate-edit', 'publishtemplate-delete'));
 
+$config->group->package->addDeployPlan = new stdclass();
+$config->group->package->addDeployPlan->order  = 15;
+$config->group->package->addDeployPlan->subset = 'deployment';
+$config->group->package->addDeployPlan->privs  = array();
+$config->group->package->addDeployPlan->privs['deploy-create']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 2,  'depend' => array('deploy-browse'), 'recommend' => array('deploy-activate', 'deploy-edit', 'deploy-finish'));
+$config->group->package->addDeployPlan->privs['deploy-edit']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 3,  'depend' => array('deploy-browse'), 'recommend' => array('deploy-activate', 'deploy-create', 'deploy-finish'));
+$config->group->package->addDeployPlan->privs['deploy-activate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 4,  'depend' => array('deploy-browse'), 'recommend' => array('deploy-create', 'deploy-edit', 'deploy-finish'));
+$config->group->package->addDeployPlan->privs['deploy-finish']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('deploy-browse'), 'recommend' => array('deploy-activate', 'deploy-create', 'deploy-edit'));
+$config->group->package->addDeployPlan->privs['deploy-delete']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 6,  'depend' => array('deploy-browse'), 'recommend' => array('deploy-create', 'deploy-edit'));
+
+$config->group->package->reviewDeployPlan = new stdclass();
+$config->group->package->reviewDeployPlan->order  = 20;
+$config->group->package->reviewDeployPlan->subset = 'deployment';
+$config->group->package->reviewDeployPlan->privs  = array();
+$config->group->package->reviewDeployPlan->privs['deploy-publish'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('deploy-browse'), 'recommend' => array('deploy-activate', 'deploy-create', 'deploy-edit', 'deploy-finish'));
+$config->group->package->reviewDeployPlan->privs['deploy-submit']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('deploy-browse'), 'recommend' => array('deploy-activate', 'deploy-create', 'deploy-edit', 'deploy-finish'));
+$config->group->package->reviewDeployPlan->privs['deploy-review']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('deploy-browse'), 'recommend' => array('deploy-activate', 'deploy-create', 'deploy-edit', 'deploy-finish'));
+$config->group->package->reviewDeployPlan->privs['deploy-recall']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('deploy-browse'), 'recommend' => array('deploy-activate', 'deploy-create', 'deploy-edit', 'deploy-finish'));
+
+$config->group->package->deployCase = new stdclass();
+$config->group->package->deployCase->order  = 25;
+$config->group->package->deployCase->subset = 'deployment';
+$config->group->package->deployCase->privs  = array();
+$config->group->package->deployCase->privs['deploy-linkCases']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('deploy-browse', 'deploy-cases'), 'recommend' => array('deploy-unlinkCase'));
+$config->group->package->deployCase->privs['deploy-unlinkCase']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 60, 'depend' => array('deploy-browse', 'deploy-cases'), 'recommend' => array('deploy-batchUnlinkCases', 'deploy-linkCases'));
+$config->group->package->deployCase->privs['deploy-batchUnlinkCases'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 65, 'depend' => array('deploy-browse', 'deploy-cases'), 'recommend' => array('deploy-unlinkCase'));
+
+$config->group->package->completeDeployStep = new stdclass();
+$config->group->package->completeDeployStep->order  = 30;
+$config->group->package->completeDeployStep->subset = 'deployment';
+$config->group->package->completeDeployStep->privs  = array();
+$config->group->package->completeDeployStep->privs['deploy-manageStep'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('deploy-browse', 'deploy-steps'), 'recommend' => array('deploy-assignTo'));
+$config->group->package->completeDeployStep->privs['deploy-assignTo']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('deploy-browse', 'deploy-steps'), 'recommend' => array('deploy-editStep', 'deploy-finishStep', 'deploy-manageStep'));
+
+$config->group->package->completedDeploy = new stdclass();
+$config->group->package->completedDeploy->order  = 35;
+$config->group->package->completedDeploy->subset = 'deployment';
+$config->group->package->completedDeploy->privs['deploy-finishStep'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('deploy-browse', 'deploy-steps'), 'recommend' => array('deploy-assignTo', 'deploy-manageStep'));
+
 $config->group->package->host = new stdclass();
 $config->group->package->host->order  = 2220;
 $config->group->package->host->subset = 'deployment';
@@ -2802,11 +2841,23 @@ $config->group->package->dev->privs  = array();
 $config->group->package->dev->privs['dev-api'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 $config->group->package->dev->privs['dev-db']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
 
+$config->group->package->errorlog = new stdclass();
+$config->group->package->errorlog->order  = 6;
+$config->group->package->errorlog->subset = 'systemsetting';
+$config->group->package->errorlog->privs  = array();
+$config->group->package->errorlog->privs['errorlog-browse']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('admin-index'), 'recommend' => array());
+$config->group->package->errorlog->privs['errorlog-view']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('errorlog-browse'), 'recommend' => array());
+$config->group->package->errorlog->privs['errorlog-delete']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 12, 'depend' => array('errorlog-browse'), 'recommend' => array());
+$config->group->package->errorlog->privs['errorlog-batchDelete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('errorlog-browse'), 'recommend' => array('errorlog-delete'));
+$config->group->package->errorlog->privs['errorlog-setting']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('errorlog-browse'), 'recommend' => array());
+
 $config->group->package->browseCodeIssue = new stdclass();
 $config->group->package->browseCodeIssue->order  = 2600;
 $config->group->package->browseCodeIssue->subset = 'codereview';
 $config->group->package->browseCodeIssue->privs  = array();
 $config->group->package->browseCodeIssue->privs['repo-review']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('repo-diff'), 'recommend' => array('repo-addBug', 'repo-editBug'));
+$config->group->package->browseCodeIssue->privs['codescan-issue']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-maintain'), 'recommend' => array());
+$config->group->package->browseCodeIssue->privs['codescan-issueView'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('codescan-issue'), 'recommend' => array());
 $config->group->package->browseCodeIssue->privs['repo-addComment'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-diff'), 'recommend' => array('repo-addBug', 'repo-editBug', 'repo-editComment', 'repo-review'));
 
 $config->group->package->reviewCodeIssue = new stdclass();
@@ -4421,8 +4472,6 @@ $config->group->package->browseScanInfo->order  = 5;
 $config->group->package->browseScanInfo->subset = 'codeScan';
 $config->group->package->browseScanInfo->privs  = array();
 $config->group->package->browseScanInfo->privs['codescan-overview']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('codescan-task'), 'recommend' => array());
-$config->group->package->browseScanInfo->privs['codescan-issue']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10,  'depend' => array('repo-maintain'), 'recommend' => array());
-$config->group->package->browseScanInfo->privs['codescan-issueView']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('codescan-issue'), 'recommend' => array());
 $config->group->package->browseScanInfo->privs['codescan-task']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20,  'depend' => array('codescan-overview'), 'recommend' => array());
 $config->group->package->browseScanInfo->privs['codescan-taskView']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('codescan-task'), 'recommend' => array());
 $config->group->package->browseScanInfo->privs['codescan-plan']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30,  'depend' => array('codescan-overview'), 'recommend' => array());

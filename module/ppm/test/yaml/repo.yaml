@@ -11,7 +11,7 @@ fields:
   - field: encoding
     range: '`utf-8`'
   - field: path
-    range: '`https://gitlabdev.qc.oop.cc/root/unittest1`'
+    range: '`https://gitlabdev.oop.cc/root/unittest1`'
   - field: SCM
     range: Gitlab
   - field: serviceHost

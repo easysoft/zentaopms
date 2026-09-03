@@ -1,0 +1,167 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Pipeline",
+  "description": "Schema for ZenTao pipeline YAML files",
+  "required": ["version", "kind", "spec"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "enum": [1],
+      "description": "Pipeline format version"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["pipeline"],
+      "description": "Pipeline kind"
+    },
+    "spec": {
+      "$ref": "#/definitions/pipelineSpec"
+    }
+  },
+  "definitions": {
+    "pipelineSpec": {
+      "type": "object",
+      "title": "Pipeline spec",
+      "description": "Pipeline spec",
+      "required": ["stages"],
+      "properties": {
+        "options": {
+          "type": "object",
+          "title": "Options",
+          "description": "Pipeline options",
+          "properties": {
+            "clone": {
+              "type": "object",
+              "title": "Clone options",
+              "description": "Repository clone options",
+              "properties": {
+                "disabled": {
+                  "type": "boolean",
+                  "description": "Disable repository clone",
+                  "default": true
+                }
+              }
+            }
+          }
+        },
+        "stages": {
+          "type": "array",
+          "title": "Stages",
+          "description": "Stage list",
+          "items": {
+            "$ref": "#/definitions/stage"
+          }
+        }
+      }
+    },
+    "stage": {
+      "type": "object",
+      "title": "Stage",
+      "description": "A pipeline stage",
+      "required": ["id", "name", "spec"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stage id, unique within the pipeline"
+        },
+        "name": {
+          "type": "string",
+          "description": "Stage name"
+        },
+        "desc": {
+          "type": "string",
+          "description": "Stage description",
+          "default": ""
+        },
+        "type": {
+          "type": "string",
+          "enum": ["ci"],
+          "description": "Stage type",
+          "default": "ci"
+        },
+        "spec": {
+          "$ref": "#/definitions/stageSpec"
+        }
+      }
+    },
+    "stageSpec": {
+      "type": "object",
+      "title": "Stage spec",
+      "description": "Stage spec",
+      "required": ["steps"],
+      "properties": {
+        "steps": {
+          "type": "array",
+          "title": "Steps",
+          "description": "Step list",
+          "items": {
+            "$ref": "#/definitions/step"
+          }
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "title": "Step",
+      "description": "A stage step",
+      "required": ["id", "name", "spec"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Step id, unique within the stage"
+        },
+        "name": {
+          "type": "string",
+          "description": "Step name"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["run", "plugin"],
+          "description": "Step type",
+          "default": "run"
+        },
+        "spec": {
+          "$ref": "#/definitions/stepSpec"
+        }
+      }
+    },
+    "stepSpec": {
+      "type": "object",
+      "title": "Step spec",
+      "description": "Step configuration, content varies by step type",
+      "properties": {
+        "container": {
+          "type": "object",
+          "title": "Container",
+          "description": "Container configuration",
+          "properties": {
+            "image": {
+              "type": "string",
+              "description": "Container image"
+            },
+            "pull": {
+              "type": "string",
+              "enum": ["always", "if-not-exists"],
+              "description": "Image pull policy",
+              "default": "if-not-exists"
+            }
+          }
+        },
+        "privileged": {
+          "type": "boolean",
+          "description": "Run container in privileged mode",
+          "default": false
+        },
+        "script": {
+          "type": "array",
+          "description": "Script lines",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

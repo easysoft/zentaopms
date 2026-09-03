@@ -22,6 +22,8 @@ cid=15175
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
+global $dbh;
+$dbh->exec("CREATE OR REPLACE VIEW ztv_tasknotpl AS SELECT * FROM zt_task WHERE deleted = '0' AND isTpl = 0");
 
 // 2. zendata数据准备（根据需要配置）
 $task = zenData('task');

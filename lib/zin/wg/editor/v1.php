@@ -58,7 +58,7 @@ class editor extends wg
     {
         $version = self::$version;
         $content = file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-        $content .= "$.getLib('zen-editor/zen-editor.esm.js?v=$version', {type: 'module'}, () => {document.body.dataset.loadedEditor = true;});";
+        $content .= "$.getLib('zen-editor/zeneditor.js?v=$version', {type: 'module'}, () => {document.body.dataset.loadedEditor = true;});";
         return $content;
     }
 

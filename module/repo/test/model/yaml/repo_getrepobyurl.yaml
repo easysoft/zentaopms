@@ -17,7 +17,7 @@ fields:
 
 - field: serviceHost
   note: 服务主机地址
-  range: gitlab.test.com{3},github.com{2},gitlabdev.qc.oop.cc{2},localhost{3}
+  range: gitlab.test.com{3},github.com{2},gitlabdev.oop.cc{2},localhost{3}
 
 - field: serviceProject
   note: 服务项目名称

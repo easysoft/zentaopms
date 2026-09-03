@@ -72,6 +72,7 @@ $lang->moduleOrder[190] = 'file';
 $lang->moduleOrder[195] = 'misc';
 $lang->moduleOrder[200] = 'backup';
 $lang->moduleOrder[205] = 'cron';
+$lang->moduleOrder[206] = 'errorlog';
 $lang->moduleOrder[210] = 'dev';
 $lang->moduleOrder[215] = 'editor';
 $lang->moduleOrder[220] = 'message';
@@ -2015,6 +2016,8 @@ $lang->resource->admin->sso             = 'ssoAction';
 $lang->resource->admin->register        = 'register';
 $lang->resource->admin->resetPWDSetting = 'resetPWDSetting';
 $lang->resource->admin->tableEngine     = 'tableEngine';
+$lang->resource->admin->charset         = 'charset';
+$lang->resource->admin->dbview          = 'dbView';
 
 $lang->admin->methodOrder[0]  = 'index';
 $lang->admin->methodOrder[10] = 'safeIndex';
@@ -2023,6 +2026,16 @@ $lang->admin->methodOrder[20] = 'sso';
 $lang->admin->methodOrder[25] = 'register';
 $lang->admin->methodOrder[35] = 'resetPWDSetting';
 $lang->admin->methodOrder[40] = 'tableEngine';
+$lang->admin->methodOrder[45] = 'charset';
+$lang->admin->methodOrder[50] = 'dbview';
+
+/* Errorlog. */
+$lang->resource->errorlog = new stdclass();
+$lang->resource->errorlog->browse      = 'browseAbbr';
+$lang->resource->errorlog->view        = 'viewAbbr';
+$lang->resource->errorlog->delete      = 'delete';
+$lang->resource->errorlog->batchDelete = 'batchDelete';
+$lang->resource->errorlog->setting     = 'setting';
 
 /* Cache. */
 $lang->resource->cache = new stdclass();

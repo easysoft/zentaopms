@@ -665,9 +665,9 @@ class searchTaoTest extends baseTest
      * @access public
      * @return string
      */
-    public function setWhereTest(string $field, string $operator, string $value, string $andOr): string
+    public function setWhereTest(string $field, string $operator, string $value, string $andOr, string $control = ''): string
     {
         $where = '';
-        return $this->instance->setWhere($where, $field, $operator, $value, $andOr);
+        return $this->instance->setWhere($where, $field, $operator, $value, $andOr, $control);
     }
 }

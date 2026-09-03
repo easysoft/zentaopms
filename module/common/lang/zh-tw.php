@@ -176,6 +176,7 @@ $lang->repo->codeRepo     = '代碼庫';
 $lang->report->common     = '统计';
 $lang->system->common     = '組織';
 $lang->admin->common      = '後台';
+$lang->errorlog->common   = '錯誤日誌';
 $lang->task->common       = '任務';
 $lang->bug->common        = 'Bug';
 $lang->testcase->common   = '用例';

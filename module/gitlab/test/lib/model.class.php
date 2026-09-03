@@ -59,7 +59,7 @@ class gitlabModelTest extends baseTest
         /* Mock: non-existent or non-gitlab server returns empty. */
         if($gitlabID == 10 || $gitlabID == 4) return '0';
 
-        $baseURL = 'https://gitlabdev.qc.oop.cc/api/v4%s?private_token=glpat-b8Sa1pM9k9ygxMZYPN6w';
+        $baseURL = 'https://gitlabdev.oop.cc/api/v4%s?private_token=glpat-U3zV-zBBm-3PnbVbersM';
 
         /* Mock: non-admin user with sudo returns URL with sudo param. */
         if($sudo && !empty($this->app->user) && !$this->app->user->admin) return $baseURL . '&sudo=1';

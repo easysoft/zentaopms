@@ -13724,6 +13724,7 @@ class upgradeModel extends model
             $workflowField->createdDate = helper::now();
             $this->dao->insert(TABLE_WORKFLOWFIELD)->data($workflowField)->autoCheck()->exec();
 
+            $maxOrder = $this->dao->select('MAX(`order`) as `maxOrder`')->from(TABLE_WORKFLOWLABEL)->where('module')->eq($module)->andWhere('action')->eq('browse')->fetch('maxOrder');
             $workflowlabel = new stdclass();
             $workflowlabel->module      = $module;
             $workflowlabel->action      = 'browse';
@@ -13731,6 +13732,7 @@ class upgradeModel extends model
             $workflowlabel->label       = $this->lang->workflowlabel->approval->labels['reviewedby'];
             $workflowlabel->params      = '[{"field":"deleted","operator":"equal","value":"0"},{"field":"reviewedBy","operator":"include","value":"currentUser"}]';
             $workflowlabel->role        = 'approval';
+            $workflowlabel->order       = $maxOrder + 1;
             $workflowlabel->createdBy   = 'admin';
             $workflowlabel->createdDate = helper::now();
             $this->dao->insert(TABLE_WORKFLOWLABEL)->data($workflowlabel)->autoCheck()->exec();

@@ -31,7 +31,6 @@ $lang->ppm->locateView        = 'View';
 $lang->ppm->codeConflict      = 'Conflict';
 $lang->ppm->hasConflict       = 'Check Conflict';
 $lang->ppm->request           = 'Request';
-$lang->ppm->AIReview          = 'AI Review';
 $lang->ppm->AICodeScore       = 'Score';
 $lang->ppm->AISevereIssue     = 'Severe Issue';
 $lang->ppm->AIOrdinaryIssue   = 'Ordinary Issue';
@@ -285,8 +284,8 @@ $lang->ppm->confirmUnlinkTask = "Are you sure to remove this task?";
 $lang->ppm->taskSummary       = "There are <strong>%s</strong> tasks on this page";
 $lang->ppm->notDelbranch      = "The source branch cannot be deleted when it is a protected branch";
 $lang->ppm->addForApp         = "There are no projects under this server, do you want to go to add?";
-$lang->ppm->checkSuccess      = 'The inspection has been passed, and this branch is allowed to be merged';
-$lang->ppm->checkFailed       = 'The check failed, and this branch cannot be merged';
+$lang->ppm->checkSuccess      = 'The merge check has been passed, and this branch is allowed to be merged';
+$lang->ppm->checkFailed       = 'The merge check failed, and this branch cannot be merged';
 $lang->ppm->MRHistory         = "This merge was created by <strong>%s</strong> on <strong>%s</strong>，merging <icon class='icon-code-fork ml-1'/><strong>%s</strong> <strong>%s</strong> commits，Merge into <icon class='icon-code-fork mr-1'/><strong>%s</strong> 。";
 
 $lang->ppm->checkStatusList = array();

@@ -232,6 +232,7 @@ $lang->userSelector->emptyText     = 'Keine verfügbaren Benutzer';
 $lang->common->common       = 'Standard Module';
 $lang->common->story        = 'Story';
 $lang->cache->common        = 'Cache';
+$lang->errorlog->common     = 'Fehlerprotokoll';
 $lang->my->common           = 'My';
 $lang->todo->common         = 'Todo';
 $lang->block->common        = 'InfoBlock';

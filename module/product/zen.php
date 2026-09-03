@@ -1538,6 +1538,8 @@ class productZen extends product
             $project->from    = 'project';
             $project->actions = $this->project->buildActionList($project);
         }
+         /* 交付物*/
+        if(in_array($this->config->edition, array('max', 'ipd'))) $projectList = $this->project->countDeliverable($projectList, 'project');
 
         return array_values($projectList);
     }

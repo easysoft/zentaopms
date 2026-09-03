@@ -3500,10 +3500,13 @@ class repoModel extends model
 
         $url = sprintf($apiRoot, "/user/repos");
 
+        $headers = array();
+        if(preg_match('/[?&]token=([^&]+)/', $url, $matches)) $headers[] = 'Authorization: token ' . urldecode($matches[1]);
+
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
+            $results = json_decode(commonModel::http($url . "&page={$page}&limit=50", '', array(), $headers));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
             if(count($results) < 50) break;

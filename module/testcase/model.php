@@ -2963,7 +2963,7 @@ class testcaseModel extends model
             $this->config->testcase->search['params']['branch']['values'] = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branches + array('all' => $this->lang->branch->all);
         }
 
-        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
+        if(!$this->config->testcase->needReview && empty($this->config->testcase->forceReview)) unset($this->config->testcase->search['params']['status']['values']['wait']);
 
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
@@ -3012,7 +3012,7 @@ class testcaseModel extends model
             }
         }
 
-        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
+        if(!$this->config->testcase->needReview && empty($this->config->testcase->forceReview)) unset($this->config->testcase->search['params']['status']['values']['wait']);
 
         $_SESSION['searchParams']['module'] = 'testcase';
         $searchConfig = $this->loadModel('search')->processBuildinFields('testcase', $this->config->testcase->search);

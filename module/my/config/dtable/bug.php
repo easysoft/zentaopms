@@ -49,9 +49,6 @@ $config->my->bug->dtable->fieldList['id']['sortType'] = true;
 $config->my->bug->dtable->fieldList['id']['required'] = true;
 $config->my->bug->dtable->fieldList['id']['group']    = 1;
 
-$config->my->bug->dtable->fieldList['product']['title']      = $lang->bug->product;
-$config->my->bug->dtable->fieldList['product']['display']    = false;
-
 $config->my->bug->dtable->fieldList['module']['display']    = false;
 
 $config->my->bug->dtable->fieldList['title']['title']    = $lang->bug->title;
@@ -91,21 +88,26 @@ $config->my->bug->dtable->fieldList['type']['flex']     = false;
 $config->my->bug->dtable->fieldList['type']['group']    = 2;
 $config->my->bug->dtable->fieldList['type']['sortType'] = true;
 
-$config->my->bug->dtable->fieldList['project']['title']      = $lang->bug->project;
-$config->my->bug->dtable->fieldList['project']['type']       = 'text';
-$config->my->bug->dtable->fieldList['project']['group']      = 3;
-$config->my->bug->dtable->fieldList['project']['sortType']   = true;
+$config->my->bug->dtable->fieldList['product']['title'] = $lang->bug->product;
+$config->my->bug->dtable->fieldList['product']['show']  = true;
+$config->my->bug->dtable->fieldList['product']['group'] = 2;
+$config->my->bug->dtable->fieldList['product']['width'] = '150';
 
-$config->my->bug->dtable->fieldList['execution']['title']      = $lang->bug->execution;
-$config->my->bug->dtable->fieldList['execution']['type']       = 'text';
-$config->my->bug->dtable->fieldList['execution']['group']      = 3;
-$config->my->bug->dtable->fieldList['execution']['sortType']   = true;
+$config->my->bug->dtable->fieldList['project']['title']    = $lang->bug->project;
+$config->my->bug->dtable->fieldList['project']['type']     = 'text';
+$config->my->bug->dtable->fieldList['project']['group']    = 3;
+$config->my->bug->dtable->fieldList['project']['sortType'] = true;
 
-$config->my->bug->dtable->fieldList['plan']['title']      = $lang->bug->plan;
-$config->my->bug->dtable->fieldList['plan']['width']      = 120;
-$config->my->bug->dtable->fieldList['plan']['group']      = 3;
-$config->my->bug->dtable->fieldList['plan']['sortType']   = true;
-$config->my->bug->dtable->fieldList['plan']['hint']       = true;
+$config->my->bug->dtable->fieldList['execution']['title']    = $lang->bug->execution;
+$config->my->bug->dtable->fieldList['execution']['type']     = 'text';
+$config->my->bug->dtable->fieldList['execution']['group']    = 3;
+$config->my->bug->dtable->fieldList['execution']['sortType'] = true;
+
+$config->my->bug->dtable->fieldList['plan']['title']    = $lang->bug->plan;
+$config->my->bug->dtable->fieldList['plan']['width']    = 120;
+$config->my->bug->dtable->fieldList['plan']['group']    = 3;
+$config->my->bug->dtable->fieldList['plan']['sortType'] = true;
+$config->my->bug->dtable->fieldList['plan']['hint']     = true;
 
 $config->my->bug->dtable->fieldList['openedBuild']['title']    = $lang->bug->openedBuild;
 $config->my->bug->dtable->fieldList['openedBuild']['type']     = 'text';

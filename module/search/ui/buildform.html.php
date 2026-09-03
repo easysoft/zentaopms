@@ -19,7 +19,12 @@ foreach($fieldParams as $name => $param)
     $condition->defaultOperator = $param['operator'];
     $condition->placeholder     = '';
     $condition->controlProps    = isset($config->search->controlProps[$module][$name]) ? (array)$config->search->controlProps[$module][$name] : array();
-    if($condition->control == 'select' && !isset($condition->controlProps['maxItemsCount'])) $condition->controlProps['maxItemsCount'] = 200;
+    if($condition->control == 'select')
+    {
+        if(!isset($condition->controlProps['maxItemsCount'])) $condition->controlProps['maxItemsCount'] = 200;
+        $condition->controlProps['multiple'] = true;
+        $condition->controlProps['menu']     = array('checkbox' => true);
+    }
 
 
     if(isset($param['class']) && in_array('date', explode(' ', $param['class'])))

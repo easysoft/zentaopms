@@ -114,7 +114,7 @@ jsVar('priv', array(
         'canActivateTask'     => $canModifyExecution && common::hasPriv('task', 'activate'),
         'canStartTask'        => $canModifyExecution && common::hasPriv('task', 'start') && $canStartExecution,
         'canAssignBug'        => $canModifyExecution && common::hasPriv('bug', 'assignto'),
-        'canConfirmBug'       => $canModifyExecution && common::hasPriv('bug', 'confirmBug'),
+        'canConfirmBug'       => $canModifyExecution && common::hasPriv('bug', 'confirm'),
         'canActivateBug'      => $canModifyExecution && common::hasPriv('bug', 'activate'),
         'canResolveBug'       => $canModifyExecution && common::hasPriv('bug', 'resolve'),
         'canCloseBug'         => $canModifyExecution && common::hasPriv('bug', 'close'),

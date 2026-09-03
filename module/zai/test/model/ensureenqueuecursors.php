@@ -63,9 +63,12 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 error_reporting(E_ERROR);
 
+$dbh->exec("DELETE FROM zt_config WHERE `owner` = 'system' AND `module` = 'zai' AND `section` = 'kb' AND `key` = 'systemVectorization'");
+
 $zd_user = zenData('user');
 $zd_user->id->range('1-1');
-$zd_user->account->range('1-1');
+$zd_user->account->range('admin');
+$zd_user->realname->range('admin');
 $zd_user->last->range('(M)-(w)')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
 $zd_user->feedback->range('0');
 $zd_user->scoreLevel->range('0');
