@@ -257,6 +257,8 @@ class customZen extends custom
             if($delItems)    $this->upgrade->deleteTestcaseDeliverable($delItems);
             if($changeItems) $this->upgrade->changeTestcaseDeliverable($changeItems);
         }
+
+        if(($this->config->edition == 'max' || $this->config->edition == 'ipd') && ($module == 'stage' && $field == 'ipdTypeList')) $this->loadModel('deliverable')->addOtherDeliverbaleStage('ipd');
         return !dao::isError();
     }
 
