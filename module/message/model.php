@@ -359,6 +359,7 @@ class messageModel extends model
 
             $submitter = zget($users, $submitter);
         }
+        if($actionType == 'submitreview' && $role == 'to' && empty($account)) $role = 'other';
 
         $action         = $this->loadModel('action')->getById($actionID);
         $actorName      = $action->actor == 'guest' ? 'guest' : zget($users, $action->actor);
