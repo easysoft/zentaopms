@@ -29,5 +29,6 @@ $lang->devops->pipelineSpace = '空间流水线';
 $lang->devops->pipelineRepo  = '代码库流水线';
 $lang->devops->artifactSpace = '空间制品库';
 $lang->devops->artifactRepo  = '代码库制品库';
+$lang->devops->welcome       = "%s研发平台";
 
 include dirname(dirname(__FILE__)) . DS . 'gitfoxmenu.php';

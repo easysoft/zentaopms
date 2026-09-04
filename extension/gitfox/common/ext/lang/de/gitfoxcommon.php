@@ -29,5 +29,6 @@ $lang->devops->pipelineSpace = 'Space Pipelines';
 $lang->devops->pipelineRepo  = 'Repository Pipelines';
 $lang->devops->artifactSpace = 'Space Artifact Repositories';
 $lang->devops->artifactRepo  = 'Repository Artifact Repositories';
+$lang->devops->welcome       = "%s R&D Platform";
 
 include dirname(dirname(__FILE__)) . DS . 'gitfoxmenu.php';
