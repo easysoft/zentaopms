@@ -72,6 +72,8 @@ class repoModel extends model
      */
     public function setMenu(array $repos, int $repoID = 0, int $spaceID = 0)
     {
+        $isGitfox = $this->config->vision == 'gitfox' || $this->config->edition == 'gitfox';
+
         if(empty($repoID)) $repoID = $this->session->repoID ? $this->session->repoID : key($repos);
         if(!isset($repos[$repoID])) $repoID = key($repos);
 
@@ -85,30 +87,36 @@ class repoModel extends model
         }
         $this->loadModel('space')->setMenu($spaceID);
 
-        if(!in_array($this->app->methodName, $this->config->repo->notSetMenuVars)) common::setMenuVars($this->config->vision == 'gitfox' ? 'repo' : 'devops', $repoID);
+        if(!in_array($this->app->methodName, $this->config->repo->notSetMenuVars))
+        {
+            common::setMenuVars($isGitfox ? 'repo' : 'devops', $repoID);
+            if($isGitfox && $this->app->tab == 'space') $this->app->tab = 'repo';
+        }
         $this->session->set('repoID', $repoID);
         $repo = $this->fetchByID($repoID);
         $this->session->set('devopsSpace', empty($repo) ? 0 : $repo->spaceID);
 
+        $repoMenu = $isGitfox ? $this->lang->repo->menu : $this->lang->devops->menu;
+
         /* 镜像代码库屏蔽"扫描(repoCodeScan)"、"代码问题(review)"与"设置(settings)"三个一级菜单。 */
         if($repo && !empty($repo->mirror))
         {
-            unset($this->lang->devops->menu->repoCodeScan);
-            unset($this->lang->devops->menu->review);
-            unset($this->lang->devops->menu->settings);
+            unset($repoMenu->repoCodeScan);
+            unset($repoMenu->review);
+            unset($repoMenu->settings);
         }
 
         /* SVN 代码库屏蔽分支、标签、代码评审、制品库、设置 5 个一级菜单。SVN 无原生分支/MR/制品库等概念。 */
         if($repo && $this->isSvn($repo))
         {
-            unset($this->lang->devops->menu->branch);
-            unset($this->lang->devops->menu->tag);
-            unset($this->lang->devops->menu->ppm);
-            unset($this->lang->devops->menu->artifact);
-            unset($this->lang->devops->menu->settings);
+            unset($repoMenu->branch);
+            unset($repoMenu->tag);
+            unset($repoMenu->ppm);
+            unset($repoMenu->artifact);
+            unset($repoMenu->settings);
         }
 
-        if(in_array($this->app->methodName, array('setarchive', 'browsewebhooks', 'createwebhook', 'editwebhook', 'logwebhook'))) $this->lang->devops->menu->settings['subModule'] .= ',repo';
+        if(in_array($this->app->methodName, array('setarchive', 'browsewebhooks', 'createwebhook', 'editwebhook', 'logwebhook'))) $repoMenu->settings['subModule'] .= ',repo';
     }
 
     /**

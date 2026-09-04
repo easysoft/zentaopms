@@ -20,36 +20,41 @@ class ciModel extends model
      */
     public function setMenu(int $repoID = 0)
     {
+        $isGitfox = $this->config->vision == 'gitfox' || $this->config->edition == 'gitfox';
+
         if($repoID) $this->session->set('repoID', $repoID);
 
         $homeMenuModule = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube', 'space');
         $homeMenuMethod = array('modelsetting', 'reviewrules', 'createocrrule', 'editocrrule');
-        if(!in_array("{$this->app->moduleName}", $homeMenuModule) && !in_array($this->app->methodName, $homeMenuMethod)) common::setMenuVars($this->config->vision == 'gitfox' ? 'repo' : 'devops', (int)$this->session->repoID);
+        if(!in_array("{$this->app->moduleName}", $homeMenuModule) && !in_array($this->app->methodName, $homeMenuMethod)) common::setMenuVars($isGitfox ? 'repo' : 'devops', (int)$this->session->repoID);
+        if($isGitfox && $this->app->tab == 'space') $this->app->tab = 'repo';
+
+        $repoMenu = $isGitfox ? $this->lang->repo->menu : $this->lang->devops->menu;
 
         if($this->session->repoID)
         {
             $repo = $this->loadModel('repo')->getByID($this->session->repoID);
-            if(!$repo) unset($this->lang->devops->menu->tag);
-            if(!$repo) unset($this->lang->devops->menu->branch);
+            if(!$repo) unset($repoMenu->tag);
+            if(!$repo) unset($repoMenu->branch);
             $this->session->set('devopsSpace', empty($repo) ? 0 : $repo->spaceID);
             $this->loadModel('common')->resetDevOpsPriv(empty($repo) ? 0 : $repo->spaceID);
 
             if($repo && $this->repo->isSvn($repo))
             {
-                unset($this->lang->devops->menu->branch);
-                unset($this->lang->devops->menu->tag);
-                unset($this->lang->devops->menu->ppm);
-                unset($this->lang->devops->menu->artifact);
-                unset($this->lang->devops->menu->settings);
-                unset($this->lang->devops->menu->review);
-                unset($this->lang->devops->menu->repoCodeScan);
+                unset($repoMenu->branch);
+                unset($repoMenu->tag);
+                unset($repoMenu->ppm);
+                unset($repoMenu->artifact);
+                unset($repoMenu->settings);
+                unset($repoMenu->review);
+                unset($repoMenu->repoCodeScan);
             }
 
             if($repo && !empty($repo->mirror))
             {
-                unset($this->lang->devops->menu->repoCodeScan);
-                unset($this->lang->devops->menu->review);
-                unset($this->lang->devops->menu->settings);
+                unset($repoMenu->repoCodeScan);
+                unset($repoMenu->review);
+                unset($repoMenu->settings);
             }
         }
 

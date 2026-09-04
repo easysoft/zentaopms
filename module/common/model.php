@@ -2701,7 +2701,7 @@ eof;
         if(empty($actionData['isClickable']) && isset($this->$moduleName) && method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) return false;
 
         global $config;
-        if($config->edition != 'open')
+        if(!in_array($config->edition, array('open', 'gitfox')))
         {
             $flowAction     = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $action);
             $isActionEnable = $flowAction && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions);

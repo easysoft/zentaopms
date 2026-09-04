@@ -2610,7 +2610,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function review(int $repoID, string $browseType = '', int $objectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function review(int $repoID = 0, string $browseType = '', int $objectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save the original $repoID to this variable to check if $repoID is 0. */
         $isAllRepo = !$repoID;

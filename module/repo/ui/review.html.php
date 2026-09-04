@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
-dropmenu
+if(!$allRepo) dropmenu
 (
     set::module($module),
     set::tab($module),
