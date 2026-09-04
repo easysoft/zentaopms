@@ -11739,14 +11739,19 @@ class upgradeModel extends model
         $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
         $deliverableID = $this->dao->lastInsertID();
 
+        /* “其他”类型；新加type，stage 与历史数据一致。 */
         $stageList = $this->config->edition != 'biz' ? $this->loadModel('deliverable')->buildStageList($workflowGroupID) : array();
-        foreach($stageList as $key => $stage)
+        foreach($stageList as $type => $stages)
         {
-            $deliverableStage = new stdclass();
-            $deliverableStage->deliverable = $deliverableID;
-            $deliverableStage->stage       = $key;
-            $deliverableStage->required    = '0';
-            $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+            foreach($stages as $stage => $label)
+            {
+                $deliverableStage = new stdclass();
+                $deliverableStage->deliverable = $deliverableID;
+                $deliverableStage->type        = $type;
+                $deliverableStage->stage       = $stage;
+                $deliverableStage->required    = '0';
+                $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+            }
         }
     }
 
