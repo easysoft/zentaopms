@@ -3,11 +3,12 @@
 $config->product->skipRedirectMethod .= ',browse,';
 
 $config->product->dtable = new stdclass();
-
 $config->product->dtable->fieldList = array();
+$config->product->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->product->dtable->fieldList['id']['type']  = 'id';
+
 $config->product->dtable->fieldList['name']['name']     = 'name';
 $config->product->dtable->fieldList['name']['title']    = $lang->product->name;
-$config->product->dtable->fieldList['name']['width']    = 0.2;
 $config->product->dtable->fieldList['name']['type']     = 'title';
 $config->product->dtable->fieldList['name']['flex']     = 1;
 $config->product->dtable->fieldList['name']['sortType'] = true;
@@ -17,6 +18,7 @@ $config->product->dtable->fieldList['name']['border']   = 'right';
 $config->product->dtable->fieldList['repo']['name']     = 'repo';
 $config->product->dtable->fieldList['repo']['title']    = $lang->product->repo;
 $config->product->dtable->fieldList['repo']['sortType'] = false;
+$config->product->dtable->fieldList['repo']['width']    = 0.3;
 
 $config->product->dtable->fieldList['desc']['name']     = 'desc';
 $config->product->dtable->fieldList['desc']['title']    = $lang->product->desc;

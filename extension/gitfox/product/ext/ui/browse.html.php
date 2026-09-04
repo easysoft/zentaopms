@@ -20,9 +20,7 @@ $products = initTableData($products, $config->product->dtable->fieldList, $this-
 $keyword = empty($keyword) ? '' : trim((string)$keyword);
 
 $browseType = empty($browseType) ? 'noclosed' : $browseType;
-$searchBrowseType = $browseType == 'bysearch' ? 'noclosed' : $browseType;
-
-$featureBarLink = createLink('product', 'browse', array
+$linkParams = array
 (
     'productID'  => 0,
     'branch'     => 'all',
@@ -36,24 +34,14 @@ $featureBarLink = createLink('product', 'browse', array
     'projectID'  => 0,
     'from'       => 'product',
     'blockID'    => 0
-));
+);
 
-$searchLink = createLink('product', 'browse', array
-(
-    'productID'  => 0,
-    'branch'     => 'all',
-    'browseType' => $searchBrowseType,
-    'param'      => 0,
-    'storyType'  => 'story',
-    'orderBy'    => $orderBy,
-    'recTotal'   => 0,
-    'recPerPage' => $recPerPage,
-    'pageID'     => 1,
-    'projectID'  => 0,
-    'from'       => 'product',
-    'blockID'    => 0
-));
-jsVar('+productSearchLink', $searchLink);
+$featureBarLink = createLink('product', 'browse', $linkParams);
+
+$linkParams['browseType'] = $browseType;
+
+$queryLink = createLink('product', 'browse', $linkParams);
+jsVar('+productSearchLink', $queryLink);
 
 $searchBox = div
 (
@@ -97,6 +85,8 @@ toolbar
     ) : null
 );
 
+$linkParams['orderBy'] = '{name}_{sortType}';
+$sortLink = createLink('product', 'browse', $linkParams);
 dtable
 (
     set::id('products'),
@@ -104,6 +94,7 @@ dtable
     set::data($products),
     set::userMap($users),
     set::footPager(usePager()),
+    set::sortLink($sortLink),
     set::emptyTip($lang->product->noProduct),
     set::createTip($lang->product->create),
     set::createLink($canCreate ? createLink('product', 'create') : '')

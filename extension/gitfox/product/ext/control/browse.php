@@ -50,9 +50,19 @@ class myProduct extends product
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $products = $this->product->getProductsInGitfox($browseType, $orderBy, $keyword, $pager);
+        $repos    = $this->loadModel('repo')->getProductRepos();
+
         foreach($products as $product)
         {
-            $product->desc = strip_tags($product->desc);
+            $product->desc     = strip_tags($product->desc);
+            $product->repoName = '';
+            if(!empty($repos[$product->id]))
+            {
+                foreach($repos[$product->id] as $repo)
+                {
+                    $product->repoName .= $repo->name . ',';
+                }
+            }
         }
 
         $this->view->title      = $this->lang->productCommon;
