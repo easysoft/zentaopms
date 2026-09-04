@@ -20,5 +20,7 @@ $lang->devops->store        = 'Store';
 $lang->devops->review       = 'Review';
 $lang->devops->issue        = 'Issue';
 $lang->devops->ppm          = 'Review';
+$lang->devops->welcome      = "%s R&D Platform";
+$lang->zentaoPMS            = 'GitFox';
 
 include dirname(dirname(__FILE__)) . DS . 'gitfoxmenu.php';
