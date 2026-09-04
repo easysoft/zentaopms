@@ -1949,7 +1949,7 @@ eof;
 
         $commonModel = new commonModel();
 
-        if($config->edition != 'open')
+        if(!in_array($config->edition, array('open', 'gitfox')))
         {
             $workflow = $commonModel->loadModel('workflow')->getByModule($module);
             if($workflow && $workflow->buildin == '0') return true;

@@ -59,6 +59,9 @@ $lang->my->menuOrder[15] = 'audit';
 $lang->my->menuOrder[20] = 'dynamic';
 $lang->my->menuOrder[25] = 'ssh';
 
+$lang->system->menu = new stdclass();
+$lang->system->menu->browse = array('link' => "{$lang->devops->system}|product|browse|");
+
 /* 空间列表页。 */
 $lang->space->homeMenu = new stdclass();
 $lang->space->homeMenu->browse = array('link' => "{$lang->space->common}|space|browse", 'alias' => 'create,edit');
