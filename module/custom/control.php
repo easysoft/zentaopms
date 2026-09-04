@@ -89,7 +89,6 @@ class custom extends control
             $this->custom->deleteItems("module={$module}&section={$field}");
         }
 
-        if(($this->config->edition == 'max' || $this->config->edition == 'ipd') && ($module == 'stage' && ($field == 'typeList' || $field == 'ipdTypeList'))) $this->loadModel('deliverable')->addOtherDeliverbaleStage($field == 'ipdTypeList' ? 'ipd' : 'execution');
         return $this->sendSuccess(array('load' => true));
     }
 
