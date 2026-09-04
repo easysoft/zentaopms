@@ -3963,4 +3963,34 @@ class repoModel extends model
         $converted = $pinyin->permalink($string);
         return $converted;
     }
+
+    /**
+     * 获取所有产品的仓库。
+     * Get all product repositories.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProductRepos(): array
+    {
+        $productRepos = array();
+
+        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchAll('id');
+        if(empty($repos)) return $productRepos;
+
+        foreach($repos as $repoID => $repo)
+        {
+            if(isset($repo->product))
+            {
+                $repoProducts = array_filter(explode(',', $repo->product));
+                foreach($repoProducts as $productID)
+                {
+                    if(!isset($productRepos[$productID])) $productRepos[$productID] = array();
+                    if(isset($productRepos[$productID][$repoID])) continue;
+                    $productRepos[$productID][$repoID] = $repo;
+                }
+            }
+        }
+        return $productRepos;
+    }
 }
