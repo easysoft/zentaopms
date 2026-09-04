@@ -315,6 +315,7 @@ class form extends formBase
             {
                 if(!($item instanceof formGroup)) continue;
                 $items[$key] = new formRow($item);
+                if($item->prop('hidden')) $items[$key]->setProp('hidden', true);
             }
         }
         else
