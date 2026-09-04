@@ -199,7 +199,7 @@ class dropmenu extends wg
         }
 
         /* 打印工作流1.5级导航. */
-        if($config->edition != 'open')
+        if(!in_array($config->edition, array('open', 'gitfox')))
         {
             $flow = $app->control->loadModel('workflow')->getByModule($module);
             if($flow && $flow->buildin == '0' && $flow->belong) $tab = $flow->belong;

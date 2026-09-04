@@ -606,7 +606,7 @@ class control extends baseControl
      */
     public function appendExtendForm(string $position = 'info', ?object $object = null, string $moduleName = '', string $methodName = ''): array
     {
-        if($this->config->edition == 'open') return array();
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return array();
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();
 
         $moduleName = $moduleName ? $moduleName : $this->app->rawModule;

@@ -131,7 +131,7 @@ class actionModel extends model
 
         $this->saveIndex($objectType, $objectID, $actionType);
 
-        if($this->config->edition != 'open') $this->loadModel('zai')->pushToVectorQueue($objectType, $objectID, $actionType);
+        if(!in_array($this->config->edition, array('open', 'gitfox'))) $this->loadModel('zai')->pushToVectorQueue($objectType, $objectID, $actionType);
 
         $changeFunc = 'after' . ucfirst($objectType);
         if(method_exists($this, $changeFunc)) call_user_func_array(array($this, $changeFunc), array($action, $actionID));
@@ -220,7 +220,7 @@ class actionModel extends model
         foreach($actions as $actionID => $action)
         {
             $actionName = strtolower($action->action);
-            if($this->config->edition != 'open' && !isset($flowList[$action->objectType])) $flowList[$action->objectType] = $this->workflow->getByModule($action->objectType);
+            if(!in_array($this->config->edition, array('open', 'gitfox')) && !isset($flowList[$action->objectType])) $flowList[$action->objectType] = $this->workflow->getByModule($action->objectType);
 
             if(substr($actionName, 0, 7)  == 'linked2')      $this->actionTao->getLinkedExtra($action, substr($actionName, 7));
             if(substr($actionName, 0, 12) == 'unlinkedfrom') $this->actionTao->getLinkedExtra($action, substr($actionName, 12));
@@ -1749,7 +1749,7 @@ class actionModel extends model
         $historiesWithoutDiff = array();    // To save histories with diff info.
 
         /* 加载工作流新增的语言包。*/
-        if($this->config->edition != 'open')
+        if(!in_array($this->config->edition, array('open', 'gitfox')))
         {
             $flow = $this->loadModel('workflow')->getByModule($objectType);
             if(!empty($flow)) $this->loadModel('common')->loadCustomLang($objectType, 'view');
@@ -2089,7 +2089,7 @@ class actionModel extends model
     public function saveIndex(string $objectType, int $objectID, string $actionType): bool
     {
         $this->loadModel('search');
-        if($this->config->edition != 'open' && $this->app->isServing()) $this->loadModel('workflow')->appendSearchConfig();
+        if(!in_array($this->config->edition, array('open', 'gitfox')) && $this->app->isServing()) $this->loadModel('workflow')->appendSearchConfig();
 
         $actionType = strtolower($actionType);
         if(!isset($this->config->search->fields->{$objectType})) return false;

@@ -83,7 +83,7 @@ class fixer extends baseFixer
     {
         global $config, $app;
 
-        if($config->edition != 'open' && empty($app->installing) && (!helper::isApiRequest() && !helper::isRunMode('test')))
+        if(!in_array($config->edition, array('open', 'gitfox')) && empty($app->installing) && (!helper::isApiRequest() && !helper::isRunMode('test')))
         {
             $moduleName = $app->getModuleName();
             $methodName = $app->getMethodName();
