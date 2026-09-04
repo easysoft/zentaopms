@@ -43,7 +43,7 @@ formPanel
     ),
     formRow
     (
-        $this->app->tab != 'devops' ? setClass('hidden') : null,
+        $this->app->tab != 'devops' && $config->edition != 'gitfox' ? setClass('hidden') : null,
         formGroup
         (
             set::width('1/2'),

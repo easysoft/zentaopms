@@ -494,6 +494,14 @@ class spaceModel extends model
             $userSpaces = $this->getPairs($this->app->user->account);
             if(!isset($userSpaces[$spaceID])) return $this->app->control->locate(helper::createLink('user', 'deny', "module={$this->app->rawModule}&method={$this->app->rawMethod}"));
             $this->session->set('devopsSpace', $spaceID);
+
+            $isGitfox = $this->config->vision == 'gitfox' || $this->config->edition == 'gitfox';
+            if($isGitfox && $this->app->tab == 'space' && isset($this->lang->space->menu))
+            {
+                $this->app->tab = 'space';
+                common::setMenuVars('space', $spaceID);
+            }
+
             unset($this->lang->devops->homeMenu->space);
             unset($this->lang->devops->homeMenu->configure);
             unset($this->lang->devops->homeMenu->codescan);

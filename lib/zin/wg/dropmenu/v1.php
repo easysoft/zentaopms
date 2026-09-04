@@ -185,6 +185,9 @@ class dropmenu extends wg
         $lang   = data('lang');
         $config = data('config');
 
+        /* GitFox 独立版中，评审、扫描、问题、流水线、制品库作为一级导航时不展示对象下拉框。 */
+        if($config->vision == 'gitfox' && in_array($app->tab, array('ppm', 'codescan', 'issue', 'pipeline', 'artifact'))) return array();
+
         if(empty($tab))      $tab      = $app->tab;
         if(empty($module))   $module   = $app->rawModule;
         if(empty($method))   $method   = $app->rawMethod;

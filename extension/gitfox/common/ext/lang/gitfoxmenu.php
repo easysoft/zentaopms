@@ -12,12 +12,23 @@ $lang->navIcons['pipeline'] = "<i class='icon icon-waterfall'></i>";
 $lang->navIcons['artifact'] = "<i class='icon icon-package'></i>";
 $lang->navIcons['admin']    = "<i class='icon icon-has-authority'></i>";
 
+$lang->navIconNames['my']       = 'home';
+$lang->navIconNames['system']   = 'has-authority-pack';
+$lang->navIconNames['space']    = 'grid-2x2';
+$lang->navIconNames['repo']     = 'code';
+$lang->navIconNames['ppm']      = 'review';
+$lang->navIconNames['codescan'] = 'test';
+$lang->navIconNames['issue']    = 'issue';
+$lang->navIconNames['pipeline'] = 'waterfall';
+$lang->navIconNames['artifact'] = 'package';
+$lang->navIconNames['admin']    = 'has-authority';
+
 /* Main Navigation. */
 $lang->mainNav           = new stdclass();
 $lang->mainNav->my       = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
 $lang->mainNav->system   = "{$lang->navIcons['system']} {$lang->devops->system}|product|browse|";
 $lang->mainNav->space    = "{$lang->navIcons['space']} {$lang->space->common}|space|browse|";
-$lang->mainNav->repo     = "{$lang->navIcons['repo']} {$lang->repo->common}|repo|maintain|";
+$lang->mainNav->repo     = "{$lang->navIcons['repo']} {$lang->devops->repo}|repo|maintain|";
 $lang->mainNav->ppm      = "{$lang->navIcons['ppm']} {$lang->devops->ppm}|ppm|browse|";
 $lang->mainNav->codescan = "{$lang->navIcons['codescan']} {$lang->devops->codescan}|codescan|task|";
 $lang->mainNav->issue    = "{$lang->navIcons['issue']} {$lang->devops->issue}|repo|review|";
@@ -59,19 +70,24 @@ $lang->my->menuOrder[15] = 'audit';
 $lang->my->menuOrder[20] = 'dynamic';
 $lang->my->menuOrder[25] = 'ssh';
 
+$lang->system->common = $lang->devops->system;
+
 $lang->system->menu = new stdclass();
-$lang->system->menu->browse = array('link' => "{$lang->devops->system}|product|browse|");
+$lang->system->menu->browse = array('link' => "{$lang->devops->appList}|product|browse|");
+
+$lang->system->menuOrder    = array();
+$lang->system->menuOrder[5] = 'browse';
 
 /* 空间列表页。 */
 $lang->space->homeMenu = new stdclass();
-$lang->space->homeMenu->browse = array('link' => "{$lang->space->common}|space|browse", 'alias' => 'create,edit');
+$lang->space->homeMenu->browse = array('link' => "{$lang->devops->spaceList}|space|browse", 'alias' => 'create,edit');
 
 /* 进入空间后的菜单。 */
 $lang->space->menu = new stdclass();
-$lang->space->menu->repos    = array('link' => "{$lang->devops->repo}|repo|maintain|spaceID=%s", 'alias' => 'create,edit,import,createrepo,binduser', 'exclude' => 'repo-setrules');
+$lang->space->menu->repos    = array('link' => "{$lang->devops->repo}|repo|maintain|inSpace=1&space=%s", 'alias' => 'create,edit,import,createrepo,binduser', 'exclude' => 'repo-setrules');
 $lang->space->menu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=%s&repoID=0&type=space", 'subModule' => 'pipeline');
 $lang->space->menu->artifact = array('link' => "{$lang->artifact->common}|artifact|browse|spaceID=%s&repoID=0&type=space", 'subModule' => 'artifact');
-$lang->space->menu->apps     = array('link' => "{$lang->devops->system}|repo|browsesystem|spaceID=%s", 'subModule' => 'system');
+$lang->space->menu->apps     = array('link' => "{$lang->devops->system}|repo|browsesystem|space=%s", 'subModule' => 'system');
 $lang->space->menu->settings = array('link' => "{$lang->devops->spaceSetting}|space|view|spaceID=%s", 'exclude' => 'repo-maintain,repo-browsesystem');
 
 /* 进入空间后的菜单顺序。 */
@@ -84,7 +100,7 @@ $lang->space->menuOrder[25] = 'settings';
 
 /* 代码库列表页。 */
 $lang->repo->homeMenu = new stdclass();
-$lang->repo->homeMenu->repos = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo,binduser', 'exclude' => 'repo-setrules');
+$lang->repo->homeMenu->repos = array('link' => "{$lang->devops->repoList}|repo|maintain", 'alias' => 'create,edit,import,createrepo,binduser', 'exclude' => 'repo-setrules');
 
 /* 进入代码库后的菜单。 */
 $lang->repo->menu = new stdclass();
@@ -123,6 +139,53 @@ $lang->repo->menu->settings['menuOrder'][5]  = 'branchType';
 $lang->repo->menu->settings['menuOrder'][10] = 'reviewFlow';
 $lang->repo->menu->settings['menuOrder'][15] = 'provider';
 $lang->repo->menu->settings['menuOrder'][20] = 'runner';
+
+/* 评审、问题、扫描、流水线与制品库菜单。 */
+$lang->ppm->menu = new stdclass();
+$lang->ppm->menu->browse = array('link' => "{$lang->devops->ppmList}|ppm|browse|");
+
+$lang->ppm->menuOrder    = array();
+$lang->ppm->menuOrder[5] = 'browse';
+
+$lang->issue = new stdclass();
+$lang->issue->common = $lang->devops->issue;
+$lang->issue->menu = new stdclass();
+$lang->issue->menu->browse = array('link' => "{$lang->devops->issueList}|repo|review|");
+
+$lang->issue->menuOrder    = array();
+$lang->issue->menuOrder[5] = 'browse';
+
+$lang->codescan = new stdclass();
+$lang->codescan->common = $lang->devops->codescan;
+$lang->codescan->menu = new stdclass();
+$lang->codescan->menu->scanTask     = array('link' => "{$lang->devops->scanTask}|codescan|task|", 'alias' => 'taskview,tasklog,issue');
+$lang->codescan->menu->scanPlan     = array('link' => "{$lang->devops->scanPlan}|codescan|plan|", 'alias' => 'planview,trigger,createplan,editplan,tips');
+$lang->codescan->menu->scanSolution = array('link' => "{$lang->devops->scanSolution}|codescan|solution|", 'alias' => 'solutionview');
+$lang->codescan->menu->ruleset      = array('link' => "{$lang->ruleset->common}|codescan|ruleset|", 'alias' => 'rulesetview');
+$lang->codescan->menu->scanRule     = array('link' => "{$lang->devops->scanRule}|codescan|browse|", 'alias' => 'view');
+
+$lang->codescan->menuOrder    = array();
+$lang->codescan->menuOrder[5]  = 'scanTask';
+$lang->codescan->menuOrder[10] = 'scanPlan';
+$lang->codescan->menuOrder[15] = 'scanSolution';
+$lang->codescan->menuOrder[20] = 'ruleset';
+$lang->codescan->menuOrder[25] = 'scanRule';
+
+$lang->pipeline->menu = new stdclass();
+$lang->pipeline->menu->space = array('link' => "{$lang->devops->pipelineSpace}|pipeline|browse|spaceID=0&repoID=0&type=space");
+$lang->pipeline->menu->repo  = array('link' => "{$lang->devops->pipelineRepo}|pipeline|browse|spaceID=0&repoID=0&type=repo");
+
+$lang->pipeline->menuOrder    = array();
+$lang->pipeline->menuOrder[5]  = 'space';
+$lang->pipeline->menuOrder[10] = 'repo';
+
+$lang->artifact->menu = new stdclass();
+$lang->artifact->menu->space = array('link' => "{$lang->devops->artifactSpace}|artifact|browse|spaceID=0&repoID=0&type=space");
+$lang->artifact->menu->repo  = array('link' => "{$lang->devops->artifactRepo}|artifact|browse|spaceID=0&repoID=0&type=repo");
+
+$lang->artifact->menuOrder    = array();
+$lang->artifact->menuOrder[5]  = 'space';
+$lang->artifact->menuOrder[10] = 'repo';
 
 if($config->vision == 'gitfox')
 {
