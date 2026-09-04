@@ -47,7 +47,7 @@ if($type == 'space') unset($config->pipeline->dtable->fieldList['repo']);
 
 /* zin: Define the toolbar on main menu. */
 $isMirror      = $repoID && !empty($repo->mirror);
-$canCreate     = hasPriv('pipeline', 'create');
+$canCreate     = hasPriv('pipeline', 'create') && $app->tab != 'pipeline';
 $runnerPriv    = hasPriv('runner', 'browse');
 $executionPriv = hasPriv('pipeline', 'execution');
 
