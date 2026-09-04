@@ -24,8 +24,7 @@ else
         set::link($this->createLink('artifact', 'browse', "spaceID={$spaceID}&repoID={$linkRepoID}&type={key}")),
     );
 }
-
-$canCreate = hasPriv('artifact', 'create');
+$canCreate = hasPriv('artifact', 'create') && $app->tab != 'artifact';
 $canEdit   = hasPriv('artifact', 'edit');
 $canDelete = hasPriv('artifact', 'delete');
 
