@@ -1,4 +1,6 @@
 <?php
+$lang->zentaoPMS = $lang->gitfoxName;
+
 $lang->devops->space        = '空间';
 $lang->devops->dynamic      = '动态';
 $lang->devops->todo         = '待处理';
