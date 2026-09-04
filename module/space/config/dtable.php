@@ -13,7 +13,8 @@ $config->space->dtable->fieldList['name']['type']     = 'shortTitle';
 $config->space->dtable->fieldList['name']['flex']     = 4;
 $config->space->dtable->fieldList['name']['hint']     = true;
 $config->space->dtable->fieldList['name']['sortType'] = false;
-$config->space->dtable->fieldList['name']['link']     = helper::createLink('repo', 'maintain', 'inSpace=1&space={id}');;
+$isGitfox = $config->vision == 'gitfox' || $config->edition == 'gitfox';
+$config->space->dtable->fieldList['name']['link']     = helper::createLink('repo', 'maintain', 'inSpace=1&space={id}') . ($isGitfox ? '#app=space' : '');
 $config->space->dtable->fieldList['name']['group']    = 1;
 
 $config->space->dtable->fieldList['manager']['title']     = $lang->space->manager;
