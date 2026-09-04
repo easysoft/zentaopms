@@ -3,8 +3,10 @@
 $config->product->skipRedirectMethod .= ',browse,';
 
 $config->product->dtable = new stdclass();
-
 $config->product->dtable->fieldList = array();
+$config->product->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->product->dtable->fieldList['id']['type']  = 'id';
+
 $config->product->dtable->fieldList['name']['name']     = 'name';
 $config->product->dtable->fieldList['name']['title']    = $lang->product->name;
 $config->product->dtable->fieldList['name']['type']     = 'title';
