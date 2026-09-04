@@ -1,4 +1,6 @@
 <?php
+$lang->zentaoPMS = $lang->gitfoxName;
+
 $lang->devops->space        = 'Space';
 $lang->devops->dynamic      = 'Dynamic';
 $lang->devops->todo         = 'Todo';
