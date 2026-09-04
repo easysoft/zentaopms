@@ -69,6 +69,15 @@ jsVar('loginTimeoutTip', $lang->user->error->loginTimeoutTip);
 $imgBasePath        = $config->webRoot . 'theme/default/images/main/';
 $logoVerticalMargin = !empty($config->safe->loginCaptcha) ? '80px' : '60px';
 $aiVerticalMargin   = !empty($config->safe->loginCaptcha) ? '64px' : '48px';
+
+$welcome = $lang->welcome;
+$logoImg = $config->user->loginImg['logo'];
+if($config->edition == 'gitfox')
+{
+    $welcome = $lang->devops->welcome;
+    $logoImg = $config->gitfox->loginImg;
+}
+
 set::zui(true);
 div
 (
@@ -88,8 +97,8 @@ div
                     set::width('5/12'),
                     setID('logo-box'),
                     set::style(array('background-image' => 'url(' . $imgBasePath . $config->user->loginImg['bg'] . ')')),
-                    h::img(setID('login-logo'), set::style(array('top' => $logoVerticalMargin)),  set::src($imgBasePath . $config->user->loginImg['logo'])),
-                    h::img(setID('login-ai'),   set::style(array('bottom' => $aiVerticalMargin)), set::src($imgBasePath . $config->user->loginImg['ai']))
+                    h::img(setID('login-logo'), set::style(array('top' => $logoVerticalMargin)),  set::src($imgBasePath . $logoImg)),
+                    ($config->edition == 'gitfox') ? null : h::img(setID('login-ai'), set::style(array('bottom' => $aiVerticalMargin)), set::src($imgBasePath . $config->user->loginImg['ai']))
                 ),
                 cell
                 (
@@ -98,7 +107,7 @@ div
                     div
                     (
                         setClass('header'),
-                        h2(setClass('font-bold'), sprintf($lang->welcome, $app->company->name)),
+                        h2(setClass('font-bold'), sprintf($welcome, $app->company->name)),
                         dropdown
                         (
                             setID('langs'),

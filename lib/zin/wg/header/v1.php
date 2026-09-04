@@ -158,7 +158,10 @@ class header extends wg
             /* 禅道国际版增加站点管理。 */
             if(!empty($config->sanplexVersion) && $app->user->admin) $items[] = array('text' => $lang->site, 'url' => createLink('admin', 'subscription'), 'icon' => 'sitemap');
 
-            $items[] = array('type' => 'divider');
+            if($app->config->vision != 'gitfox')
+            {
+                $items[] = array('type' => 'divider');
+            }
 
             if($app->config->vision === 'rnd' && !commonModel::isTutorialMode())
             {
@@ -186,7 +189,21 @@ class header extends wg
         $helpItems[] = array('text' => $lang->changeLog, 'url' => createLink('misc', 'changeLog'), 'data-toggle' => 'modal', 'innerClass' => $modalClass);
 
         /* 禅道国际版隐藏帮助。 */
-        if(empty($config->sanplexVersion)) $items[] = array('text' => $lang->manual, 'icon' => 'help', 'url' => $manualUrl, 'attrs' => array('data-app' => 'help'));
+        if(empty($config->sanplexVersion) && $app->config->vision != 'gitfox') $items[] = array('text' => $lang->manual, 'icon' => 'help', 'url' => $manualUrl, 'attrs' => array('data-app' => 'help'));
+
+        $langItems = array();
+        foreach($app->config->langs as $key => $value) $langItems[] = array('text' => $value, 'data-value' => $key, 'url' => "javascript:selectLang(\"$key\")", 'active' => $app->cookie->lang == $key);
+
+        if($app->config->vision === 'gitfox')
+        {
+            $items[] = array('text' => $lang->lang, 'icon' => 'lang', 'items' => $langItems);
+            $items[] = array
+            (
+                'url'         => createLink('my', 'ssh', '', '', false),
+                'icon'        => 'icon-private',
+                'text'        => $lang->ssh->common
+            );
+        }
 
         $items[] = array('type' => 'divider');
 
@@ -203,23 +220,28 @@ class header extends wg
             );
         }
 
-        $themeItems = array();
-        foreach($app->lang->themes as $key => $value)
+        if($app->config->vision != 'gitfox')
         {
-            $themeItems[] = array('text' => $value, 'data-value' => $key, 'url' => "javascript:selectTheme(\"$key\")", 'selected' => $app->cookie->theme == $key);
-        }
-        $items[] = array
-        (
-            'text'      => $lang->theme,
-            'icon'      => 'theme',
-            'key'       => 'theme',
-            'items'     => $themeItems,
-            'listProps' => ['getItem' => jsRaw('(item) => {item.selected = item["data-value"] === $.cookie.get("theme"); return item;}')]
-        );
+            $themeItems = array();
+            foreach($app->lang->themes as $key => $value)
+            {
+                $themeItems[] = array('text' => $value, 'data-value' => $key, 'url' => "javascript:selectTheme(\"$key\")", 'selected' => $app->cookie->theme == $key);
+            }
+            $items[] = array
+            (
+                'text'      => $lang->theme,
+                'icon'      => 'theme',
+                'key'       => 'theme',
+                'items'     => $themeItems,
+                'listProps' => ['getItem' => jsRaw('(item) => {item.selected = item["data-value"] === $.cookie.get("theme"); return item;}')]
+            );
 
-        $langItems = array();
-        foreach($app->config->langs as $key => $value) $langItems[] = array('text' => $value, 'data-value' => $key, 'url' => "javascript:selectLang(\"$key\")", 'active' => $app->cookie->lang == $key);
-        $items[] = array('text' => $lang->lang, 'icon' => 'lang', 'items' => $langItems);
+            $items[] = array('text' => $lang->lang, 'icon' => 'lang', 'items' => $langItems);
+        }
+        else
+        {
+            $items[] = array('text' => $lang->manual, 'icon' => 'help', 'url' => $manualUrl, 'attrs' => array('data-app' => 'help'));
+        }
         $items[] = array('type' => 'divider');
 
         /* Zentao desktop client menu. */
@@ -234,7 +256,7 @@ class header extends wg
         $mobileSubMenu[] = array('content' => array('html' => "<img src='{$config->webRoot}static/images/app-qrcode.png' />", 'style' => 'width: 100px; heigth: 100px;'));
 
         /* 禅道国际版隐藏该内容。 */
-        if(empty($config->sanplexVersion))
+        if(empty($config->sanplexVersion) && $app->config->vision != 'gitfox')
         {
             $items[] = array('icon' => 'mobile', 'text' => $lang->downloadMobile, 'items' => $mobileSubMenu);
             $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'), 'data-toggle' => 'modal', 'innerClass' => $modalClass);
