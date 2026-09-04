@@ -1,15 +1,15 @@
 <?php
-$lang->productCommon            = 'Anwendung';
-$lang->product->common              = 'Anwendung';
-$lang->product->all                 = 'Anwendungsliste';
-$lang->product->name                = 'Anwendungsname';
-$lang->product->create              = 'Anwendung hinzufügen';
-$lang->product->desc                = 'Anwendungsbeschreibung';
-$lang->product->noProduct           = 'Keine Anwendungen gefunden.';
-$lang->product->searchByAppName     = 'Nach Anwendungsname suchen';
+$lang->productCommon            = 'Application';
+$lang->product->common          = 'Application';
+$lang->product->all             = 'Application List';
+$lang->product->name            = 'Application Name';
+$lang->product->create          = 'Add Application';
+$lang->product->desc            = 'Application Description';
+$lang->product->noProduct       = 'No applications found.';
+$lang->product->searchByAppName = 'Search by application name';
 
-$lang->product->statusList['closed'] = 'Geschlossen';
+$lang->product->statusList['closed'] = 'Closed';
 
-$lang->product->featureBar['all']['all']      = 'Alle';
-$lang->product->featureBar['all']['noclosed'] = 'Offen';
-$lang->product->featureBar['all']['closed']   = 'Geschlossen';
+$lang->product->featureBar['all']['all']      = 'All';
+$lang->product->featureBar['all']['noclosed'] = 'Open';
+$lang->product->featureBar['all']['closed']   = 'Closed';
