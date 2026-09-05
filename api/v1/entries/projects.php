@@ -96,6 +96,11 @@ class projectsEntry extends entry
         $this->setPost('model', $this->request('model', 'scrum'));
         $this->setPost('parent', $this->request('parent', 0));
 
+        /* The create form always posts storyType, the API does not; default it the same way the form does. */
+        $projectModel     = $this->request('model', 'scrum');
+        $defaultStoryType = in_array($projectModel, array('waterfall', 'waterfallplus', 'ipd')) ? 'story,requirement' : 'story';
+        $this->setPost('storyType', $this->request('storyType', $defaultStoryType));
+
         $requireFields = 'name,begin,end,products';
         if($useCode) $requireFields .= ',code';
         $this->requireFields($requireFields);
