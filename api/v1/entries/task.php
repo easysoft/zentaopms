@@ -134,7 +134,7 @@ class taskEntry extends entry
     public function delete($taskID)
     {
         $control = $this->loadController('task', 'delete');
-        $control->delete(0, $taskID, 'true');
+        $control->delete($taskID);
 
         $this->getData();
         return $this->sendSuccess(200, 'success');
