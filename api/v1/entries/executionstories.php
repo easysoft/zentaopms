@@ -47,4 +47,58 @@ class executionStoriesEntry extends entry
 
         return $this->sendError(400, 'error');
     }
+
+    /**
+     * POST method: link stories to the execution.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function post($executionID)
+    {
+        if(empty($executionID)) return $this->sendError(400, 'Need execution id.');
+
+        if(!commonModel::hasPriv('execution', 'linkStory')) return $this->sendError(403, 'Access not allowed.');
+
+        $stories = $this->request('stories', array());
+        if(!is_array($stories)) $stories = array_filter(explode(',', (string)$stories));
+        $stories = array_values(array_filter(array_map('intval', $stories)));
+        if(empty($stories)) return $this->sendError(400, 'Need stories.');
+
+        $executionModel = $this->loadModel('execution');
+        $execution      = $executionModel->getByID($executionID);
+        if(empty($execution)) return $this->sendError(404, 'Execution not found.');
+
+        /* Same order as executionModel::linkStories(): a story has to be linked to the project as well. */
+        if($execution->type != 'project' and !empty($execution->project)) $executionModel->linkStory((int)$execution->project, $stories);
+        $executionModel->linkStory((int)$executionID, $stories);
+        if(dao::isError()) return $this->sendError(400, dao::getError());
+
+        return $this->send(201, array('execution' => (int)$executionID, 'stories' => $stories));
+    }
+
+    /**
+     * DELETE method: unlink a story from the execution.
+     *
+     * @param  int    $executionID
+     * @param  int    $storyID
+     * @access public
+     * @return string
+     */
+    public function delete($executionID, $storyID)
+    {
+        if(empty($executionID)) return $this->sendError(400, 'Need execution id.');
+        if(empty($storyID))     return $this->sendError(400, 'Need story id.');
+        if(!commonModel::hasPriv('execution', 'unlinkStory')) return $this->sendError(403, 'Access not allowed.');
+
+        $executionModel = $this->loadModel('execution');
+        $execution      = $executionModel->getByID($executionID);
+        if(empty($execution)) return $this->sendError(404, 'Execution not found.');
+
+        $executionModel->unlinkStory((int)$executionID, (int)$storyID);
+        if(dao::isError()) return $this->sendError(400, dao::getError());
+
+        return $this->sendSuccess(200, 'success');
+    }
 }
