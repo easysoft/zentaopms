@@ -62,6 +62,12 @@ $fieldList['status']['statusMap']['changed'] = $lang->task->storyChange;
 
 if(!empty($project->isTpl)) unset($fieldList['deliverable']);
 
+if(in_array($config->edition, array('max', 'ipd')))
+{
+    $hasDeliverable = $app->control->loadModel('workflowgroup')->hasFeature($project->workflowGroup, 'deliverable');
+    if(!$hasDeliverable) unset($fieldList['deliverable']);
+}
+
 /* waterfall & waterfallplus & ipd model with different edit link. */
 if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
 {
