@@ -57,6 +57,8 @@ $lang->ppm->decision          = 'Review Decision';
 $lang->ppm->opinion           = 'Review Opinion';
 $lang->ppm->merge             = 'Merge' . $lang->ppm->common;
 $lang->ppm->assignedTo        = 'Assigned To';
+$lang->ppm->space             = 'Space';
+$lang->ppm->allSpace          = 'All Space';
 
 $lang->ppm->opinionPlaceholder = 'Enter Review Opinion';
 
