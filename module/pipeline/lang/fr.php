@@ -29,6 +29,7 @@ $lang->pipeline->execution     = 'Execution History';
 $lang->pipeline->log           = 'Execution Log';
 $lang->pipeline->arrange       = 'Arrange Pipeline';
 $lang->pipeline->execView      = 'Execution View';
+$lang->pipeline->allSpace      = 'All Spaces';
 
 $lang->pipeline->confirmDelete      = 'Voullez-vous supprimer ce job ?';
 $lang->pipeline->confirmExec        = 'Are you sure you want to execute this Jenkins pipeline?';

@@ -41,6 +41,7 @@ class pipelineZen extends pipeline
         $searchConfig['actionURL'] = $actionURL;
 
         if(isset($searchConfig['params']['repoID']))    $searchConfig['params']['repoID']['values']    = $this->loadModel('repo')->getRepoPairs('');
+        if(isset($searchConfig['params']['spaceID']))   $searchConfig['params']['spaceID']['values']   = $this->loadModel('space')->getPairs();
         if(isset($searchConfig['params']['createdBy'])) $searchConfig['params']['createdBy']['values'] = $this->loadModel('user')->getPairs('noclosed|nodeleted');
 
         $this->loadModel('search')->setSearchParams($searchConfig);

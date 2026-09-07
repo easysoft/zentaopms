@@ -29,6 +29,7 @@ $lang->pipeline->execution     = '执行历史';
 $lang->pipeline->log           = '执行日志';
 $lang->pipeline->arrange       = '编排流水线';
 $lang->pipeline->execView      = '执行详情';
+$lang->pipeline->allSpace      = '所有空间';
 
 $lang->pipeline->confirmDelete      = '确认删除该流水线';
 $lang->pipeline->confirmExec        = '确认执行该Jenkins流水线？';

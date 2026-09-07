@@ -22,6 +22,23 @@ jsVar('type', $type);
 /* 空间级别的代码库流水线或镜像代码库的流水线需显示服务器列。 */
 $needServer = (!$repoID && $type != 'space') || !empty($repo->mirror);
 
+$spaceItems = array();
+$spaceItems[] = array('text' => $lang->pipeline->allSpace, 'url' => createLink('pipeline', 'browse', "space=0&repoID=0&type={$type}"));
+foreach($spaces as $id => $spaceName)
+{
+    $spaceItems[] = array('text' => $spaceName, 'url' => createLink('pipeline', 'browse', "space={$id}&repoID={$repoID}&type={$type}"));
+}
+
+if($app->tab == 'pipeline')
+{
+    $config->pipeline->dtable->fieldList['space']['map'] = $spaces;
+    $dropdown = dropdown
+    (
+        to('trigger', btn(zget($spaces, $spaceID, $lang->pipeline->allSpace), setID('spaceDropdown'), setClass('ghost text-ellipsis text-left'))),
+        set::items($spaceItems)
+    );
+}
+
 if($repoID)
 {
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
@@ -31,13 +48,22 @@ if($repoID)
     {
         unset($config->pipeline->dtable->fieldList['status']);
     }
-    featureBar(div(searchToggle(set::module('pipeline'), set::open($type == 'bySearch'))));
+    featureBar
+    (
+        $app->tab != 'pipeline' && !empty($dropdown) ? null : to::before($dropdown),
+        div
+        (
+            searchToggle(set::module('pipeline'),
+            set::open($type == 'bySearch'))
+        )
+    );
 }
 else
 {
     /* zin: Define the set::module('pipeline') feature bar on main menu. */
     featureBar
     (
+        $app->tab != 'pipeline' && !empty($dropdown) ? null : to::before($dropdown),
         set::current($type),
         set::link($this->createLink('pipeline', 'browse', "spaceID={$spaceID}&repoID={$repoID}&type={key}")),
         div(searchToggle(set::module('pipeline'), set::open($type == 'bySearch')))
