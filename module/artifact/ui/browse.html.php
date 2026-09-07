@@ -10,7 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$linkRepoID = empty($repo) ? 0 : $repo->id;
+$linkRepoID   = empty($repo) ? 0 : $repo->id;
+$spaceItems   = array();
+$spaceItems[] = array('text' => $lang->artifact->allSpace, 'url' => createLink('artifact', 'browse', "spaceID=0&repoID=0&type={$type}"));
+foreach($spaces as $id => $spaceName)
+{
+    $spaceItems[] = array('text' => $spaceName, 'url' => createLink('artifact', 'browse', "spaceID={$id}&repoID={$linkRepoID}&type={$type}"));
+}
 if($repoID)
 {
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
@@ -20,6 +26,14 @@ else
 {
     featureBar
     (
+        $app->tab != 'artifact' ? null : to::before
+        (
+            dropdown
+            (
+                to('trigger', btn(zget($spaces, $spaceID, $lang->artifact->allSpace), setID('spaceDropdown'), setClass('ghost text-ellipsis text-left'))),
+                set::items($spaceItems)
+            )
+        ),
         set::current($type),
         set::link($this->createLink('artifact', 'browse', "spaceID={$spaceID}&repoID={$linkRepoID}&type={key}")),
     );

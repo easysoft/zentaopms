@@ -17,6 +17,7 @@ $lang->artifact->batchDeleteArtifact = 'Batch Delete Artifacts';
 $lang->artifact->copyCMD             = 'Copy Command';
 $lang->artifact->copied              = 'Copied Successfully';
 $lang->artifact->copyFail            = 'Copy failed, please copy manually';
+$lang->artifact->allSpace            = 'All Space';
 
 $lang->artifact->name          = 'Name';
 $lang->artifact->code          = 'Code';
