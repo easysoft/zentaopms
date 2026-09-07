@@ -84,6 +84,7 @@ if(!empty($artifactLibList))
                     setClass('canvas border rounded py-2 px-3 col gap-1 hover:shadow-lg hover:border-primary relative cursor-pointer', 'open-url'),
                     set('data-id', $artifactLib->id),
                     set('data-url', inLink('view', "artifactID={$artifactLib->id}&spaceID={$artifactLib->spaceID}&repoID={$artifactLib->repoID}&type={$type}")),
+                    set('data-app', $app->tab),
                     div
                     (
                         setClass('flex justify-between items-center'),

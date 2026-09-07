@@ -104,23 +104,35 @@ $lang->repo->homeMenu->repos = array('link' => "{$lang->devops->repoList}|repo|m
 
 /* 进入代码库后的菜单。 */
 $lang->repo->menu = new stdclass();
-$lang->repo->menu->code      = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules');
-$lang->repo->menu->commit    = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s", 'alias' => 'diff');
-$lang->repo->menu->branch    = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
-$lang->repo->menu->tag       = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
-$lang->repo->menu->ppm       = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=%s");
-$lang->repo->menu->pipeline  = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'pipeline');
-$lang->repo->menu->artifact  = array('link' => "{$lang->artifact->common}|artifact|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'artifact');
-$lang->repo->menu->codescan  = array('link' => "{$lang->devops->codescan}|codescan|task|repoID=%s", 'subModule' => 'codescan');
-$lang->repo->menu->issue     = array('link' => "{$lang->devops->issue}|repo|review|repoID=%s", 'subModule' => 'bug');
-$lang->repo->menu->settings  = array('link' => "{$lang->repoSettings->common}|repobranchtype|browse|repoID=%s", 'subModule' => 'reporeviewflow,repobranchtype', 'alias' => 'browsewebhooks,browserule,createwebhook,editwebhook,logwebhook,setarchive');
+$lang->repo->menu->code     = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'alias' => 'view', 'subModule' => 'my', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules,repo-setbranchrule,repobranchType-browse,repo-browsewebhooks,repo-createwebhook,repo-editwebhook,repo-logwebhook');
+$lang->repo->menu->commit   = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s", 'alias' => 'diff');
+$lang->repo->menu->branch   = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
+$lang->repo->menu->tag      = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
+$lang->repo->menu->ppm      = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=%s");
+$lang->repo->menu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'pipeline');
+$lang->repo->menu->artifact = array('link' => "{$lang->artifact->common}|artifact|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'artifact');
+$lang->repo->menu->codescan = array('link' => "{$lang->devops->codescan}|codescan|task|repoID=%s", 'alias' => 'planview,createplan,editplan', 'subModule' => 'codescan', 'exclude' => 'codescan-issue');
+$lang->repo->menu->issue    = array('link' => "{$lang->devops->issue}|repo|review|repoID=%s", 'subModule' => 'bug,codescan', 'exclude' => 'codescan-task,codescan-plan,codescan-solution,codescan-ruleset,codescan-createplan,codescan-editplan');
+$lang->repo->menu->settings = array('link' => "{$lang->repoSettings->common}|repobranchtype|browse|repoID=%s", 'subModule' => 'reporeviewflow,repobranchtype', 'alias' => 'browsewebhooks,browserule,createwebhook,editwebhook,logwebhook,setarchive');
 
+$lang->repo->menu->codescan['subMenu'] = new stdclass();
+$lang->repo->menu->codescan['subMenu']->scanTask = array('link' => "{$lang->devops->scanTask}|codescan|task|repoID=%s", 'alias' => 'taskview,tasklog,issue,issueview', 'exclude' => 'codescan-plan,codescan-planview');
+$lang->repo->menu->codescan['subMenu']->scanPlan = array('link' => "{$lang->devops->scanPlan}|codescan|plan|repoID=%s", 'alias' => 'planview,createplan,editplan,trigger,tips');
+
+$lang->repo->menu->codescan['menuOrder'][5]  = 'scanTask';
+$lang->repo->menu->codescan['menuOrder'][10] = 'scanPlan';
+
+$lang->repo->menu->issue['subMenu'] = new stdclass();
+$lang->repo->menu->issue['subMenu']->review   = array('link' => "{$lang->devops->reviewIssue}|repo|review|repoID=%s", 'subModule' => 'bug');
+$lang->repo->menu->issue['subMenu']->codescan = array('link' => "{$lang->devops->scanIssue}|codescan|issue|repoID=%s", 'alias' => 'issueview', 'subModule' => 'bug', 'exclude' => 'bug-view');
+
+$lang->repo->menu->issue['menuOrder'][10] = 'review';
+$lang->repo->menu->issue['menuOrder'][15] = 'codescan';
 /* 代码库设置子菜单。 */
 $lang->repo->menu->settings['subMenu'] = new stdclass();
 $lang->repo->menu->settings['subMenu']->branchType = array('link' => "{$lang->devops->branchType}|repobranchtype|browse|repoID=%s", 'alias' => 'create,edit,delete,import');
 $lang->repo->menu->settings['subMenu']->reviewFlow = array('link' => "{$lang->devops->reviewFlow}|reporeviewflow|browse|repoID=%s", 'alias' => 'create,edit');
-$lang->repo->menu->settings['subMenu']->provider   = array('link' => "{$lang->provider->common}|provider|browse|", 'alias' => 'create,edit');
-$lang->repo->menu->settings['subMenu']->runner     = array('link' => "{$lang->runner->common}|runner|browse|");
+$lang->repo->menu->settings['subMenu']->webhooks   = array('link' => "Webhooks|repo|browsewebhooks|repoID=%s", 'alias' => 'createwebhook,editwebhook,logwebhook');
 
 /* 进入代码库后的菜单顺序。 */
 $lang->repo->menuOrder     = array();
@@ -150,10 +162,12 @@ $lang->ppm->menuOrder[5] = 'browse';
 $lang->issue = new stdclass();
 $lang->issue->common = $lang->devops->issue;
 $lang->issue->menu = new stdclass();
-$lang->issue->menu->browse = array('link' => "{$lang->devops->issueList}|repo|review|");
+$lang->issue->menu->review   = array('link' => "{$lang->devops->reviewIssue}|repo|review|repoID=%s", 'subModule' => 'bug');
+$lang->issue->menu->codescan = array('link' => "{$lang->devops->scanIssue}|codescan|issue|repoID=%s", 'alias' => 'issueview', 'subModule' => 'bug', 'exclude' => 'bug-view');
 
-$lang->issue->menuOrder    = array();
-$lang->issue->menuOrder[5] = 'browse';
+$lang->issue->menuOrder     = array();
+$lang->issue->menuOrder[5]  = 'review';
+$lang->issue->menuOrder[10] = 'codescan';
 
 $lang->codescan = new stdclass();
 $lang->codescan->common = $lang->devops->codescan;
@@ -172,30 +186,33 @@ $lang->codescan->menuOrder[20] = 'ruleset';
 $lang->codescan->menuOrder[25] = 'scanRule';
 
 $lang->pipeline->menu = new stdclass();
-$lang->pipeline->menu->browse = array('link' => "{$lang->devops->pipeline}|pipeline|browse|spaceID=0&repoID=0&type=space");
+$lang->pipeline->menu->browse = array('link' => "{$lang->devops->pipeline}|pipeline|browse|spaceID=0&repoID=0&type=space", 'alias' => 'view');
 
 $lang->pipeline->menuOrder    = array();
 $lang->pipeline->menuOrder[5] = 'browse';
 
 $lang->artifact->menu = new stdclass();
-$lang->artifact->menu->browse = array('link' => "{$lang->devops->artifact}|artifact|browse|spaceID=0&repoID=0&type=space");
+$lang->artifact->menu->browse = array('link' => "{$lang->devops->artifact}|artifact|browse|spaceID=0&repoID=0&type=space", 'alias' => 'view');
 
 $lang->artifact->menuOrder    = array();
 $lang->artifact->menuOrder[5] = 'browse';
 
 if($config->vision == 'gitfox')
 {
-    $lang->navGroup->my        = 'my';
-    $lang->navGroup->todo      = 'my';
-    $lang->navGroup->product   = 'system';
-    $lang->navGroup->space     = 'space';
-    $lang->navGroup->repo      = 'repo';
-    $lang->navGroup->ci        = 'repo';
-    $lang->navGroup->job       = 'repo';
-    $lang->navGroup->ppm       = 'ppm';
-    $lang->navGroup->codescan  = 'codescan';
-    $lang->navGroup->pipeline  = 'pipeline';
-    $lang->navGroup->artifact  = 'artifact';
-    $lang->navGroup->company   = 'my';
-    $lang->navGroup->admin     = 'admin';
+    $lang->navGroup->my             = 'my';
+    $lang->navGroup->todo           = 'my';
+    $lang->navGroup->product        = 'system';
+    $lang->navGroup->space          = 'space';
+    $lang->navGroup->repo           = 'repo';
+    $lang->navGroup->ci             = 'repo';
+    $lang->navGroup->job            = 'repo';
+    $lang->navGroup->ppm            = 'ppm';
+    $lang->navGroup->codescan       = 'codescan';
+    $lang->navGroup->pipeline       = 'pipeline';
+    $lang->navGroup->artifact       = 'artifact';
+    $lang->navGroup->company        = 'my';
+    $lang->navGroup->admin          = 'admin';
+    $lang->navGroup->reporeviewflow = 'repo';
+    $lang->navGroup->repobranchtype = 'repo';
+    $lang->navGroup->repobranchrule = 'repo';
 }
