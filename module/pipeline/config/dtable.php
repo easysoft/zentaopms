@@ -86,20 +86,22 @@ $config->pipeline->actionList['exec']['hint']        = $lang->pipeline->exec;
 $config->pipeline->actionList['exec']['url']         = array('module' => 'pipeline', 'method' => 'exec', 'params' => "pipelineID={id}");
 $config->pipeline->actionList['exec']['data-toggle'] = 'modal';
 
-$config->pipeline->actionList['execution']['icon'] = 'file-log';
-$config->pipeline->actionList['execution']['text'] = $lang->pipeline->execution;
-$config->pipeline->actionList['execution']['hint'] = $lang->pipeline->execution;
-$config->pipeline->actionList['execution']['url']  = array('module' => 'pipeline', 'method' => 'execution', 'params' => "spaceID={spaceID}&repoID={repoID}&type={scope}&pipelineID={id}");
+$config->pipeline->actionList['execution']['icon']     = 'file-log';
+$config->pipeline->actionList['execution']['text']     = $lang->pipeline->execution;
+$config->pipeline->actionList['execution']['hint']     = $lang->pipeline->execution;
+$config->pipeline->actionList['execution']['url']      = array('module' => 'pipeline', 'method' => 'execution', 'params' => "spaceID={spaceID}&repoID={repoID}&type={scope}&pipelineID={id}");
+$config->pipeline->actionList['execution']['data-app'] = $app->tab;
 
 $config->pipeline->actionList['edit']['icon'] = 'edit';
 $config->pipeline->actionList['edit']['text'] = $lang->pipeline->edit;
 $config->pipeline->actionList['edit']['hint'] = $lang->pipeline->edit;
 $config->pipeline->actionList['edit']['url']  = helper::createLink('pipeline', 'edit', "id={id}");
 
-$config->pipeline->actionList['arrange']['icon'] = 'design';
-$config->pipeline->actionList['arrange']['text'] = $lang->pipeline->arrange;
-$config->pipeline->actionList['arrange']['hint'] = $lang->pipeline->arrange;
-$config->pipeline->actionList['arrange']['url']  = helper::createLink('pipeline', 'arrange',"id={id}&space={spaceID}&repoID={repoID}&type={scope}");
+$config->pipeline->actionList['arrange']['icon']     = 'design';
+$config->pipeline->actionList['arrange']['text']     = $lang->pipeline->arrange;
+$config->pipeline->actionList['arrange']['hint']     = $lang->pipeline->arrange;
+$config->pipeline->actionList['arrange']['data-app'] = $app->tab;
+$config->pipeline->actionList['arrange']['url']      = helper::createLink('pipeline', 'arrange',"id={id}&space={spaceID}&repoID={repoID}&type={scope}");
 
 $config->pipeline->actionList['delete']['icon']       = 'trash';
 $config->pipeline->actionList['delete']['text']       = $lang->pipeline->delete;
@@ -182,10 +184,11 @@ $config->pipeline->execution->dtable->fieldList['createdDate']['width']    = '11
 $config->pipeline->execution->dtable->fieldList['createdDate']['hint']     = true;
 
 $config->pipeline->execution->actionList = array();
-$config->pipeline->execution->actionList['view']['icon'] = 'info';
-$config->pipeline->execution->actionList['view']['text'] = $lang->pipeline->log;
-$config->pipeline->execution->actionList['view']['hint'] = $lang->pipeline->log;
-$config->pipeline->execution->actionList['view']['url']  = array('module' => 'pipeline', 'method' => 'execView', 'params' => "execID={id}");
+$config->pipeline->execution->actionList['view']['icon']     = 'info';
+$config->pipeline->execution->actionList['view']['text']     = $lang->pipeline->log;
+$config->pipeline->execution->actionList['view']['hint']     = $lang->pipeline->log;
+$config->pipeline->execution->actionList['view']['data-app'] = $app->tab;
+$config->pipeline->execution->actionList['view']['url']      = array('module' => 'pipeline', 'method' => 'execView', 'params' => "execID={id}");
 
 $config->pipeline->execution->actionList['cancel']['icon']         = 'ban';
 $config->pipeline->execution->actionList['cancel']['text']         = $lang->pipeline->cancelBtn;

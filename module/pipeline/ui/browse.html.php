@@ -50,7 +50,7 @@ if($repoID)
     }
     featureBar
     (
-        $app->tab != 'pipeline' && !empty($dropdown) ? null : to::before($dropdown),
+        $app->tab != 'pipeline' && empty($dropdown) ? null : to::before($dropdown),
         div
         (
             searchToggle(set::module('pipeline'),

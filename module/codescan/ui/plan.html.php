@@ -26,6 +26,7 @@ hasPriv('codescan', 'createplan') ? toolbar
         'text'        => $lang->codescan->createPlan,
         'url'         => inLink('createplan', "repoID={$repoID}"),
         'class'       => 'primary',
+        'data-app'    => $app->tab,
         'icon'        => 'plus'
     )))
 ) : null;

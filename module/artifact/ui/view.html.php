@@ -151,6 +151,7 @@ div
             setClass('ghost text-primary square'),
             set::title('home'),
             set::icon('back'),
+            setData('app', $app->tab),
             set::url($browseLink)
         ),
         picker
