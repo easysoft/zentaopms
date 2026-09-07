@@ -13,11 +13,26 @@ namespace zin;
 jsVar('repoID', $repo->id);
 
 dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
+if(isset($config->ppm->dtable->fieldList['repo'])) $config->ppm->dtable->fieldList['repo']['map'] = $repos;
 
 $ppms = initTableData($ppmList, $config->ppm->dtable->fieldList, $this->ppm);
 
+$spaceItems = array();
+$spaceItems[] = array('text' => $lang->ppm->allSpace, 'url' => createLink('ppm', 'browse'));
+foreach($spaces as $id => $spaceName)
+{
+    $spaceItems[] = array('text' => $spaceName, 'url' => createLink('ppm', 'browse', "id={$repo->id}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&spaceID={$id}"));
+}
 featureBar
 (
+    $app->tab != 'ppm' ? null : to::before
+    (
+        dropdown
+        (
+            to('trigger', btn(zget($spaces, $spaceID, $lang->ppm->allSpace), setID('spaceDropdown'), setClass('ghost text-ellipsis text-left'))),
+            set::items($spaceItems)
+        )
+    ),
     set::current($mode != 'status' ? $mode : $param),
     set::linkParams("repoID={$repo->id}&mode=status&param={key}")
 );

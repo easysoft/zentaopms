@@ -57,10 +57,11 @@ class ppm extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  int    $spaceID
      * @access public
      * @return void
      */
-    public function browse(int $repoID = 0, string $mode = 'status', string $param = 'opened', int $objectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $repoID = 0, string $mode = 'status', string $param = 'opened', int $objectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $spaceID = 0)
     {
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
         if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox"));
@@ -94,7 +95,7 @@ class ppm extends control
         if(in_array($this->app->tab, array('execution', 'project')) && $objectID) return print($this->fetch('ppm', 'browseByExecution', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}"));
 
         $repoList = $this->repo->getListByPriv('all', '', false);
-        if(empty($repoList)) $this->locate($this->repo->createLink('create'));
+        if(empty($repoList)) $this->locate($this->repo->createLink('createRepo'));
 
         if(!$repoID) $repoID = key($repoList);
         $repoID = $this->repo->saveState($repoID, $objectID);
@@ -112,15 +113,17 @@ class ppm extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $ppmList       = $this->ppm->getList($mode, $param, $orderBy, array(), $repoID, 0, $pager);
+        $ppmList       = $this->ppm->getList($mode, $param, $orderBy, array(), $repoID, 0, $pager, $spaceID);
         $canEdit       = common::hasPriv($this->app->rawModule, 'edit');
         $reviewResults = $this->ppm->getReviewResults(array_keys($ppmList), $repoID);
+        $spaces = $this->config->vision == 'gitfox' ? $this->loadModel('space')->getPairs() : array();
         foreach($ppmList as $ppm)
         {
             $ppm->canEdit        = $canEdit ? '' : 'disabled';
             $ppm->approvalStatus = !empty($reviewResults[$ppm->id]) && $reviewResults[$ppm->id]['result'] ? $this->lang->ppm->approve : $this->lang->ppm->reject;
 
             if($ppm->status == 'merged' || $ppm->status == 'closed') $ppm->mergeStatus = $ppm->status;
+            $ppm->space = zget($spaces , $repoList[$ppm->repoID]->spaceID, '');
         }
 
         $this->view->title    = $this->lang->ppm->common . $this->lang->hyphen . $this->lang->ppm->browse;
@@ -132,6 +135,9 @@ class ppm extends control
         $this->view->repo     = $repo;
         $this->view->orderBy  = $orderBy;
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->repos    = empty($repoList) ? array() : array_column($repoList, 'name', 'id');
+        $this->view->spaces   = $spaces;
+        $this->view->spaceID  = $spaceID;
         $this->display();
     }
 
