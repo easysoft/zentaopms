@@ -156,7 +156,7 @@ div
                         //        $type == 'pipeline' ? setClass('active') : null
                         //    )
                         //),
-                        li
+                        $config->edition == 'gitfox' ? null : li
                         (
                             setClass('nav-item'),
                             a
