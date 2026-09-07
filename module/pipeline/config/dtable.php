@@ -62,6 +62,16 @@ $config->pipeline->dtable->fieldList['desc']['type']   = 'html';
 $config->pipeline->dtable->fieldList['desc']['hint']   = true;
 $config->pipeline->dtable->fieldList['desc']['show']   = true;
 
+if($app->tab == 'pipeline')
+{
+    $config->pipeline->dtable->fieldList['space']['title']    = $lang->pipeline->repo;
+    $config->pipeline->dtable->fieldList['space']['name']     = 'spaceID';
+    $config->pipeline->dtable->fieldList['space']['sortType'] = false;
+    $config->pipeline->dtable->fieldList['space']['width']    = '120';
+    $config->pipeline->dtable->fieldList['space']['hint']     = true;
+    $config->pipeline->dtable->fieldList['space']['show']     = true;
+}
+
 $config->pipeline->dtable->fieldList['repo']['title']    = $lang->pipeline->repo;
 $config->pipeline->dtable->fieldList['repo']['name']     = 'repoName';
 $config->pipeline->dtable->fieldList['repo']['sortType'] = false;

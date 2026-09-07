@@ -117,6 +117,7 @@ class pipeline extends control
         $this->view->pager        = $pager;
         $this->view->pipelineList = $pipelineList;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->spaces       = $this->config->edition == 'gitfox' ? $this->loadModel('space')->getPairs() : array();
 
         $this->display();
     }
