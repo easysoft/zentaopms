@@ -130,6 +130,16 @@ if(!empty($artifactLibList))
                                     set::title($repoName),
                                     $lang->artifact->repo . ' : ' . $repoName
                                 )
+                            ) : null,
+                            empty($repoName) && $app->tab == 'artifact' && !empty($spaces[$artifactLib->spaceID]) ? div
+                            (
+                                setClass('absolute bottom-2 ml-0'),
+                                label
+                                (
+                                    setClass('ghost flex clip text-sm'),
+                                    set::title($spaces[$artifactLib->spaceID]),
+                                    $lang->artifact->space . ' : ' . $spaces[$artifactLib->spaceID]
+                                )
                             ) : null
                         ),
                     )

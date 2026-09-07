@@ -18,6 +18,7 @@ $lang->artifact->copyCMD             = '复制命令';
 $lang->artifact->copied              = '复制成功';
 $lang->artifact->copyFail            = '复制失败，请手动复制';
 $lang->artifact->allSpace            = '所有空间';
+$lang->artifact->space               = '所属空间';
 
 $lang->artifact->name          = '名称';
 $lang->artifact->code          = '唯一标识';
