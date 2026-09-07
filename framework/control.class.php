@@ -37,7 +37,7 @@ class control extends baseControl
 
         $this->app->setOpenApp();
 
-        if($this->config->edition == 'open') return false;
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return false;
 
         /* Code for task #9224. Set requiredFields for workflow. */
         if($this->dbh && ($this->app->isServing() || (helper::isApiRequest())))
@@ -427,7 +427,7 @@ class control extends baseControl
      */
     public function buildOperateMenu(object $object, string $type = 'view')
     {
-        if($this->config->edition == 'open') return false;
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return false;
 
         $moduleName = $this->moduleName;
         return $this->$moduleName->buildOperateMenu($object, $type);
@@ -442,7 +442,7 @@ class control extends baseControl
      */
     public function executeHooks(int $objectID): string
     {
-        if($this->config->edition == 'open') return '';
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return '';
 
         $moduleName = $this->moduleName;
         return $this->$moduleName->executeHooks($objectID);
@@ -456,7 +456,7 @@ class control extends baseControl
      */
     public function getFlowExportFields()
     {
-        if($this->config->edition == 'open') return array();
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return array();
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();
 
         $moduleName = $this->moduleName;
@@ -482,7 +482,7 @@ class control extends baseControl
     public function printExtendFields(object|string $object, string $type, string $extras = '', bool $print = true, string $moduleName = '', string $methodName = '')
     {
         $content = $type == 'items' ? array() : '';
-        if($this->config->edition == 'open') return $content;
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return $content;
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $content;
 
         $moduleName = $moduleName ?: $this->app->getModuleName();
@@ -711,7 +711,7 @@ class control extends baseControl
      */
     public function extendRequireFields(int $objectID = 0)
     {
-        if($this->config->edition == 'open') return;
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return;
 
         $groupID      = $this->loadModel('workflowgroup')->getGroupIDByDataID($this->moduleName, $objectID);
         $uiID         = $this->loadModel('workflowlayout')->getUIByDataID($this->moduleName, $this->methodName, $objectID, $groupID);
