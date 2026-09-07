@@ -238,6 +238,13 @@ class datatable extends control
             if(!$hasProcess) unset($cols['activity'], $cols['trimmable'], $cols['trimRule']);
         }
 
+        if(in_array($this->config->edition, array('max', 'ipd')) && $module == 'project' && $method == 'execution')
+        {
+            $project        = $this->datatable->fetchByID($this->session->project, 'project');
+            $hasDeliverable = $this->loadModel('workflowgroup')->hasFeature($project->workflowGroup, 'deliverable');
+            if(!$hasDeliverable) unset($cols['deliverable']);
+        }
+
         if($extra == 'unsetStory' && isset($cols['story'])) unset($cols['story']);
         if($module == 'pipeline') unset($cols['repo']);
 
