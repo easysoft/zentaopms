@@ -172,20 +172,16 @@ $lang->codescan->menuOrder[20] = 'ruleset';
 $lang->codescan->menuOrder[25] = 'scanRule';
 
 $lang->pipeline->menu = new stdclass();
-$lang->pipeline->menu->space = array('link' => "{$lang->devops->pipelineSpace}|pipeline|browse|spaceID=0&repoID=0&type=space");
-$lang->pipeline->menu->repo  = array('link' => "{$lang->devops->pipelineRepo}|pipeline|browse|spaceID=0&repoID=0&type=repo");
+$lang->pipeline->menu->browse = array('link' => "{$lang->devops->pipeline}|pipeline|browse|spaceID=0&repoID=0&type=space");
 
 $lang->pipeline->menuOrder    = array();
-$lang->pipeline->menuOrder[5]  = 'space';
-$lang->pipeline->menuOrder[10] = 'repo';
+$lang->pipeline->menuOrder[5] = 'browse';
 
 $lang->artifact->menu = new stdclass();
-$lang->artifact->menu->space = array('link' => "{$lang->devops->artifactSpace}|artifact|browse|spaceID=0&repoID=0&type=space");
-$lang->artifact->menu->repo  = array('link' => "{$lang->devops->artifactRepo}|artifact|browse|spaceID=0&repoID=0&type=repo");
+$lang->artifact->menu->browse = array('link' => "{$lang->devops->artifact}|artifact|browse|spaceID=0&repoID=0&type=space");
 
 $lang->artifact->menuOrder    = array();
-$lang->artifact->menuOrder[5]  = 'space';
-$lang->artifact->menuOrder[10] = 'repo';
+$lang->artifact->menuOrder[5] = 'browse';
 
 if($config->vision == 'gitfox')
 {
