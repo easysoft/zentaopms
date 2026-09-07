@@ -53,7 +53,7 @@ class artifactModel extends model
         return $this->dao->select('*')->from(TABLE_ARTIFACT)
             ->where('deleted')->eq(0)
             ->beginIF($scope != 'all')->andWhere('scope')->eq($scope)->fi()
-            ->andWhere('spaceID')->eq($spaceID)
+            ->beginIF($this->app->tab != 'artifact' || $spaceID != 0)->andWhere('spaceID')->eq($spaceID)->fi()
             ->beginIF($repoID && $scope != 'all')->andWhere('repoID')->eq($repoID)->fi()
             ->beginIF(!$repoID && $scope != 'space' && !empty($repos))->andWhere('repoID')->in($repos)->fi()
             ->orderBy($orderBy)

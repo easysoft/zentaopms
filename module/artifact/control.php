@@ -92,6 +92,7 @@ class artifact extends control
         $this->view->type            = $type;
         $this->view->artifactLibList = $this->artifact->getLibList($type == 'repo' && !empty($repo) ? $repo->spaceID : $space, $repoID, $type, 'createdDate_asc', $pager);
         $this->view->pager           = $pager;
+        $this->view->spaces          = $this->spaces;
 
         $this->display();
     }
