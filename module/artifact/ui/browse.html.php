@@ -20,24 +20,22 @@ foreach($spaces as $id => $spaceName)
 if($repoID)
 {
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
-    unset($lang->artifact->featureBar);
+    if($app->tab != 'artifact') unset($lang->artifact->featureBar);
 }
-else
-{
-    featureBar
+
+featureBar
+(
+    $app->tab != 'artifact' ? null : to::before
     (
-        $app->tab != 'artifact' ? null : to::before
+        dropdown
         (
-            dropdown
-            (
-                to('trigger', btn(zget($spaces, $spaceID, $lang->artifact->allSpace), setID('spaceDropdown'), setClass('ghost text-ellipsis text-left'))),
-                set::items($spaceItems)
-            )
-        ),
-        set::current($type),
-        set::link($this->createLink('artifact', 'browse', "spaceID={$spaceID}&repoID={$linkRepoID}&type={key}")),
-    );
-}
+            to('trigger', btn(zget($spaces, $spaceID, $lang->artifact->allSpace), setID('spaceDropdown'), setClass('ghost text-ellipsis text-left'))),
+            set::items($spaceItems)
+        )
+    ),
+    set::current($type),
+    set::link($this->createLink('artifact', 'browse', "spaceID={$spaceID}&repoID={$linkRepoID}&type={key}")),
+);
 $canCreate = hasPriv('artifact', 'create') && $app->tab != 'artifact';
 $canEdit   = hasPriv('artifact', 'edit');
 $canDelete = hasPriv('artifact', 'delete');
@@ -85,7 +83,7 @@ if(!empty($artifactLibList))
                 (
                     setClass('canvas border rounded py-2 px-3 col gap-1 hover:shadow-lg hover:border-primary relative cursor-pointer', 'open-url'),
                     set('data-id', $artifactLib->id),
-                    set('data-url', inLink('view', "artifactID={$artifactLib->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}")),
+                    set('data-url', inLink('view', "artifactID={$artifactLib->id}&spaceID={$artifactLib->spaceID}&repoID={$artifactLib->repoID}&type={$type}")),
                     div
                     (
                         setClass('flex justify-between items-center'),
