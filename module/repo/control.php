@@ -638,25 +638,29 @@ class repo extends control
         $logs  = $this->repo->getCommits($repo, $entry, $branchID, 'dir', $pager, '', '', $query);
         if(count($logs) == 0 && $pageID != 1) $this->locate(inLink('log', "repoID=$repoID&branchID=$branchID&objectID=$objectID&entry=$entry&source=$source&browseType=$browseType&param=$param&recTotal=0&recPerPage=$recPerPage&pageID=1"));
 
-        $revisionIds = array_column($logs, 'revision');
-        $modelCommits = new stdClass();
-        $modelCommits->stories = $this->loadModel('story')->getLinkedCommits($repoID, $revisionIds);
-        $modelCommits->designs = $this->loadModel('design')->getLinkedCommits($repoID, $revisionIds);
-        $modelCommits->tasks   = $this->loadModel('task')->getLinkedCommits($repoID, $revisionIds);
-        $modelCommits->bugs    = $this->loadModel('bug')->getLinkedCommits($repoID, $revisionIds);
-        /* Set tips and buttons for different relations. */
-        foreach($logs as $logItem)
+        $isGitfox = $this->config->edition == 'gitfox';
+        if(!$isGitfox)
         {
-            $logItem->relationFieldTips = '';
-            foreach(array('designs' => 'design', 'stories' => 'story', 'tasks' => 'task' , 'bugs' => 'bug') as $fieldType => $moduleName)
+            $revisionIds = array_column($logs, 'revision');
+            $modelCommits = new stdClass();
+            $modelCommits->stories = $this->loadModel('story')->getLinkedCommits($repoID, $revisionIds);
+            $modelCommits->designs = $this->loadModel('design')->getLinkedCommits($repoID, $revisionIds);
+            $modelCommits->tasks   = $this->loadModel('task')->getLinkedCommits($repoID, $revisionIds);
+            $modelCommits->bugs    = $this->loadModel('bug')->getLinkedCommits($repoID, $revisionIds);
+            /* Set tips and buttons for different relations. */
+            foreach($logs as $logItem)
             {
-                if(!empty($modelCommits->{$fieldType}[$logItem->revision]))
+                $logItem->relationFieldTips = '';
+                foreach(array('designs' => 'design', 'stories' => 'story', 'tasks' => 'task' , 'bugs' => 'bug') as $fieldType => $moduleName)
                 {
-                    $fieldCommits = $modelCommits->{$fieldType}[$logItem->revision];
-                    $logItem->relationFieldTips .= ' ' . $this->lang->repo->{$moduleName};
-                    foreach($fieldCommits as $item) $item->url = !empty($item->id) ? $this->createLink($moduleName, 'view', "{$moduleName}ID=" . $item->id) : '';
-                    $logItem->relationFieldTips .= ' #'.implode(' #', array_column($fieldCommits, 'id'));
-                    $logItem->relationField[$fieldType] = $fieldCommits;
+                    if(!empty($modelCommits->{$fieldType}[$logItem->revision]))
+                    {
+                        $fieldCommits = $modelCommits->{$fieldType}[$logItem->revision];
+                        $logItem->relationFieldTips .= ' ' . $this->lang->repo->{$moduleName};
+                        foreach($fieldCommits as $item) $item->url = !empty($item->id) ? $this->createLink($moduleName, 'view', "{$moduleName}ID=" . $item->id) : '';
+                        $logItem->relationFieldTips .= ' #'.implode(' #', array_column($fieldCommits, 'id'));
+                        $logItem->relationField[$fieldType] = $fieldCommits;
+                    }
                 }
             }
         }
@@ -812,16 +816,26 @@ class repo extends control
         if($this->server->request_method == 'POST') return $this->repoZen->locateDiffPage($repoID, $objectID, $arrange, $isBranchOrTag, $file);
 
         $diffs    = array();
+        $diffText = '';
         $encoding = empty($encoding) ? 'utf-8' : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
-        if($oldRevision !== '')
+
+        if($this->repo->isSvn($repo))
+        {
+            if($oldRevision !== '')
+            {
+                $this->scm->setEngine($repo);
+                $diffs = $this->scm->diff($entry, $oldRevision, $newRevision, 'yes', $isBranchOrTag ? 'isBranchOrTag' : '');
+            }
+
+            if($encoding != 'utf-8') $diffs = $this->repoZen->encodingDiff($diffs, $encoding);
+            if($arrange == 'appose') $diffs = $this->repo->getApposeDiff($diffs);
+        }
+        elseif($oldRevision !== '')
         {
             $this->scm->setEngine($repo);
-            $diffs = $this->scm->diff($entry, $oldRevision, $newRevision, 'yes', $isBranchOrTag ? 'isBranchOrTag': '');
+            $diffText = $this->scm->diff($entry, $oldRevision, $newRevision, 'no', $isBranchOrTag ? 'isBranchOrTag': '');
         }
-
-        if($encoding != 'utf-8') $diffs = $this->repoZen->encodingDiff($diffs, $encoding);
-        if($arrange == 'appose') $diffs = $this->repo->getApposeDiff($diffs);
 
         $this->view->entry         = urldecode($entry);
         $this->view->encoding      = str_replace('-', '_', $encoding);
@@ -832,6 +846,7 @@ class repo extends control
         $this->view->objectID      = $objectID;
         $this->view->repo          = $repo;
         $this->view->diffs         = $diffs;
+        $this->view->diffText      = $diffText;
         $this->view->newRevision   = $newRevision;
         $this->view->oldRevision   = $oldRevision;
         $this->view->isBranchOrTag = $isBranchOrTag;
