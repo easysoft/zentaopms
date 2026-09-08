@@ -13,6 +13,8 @@ $lang->product->desc            = 'Application Description';
 $lang->product->noProduct       = 'No applications found.';
 $lang->product->searchByAppName = 'Search by application name';
 $lang->product->confirmDelete   = 'Are you sure you want to delete this Application?';
+$lang->product->closeAction     = 'Close Application';
+$lang->product->activateAction  = 'Activate Application';
 
 $lang->product->statusList['closed'] = 'Closed';
 
