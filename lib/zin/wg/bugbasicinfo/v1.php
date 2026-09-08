@@ -135,7 +135,7 @@ class bugBasicInfo extends wg
         );
 
         $items[$lang->bug->activatedCount] = $bug->activatedCount ? "{$bug->activatedCount}" : '';
-        if($config->edition != 'open')
+        if(!in_array($config->edition, array('open', 'gitfox')))
         {
             $found = '';
             if(!empty($bug->found)) $found .= span(zget($users, $bug->found));

@@ -14,15 +14,19 @@ namespace zin;
 
 include "header.review.html.php";
 
-$canLinkStory    = common::hasPriv('repo', 'linkStory');
-$canLinkBug      = common::hasPriv('repo', 'linkBug');
-$canLinkTask     = common::hasPriv('repo', 'linkTask');
+/* GitFox 独立版不提供关联禅道对象入口。 */
+$isGitfox        = $config->edition == 'gitfox';
+$canLinkStory    = !$isGitfox && common::hasPriv('repo', 'linkStory');
+$canLinkBug      = !$isGitfox && common::hasPriv('repo', 'linkBug');
+$canLinkTask     = !$isGitfox && common::hasPriv('repo', 'linkTask');
 $canUnlinkObject = common::hasPriv('repo', 'unlink');
 $canAddBug       = common::hasPriv('repo', 'addBug');
+$showRelation    = $showLinkObject && !$isGitfox;
 
 jsVar('unlinkTitle', $this->lang->repo->unlink);
 jsVar('addIssueTip', $lang->repo->addIssue);
 jsVar('canUnlinkObject', $canUnlinkObject);
+jsVar('showRelation', $showRelation);
 jsVar('fileExt', $this->config->repo->fileExt);
 jsVar('file', $pathInfo);
 jsVar('filePath', $entry);
@@ -107,9 +111,9 @@ else
 }
 
 $dropMenus = array();
-if($canLinkStory) $dropMenus[] = array('id' => 'linkStory', 'text' => $this->lang->repo->linkStory, 'icon' => 'lightbulb');
-if($canLinkBug)   $dropMenus[] = array('id' => 'linkBug',   'text' => $this->lang->repo->linkBug,   'icon' => 'bug');
-if($canLinkTask)  $dropMenus[] = array('id' => 'linkTask',  'text' => $this->lang->repo->linkTask,  'icon' => 'todo');
+if($showRelation && $canLinkStory) $dropMenus[] = array('id' => 'linkStory', 'text' => $this->lang->repo->linkStory, 'icon' => 'lightbulb');
+if($showRelation && $canLinkBug)   $dropMenus[] = array('id' => 'linkBug',   'text' => $this->lang->repo->linkBug,   'icon' => 'bug');
+if($showRelation && $canLinkTask)  $dropMenus[] = array('id' => 'linkTask',  'text' => $this->lang->repo->linkTask,  'icon' => 'todo');
 
 $logWg = $showLinkObject ? div
 (
@@ -135,7 +139,7 @@ $logWg = $showLinkObject ? div
         ) : ''
     )
 ) : null;
-$relatedWg = $showLinkObject ? div
+$relatedWg = $showRelation ? div
 (
     set::id('related'),
     div(set::className('btn btn-left pull-left'), icon('chevron-left')),
@@ -163,7 +167,7 @@ div
     set::className('repoCode'),
     $wg,
     $showLinkObject ? $logWg : null,
-    $showLinkObject ? $relatedWg : null
+    $showRelation ? $relatedWg : null
 );
 
 div

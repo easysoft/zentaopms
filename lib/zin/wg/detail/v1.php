@@ -320,7 +320,7 @@ CSS;
     {
         global $app, $config;
         $sections = $this->prop('sections', []);
-        if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading) && $app->moduleName != 'flow') $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
+        if(!in_array($config->edition, array('open', 'gitfox')) && empty($app->installing) && empty($app->upgrading) && $app->moduleName != 'flow') $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
 
         $list                = array();
         $firstSectionHandled = false;
@@ -430,7 +430,7 @@ CSS;
         if(!in_array($objectType, array('story', 'task', 'bug', 'testcase'))) return null;
 
         global $lang, $app, $config;
-        if($config->edition == 'open') return null;
+        if(in_array($config->edition, array('open', 'gitfox'))) return null;
 
         $app->control->loadModel('aitask');
         jsVar('aiStatusList', $lang->aitask->statusList);
@@ -466,7 +466,7 @@ CSS;
         global $config;
 
         $mainSections    = $this->buildMainSections();
-        $enableProcedure = !empty($config->enableAITeammate) && $config->edition != 'open';
+        $enableProcedure = !empty($config->enableAITeammate) && !in_array($config->edition, array('open', 'gitfox'));
         return div
         (
             setClass('detail-main flex-auto col gap-2 min-w-0'),
@@ -525,7 +525,7 @@ CSS;
     {
         global $app, $config;
         $tabs = $this->prop('tabs', []);
-        if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading) && $app->moduleName != 'flow') $tabs = $app->control->loadModel('flow')->buildExtendZinValue($tabs, $this->prop('object'), 'basic');
+        if(!in_array($config->edition, array('open', 'gitfox')) && empty($app->installing) && empty($app->upgrading) && $app->moduleName != 'flow') $tabs = $app->control->loadModel('flow')->buildExtendZinValue($tabs, $this->prop('object'), 'basic');
         if(!$tabs) return null;
 
         $groups = array();

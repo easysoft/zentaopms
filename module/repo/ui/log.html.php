@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
+$isGitfox = $config->edition == 'gitfox';
 
 /* Project switch in second level nav. */
 dropmenu
@@ -50,9 +51,12 @@ foreach($paths as $pathName)
 }
 if($fileName) $breadcrumbItems[] = h::span($fileName);
 
+if($isGitfox) unset($config->repo->logDtable->fieldList['relations']);
+
 foreach($logs as $log)
 {
     $log->revision = substr($log->revision, 0, 10);
+    if($isGitfox) continue;
     if (empty($log->relationField)) continue;
     $log->relations = '<div class="relationsField" title="' . $log->relationFieldTips . '">';
     foreach (array('stories' => 'story', 'designs' => 'design', 'tasks' => 'task', 'bugs' => 'bug') as $key => $value)

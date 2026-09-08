@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 global $app;
 $app->loadLang('bug');
+$isGitfox = $config->edition == 'gitfox';
 
 /* get last review info in this file. */
 $lastReview   = $this->repo->getLastReviewInfo($file);
@@ -36,11 +37,12 @@ else
 $repoProduct = isset($_COOKIE['repoPairs'][$repoID]) ? $_COOKIE['repoPairs'][$repoID] : '';
 $repoProduct = isset($lastReview) && isset($lastReview->product) ? $lastReview->product : $repoProduct;
 $repoProduct = isset($products[$repoProduct]) ? $repoProduct : key($products);
-$executions  = $this->repo->getExecutionPairs($repoProduct);
-$modules     = $this->loadModel('tree')->getOptionMenu($repoProduct, $viewType = 'bug', $startModuleID = 0);
+/* GitFox 独立版的提问题表单不展示执行、模块等禅道概念。 */
+$executions  = $isGitfox ? array() : $this->repo->getExecutionPairs($repoProduct);
+$modules     = $isGitfox ? array() : $this->loadModel('tree')->getOptionMenu($repoProduct, $viewType = 'bug', $startModuleID = 0);
 $users       = $this->loadModel('user')->getPairs('devfirst|nodeleted|noclosed');
 $products    = array('' => '') + $products;
-$executions  = array('' => '') + $executions;
+if(!$isGitfox) $executions = array('' => '') + $executions;
 
 $cwd         = getcwd();
 $commiters   = $this->user->getCommiters();
@@ -189,7 +191,7 @@ formPanel
             on::change('loadBranch')
         )
     ),
-    formRow
+    $isGitfox ? null : formRow
     (
         formGroup
         (
