@@ -35,7 +35,7 @@ class taskFinishEntry extends entry
         $this->setPost('consumed', $this->request('currentConsumed', 0) + $task->consumed);
 
         $this->requireFields('currentConsumed,realStarted,finishedDate');
-        $control->finish($taskID);
+        $control->finish((int)$taskID);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');

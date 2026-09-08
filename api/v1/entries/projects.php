@@ -31,13 +31,13 @@ class projectsEntry extends entry
         if($programID)
         {
             $control = $this->loadController('program', 'project');
-            $control->project($programID, $this->param('status', 'all'), $this->param('order', 'order_asc'), 0, $this->param('limit', 20), $this->param('page', 1));
+            $control->project((int)$programID, $this->param('status', 'all'), $this->param('order', 'order_asc'), 0, (int)$this->param('limit', 20), (int)$this->param('page', 1));
             $data = $this->getData();
         }
         else
         {
             $control = $this->loadController('project', 'browse');
-            $control->browse($programID, $this->param('status', 'all'), 0, $this->param('order', 'order_asc'), 0, $this->param('limit', 20), $this->param('page', 1));
+            $control->browse((int)$programID, $this->param('status', 'all'), 0, $this->param('order', 'order_asc'), 0, (int)$this->param('limit', 20), (int)$this->param('page', 1));
             $data = $this->getData();
         }
 
@@ -120,7 +120,7 @@ class projectsEntry extends entry
     public function getDropMenu()
     {
         $control = $this->loadController('project', 'ajaxGetDropMenu');
-        $control->ajaxGetDropMenu($this->request('projectID', 0), $this->request('module', 'project'), $this->request('method', 'browse'));
+        $control->ajaxGetDropMenu((int)$this->request('projectID', 0), $this->request('module', 'project'), $this->request('method', 'browse'));
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);

@@ -64,3 +64,13 @@ r(isset($filters['name4']) && $filters['name4']['operator'] == 'LIKE' && $filter
 r(isset($filters['date1']) && $filters['date1']['operator'] == 'BETWEEN' && $filters['date1']['value'] == "'2018-01-01 00:00:00' AND '2018-01-31 23:59:59'") && p('') && e('1');  //测试过滤类型为datetime,开始时间和结束时间都存在的情况, 判断生成的过滤条件是否正确
 r(isset($filters['date2']) && $filters['date2']['operator'] == '<=' && $filters['date2']['value'] == "'2018-01-31 23:59:59'") && p('') && e('1');  //测试过滤类型为datetime,开始时间不存在但结束时间存在的情况, 判断生成的过滤条件是否正确
 r(isset($filters['date3']) && $filters['date3']['operator'] == '>=' && $filters['date3']['value'] == "'2018-01-01 00:00:00'") && p('') && e('1');  //测试过滤类型为datetime,开始时间存在但结束时间不存在的情况, 判断生成的过滤条件是否正确
+
+$maliciousFilters = array
+(
+    array('type' => 'select', 'field' => 'name5', 'default' => "x') or sleep(3)-- "),
+    array('type' => 'input',  'field' => 'name6', 'default' => "x') or sleep(3)-- ")
+);
+list($sqlM, $filtersM) = $pivot->getFilterFormatTest($sqlList[1], $maliciousFilters);
+
+r(strpos($filtersM['name5']['value'], "') or") === false && substr($filtersM['name5']['value'], -1) === ')') && p('') && e('1'); // 注入payload不能逃逸select过滤值
+r(strpos($filtersM['name6']['value'], "') or") === false && substr($filtersM['name6']['value'], -1) === "'") && p('') && e('1'); // 注入payload不能逃逸input过滤值

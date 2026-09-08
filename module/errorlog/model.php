@@ -11,6 +11,18 @@
 class errorlogModel extends model
 {
     /**
+     * 查询列表所需的联表字段。
+     * Fields for the joined list query.
+     *
+     * @access protected
+     * @return string
+     */
+    protected function getSelectFields(): string
+    {
+        return 't1.id, t1.requestID, t1.module, t1.method, t1.account, t1.url, t1.createdDate, t2.md5, t2.level, t2.message, t2.file, t2.line, t2.trace';
+    }
+
+    /**
      * 获取错误日志列表。
      * Get error log list.
      *
@@ -22,7 +34,8 @@ class errorlogModel extends model
      */
     public function getList(string $query = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('*')->from(TABLE_ERRORLOG)
+        return $this->dao->select($this->getSelectFields())->from(TABLE_ERRORLOGREQ)->alias('t1')
+            ->leftJoin(TABLE_ERRORLOG)->alias('t2')->on('t1.md5 = t2.md5')
             ->where('1=1')
             ->beginIF(!empty($query))->andWhere($query)->fi()
             ->orderBy($orderBy)
@@ -40,20 +53,27 @@ class errorlogModel extends model
      */
     public function getByID(int $id): object|false
     {
-        return $this->dao->select('*')->from(TABLE_ERRORLOG)->where('id')->eq($id)->fetch();
+        return $this->dao->select($this->getSelectFields())->from(TABLE_ERRORLOGREQ)->alias('t1')
+            ->leftJoin(TABLE_ERRORLOG)->alias('t2')->on('t1.md5 = t2.md5')
+            ->where('t1.id')->eq($id)
+            ->fetch();
     }
 
     /**
      * 根据请求ID获取错误日志。
-     * Get an error log by request id.
+     * Get all error logs of one request.
      *
      * @param  string $requestID
      * @access public
-     * @return object|false
+     * @return array
      */
-    public function getByRequestID(string $requestID): object|false
+    public function getByRequestID(string $requestID): array
     {
-        return $this->dao->select('*')->from(TABLE_ERRORLOG)->where('requestID')->eq($requestID)->orderBy('id_desc')->limit(1)->fetch();
+        return $this->dao->select($this->getSelectFields())->from(TABLE_ERRORLOGREQ)->alias('t1')
+            ->leftJoin(TABLE_ERRORLOG)->alias('t2')->on('t1.md5 = t2.md5')
+            ->where('t1.requestID')->eq($requestID)
+            ->orderBy('t1.id_asc')
+            ->fetchAll('', false);
     }
 
     /**
@@ -84,7 +104,12 @@ class errorlogModel extends model
      */
     public function deleteByID(int $id): bool
     {
-        $this->dao->delete()->from(TABLE_ERRORLOG)->where('id')->eq($id)->exec();
+        $log = $this->dao->select('md5')->from(TABLE_ERRORLOGREQ)->where('id')->eq($id)->fetch();
+        if($log)
+        {
+            $this->dao->delete()->from(TABLE_ERRORLOGREQ)->where('id')->eq($id)->exec();
+            $this->deleteOrphanErrorLogs(array($log->md5));
+        }
         return !dao::isError();
     }
 
@@ -101,7 +126,9 @@ class errorlogModel extends model
         $ids = array_filter($ids, 'is_numeric');
         if(empty($ids)) return true;
 
-        $this->dao->delete()->from(TABLE_ERRORLOG)->where('id')->in($ids)->exec();
+        $md5s = $this->dao->select('md5')->from(TABLE_ERRORLOGREQ)->where('id')->in($ids)->fetchPairs('md5', 'md5');
+        $this->dao->delete()->from(TABLE_ERRORLOGREQ)->where('id')->in($ids)->exec();
+        $this->deleteOrphanErrorLogs(array_keys($md5s));
         return !dao::isError();
     }
 
@@ -114,7 +141,7 @@ class errorlogModel extends model
      */
     public function getModulePairs(): array
     {
-        return $this->dao->select('DISTINCT `module`')->from(TABLE_ERRORLOG)->where('module')->ne('')->orderBy('module')->fetchPairs('module', 'module');
+        return $this->dao->select('DISTINCT `module`')->from(TABLE_ERRORLOGREQ)->where('module')->ne('')->orderBy('module')->fetchPairs('module', 'module');
     }
 
     /**
@@ -127,7 +154,26 @@ class errorlogModel extends model
      */
     public function deleteByDate(string $date): bool
     {
-        $this->dao->delete()->from(TABLE_ERRORLOG)->where('createdDate')->lt($date)->exec();
+        $md5s = $this->dao->select('md5')->from(TABLE_ERRORLOGREQ)->where('createdDate')->lt($date)->fetchPairs('md5', 'md5');
+        $this->dao->delete()->from(TABLE_ERRORLOGREQ)->where('createdDate')->lt($date)->exec();
+        $this->deleteOrphanErrorLogs(array_keys($md5s));
         return !dao::isError();
+    }
+
+    /**
+     * 清理不再被任何请求引用的错误本体。
+     * Delete orphan error bodies which are not referenced by any request record.
+     *
+     * @param  array $md5s
+     * @access protected
+     * @return void
+     */
+    protected function deleteOrphanErrorLogs(array $md5s): void
+    {
+        $md5s = array_values(array_unique(array_filter($md5s)));
+        if(empty($md5s)) return;
+
+        $referencedSQL = $this->dao->select('md5')->from(TABLE_ERRORLOGREQ)->where('md5')->in($md5s)->get();
+        $this->dao->delete()->from(TABLE_ERRORLOG)->where('md5')->in($md5s)->andWhere('md5')->subNotIn($referencedSQL)->exec();
     }
 }

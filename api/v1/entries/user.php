@@ -32,7 +32,7 @@ class userEntry extends entry
 
         /* Get user by id. */
         $control = $this->loadController('user', 'profile');
-        $control->profile($userID);
+        $control->profile((int)$userID);
 
         $data = $this->getData();
         if(!$data) return $this->send404(); // If no user, send 404.
@@ -145,7 +145,7 @@ class userEntry extends entry
                     $this->config->logonMethods[] = 'my.execution';
 
                     $control = $this->loadController('my', 'execution');
-                    $control->execution($this->param('type', 'undone'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
+                    $control->execution($this->param('type', 'undone'), $this->param('order', 'id_desc'), (int)$this->param('total', 0), (int)$this->param('limit', 5), (int)$this->param('page', 1));
                     $data = $this->getData();
 
                     if($data->status == 'success')
@@ -200,7 +200,7 @@ class userEntry extends entry
                     global $app;
                     $app->rawMethod = 'work';
                     $control = $this->loadController('my', 'task');
-                    $control->task($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
+                    $control->task($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), (int)$this->param('total', 0), (int)$this->param('limit', 5), (int)$this->param('page', 1));
                     $data = $this->getData();
 
                     if($data->status == 'success')
@@ -218,7 +218,7 @@ class userEntry extends entry
                     global $app;
                     $app->rawMethod = 'work';
                     $control = $this->loadController('my', 'bug');
-                    $control->bug($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
+                    $control->bug($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), (int)$this->param('total', 0), (int)$this->param('limit', 5), (int)$this->param('page', 1));
                     $data = $this->getData();
 
                     if($data->status == 'success')
@@ -259,7 +259,7 @@ class userEntry extends entry
                     if(!common::hasPriv('my', 'todo')) break;
 
                     $control = $this->loadController('my', 'todo');
-                    $control->todo($this->param('date', 'before'), '', 'all', 'date_desc', 0, $this->param('limit', 5), 1);
+                    $control->todo($this->param('date', 'before'), '', 'all', 'date_desc', 0, (int)$this->param('limit', 5), 1);
                     $data = $this->getData();
 
                     if($data->status == 'success')
@@ -277,7 +277,7 @@ class userEntry extends entry
                     global $app;
                     $app->rawMethod = 'work';
                     $control = $this->loadController('my', 'story');
-                    $control->story($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
+                    $control->story($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), (int)$this->param('total', 0), (int)$this->param('limit', 5), (int)$this->param('page', 1));
                     $data = $this->getData();
 
                     if($data->status == 'success')
@@ -304,7 +304,7 @@ class userEntry extends entry
                         $app->rawMethod = 'work';
                         $this->config->logonMethods[] = 'my.issue';
                         $control = $this->loadController('my', 'issue');
-                        $control->issue('createdBy', 0, 'id_desc', 0, $this->param('limit', 5), 1);
+                        $control->issue('createdBy', 0, 'id_desc', 0, (int)$this->param('limit', 5), 1);
                         $data = $this->getData();
 
                         if($data->status == 'success')
@@ -324,7 +324,7 @@ class userEntry extends entry
                         $app->rawMethod = 'work';
                         $this->config->logonMethods[] = 'my.risk';
                         $control = $this->loadController('my', 'risk');
-                        $control->risk('assignedTo', 0, 'id_desc', 0, $this->param('limit', 5), 1);
+                        $control->risk('assignedTo', 0, 'id_desc', 0, (int)$this->param('limit', 5), 1);
                         $data = $this->getData();
 
                         if($data->status == 'success')
@@ -344,7 +344,7 @@ class userEntry extends entry
                         $app->rawMethod = 'work';
                         $this->config->logonMethods[] = 'my.myMeeting';
                         $control = $this->loadController('my', 'myMeeting');
-                        $control->myMeeting('futureMeeting', 0, 'id_desc', 0, $this->param('limit', 5), 1);
+                        $control->myMeeting('futureMeeting', 0, 'id_desc', 0, (int)$this->param('limit', 5), 1);
                         $data = $this->getData();
 
                         if($data->status == 'success')
@@ -418,7 +418,7 @@ class userEntry extends entry
         $this->setPost('passwordLength', strlen($setPassword));
         $this->setPost('verifyPassword', md5($this->app->user->password . $this->app->session->rand));
 
-        $control->edit($userID);
+        $control->edit((int)$userID);
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
@@ -447,7 +447,7 @@ class userEntry extends entry
         $this->setPost('verifyPassword', md5($this->app->user->password . $this->app->session->rand));
 
         $control = $this->loadController('user', 'delete');
-        $control->delete($userID);
+        $control->delete((int)$userID);
 
         $this->getData();
         return $this->sendSuccess(200, 'success');

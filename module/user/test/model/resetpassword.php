@@ -34,11 +34,11 @@ unset($config->safe->mode);
 unset($config->safe->weak);
 
 $password = md5(123456);
-$user1    = (object)array('account' => 'user2', 'password' => $password, 'password1' => $password, 'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 6);
-$user2    = (object)array('account' => 'admin', 'password' => $password, 'password1' => '',        'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 6);
-$user3    = (object)array('account' => 'admin', 'password' => $password, 'password1' => $password, 'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 5);
-$user4    = (object)array('account' => 'admin', 'password' => $password, 'password1' => $password, 'password2' => '123456',  'passwordStrength' => 0, 'passwordLength' => 6);
-$user5    = (object)array('account' => 'user1', 'password' => $password, 'password1' => $password, 'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 6);
+$user1    = (object)array('account' => 'user2', 'password' => $password, 'password1' => $password, 'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 6, 'passwordPlain' => '123456');
+$user2    = (object)array('account' => 'admin', 'password' => $password, 'password1' => '',        'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 6, 'passwordPlain' => '123456');
+$user3    = (object)array('account' => 'admin', 'password' => $password, 'password1' => $password, 'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 5, 'passwordPlain' => '12345');
+$user4    = (object)array('account' => 'admin', 'password' => $password, 'password1' => $password, 'password2' => '123456',  'passwordStrength' => 0, 'passwordLength' => 6, 'passwordPlain' => '123456');
+$user5    = (object)array('account' => 'user1', 'password' => $password, 'password1' => $password, 'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 6, 'passwordPlain' => '123456');
 
 $result = $userTest->resetPasswordTest($user1);
 r($result) && p('result')         && e(0);            // user2 用户不存在，返回 false。

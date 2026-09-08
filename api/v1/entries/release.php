@@ -21,7 +21,7 @@ class releaseEntry extends entry
     public function get($releaseID)
     {
         $control = $this->loadController('release', 'view');
-        $control->view($releaseID);
+        $control->view((int)$releaseID);
 
         $data = $this->getData();
         if(!$data or !isset($data->status)) return $this->send400('error');
@@ -48,7 +48,7 @@ class releaseEntry extends entry
         $fields = 'name,build,status,desc';
         $this->batchSetPost($fields, $oldRelease);
 
-        $control->edit($releaseID);
+        $control->edit((int)$releaseID);
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
@@ -67,7 +67,7 @@ class releaseEntry extends entry
     public function delete($releaseID)
     {
         $control = $this->loadController('release', 'delete');
-        $control->delete($releaseID, 'yes');
+        $control->delete((int)$releaseID, 'yes');
 
         $this->getData();
         return $this->sendSuccess(200, 'success');

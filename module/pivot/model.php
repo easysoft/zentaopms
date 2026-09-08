@@ -817,13 +817,23 @@ class pivotModel extends model
                 {
                     case 'select':
                         if(is_string($default) && strpos($default, ',') !== false) $default = explode(',', $default);
-                        if(is_array($default)) $default = implode("', '", array_filter($default, function($val){return trim($val) != '';}));
-                        if(empty($default)) break;
-                        $value = "('" . $default . "')";
+                        if(is_array($default))
+                        {
+                            $default = array_filter($default, function($val){return trim((string)$val) != '';});
+                            $quotedValues = array();
+                            foreach($default as $val) $quotedValues[] = $this->dbh->quote($val);
+                            if(empty($quotedValues)) break;
+                            $value = '(' . implode(', ', $quotedValues) . ')';
+                        }
+                        else
+                        {
+                            if($default === '') break;
+                            $value = '(' . $this->dbh->quote($default) . ')';
+                        }
                         $filterFormat[$field] = array('operator' => 'IN', 'value' => $value);
                         break;
                     case 'input':
-                        $filterFormat[$field] = array('operator' => 'LIKE', 'value' => "'%$default%'");
+                        $filterFormat[$field] = array('operator' => 'LIKE', 'value' => $this->dbh->quote('%' . $default . '%'));
                         break;
                     case 'date':
                     case 'datetime':
@@ -1861,7 +1871,11 @@ class pivotModel extends model
             $type       = $filter['type'];
             $typeOption = $filter['typeOption'];
             if(strpos($type, 'select') !== false && !isset($options[$typeOption])) $options[$typeOption] = $this->getSysOptions($typeOption);
-            $filters[$index]['default'] = array_intersect($filter['default'], array_keys($options[$typeOption]));
+
+            $default = $filter['default'];
+            if(is_string($default)) $default = explode(',', $default);
+            if(!is_array($default)) continue;
+            $filters[$index]['default'] = array_intersect($default, array_keys($options[$typeOption]));
         }
 
         return $filters;

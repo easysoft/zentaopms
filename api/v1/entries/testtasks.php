@@ -25,7 +25,7 @@ class testtasksEntry extends entry
         /* Get all testtasks. */
         $control   = $this->loadController('testtask', 'browse');
         $productID = $this->param('product', 0);
-        $control->browse($productID, $this->param('branch', ''), ($productID > 0 ? 'local' : 'all') . ',' . $this->param('status', 'totalStatus'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1), $this->param('begin', ''), $this->param('end', ''));
+        $control->browse((int)$productID, $this->param('branch', ''), ($productID > 0 ? 'local' : 'all') . ',' . $this->param('status', 'totalStatus'), $this->param('order', 'id_desc'), (int)$this->param('total', 0), (int)$this->param('limit', 20), (int)$this->param('page', 1), $this->param('begin', ''), $this->param('end', ''));
         $data = $this->getData();
 
         if(!isset($data->status)) return $this->sendError(400, 'error');
@@ -97,7 +97,7 @@ class testtasksEntry extends entry
         $this->batchSetPost($fields);
 
         $this->requireFields('name,begin,end');
-        $control->create($productID, $executionID, $build, $projectID);
+        $control->create((int)$productID, (int)$executionID, (int)$build, (int)$projectID);
 
         $data = $this->getData();
         if(!isset($data->id)) return $this->sendError(400, $data->message);

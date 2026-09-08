@@ -36,7 +36,7 @@ class productModel extends model
     public function getByID(int $productID): object|false
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProduct();
-        $product = $this->fetchById($productID);
+        $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         if(!$product) return false;
 
         return $this->loadModel('file')->replaceImgURL($product, 'desc');
@@ -900,7 +900,7 @@ class productModel extends model
         if(empty($product)) return $this->loadModel('project')->getPairs();
 
         $appendProject = $this->productTao->formatAppendParam($appendProject);
-        return $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $projectPairs  = $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('(t1.product')->eq($productID)
             ->andWhere('t2.type')->eq('project')
@@ -912,8 +912,10 @@ class productModel extends model
             ->beginIF($product->type != 'normal' and $branch !== '' and $branch != 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->markRight(1)
             ->beginIF($appendProject)->orWhere('t2.id')->in($appendProject)->fi()
-            ->orderBy('`order`_asc')
+            ->orderBy('t2.id_desc')
             ->fetchPairs('id', 'name');
+        foreach($projectPairs as $id => $name) $projectPairs[$id] = htmlspecialchars_decode((string)$name, ENT_QUOTES);
+        return $projectPairs;
     }
 
     /**

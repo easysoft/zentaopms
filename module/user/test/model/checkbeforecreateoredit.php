@@ -26,9 +26,9 @@ $userTest = new userModelTest();
 $random   = updateSessionRandom();
 $verify   = md5($app->user->password . $random);
 
-$guestUser   = (object)array('account' => 'guest',      'password1' => '123456', 'password2' => '123456', 'passwordLength' => 6, 'passwordStrength' => 1, 'verifyPassword' => $verify);
+$guestUser   = (object)array('account' => 'guest',      'password1' => '123456', 'password2' => '123456', 'passwordLength' => 6, 'passwordStrength' => 1, 'verifyPassword' => $verify, 'passwordPlain' => '123456');
 $noPassUser  = (object)array('account' => 'normaluser', 'password1' => '',       'password2' => '',       'verifyPassword' => $verify);
-$normalUser  = (object)array('account' => 'testuser',   'password1' => '123456', 'password2' => '123456', 'passwordLength' => 6, 'passwordStrength' => 1, 'verifyPassword' => $verify);
+$normalUser  = (object)array('account' => 'testuser',   'password1' => '123456', 'password2' => '123456', 'passwordLength' => 6, 'passwordStrength' => 1, 'verifyPassword' => $verify, 'passwordPlain' => '123456');
 $noPassUser2 = (object)array('account' => 'nopassuser', 'password1' => '',       'password2' => '',       'verifyPassword' => $verify);
 
 r($userTest->checkBeforeCreateOrEditTest($guestUser))          && p('result')         && e(0);

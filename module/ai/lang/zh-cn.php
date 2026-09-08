@@ -230,6 +230,7 @@ $lang->ai->prompts->promptPreview  = '操作禅道智能体预览';
 /* Target form selecting. */
 $lang->ai->prompts->selectTargetForm    = '选择表单';
 $lang->ai->prompts->selectTargetFormTip = '选择后，可以将大语言模型返回的结果直接录入到禅道对应的表单中。';
+$lang->ai->prompts->noRedirect          = '无需返回禅道表单';
 $lang->ai->prompts->goingTesting        = '即将跳转至调试页面';
 $lang->ai->prompts->goingTestingFail    = '暂无可调试的对象';
 

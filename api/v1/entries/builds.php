@@ -24,7 +24,7 @@ class buildsEntry extends entry
         if(empty($projectID)) return $this->sendError(400, "Need project id.");
 
         $control = $this->loadController('projectbuild', 'browse');
-        $control->browse($projectID, $this->param('type', 'all'), $this->param('param', 0), $this->param('order', 't1.date_desc,t1.id_desc'));
+        $control->browse((int)$projectID, $this->param('type', 'all'), (int)$this->param('param', 0), $this->param('order', 't1.date_desc,t1.id_desc'));
         $data = $this->getData();
 
         if(!isset($data->status)) return $this->sendError(400, 'error');
@@ -61,7 +61,7 @@ class buildsEntry extends entry
         $this->requireFields('execution,product,name,builder,date');
 
         $executionID = isset($_POST['execution']) ? $_POST['execution'] : 0;
-        $control->create($executionID, 0, $projectID);
+        $control->create((int)$executionID, 0, (int)$projectID);
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);

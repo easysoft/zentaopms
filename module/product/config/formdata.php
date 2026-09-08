@@ -1,5 +1,9 @@
 <?php
 global $app, $lang;
+
+$account = $app->user->account ?? '';
+$now     = helper::now();
+
 $config->product->form = new stdclass();
 $config->product->form->create = array();
 $config->product->form->create['program']        = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
@@ -17,8 +21,8 @@ $config->product->form->create['desc']           = array('type' => 'string',  'c
 $config->product->form->create['acl']            = array('type' => 'string',  'control' => 'radio',        'required' => false, 'default' => 'open',    'width'  => 'full', 'options' => $lang->product->aclList);
 $config->product->form->create['groups']         = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '',        'filter' => 'join', 'width' => 'full', 'options' => array());
 $config->product->form->create['whitelist']      = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '',        'filter' => 'join', 'width' => 'full', 'options' => 'users');
-$config->product->form->create['createdBy']      = array('type' => 'account', 'control' => '',             'required' => false, 'default' => (isset($app->user) && isset($app->user->account)) ? $app->user->account : '');
-$config->product->form->create['createdDate']    = array('type' => 'string',  'control' => '',             'required' => false, 'default' => helper::now());
+$config->product->form->create['createdBy']      = array('type' => 'account', 'control' => '',             'required' => false, 'default' => $account);
+$config->product->form->create['createdDate']    = array('type' => 'string',  'control' => '',             'required' => false, 'default' => $now);
 $config->product->form->create['createdVersion'] = array('type' => 'string',  'control' => '',             'required' => false, 'default' => $config->version);
 
 $config->product->form->edit = array();
@@ -51,7 +55,7 @@ $config->product->form->batchEdit['acl']     = array('type' => 'string', 'contro
 
 $config->product->form->close = array();
 $config->product->form->close['status']     = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => 'close');
-$config->product->form->close['closedDate'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => helper::now());
+$config->product->form->close['closedDate'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => $now);
 $config->product->form->close['comment']    = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'width' => 'full');
 
 $config->product->form->activate = array();

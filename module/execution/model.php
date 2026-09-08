@@ -1082,7 +1082,8 @@ class executionModel extends model
         if(dao::isError() && !empty(dao::$errors['realEnd']) && count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
         if(dao::isError()) return false;
 
-        $changes = common::createChanges($oldExecution, $execution);
+        $changes  = common::createChanges($oldExecution, $execution);
+        $actionID = 0;
         if($this->post->comment != '' || !empty($changes))
         {
             $this->loadModel('action');

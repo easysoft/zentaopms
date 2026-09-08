@@ -448,20 +448,28 @@ class baseRouter
     public $requestID = '';
 
     /**
-     * 当前请求已经记录的错误数量，防止错误刷爆日志表。
-     * The count of errors recorded in current request, prevent flooding the errorlog table.
-     *
-     * @var int
-     */
-    public $errorLogCount = 0;
-
-    /**
      * 是否正在保存错误日志，防止递归记录。
      * Whether is saving error log, prevent recursion.
      *
      * @var bool
      */
     public $savingErrorLog = false;
+
+    /**
+     * 当前请求已写入主表的错误签名，避免对同一错误本体重复发起插入。
+     * The md5 list of error bodies written in current request, avoid duplicate inserts of the same error body.
+     *
+     * @var array
+     */
+    public $savedErrorLogBodies = array();
+
+    /**
+     * 当前请求已写入关联表的记录，key为requestID|md5，同请求同错误只记录一次。
+     * The records written in current request, key is requestID|md5.
+     *
+     * @var array
+     */
+    public $savedErrorLogRecords = array();
 
     /**
      * 是否将mysql的错误作为异常抛出。
@@ -3462,7 +3470,12 @@ class baseRouter
 
     /**
      * 保存错误信息到错误日志表。
-     * Save error info to the errorlog table.
+     * Save error info to the errorlog tables.
+     *
+     * 错误本体（file/line/level/message）以 md5 为唯一键存入 zt_errorlog，
+     * 请求入口属性（requestID/module/method/account/url）存入 zt_errorlogreq。
+     * The error body is saved to zt_errorlog keyed by md5 of file/line/level/message,
+     * while the request entry attributes are saved to zt_errorlogreq.
      *
      * @param  int    $level
      * @param  string $message
@@ -3478,12 +3491,9 @@ class baseRouter
         if($this->savingErrorLog)           return;
         if($this->moduleName == 'errorlog') return;
         if(empty($this->dbh))               return;
-        if($this->errorLogCount >= 100)     return;
 
         $account = isset($_SESSION['user']->account) ? $_SESSION['user']->account : '';
-
-        $this->savingErrorLog = true;
-        $this->errorLogCount ++;
+        if(empty($this->requestID)) $this->requestID = 'sid-' . md5(uniqid('', true));
 
         /* 隐藏安装目录的绝对路径，统一保存为相对路径。Hide absolute base path, store relative paths. */
         $basePath = $this->getBasePath();
@@ -3494,17 +3504,44 @@ class baseRouter
             $trace   = str_replace($basePath, '', $trace);
         }
 
+        /* 错误本体签名，不含请求入口属性和堆栈。Signature of the error body, without request entry attributes and trace. */
+        $md5 = md5(implode("\n", array($file, (string)$line, (string)$level, $message)));
+
+        /* 同请求同错误只记录一次，命中后不再发起任何SQL。Skip duplicates in the same request without SQL. */
+        $recordKey = $this->requestID . '|' . $md5;
+        if(isset($this->savedErrorLogRecords[$recordKey])) return;
+
+        $this->savingErrorLog = true;
         try
         {
-            $stmt = $this->dbh->prepare('INSERT INTO ' . TABLE_ERRORLOG . ' (`requestID`, `account`, `module`, `method`, `url`, `level`, `message`, `file`, `line`, `trace`, `createdDate`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-            $stmt->execute(array($this->requestID, $account, $this->moduleName, $this->rawMethod, substr($this->getURI(), 0, 255), $level, $message, $file, $line, $trace, helper::now()));
+            if(!isset($this->savedErrorLogBodies[$md5]))
+            {
+                try
+                {
+                    $sql  = $this->dbh->formatSQL('INSERT INTO ' . TABLE_ERRORLOG . ' (`md5`, `file`, `line`, `level`, `message`, `trace`) VALUES (?, ?, ?, ?, ?, ?)');
+                    $stmt = $this->dbh->prepare($sql);
+                    $stmt->execute(array($md5, $file, $line, $level, $message, $trace));
+                    $this->savedErrorLogBodies[$md5] = true;
+                }
+                catch(Throwable $e)
+                {
+                    /* 主键冲突或写库失败均忽略，错误本体可能已由其他请求写入。Ignore duplicate keys and other failures. */
+                }
+            }
+
+            $sql  = $this->dbh->formatSQL('INSERT INTO ' . TABLE_ERRORLOGREQ . ' (`requestID`, `md5`, `module`, `method`, `account`, `url`, `createdDate`) VALUES (?, ?, ?, ?, ?, ?, ?)');
+            $stmt = $this->dbh->prepare($sql);
+            $stmt->execute(array($this->requestID, $md5, $this->moduleName, $this->rawMethod, $account, substr((string)$this->getURI(), 0, 255), helper::now()));
+            $this->savedErrorLogRecords[$recordKey] = true;
         }
         catch(Throwable $e)
         {
             /* 记录失败不影响主流程。If failed to save, do not affect the main flow. */
         }
-
-        $this->savingErrorLog = false;
+        finally
+        {
+            $this->savingErrorLog = false;
+        }
     }
 
     /**

@@ -28,7 +28,7 @@ class executionsEntry extends entry
         if($projectID)
         {
             $control = $this->loadController('project', 'execution');
-            $control->execution($this->param('status', 'undone'), $projectID, $this->param('order', 'id_desc'), $this->param('product', 0), 0, $this->param('limit', 20), $this->param('page', 1));
+            $control->execution($this->param('status', 'undone'), (int)$projectID, $this->param('order', 'id_desc'), (int)$this->param('product', 0), 0, (int)$this->param('limit', 20), (int)$this->param('page', 1));
 
             /* Response */
             $data = $this->getData();
@@ -42,7 +42,7 @@ class executionsEntry extends entry
         else
         {
             $control = $this->loadController('execution', 'all');
-            $control->all($this->param('status', 'all'), $this->param('order', 'id_desc'), 0, '', 0, $this->param('limit', 20), $this->param('page', 1));
+            $control->all($this->param('status', 'all'), $this->param('order', 'id_desc'), 0, '', 0, (int)$this->param('limit', 20), (int)$this->param('page', 1));
             $data = $this->getData();
 
             if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
@@ -136,7 +136,7 @@ class executionsEntry extends entry
         if($useCode) $requireFields .= ',code';
         $this->requireFields($requireFields);
 
-        $control->create($projectID);
+        $control->create((int)$projectID);
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
@@ -155,7 +155,7 @@ class executionsEntry extends entry
     public function getDropMenu()
     {
         $control = $this->loadController('execution', 'ajaxGetDropMenu');
-        $control->ajaxGetDropMenu($this->request('executionID', 0), $this->request('module', 'execution'), $this->request('method', 'task'), $this->request('extra', ''));
+        $control->ajaxGetDropMenu((int)$this->request('executionID', 0), $this->request('module', 'execution'), $this->request('method', 'task'), $this->request('extra', ''));
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);

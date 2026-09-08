@@ -8295,7 +8295,7 @@ LEFT JOIN (
         DAY(`createdDate`)
 ) compile_stats ON base.`YEARMONTH` = compile_stats.`YEARMONTH`
 WHERE base.year > 0
-ORDER BY base.`year`, base.`month`, base.`day` LIMIT 999999;
+ORDER BY base.`year`, base.`month`, base.`day` LIMIT 999999
 EOT
 ,
     'settings' => array(

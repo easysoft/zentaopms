@@ -947,7 +947,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function testcase(int $projectID = 0, int $productID = 0, string $branch = 'all', string $browseType = 'all', int $param = 0, string $caseType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testcase(int $projectID = 0, int $productID = 0, string $branch = 'all', string $browseType = 'all', int $param = 0, string $caseType = '', string $orderBy = 'sort_asc,id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* 项目型项目不展示2.5级产品下拉菜单。 */
         $project = $this->project->getByID($projectID);

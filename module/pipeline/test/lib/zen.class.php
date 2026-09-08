@@ -70,9 +70,9 @@ class pipelineZenTest extends baseTest
         return $result;
     }
 
-    public function getPipelineSearchQueryTest(int $queryID): string
+    public function getPipelineSearchQueryTest(int $queryID, string $queryName = 'pipelineQuery'): string
     {
-        $result = $this->invokeArgs('getPipelineSearchQuery', [$queryID]);
+        $result = $this->invokeArgs('getPipelineSearchQuery', [$queryID, $queryName]);
         if(dao::isError()) return false;
         return $result;
     }
@@ -83,4 +83,108 @@ class pipelineZenTest extends baseTest
         if(dao::isError()) return false;
         return $result;
     }
+
+    /**
+     * Test buildJenkinsTree method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function buildJenkinsTreeTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('buildJenkinsTree', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test renderSchemaKeywords method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function renderSchemaKeywordsTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('renderSchemaKeywords', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+    /**
+     * Test buildArtifactLibSchemaItems method.
+     *
+     * @param  string $scope
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function buildArtifactLibSchemaItemsTest(string $scope = 'space,repo', string $type = 'container')
+    {
+        try
+        {
+            $result = $this->invokeArgs('buildArtifactLibSchemaItems', array($scope, $type));
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+
+            $values = array();
+            $this->collectLeafValues($result, $values);
+            sort($values, SORT_STRING);
+
+            return array('groupCount' => count($result), 'values' => implode(',', $values));
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+    /**
+     * 收集嵌套树中所有叶子节点的 value，跳过带子项的分组节点。
+     * Collect leaf node values in nested picker items.
+     *
+     * @param  array $nodes
+     * @param  array $values
+     * @access private
+     * @return void
+     */
+    private function collectLeafValues(array $nodes, array &$values): void
+    {
+        foreach($nodes as $node)
+        {
+            if(isset($node['items']) && !empty($node['items']))
+            {
+                $this->collectLeafValues($node['items'], $values);
+                continue;
+            }
+
+            if(array_key_exists('value', $node)) $values[] = (string)$node['value'];
+        }
+    }
+
 }

@@ -341,32 +341,37 @@ class blockZenTest extends baseTest
      * @access public
      * @return object
      */
-    public function printProjectStatisticBlockTest(object $block)
+    public function printProjectStatisticBlockTest(...$args)
     {
-        ob_start();
-        $this->invokeArgs('printProjectStatisticBlock', [$block]);
-        ob_get_clean();
-
-        if(dao::isError()) return dao::getError();
-
-        $view = $this->getProperty('view');
-
-        $result = new stdClass();
-        $result->projectCount = isset($view->projects) ? count($view->projects) : 0;
-        $result->userCount    = isset($view->users)    ? count($view->users)    : 0;
-
-        if(isset($view->projects))
+        try
         {
-            foreach($view->projects as $index => $project)
-            {
-                $projectKey = 'project' . $index;
-                $result->$projectKey = new stdClass();
-                $result->$projectKey->id     = isset($project->id)     ? $project->id     : 0;
-                $result->$projectKey->name   = isset($project->name)   ? $project->name   : '';
-                $result->$projectKey->status = isset($project->status) ? $project->status : '';
-            }
+            ob_start();
+            global $app;
+            $savedModule = $app->moduleName;
+            $savedRawModule = $app->rawModule;
+            $savedRawMethod = $app->rawMethod;
+            $app->moduleName = 'common';
+            $app->rawModule = null;
+            $app->rawMethod = null;
+            $target = $app->loadTarget('block', '', 'zen');
+            $reflection = new ReflectionClass($target);
+            $method = $reflection->getMethod('printProjectStatisticBlock');
+            $method->setAccessible(true);
+            $result = $method->invokeArgs($target, $args);
+            $app->moduleName = $savedModule;
+            $app->rawModule = $savedRawModule;
+            $app->rawMethod = $savedRawMethod;
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
         }
-        return $result;
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
     }
 
     /**
@@ -1644,4 +1649,290 @@ class blockZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $this->getProperty('view');
     }
+
+    /**
+     * Test createMoreLink method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function createMoreLinkTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('createMoreLink', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test printAnnualWorkloadBlock method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printAnnualWorkloadBlockTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('printAnnualWorkloadBlock', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test printBugBlock method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printBugBlockTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('printBugBlock', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test printBugStatisticBlock method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printBugStatisticBlockTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('printBugStatisticBlock', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test printIssueBlock method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printIssueBlockTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('printIssueBlock', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test printRiskBlock method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printRiskBlockTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('printRiskBlock', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test printScrumIssueBlock method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printScrumIssueBlockTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('printScrumIssueBlock', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test printScrumListBlock method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printScrumListBlockTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('printScrumListBlock', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test printScrumRiskBlock method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printScrumRiskBlockTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('printScrumRiskBlock', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test printSprintBlock method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printSprintBlockTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('printSprintBlock', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test printWaterfallIssueBlock method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printWaterfallIssueBlockTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('printWaterfallIssueBlock', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
 }

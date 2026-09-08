@@ -134,6 +134,8 @@ class screen extends control
      */
     public function viewOld(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
     {
+        $this->screen->checkAccess($screenID);
+
         if(empty($year))  $year  = date('Y');
         if(empty($month)) $month = date('m');
 
@@ -172,10 +174,12 @@ class screen extends control
      * @access public
      * @return void
      */
-    public function ajaxGetChart(int $year = 0, int $month = 0, int $dept = 0, string $account = '')
+    public function ajaxGetChart(int $screenID = 0, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
     {
         if(!empty($_POST))
         {
+            if($screenID) $this->screen->checkAccess($screenID);
+
             $sourceID = $this->post->sourceID;
             $type     = $this->post->type;
 
@@ -207,12 +211,14 @@ class screen extends control
 
             if($type == 'pivot')
             {
+                $this->loadModel('pivot')->checkAccess($sourceID);
                 $chartOrPivot = $this->loadModel('pivot')->getPivotDataByID($sourceID);
             }
             else
             {
                 $table = $this->config->objectTables[$type];
                 $chartOrPivot = $this->dao->select('*')->from($table)->where('id')->eq($sourceID)->fetch();
+                if(!empty($chartOrPivot)) $this->loadModel('chart')->checkAccess($sourceID);
             }
 
             $filterFormat = array();

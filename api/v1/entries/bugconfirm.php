@@ -26,7 +26,7 @@ class bugConfirmEntry extends entry
         $bug    = $this->loadModel('bug')->getByID($bugID);
         $this->batchSetPost($fields, $bug);
 
-        $control->confirm($bugID);
+        $control->confirm((int)$bugID);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');

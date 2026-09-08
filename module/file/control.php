@@ -498,15 +498,14 @@ class file extends control
      */
     public function ajaxSaveTemplate(string $module)
     {
-        $templateID = (int)$this->file->saveExportTemplate($module);
-        if(dao::isError())
-        {
-            $alert = '';
-            $errors = dao::getError();
-            foreach($errors as $errorContent) $alert .= is_array($errorContent) ? implode("\n", $errorContent) : $errorContent;
-            return $this->send(array('alert' => $alert));
-        }
-        return print($this->fetch('file', 'buildExportTPL', "module=$module&templateID=$templateID"));
+        $module = strtolower(trim($module));
+        if(!preg_match('/^[a-z0-9_]+$/', $module)) return $this->send(array('alert' => $this->lang->error->accessDenied));
+        if(!common::hasPriv($module, 'export'))    return $this->send(array('alert' => $this->lang->error->accessDenied));
+
+        $result = $this->file->saveExportTemplate($module);
+        if($result['result'] == 'fail') return $this->send(array('alert' => $result['message']));
+
+        return print($this->fetch('file', 'buildExportTPL', "module=$module&templateID={$result['templateID']}"));
     }
 
     /**

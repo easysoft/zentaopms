@@ -23,7 +23,7 @@ class bugEntry extends entry
         $this->resetOpenApp($this->param('tab', 'product'));
 
         $control = $this->loadController('bug', 'view');
-        $control->view($bugID);
+        $control->view((int)$bugID);
 
         $data = $this->getData();
 
@@ -99,7 +99,7 @@ class bugEntry extends entry
         $this->batchSetPost($fields, $oldBug);
         $this->setPost('notifyEmail', implode(',', $this->request('notifyEmail', array())));
 
-        $control->edit($bugID);
+        $control->edit((int)$bugID);
 
         $data = $this->getData();
 
@@ -127,7 +127,7 @@ class bugEntry extends entry
             if(!in_array($bug->project, $projects)) return $this->sendError(400, 'No access to the project that the bug belongs to');
         }
 
-        $control->delete($bugID, 'yes');
+        $control->delete((int)$bugID, 'yes');
 
         $this->getData();
         return $this->sendSuccess(200, 'success');

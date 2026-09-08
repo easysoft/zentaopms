@@ -21,7 +21,7 @@ class testcaseEntry extends entry
     public function get($testcaseID)
     {
         $control = $this->loadController('testcase', 'view');
-        $control->view($testcaseID, $this->param('version', 0));
+        $control->view((int)$testcaseID, (int)$this->param('version', 0));
 
         $data = $this->getData();
         if(!$data or (isset($data->message) and $data->message == '404 Not found')) return $this->send404();
@@ -89,7 +89,7 @@ class testcaseEntry extends entry
         $this->setPost('expects',  isset($this->requestBody->expects) ? $this->requestBody->expects : $expects);
         $this->setPost('stepType', isset($this->requestBody->stepType) ? $this->requestBody->stepType : $stepType);
 
-        $control->edit($caseID);
+        $control->edit((int)$caseID);
 
         $this->getData();
         $case = $this->testcase->getByID($caseID);
@@ -106,7 +106,7 @@ class testcaseEntry extends entry
     public function delete($testcaseID)
     {
         $control = $this->loadController('testcase', 'delete');
-        $control->delete($testcaseID, 'yes');
+        $control->delete((int)$testcaseID, 'yes');
 
         $this->getData();
 

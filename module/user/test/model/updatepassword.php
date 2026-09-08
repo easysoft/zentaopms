@@ -43,11 +43,11 @@ $random   = updateSessionRandom();
 $password = md5(654321);
 $original = md5($app->user->password  . $random);
 
-$user1 = (object)array('originalPassword' => $original, 'password' => $password, 'password1' => '',        'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 6);
-$user2 = (object)array('originalPassword' => $original, 'password' => $password, 'password1' => $password, 'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 5);
-$user3 = (object)array('originalPassword' => $original, 'password' => $password, 'password1' => $password, 'password2' => '',        'passwordStrength' => 0, 'passwordLength' => 6);
-$user4 = (object)array('originalPassword' => '',        'password' => $password, 'password1' => $password, 'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 6);
-$user5 = (object)array('originalPassword' => $original, 'password' => $password, 'password1' => $password, 'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 6);
+$user1 = (object)array('originalPassword' => $original, 'password' => $password, 'password1' => '',        'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 6, 'passwordPlain' => '654321');
+$user2 = (object)array('originalPassword' => $original, 'password' => $password, 'password1' => $password, 'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 5, 'passwordPlain' => '65432');
+$user3 = (object)array('originalPassword' => $original, 'password' => $password, 'password1' => $password, 'password2' => '',        'passwordStrength' => 0, 'passwordLength' => 6, 'passwordPlain' => '654321');
+$user4 = (object)array('originalPassword' => '',        'password' => $password, 'password1' => $password, 'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 6, 'passwordPlain' => '654321');
+$user5 = (object)array('originalPassword' => $original, 'password' => $password, 'password1' => $password, 'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 6, 'passwordPlain' => '654321');
 
 $result = $userTest->updatePasswordTest($user1);
 r($result) && p('result')           && e(0);                    // 密码为空，返回 false。

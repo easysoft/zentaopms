@@ -24,7 +24,7 @@ class executionBugsEntry extends entry
         if(empty($executionID)) return $this->sendError(400, 'Need execution id.');
 
         $control = $this->loadController('execution', 'bug');
-        $control->bug($executionID, $this->param('product', 0), $this->param('branch', 0), $this->param('order', 'status,id_desc'), $this->param('build', 0), $this->param('status', 'all'), 0, 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->bug((int)$executionID, (int)$this->param('product', 0), $this->param('branch', 0), $this->param('order', 'status,id_desc'), (int)$this->param('build', 0), $this->param('status', 'all'), 0, 0, (int)$this->param('limit', 20), (int)$this->param('page', 1));
 
         $data = $this->getData();
 

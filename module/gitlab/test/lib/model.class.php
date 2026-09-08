@@ -241,4 +241,56 @@ class gitlabModelTest extends baseTest
         }
         return array();
     }
+
+    /**
+     * Test apiGetExecInfo method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function apiGetExecInfoTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('apiGetExecInfo', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test getLogs method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getLogsTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('getLogs', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
 }

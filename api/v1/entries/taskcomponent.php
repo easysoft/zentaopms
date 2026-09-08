@@ -28,7 +28,7 @@ class taskComponentEntry extends entry
         foreach($fields as $field) $this->setArrayPost($field);
         $task = $this->loadModel('task')->getById($taskID);
 
-        $control->batchCreate($task->execution, 0, 0, $taskID);
+        $control->batchCreate((int)$task->execution, 0, 0, (int)$taskID);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');

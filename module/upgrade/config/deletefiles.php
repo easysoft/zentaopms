@@ -2640,3 +2640,4 @@ $config->delete['22_3'][] = 'module/svn';
 $config->delete['22_3'][] = 'module/compile';
 $config->delete['22_5'][] = 'extension/custom/runner';
 $config->delete['22_5'][] = 'module/upgrade/css/execute.ui.css';
+$config->delete['22_6'][] = 'module/testcase/config/search.php';

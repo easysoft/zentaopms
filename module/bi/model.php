@@ -625,6 +625,7 @@ class biModel extends model
             $wheres = array();
             foreach($filters as $field => $filter)
             {
+                if(!self::isSafeFilterField((string)$field) || !self::isAllowedFilterOperator((string)$filter['operator'])) continue;
                 $wheres[] = "$field {$filter['operator']} {$filter['value']}";
             }
             $moleculeWheres    = array_merge($moleculeWheres, $wheres);
@@ -700,6 +701,7 @@ class biModel extends model
                 $wheres = array();
                 foreach($filters as $field => $filter)
                 {
+                    if(!self::isSafeFilterField((string)$field) || !self::isAllowedFilterOperator((string)$filter['operator'])) continue;
                     $wheres[] = "`$field` {$filter['operator']} {$filter['value']}";
                 }
 
@@ -2407,5 +2409,32 @@ class biModel extends model
         if(empty($object)) return null;
         if(is_scalar($object)) return $object;
         return json_encode($object);
+    }
+
+    /**
+     * 过滤操作符白名单。
+     * Filter operator whitelist.
+     *
+     * @param  string $operator
+     * @access private
+     * @return bool
+     */
+    private static function isAllowedFilterOperator(string $operator): bool
+    {
+        $allowed = array('IN', 'NOT IN', 'LIKE', 'NOT LIKE', 'BETWEEN', '=', '!=', '<>', '>', '<', '>=', '<=', 'IS NULL', 'IS NOT NULL');
+        return in_array(strtoupper(trim($operator)), $allowed);
+    }
+
+    /**
+     * 过滤字段标识符校验。
+     * Validate the filter field identifier.
+     *
+     * @param  string $field
+     * @access private
+     * @return bool
+     */
+    private static function isSafeFilterField(string $field): bool
+    {
+        return preg_match('/^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)?$/', $field) === 1;
     }
 }

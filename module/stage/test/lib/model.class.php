@@ -189,4 +189,30 @@ class stageModelTest extends baseTest
 
         return trim(implode(',', array_filter(array($link, $stageTab['subModule'] ?? '', $links), fn($value) => $value !== '')), ',');
     }
+
+    /**
+     * Test updateOrder method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function updateOrderTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('updateOrder', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
 }

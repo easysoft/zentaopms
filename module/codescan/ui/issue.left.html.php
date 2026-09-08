@@ -23,7 +23,8 @@ if(!empty($taskList))
     $taskItems = array_slice($taskItems, 0, 11);
 }
 
-$selected     = !empty($params['branch']) ? (string)$this->cookie->issueFile : (!empty($ruleName) ? $ruleName : $lang->all);
+$issueFile    = !empty($params['path']) ? (string)$params['path'] : (string)$this->cookie->issueFile;
+$selected     = !empty($params['branch']) ? $issueFile : (!empty($ruleName) ? $ruleName : $lang->all);
 $selectTaskID = isset($params['taskID']) ? $params['taskID'] : 0;
 $isRule       = strpos($extras, 'ruleID') !== false;
 
@@ -80,7 +81,7 @@ sidebar
                 set::expandedIcon('icon-folder-open-o'),
                 set::normalIcon('icon-doc'),
                 set::onClickItem(jsRaw('window.issueTreeClick')),
-                set::selected(empty($params['branch']) ? '' : ($params['branch'] . str_replace(array('/', '-', '.'), '', (string)$this->cookie->issueFile))),
+                set::selected(empty($params['branch']) ? '' : ($params['branch'] . str_replace(array('/', '-', '.'), '', $issueFile))),
                 set::hover(true),
                 set::lines(true),
                 set::items($fileTree)

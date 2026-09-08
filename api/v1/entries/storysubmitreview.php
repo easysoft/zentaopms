@@ -25,7 +25,7 @@ class storySubmitReviewEntry extends entry
         $fields = 'reviewer,needNotReview';
         $this->batchSetPost($fields);
 
-        $control->submitReview($storyID, $this->param('storyType', 'story'));
+        $control->submitReview((int)$storyID, $this->param('storyType', 'story'));
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');

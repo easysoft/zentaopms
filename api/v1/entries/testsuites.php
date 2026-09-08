@@ -24,7 +24,7 @@ class testsuitesEntry extends entry
         if(empty($productID)) return $this->sendError(400, 'Need product id.');
 
         $control = $this->loadController('testsuite', 'browse');
-        $control->browse($productID, 'all', $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->browse((int)$productID, 'all', $this->param('order', 'id_desc'), 0, (int)$this->param('limit', 20), (int)$this->param('page', 1));
 
         $data = $this->getData();
         if(isset($data->status) and $data->status == 'success')
@@ -67,7 +67,7 @@ class testsuitesEntry extends entry
 
         $this->requireFields('name');
 
-        $control->create($productID);
+        $control->create((int)$productID);
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);

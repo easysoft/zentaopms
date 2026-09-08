@@ -24,7 +24,7 @@ class projectStoriesEntry extends entry
         if(!$projectID) return $this->sendError(400, 'Need product id.');
 
         $control = $this->loadController('projectstory', 'story');
-        $control->story($projectID, $this->param('product', 0), $this->param('branch', ''), $this->param('status', 'unclosed'), 0, 'story', $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->story((int)$projectID, (int)$this->param('product', 0), $this->param('branch', ''), $this->param('status', 'unclosed'), 0, 'story', $this->param('order', 'id_desc'), 0, (int)$this->param('limit', 20), (int)$this->param('page', 1));
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')

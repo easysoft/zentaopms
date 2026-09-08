@@ -21,7 +21,7 @@ class storyRecallEntry extends entry
     public function delete($storyID)
     {
         $control = $this->loadController('story', 'recall');
-        $control->recall($storyID, 'view', 'yes', $this->param('type', 'story'));
+        $control->recall((int)$storyID, 'view', 'yes', $this->param('type', 'story'));
 
         $this->getData();
         return $this->sendSuccess(200, 'success');

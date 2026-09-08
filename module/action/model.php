@@ -681,6 +681,46 @@ class actionModel extends model
         $objectType = $action->objectType;
         $actionType = strtolower($action->action);
 
+        /* Merge for convert to object name. */
+        if(isset($action->from) and $action->from == 'feedback')
+        {
+            $desc = '';
+            $objectID   = $action->objectID;
+            $object     = $this->loadModel($objectType)->fetchById($objectID);
+            $nameField  = zget($this->config->action->objectNameFields, $objectType, '');
+            $commonText = $objectType == 'story' ? $this->lang->{$object->type}->common : $this->lang->$objectType->common;
+            if($object and $nameField)
+            {
+                $objectDesc = $commonText . ' [<strong>' . html::a(helper::createLink($objectType, 'view', "id=$objectID"), $object->$nameField) . '</strong>] ';
+                if($action->objectType == 'story' and $action->action == 'reviewed' and strpos($action->extra, ',') !== false)
+                {
+                    $desc = $this->lang->$objectType->action->rejectreviewed;
+                }
+                elseif(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
+                {
+                    $desc = $this->lang->$objectType->action->$actionType;
+                }
+                elseif(isset($this->lang->action->desc->$actionType))
+                {
+                    $desc = $this->lang->action->desc->$actionType;
+                }
+                else
+                {
+                    $desc = $action->extra ? $this->lang->action->desc->extra : $this->lang->action->desc->common;
+                }
+
+                if(!isset($this->lang->$objectType->action)) $this->lang->$objectType->action = new stdclass();
+                if(is_array($desc))
+                {
+                    $desc['main'] = str_replace('$date, ', '$date, ' . $objectDesc, $desc['main']);
+                }
+                else
+                {
+                    $desc = str_replace('$date, ', '$date, ' . $objectDesc, $desc);
+                }
+            }
+        }
+
         /**
          *
          * 设置操作的描述。

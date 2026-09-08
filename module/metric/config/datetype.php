@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 $config->metric->dateType = array();
 $config->metric->dateType['count_of_annual_created_top_program'] = 'year';
 $config->metric->dateType['count_of_annual_closed_top_program'] = 'year';

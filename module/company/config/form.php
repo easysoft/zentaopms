@@ -1,9 +1,5 @@
 <?php
-declare(strict_types=1);
-global $lang, $app;
-
 $config->company->form = new stdclass();
-
 $config->company->form->edit = array();
 $config->company->form->edit['name']     = array('required' => true,  'type' => 'string', 'filter' => 'trim');
 $config->company->form->edit['phone']    = array('required' => false,  'type' => 'string', 'default' => '');

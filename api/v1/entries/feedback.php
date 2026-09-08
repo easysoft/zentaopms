@@ -21,7 +21,7 @@ class feedbackEntry extends entry
     public function get($feedbackID)
     {
         $control = $this->loadController('feedback', 'adminView');
-        $control->adminView($feedbackID);
+        $control->adminView((int)$feedbackID);
 
         $data = $this->getData();
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
@@ -56,7 +56,7 @@ class feedbackEntry extends entry
         $fields = 'module,product,type,title,public,desc,status,feedbackBy,notifyEmail,notify,uid,pri';
         $this->batchSetPost($fields, $oldFeedback);
 
-        $control->edit($feedbackID, '');
+        $control->edit((int)$feedbackID, '');
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
@@ -77,7 +77,7 @@ class feedbackEntry extends entry
     public function delete($feedbackID)
     {
         $control = $this->loadController('feedback', 'delete');
-        $control->delete($feedbackID, 'yes');
+        $control->delete((int)$feedbackID, 'yes');
 
         $this->getData();
         return $this->sendSuccess(200, 'success');

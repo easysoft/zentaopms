@@ -1,12 +1,12 @@
 <?php
-$now = helper::now();
+global $app;
+
+$account = $app->user->account ?? '';
+$now     = helper::now();
 
 $config->task->form = new stdclass();
 $config->task->form->team = new stdclass();
 $config->task->form->testTask = new stdclass();
-
-global $app;
-$account = isset($app->user->account) ? $app->user->account : '';
 
 $config->task->form->create = array();
 $config->task->form->create['execution']    = array('type' => 'int',      'required' => true,  'default' => 0);

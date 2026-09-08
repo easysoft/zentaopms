@@ -1582,13 +1582,25 @@ class repoModel extends model
      */
     public function saveAction2PMS(array $objects, object $log, string $repoRoot = '', string $encodings = 'utf-8', string $scm = 'svn', array $gitlabAccountPairs = array()): bool
     {
-        $committers  = $this->loadModel('user')->getCommiters('account');
-        $log->author = zget($gitlabAccountPairs, $log->author, zget($committers, $log->author));
+        $committers = $this->loadModel('user')->getCommiters('account');
+        $rawAuthor  = trim((string)$log->author);
+        $author     = zget($committers, $rawAuthor, '');
+        if(!$author && isset($gitlabAccountPairs[$rawAuthor]))
+        {
+            $candidate = $gitlabAccountPairs[$rawAuthor];
+            if($this->loadModel('user')->getById($candidate)) $author = $candidate;
+        }
+        if(!$author && $this->loadModel('user')->getById($rawAuthor)) $author = $rawAuthor;
+        $log->author = $author ?: $rawAuthor;
 
+        $originalUser = null;
         if(isset($this->app->user))
         {
-            $account = $this->app->user->account;
-            $this->app->user->account = $log->author;
+            $originalUser = clone $this->app->user;
+            $authorUser = $this->loadModel('user')->getById($log->author);
+            $this->app->user->account  = $log->author;
+            $this->app->user->id       = $authorUser ? $authorUser->id : 0;
+            $this->app->user->realname = $authorUser ? $authorUser->realname : ($rawAuthor ?: 'system');
         }
 
         $action  = new stdclass();
@@ -1625,7 +1637,7 @@ class repoModel extends model
         $action->action = $scm == 'svn' ? 'svncommited' : 'gitcommited';
         $this->saveObjectToPms($objects, $action, $changes);
 
-        if(isset($this->app->user)) $this->app->user->account = $account;
+        if(isset($originalUser)) $this->app->user = $originalUser;
         return !dao::isError();
     }
 
@@ -1868,8 +1880,15 @@ class repoModel extends model
 
             $log = new stdclass();
             $log->revision = isset($commit->id) ? $commit->id : $commit->sha;
-            $log->msg      = $commit->message;
-            $log->author   = isset($commit->author->identity->name) ? $commit->author->identity->name : $commit->author->name;
+            $log->msg      = isset($commit->message) ? $commit->message : zget($commit, 'title', '');
+            $log->author   = '';
+            if(isset($commit->author) && is_object($commit->author))
+            {
+                if(isset($commit->author->identity) && is_object($commit->author->identity)) $log->author = zget($commit->author->identity, 'name', '');
+                if(!$log->author) $log->author = zget($commit->author, 'name', '');
+                if(!$log->author) $log->author = zget($commit->author, 'username', '');
+                if(!$log->author) $log->author = zget($commit->author, 'email', '');
+            }
             $log->date     = date("Y-m-d H:i:s", strtotime($time));
             $log->files    = array();
             $log->repo     = $repo;

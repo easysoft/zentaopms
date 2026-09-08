@@ -715,7 +715,7 @@ class repo extends control
         {
             $oldRevision = '^';
             if($revision) $oldRevision = "{$revision}^";
-            $newRevision = $log[0]->revision;
+            $newRevision = empty($log[0]) ? '' : $log[0]->revision;
         }
 
         $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&oldrevision=$oldRevision&newRevision={$newRevision}"));
@@ -1285,7 +1285,7 @@ class repo extends control
 
         $suffix   = '';
         if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]);
-        if(!$suffix or (!array_key_exists($suffix, $this->config->program->suffix) and strpos($this->config->repo->images, "|$suffix|") === false)) $suffix = $this->repoZen->isBinary($content, $suffix) ? 'binary' : 'c';
+        if(!$suffix or (!array_key_exists($suffix, $this->config->repo->program->suffix) and strpos($this->config->repo->images, "|$suffix|") === false)) $suffix = $this->repoZen->isBinary($content, $suffix) ? 'binary' : 'c';
 
         if(strpos($this->config->repo->images, "|$suffix|") !== false)
         {
@@ -1439,7 +1439,7 @@ class repo extends control
         $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
         $logs     = array();
         $revision = $version == 1 ? 'HEAD' : $latestInDB->commit;
-        if($repo->scmType == 'git' && $revision > 1) $revision = $latestInDB->revision;
+        if($repo->scmType == 'git' && $revision > 1 && !empty($latestInDB->revision)) $revision = $latestInDB->revision;
 
         $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branch);
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branch);
@@ -1452,7 +1452,7 @@ class repo extends control
             return print('finish');
         }
 
-        $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repoID)->exec();
+        //$this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repoID)->exec();
         echo $commitCount;
     }
 

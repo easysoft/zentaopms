@@ -511,6 +511,8 @@ class spaceModel extends model
                 if(isset($this->lang->devops->homeMenu->$menu)) $this->lang->devops->homeMenu->$menu = common::setMenuVarsEx($this->lang->devops->homeMenu->$menu, $spaceID);
             }
 
+            if(empty($this->lang->devops->homeMenu)) return;
+
             foreach($this->lang->devops->homeMenu as $label => &$menu)
             {
                 if(empty($menu['link'])) continue;

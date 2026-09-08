@@ -32,7 +32,7 @@ class configsEntry extends baseEntry
         $configs[] = array('key' => 'hourUnit',        'value' => $this->config->hourUnit);
         $configs[] = array('key' => 'CRProduct',       'value' => $this->config->CRProduct);
         $configs[] = array('key' => 'CRExecution',     'value' => $this->config->CRExecution);
-        $configs[] = array('key' => 'CRTask',          'value' => $this->config->CRTask);
+        $configs[] = array('key' => 'CRTask',          'value' => isset($this->config->CRTask) ? $this->config->CRTask : '');
         $configs[] = array('key' => 'edition',         'value' => $this->config->edition);
         $configs[] = array('key' => 'vision',          'value' => $this->config->vision);
         $configs[] = array('key' => 'storyNeedReview', 'value' => !!$this->config->story->needReview);

@@ -25,7 +25,7 @@ class issueEntry extends entry
 
         /* Otherwise, get issue of project. */
         $control = $this->loadController('issue', 'view');
-        $control->view($issueID);
+        $control->view((int)$issueID);
 
         $data = $this->getData();
         if(!$data or (isset($data->message) and $data->message == '404 Not found')) return $this->send404();
@@ -51,7 +51,7 @@ class issueEntry extends entry
         $fields = 'type,title,severity,pri,assignedTo,deadline,desc';
         $this->batchSetPost($fields, $oldIssue);
 
-        $control->edit($issueID);
+        $control->edit((int)$issueID);
 
         $data = $this->getData();
         if(!$data or (isset($data->message) and $data->message == '404 Not found')) return $this->send404();
@@ -71,7 +71,7 @@ class issueEntry extends entry
     public function delete($issueID)
     {
         $control = $this->loadController('issue', 'delete');
-        $control->delete($issueID, 'true');
+        $control->delete((int)$issueID, 'true');
 
         $this->getData();
         return $this->sendSuccess(200, 'success');

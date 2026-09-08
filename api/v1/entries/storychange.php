@@ -39,7 +39,7 @@ class storyChangeEntry extends entry
 
         $this->requireFields('title');
 
-        $control->change($storyID, '', $oldStory->type);
+        $control->change((int)$storyID, '', $oldStory->type);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');

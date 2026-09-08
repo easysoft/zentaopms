@@ -23,7 +23,7 @@ class productplanEntry extends entry
         $fields = $this->param('fields');
 
         $control = $this->loadController('productplan', 'view');
-        $control->view($planID);
+        $control->view((int)$planID);
 
         $data = $this->getData();
         if(!$data or !isset($data->status)) return $this->send400('error');
@@ -56,14 +56,14 @@ class productplanEntry extends entry
         $this->setPost('product', $oldPlan->product);
         $this->setPost('status',  $oldPlan->status);
 
-        $control->edit($planID);
+        $control->edit((int)$planID);
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         /* Get plan info. */
         $control = $this->loadController('productplan', 'view');
-        $control->view($planID);
+        $control->view((int)$planID);
 
         $data = $this->getData();
         if(!$data or !isset($data->status)) return $this->send400('error');
@@ -83,7 +83,7 @@ class productplanEntry extends entry
     public function delete($planID)
     {
         $control = $this->loadController('productplan', 'delete');
-        $control->delete($planID, 'yes');
+        $control->delete((int)$planID, 'yes');
 
         $this->getData();
         return $this->sendSuccess(200, 'success');

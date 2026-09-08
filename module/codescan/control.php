@@ -1282,7 +1282,8 @@ class codescan extends control
         $condition = $repoID ? "repoID=$serviceRepoID" : "taskID=$taskID";
         if($severity) $condition .= "&priority=$severity";
         if(!empty($params['ruleID']) && $params['ruleID'] != 'all') $condition .= "&ruleID={$params['ruleID']}";
-        if(!empty($params['branch']) && $this->cookie->issueFile) $condition .= "&branch={$params['branch']}&file={$this->cookie->issueFile}";
+        $issueFile = !empty($params['path']) ? $params['path'] : $this->cookie->issueFile;
+        if(!empty($params['branch']) && $issueFile) $condition .= "&branch={$params['branch']}&file={$issueFile}";
 
         $conditions = $this->codescanZen->buildParams($type, $condition, (int)$queryID, $orderBy, $pager->recPerPage, $pager->pageID);
         $conditions = $type == 'bySearch' && $repoID ? array_merge($conditions, array('repoID' => $serviceRepoID)) : array_merge($conditions, array('taskID' => $taskID));

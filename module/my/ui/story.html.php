@@ -102,9 +102,27 @@ $stories = initTableData($stories, $config->my->story->dtable->fieldList, $this-
 $cols    = $this->loadModel('datatable')->getSetting('my', 'story');
 if($viewType == 'tiled') $cols['title']['nestedToggle'] = false;
 
+/* Convert reviewer accounts to realnames. */
+$processReviewer = function($story) use ($users, &$processReviewer)
+{
+    if(isset($story->reviewer))
+    {
+        $reviewers = is_string($story->reviewer) ? array_filter(explode(',', $story->reviewer)) : array_filter($story->reviewer);
+        foreach($reviewers as $index => $account) $reviewers[$index] = zget($users, $account, $account);
+        $story->reviewer = implode(' ', $reviewers);
+    }
+
+    if(!empty($story->children))
+    {
+        foreach($story->children as $child) $processReviewer($child);
+    }
+};
+
 /* 父需求去掉创建用例按钮。 */
 foreach($stories as $id => $story)
 {
+    $processReviewer($story);
+
     if(isset($story->actions))
     {
         foreach($story->actions as $key => $action)

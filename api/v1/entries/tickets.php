@@ -22,7 +22,7 @@ class ticketsEntry extends entry
         if(strpos(strtolower($this->param('fields')), 'moduleandproduct') !== false) return $this->getModuleAndProduct();
 
         $control = $this->loadController('ticket', 'browse');
-        $control->browse($this->param('status', 'wait'), 0, $this->param('orderBy', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->browse($this->param('status', 'wait'), 0, $this->param('orderBy', 'id_desc'), 0, (int)$this->param('limit', 20), (int)$this->param('page', 1));
         $data = $this->getData();
 
         if(!$data or !isset($data->status)) return $this->sendError(400, 'error');

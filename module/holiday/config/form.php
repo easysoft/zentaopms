@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 $config->holiday->form = new stdclass();
 
 $config->holiday->form->create = array();

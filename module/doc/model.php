@@ -2741,11 +2741,31 @@ class docModel extends model
 
         list($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $epicIdList, $requirementIdList, $planIdList, $releaseIdList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList, $testtaskIdList, $resultIdList) = $this->getLinkedObjectData($type, $objectID);
 
+        /* 获取文档当前版本中的附件，只展示未删除文档的当前附件。Get files of the current version of docs. */
+        $docFileIdList = 0;
+        if($docIdList)
+        {
+            $docContentList = $this->dao->select('t1.doc, t1.files')->from(TABLE_DOCCONTENT)->alias('t1')
+                ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc = t2.id and t1.version = t2.version')
+                ->where("t2.id in($docIdList)")
+                ->fetchPairs('doc', 'files');
+
+            $docFileIdList = array();
+            foreach($docContentList as $docFiles)
+            {
+                foreach(explode(',', trim((string)$docFiles, ',')) as $fileID)
+                {
+                    if($fileID !== '') $docFileIdList[$fileID] = $fileID;
+                }
+            }
+            $docFileIdList = empty($docFileIdList) ? 0 : implode(',', $docFileIdList);
+        }
+
         $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('size')->gt('0')
             ->andWhere('deleted')->eq('0')
             ->andWhere("(`objectType` = '$type' and `objectID` = $objectID)", true)
-            ->beginIF($docIdList)->orWhere("(`objectType` = 'doc' and `objectID` in ($docIdList))")->fi()
+            ->beginIF($docFileIdList)->orWhere("(`objectType` = 'doc' and `id` in ($docFileIdList))")->fi()
             ->orWhere("(`objectType` = 'bug' and `objectID` in ($bugIdList))")
             ->orWhere("(`objectType` = 'testreport' and `objectID` in ($testReportIdList))")
             ->orWhere("(`objectType` = 'testcase' and `objectID` in ($caseIdList))")
@@ -2823,10 +2843,11 @@ class docModel extends model
         $casePairs = $this->dao->select('`case`')->from(TABLE_PROJECTCASE)->where($field)->eq($objectID)->beginIF(!$this->app->user->admin)->andWhere($field)->in($userView)->fi()->fetchPairs('case');
         if(!empty($casePairs)) $caseIdList = implode(',', $casePairs);
 
-        $docs = $this->dao->select('*')->from(TABLE_DOC)->where($type)->eq($objectID)->fetchAll('id', false);
+        /* 已删除文档的附件不同步显示，文档恢复后自动显示。 Files of deleted docs are hidden, and shown again after the doc is restored. */
+        $docs = $this->dao->select('*')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->fetchAll('id', false);
         $docs = $this->batchCheckPrivDoc($docs);
 
-        $docIdList = empty($docs) ? 0 : $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('vision')->eq($this->config->vision)->andWhere('id')->in(array_keys($docs))->get();
+        $docIdList = empty($docs) ? 0 : $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('vision')->eq($this->config->vision)->andWhere('deleted')->eq('0')->andWhere('id')->in(array_keys($docs))->get();
 
         if($type == 'product')
         {
@@ -4158,7 +4179,7 @@ class docModel extends model
             ->where('t2.id')->eq($docID)
             ->fetch();
 
-        unset($docContent->id);
+        unset($docContent->id, $docContent->editedDate, $docContent->editedBy);
         $docContent->files    = trim(str_replace(",{$fileID},", ',', ",{$docContent->files},"), ',');
         $docContent->version += 1;
         $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();

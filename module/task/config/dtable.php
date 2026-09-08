@@ -57,7 +57,7 @@ $config->task->dtable->fieldList['openedDate']['group']    = 2;
 
 $config->task->dtable->fieldList['assignedTo']['title']       = $lang->task->assignedTo;
 $config->task->dtable->fieldList['assignedTo']['type']        = 'assign';
-$config->task->dtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
+$config->task->dtable->fieldList['assignedTo']['currentUser'] = $app->user->account ?? '';
 $config->task->dtable->fieldList['assignedTo']['assignLink']  = array('module' => 'task', 'method' => 'assignTo', 'params' => 'executionID={execution}&taskID={id}');
 $config->task->dtable->fieldList['assignedTo']['sortType']    = true;
 $config->task->dtable->fieldList['assignedTo']['show']        = true;

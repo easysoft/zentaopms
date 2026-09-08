@@ -1,5 +1,6 @@
 <?php
-declare(strict_types=1);
+$today = helper::today();
+$now   = helper::now();
 
 $config->todo->form = new stdclass();
 $config->todo->form->create = array();
@@ -18,11 +19,11 @@ $config->todo->create->form['task']         = array('required' => false, 'type' 
 $config->todo->create->form['bug']          = array('required' => false, 'type' => 'string', 'default'  => 0);
 $config->todo->create->form['status']       = array('required' => true,  'type' => 'string');
 $config->todo->create->form['pri']          = array('required' => true,  'type' => 'int');
-$config->todo->create->form['date']         = array('required' => false, 'type' => 'string',  'default' => helper::today());
+$config->todo->create->form['date']         = array('required' => false, 'type' => 'string',  'default' => $today);
 $config->todo->create->form['begin']        = array('required' => false, 'type' => 'string',  'default' => '2400');
 $config->todo->create->form['end']          = array('required' => false, 'type' => 'string',  'default' => '2400');
 $config->todo->create->form['private']      = array('required' => false, 'type' => 'string',  'default' => '0');
-$config->todo->create->form['assignedDate'] = array('required' => false, 'type' => 'string',  'default' => helper::now());
+$config->todo->create->form['assignedDate'] = array('required' => false, 'type' => 'string',  'default' => $now);
 $config->todo->create->form['assignedTo']   = array('required' => false, 'type' => 'string',  'default' => '');
 $config->todo->create->form['assignedBy']   = array('required' => false, 'type' => 'string',  'default' => '');
 $config->todo->create->form['vision']       = array('required' => false, 'type' => 'string',  'default' => $this->config->vision);
@@ -48,7 +49,7 @@ $config->todo->edit->form['name']         = array('required' => true,  'type' =>
 $config->todo->edit->form['status']       = array('required' => true,  'type' => 'string');
 $config->todo->edit->form['pri']          = array('required' => true,  'type' => 'int');
 $config->todo->edit->form['type']         = array('required' => false, 'type' => 'string',  'default' => '');
-$config->todo->edit->form['date']         = array('required' => false, 'type' => 'string',  'default' => helper::today());
+$config->todo->edit->form['date']         = array('required' => false, 'type' => 'string',  'default' => $today);
 $config->todo->edit->form['begin']        = array('required' => false, 'type' => 'string',  'default' => '2400');
 $config->todo->edit->form['end']          = array('required' => false, 'type' => 'string',  'default' => '2400');
 $config->todo->edit->form['private']      = array('required' => false, 'type' => 'string',  'default' => '0');
@@ -60,7 +61,7 @@ $config->todo->edit->form['config']       = array('required' => false, 'type' =>
 $config->todo->assignTo = new stdclass();
 $config->todo->assignTo->form = array();
 $config->todo->assignTo->form['assignedBy']   = array('required' => false, 'type' => 'string', 'default' => '');
-$config->todo->assignTo->form['assignedDate'] = array('required' => false, 'type' => 'string', 'default' => helper::now());
+$config->todo->assignTo->form['assignedDate'] = array('required' => false, 'type' => 'string', 'default' => $now);
 $config->todo->assignTo->form['date']         = array('required' => false, 'type' => 'string', 'default' => '');
 $config->todo->assignTo->form['begin']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->todo->assignTo->form['end']          = array('required' => false, 'type' => 'string', 'default' => '');

@@ -92,12 +92,18 @@ $cols['id']['name'] = 'id';
 if(isset($cols['story'])) $cols['story']['hint']  = jsRaw('(info) => info.col.setting.map[info.row.data.story]');
 if(isset($cols['pri']))   $cols['pri']['priList'] = $lang->testcase->priList;
 
+$canSort = strpos($orderBy, 'sort_asc') !== false;
+
 dtable
 (
     set::userMap($users),
     set::cols($cols),
     set::data($cases),
     set::customCols(true),
+    set::plugins(array('sortable')),
+    set::sortable($canSort),
+    set::onSortEnd($canSort ? jsRaw('window.onSortEnd') : null),
+    set::canSortTo($canSort ? jsRaw('window.canSortTo') : null),
     set::orderBy($orderBy),
     set::sortLink(createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}&browseType={$browseType}&param=0&moduleID={$moduleID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(

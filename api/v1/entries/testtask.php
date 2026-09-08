@@ -21,7 +21,7 @@ class testtaskEntry extends entry
     public function get($testtaskID)
     {
         $control = $this->loadController('testtask', 'cases');
-        $control->cases($testtaskID, 'all', 0, $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
+        $control->cases((int)$testtaskID, 'all', 0, $this->param('order', 'id_desc'), (int)$this->param('total', 0), (int)$this->param('limit', 20), (int)$this->param('page', 1));
 
         $data = $this->getData();
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
@@ -47,7 +47,7 @@ class testtaskEntry extends entry
     public function delete($testtaskID)
     {
         $control = $this->loadController('testtask', 'delete');
-        $control->delete($testtaskID, 'yes');
+        $control->delete((int)$testtaskID, 'yes');
 
         $this->getData();
 

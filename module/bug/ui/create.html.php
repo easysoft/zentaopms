@@ -18,7 +18,7 @@ $fields->autoLoad('product',   array('items' => 'product,module,assignedTo,story
        ->autoLoad('branch',    'module,execution,project,story,task,assignedTo,plan')
        ->autoLoad('module',    'assignedTo,story')
        ->autoLoad('project',   'project,execution,story,task,assignedTo,injection,identify,openedBuild')
-       ->autoLoad('execution', 'execution,story,task,assignedTo,openedBuild')
+       ->autoLoad('execution', 'project,execution,story,task,assignedTo,openedBuild')
        ->autoLoad('allUsers',  'assignedTo')
        ->autoLoad('region',    'lane');
 

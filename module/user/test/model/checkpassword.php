@@ -59,12 +59,12 @@ global $config;
 $userTest = new userModelTest();
 
 $user1 = (object)array('password1' => '');
-$user2 = (object)array('password1' => '123456', 'password2' => '12345',  'passwordStrength' => 0, 'passwordLength' => 6);
-$user3 = (object)array('password1' => '12345',  'password2' => '12345',  'passwordStrength' => 0, 'passwordLength' => 5);
-$user4 = (object)array('password1' => '123456', 'password2' => '123456', 'passwordStrength' => 0, 'passwordLength' => 6);
-$user5 = (object)array('password1' => '1234567890', 'password2' => '1234567890', 'passwordStrength' => 0, 'passwordLength' => 10);
-$user6 = (object)array('password1' => md5('123456'), 'password2' => md5('123456'), 'passwordStrength' => 0, 'passwordLength' => 6);
-$user7 = (object)array('password1' => md5('1234567890'), 'password2' => md5('1234567890'), 'passwordStrength' => 0, 'passwordLength' => 10);
+$user2 = (object)array('password1' => '123456', 'password2' => '12345',  'passwordStrength' => 0, 'passwordLength' => 6, 'passwordPlain' => '123456');
+$user3 = (object)array('password1' => '12345',  'password2' => '12345',  'passwordStrength' => 0, 'passwordLength' => 5, 'passwordPlain' => '12345');
+$user4 = (object)array('password1' => '123456', 'password2' => '123456', 'passwordStrength' => 0, 'passwordLength' => 6, 'passwordPlain' => '123456');
+$user5 = (object)array('password1' => '1234567890', 'password2' => '1234567890', 'passwordStrength' => 0, 'passwordLength' => 10, 'passwordPlain' => '1234567890');
+$user6 = (object)array('password1' => md5('123456'), 'password2' => md5('123456'), 'passwordStrength' => 0, 'passwordLength' => 6, 'passwordPlain' => '123456');
+$user7 = (object)array('password1' => md5('1234567890'), 'password2' => md5('1234567890'), 'passwordStrength' => 0, 'passwordLength' => 10, 'passwordPlain' => '1234567890');
 
 /* 密码为空。*/
 $result = $userTest->checkPasswordTest($user1);

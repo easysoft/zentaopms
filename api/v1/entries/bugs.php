@@ -24,7 +24,7 @@ class bugsEntry extends entry
         if(empty($productID)) return $this->sendError(400, 'Need product id.');
 
         $control = $this->loadController('bug', 'browse');
-        $control->browse($productID, $this->param('branch', 'all'), $this->param('status', ''), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->browse((int)$productID, $this->param('branch', 'all'), $this->param('status', ''), 0, $this->param('order', 'id_desc'), 0, (int)$this->param('limit', 20), (int)$this->param('page', 1));
 
         $data = $this->getData();
 
@@ -86,7 +86,7 @@ class bugsEntry extends entry
 
         $this->requireFields('title,pri,severity,type,openedBuild');
 
-        $control->create($productID);
+        $control->create((int)$productID);
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);

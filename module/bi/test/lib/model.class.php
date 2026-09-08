@@ -1112,4 +1112,28 @@ class biModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test isSafeFilterField method.
+     *
+     * @param  string $field
+     * @access public
+     * @return bool
+     */
+    public function isSafeFilterFieldTest(string $field): bool
+    {
+        return $this->invokeArgs('isSafeFilterField', [$field]);
+    }
+
+    /**
+     * Test isAllowedFilterOperator method.
+     *
+     * @param  string $operator
+     * @access public
+     * @return bool
+     */
+    public function isAllowedFilterOperatorTest(string $operator): bool
+    {
+        return $this->invokeArgs('isAllowedFilterOperator', [$operator]);
+    }
 }

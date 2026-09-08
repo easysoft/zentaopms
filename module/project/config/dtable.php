@@ -521,6 +521,13 @@ $config->project->dtable->testtask->fieldList['pri']['title'] = $lang->priAB;
 $config->project->dtable->testtask->fieldList['pri']['type']  = 'pri';
 $config->project->dtable->testtask->fieldList['pri']['show']  = true;
 
+$config->project->dtable->testtask->fieldList['type']['name']  = 'type';
+$config->project->dtable->testtask->fieldList['type']['title'] = $lang->testtask->type;
+$config->project->dtable->testtask->fieldList['type']['type']  = 'category';
+$config->project->dtable->testtask->fieldList['type']['map']   = $lang->testtask->typeList;
+$config->project->dtable->testtask->fieldList['type']['show']  = true;
+$config->project->dtable->testtask->fieldList['type']['width'] = 150;
+
 $config->project->dtable->testtask->fieldList['build']['name']  = 'buildName';
 $config->project->dtable->testtask->fieldList['build']['title'] = $lang->testtask->build;
 $config->project->dtable->testtask->fieldList['build']['type']  = 'text';
@@ -542,6 +549,16 @@ $config->project->dtable->testtask->fieldList['end']['name']  = 'end';
 $config->project->dtable->testtask->fieldList['end']['title'] = $lang->testtask->end;
 $config->project->dtable->testtask->fieldList['end']['type']  = 'date';
 $config->project->dtable->testtask->fieldList['end']['group'] = '4';
+
+$config->project->dtable->testtask->fieldList['realBegan']['name']  = 'realBegan';
+$config->project->dtable->testtask->fieldList['realBegan']['title'] = $lang->testtask->realBegan;
+$config->project->dtable->testtask->fieldList['realBegan']['type']  = 'date';
+$config->project->dtable->testtask->fieldList['realBegan']['group'] = '4';
+
+$config->project->dtable->testtask->fieldList['realFinishedDate']['name']  = 'realFinishedDate';
+$config->project->dtable->testtask->fieldList['realFinishedDate']['title'] = $lang->testtask->realFinishedDate;
+$config->project->dtable->testtask->fieldList['realFinishedDate']['type']  = 'date';
+$config->project->dtable->testtask->fieldList['realFinishedDate']['group'] = '4';
 
 $config->project->dtable->testtask->fieldList['status']['name']      = 'status';
 $config->project->dtable->testtask->fieldList['status']['title']     = $lang->testtask->status;

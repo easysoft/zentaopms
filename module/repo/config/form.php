@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 $config->repo->form = new stdclass();
 
 $config->repo->form->create = array();

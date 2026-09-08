@@ -24,7 +24,7 @@ class risksEntry extends entry
         {
             /* Get my risks defaultly. */
             $control = $this->loadController('my', 'risk');
-            $control->risk($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
+            $control->risk($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), (int)$this->param('total', 0), (int)$this->param('limit', 20), (int)$this->param('page', 1));
             $data = $this->getData();
         }
         else
@@ -34,7 +34,7 @@ class risksEntry extends entry
 
             /* Get risks by project. */
             $control = $this->loadController('risk', 'browse');
-            $control->browse($projectID, $this->param('type', 'all'), '', $this->param('order', ''), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
+            $control->browse((int)$projectID, $this->param('type', 'all'), '', $this->param('order', ''), (int)$this->param('total', 0), (int)$this->param('limit', 20), (int)$this->param('page', 1));
             $data = $this->getData();
         }
 
@@ -74,7 +74,7 @@ class risksEntry extends entry
 
         $this->requireFields('name');
 
-        $control->create($projectID);
+        $control->create((int)$projectID);
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);

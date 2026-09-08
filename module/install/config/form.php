@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 $config->install->form = new stdclass();
 
 $config->install->form->step2 = array();

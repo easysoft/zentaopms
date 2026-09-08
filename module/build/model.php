@@ -382,6 +382,7 @@ class buildModel extends model
         $branches = strpos($params, 'separate') === false ? "0,$branch" : $branch;
         foreach($releases as $release)
         {
+            if(!isset($release->status)) continue;
             if(strpos($params, 'noterminate') !== false && $release->status == 'terminate') continue;
 
             if($branch !== 'all')
@@ -965,5 +966,29 @@ class buildModel extends model
         }
 
         return array_values($buildItems);
+    }
+
+    /**
+     * 获取通过动作触发的邮件通知人员。
+     * Get toList and ccList.
+     *
+     * @param  object $build
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList(object $build): bool|array
+    {
+        $toList = !empty($build->builder) ? $build->builder : '';
+        $ccList = !empty($build->createdBy) ? $build->createdBy : '';
+        if($toList && $toList == $ccList) $ccList = '';
+
+        if(empty($toList))
+        {
+            if(empty($ccList)) return false;
+            $toList = $ccList;
+            $ccList = '';
+        }
+
+        return array($toList, $ccList);
     }
 }

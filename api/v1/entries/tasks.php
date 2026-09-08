@@ -49,7 +49,7 @@ class tasksEntry extends entry
         {
             /* Get my tasks defaultly. */
             $control = $this->loadController('my', 'task');
-            $control->task($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
+            $control->task($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), (int)$this->param('total', 0), (int)$this->param('limit', 20), (int)$this->param('page', 1));
             $data = $this->getData();
         }
         else
@@ -71,7 +71,7 @@ class tasksEntry extends entry
 
             /* Get tasks by execution. */
             $control = $this->loadController('execution', 'task');
-            $control->task($executionID, $this->param('status', 'all'), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 100), $this->param('page', 1));
+            $control->task((int)$executionID, $this->param('status', 'all'), 0, $this->param('order', 'id_desc'), 0, (int)$this->param('limit', 100), (int)$this->param('page', 1));
             $data = $this->getData();
         }
 
@@ -183,7 +183,7 @@ class tasksEntry extends entry
 
         $this->requireFields('name,assignedTo,type,estStarted,deadline');
 
-        $control->create($executionID, $this->request('storyID', 0), $this->request('moduleID', 0), $this->request('copyTaskID', 0), $this->request('copyTodoID', 0));
+        $control->create((int)$executionID, (int)$this->request('storyID', 0), (int)$this->request('moduleID', 0), (int)$this->request('copyTaskID', 0), (int)$this->request('copyTodoID', 0));
 
         $data = $this->getData();
         if(!isset($data->id)) return $this->sendError(400, $data->message);

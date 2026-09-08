@@ -81,7 +81,7 @@ class programsEntry extends entry
 
         $this->requireFields('name,begin,end');
 
-        $control->create($this->request('parent', 0));
+        $control->create((int)$this->request('parent', 0));
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);

@@ -447,7 +447,7 @@ class commonModel extends model
     {
         if(in_array("$module.$method", $this->config->openMethods)) return true;
 
-        if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
+        if($this->loadModel('user')->isLogon() || (!empty($this->app->company->guest) && $this->app->user->account == 'guest'))
         {
             if(in_array("$module.$method", $this->config->logonMethods)) return true;
             if($module == 'block' && stripos(',dashboard,printblock,create,edit,delete,close,reset,layout,', ",{$method},") !== false) return true;
@@ -1450,9 +1450,11 @@ eof;
         /* If is the program/project/product/execution admin, have all program privileges. */
         if($app->config->vision != 'lite' && commonTao::isProjectAdmin($module, $object)) return true;
 
+        if(empty($app->user->rights)) return false;
+
         /* If not super admin, check the rights. */
-        $rights = $app->user->rights['rights'];
-        $acls   = $app->user->rights['acls'];
+        $rights = $app->user->rights['rights'] ?? [];
+        $acls   = $app->user->rights['acls'] ?? [];
 
         /* White list of import method. */
         $canImport = isset($rights[$module]['import']) && commonModel::hasDBPriv($object, $module, 'import');

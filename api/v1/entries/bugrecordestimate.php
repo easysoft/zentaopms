@@ -23,7 +23,7 @@ class bugRecordEstimateEntry extends entry
         if($this->config->edition == 'open') return $this->send400('ZenTaoPMS does not have bug effort function.');
 
         $control = $this->loadController('effort', 'createForObject');
-        $control->createForObject('bug', $bugID);
+        $control->createForObject('bug', (int)$bugID);
 
         $data = $this->getData();
         if(!$data) return $this->error('error');
@@ -49,7 +49,7 @@ class bugRecordEstimateEntry extends entry
 
         $fields = 'id,dates,consumed,objectType,objectID,work';
         $this->batchSetPost($fields);
-        $control->createForObject('bug', $bugID);
+        $control->createForObject('bug', (int)$bugID);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');

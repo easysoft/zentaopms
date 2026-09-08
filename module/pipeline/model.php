@@ -60,6 +60,7 @@ class pipelineModel extends model
             ->leftJoin(TABLE_PROVIDER)->alias('t4')->on('t1.`providerID`=t4.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.name')->ne('_codescan')
+            ->andWhere('t1.name')->ne('_codereview')
             ->beginIF($repoID)->andWhere('t1.`repoID`')->eq($repoID)->fi()
             ->beginIF(!empty($pipelineQuery))->andWhere($pipelineQuery)->fi()
             ->beginIF($spaceID)->andWhere('t1.`spaceID`')->eq($spaceID)->fi()

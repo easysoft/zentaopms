@@ -28,7 +28,7 @@ class taskAssignToEntry extends entry
 
         $this->requireFields('assignedTo');
 
-        $control->assignTo($task->execution, $taskID);
+        $control->assignTo((int)$task->execution, (int)$taskID);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');

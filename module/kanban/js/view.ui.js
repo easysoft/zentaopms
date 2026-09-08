@@ -51,7 +51,7 @@ window.getLaneActions = function(lane)
 window.getCol = function(col)
 {
     /* 计算WIP。*/
-    if(kanban.showWIP != '1') return false;
+    if(kanban.showWIP != '1') return col;
 
     const limit = col.limit == -1 ? "<i class='icon icon-md icon-infinite'></i>" : col.limit;
     const cards = col.cards;

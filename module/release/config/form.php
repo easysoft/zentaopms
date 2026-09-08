@@ -14,7 +14,7 @@ $config->release->form->create['releasedDate'] = array('type' => 'releasedDate',
 $config->release->form->create['status']       = array('type' => 'string',       'required' => true,  'default' => 'wait');
 $config->release->form->create['desc']         = array('type' => 'string',       'required' => false, 'default' => '', 'control' => 'editor');
 $config->release->form->create['mailto']       = array('type' => 'array',        'required' => false, 'default' => '', 'filter' => 'join');
-$config->release->form->create['createdBy']    = array('type' => 'string',       'required' => false, 'default' => $app->user->account);
+$config->release->form->create['createdBy']    = array('type' => 'string',       'required' => false, 'default' => $app->user->account ?? '');
 $config->release->form->create['createdDate']  = array('type' => 'datetime',     'required' => false, 'default' => helper::now());
 
 $config->release->form->edit['system']       = array('type' => 'int',          'required' => true);

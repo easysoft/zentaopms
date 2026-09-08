@@ -1,65 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-function ztfVal($value)
-{
-    if($value === null) return 'null';
-    if(is_bool($value)) return $value ? '1' : '0';
-    if(is_scalar($value))
-    {
-        $string = (string)$value;
-        if(strlen($string) > 80) return 'string_len=' . strlen($string);
-        return $string;
-    }
-    if(is_array($value))
-    {
-        if(empty($value)) return 'empty_array';
-        $first = reset($value);
-        if(is_object($first) || is_array($first)) return 'array_count=' . count($value);
-        $parts = array();
-        foreach($value as $item) $parts[] = is_scalar($item) ? (string)$item : 'obj';
-        return 'array:' . implode(',', $parts);
-    }
-    if(is_object($value))
-    {
-        $vars = get_object_vars($value);
-        if(empty($vars)) return 'empty_object';
-        foreach(array('id', 'name', 'title', 'status', 'type', 'code', 'account', 'module', 'field', 'value') as $key)
-        {
-            if(array_key_exists($key, $vars)) return $key . '=' . (is_scalar($vars[$key]) ? $vars[$key] : 'object');
-        }
-        return 'object_count=' . count($vars);
-    }
-    return 'unknown';
-}
-
-function ztfCall($callable)
-{
-    try
-    {
-        ob_start();
-        $result = $callable();
-        $echoed = ob_get_clean();
-        if($echoed !== '') return 'echo_yes';
-        if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
-        return $result;
-    }
-    catch(Throwable $e)
-    {
-        if(ob_get_level()) ob_end_clean();
-        if($e instanceof EndResponseException) return 0;
-        return 'error:' . get_class($e);
-    }
-}
-
-function ztfInvoke($object, $method, array $args)
-{
-    $reflection = new ReflectionMethod($object, $method);
-    $reflection->setAccessible(true);
-    return $reflection->invokeArgs($object, $args);
-}
-
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 error_reporting(E_ERROR);
 
@@ -88,22 +31,24 @@ $zd_system->status->range('active');
 $zd_system->deleted->range('0');
 $zd_system->gen(2);
 
+
+$testObj = new systemModelTest();
 /**
 
 title=测试 systemModel::getByID()
 timeout=0
 cid=0
 
-- 步骤1：正常输入 @id=1
+- 步骤1：正常输入 @1
 - 步骤2：边界值输入 @error:TypeError
 - 步骤3：无效输入 @error:TypeError
 - 步骤4：大值输入 @error:TypeError
-- 步骤5：业务规则验证 @id=2
+- 步骤5：业务规则验证 @2
 
 */
 
-r(ztfVal(ztfCall(function() use ($tester) { return $tester->system->getByID(1); }))) && p() && e('id=1'); // 步骤1：正常输入
-r(ztfVal(ztfCall(function() use ($tester) { return $tester->system->getByID(0); }))) && p() && e('error:TypeError'); // 步骤2：边界值输入
-r(ztfVal(ztfCall(function() use ($tester) { return $tester->system->getByID(-1); }))) && p() && e('error:TypeError'); // 步骤3：无效输入
-r(ztfVal(ztfCall(function() use ($tester) { return $tester->system->getByID(999999); }))) && p() && e('error:TypeError'); // 步骤4：大值输入
-r(ztfVal(ztfCall(function() use ($tester) { return $tester->system->getByID(2); }))) && p() && e('id=2'); // 步骤5：业务规则验证
+r($testObj->getByIDTest(1)) && p('id') && e('1'); // 步骤1：正常输入
+r($testObj->getByIDTest(0)) && p() && e('error:TypeError'); // 步骤2：边界值输入
+r($testObj->getByIDTest(-1)) && p() && e('error:TypeError'); // 步骤3：无效输入
+r($testObj->getByIDTest(999999)) && p() && e('error:TypeError'); // 步骤4：大值输入
+r($testObj->getByIDTest(2)) && p('id') && e('2'); // 步骤5：业务规则验证

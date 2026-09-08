@@ -550,7 +550,7 @@ class story extends control
         $uri     = $this->app->getURI(true);
         $tab     = $this->app->tab;
         $story   = $this->story->getById($storyID, $version, true);
-        $product = $this->product->getByID((int)$story->product);
+        $product = $this->loadModel('product')->getByID((int)$story->product);
 
         $isAPI = helper::isApiRequest();
         if(!isInModal() && $tab == 'product' && !empty($product->shadow) && !$isAPI) return $this->send(array('result' => 'success', 'open' => array('url' => $uri, 'app' => 'project')));

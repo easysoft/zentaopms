@@ -28,7 +28,7 @@ class meetingsEntry extends entry
         if(!$project) return $this->send404();
 
         /* Get meetings by project. */
-        $control->browse($projectID, $this->param('status', 'all'), '', $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->browse((int)$projectID, $this->param('status', 'all'), '', $this->param('order', 'id_desc'), 0, (int)$this->param('limit', 20), (int)$this->param('page', 1));
         $data = $this->getData();
 
         if(!isset($data->status)) return $this->sendError(400, 'error');
@@ -67,7 +67,7 @@ class meetingsEntry extends entry
 
         $this->requireFields('name');
 
-        $control->create($projectID);
+        $control->create((int)$projectID);
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);

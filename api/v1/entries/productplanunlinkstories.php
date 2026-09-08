@@ -28,7 +28,7 @@ class productplanUnlinkStoriesEntry extends entry
             if(dao::isError()) return $this->sendError('error');
         }
 
-        $control->view($planID);
+        $control->view((int)$planID);
 
         $data = $this->getData();
         if(!$data or !isset($data->status)) return $this->send400('error');

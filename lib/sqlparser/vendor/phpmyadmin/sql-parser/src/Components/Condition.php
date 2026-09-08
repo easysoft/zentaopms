@@ -19,6 +19,7 @@ use function trim;
  *
  * @final
  */
+#[\AllowDynamicProperties]
 class Condition extends Component
 {
     /**
