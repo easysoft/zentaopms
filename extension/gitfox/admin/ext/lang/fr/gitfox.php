@@ -3,18 +3,38 @@ global $config;
 
 if($config->vision == 'gitfox')
 {
+    unset($lang->admin->menuList->switch);
     unset($lang->admin->menuList->workflow);
     unset($lang->admin->menuList->approvalFlow);
+    unset($lang->admin->menuList->message);
+    unset($lang->admin->menuList->extension);
+    unset($lang->admin->menuList->dev);
+    unset($lang->admin->menuList->convert);
 
-    $lang->admin->menuList->devopsConfig['name']  = 'DevOps Config';
-    $lang->admin->menuList->devopsConfig['desc']  = 'Configure branch types, services and build runners.';
-    $lang->admin->menuList->devopsConfig['order'] = 75;
+    $lang->admin->setFlow = 'DevOps Config';
 
-    $lang->admin->menuList->devopsConfig['subMenu']['branchType'] = array('link' => "{$lang->devops->branchType}|repobranchtype|browse|", 'alias' => 'create,edit,delete,import');
-    $lang->admin->menuList->devopsConfig['subMenu']['service']    = array('link' => "{$lang->provider->common}|provider|browse|", 'alias' => 'create,edit');
-    $lang->admin->menuList->devopsConfig['subMenu']['runner']     = array('link' => "{$lang->runner->common}|runner|browse|");
+    $lang->admin->menuList->branchType['name']  = $lang->devops->branchType;
+    $lang->admin->menuList->branchType['desc']  = 'Manage branch types and naming rules.';
+    $lang->admin->menuList->branchType['link']  = 'repobranchtype|browse|';
+    $lang->admin->menuList->branchType['group'] = 'flow';
+    $lang->admin->menuList->branchType['icon']  = 'code-fork';
+    $lang->admin->menuList->branchType['bg']    = 'primary';
+    $lang->admin->menuList->branchType['order'] = 75;
 
-    $lang->admin->menuList->devopsConfig['menuOrder'][5]  = 'branchType';
-    $lang->admin->menuList->devopsConfig['menuOrder'][10] = 'service';
-    $lang->admin->menuList->devopsConfig['menuOrder'][15] = 'runner';
+    $lang->admin->menuList->service['name']  = $lang->provider->common;
+    $lang->admin->menuList->service['desc']  = 'Manage repository services.';
+    $lang->admin->menuList->service['link']  = 'provider|browse|';
+    $lang->admin->menuList->service['group'] = 'flow';
+    $lang->admin->menuList->service['icon']  = 'cog';
+    $lang->admin->menuList->service['bg']    = 'primary';
+    $lang->admin->menuList->service['order'] = 80;
+
+    $lang->admin->menuList->runner['name']  = $lang->runner->common;
+    $lang->admin->menuList->runner['desc']  = 'Manage runners.';
+    $lang->admin->menuList->runner['link']  = 'runner|browse|';
+    $lang->admin->menuList->runner['group'] = 'flow';
+    $lang->admin->menuList->runner['icon']  = 'run-alt';
+    $lang->admin->menuList->runner['bg']    = 'primary';
+    $lang->admin->menuList->runner['order'] = 85;
+
 }
