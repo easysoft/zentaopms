@@ -17,7 +17,12 @@ class myRepobranchtype extends repobranchtype
      */
     public function browse(int $repoID = 0, string $orderBy = 'id_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        if($this->config->vision == 'gitfox') $this->app->tab = $repoID ? 'repo' : 'admin';
+        if($this->config->vision == 'gitfox')
+        {
+            $navGroup = $repoID ? 'repo' : 'admin';
+            $this->app->tab = $navGroup;
+            $this->lang->navGroup->repobranchtype = $navGroup;
+        }
 
         parent::browse($repoID, $orderBy, $recTotal, $recPerPage, $pageID);
     }
