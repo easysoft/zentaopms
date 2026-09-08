@@ -866,7 +866,7 @@ function initTableData(array $items, array &$fieldList, ?object $model = null): 
 
                         if(method_exists($model, 'isClickable') && !$model->isClickable($item, $otherActionName)) $otherAction .= '-';
 
-                        if(substr($otherAction, -1) != '-' && $model->config->edition != 'open')
+                        if(substr($otherAction, -1) != '-' && !in_array($model->config->edition, array('open', 'gitfox')))
                         {
                             if(!checkFlowActionCondition(zget($actionList, $otherActionName, array()), $otherActionName, $item, $model)) $otherAction .= '-';
                         }
@@ -885,7 +885,7 @@ function initTableData(array $items, array &$fieldList, ?object $model = null): 
 
                     if(method_exists($model, 'isClickable') && !$model->isClickable($item, $moreActionName)) $moreAction .= '-';
 
-                    if(substr($moreAction, -1) != '-' && $model->config->edition != 'open')
+                    if(substr($moreAction, -1) != '-' && !in_array($model->config->edition, array('open', 'gitfox')))
                     {
                         if(!checkFlowActionCondition(zget($actionList, $moreActionName, array()), $moreActionName, $item, $model)) $moreAction .= '-';
                     }

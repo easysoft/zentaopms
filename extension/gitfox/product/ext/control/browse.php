@@ -35,7 +35,7 @@ class myProduct extends product
         if($this->config->vision != 'gitfox') return parent::browse($productID, $branch, $browseType, $param, $storyType, $orderBy, $recTotal, $recPerPage, $pageID, $projectID, $from, $blockID);
 
         $browseType = $browseType === '' ? 'noclosed' : strtolower($browseType);
-        $orderBy    = $orderBy    === '' ? 'order_asc' : $orderBy;
+        $orderBy    = $orderBy    === '' ? 'order_desc' : $orderBy;
 
         /* 搜索词优先使用 URL 参数，其次使用 cookie；有 URL 参数时同步回 cookie，保证模型过滤与后续分页一致。 */
         $keyword = $this->get->keyword;
