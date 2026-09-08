@@ -30,5 +30,5 @@ $config->product->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->product->dtable->fieldList['actions']['type']     = 'actions';
 $config->product->dtable->fieldList['actions']['minWidth'] = '60';
 $config->product->dtable->fieldList['actions']['fixed']    = 'right';
-$config->product->dtable->fieldList['actions']['menu']     = array('edit', 'close', 'delete');
+$config->product->dtable->fieldList['actions']['menu']     = array('edit', 'close|activate', 'delete');
 $config->product->dtable->fieldList['actions']['list']     = $config->product->actionList;
