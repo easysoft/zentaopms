@@ -15,6 +15,9 @@ $config->bug->edit->requiredFields        = 'title,openedBuild';
 $config->bug->resolve->requiredFields     = 'resolution';
 $config->bug->confirm->requiredFields     = '';
 
+/* GitFox独立版编辑页隐藏或不可编辑的字段 */
+$config->bug->edit->gitfoxHiddenFields = array('module', 'plan', 'case', 'type', 'feedbackBy', 'notifyEmail', 'os', 'browser', 'keywords', 'mailto', 'project', 'execution', 'story', 'task', 'openedBuild', 'resolvedBy', 'resolvedDate', 'resolvedBuild', 'resolution', 'duplicateBug', 'closedBy', 'closedDate', 'relatedBug', 'testtask', 'status', 'confirmed');
+
 $config->bug->actions = new stdclass();
 $config->bug->actions->view = array();
 $config->bug->actions->view['mainActions']   = array('confirm', 'assignTo', 'createBranch', 'resolve', 'close', 'activate', 'toStory', 'toTask', 'createCase');
