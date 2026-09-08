@@ -4,8 +4,8 @@ helper::importControl('repobranchtype');
 class myRepobranchtype extends repobranchtype
 {
     /**
-     * GitFox 下分支类型同时存在于代码库设置和后台 DevOps配置中。
-     * 根据 repoID 判断当前归属：带 repoID 属于代码库，不带 repoID 属于后台。
+     * 浏览分支类型。
+     * Browse branch type.
      *
      * @param  int    $repoID
      * @param  string $orderBy
