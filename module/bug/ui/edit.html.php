@@ -30,6 +30,7 @@ foreach($bug->files as $file)
     $files[] = $file;
 }
 
+$isGitFox = $config->edition == 'gitfox';
 $isEn = $app->getClientLang() == 'en';
 
 detailHeader
@@ -145,7 +146,7 @@ detailBody
                     ) : null
                 )
             ),
-            item
+            !$isGitFox ? item
             (
                 set::name($lang->bug->module),
                 set::required(strpos(",{$config->bug->edit->requiredFields},", ',module,') !== false),
@@ -155,8 +156,8 @@ detailBody
                     set::value($bug->module),
                     set::manageLink(createLink('tree', 'browse', "rootID={$product->id}&view=bug&currentModuleID=0&branch={$bug->branch}"))
                 )
-            ),
-            !$product->shadow ? item
+            ) : null,
+            !$product->shadow && !$isGitFox ? item
             (
                 set::trClass($product->shadow && isset($project) && empty($project->multiple) ? 'hidden' : ''),
                 set::name($lang->bug->plan),
@@ -173,7 +174,7 @@ detailBody
                     )
                 )
             ) : null,
-            item
+            !$isGitFox ? item
             (
                 set::name($lang->bug->fromCase),
                 formGroup
@@ -187,8 +188,8 @@ detailBody
                         set::maxItemsCount($config->maxCount)
                     )
                 )
-            ),
-            item
+            ) : null,
+            !$isGitFox ? item
             (
                 set::name($lang->bug->type),
                 set::required(strpos(",{$config->bug->edit->requiredFields},", ',type,') !== false),
@@ -201,7 +202,7 @@ detailBody
                         set::value($bug->type)
                     )
                 )
-            ),
+            ) : null,
             item
             (
                 set::name($lang->bug->severity),
@@ -287,7 +288,7 @@ detailBody
                     )
                 )
             ),
-            item
+            !$isGitFox ? item
             (
                 set::name($lang->bug->feedbackBy),
                 set::required(strpos(",{$config->bug->edit->requiredFields},", ',feedbackBy,') !== false),
@@ -296,8 +297,8 @@ detailBody
                     set::name('feedbackBy'),
                     set::value($bug->feedbackBy)
                 )
-            ),
-            item
+            ) : null,
+            !$isGitFox ? item
             (
                 set::name($lang->bug->notifyEmail),
                 input
@@ -305,8 +306,8 @@ detailBody
                     set::name('notifyEmail'),
                     set::value($bug->notifyEmail)
                 )
-            ),
-            item
+            ) : null,
+            !$isGitFox ? item
             (
                 set::name($lang->bug->os),
                 set::required(strpos(",{$config->bug->edit->requiredFields},", ',os,') !== false),
@@ -321,8 +322,8 @@ detailBody
                         set::value($bug->os)
                     )
                 )
-            ),
-            item
+            ) : null,
+            !$isGitFox ? item
             (
                 set::trClass('browserTR'),
                 set::name($lang->bug->browser),
@@ -338,8 +339,8 @@ detailBody
                         set::value($bug->browser)
                     )
                 )
-            ),
-            item
+            ) : null,
+            !$isGitFox ? item
             (
                 set::name($lang->bug->keywords),
                 set::required(strpos(",{$config->bug->edit->requiredFields},", ',keywords,') !== false),
@@ -351,14 +352,14 @@ detailBody
                         set::value($bug->keywords)
                     )
                 )
-            ),
-            item
+            ) : null,
+            !$isGitFox ? item
             (
                 set::name($lang->bug->mailto),
                 mailto(set::items($users), set::value($bug->mailto)),
-            )
+            ) : null
         ),
-        tableData
+        !$isGitFox ? tableData
         (
             $isEn ? setClass('en-table') : null,
             set::title(!empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask),
@@ -424,8 +425,8 @@ detailBody
                     )
                 )
             )
-        ),
-        tableData
+        ) : null,
+        !$isGitFox ? tableData
         (
             $isEn ? setClass('en-table') : null,
             set::title($lang->bug->legendLife),
@@ -557,8 +558,8 @@ detailBody
                     set::value($bug->closedDate)
                 )
             )
-        ),
-        tableData
+        ) : null,
+        !$isGitFox ? tableData
         (
             $isEn ? setClass('en-table') : null,
             set::title($lang->bug->legendMisc),
@@ -602,7 +603,7 @@ detailBody
                     )
                 )
             )
-        )
+        ) : null
     )
 );
 

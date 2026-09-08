@@ -12,7 +12,8 @@ class bugBasicInfo extends wg
         'product'    => '?object',   // 当前产品。
         'users'      => '?array',    // 用户列表。
         'statusText' => '?string',   // 状态信息。
-        'modulePath' => '?string'    // 模块路径。
+        'modulePath' => '?string',   // 模块路径。
+        'gitfox'     => '?bool'      // 是否GitFox独立版。
     );
 
     protected function getModuleItems(object $bug, null|bool|object $product, array $branches): array
@@ -177,6 +178,32 @@ class bugBasicInfo extends wg
         $mailtoText = '';
         foreach($mailtoList as $account) $mailtoText .= zget($users, $account) . ' ';
         $items[$lang->bug->mailto] = array('control' => 'text', 'text' => trim($mailtoText), 'title' => trim($mailtoText));
+
+        /* 隐藏基本信息中不需要展示的字段。Hide unnecessary fields in basic info. */
+        $isGitFox = $this->prop('gitfox', $config->edition == 'gitfox');
+        if($isGitFox)
+        {
+            $hiddenFieldLabels = array
+            (
+                $lang->task->module,
+                $lang->bug->plan,
+                $lang->bug->fromCase,
+                $lang->bug->type,
+                isset($lang->bug->found) ? $lang->bug->found : null,
+                $lang->bug->feedbackBy,
+                $lang->bug->notifyEmail,
+                $lang->bug->os,
+                $lang->bug->browser,
+                isset($lang->bug->injection) ? $lang->bug->injection : null,
+                isset($lang->bug->identify) ? $lang->bug->identify : null,
+                $lang->bug->keywords,
+                $lang->bug->mailto
+            );
+            foreach($hiddenFieldLabels as $label)
+            {
+                if(!is_null($label)) unset($items[$label]);
+            }
+        }
 
         return $items;
     }
