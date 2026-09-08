@@ -12,6 +12,7 @@ $fields->field('duplicateStory')
     ->control(array('control' => 'picker', 'items' => createLink('story', 'ajaxGetDuplicatedStories', "storyID=" . data('story.id') . "&productID=" . data('story.product'))))
     ->required(true)
     ->items(data('users'))
+    ->skipCustomUI() // Skip custom ui in workflow form designer
     ->value(data('story.closedBy'));
 
 $fields->field('comment')->label($lang->comment)->width('full')->control('editor');
