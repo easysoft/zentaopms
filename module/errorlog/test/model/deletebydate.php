@@ -7,34 +7,42 @@ title=测试 errorlogModel::deleteByDate();
 timeout=0
 cid=0
 
-- 正常删除截止日期之前的错误日志 @1
-- 删除后剩余2条错误日志 @2
-- 边界日期等于最后一条日志日期时不删除该日志 @1
-- 边界日期仍保留1条错误日志 @1
-- 边界日期加1秒后删除剩余到期日志 @1
-- 删除后剩余0条错误日志 @0
-- 未来日期删除全部日志 @1
-- 再次执行删除无数据时不报错 @1
+- 执行errorlog模块的deleteByDateTest方法，参数是2026-06-01 00:00:00 @1
+- 执行errorlog模块的getListTest方法，返回列表数量 @3
+- 执行errorlog模块的getListTest方法，第1条的createdDate属性 @2026-08-01 00:00:00
+- 执行errorlog模块的getListTest方法，第1条的requestID属性 @req-002
+- 执行errorlog模块删除后错误本体表记录数量 @3
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+error_reporting(E_ERROR);
+
 $errorlog = zenData('errorlog');
-$errorlog->requestID->range('req-001{2},req-002{3}');
-$errorlog->createdDate->range('20260101 000000-20260105 000000:1D')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+$errorlog->id->setNull();
+$errorlog->md5->range('d1,d2,d3,d4,d5');
+$errorlog->file->range('module/bug/list.php{5}');
+$errorlog->line->range('1,2,3,4,5');
+$errorlog->level->range('2{5}');
+$errorlog->message->range('msg-1,msg-2,msg-3,msg-4,msg-5');
 $errorlog->gen(5);
+
+$errorlogreq = zenData('errorlogreq');
+$errorlogreq->id->range('1-5');
+$errorlogreq->requestID->range('req-001{2},req-002{3}');
+$errorlogreq->md5->range('d1,d2,d3,d4,d5');
+$errorlogreq->module->range('bug{3},task{2}');
+$errorlogreq->createdDate->range('`2026-01-01 00:00:00`,`2026-01-01 00:00:00`,`2026-08-01 00:00:00`,`2026-08-01 00:00:00`,`2026-08-01 00:00:00`');
+$errorlogreq->gen(5);
 
 su('admin');
 
 $errorlogModel = new errorlogModelTest();
 
-r($errorlogModel->deleteByDateTest('2026-01-03 00:00:00')) && p() && e('1'); // 正常删除截止日期之前的错误日志
-r(count($errorlogModel->getListTest())) && p() && e('2'); // 删除后剩余2条错误日志
-r($errorlogModel->deleteByDateTest('2026-01-04 00:00:00')) && p() && e('1'); // 边界日期等于日志日期时不删除该日志
-r(count($errorlogModel->getListTest())) && p() && e('1'); // 边界日期仍保留1条错误日志
-r($errorlogModel->deleteByDateTest('2026-01-04 00:00:01')) && p() && e('1'); // 边界日期加1秒后删除到期日志
-r(count($errorlogModel->getListTest())) && p() && e('0'); // 删除后剩余0条错误日志
-r($errorlogModel->deleteByDateTest('2099-01-01 00:00:00')) && p() && e('1'); // 未来日期删除全部日志
-r($errorlogModel->deleteByDateTest('2099-01-01 00:00:00')) && p() && e('1'); // 再次执行删除无数据时不报错
+r($errorlogModel->deleteByDateTest('2026-06-01 00:00:00')) && p() && e('1');
+r(count($errorlogModel->getListTest())) && p() && e('3');
+r($errorlogModel->getListTest()) && p('0:createdDate') && e('2026-08-01 00:00:00');
+r($errorlogModel->getListTest()) && p('0:requestID') && e('req-002');
+r(count($errorlogModel->instance->dao->select('md5')->from(TABLE_ERRORLOG)->fetchAll('', false))) && p() && e('3');

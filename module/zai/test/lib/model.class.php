@@ -1008,4 +1008,212 @@ class zaiModelTest extends baseTest
             return '0';
         }
     }
+
+    /**
+     * Test batchEnqueueTargets method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function batchEnqueueTargetsTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('batchEnqueueTargets', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test batchSyncTargets method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function batchSyncTargetsTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('batchSyncTargets', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test buildProgressList method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function buildProgressListTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('buildProgressList', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test ensureSyncDetail method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function ensureSyncDetailTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('ensureSyncDetail', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test getTargetsByIDList method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getTargetsByIDListTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('getTargetsByIDList', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test normalizeSyncFailure method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function normalizeSyncFailureTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('normalizeSyncFailure', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test resolveRelatedName method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function resolveRelatedNameTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('resolveRelatedName', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test syncVectorization method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function syncVectorizationTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('syncVectorization', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
 }

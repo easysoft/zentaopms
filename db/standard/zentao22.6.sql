@@ -3080,24 +3080,29 @@ CREATE TABLE `zt_log` (
   KEY `obejctID` (`objectID`)
 ) ENGINE=InnoDB;
 CREATE TABLE `zt_errorlog` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `requestID` varchar(64) NOT NULL DEFAULT '' COMMENT '请求ID',
-  `account` varchar(30) NOT NULL DEFAULT '' COMMENT '用户账号',
-  `module` varchar(30) NOT NULL DEFAULT '' COMMENT '模块',
-  `method` varchar(100) NOT NULL DEFAULT '' COMMENT '方法',
-  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '请求地址',
-  `level` smallint unsigned NOT NULL DEFAULT '0' COMMENT '错误级别',
-  `message` text COMMENT '错误信息',
+  `md5` char(32) NOT NULL DEFAULT '' COMMENT '错误签名MD5',
   `file` varchar(255) NOT NULL DEFAULT '' COMMENT '错误文件',
   `line` int unsigned NOT NULL DEFAULT '0' COMMENT '错误行号',
+  `level` smallint unsigned NOT NULL DEFAULT '0' COMMENT '错误级别',
+  `message` text COMMENT '错误信息',
   `trace` text COMMENT '错误堆栈',
+  PRIMARY KEY (`md5`)
+) ENGINE=InnoDB COMMENT='错误本体';
+CREATE TABLE `zt_errorlogreq` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `requestID` varchar(64) NOT NULL DEFAULT '' COMMENT '请求ID',
+  `md5` char(32) NOT NULL DEFAULT '' COMMENT '错误签名MD5',
+  `module` varchar(30) NOT NULL DEFAULT '' COMMENT '模块',
+  `method` varchar(100) NOT NULL DEFAULT '' COMMENT '方法',
+  `account` varchar(30) NOT NULL DEFAULT '' COMMENT '用户账号',
+  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '请求地址',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_requestID_md5` (`requestID`,`md5`),
   KEY `idx_requestID` (`requestID`),
-  KEY `idx_module` (`module`),
-  KEY `idx_level` (`level`),
+  KEY `idx_md5` (`md5`),
   KEY `idx_createdDate` (`createdDate`)
-) ENGINE=InnoDB COMMENT='错误日志';
+) ENGINE=InnoDB COMMENT='错误请求记录';
 CREATE TABLE `zt_mark` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(10) NOT NULL DEFAULT '',

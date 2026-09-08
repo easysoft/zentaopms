@@ -1564,9 +1564,9 @@ function getWebRoot($full = false)
     if(!empty($_SERVER['REQUEST_URI']))
     {
         $requestPath = parse_url((string)$_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $requestPath = rawurldecode($requestPath);
         if(is_string($requestPath) && $requestPath !== '')
         {
+            $requestPath = rawurldecode($requestPath);
             /* REQUEST_URI may contain extra PATH_INFO after the entry script, such as /www/api.php/v2/bugs/1. */
             $entryScript = basename($path);
             $entryMarker = $entryScript ? '/' . $entryScript : '';

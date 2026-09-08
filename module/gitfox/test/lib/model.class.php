@@ -394,4 +394,56 @@ class gitfoxModelTest extends baseTest
         if(is_null($result))   return 0;
         return (int)$result;
     }
+
+    /**
+     * Test apiGetRepoDiffs method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function apiGetRepoDiffsTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('apiGetRepoDiffs', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test getHealth method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getHealthTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('getHealth', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
 }

@@ -292,14 +292,20 @@
         zui.Modal.showError({error: isNormalPage ? data : `<b>URL</b>: ${options.url}<br>${data}`, size: 'lg', html: !isNormalPage})
     }
 
-    function showErrorLog(log)
+    function showErrorLog(logs)
     {
-        if(!log) return;
+        if(!logs) return;
+        if(!Array.isArray(logs)) logs = [logs];
 
-        console.groupCollapsed(`%c ZIN %c errorlog %c ${log.requestID}`, 'color:#fff;font-weight:bold;background:#dc2626', 'color:#dc2626;font-weight:bold', 'font-weight:bold');
-        console.log('[ErrorLog]', {level: log.levelName || log.level, module: log.module, method: log.method, message: log.message, file: log.file, line: log.line, url: log.url, account: log.account, createdDate: log.createdDate});
-        console.log('[ErrorLog] trace', log.trace);
-        console.groupEnd();
+        logs.forEach(function(log)
+        {
+            if(!log) return;
+
+            console.groupCollapsed(`%c ZIN %c errorlog %c ${log.requestID}`, 'color:#fff;font-weight:bold;background:#dc2626', 'color:#dc2626;font-weight:bold', 'font-weight:bold');
+            console.log('[ErrorLog]', {level: log.levelName || log.level, module: log.module, method: log.method, message: log.message, file: log.file, line: log.line, url: log.url, account: log.account, createdDate: log.createdDate});
+            console.log('[ErrorLog] trace', log.trace);
+            console.groupEnd();
+        });
     }
 
     function initZinbar()

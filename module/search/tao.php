@@ -287,11 +287,13 @@ class searchTao extends searchModel
 
             if(count($selectValues) > 1)
             {
-                if($operator == '=' || $operator == '!=')
+                if($operator == 'include' || $operator == 'notinclude')
                 {
-                    $glue       = $operator == '=' ? ' OR ' : ' AND ';
+                    $equalOp    = $operator == 'include';
+                    $sqlOp      = $equalOp ? '=' : '!=';
+                    $glue       = $equalOp ? ' OR ' : ' AND ';
                     $conditions = array();
-                    foreach($selectValues as $selectValue) $conditions[] = '`' . $field . '` ' . $operator . ' ' . $this->dbh->quote($selectValue);
+                    foreach($selectValues as $selectValue) $conditions[] = '`' . $field . '` ' . $sqlOp . ' ' . $this->dbh->quote($selectValue);
                     return $where . " $andOr (" . implode($glue, $conditions) . ")";
                 }
 

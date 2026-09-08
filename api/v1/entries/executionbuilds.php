@@ -24,7 +24,7 @@ class executionBuildsEntry extends entry
         if(empty($executionID)) return $this->sendError(400, "Need execution id.");
 
         $control = $this->loadController('execution', 'build');
-        $control->build($executionID, $this->param('status', 'all'), $this->param('param', 0), $this->param('order', 't1.date_desc,t1.id_desc'));
+        $control->build((int)$executionID, $this->param('status', 'all'), (int)$this->param('param', 0), $this->param('order', 't1.date_desc,t1.id_desc'));
         $data = $this->getData();
 
         if(!isset($data->status)) return $this->sendError(400, 'error');

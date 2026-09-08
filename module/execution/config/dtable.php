@@ -351,6 +351,13 @@ $config->execution->testtask->dtable->fieldList['pri']['title'] = $lang->priAB;
 $config->execution->testtask->dtable->fieldList['pri']['type']  = 'pri';
 $config->execution->testtask->dtable->fieldList['pri']['show']  = true;
 
+$config->execution->testtask->dtable->fieldList['type']['name']  = 'type';
+$config->execution->testtask->dtable->fieldList['type']['title'] = $lang->testtask->type;
+$config->execution->testtask->dtable->fieldList['type']['type']  = 'category';
+$config->execution->testtask->dtable->fieldList['type']['map']   = $lang->testtask->typeList;
+$config->execution->testtask->dtable->fieldList['type']['show']  = true;
+$config->execution->testtask->dtable->fieldList['type']['width'] = 150;
+
 $config->execution->testtask->dtable->fieldList['build']['name']  = 'buildName';
 $config->execution->testtask->dtable->fieldList['build']['title'] = $lang->testtask->build;
 $config->execution->testtask->dtable->fieldList['build']['type']  = 'text';
@@ -378,6 +385,16 @@ $config->execution->testtask->dtable->fieldList['end']['name']  = 'end';
 $config->execution->testtask->dtable->fieldList['end']['title'] = $lang->testtask->end;
 $config->execution->testtask->dtable->fieldList['end']['type']  = 'date';
 $config->execution->testtask->dtable->fieldList['end']['group'] = '4';
+
+$config->execution->testtask->dtable->fieldList['realBegan']['name']  = 'realBegan';
+$config->execution->testtask->dtable->fieldList['realBegan']['title'] = $lang->testtask->realBegan;
+$config->execution->testtask->dtable->fieldList['realBegan']['type']  = 'date';
+$config->execution->testtask->dtable->fieldList['realBegan']['group'] = '4';
+
+$config->execution->testtask->dtable->fieldList['realFinishedDate']['name']  = 'realFinishedDate';
+$config->execution->testtask->dtable->fieldList['realFinishedDate']['title'] = $lang->testtask->realFinishedDate;
+$config->execution->testtask->dtable->fieldList['realFinishedDate']['type']  = 'date';
+$config->execution->testtask->dtable->fieldList['realFinishedDate']['group'] = '4';
 
 $config->execution->testtask->dtable->fieldList['actions']['name']     = 'actions';
 $config->execution->testtask->dtable->fieldList['actions']['title']    = $lang->actions;

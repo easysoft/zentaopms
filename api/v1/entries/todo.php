@@ -21,7 +21,7 @@ class todoEntry extends entry
     public function get($todoID)
     {
         $control = $this->loadController('todo', 'view');
-        $control->view($todoID, $this->param('from', 'my'));
+        $control->view((int)$todoID, $this->param('from', 'my'));
 
         $data = $this->getData();
         if(!$data or (isset($data->message) and $data->message == '404 Not found')) return $this->send404();
@@ -53,7 +53,7 @@ class todoEntry extends entry
         $this->setPost('begin', $this->request('begin') ? str_replace(':', '', $this->request('begin')) : $oldTodo->begin);
         $this->setPost('end', $this->request('end') ? str_replace(':', '', $this->request('end')) : $oldTodo->end);
 
-        $control->edit($todoID);
+        $control->edit((int)$todoID);
 
         $data = $this->getData();
 
@@ -74,7 +74,7 @@ class todoEntry extends entry
     public function delete($todoID)
     {
         $control = $this->loadController('todo', 'delete');
-        $control->delete($todoID, 'yes');
+        $control->delete((int)$todoID, 'yes');
 
         $this->getData();
         return $this->sendSuccess(200, 'success');

@@ -310,6 +310,7 @@ define('TABLE_WEEKLYREPORT',  '`' . $config->db->prefix . 'weeklyreport`');
 define('TABLE_WEBHOOK',       '`' . $config->db->prefix . 'webhook`');
 define('TABLE_LOG',           '`' . $config->db->prefix . 'log`');
 define('TABLE_ERRORLOG',      '`' . $config->db->prefix . 'errorlog`');
+define('TABLE_ERRORLOGREQ',   '`' . $config->db->prefix . 'errorlogreq`');
 define('TABLE_SCORE',         '`' . $config->db->prefix . 'score`');
 define('TABLE_NOTIFY',        '`' . $config->db->prefix . 'notify`');
 define('TABLE_OAUTH',         '`' . $config->db->prefix . 'oauth`');

@@ -25,7 +25,7 @@ class productProjectsEntry extends entry
         $appendFields = $this->param('fields', '');
 
         $control = $this->loadController('product', 'project');
-        $control->project($this->param('status', 'all'), $productID, $this->param('branch', 0), $this->param('involved', 0), $this->param('order', 'order_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->project($this->param('status', 'all'), (int)$productID, $this->param('branch', 0), (int)$this->param('involved', 0), $this->param('order', 'order_desc'), 0, (int)$this->param('limit', 20), (int)$this->param('page', 1));
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')
@@ -97,7 +97,7 @@ class productProjectsEntry extends entry
     public function getDropMenu()
     {
         $control = $this->loadController('project', 'ajaxGetDropMenu');
-        $control->ajaxGetDropMenu($this->request('projectID', 0), $this->request('module', 'project'), $this->request('method', 'browse'));
+        $control->ajaxGetDropMenu((int)$this->request('projectID', 0), $this->request('module', 'project'), $this->request('method', 'browse'));
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);

@@ -3592,4 +3592,82 @@ class testcaseZenTest
         return $result;
     }
 
+
+    /**
+     * Test assignModuleOptionMenuForEdit method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function assignModuleOptionMenuForEditTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('assignModuleOptionMenuForEdit', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test buildBrowseSearchForm method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function buildBrowseSearchFormTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('buildBrowseSearchForm', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test responseAfterBatchCreate method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterBatchCreateTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('responseAfterBatchCreate', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
 }

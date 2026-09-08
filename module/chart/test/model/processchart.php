@@ -1,65 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-function ztfVal($value)
-{
-    if($value === null) return 'null';
-    if(is_bool($value)) return $value ? '1' : '0';
-    if(is_scalar($value))
-    {
-        $string = (string)$value;
-        if(strlen($string) > 80) return 'string_len=' . strlen($string);
-        return $string;
-    }
-    if(is_array($value))
-    {
-        if(empty($value)) return 'empty_array';
-        $first = reset($value);
-        if(is_object($first) || is_array($first)) return 'array_count=' . count($value);
-        $parts = array();
-        foreach($value as $item) $parts[] = is_scalar($item) ? (string)$item : 'obj';
-        return 'array:' . implode(',', $parts);
-    }
-    if(is_object($value))
-    {
-        $vars = get_object_vars($value);
-        if(empty($vars)) return 'empty_object';
-        foreach(array('id', 'name', 'title', 'status', 'type', 'code', 'account', 'module', 'field', 'value') as $key)
-        {
-            if(array_key_exists($key, $vars)) return $key . '=' . (is_scalar($vars[$key]) ? $vars[$key] : 'object');
-        }
-        return 'object_count=' . count($vars);
-    }
-    return 'unknown';
-}
-
-function ztfCall($callable)
-{
-    try
-    {
-        ob_start();
-        $result = $callable();
-        $echoed = ob_get_clean();
-        if($echoed !== '') return 'echo_yes';
-        if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
-        return $result;
-    }
-    catch(Throwable $e)
-    {
-        if(ob_get_level()) ob_end_clean();
-        if($e instanceof EndResponseException) return 0;
-        return 'error:' . get_class($e);
-    }
-}
-
-function ztfInvoke($object, $method, array $args)
-{
-    $reflection = new ReflectionMethod($object, $method);
-    $reflection->setAccessible(true);
-    return $reflection->invokeArgs($object, $args);
-}
-
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 error_reporting(E_ERROR);
 
@@ -78,22 +21,27 @@ su('admin');
 
 $tester->loadModel('chart');
 
+
+$testObj = new chartModelTest();
 /**
 
 title=测试 chartModel::processChart()
 timeout=0
 cid=0
 
-- 步骤1：正常输入 @object_count=6
-- 步骤2：边界值输入 @object_count=6
-- 步骤3：无效输入 @object_count=6
-- 步骤4：大值输入 @id=999999
-- 步骤5：业务规则验证 @id=1
+- 步骤1：正常输入 @6
+- 步骤2：边界值输入 @6
+- 步骤3：无效输入 @6
+- 步骤4：大值输入 @999999
+- 步骤5：业务规则验证 @1
 
 */
 
-r(ztfVal(ztfCall(function() use ($tester) { return $tester->chart->processChart((object)array()); }))) && p() && e('object_count=6'); // 步骤1：正常输入
-r(ztfVal(ztfCall(function() use ($tester) { return $tester->chart->processChart((object)array()); }))) && p() && e('object_count=6'); // 步骤2：边界值输入
-r(ztfVal(ztfCall(function() use ($tester) { return $tester->chart->processChart((object)array()); }))) && p() && e('object_count=6'); // 步骤3：无效输入
-r(ztfVal(ztfCall(function() use ($tester) { return $tester->chart->processChart((object)array('id' => 999999)); }))) && p() && e('id=999999'); // 步骤4：大值输入
-r(ztfVal(ztfCall(function() use ($tester) { return $tester->chart->processChart((object)array('id' => 1, 'name' => 'test')); }))) && p() && e('id=1'); // 步骤5：业务规则验证
+$result = $testObj->processChartTest((object)array());
+r(count(get_object_vars($result))) && p() && e('6'); // 步骤1：正常输入
+$result = $testObj->processChartTest((object)array());
+r(count(get_object_vars($result))) && p() && e('6'); // 步骤2：边界值输入
+$result = $testObj->processChartTest((object)array());
+r(count(get_object_vars($result))) && p() && e('6'); // 步骤3：无效输入
+r($testObj->processChartTest((object)array('id' => 999999))) && p('id') && e('999999'); // 步骤4：大值输入
+r($testObj->processChartTest((object)array('id' => 1, 'name' => 'test'))) && p('id') && e('1'); // 步骤5：业务规则验证

@@ -34,9 +34,9 @@ $config->execution->form->create['days']          = array('type' => 'int',    'r
 $config->execution->form->create['lifetime']      = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '');
 $config->execution->form->create['attribute']     = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '');
 $config->execution->form->create['percent']       = array('type' => 'float',  'required' => false, 'control' => 'text',   'default' => 0);
-$config->execution->form->create['products']      = array('type' => 'array',  'required' => false, 'control' => 'select', 'default' => array());
+$config->execution->form->create['products']      = array('type' => 'array',  'required' => false, 'control' => 'select', 'default' => array(), 'label' => $lang->execution->manageProducts, 'skipRequired' => true);
 $config->execution->form->create['branch']        = array('type' => 'array',  'required' => false, 'control' => 'select', 'default' => array());
-$config->execution->form->create['plans']         = array('type' => 'array',  'required' => false, 'control' => 'select', 'default' => array());
+$config->execution->form->create['plans']         = array('type' => 'array',  'required' => false, 'control' => 'select', 'default' => array(), 'skipRequired' => true);
 $config->execution->form->create['team']          = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '');
 $config->execution->form->create['status']        = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => 'wait');
 $config->execution->form->create['PM']            = array('type' => 'string', 'required' => false, 'control' => 'select', 'default' => '');
@@ -57,9 +57,9 @@ $config->execution->form->edit['days']        = array('type' => 'int',    'requi
 $config->execution->form->edit['lifetime']    = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '');
 $config->execution->form->edit['attribute']   = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '');
 $config->execution->form->edit['percent']     = array('type' => 'float',  'required' => false, 'control' => 'text',   'default' => 0);
-$config->execution->form->edit['products']    = array('type' => 'array',  'required' => false, 'default' => array());
+$config->execution->form->edit['products']    = array('type' => 'array',  'required' => false, 'default' => array(), 'label' => $lang->execution->manageProducts, 'skipRequired' => true);
 $config->execution->form->edit['branch']      = array('type' => 'array',  'required' => false, 'default' => array());
-$config->execution->form->edit['plans']       = array('type' => 'array',  'required' => false, 'default' => array());
+$config->execution->form->edit['plans']       = array('type' => 'array',  'required' => false, 'default' => array(), 'skipRequired' => true);
 $config->execution->form->edit['team']        = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '');
 $config->execution->form->edit['status']      = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => 'wait');
 $config->execution->form->edit['PM']          = array('type' => 'string', 'required' => false, 'control' => 'select', 'default' => '');

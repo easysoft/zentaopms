@@ -30,7 +30,7 @@ class productsEntry extends entry
         if($programID)
         {
             $control = $this->loadController('program', 'product');
-            $control->product($programID, $this->param('status', 'all'), $this->param('order', 'order_asc'), 0, $this->param('limit', '20'), $this->param('page', '1'));
+            $control->product((int)$programID, $this->param('status', 'all'), $this->param('order', 'order_asc'), 0, (int)$this->param('limit', '20'), (int)$this->param('page', '1'));
 
             /* Response */
             $data = $this->getData();
@@ -43,7 +43,7 @@ class productsEntry extends entry
         elseif($projectID)
         {
             $control = $this->loadController('project', 'manageProducts');
-            $control->manageProducts($projectID);
+            $control->manageProducts((int)$projectID);
 
             /* Response */
             $data = $this->getData();
@@ -55,7 +55,7 @@ class productsEntry extends entry
         else
         {
             $control = $this->loadController('product', 'all');
-            $control->all($this->param('status', 'all'), $this->param('order', 'program_asc'), 0, 0, $this->param('limit', 100), $this->param('page', 1));
+            $control->all($this->param('status', 'all'), $this->param('order', 'program_asc'), 0, 0, (int)$this->param('limit', 100), (int)$this->param('page', 1));
 
             /* Response */
             $data = $this->getData();
@@ -128,7 +128,7 @@ class productsEntry extends entry
         if($useCode) $requireFields .= ',code';
         $this->requireFields($requireFields);
 
-        $control->create($this->request('program', 0));
+        $control->create((int)$this->request('program', 0));
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
@@ -150,7 +150,7 @@ class productsEntry extends entry
     public function getDropMenu()
     {
         $control = $this->loadController('product', 'ajaxGetDropMenu');
-        $control->ajaxGetDropMenu($this->request('productID', 0), $this->request('module', 'product'), $this->request('method', 'browse'), $this->request('extra', ''), $this->request('from', ''));
+        $control->ajaxGetDropMenu((int)$this->request('productID', 0), $this->request('module', 'product'), $this->request('method', 'browse'), $this->request('extra', ''), $this->request('from', ''));
 
         $data = $this->getData();
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);

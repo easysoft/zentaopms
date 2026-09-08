@@ -66,4 +66,30 @@ class myZenTest
         if(dao::isError()) return dao::getError();
         return $count;
     }
+
+    /**
+     * Test checkSSH method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function checkSSHTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('checkSSH', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
 }

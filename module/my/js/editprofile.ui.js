@@ -48,6 +48,13 @@ function encryptPassword()
     const password1 = $('#password1').val().trim();
     if(password1 && !password1Encrypted)
     {
+        let $plainField = $('form input[name="passwordPlain"]');
+        if($plainField.length == 0)
+        {
+            $plainField = $('<input type="hidden" name="passwordPlain" value="">');
+            $('#password1').closest('form').append($plainField);
+        }
+        $plainField.val(password1);
         $('#password1').val(md5(password1) + rand);
         $("input[name=passwordStrength]").val(computePasswordStrength(password1));
         $("input[name=passwordLength]").val(password1.length);

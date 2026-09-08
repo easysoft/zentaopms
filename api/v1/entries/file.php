@@ -20,7 +20,7 @@ class fileEntry extends entry
     public function get($fileID)
     {
         $control = $this->loadController('file', 'download');
-        $control->download($fileID);
+        $control->download((int)$fileID);
 
         $data = $this->getData();
         if(!$data or !isset($data->status)) return $this->send400('error');

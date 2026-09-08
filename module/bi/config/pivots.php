@@ -267,9 +267,9 @@ from zt_product as t1
         select
             product,
             count(id) as bug,
-            sum(case when resolution in ('fixed', 'postponed') or status = 'active' then 1=1 else 0 end) as effbugs,
-            sum(case when resolution = 'fixed' then 1=1 else 0 end) as fixedbugs,
-            sum(case when severity IN (1, 2) then 1=1 else 0 end) as pri12bugs
+            sum(case when resolution in ('fixed', 'postponed') or status = 'active' then 1 else 0 end) as effbugs,
+            sum(case when resolution = 'fixed' then 1 else 0 end) as fixedbugs,
+            sum(case when severity IN (1, 2) then 1 else 0 end) as pri12bugs
         from zt_bug
         where deleted = '0'
         group by product

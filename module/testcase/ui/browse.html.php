@@ -76,19 +76,19 @@ if($canBatchIgnoreCaseChange)   $navActions[] = array('text' => $lang->testcase-
 if($canBatchChangeModule)
 {
     $moduleItems = array();
-    foreach($modules as $changeModuleID => $module) $moduleItems[] = array('text' => $module, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeModule', "moduleID={$changeModuleID}"));
+    foreach($modules as $changeModuleID => $module) $moduleItems[] = array('text' => $module, 'hint' => $module, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeModule', "moduleID={$changeModuleID}"));
 }
 
 if($canBatchChangeBranch)
 {
     $branchItems = array();
-    foreach($branchTagOption as $branchTagID => $branchName) $branchItems[] = array('text' => $branchName, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeBranch', "branchID=$branchTagID"));
+    foreach($branchTagOption as $branchTagID => $branchName) $branchItems[] = array('text' => $branchName, 'hint' => $module, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeBranch', "branchID=$branchTagID"));
 }
 
 if($canBatchChangeScene)
 {
     $sceneItems = array();
-    foreach($iscenes as $sceneID => $scene) $sceneItems[] = array('text' => $scene, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeScene', "sceneId=$sceneID"));
+    foreach($iscenes as $sceneID => $scene) $sceneItems[] = array('text' => $scene, 'hint' => $scene, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeScene', "sceneId=$sceneID"));
 }
 
 $footToolbar = $canBatchAction ? array('items' => array
@@ -173,6 +173,7 @@ $linkParams = '';
 foreach($app->rawParams as $key => $value) $linkParams = $key != 'orderBy' ? "{$linkParams}&{$key}={$value}" : "{$linkParams}&orderBy={name}_{sortType}";
 
 $caseCreateLink = $canCreateCase ? $createCaseLink : '';
+$canSort        = $canModify && hasPriv('testcase', 'updateOrder') && strpos($orderBy, 'sort_asc') !== false;
 
 div(
     on::click('[data-col="actions"] .ztf-case', 'window.checkZtf'),
@@ -180,9 +181,9 @@ div(
     (
         set::id('testcases'),
         set::plugins(array('sortable')),
-        set::sortable(strpos($orderBy, 'sort_asc') !== false),
-        set::onSortEnd(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.onSortEnd') : null),
-        set::canSortTo(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.canSortTo') : null),
+        set::sortable($canSort),
+        set::onSortEnd($canSort ? jsRaw('window.onSortEnd') : null),
+        set::canSortTo($canSort ? jsRaw('window.canSortTo') : null),
         ($isFromDoc || $isFromAI) ? set::afterRender(jsCallback()->call('toggleCheckRows', $idList)) : null,
         ($isFromDoc || $isFromAI) ? set::onCheckChange(jsRaw('window.checkedChange')) : null,
         ($isFromDoc || $isFromAI) ? set::height(400) : null,

@@ -1,66 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-function ztfVal($value)
-{
-    if($value === null) return 'null';
-    if(is_bool($value)) return $value ? '1' : '0';
-    if(is_scalar($value))
-    {
-        $string = str_replace(array("'", '"', '\\'), '', (string)$value);
-        if(strpos($string, '.php') !== false || strpos($string, 'http') !== false || strpos($string, 'href=') !== false) return 'string_with_url';
-        if(strlen($string) > 80) return 'string_len=' . strlen($string);
-        return $string;
-    }
-    if(is_array($value))
-    {
-        if(empty($value)) return 'empty_array';
-        $first = reset($value);
-        if(is_object($first) || is_array($first)) return 'array_count=' . count($value);
-        $parts = array();
-        foreach($value as $item) $parts[] = is_scalar($item) ? str_replace(array("'", '"', '\\'), '', (string)$item) : 'obj';
-        return 'array:' . implode(',', $parts);
-    }
-    if(is_object($value))
-    {
-        $vars = get_object_vars($value);
-        if(empty($vars)) return 'empty_object';
-        foreach(array('id', 'name', 'title', 'status', 'type', 'code', 'account', 'module', 'field', 'value') as $key)
-        {
-            if(array_key_exists($key, $vars)) return $key . '=' . (is_scalar($vars[$key]) ? str_replace(array("'", '"', '\\'), '', (string)$vars[$key]) : 'object');
-        }
-        return 'object_count=' . count($vars);
-    }
-    return 'unknown';
-}
-
-function ztfCall($callable)
-{
-    try
-    {
-        ob_start();
-        $result = $callable();
-        $echoed = ob_get_clean();
-        if($echoed !== '') return 'echo_yes';
-        if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
-        return $result;
-    }
-    catch(Throwable $e)
-    {
-        if(ob_get_level()) ob_end_clean();
-        if($e instanceof EndResponseException) return 0;
-        return 'error:' . get_class($e);
-    }
-}
-
-function ztfInvoke($object, $method, array $args)
-{
-    $reflection = new ReflectionMethod($object, $method);
-    $reflection->setAccessible(true);
-    return $reflection->invokeArgs($object, $args);
-}
-
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 error_reporting(E_ERROR);
 
@@ -79,6 +21,8 @@ su('admin');
 
 $tester->loadModel('common');
 
+
+$testObj = new commonModelTest();
 /**
 
 title=测试 commonModel::printLink()
@@ -93,8 +37,8 @@ cid=0
 
 */
 
-r(ztfVal(ztfCall(function() use ($tester) { return ztfInvoke($tester->common, 'printLink', array(1, 1, '', '', '', '', true, false, null)); }))) && p() && e('error:TypeError'); // 步骤1：正常输入
-r(ztfVal(ztfCall(function() use ($tester) { return ztfInvoke($tester->common, 'printLink', array(0, 1, '', '', '', '', true, false, null)); }))) && p() && e('error:TypeError'); // 步骤2：边界值输入
-r(ztfVal(ztfCall(function() use ($tester) { return ztfInvoke($tester->common, 'printLink', array('abc', 1, '', '', '', '', true, false, null)); }))) && p() && e('error:TypeError'); // 步骤3：无效输入
-r(ztfVal(ztfCall(function() use ($tester) { return ztfInvoke($tester->common, 'printLink', array(999999, 1, '', '', '', '', true, false, null)); }))) && p() && e('error:TypeError'); // 步骤4：大值输入
-r(ztfVal(ztfCall(function() use ($tester) { return ztfInvoke($tester->common, 'printLink', array('test', 'test', '', '', '', '', true, false, null)); }))) && p() && e('0'); // 步骤5：业务规则验证
+r($testObj->printLinkTest(1, 1, '', '', '', '', true, false, null)) && p() && e('error:TypeError'); // 步骤1：正常输入
+r($testObj->printLinkTest(0, 1, '', '', '', '', true, false, null)) && p() && e('error:TypeError'); // 步骤2：边界值输入
+r($testObj->printLinkTest('abc', 1, '', '', '', '', true, false, null)) && p() && e('error:TypeError'); // 步骤3：无效输入
+r($testObj->printLinkTest(999999, 1, '', '', '', '', true, false, null)) && p() && e('error:TypeError'); // 步骤4：大值输入
+r($testObj->printLinkTest('test', 'test', '', '', '', '', true, false, null)) && p() && e('0'); // 步骤5：业务规则验证

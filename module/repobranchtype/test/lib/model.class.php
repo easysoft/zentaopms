@@ -1,4 +1,6 @@
 <?php
+
+require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
 class repobranchtypeTest
 {
     public function __construct()
@@ -104,4 +106,140 @@ class repobranchtypeTest
 
         return $result;
     }
+}
+
+class repobranchtypeModelTest extends baseTest
+{
+    protected $moduleName = 'repobranchtype';
+    protected $className  = 'model';
+
+    /**
+     * Test apiCreateBranchType method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function apiCreateBranchTypeTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('apiCreateBranchType', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test apiDeleteBranchType method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function apiDeleteBranchTypeTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('apiDeleteBranchType', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test apiUpdateBranchType method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function apiUpdateBranchTypeTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('apiUpdateBranchType', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test getByBranches method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getByBranchesTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('getByBranches', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test importBranchTypes method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function importBranchTypesTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('importBranchTypes', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
 }

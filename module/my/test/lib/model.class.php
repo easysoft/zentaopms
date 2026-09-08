@@ -1240,4 +1240,134 @@ class myModelTest extends baseTest
 
         return $count;
     }
+
+    /**
+     * Test createSSH method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function createSSHTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('createSSH', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test deleteSSH method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function deleteSSHTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('deleteSSH', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test editSSH method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function editSSHTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('editSSH', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test getSSH method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getSSHTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('getSSH', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test getSSHbyID method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getSSHbyIDTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('getSSHbyID', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
 }

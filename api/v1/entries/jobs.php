@@ -25,7 +25,7 @@ class jobsEntry extends entry
 
         if(empty($pipeline))
         {
-            $control->browse($orderBy, 0, $this->param('limit', 100), $this->param('page', 1));
+            $control->browse($orderBy, 0, (int)$this->param('limit', 100), (int)$this->param('page', 1));
 
             /* Response */
             $data = $this->getData();

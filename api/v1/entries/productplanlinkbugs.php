@@ -25,13 +25,13 @@ class productplanLinkBugsEntry extends entry
         $fields = 'bugs';
         $this->batchSetPost($fields);
 
-        $control->linkBug($planID);
+        $control->linkBug((int)$planID);
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'success')
         {
             $control = $this->loadController('productplan', 'view');
-            $control->view($planID);
+            $control->view((int)$planID);
 
             $data = $this->getData();
             if(!$data or !isset($data->status)) return $this->send400('error');

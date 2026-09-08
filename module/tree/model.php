@@ -2460,6 +2460,7 @@ class treeModel extends model
         if($viewType == 'line') $rootID = 0;
         $stmt  = $this->app->dbQuery($this->buildMenuQuery($rootID, $viewType, $currentModuleID, $branchID));
         $trees = $this->getDataStructure($stmt, $viewType, $rootID, array(), $branchID);
+        foreach($trees as $tree) $tree->name = htmlspecialchars_decode((string)$tree->name, ENT_QUOTES);
 
         return $trees;
     }

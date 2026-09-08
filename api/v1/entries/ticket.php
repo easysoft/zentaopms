@@ -21,7 +21,7 @@ class ticketEntry extends entry
     public function get($ticketID)
     {
         $control = $this->loadController('ticket', 'view');
-        $control->view($ticketID);
+        $control->view((int)$ticketID);
 
         $data = $this->getData();
 
@@ -52,7 +52,7 @@ class ticketEntry extends entry
         $fields = 'module,product,type,openedBuild,assignedTo,deadline,title,desc,status,notify,uid';
         $this->batchSetPost($fields, $oldTicket);
 
-        $control->edit($ticketID);
+        $control->edit((int)$ticketID);
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
@@ -73,7 +73,7 @@ class ticketEntry extends entry
     public function delete($ticketID)
     {
         $control = $this->loadController('ticket', 'delete');
-        $control->delete($ticketID, 'yes');
+        $control->delete((int)$ticketID, 'yes');
 
         $this->getData();
         return $this->sendSuccess(200, 'success');

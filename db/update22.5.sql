@@ -158,6 +158,8 @@ ALTER TABLE `zt_ai_agent` ADD `cycleConfig` text NULL DEFAULT NULL COMMENT '周�
 ALTER TABLE `zt_ai_agent` ADD `notifyRule` text NULL DEFAULT NULL COMMENT '通知规则JSON：roles/users/methods' AFTER `cycleConfig`;
 ALTER TABLE `zt_ai_agent` ADD `lastRunDate` datetime NULL DEFAULT NULL COMMENT '最近一次定时执行时间' AFTER `editedDate`;
 
+UPDATE `zt_ai_agent` SET `targetForm` = 'task.batchcreate', `actionPurpose` = 'task.batchcreate' WHERE `targetForm` = 'execution.batchcreatetask' OR `actionPurpose` = 'execution.batchcreatetask';
+
 CREATE TABLE IF NOT EXISTS `zt_ai_timerlog` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `agent` int unsigned NOT NULL DEFAULT 0 COMMENT '智能体ID',
@@ -196,25 +198,34 @@ ALTER TABLE `zt_notify` MODIFY COLUMN `action` int unsigned NOT NULL DEFAULT 0;
 
 -- DROP TABLE IF EXISTS `zt_errorlog`;
 CREATE TABLE IF NOT EXISTS `zt_errorlog` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `requestID` varchar(64) NOT NULL DEFAULT '' COMMENT '请求ID',
-  `account` varchar(30) NOT NULL DEFAULT '' COMMENT '用户账号',
-  `module` varchar(30) NOT NULL DEFAULT '' COMMENT '模块',
-  `method` varchar(100) NOT NULL DEFAULT '' COMMENT '方法',
-  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '请求地址',
-  `level` smallint unsigned NOT NULL DEFAULT 0 COMMENT '错误级别',
-  `message` text DEFAULT NULL COMMENT '错误信息',
+  `md5` char(32) NOT NULL DEFAULT '' COMMENT '错误签名MD5',
   `file` varchar(255) NOT NULL DEFAULT '' COMMENT '错误文件',
   `line` int unsigned NOT NULL DEFAULT 0 COMMENT '错误行号',
+  `level` smallint unsigned NOT NULL DEFAULT 0 COMMENT '错误级别',
+  `message` text DEFAULT NULL COMMENT '错误信息',
   `trace` text DEFAULT NULL COMMENT '错误堆栈',
+  PRIMARY KEY (`md5`)
+) ENGINE=InnoDB COMMENT='错误本体';
+
+-- DROP TABLE IF EXISTS `zt_errorlogreq`;
+CREATE TABLE IF NOT EXISTS `zt_errorlogreq` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `requestID` varchar(64) NOT NULL DEFAULT '' COMMENT '请求ID',
+  `md5` char(32) NOT NULL DEFAULT '' COMMENT '错误签名MD5',
+  `module` varchar(30) NOT NULL DEFAULT '' COMMENT '模块',
+  `method` varchar(100) NOT NULL DEFAULT '' COMMENT '方法',
+  `account` varchar(30) NOT NULL DEFAULT '' COMMENT '用户账号',
+  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '请求地址',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB COMMENT='错误日志';
-
-CREATE INDEX `idx_requestID`   ON `zt_errorlog`(`requestID`);
-CREATE INDEX `idx_module`      ON `zt_errorlog`(`module`);
-CREATE INDEX `idx_level`       ON `zt_errorlog`(`level`);
-CREATE INDEX `idx_createdDate` ON `zt_errorlog`(`createdDate`);
+) ENGINE=InnoDB COMMENT='错误请求记录';
+CREATE UNIQUE INDEX `uk_requestID_md5` ON `zt_errorlogreq`(`requestID`, `md5`);
+CREATE INDEX `idx_requestID`   ON `zt_errorlogreq`(`requestID`);
+CREATE INDEX `idx_md5`         ON `zt_errorlogreq`(`md5`);
+CREATE INDEX `idx_createdDate` ON `zt_errorlogreq`(`createdDate`);
 
 REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
 ('*/5', '*', '*', '*', '*', 'moduleName=errorlog&methodName=deleteLog', '删除过期错误日志', 'zentao', 1, 'normal', NULL);
+
+DELETE FROM `zt_workflowfield`  WHERE `module` = 'ticket' AND `field` = 'consumed';
+DELETE FROM `zt_workflowlayout` WHERE `module` = 'ticket' AND `field` = 'consumed';

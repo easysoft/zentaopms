@@ -76,9 +76,10 @@ class doc extends control
             'mine'    => 'mySpace',
             'product' => 'productSpace',
             'project' => 'projectSpace',
+            'quick'   => 'quick',
             'custom'  => 'teamSpace'
         );
-        $method = $spaceMap[$lastViewedSpaceHome];
+        $method = zget($spaceMap, $lastViewedSpaceHome, '');
         if(empty($method) || !common::hasPriv('doc', $method)) return $this->locate($this->createLink('doc', 'mySpace'));
 
         $lastViewedSpace = $this->doc->getLastViewed('lastViewedSpace');
@@ -1954,7 +1955,7 @@ class doc extends control
                 $_POST['parent'] = 0;
             }
 
-            $data = $this->docZen->prepareDocFormData($spaceType, $space);
+            $data = $this->docZen->prepareDocFormData($spaceType, (string)$space);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = common::createChanges($doc, $data);
@@ -1981,6 +1982,17 @@ class doc extends control
         $this->display();
     }
 
+    /**
+     * 复制文档。
+     * Copy doc.
+     *
+     * @param  int    $docID
+     * @param  int    $libID
+     * @param  string $spaceType
+     * @param  string $space
+     * @access public
+     * @return void
+     */
     public function copyDoc(int $docID, int $libID = 0, string $spaceType = '', string $space = '')
     {
         $doc = $this->docZen->initDocContext($docID, $libID, $spaceType, $space);
@@ -1994,7 +2006,7 @@ class doc extends control
                 $_POST['parent'] = 0;
             }
 
-            $data = $this->docZen->prepareDocFormData($spaceType, $space);
+            $data = $this->docZen->prepareDocFormData($spaceType, (string)$space);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $newDocID = $this->doc->copyDoc($docID, $data);

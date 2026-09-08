@@ -228,6 +228,7 @@ $lang->ai->prompts->promptPreview  = 'Purpose ZenTao Agent Preview';
 /* Target form selecting. */
 $lang->ai->prompts->selectTargetForm    = 'Select Target Form';
 $lang->ai->prompts->selectTargetFormTip = 'Results returned from LLMs can be directly inputed into forms within ZenTao.';
+$lang->ai->prompts->noRedirect          = 'No need to return to the Zentao form';
 $lang->ai->prompts->goingTesting        = 'Redirecting to testing page';
 $lang->ai->prompts->goingTestingFail    = 'No testable object available.';
 

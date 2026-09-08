@@ -275,7 +275,7 @@ if($canBatchAction)
         $moduleItems = array();
         foreach($modules as $moduleID => $module)
         {
-            $moduleItems[] = array('text' => $module, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('task', 'batchChangeModule', "moduleID=$moduleID"));
+            $moduleItems[] = array('text' => $module, 'hint' => $module, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('task', 'batchChangeModule', "moduleID=$moduleID"));
         }
     }
 

@@ -25,7 +25,7 @@ class bugResolveEntry extends entry
         $fields = 'resolution,resolvedBuild,resolvedDate,duplicateBug,assignedTo,uid,comment';
         $this->batchSetPost($fields);
 
-        $control->resolve($bugID);
+        $control->resolve((int)$bugID);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');

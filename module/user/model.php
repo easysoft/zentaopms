@@ -128,6 +128,18 @@ class userModel extends model
             return !dao::isError();
         }
 
+        /* 服务端根据明文重新计算密码强度与长度，避免信任客户端提交的 passwordStrength/passwordLength 字段。*/
+        /* Recompute the password strength and length on the server, never trust the client submitted fields. */
+        $passwordPlain = isset($user->passwordPlain) ? trim((string)$user->passwordPlain) : '';
+        if($passwordPlain === '' && isset($this->post->passwordPlain)) $passwordPlain = trim((string)$this->post->passwordPlain);
+        if($passwordPlain === '')
+        {
+            dao::$errors['password1'][] = $this->lang->user->error->password;
+            return !dao::isError();
+        }
+        $user->passwordLength   = strlen($passwordPlain);
+        $user->passwordStrength = $this->computePasswordStrength($passwordPlain);
+
         /* 检查密码强度是否符合安全设置。*/
         /* Check if the password strength meets the security settings. */
         if(isset($this->config->safe->mode) && ($user->passwordStrength < $this->config->safe->mode))

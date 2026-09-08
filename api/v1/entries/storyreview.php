@@ -26,7 +26,7 @@ class storyReviewEntry extends entry
         $fields = 'reviewedDate,result,closedReason,pri,estimate,comment';
         $this->batchSetPost($fields);
 
-        $control->review($storyID);
+        $control->review((int)$storyID);
 
         $data = $this->getData();
         if(!$data or !isset($data->status)) return $this->send400('error');

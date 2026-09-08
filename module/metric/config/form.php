@@ -1,7 +1,4 @@
 <?php
-declare(strict_types=1);
-global $lang, $app;
-
 $config->metric->form = new stdclass();
 
 $config->metric->form->create = array();
@@ -11,9 +8,9 @@ $config->metric->form->create['purpose']    = array('required' => true,  'type' 
 $config->metric->form->create['scope']      = array('required' => true,  'type' => 'string');
 $config->metric->form->create['object']     = array('required' => true,  'type' => 'string');
 $config->metric->form->create['dateType']   = array('required' => true,  'type' => 'string');
-$config->metric->form->create['alias']      = array('required' => false,  'type' => 'string');
-$config->metric->form->create['desc']       = array('required' => false,  'type' => 'string', 'filter' => 'trim');
-$config->metric->form->create['definition'] = array('required' => false,  'type' => 'string', 'filter' => 'trim');
+$config->metric->form->create['alias']      = array('required' => false, 'type' => 'string');
+$config->metric->form->create['desc']       = array('required' => false, 'type' => 'string', 'filter' => 'trim');
+$config->metric->form->create['definition'] = array('required' => false, 'type' => 'string', 'filter' => 'trim');
 
 $config->metric->form->edit = array();
 $config->metric->form->edit['name']       = array('required' => true, 'type' => 'string', 'filter' => 'trim');
@@ -36,6 +33,6 @@ $config->metric->form->change['status']     = array('required' => true,  'type' 
 $config->metric->form->change['purpose']    = array('required' => true,  'type' => 'string');
 $config->metric->form->change['scope']      = array('required' => true,  'type' => 'string');
 $config->metric->form->change['object']     = array('required' => true,  'type' => 'string');
-$config->metric->form->change['unit']       = array('required' => false,  'type' => 'string');
-$config->metric->form->change['desc']       = array('required' => false,  'type' => 'string', 'filter' => 'trim');
-$config->metric->form->change['definition'] = array('required' => false,  'type' => 'string', 'filter' => 'trim');
+$config->metric->form->change['unit']       = array('required' => false, 'type' => 'string');
+$config->metric->form->change['desc']       = array('required' => false, 'type' => 'string', 'filter' => 'trim');
+$config->metric->form->change['definition'] = array('required' => false, 'type' => 'string', 'filter' => 'trim');

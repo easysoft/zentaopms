@@ -24,7 +24,7 @@ class reposEntry extends entry
 
         if(empty($repoUrl))
         {
-            $control->maintain(0, $this->param('order', 'id_desc'), 0, $this->param('limit', 100), $this->param('page', 1));
+            $control->maintain(0, $this->param('order', 'id_desc'), 0, (int)$this->param('limit', 100), (int)$this->param('page', 1));
             /* Response */
             $data = $this->getData();
         }

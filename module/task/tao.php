@@ -66,6 +66,7 @@ class taskTao extends taskModel
             $newTask->assignedDate   = $now;
             $newTask->finishedBy     = $this->app->user->account;
             $newTask->finishedDate   = $now;
+            unset($newTask->subStatus);
             $actionID = $this->action->create('task', $task->id, 'Finished', $record->work);
         }
         /* Start task by effort. */
@@ -74,6 +75,7 @@ class taskTao extends taskModel
             $newTask->status       = 'doing';
             $newTask->assignedTo   = $this->app->user->account;
             $newTask->assignedDate = $now;
+            unset($newTask->subStatus);
             $actionID = $this->action->create('task', $task->id, 'Started', $record->work);
         }
         /* Activate task by effort. */
@@ -88,6 +90,7 @@ class taskTao extends taskModel
             $newTask->finishedDate   = null;
             $newTask->canceledDate   = null;
             $newTask->closedDate     = null;
+            unset($newTask->subStatus);
             $actionID = $this->action->create('task', $task->id, 'Activated', $record->work);
         }
         else

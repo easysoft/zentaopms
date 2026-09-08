@@ -21,7 +21,7 @@ class riskEntry extends entry
     public function get($riskID)
     {
         $control = $this->loadController('risk', 'view');
-        $control->view($riskID);
+        $control->view((int)$riskID);
 
         $data = $this->getData();
         if(!$data or (isset($data->message) and $data->message == '404 Not found')) return $this->send404();
@@ -48,7 +48,7 @@ class riskEntry extends entry
         $fields = 'source,name,category,strategy,status,impact,probability,rate,identifiedDate,plannedClosedDate,actualClosedDate,resolvedBy,assignedTo,prevention,remedy,resolution';
         $this->batchSetPost($fields, $oldRisk);
 
-        $control->edit($riskID);
+        $control->edit((int)$riskID);
 
         $data = $this->getData();
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
@@ -67,7 +67,7 @@ class riskEntry extends entry
     public function delete($riskID)
     {
         $control = $this->loadController('risk', 'delete');
-        $control->delete($riskID, 'true');
+        $control->delete((int)$riskID, 'true');
 
         $this->getData();
         return $this->sendSuccess(200, 'success');

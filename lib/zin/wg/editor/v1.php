@@ -42,6 +42,10 @@ class editor extends wg
         zen-editor-menu-item > .menu-item.is-active:not(:hover) {background-color: transparent!important;}
         zen-editor-menu-item > .menu-item:has(.color):hover, zen-editor-menu-item > .menu-item:has(.color).is-active {background-color: ransparent!important; box-shadow: inset 0 0 0 1px var(--color-primary-300)!important;}
         .menubar {border-bottom: 1px solid #d8dbde!important; padding: 0.125rem;}
+        .editor__content {display: flex; flex-direction: column;}
+        .editor__content > div,
+        .editor__content > div > .article {display: flex; flex: 1; flex-direction: column;}
+        .tiptap.ProseMirror {flex: 1;}
         .tippy-content > div {border: 1px solid #d8dbde!important;}
         .tippy-content zen-editor-menu-item {line-height: normal;}
         .tippy-content zen-editor-menu-item .label {all: unset;}

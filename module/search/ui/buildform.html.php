@@ -22,8 +22,9 @@ foreach($fieldParams as $name => $param)
     if($condition->control == 'select')
     {
         if(!isset($condition->controlProps['maxItemsCount'])) $condition->controlProps['maxItemsCount'] = 200;
-        $condition->controlProps['multiple'] = true;
-        $condition->controlProps['menu']     = array('checkbox' => true);
+        $condition->controlProps['multiple']            = true;
+        $condition->controlProps['menu']                = array('checkbox' => true);
+        $condition->controlProps['clearSearchOnSelect'] = false;
     }
 
 

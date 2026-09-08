@@ -1,8 +1,10 @@
 <?php
-$now   = helper::now();
-$today = helper::today();
-
 global $app, $lang;
+
+$account = $app->user->account ?? '';
+$now     = helper::now();
+$today   = helper::today();
+
 $config->story->form = new stdclass();
 $config->story->form->create = array();
 $config->story->form->create['product']     = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
@@ -35,7 +37,7 @@ $config->story->form->create['modules']     = array('type' => 'array',   'contro
 $config->story->form->create['plans']       = array('type' => 'array',   'control' => 'select',       'required' => false, 'default' => 0, 'options' => array());
 $config->story->form->create['vision']      = array('type' => 'string',  'control' => '',             'required' => false, 'default' => $config->vision);
 $config->story->form->create['version']     = array('type' => 'int',     'control' => '',             'required' => false, 'default' => 1);
-$config->story->form->create['openedBy']    = array('type' => 'string',  'control' => '',             'required' => false, 'default' => $app->user->account);
+$config->story->form->create['openedBy']    = array('type' => 'string',  'control' => '',             'required' => false, 'default' => $account);
 $config->story->form->create['openedDate']  = array('type' => 'string',  'control' => '',             'required' => false, 'default' => helper::now());
 
 $config->story->form->edit = array();
@@ -117,7 +119,7 @@ $config->story->form->batchclose['duplicateStory'] = array('type' => 'int',    '
 
 $config->story->form->assignTo = array();
 $config->story->form->assignTo['assignedTo']     = array('type' => 'string',   'control' => 'picker', 'required' => false, 'default' => '');
-$config->story->form->assignTo['lastEditedBy']   = array('type' => 'string',   'control' => 'hidden', 'required' => false, 'default' => $app->user->account);
+$config->story->form->assignTo['lastEditedBy']   = array('type' => 'string',   'control' => 'hidden', 'required' => false, 'default' => $account);
 $config->story->form->assignTo['lastEditedDate'] = array('type' => 'datetime', 'control' => 'hidden', 'required' => false, 'default' => $now);
 $config->story->form->assignTo['assignedDate']   = array('type' => 'datetime', 'control' => 'hidden', 'required' => false, 'default' => $now);
 
@@ -148,7 +150,7 @@ $config->story->form->activate = array();
 $config->story->form->activate['assignedTo']      = array('type' => 'string',   'required' => false, 'default' => '');
 $config->story->form->activate['activatedDate']   = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->story->form->activate['lastEditedDate']  = array('type' => 'datetime', 'required' => false, 'default' => $now);
-$config->story->form->activate['lastEditedBy']    = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
+$config->story->form->activate['lastEditedBy']    = array('type' => 'string',   'required' => false, 'default' => $account);
 $config->story->form->activate['closedBy']        = array('type' => 'string',   'required' => false, 'default' => '');
 $config->story->form->activate['closedReason']    = array('type' => 'string',   'required' => false, 'default' => '');
 $config->story->form->activate['closedDate']      = array('type' => 'datetime', 'required' => false, 'default' => null);
@@ -162,8 +164,8 @@ $config->story->form->close = array();
 $config->story->form->close['status']         = array('type' => 'string',   'required' => false, 'default' => 'closed');
 $config->story->form->close['stage']          = array('type' => 'string',   'required' => false, 'default' => 'closed');
 $config->story->form->close['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
-$config->story->form->close['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
-$config->story->form->close['closedBy']       = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
+$config->story->form->close['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $account);
+$config->story->form->close['closedBy']       = array('type' => 'string',   'required' => false, 'default' => $account);
 $config->story->form->close['closedReason']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->story->form->close['closedDate']     = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->story->form->close['assignedDate']   = array('type' => 'datetime', 'required' => false, 'default' => $now);
@@ -192,6 +194,6 @@ $config->story->form->batchToTask['deadline']   = array('type' => 'date',   'req
 $config->story->form->batchToTask['pri']        = array('type' => 'int',    'required' => false, 'default' => 3);
 $config->story->form->batchToTask['status']     = array('type' => 'string', 'required' => false, 'default' => 'wait');
 $config->story->form->batchToTask['vision']     = array('type' => 'string', 'required' => false, 'default' => 'rnd');
-$config->story->form->batchToTask['openedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
+$config->story->form->batchToTask['openedBy']   = array('type' => 'string', 'required' => false, 'default' => $account);
 $config->story->form->batchToTask['openedDate'] = array('type' => 'string', 'required' => false, 'default' => $now);
 $config->story->form->batchToTask['version']    = array('type' => 'int',    'required' => false, 'default' => 1);

@@ -1,7 +1,7 @@
 ---
 fields:
 - field: id
-  range: 1-5
+  range: 1-1
 - field: type
   note: 内外部人员
   range: inside{900},outside,inside{10000}
@@ -13,15 +13,25 @@ fields:
   note: 所属部门
   range: 1-100{10}
 - field: account
-  range: admin,user1,user2,user3,user4
+  range: 1-1
 - field: password
   note: 密码
   range: 123Qwe!@#{346}
   format: md5
 - field: role
-  range: admin{1},dev{2},qa{1},pm{1}
+  note: 职位
+  range: qa{101},dev{200},pm{10},po{10},td{2},pd{2},qd{2},top{5},others{14}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
 - field: realname
-  range: 管理员,用户1,用户2,用户3,用户4
+  note: 真实姓名
+  fields:
+  - field: realname1
+    range: admin,用户{99},测试{100},开发{100},项目经理{100},产品经理{100},研发主管{100},产品主管{100},测试主管{100},高层管理{100},外用户{100},其他{100},A,BB,CCC,非常长非常长的用户名怎么这么长?
+  - field: realname2
+    range: '[],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}'
 - field: nickname
   note: 昵称
 - field: commiter
@@ -122,9 +132,9 @@ fields:
   note: 最后IP
   format: ""
 - field: last
-  note: 最后登录
-  range: (-1M)-(+1w):60m
+  range: (M)-(w)
   type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
 - field: fails
   note: 失败次数
   range: 1-5
@@ -145,9 +155,13 @@ fields:
   note: 积分
   range: 1-10000:R
 - field: scoreLevel
-  note: 积分等级
-  range: 0
+  range: "0"
 - field: deleted
-  note: 是否删除
-  range: 0
+  range: "0"
+- field: feedback
+  range: "0"
+- field: resetExpired
+  range: "0"
+- field: jira
+  range: "0"
 ...

@@ -381,12 +381,12 @@ formPanel
         (
             set::width('1/4'),
             setClass('priBox'),
-            inputGroup
+            div
             (
-                setClass('flex items-center'),
-                span
+                setClass('flex items-center w-full'),
+                div
                 (
-                    setClass('ml-2 w-16'),
+                    setClass('px-2 w-20 text-right'),
                     $lang->todo->pri
                 ),
                 priPicker

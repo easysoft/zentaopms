@@ -20,7 +20,7 @@ $config->testreport->form->create['bugs']        = array('type' => 'string',   '
 $config->testreport->form->create['builds']      = array('type' => 'string',   'required' => false, 'default' => '', 'filter' => 'trim');
 $config->testreport->form->create['cases']       = array('type' => 'string',   'required' => false, 'default' => '', 'filter' => 'trim');
 $config->testreport->form->create['stories']     = array('type' => 'string',   'required' => false, 'default' => '', 'filter' => 'trim');
-$config->testreport->form->create['createdBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
+$config->testreport->form->create['createdBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account ?? '');
 $config->testreport->form->create['createdDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 
 $config->testreport->form->edit = array();

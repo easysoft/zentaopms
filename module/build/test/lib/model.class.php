@@ -26,6 +26,22 @@ class buildModelTest extends baseTest
     }
 
     /**
+     * Test getToAndCcList method.
+     *
+     * @param  object $build
+     * @access public
+     * @return array|false
+     */
+    public function getToAndCcListTest(object $build): array|false
+    {
+        $result = $this->instance->getToAndCcList($build);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 通过版本ID列表获取版本信息。
      * Get builds by id list.
      *

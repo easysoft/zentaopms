@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 helper::import(dirname(__FILE__) . 'config/form.php');
 
 $config->programplan->create = new stdclass();

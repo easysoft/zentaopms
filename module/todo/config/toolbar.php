@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 global $lang;
 
 $config->todo->toolbar = new stdclass();

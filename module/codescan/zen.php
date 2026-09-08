@@ -696,6 +696,7 @@ class codescanZen extends codescan
     protected function processIssueFileTree(array $fileTree, string $urlParam, array $params = array()): array
     {
         if(isset($params['branch'])) unset($params['branch']);
+        if(isset($params['path']))   unset($params['path']);
         if(isset($params['ruleID'])) unset($params['ruleID']);
         $extra = str_replace(array('&', '', '-'), array(',', ' ', '*'), http_build_query($params));
 
@@ -714,7 +715,9 @@ class codescanZen extends codescan
             else
             {
                 $dirPath = explode('/', $file->path);
-                $file->link = sprintf($urlParam, "{$extra},branch={$dirPath[0]}");
+                $ref     = !empty($file->ref) ? $file->ref : $file->path;
+                $file->ref = $ref;
+                $file->link = sprintf($urlParam, "{$extra},branch={$dirPath[0]},path=" . rawurlencode($ref));
             }
             $treeList[] = $file;
         }

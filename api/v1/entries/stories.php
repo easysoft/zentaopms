@@ -24,7 +24,7 @@ class storiesEntry extends entry
         if(!$productID) return $this->sendError(400, 'Need product id.');
 
         $control = $this->loadController('product', 'browse');
-        $control->browse($productID, $this->param('branch', ''), $this->param('status', 'unclosed'), 0, $this->param('type', 'story'), $this->param('order', 'id_desc'), 0, $this->param('limit', 500), $this->param('page', 1));
+        $control->browse((int)$productID, $this->param('branch', ''), $this->param('status', 'unclosed'), 0, $this->param('type', 'story'), $this->param('order', 'id_desc'), 0, (int)$this->param('limit', 500), (int)$this->param('page', 1));
 
         $data = $this->getData();
         if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
@@ -115,7 +115,7 @@ class storiesEntry extends entry
 
         $this->requireFields('title,spec,pri,category');
 
-        $control->create($productID, $this->param('branch', 0), $this->param('moduleID', 0), $this->param('storyID', 0), $this->param('objectID', 0), $this->param('bugID', 0), 0, 0, '', $this->param('type', 'story'));
+        $control->create((int)$productID, $this->param('branch', 0), (int)$this->param('moduleID', 0), (int)$this->param('storyID', 0), (int)$this->param('objectID', 0), (int)$this->param('bugID', 0), 0, 0, '', $this->param('type', 'story'));
 
         $data = $this->getData();
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);

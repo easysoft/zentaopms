@@ -909,10 +909,13 @@ class bugZen extends bug
         $executionID = (int)$bug->executionID;
         $product     = $this->product->getByID($productID);
 
+        if(($this->app->tab == 'execution' || $this->app->tab == 'qa') && $executionID && !$projectID)
+        {
+            $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+        }
+
         $projects  = $this->product->getProjectPairsByProduct($productID, $branch);
         $projectID = isset($projects[$projectID]) ? $projectID : '';
-
-        if($this->app->tab == 'execution' && $executionID && !$projectID) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
         if($product->shadow && !$projectID) $projectID = key($projects);
 
         $project = array();
@@ -1825,6 +1828,45 @@ class bugZen extends bug
                 foreach($productOpenedBuildItems as $buildID => $buildName) $productOpenedBuilds[$bug->product][] = array('text' => $buildName, 'value' => $buildID, 'keys' => $buildName);
             }
         }
+
+        /* 将 Bug 当前的影响版本补充到下拉选项，与编辑页逻辑保持一致，避免批量编辑时被清空。 */
+        foreach($bugs as $bug)
+        {
+            $bugOpenedBuilds = array_filter(array_map('trim', explode(',', $bug->openedBuild ?? '')));
+            if(empty($bugOpenedBuilds)) continue;
+
+            if($bug->execution)
+            {
+                $openedBuildListKey = $bug->execution;
+                $openedBuildList    = &$executionOpenedBuilds;
+            }
+            elseif($bug->project)
+            {
+                $openedBuildListKey = $bug->project;
+                $openedBuildList    = &$projectOpenedBuilds;
+            }
+            else
+            {
+                $openedBuildListKey = $bug->product;
+                $openedBuildList    = &$productOpenedBuilds;
+            }
+
+            if(!isset($openedBuildList[$openedBuildListKey])) $openedBuildList[$openedBuildListKey] = array();
+
+            $existingBuildIdList = array_column($openedBuildList[$openedBuildListKey], 'value');
+            foreach($bugOpenedBuilds as $bugOpenedBuild)
+            {
+                if(in_array($bugOpenedBuild, $existingBuildIdList)) continue;
+
+                $build = $this->build->getByID((int)$bugOpenedBuild);
+                if($build)
+                {
+                    $openedBuildList[$openedBuildListKey][] = array('text' => $build->name, 'value' => $build->id, 'keys' => $build->name);
+                    $existingBuildIdList[] = $build->id;
+                }
+            }
+        }
+        unset($openedBuildList);
 
         $this->view->noProductProjects     = $noProductProjects;
         $this->view->noSprintProjects      = $noSprintProjects;

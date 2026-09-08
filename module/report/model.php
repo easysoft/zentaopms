@@ -249,9 +249,20 @@ class reportModel extends model
             ->andWhere('t1.end')->lt(date(DT_DATE1, strtotime('+' . $expireDays . ' day')))
             ->fetchAll();
 
+        /* 过期提醒的时候，忽略规划看板下的卡片。Ignore kanban cards in plan kanban. */
+        $PIList   = $this->dao->select('teamkanban,plankanban')->from(TABLE_PI)->fetchAll();
+        $PIKanban = array();
+        foreach($PIList as $PI)
+        {
+            $PIKanban[$PI->teamkanban] = $PI->teamkanban;
+            $PIKanban[$PI->plankanban] = $PI->plankanban;
+        }
+
         $cardGroups = array();
         foreach($cards as $card)
         {
+            if(isset($PIKanban[$card->kanban])) continue;
+
             $assignedToList = explode(',', $card->assignedTo);
             foreach($assignedToList as $assignedTo)
             {

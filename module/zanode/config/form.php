@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 $config->zanode->form = new stdclass();
 
 $config->zanode->form->create = array();

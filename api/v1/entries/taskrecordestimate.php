@@ -24,12 +24,12 @@ class taskRecordEstimateEntry extends entry
         if($issetEffort)
         {
             $control = $this->loadController('effort', 'createForObject');
-            $control->createForObject('task', $taskID);
+            $control->createForObject('task', (int)$taskID);
         }
         else
         {
             $control = $this->loadController('task', 'recordWorkhour');
-            $control->recordWorkhour($taskID);
+            $control->recordWorkhour((int)$taskID);
         }
 
         $data = $this->getData();
@@ -54,7 +54,7 @@ class taskRecordEstimateEntry extends entry
 
         $fields = 'date,consumed,left,work';
         $this->batchSetPost($fields);
-        $control->recordWorkhour($taskID);
+        $control->recordWorkhour((int)$taskID);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');

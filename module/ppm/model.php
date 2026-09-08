@@ -133,14 +133,14 @@ class ppmModel extends model
         if(dao::isError()) return false;
         if(!empty($diffStats))
         {
-            $ppm->additions   = zget($diffStats, 'additions', 0);
-            $ppm->deletions   = zget($diffStats, 'deletions', 0);
-            $ppm->commitCount = zget($diffStats, 'commits', 0);
-            $ppm->fileCount   = zget($diffStats, 'filesChanged', 0);
+            $ppm->additions    = zget($diffStats, 'additions', 0);
+            $ppm->deletions    = zget($diffStats, 'deletions', 0);
+            $ppm->commitCount  = zget($diffStats, 'commits', 0);
+            $ppm->fileCount    = zget($diffStats, 'filesChanged', 0);
+            $ppm->mergeBaseSHA = zget($diffStats, 'mergeBaseSHA', '');
         }
         $ppm = $this->loadModel('file')->processImgURL($ppm, $this->config->ppm->editor->create['id'], (string)$this->post->uid);
 
-        $ppm->mergeBaseSHA = $ppm->mergeTargetSHA;
         $ppmID = $this->insertMr($ppm);
         if(dao::isError()) return false;
         $this->file->updateObjectID($this->post->uid, $ppmID, 'ppm');

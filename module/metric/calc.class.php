@@ -12,6 +12,15 @@
 class baseCalc
 {
     /**
+     * 度量项ID。
+     * metricID
+     *
+     * @var int
+     * @access public
+     */
+    public $id = 0;
+
+    /**
      * 来源数据集。
      * dataset
      *

@@ -272,4 +272,82 @@ class pivotTaoTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test getAllProductsIDAndName method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getAllProductsIDAndNameTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('getAllProductsIDAndName', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test getAssignBugGroup method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getAssignBugGroupTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('getAssignBugGroup', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test getNoAssignExecution method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getNoAssignExecutionTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('getNoAssignExecution', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
 }

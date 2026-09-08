@@ -1269,4 +1269,30 @@ class bugZenTest extends baseTest
             'executionOpenedBuilds' => !empty($instance->view->executionOpenedBuilds) ? count($instance->view->executionOpenedBuilds) : 0
         );
     }
+
+    /**
+     * Test getBranchOptions method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getBranchOptionsTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('getBranchOptions', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
 }

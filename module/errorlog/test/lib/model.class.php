@@ -49,13 +49,13 @@ class errorlogModelTest extends baseTest
 
     /**
      * 测试根据请求ID获取错误日志。
-     * Test get error log by request id.
+     * Test get error logs by request id.
      *
      * @param  string $requestID
      * @access public
-     * @return object|array
+     * @return array
      */
-    public function getByRequestIDTest(string $requestID): object|array|false
+    public function getByRequestIDTest(string $requestID): array
     {
         $log = $this->instance->getByRequestID($requestID);
         if(dao::isError()) return dao::getError();
@@ -132,5 +132,32 @@ class errorlogModelTest extends baseTest
         $result = $this->instance->deleteByIDs($ids);
         if(dao::isError()) return dao::getError();
         return $result;
+    }
+
+    /**
+     * 测试获取联表查询字段。
+     * Test get select fields of the joined query.
+     *
+     * @access public
+     * @return string
+     */
+    public function getSelectFieldsTest(): string
+    {
+        return $this->invokeArgs('getSelectFields');
+    }
+
+    /**
+     * 测试清理孤立错误本体。
+     * Test delete orphan error bodies.
+     *
+     * @param  array $md5s
+     * @access public
+     * @return bool|array
+     */
+    public function deleteOrphanErrorLogsTest(array $md5s): bool|array
+    {
+        $this->invokeArgs('deleteOrphanErrorLogs', array($md5s));
+        if(dao::isError()) return dao::getError();
+        return true;
     }
 }

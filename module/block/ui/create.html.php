@@ -25,7 +25,7 @@ $blockSize   = !empty($config->block->size[$module][$code]) ? $config->block->si
 /* 根据区块的可选尺寸生成区块的可选宽度列表。 */
 $widthOptions = array();
 foreach(array_keys($blockSize) as $width) $widthOptions[$width] = zget($this->lang->block->widthOptions, $width);
-$defaultWidth = reset($widthOptions);
+$defaultWidth = array_key_first($widthOptions);
 $moduleWidth  = $app->getClientLang() == 'en' ? '160' : '128';
 row
 (

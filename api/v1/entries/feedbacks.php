@@ -23,7 +23,7 @@ class feedbacksEntry extends entry
 
         $control = $this->loadController('feedback', 'admin');
         $control->session->set('feedbackProduct', 0);
-        $control->admin($this->param('status', 'unclosed'), 0, $this->param('orderBy', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->admin($this->param('status', 'unclosed'), 0, $this->param('orderBy', 'id_desc'), 0, (int)$this->param('limit', 20), (int)$this->param('page', 1));
         $data = $this->getData();
 
         if(!$data or !isset($data->status)) return $this->sendError(400, 'error');

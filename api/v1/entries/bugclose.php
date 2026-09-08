@@ -25,7 +25,7 @@ class bugCloseEntry extends entry
         $fields = 'comment';
         $this->batchSetPost($fields);
 
-        $control->close($bugID);
+        $control->close((int)$bugID);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');

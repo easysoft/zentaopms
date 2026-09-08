@@ -95,4 +95,30 @@ class kanbanZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test assignCreateVars method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function assignCreateVarsTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('assignCreateVars', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
 }

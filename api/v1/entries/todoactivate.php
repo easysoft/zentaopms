@@ -21,7 +21,7 @@ class todoActivateEntry extends entry
     public function get($todoID)
     {
         $control = $this->loadController('todo', 'activate');
-        $control->activate($todoID);
+        $control->activate((int)$todoID);
 
         $data = $this->getData();
         if(!$data or !isset($data->status)) return $this->send400('error');

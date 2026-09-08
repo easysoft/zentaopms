@@ -862,6 +862,9 @@ class codescanModel extends model
      */
     public function getScanIssueList(int $taskID, array $params = array()): object|array
     {
+        $file = zget($params, 'file', '');
+        if($file != '') $params['path'] = $file;
+        unset($params['file']);
         if(isset($params['repoID']))   $params['repoID'] = (int)$params['repoID'];
         if(isset($params['ruleID']))   $params['ruleID'] = (int)$params['ruleID'];
         if(isset($params['planID']))   $params['planID'] = (int)$params['planID'];

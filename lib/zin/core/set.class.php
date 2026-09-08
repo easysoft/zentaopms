@@ -44,15 +44,7 @@ class set extends setting implements iDirective
         $set = new set();
         if(empty($args)) return $set->set($prop, true);
 
-        if($prop === 'class' || strtolower($prop) === 'classname')
-        {
-            global $config;
-            if($prop === 'class' && isset($config->debug) && $config->debug)
-            {
-                trigger_error("[ZIN] Use set::className() instead of set::class() to compatible with php 5.4.", E_USER_WARNING);
-            }
-            return $set->setClass('class', $args);
-        }
+        if($prop === 'class' || strtolower($prop) === 'classname') return $set->setClass('class', $args);
 
         /* Compatible with zui prop className. */
         if($prop === '_className')

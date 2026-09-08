@@ -645,7 +645,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testcase(int $executionID = 0, int $productID = 0, string $branchID = 'all', string $browseType = 'all', int $param = 0, int $moduleID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testcase(int $executionID = 0, int $productID = 0, string $branchID = 'all', string $browseType = 'all', int $param = 0, int $moduleID = 0, string $orderBy = 'sort_asc,id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->commonAction($executionID);
         $uri = $this->app->getURI(true);

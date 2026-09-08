@@ -25,7 +25,7 @@ class stakeholdersEntry extends entry
         if($programID)
         {
             $control = $this->loadController('program', 'stakeholder');
-            $control->stakeholder($programID, $this->param('order', 't1.id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+            $control->stakeholder((int)$programID, $this->param('order', 't1.id_desc'), 0, (int)$this->param('limit', 20), (int)$this->param('page', 1));
             $data = $this->getData();
         }
 
@@ -101,7 +101,7 @@ class stakeholdersEntry extends entry
     public function getDropMenu()
     {
         $control = $this->loadController('project', 'ajaxGetDropMenu');
-        $control->ajaxGetDropMenu($this->request('projectID', 0), $this->request('module', 'project'), $this->request('method', 'browse'));
+        $control->ajaxGetDropMenu((int)$this->request('projectID', 0), $this->request('module', 'project'), $this->request('method', 'browse'));
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);

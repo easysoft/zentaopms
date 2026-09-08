@@ -23,7 +23,7 @@ class taskEntry extends entry
         $this->resetOpenApp($this->param('tab', 'execution'));
 
         $control = $this->loadController('task', 'view');
-        $control->view($taskID);
+        $control->view((int)$taskID);
 
         $data = $this->getData();
 
@@ -116,7 +116,7 @@ class taskEntry extends entry
             if(!empty($oldTask->finishedDate)) $this->setPost('finishedDate', $oldTask->finishedDate);
         }
 
-        $control->edit($taskID);
+        $control->edit((int)$taskID);
 
         $data = $this->getData();
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
@@ -134,7 +134,7 @@ class taskEntry extends entry
     public function delete($taskID)
     {
         $control = $this->loadController('task', 'delete');
-        $control->delete(0, $taskID, 'true');
+        $control->delete((int)$taskID);
 
         $this->getData();
         return $this->sendSuccess(200, 'success');

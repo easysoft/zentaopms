@@ -26,7 +26,7 @@ class projectReleasesEntry extends entry
         $page    = intval($this->param('page', 1));
         $limit   = intval($this->param('limit', 20));
         $control = $this->loadController('projectrelease', 'browse');
-        $control->browse($projectID, $this->param('execution', 0), $this->param('status', 'all'), $this->param('order', 't1.date_desc'), 0, $limit, $page);
+        $control->browse((int)$projectID, (int)$this->param('execution', 0), $this->param('status', 'all'), $this->param('order', 't1.date_desc'), 0, (int)$limit, (int)$page);
 
         /* Response */
         $data = $this->getData();
@@ -65,7 +65,7 @@ class projectReleasesEntry extends entry
 
         $this->requireFields('name,date');
 
-        $control->create($projectID);
+        $control->create((int)$projectID);
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);

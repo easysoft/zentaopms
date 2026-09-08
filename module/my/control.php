@@ -263,6 +263,7 @@ class my extends control
                 $story->bugCount      = zget($storyBugs,  $story->id, 0);
                 $story->caseCount     = zget($storyCases, $story->id, 0);
                 $story->relatedObject = zget($relatedObjectList, $story->id, 0);
+                $story->productTitle  = htmlspecialchars_decode((string)$story->productTitle, ENT_QUOTES);
             }
         }
 
@@ -510,6 +511,12 @@ class my extends control
         $this->my->buildTaskSearchForm($queryID, $actionURL, $this->app->rawMethod . 'Task');
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
+        foreach($tasks as $task)
+        {
+            $task->projectName   = htmlspecialchars_decode((string)$task->projectName, ENT_QUOTES);
+            $task->executionName = htmlspecialchars_decode((string)$task->executionName, ENT_QUOTES);
+        }
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->task;

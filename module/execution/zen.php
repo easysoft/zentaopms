@@ -966,10 +966,21 @@ class executionZen extends execution
         if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
         $fields = $this->config->execution->form->create;
-        foreach(explode(',', trim($this->config->execution->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
+        $requiredFields = explode(',', trim($this->config->execution->create->requiredFields, ','));
+        foreach($requiredFields as $field)
+        {
+            /* Products and plans are validated below with their actual control names so ZIN can show inline errors. */
+            if(in_array($field, array('products', 'plans'))) continue;
+            $fields[$field]['required'] = true;
+        }
         if(!isset($_POST['code'])) $fields['code']['required'] = false;
         if(!isset($_POST['percent'])) $fields['percent']['required'] = false;
-        $this->config->execution->create->requiredFields = implode(',', array_keys(array_filter(array_map(function($config){return $config['required'] == true;}, $fields))));
+        $requiredFieldNames = array_keys(array_filter(array_map(function($config){return $config['required'] == true;}, $fields)));
+        foreach(array('products', 'plans') as $field)
+        {
+            if(in_array($field, $requiredFields) && !in_array($field, $requiredFieldNames)) $requiredFieldNames[] = $field;
+        }
+        $this->config->execution->create->requiredFields = implode(',', $requiredFieldNames);
 
         $this->correctErrorLang();
         $execution = form::data($fields)

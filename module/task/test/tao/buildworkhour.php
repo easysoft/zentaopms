@@ -2,7 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/tao.class.php';
-su('admin');
 
 /**
 
@@ -76,6 +75,8 @@ $user->gen(20);
 
 $action = zenData('action');
 $action->gen(0);
+
+su('admin');
 
 $finishRecord = array();
 $finishRecord[1] = new stdclass();

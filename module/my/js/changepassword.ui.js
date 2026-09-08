@@ -27,7 +27,17 @@ function clickSubmit()
     $('form input[name=passwordStrength]').val(passwordStrength);
 
     if(password  && !originalEncrypted)  $('#originalPassword').val(md5(md5(password) + rand));
-    if(password1 && !password1Encrypted) $('#password1').val(md5(password1) + rand);
+    if(password1 && !password1Encrypted)
+    {
+        let $plainField = $('form input[name="passwordPlain"]');
+        if($plainField.length == 0)
+        {
+            $plainField = $('<input type="hidden" name="passwordPlain" value="">');
+            $('#password1').closest('form').append($plainField);
+        }
+        $plainField.val(password1);
+        $('#password1').val(md5(password1) + rand);
+    }
     if(password2 && !password2Encrypted) $('#password2').val(md5(password2) + rand);
     originalEncrypted  = true;
     password1Encrypted = true;

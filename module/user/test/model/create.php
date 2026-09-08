@@ -116,6 +116,7 @@ $template->gender           = 'm';
 $template->verifyPassword   = $verify;
 $template->passwordLength   = 6;
 $template->passwordStrength = 0;
+$template->passwordPlain    = '123456';
 
 $userTest = new userModelTest();
 
@@ -137,6 +138,7 @@ r($result) && p('errors:password1') && e('『密码』不能为空。'); // 密�
 $user3 = clone $template;
 $user3->password1      = $password;
 $user3->passwordLength = 5;
+$user3->passwordPlain  = '12345';
 $result = $userTest->createTest($user3);
 r($result) && p('result')           && e(0);                   // 密码长度不够，返回 false。
 r($result) && p('errors:password1') && e('密码须6位及以上。'); // 密码长度不够，提示错误信息。

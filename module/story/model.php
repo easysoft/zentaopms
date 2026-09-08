@@ -337,7 +337,9 @@ class storyModel extends model
         }
 
         $stories = $this->storyTao->fixBranchStoryStage($stories);
-        return $this->storyTao->mergePlanTitleAndChildren($productID, $stories, $storyType);
+        $stories = $this->storyTao->mergePlanTitleAndChildren($productID, $stories, $storyType);
+        foreach($stories as $story) $story->title = htmlspecialchars_decode((string)$story->title, ENT_QUOTES);
+        return $stories;
     }
 
     /**

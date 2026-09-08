@@ -1807,6 +1807,6 @@ class kanban extends control
     public function ajaxGetSpaceTeam(int $spaceID)
     {
         $space = $this->loadModel('kanban')->getSpaceById($spaceID);
-        return print(json_encode($space->team));
+        return print(json_encode($space->team ?? ''));
     }
 }

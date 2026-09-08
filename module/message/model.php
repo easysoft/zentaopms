@@ -203,6 +203,7 @@ class messageModel extends model
 
         $this->loadModel('action');
         $user   = $this->loadModel('user')->getById($actor);
+        if(!$user && $actor != 'guest') return false;
         $table  = $this->config->objectTables[$objectType];
         $field  = $this->config->action->objectNameFields[$objectType];
         $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
@@ -298,7 +299,7 @@ class messageModel extends model
         if(empty($toList) && $objectType == 'meeting')     $toList = $object->host . $object->participant;
         if(empty($toList) && $objectType == 'ppm')         $toList = $object->createdBy . ',' . $object->assignee;
         if(empty($toList) and $objectType == 'demandpool') $toList = trim($object->owner, ',') . ',' . trim($object->reviewer, ',');
-        if(empty($toList) && in_array($objectType, array('release', 'doc', 'execution')))
+        if(empty($toList) && in_array($objectType, array('release', 'doc', 'execution', 'build')))
         {
             list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object);
             $toList = $toList . ',' . $ccList;

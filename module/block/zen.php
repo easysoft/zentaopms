@@ -26,7 +26,7 @@ class blockZen extends block
 
             /* 根据module和code生成区块的宽度和高度。 */
             $sizeConfig = !empty($this->config->block->size[$block['module']][$block['code']]) ? $this->config->block->size[$block['module']][$block['code']] : $this->config->block->defaultSize;
-            if(empty($block['width'])) $block['width'] = reset(array_keys($sizeConfig));
+            if(empty($block['width'])) $block['width'] = array_key_first($sizeConfig);
             $block['height'] = zget($sizeConfig, $block['width'], reset($sizeConfig));
 
             $block['account']   = $account;   // 所属用户。
@@ -239,7 +239,7 @@ class blockZen extends block
             $sizeConfig = !empty($this->config->block->size[$block->module][$block->code]) ? $this->config->block->size[$block->module][$block->code] : $this->config->block->defaultSize;
 
             /* 设置区块的默认宽度和高度。 */
-            if(empty($block->width))  $block->width  = reset(array_keys($sizeConfig));
+            if(empty($block->width))  $block->width  = array_key_first($sizeConfig);
             if(empty($block->height)) $block->height = zget($sizeConfig, $block->width, reset($sizeConfig));
 
             /* 设置区块距离左侧的宽度和距离顶部的高度。 */

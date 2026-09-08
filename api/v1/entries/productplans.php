@@ -24,7 +24,7 @@ class productplansEntry extends entry
         if(!$productID) return $this->sendError(400, 'No product id.');
 
         $control = $this->loadController('productplan', 'browse');
-        $control->browse($productID, $this->param('branch', 0), $this->param('status', 'all'), $this->param('query', 0), $this->param('order', 'begin_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->browse((int)$productID, $this->param('branch', 0), $this->param('status', 'all'), (int)$this->param('query', 0), $this->param('order', 'begin_desc'), 0, (int)$this->param('limit', 20), (int)$this->param('page', 1));
 
         /* Response */
         $data = $this->getData();
@@ -78,7 +78,7 @@ class productplansEntry extends entry
         $this->setPost('parent', $this->request('parent', 0));
         $this->setPost('branch', $this->request('branch', 0));
 
-        $control->create($productID, $this->param('branch', 0), $this->param('parent', 0));
+        $control->create((int)$productID, (int)$this->param('branch', 0), (int)$this->param('parent', 0));
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'success')

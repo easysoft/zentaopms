@@ -39,7 +39,7 @@ class testcasesEntry extends entry
         $this->app->cookie->onlyAutoCase = 0;
 
         $control = $this->loadController('testcase', 'browse');
-        $control->browse($productID, $this->param('branch', ''), $type, $param, $this->param('caseType', ''), $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->browse((int)$productID, $this->param('branch', ''), $type, (int)$param, $this->param('caseType', ''), $this->param('order', 'id_desc'), 0, (int)$this->param('limit', 20), (int)$this->param('page', 1));
 
         $data = $this->getData();
 

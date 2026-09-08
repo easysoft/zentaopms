@@ -162,6 +162,7 @@ $template->gender           = 'm';
 $template->verifyPassword   = $verify;
 $template->passwordLength   = 6;
 $template->passwordStrength = 0;
+$template->passwordPlain    = '123456';
 
 $userTest = new userModelTest();
 
@@ -180,6 +181,7 @@ r($result) && p('errors:account') && e('用户名已被系统预留'); // 使用
 $user2 = clone $template;
 $user2->password1      = $password;
 $user2->passwordLength = 5;
+$user2->passwordPlain  = '12345';
 $result = $userTest->updateTest($user2);
 r($result) && p('result')           && e(0);                   // 密码长度不够，返回 false。
 r($result) && p('errors:password1') && e('密码须6位及以上。'); // 密码长度不够，提示错误信息。

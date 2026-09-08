@@ -14,6 +14,11 @@ class xuanxuanMessage extends messageModel
             if(isset($messageActions[$objectType]) and in_array($actionType, $messageActions[$objectType]))
             {
                 $this->loadModel('action');
+                $actorAccount = $actor ?: zget($this->app->user, 'account', '');
+                $actorUser    = $this->loadModel('user')->getById($actorAccount);
+                if(!$actorUser && $actorAccount != 'guest') return;
+                $actorID   = $actorUser ? $actorUser->id : 0;
+                $actorName = $actorUser ? $actorUser->realname : 'guest';
 
                 $field = 'obj.*';
                 if($objectType == 'task')     $field = 'obj.*,project.name as projectName,execu.name as execuName';
@@ -43,24 +48,25 @@ class xuanxuanMessage extends messageModel
                     ->fi()
                     ->where('obj.id')->eq($objectID)
                     ->fetch();
+                if(!$object) return;
                 $field = $this->config->action->objectNameFields[$objectType];
-                $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyTitle, $this->app->user->realname, $this->lang->action->label->$actionType, 1, $this->lang->action->objectTypes[$objectType]);
+                $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyTitle, $actorName, $this->lang->action->label->$actionType, 1, $this->lang->action->objectTypes[$objectType]);
                 if($objectType == 'story' && $actionType == 'reviewed' && !empty($extra))
                 {
                     $notifyExtra = explode(',', $extra);
                     $notifyType  = strtolower($notifyExtra[0]);
 
-                    if($notifyType == 'pass')    $title = sprintf($this->lang->message->notifyPassTitle,    $this->app->user->realname, 1);
-                    if($notifyType == 'clarify') $title = sprintf($this->lang->message->notifyClarifyTitle, $this->app->user->realname, 1);
-                    if($notifyType == 'reject')  $title = sprintf($this->lang->message->notifyRejectTitle,  $this->app->user->realname, 1);
+                    if($notifyType == 'pass')    $title = sprintf($this->lang->message->notifyPassTitle,    $actorName, 1);
+                    if($notifyType == 'clarify') $title = sprintf($this->lang->message->notifyClarifyTitle, $actorName, 1);
+                    if($notifyType == 'reject')  $title = sprintf($this->lang->message->notifyRejectTitle,  $actorName, 1);
                 }
 
                 if($objectType == 'feedback' && ($actionType == 'tobug' || $actionType == 'tostory' || $actionType == 'totask' || $actionType == 'todo'))
                 {
-                    if($actionType == 'tobug')   $title = sprintf($this->lang->message->feedbackToBugTitle,   $this->app->user->realname, 1);
-                    if($actionType == 'tostory') $title = sprintf($this->lang->message->feedbackToStoryTitle, $this->app->user->realname, 1);
-                    if($actionType == 'totask')  $title = sprintf($this->lang->message->feedbackToTaskTitle,  $this->app->user->realname, 1);
-                    if($actionType == 'todo')    $title = sprintf($this->lang->message->feedbackToDoTitle,    $this->app->user->realname, 1);
+                    if($actionType == 'tobug')   $title = sprintf($this->lang->message->feedbackToBugTitle,   $actorName, 1);
+                    if($actionType == 'tostory') $title = sprintf($this->lang->message->feedbackToStoryTitle, $actorName, 1);
+                    if($actionType == 'totask')  $title = sprintf($this->lang->message->feedbackToTaskTitle,  $actorName, 1);
+                    if($actionType == 'todo')    $title = sprintf($this->lang->message->feedbackToDoTitle,    $actorName, 1);
                 }
 
                 $server = $this->loadModel('im')->getServer('zentao');
@@ -114,7 +120,7 @@ class xuanxuanMessage extends messageModel
                     ->fetchAll('id');
                 $target = array_keys($target);
 
-                $subContent = (object)array('action' => $actionType, 'object' => $objectID, 'objectName' => $object->$field, 'objectType' => $objectType, 'actor' => $this->app->user->id, 'actorName' => $this->app->user->realname);
+                $subContent = (object)array('action' => $actionType, 'object' => $objectID, 'objectName' => $object->$field, 'objectType' => $objectType, 'actor' => $actorID, 'actorName' => $actorName);
                 $subContent->name = $object->$field;
                 $subContent->id = sprintf('%03d', $object->id);
                 $subContent->count = 1;

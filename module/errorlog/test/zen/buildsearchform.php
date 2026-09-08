@@ -10,7 +10,8 @@ cid=0
 - 构建搜索表单后session中的module为errorlog @errorlog
 - session中的queryID为1 @1
 - session中的actionURL正确 @http://example.com/errorlog
-- module参数值被替换为错误日志模块列表 @bug,task
+- module参数值被替换为错误日志模块列表的第一个模块 @bug
+- module参数值被替换为错误日志模块列表的第二个模块 @task
 - 再次构建后session参数被更新 @http://example.com/errorlog/2
 
 */
@@ -18,16 +19,22 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-$errorlog = zenData('errorlog');
-$errorlog->requestID->range('req-001{2},req-002{3}');
-$errorlog->module->range('bug{3},task{2}');
-$errorlog->gen(5);
+$errorlogreq = zenData('errorlogreq');
+$errorlogreq->id->range('1-5');
+$errorlogreq->requestID->range('req-001{2},req-002{3}');
+$errorlogreq->md5->prefix('md5')->range('1-5');
+$errorlogreq->module->range('bug{3},task{2}');
+$errorlogreq->method->range('browse{5}');
+$errorlogreq->account->range('admin{5}');
+$errorlogreq->url->range('http://example.com{5}');
+$errorlogreq->gen(5);
 
 su('admin');
 
 helper::import($tester->app->getModulePath('', 'errorlog') . 'control.php');
 
 $errorlogZen = new errorlogZenTest();
+unset($_SESSION['errorlogsearchParams']);
 $searchConfig = array(
     'module'    => 'errorlog',
     'fields'    => array('requestID' => '请求ID', 'module' => '模块'),

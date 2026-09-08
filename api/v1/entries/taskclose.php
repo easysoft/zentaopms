@@ -26,7 +26,7 @@ class taskCloseEntry extends entry
         $fields = 'comment';
         $this->batchSetPost($fields);
 
-        $control->close($taskID);
+        $control->close((int)$taskID);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');

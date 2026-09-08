@@ -2369,4 +2369,56 @@ class taskZenTest
         // 返回view对象以便测试
         return $taskZen->view;
     }
+
+    /**
+     * Test processExportData method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function processExportDataTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('processExportData', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test responseAfterRecord method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterRecordTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('responseAfterRecord', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
 }

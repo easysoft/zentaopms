@@ -1534,4 +1534,56 @@ class spaceModelTest extends baseTest
 
         return (int)$this->instance->dao->select('COUNT(*) AS count')->from(TABLE_DEVOPSSPACEUSER)->where('space')->eq($space->id)->andWhere('role')->eq('manager')->fetch('count');
     }
+
+    /**
+     * Test buildSearchForm method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function buildSearchFormTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('buildSearchForm', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+
+    /**
+     * Test processMemberSearchQuery method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function processMemberSearchQueryTest(...$args)
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('processMemberSearchQuery', $args);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            if(dao::isError()) return 'daoError:' . json_encode(dao::getError(), JSON_UNESCAPED_UNICODE);
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
 }

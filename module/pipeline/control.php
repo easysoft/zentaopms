@@ -746,6 +746,17 @@ class pipeline extends control
             $stepSchema = str_replace('%%' . $key . '%%', $link, $stepSchema);
         }
 
+
+        $schemaArtifactTypes = array('dockerArtifactLibTree' => 'container', 'fileArtifactLibTree' => 'file');
+        foreach($schemaArtifactTypes as $mark => $type)
+        {
+            $token = '%%' . $mark . '%%';
+            if(strpos($stepSchema, $token) === false) continue;
+
+            $artifactLibItems = $this->pipelineZen->buildArtifactLibSchemaItems('space,repo', $type);
+            $stepSchema       = str_replace('"' . $token . '"', json_encode($artifactLibItems), $stepSchema);
+        }
+
         $this->send(array('result' => 'success', 'data' => $stepSchema));
     }
 
@@ -1266,5 +1277,23 @@ class pipeline extends control
         }
 
         echo json_encode($repoList);
+    }
+
+    /**
+     * 获取当前用户可访问的制品库树。
+     * Get artifact lib picker tree items for step schema.
+     *
+     * 下拉数据源：以 空间/仓库 两级容器分组展示制品库，不含全局级(global)库。
+     * The picker tree groups artifact libs by space/repo, excludes global libs.
+     *
+     * @param  string $scope 制品库作用域，逗号分隔，取值 space/repo，空为不限
+     * @param  string $type  制品类型过滤，如 container(docker)/file，空为不限
+     * @access public
+     * @return void
+     */
+    public function ajaxGetArtifactLibs(string $scope = 'space,repo', string $type = 'container')
+    {
+        $items = $this->pipelineZen->buildArtifactLibSchemaItems($scope, $type);
+        echo json_encode($items);
     }
 }

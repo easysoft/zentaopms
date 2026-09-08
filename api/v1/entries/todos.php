@@ -20,7 +20,7 @@ class todosEntry extends entry
     public function get()
     {
         $control = $this->loadController('my', 'todo');
-        $control->todo($this->param('type', 'all'), $this->param('userID', ''), $this->param('status', 'all'), $this->param('order', 'date_desc,status,begin'), $this->param('total', 0), $this->param('limit', 100), $this->param('page', 1));
+        $control->todo($this->param('type', 'all'), $this->param('userID', ''), $this->param('status', 'all'), $this->param('order', 'date_desc,status,begin'), (int)$this->param('total', 0), (int)$this->param('limit', 100), (int)$this->param('page', 1));
         $data = $this->getData();
 
         if(!isset($data->status)) return $this->sendError(400, 'error');

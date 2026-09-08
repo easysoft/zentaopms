@@ -206,13 +206,13 @@ $batchItems = array
 $branchItems = array();
 foreach($branchTagOption as $branchID => $branchName)
 {
-    $branchItems[] = array('text' => $branchName, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('bug', 'batchChangeBranch', "branchID=$branchID"));
+    $branchItems[] = array('text' => $branchName, 'hint' => $branchName, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('bug', 'batchChangeBranch', "branchID=$branchID"));
 }
 
 $moduleItems = array();
 foreach($modules as $moduleID => $module)
 {
-    $moduleItems[] = array('text' => $module, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('bug', 'batchChangeModule', "moduleID=$moduleID"));
+    $moduleItems[] = array('text' => $module, 'hint' => $module, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('bug', 'batchChangeModule', "moduleID=$moduleID"));
 }
 
 $footToolbar = array();

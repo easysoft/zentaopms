@@ -97,7 +97,7 @@ class aiAgentEntry extends wg
     {
         $children         = array();
         $objectID         = $this->getObjectID();
-        $availablePrompts = array_values(array_filter($prompts, static fn($prompt) => empty($prompt->unauthorized)));
+        $availablePrompts = array_values(array_filter($prompts, static fn($prompt) => empty($prompt->unauthorized) && !($app->tab !== 'execution' && $prompt->actionPurpose === 'story.totask')));
 
         $objectVarName = $this->getObjectVarName($module, $method, $config);
         if($this->prop('showAgent') && !empty($availablePrompts))
@@ -138,7 +138,7 @@ class aiAgentEntry extends wg
             {
                 $children[] = aiAgentMenu
                 (
-                    set::items($prompts),
+                    set::items($availablePrompts),
                     set::isFormPage($type === 'form'),
                     set::objectID($objectID),
                     set::module($module),

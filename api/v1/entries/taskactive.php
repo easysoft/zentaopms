@@ -25,7 +25,7 @@ class taskActiveEntry extends entry
         $fields = 'assignedTo,team,teamSource,teamEstimate,teamConsumed,teamLeft,left,mode,multiple,comment';
         $this->batchSetPost($fields);
 
-        $control->activate($taskID);
+        $control->activate((int)$taskID);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');

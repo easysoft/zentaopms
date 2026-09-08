@@ -21,6 +21,12 @@ $config->testtask->dtable->fieldList['pri']['title'] = $lang->priAB;
 $config->testtask->dtable->fieldList['pri']['type']  = 'pri';
 $config->testtask->dtable->fieldList['pri']['show']  = true;
 
+$config->testtask->dtable->fieldList['type']['name']  = 'type';
+$config->testtask->dtable->fieldList['type']['title'] = $lang->testtask->type;
+$config->testtask->dtable->fieldList['type']['type']  = 'category';
+$config->testtask->dtable->fieldList['type']['map']   = $lang->testtask->typeList;
+$config->testtask->dtable->fieldList['type']['show']  = true;
+
 $config->testtask->dtable->fieldList['productName']['name']  = 'productName';
 $config->testtask->dtable->fieldList['productName']['title'] = $lang->testtask->product;
 $config->testtask->dtable->fieldList['productName']['type']  = 'text';
@@ -64,6 +70,18 @@ $config->testtask->dtable->fieldList['end']['title'] = $lang->testtask->end;
 $config->testtask->dtable->fieldList['end']['type']  = 'date';
 $config->testtask->dtable->fieldList['end']['group'] = 'user';
 $config->testtask->dtable->fieldList['end']['show']  = true;
+
+$config->testtask->dtable->fieldList['realBegan']['name']  = 'realBegan';
+$config->testtask->dtable->fieldList['realBegan']['title'] = $lang->testtask->realBegan;
+$config->testtask->dtable->fieldList['realBegan']['type']  = 'date';
+$config->testtask->dtable->fieldList['realBegan']['group'] = 'user';
+$config->testtask->dtable->fieldList['realBegan']['show']  = true;
+
+$config->testtask->dtable->fieldList['realFinishedDate']['name']  = 'realFinishedDate';
+$config->testtask->dtable->fieldList['realFinishedDate']['title'] = $lang->testtask->realFinishedDate;
+$config->testtask->dtable->fieldList['realFinishedDate']['type']  = 'date';
+$config->testtask->dtable->fieldList['realFinishedDate']['group'] = 'user';
+$config->testtask->dtable->fieldList['realFinishedDate']['show']  = true;
 
 $config->testtask->dtable->fieldList['status']['name']      = 'status';
 $config->testtask->dtable->fieldList['status']['title']     = $lang->testtask->status;
