@@ -11,6 +11,8 @@ $lang->product->noProduct       = '暂无应用';
 $lang->product->searchByAppName = '根据应用名称搜索';
 $lang->product->repo            = '代码库';
 $lang->product->confirmDelete   = '您确定删除该应用吗？';
+$lang->product->closeAction     = '关闭应用';
+$lang->product->activateAction  = '激活应用';
 
 $lang->product->statusList['closed'] = '已关闭';
 
