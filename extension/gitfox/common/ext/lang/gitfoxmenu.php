@@ -88,7 +88,12 @@ $lang->space->menu->repos    = array('link' => "{$lang->devops->repo}|repo|maint
 $lang->space->menu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=%s&repoID=0&type=space", 'subModule' => 'pipeline');
 $lang->space->menu->artifact = array('link' => "{$lang->artifact->common}|artifact|browse|spaceID=%s&repoID=0&type=space", 'subModule' => 'artifact');
 $lang->space->menu->apps     = array('link' => "{$lang->devops->system}|repo|browsesystem|space=%s", 'subModule' => 'system');
-$lang->space->menu->settings = array('link' => "{$lang->devops->spaceSetting}|space|view|spaceID=%s", 'exclude' => 'repo-maintain,repo-browsesystem');
+$lang->space->menu->settings = array('link' => "{$lang->devops->spaceSetting}|space|view|spaceID=%s", 'subModule' =>'space', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
+
+$lang->space->menu->settings['subMenu'] = new stdclass();
+$lang->space->menu->settings['subMenu']->overview = array('link' => "{$lang->devops->overview}|space|view|spaceID=%s");
+$lang->space->menu->settings['subMenu']->member   = array('link' => "{$lang->devops->member}|space|members|spaceID=%s", 'alias' => 'managemembers');
+$lang->space->menu->settings['subMenu']->group    = array('link' => "{$lang->devops->group}|space|group|spaceID=%s", 'alias' => 'managepriv');
 
 /* 进入空间后的菜单顺序。 */
 $lang->space->menuOrder     = array();
@@ -212,6 +217,8 @@ if($config->vision == 'gitfox')
     $lang->navGroup->artifact       = 'artifact';
     $lang->navGroup->company        = 'my';
     $lang->navGroup->admin          = 'admin';
+    $lang->navGroup->provider       = 'admin';
+    $lang->navGroup->runner         = 'admin';
     $lang->navGroup->reporeviewflow = 'repo';
     $lang->navGroup->repobranchtype = 'repo';
     $lang->navGroup->repobranchrule = 'repo';
