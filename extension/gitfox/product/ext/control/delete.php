@@ -24,8 +24,6 @@ class myProduct extends product
     {
         if($this->config->vision != 'gitfox') return parent::delete($productID, $confirm);
 
-        if($confirm == 'no') return parent::delete($productID, $confirm);
-
         // 删除 product 和对应 systems
         if(!$this->product->deleteProductWithSystems($productID))
         {

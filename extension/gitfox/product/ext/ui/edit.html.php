@@ -26,7 +26,7 @@ $fields->field('desc')
 
 formGridPanel
 (
-    set::title($lang->product->create),
+    set::title($lang->product->edit),
     set::fields($fields),
     set::modeSwitcher(false)
 );
