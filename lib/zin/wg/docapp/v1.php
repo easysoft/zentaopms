@@ -235,6 +235,8 @@ class docApp extends wg
         $langData->createRelease     = $lang->api->createRelease;
         $langData->libTypeList       = $lang->api->libTypeList;
         $langData->latestVersion     = $lang->api->latestVersion;
+        $langData->deliverableLabel  = $lang->project->deliverableAbbr;
+        $langData->baselineLabel     = $lang->project->baseline;
         $langData->template          = $lang->doc->template;
         $langData->labelAllVersions  = $lang->doc->allVersion;
         $langData->labelDiff         = $lang->doc->diff;
