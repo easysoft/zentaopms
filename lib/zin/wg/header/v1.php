@@ -340,7 +340,7 @@ class header extends wg
     {
         global $app, $config, $lang;
 
-        /* GitFox 环境隐藏头部快速创建入口。 */
+        // GitFox 独立版本隐藏快速创建入口。
         if($config->vision == 'gitfox') return null;
 
         /* Initialize the default values. */
