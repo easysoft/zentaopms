@@ -28,5 +28,6 @@ $lang->devops->issueList    = 'Issue List';
 $lang->devops->pipeline     = 'Pipelines';
 $lang->devops->artifact     = 'Artifacts';
 $lang->devops->welcome      = "%s R&D Platform";
+$lang->devops->website      = "https://www.gitfox.net";
 
 include dirname(dirname(__FILE__)) . DS . 'gitfoxmenu.php';

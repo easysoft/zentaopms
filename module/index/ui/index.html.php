@@ -190,6 +190,15 @@ div
 div(setID('apps'));
 
 /* The toolbar docked on the bottom. */
+$versionIcon    = 'zentao text-2xl';
+$versionWebsite = $lang->website;
+if($config->vision == 'gitfox')
+{
+    $gitfoxLogo     = empty($config->gitfox->logoImg) ? 'gf-logo.svg' : $config->gitfox->logoImg;
+    $versionIcon    = img(setClass('h-6 w-6'), set('src', $config->webRoot . 'theme/default/images/main/' . $gitfoxLogo));
+    $versionWebsite = $lang->devops->website;
+}
+
 div
 (
     setID('appsBar'),
@@ -205,8 +214,8 @@ div
         (
             setID('version'),
             setClass('ghost btn-zentao px-1'),
-            set::icon('zentao text-2xl'),
-            set::url($lang->website),
+            set::icon($versionIcon),
+            set::url($versionWebsite),
             set::target('_blank'),
             set::hint($version),
             set::text($versionName)

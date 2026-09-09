@@ -24,6 +24,12 @@ class myProduct extends product
     {
         if($this->config->vision != 'gitfox') return parent::delete($productID, $confirm);
 
+        if($confirm == 'no')
+        {
+            $confirmURL = $this->createLink('product', 'delete', "productID={$productID}&confirm=yes");
+            return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->product->confirmDelete, 'confirmed' => $confirmURL)));
+        }
+
         // 删除 product 和对应 systems
         if(!$this->product->deleteProductWithSystems($productID))
         {

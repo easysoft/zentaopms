@@ -340,6 +340,9 @@ class header extends wg
     {
         global $app, $config, $lang;
 
+        // GitFox 独立版本隐藏快速创建入口。
+        if($config->vision == 'gitfox') return null;
+
         /* Initialize the default values. */
         $showCreateList = $needPrintDivider = false;
         $isCompatible   = isset($config->zin->mode) && $config->zin->mode == 'compatible';
