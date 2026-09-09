@@ -2021,7 +2021,7 @@ class docModel extends model
             foreach($doc->renameFiles as $fileID => $fileName)
             {
                 if(!isset($oldDoc->files[$fileID])) continue;
-                if(validater::checkLength($fileName, 80, 1) == false) continue;
+                if(!validater::checkLength($fileName, 80, 1)) continue;
                 $this->dao->update(TABLE_FILE)->set('title')->eq($fileName)
                     ->where('id')->eq((int)$fileID)
                     ->andWhere('objectType')->eq('doc')
@@ -4213,7 +4213,7 @@ class docModel extends model
             ->andWhere('objectID')->eq($docID)
             ->fetch();
         if(!$file) return array('result' => 'fail', 'message' => $this->lang->file->fileNotFound);
-        if(validater::checkLength($fileName, 80, 1) == false) return array('result' => 'fail', 'message' => sprintf($this->lang->error->length[1], $this->lang->file->title, 80, 1));
+        if(!validater::checkLength($fileName, 80, 1)) return array('result' => 'fail', 'message' => sprintf($this->lang->error->length[1], $this->lang->file->title, 80, 1));
 
         $this->dao->update(TABLE_FILE)
             ->set('title')->eq($fileName)
