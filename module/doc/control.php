@@ -1025,6 +1025,13 @@ class doc extends control
 
             if(!$isOpen && !$isAuthorOrAdmin && !$isInEditUsers && !$isInEditGroups) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
 
+            if(isset($_POST['renameFileID']))
+            {
+                $this->loadModel('file');
+                $result = $this->doc->renameFile($docID, (int)$this->post->renameFileID, (string)$this->post->fileName, (string)$this->post->extension);
+                return $this->send($result);
+            }
+
             if($doc->type == 'chapter') $this->lang->doc->title = $this->lang->doc->chapterName;
 
             $changes = $files = array();

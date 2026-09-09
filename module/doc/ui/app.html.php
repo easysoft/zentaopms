@@ -44,7 +44,6 @@ $privs['moveLib']      = hasPriv('doc', 'moveLib') && !$projectTemplate;
 $privs['deleteLib']    = hasPriv('doc', 'deleteLib');
 $privs['sortDocLib']   = hasPriv('doc', 'sortDocLib');
 $privs['uploadFile']   = hasPriv('doc', 'create') && !$projectTemplate;
-$privs['editFile']     = hasPriv('file', 'edit');
 $privs['deleteFile']   = hasPriv('doc', 'deleteFile');
 $privs['exportFiles']  = hasPriv('doc', 'exportFiles') && !$projectTemplate;
 $privs['createSpace']  = $hasCustomSpace && hasPriv('doc', 'createSpace');

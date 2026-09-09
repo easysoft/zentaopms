@@ -4152,6 +4152,40 @@ class docModel extends model
     }
 
     /**
+     * 重命名文档附件。
+     * Rename doc file.
+     *
+     * @param  int    $docID
+     * @param  int    $fileID
+     * @param  string $fileName
+     * @param  string $extension
+     * @access public
+     * @return array
+     */
+    public function renameFile(int $docID, int $fileID, string $fileName, string $extension = ''): array
+    {
+        $file = $this->dao->select('*')->from(TABLE_FILE)
+            ->where('id')->eq($fileID)
+            ->andWhere('objectType')->eq('doc')
+            ->andWhere('objectID')->eq($docID)
+            ->fetch();
+        if(!$file) return array('result' => 'fail', 'message' => $this->lang->file->fileNotFound);
+        if(validater::checkLength($fileName, 80, 1) == false) return array('result' => 'fail', 'message' => sprintf($this->lang->error->length[1], $this->lang->file->title, 80, 1));
+
+        $this->dao->update(TABLE_FILE)
+            ->set('title')->eq($fileName)
+            ->beginIF($extension)->set('extension')->eq($extension)->fi()
+            ->where('id')->eq($fileID)
+            ->exec();
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+        $actionID = $this->loadModel('action')->create('doc', $docID, 'editfile', '', $fileName);
+        $changes  = array(array('field' => 'fileName', 'old' => $file->title, 'new' => $fileName, 'diff' => ''));
+        $this->action->logHistory($actionID, $changes);
+        return array('result' => 'success');
+    }
+
+    /**
      * 移动文档库。
      * Move library.
      *
