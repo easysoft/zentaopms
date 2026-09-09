@@ -1987,6 +1987,20 @@ class docModel extends model
         unset($doc->deleteFiles);
 
         $oldDoc           = $this->getByID($docID);
+        if(!empty($doc->renameFiles))
+        {
+            foreach($doc->renameFiles as $fileID => $fileName)
+            {
+                if(!isset($oldDoc->files[$fileID])) continue;
+                if(validater::checkLength($fileName, 80, 1) == false) continue;
+                $this->dao->update(TABLE_FILE)->set('title')->eq($fileName)
+                    ->where('id')->eq((int)$fileID)
+                    ->andWhere('objectType')->eq('doc')
+                    ->andWhere('objectID')->eq($docID)
+                    ->exec();
+            }
+        }
+        unset($doc->renameFiles);
         $changes          = common::createChanges($oldDoc, $doc);
         $oldRawContent    = isset($oldDoc->rawContent) ? $oldDoc->rawContent : '';
         $newRawContent    = isset($doc->rawContent) ? $doc->rawContent : '';
