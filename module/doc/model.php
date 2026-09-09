@@ -1987,6 +1987,20 @@ class docModel extends model
         unset($doc->deleteFiles);
 
         $oldDoc           = $this->getByID($docID);
+        if(!empty($doc->renameFiles))
+        {
+            foreach($doc->renameFiles as $fileID => $fileName)
+            {
+                if(!isset($oldDoc->files[$fileID])) continue;
+                if(validater::checkLength($fileName, 80, 1) == false) continue;
+                $this->dao->update(TABLE_FILE)->set('title')->eq($fileName)
+                    ->where('id')->eq((int)$fileID)
+                    ->andWhere('objectType')->eq('doc')
+                    ->andWhere('objectID')->eq($docID)
+                    ->exec();
+            }
+        }
+        unset($doc->renameFiles);
         $changes          = common::createChanges($oldDoc, $doc);
         $oldRawContent    = isset($oldDoc->rawContent) ? $oldDoc->rawContent : '';
         $newRawContent    = isset($doc->rawContent) ? $doc->rawContent : '';
@@ -4149,6 +4163,40 @@ class docModel extends model
 
         $this->dao->update(TABLE_DOC)->set('version')->eq($docContent->version)->where('id')->eq($docID)->exec();
         return !dao::isError();
+    }
+
+    /**
+     * 重命名文档附件。
+     * Rename doc file.
+     *
+     * @param  int    $docID
+     * @param  int    $fileID
+     * @param  string $fileName
+     * @param  string $extension
+     * @access public
+     * @return array
+     */
+    public function renameFile(int $docID, int $fileID, string $fileName, string $extension = ''): array
+    {
+        $file = $this->dao->select('*')->from(TABLE_FILE)
+            ->where('id')->eq($fileID)
+            ->andWhere('objectType')->eq('doc')
+            ->andWhere('objectID')->eq($docID)
+            ->fetch();
+        if(!$file) return array('result' => 'fail', 'message' => $this->lang->file->fileNotFound);
+        if(validater::checkLength($fileName, 80, 1) == false) return array('result' => 'fail', 'message' => sprintf($this->lang->error->length[1], $this->lang->file->title, 80, 1));
+
+        $this->dao->update(TABLE_FILE)
+            ->set('title')->eq($fileName)
+            ->beginIF($extension)->set('extension')->eq($extension)->fi()
+            ->where('id')->eq($fileID)
+            ->exec();
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+        $actionID = $this->loadModel('action')->create('doc', $docID, 'editfile', '', $fileName);
+        $changes  = array(array('field' => 'fileName', 'old' => $file->title, 'new' => $fileName, 'diff' => ''));
+        $this->action->logHistory($actionID, $changes);
+        return array('result' => 'success');
     }
 
     /**

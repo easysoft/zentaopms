@@ -54,7 +54,7 @@ window.downloadFile = function(fileID, extension, imageWidth)
     if(!fileID) return;
     var windowWidth = $(window).width();
 
-    var url = $.createLink('file', 'download', 'fileID=' + fileID + '&mouse=left');
+    var url = $.createLink('doc', 'downloadFile', 'fileID=' + fileID + '&mouse=left');
     url    += url.includes('?') ? '&' : '?';
     url    += `'${sessionString}'`;
 

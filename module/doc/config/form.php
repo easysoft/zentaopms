@@ -90,6 +90,7 @@ $config->doc->form->edit['editedBy']      = array('type' => 'string',   'require
 $config->doc->form->edit['editedDate']    = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->doc->form->edit['fromVersion']   = array('type' => 'string',  'required' => false, 'default' => '');
 $config->doc->form->edit['files']         = array('type' => 'string',  'required' => false, 'default' => '');
+$config->doc->form->edit['renameFiles']   = array('type' => 'array',   'required' => false, 'default' => array());
 $config->doc->form->edit['isDeliverable'] = array('type' => 'string',   'required' => false, 'default' => '0');
 $config->doc->form->edit['deleteFiles']   = array('type' => 'array',    'required' => false, 'default' => array(), 'filter' => 'join');
 

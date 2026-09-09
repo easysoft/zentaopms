@@ -205,7 +205,7 @@ class docApp extends wg
         $fileUrl    = $this->prop('fileUrl');
         if(empty($fileUrl))
         {
-            $fileUrl    = createLink('file', 'download', 'fileID={id}');
+            $fileUrl    = createLink('doc', 'downloadFile', 'fileID={id}');
             $fileUrl   .= strpos($fileUrl, '?') === false ? '?' : '&';
             $fileUrl   .= $sessionStr;
         }
@@ -323,8 +323,9 @@ class docApp extends wg
         $app->control->loadModel('file');
 
         $fileListProps   = array();
-        $canPreviewFile  = common::hasPriv('file', 'preview');
-        $canDownloadFile = common::hasPriv('file', 'download');
+        $privs           = $this->prop('privs', array());
+        $canPreviewFile  = isset($privs['previewFile']) ? $privs['previewFile'] : common::hasPriv('file', 'preview');
+        $canDownloadFile = isset($privs['downloadFile']) ? $privs['downloadFile'] : common::hasPriv('file', 'download');
         if(!$canDownloadFile) $fileUrl = '';
 
         jsVar('libreOfficeTurnon', !empty($config->file->libreOfficeTurnon));
@@ -340,7 +341,7 @@ class docApp extends wg
         $fileListProps['itemProps']        = array('target' => '_blank');
         $fileListProps['fileActions']      = jsCallback('file')->do('return getFileActions(file)');
 
-        $canPreviewOffice  = common::hasPriv('file', 'preview') && !empty($config->file->libreOfficeTurnon);
+        $canPreviewOffice  = $canPreviewFile && !empty($config->file->libreOfficeTurnon);
         $historyPanelProps = $this->prop('historyPanel');
         if(empty($historyPanelProps)) $historyPanelProps = array();
         if(is_array($historyPanelProps)) $historyPanelProps['fileListProps'] = $fileListProps;
@@ -362,9 +363,8 @@ class docApp extends wg
             )], $this->convertZentaoListMenu($zentaoListMenu))
             : array();
 
-        $privs = $this->prop('privs', []);
         if(!isset($privs['downloadFile'])) $privs['downloadFile'] = $canDownloadFile;
-        if(empty($privs['previewFile']))   $privs['previewFile']  = $canPreviewOffice;
+        if(!isset($privs['previewFile']))  $privs['previewFile']  = $canPreviewOffice;
 
         return zui::docApp
         (
