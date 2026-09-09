@@ -37,6 +37,8 @@
 #ganttContainer .gantt_task_link.start_to_finish .gantt_link_arrow_left { border-right-color: #975000; }
 
 #ganttContainer .gantt_critical_link .gantt_line_wrapper>div {background-color: #e63030 !important;}
+#ganttContainer .gantt_critical_link:hover .gantt_line_wrapper>div,
+#ganttContainer .gantt_related_link:hover .gantt_line_wrapper>div {box-shadow:0 0 5px 0 #e63030 !important;}
 #ganttContainer .gantt_critical_link.start_to_start .gantt_link_arrow_right {border-left-color: #e63030 !important;}
 #ganttContainer .gantt_critical_link.finish_to_start .gantt_link_arrow_right {border-left-color: #e63030 !important;}
 #ganttContainer .gantt_critical_link.start_to_finish .gantt_link_arrow_left {border-right-color: #e63030 !important;}
