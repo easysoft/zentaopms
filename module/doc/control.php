@@ -1894,6 +1894,46 @@ class doc extends control
     }
 
     /**
+     * 下载文档附件。
+     * Download doc file.
+     *
+     * @param  int    $fileID
+     * @param  string $mouse
+     * @access public
+     * @return void
+     */
+    public function downloadFile(int $fileID, string $mouse = '')
+    {
+        $this->loadModel('file');
+        $file = $this->file->getByID($fileID);
+        if(empty($file) || $file->objectType != 'doc') return $this->sendError($this->lang->file->fileNotFound);
+        $doc = $this->doc->getByID((int)$file->objectID);
+        if(!$doc || !$this->doc->checkPrivDoc($doc)) return $this->sendError($this->lang->file->accessDenied);
+
+        return print($this->fetch('file', 'download', "fileID=$fileID&mouse=$mouse"));
+    }
+
+    /**
+     * 预览文档附件。
+     * Preview doc file.
+     *
+     * @param  int    $fileID
+     * @param  string $mouse
+     * @access public
+     * @return void
+     */
+    public function previewFile(int $fileID, string $mouse = '')
+    {
+        $this->loadModel('file');
+        $file = $this->file->getByID($fileID);
+        if(empty($file) || $file->objectType != 'doc') return $this->sendError($this->lang->file->fileNotFound);
+        $doc = $this->doc->getByID((int)$file->objectID);
+        if(!$doc || !$this->doc->checkPrivDoc($doc)) return $this->sendError($this->lang->file->accessDenied);
+
+        return print($this->fetch('file', 'preview', "fileID=$fileID&mouse=$mouse"));
+    }
+
+    /**
      * 移动文档库
      * Move Lib.
      *
