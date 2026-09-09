@@ -314,8 +314,16 @@ class form extends formBase
             foreach($items as $key => $item)
             {
                 if(!($item instanceof formGroup)) continue;
-                $items[$key] = new formRow($item);
-                if($item->prop('hidden')) $items[$key]->setProp('hidden', true);
+                if($item->prop('hidden'))
+                {
+                    $item->setProp('hidden', false);
+                    $items[$key] = new formRow($item);
+                    $items[$key]->setProp('hidden', true);
+                }
+                else
+                {
+                    $items[$key] = new formRow($item);
+                }
             }
         }
         else
