@@ -49,11 +49,11 @@
 #ganttContainer .gantt_related_link.finish_to_start .gantt_link_arrow_right {border-left-color: #e63030 !important;}
 #ganttContainer .gantt_related_link.start_to_finish .gantt_link_arrow_left {border-right-color: #e63030 !important;}
 #ganttContainer .gantt_related_link.finish_to_finish .gantt_link_arrow_left {border-right-color: #e63030 !important;}
-#ganttContainer .gantt_link_delete_btn{display:none; position:absolute; z-index:20; width:18px; height:18px; padding:0; background:transparent; border:0;}
+#ganttContainer .gantt_link_delete_btn{display:none; position:absolute; z-index:20; width:24px; height:24px; padding:0; background:#fff; border:1px solid #d9dfe8; border-radius:50%; box-shadow:0 1px 4px rgba(0,0,0,.18); cursor:pointer;}
 #ganttContainer .gantt_link_delete_btn:before,
-#ganttContainer .gantt_link_delete_btn:after{content:''; position:absolute; top:8px; left:2px; width:14px; height:2px; border-radius:2px; background:var(--gantt-link-delete-color, #7576ba);}
-#ganttContainer .gantt_link_delete_btn:before{transform:rotate(45deg);}
-#ganttContainer .gantt_link_delete_btn:after{transform:rotate(-45deg);}
+#ganttContainer .gantt_link_delete_btn:after{content:''; position:absolute; top:50%; left:50%; width:10px; height:2px; border-radius:2px; background:#697386; transform-origin:center;}
+#ganttContainer .gantt_link_delete_btn:before{transform:translate(-50%, -50%) rotate(45deg);}
+#ganttContainer .gantt_link_delete_btn:after{transform:translate(-50%, -50%) rotate(-45deg);}
 #ganttContainer .gantt_marker .gantt_marker_content {left: -15px; background-color: #f51e1e;}
 
 #ganttContainer .submitBtn{display:none}
