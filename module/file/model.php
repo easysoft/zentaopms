@@ -1294,10 +1294,13 @@ class fileModel extends model
             $imageWidth = $imageSize[0] ?? 0;
         }
 
-        $downloadLink  = helper::createLink('file', 'download', "fileID=$file->id");
+        $downloadModule = $file->objectType == 'doc' ? 'doc' : 'file';
+        $downloadMethod = $file->objectType == 'doc' ? 'downloadFile' : 'download';
+        $downloadLink  = helper::createLink($downloadModule, $downloadMethod, "fileID=$file->id");
         $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
         $downloadLink .= $sessionString;
-        $fileTitleLink = common::hasPriv('file', 'download') ? html::a($downloadLink, $fileTitle . " <span class='text-gray'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'") : "<div id='fileTitle$file->id' style='display: inline-block'>" . $fileTitle . " <span class='text-gray'>({$fileSize})</span></div>";
+        $canDownload = common::hasPriv('file', 'download') || ($file->objectType == 'doc' && common::hasPriv('doc', 'view'));
+        $fileTitleLink = $canDownload ? html::a($downloadLink, $fileTitle . " <span class='text-gray'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'") : "<div id='fileTitle$file->id' style='display: inline-block'>" . $fileTitle . " <span class='text-gray'>({$fileSize})</span></div>";
 
         $objectType = zget($this->config->file->objectType, $file->objectType);
         $viewMethod = $objectType == 'feedback' && $this->config->vision != 'lite' ? 'adminView' : 'view';
@@ -1356,12 +1359,16 @@ class fileModel extends model
         if(stripos('txt|jpg|jpeg|gif|png|bmp|mp4', $file->extension) !== false) $canPreview = true;
         if(isset($this->config->file->libreOfficeTurnon) and $this->config->file->libreOfficeTurnon == 1 && $isOfficeFile) $canPreview = true;
 
-        if($canPreview && common::hasPriv('file', 'preview'))
+        $canPreviewPriv = common::hasPriv('file', 'preview') || ($file->objectType == 'doc' && common::hasPriv('doc', 'view'));
+        if($canPreview && $canPreviewPriv)
         {
             $dataToggle = $isOfficeFile ? '' : " data-toggle='modal' data-size='lg'";
-            $html      .= html::a(helper::createLink('file', 'preview', "fileID=$file->id&mouse=left"), "<i class='icon icon-eye'></i>", $isOfficeFile ? '_blank' : '', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' {$dataToggle}");
+            $previewModule = $file->objectType == 'doc' ? 'doc' : 'file';
+            $previewMethod = $file->objectType == 'doc' ? 'previewFile' : 'preview';
+            $html      .= html::a(helper::createLink($previewModule, $previewMethod, "fileID=$file->id&mouse=left"), "<i class='icon icon-eye'></i>", $isOfficeFile ? '_blank' : '', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' {$dataToggle}");
         }
-        if(common::hasPriv('file', 'download')) $html .= html::a($downloadLink, "<i class='icon icon-download'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->downloadFile}'");
+        $canDownload = common::hasPriv('file', 'download') || ($file->objectType == 'doc' && common::hasPriv('doc', 'view'));
+        if($canDownload) $html .= html::a($downloadLink, "<i class='icon icon-download'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->downloadFile}'");
         if(common::hasPriv($objectType, 'edit', $object))
         {
             if($showEdit and common::hasPriv('file', 'edit')) $html .= html::a('###', "<i class='icon icon-pencil-alt'></i>", '', "id='renameFile$file->id' class='fileAction btn btn-link edit text-primary' onclick='showRenameBox($file->id)' title='{$this->lang->file->edit}'");
