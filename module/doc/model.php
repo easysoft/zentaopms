@@ -1355,6 +1355,35 @@ class docModel extends model
     }
 
     /**
+     * Get deliverable and baseline markers for document versions.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return array
+     */
+    public function getVersionMarkers(int $docID): array
+    {
+        if(!in_array($this->config->edition, array('max', 'ipd')) || !$docID) return array();
+
+        $markers = array();
+        $versionList = $this->dao->select('t1.`docVersion`, t1.`submittedBy`, t2.`isBaseline`')
+            ->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.review = t2.id')
+            ->where('t1.doc')->eq($docID)
+            ->fetchAll();
+
+        foreach($versionList as $version)
+        {
+            if(empty($version->docVersion)) continue;
+            if(!isset($markers[$version->docVersion])) $markers[$version->docVersion] = array();
+            if(!empty($version->submittedBy)) $markers[$version->docVersion]['deliverable'] = true;
+            if($version->isBaseline) $markers[$version->docVersion]['baseline'] = true;
+        }
+
+        return $markers;
+    }
+
+    /**
      * 处理文档数据。
      * Process doc data.
      *
