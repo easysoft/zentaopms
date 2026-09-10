@@ -110,6 +110,7 @@ class form extends formBase
             if(!is_null($fields->labelData))      $this->setProp('labelData',     $fields->labelData);
             if(!is_null($fields->valueData))      $this->setProp('data',          $fields->valueData);
             if(!is_null($fields->ordersForFull))  $this->setProp('fullModeOrders', $fields->ordersForFull);
+            if(!is_null($fields->linkages))       $this->setProp('linkages',       $fields->linkages);
 
             if(!is_null($fields->autoLoadRule))
             {
@@ -176,6 +177,9 @@ class form extends formBase
                 if(is_array($control) && !isset($control['id'])) $control['id'] = '';
                 $item['control'] = $control;
             }
+
+            unset($item['group']);
+            unset($item['position']);
         }
         return $item;
     }
@@ -296,7 +300,7 @@ class form extends formBase
         $after = parent::buildAfter();
         if($this->isLayout('grid'))
         {
-            $options = $this->props->pick(array('loadUrl', 'autoLoad', 'fullModeOrders'));
+            $options = $this->props->pick(array('loadUrl', 'autoLoad', 'fullModeOrders', 'linkages'));
             $after[] = zui::formGrid
             (
                 set::_to('#' . $this->id()),
