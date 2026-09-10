@@ -63,6 +63,7 @@ class myProduct extends product
                     $product->repoName .= $repo->name . ',';
                 }
             }
+            $product->repoName = rtrim($product->repoName, ',');
         }
 
         $this->view->title      = $this->lang->productCommon;
