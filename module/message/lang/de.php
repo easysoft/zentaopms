@@ -41,7 +41,7 @@ $lang->message->noticeText->edited         = '{actor} edited the content of {obj
 $lang->message->noticeText->commented      = '{actor} has added a new comment under {objectType}《{objectTitle}》.';
 $lang->message->noticeText->changed        = '{actor} has changed the content of {objectType} 《{objectTitle}》.';
 $lang->message->noticeText->submitreview   = '{actor} has submitted a review for {objectType}《{objectTitle}》, please approve it in a timely manner.';
-$lang->message->noticeText->reviewed       = 'The {objectType} 《{objectTitle}》 you submitted has been processed by {actor}, with the result being: {reviewResult}. Approval comment: {reviewComment}.';
+$lang->message->noticeText->reviewed       = 'The {objectType} 《{objectTitle}》 you submitted has been processed by {actor}, with the result being: {reviewResult}. {reviewComment}';
 $lang->message->noticeText->otherreviewed  = 'The {objectType} 《{objectTitle}》 you submitted has been processed by {actor}, with the result being: {reviewResult}';
 $lang->message->noticeText->reverted       = '{actor} has rolled back {objectType} 《{objectTitle}》 and requested you to make modifications and resubmit it.';
 $lang->message->noticeText->forwarded      = '{actor} has transferred {objectType}《{objectTitle}》to you. Please handle it promptly.';
@@ -66,8 +66,8 @@ $lang->message->noticeText->ccSuffix       = "You have been CC'd.";
 
 $lang->message->noticeText->extend['submitreview']['cc']     = '{actor} has submitted a review for {objectType}《{objectTitle}》, and you have been CCed.';
 $lang->message->noticeText->extend['submitreview']['other']  = '{actor} submitted a review for {objectType}《{objectTitle}》.';
-$lang->message->noticeText->extend['reviewed']['cc']         = 'The {objectType} submitted by {submitter}, titled 《{objectTitle}》, has been processed by {actor}, with the result being: {reviewResult}. Approval comment: {reviewComment}. You have been copied.';
-$lang->message->noticeText->extend['reviewed']['other']      = 'The {objectType} submitted by {submitter}, titled 《{objectTitle}》, has been processed by {actor}, with the result being: {reviewResult}. Approval comment: {reviewComment}.';
+$lang->message->noticeText->extend['reviewed']['cc']         = 'The {objectType} submitted by {submitter}, titled 《{objectTitle}》, has been processed by {actor}, with the result being: {reviewResult}. {reviewComment} You have been copied.';
+$lang->message->noticeText->extend['reviewed']['other']      = 'The {objectType} submitted by {submitter}, titled 《{objectTitle}》, has been processed by {actor}, with the result being: {reviewResult}. {reviewComment}';
 $lang->message->noticeText->extend['otherreviewed']['cc']    = 'The {objectType} submitted by {submitter}, titled 《{objectTitle}》, has been processed by {actor}, with the result being: {reviewResult}. You have been copied.';
 $lang->message->noticeText->extend['otherreviewed']['other'] = 'The {objectType} submitted by {submitter}, titled 《{objectTitle}》, has been processed by {actor}, with the result being: {reviewResult}.';
 $lang->message->noticeText->extend['reverted']['cc']         = '{actor} has rolled back {objectType}《{objectTitle}》and you have been CCed.';
@@ -116,6 +116,8 @@ $lang->message->storyReviewResultList['pass']    = 'Pass';
 $lang->message->storyReviewResultList['revert']  = 'Revoke';
 $lang->message->storyReviewResultList['clarify'] = 'To Be Clarified';
 $lang->message->storyReviewResultList['reject']  = 'Reject';
+
+$lang->message->reviewCommentTemplate = 'Approval comment: %s.';
 
 $lang->message->notice = new stdclass();
 $lang->message->notice->allMarkRead = 'One-click read';

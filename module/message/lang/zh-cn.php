@@ -41,7 +41,7 @@ $lang->message->noticeText->edited         = '{actor} 编辑了{objectType}《{o
 $lang->message->noticeText->commented      = '{actor} 在{objectType}《{objectTitle}》下添加了新的备注。';
 $lang->message->noticeText->changed        = '{actor} 变更了{objectType}《{objectTitle}》的内容。';
 $lang->message->noticeText->submitreview   = '{actor} 提交了{objectType}《{objectTitle}》的评审，请您及时审批。';
-$lang->message->noticeText->reviewed       = '您提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。审批意见：{reviewComment}。';
+$lang->message->noticeText->reviewed       = '您提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。{reviewComment}';
 $lang->message->noticeText->otherreviewed  = '您提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。';
 $lang->message->noticeText->reverted       = '{actor} 将{objectType}《{objectTitle}》回退，请您修改后重新提交。';
 $lang->message->noticeText->forwarded      = '{actor} 将{objectType}《{objectTitle}》转交给了您，请及时处理。';
@@ -66,8 +66,8 @@ $lang->message->noticeText->ccSuffix       = '您已被抄送。';
 
 $lang->message->noticeText->extend['submitreview']['cc']     = '{actor} 提交了{objectType}《{objectTitle}》的评审，您已被抄送。';
 $lang->message->noticeText->extend['submitreview']['other']  = '{actor} 提交了{objectType}《{objectTitle}》的评审。';
-$lang->message->noticeText->extend['reviewed']['cc']         = '{submitter} 提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。审批意见：{reviewComment}，您已被抄送。';
-$lang->message->noticeText->extend['reviewed']['other']      = '{submitter} 提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。审批意见：{reviewComment}。';
+$lang->message->noticeText->extend['reviewed']['cc']         = '{submitter} 提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。{reviewComment}您已被抄送。';
+$lang->message->noticeText->extend['reviewed']['other']      = '{submitter} 提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。{reviewComment}';
 $lang->message->noticeText->extend['otherreviewed']['cc']    = '{submitter} 提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。您已被抄送。';
 $lang->message->noticeText->extend['otherreviewed']['other'] = '{submitter} 提交的{objectType}《{objectTitle}》已由 {actor} 处理，结果为：{reviewResult}。';
 $lang->message->noticeText->extend['reverted']['cc']         = '{actor} 将{objectType}《{objectTitle}》回退，您已被抄送。';
@@ -116,6 +116,8 @@ $lang->message->storyReviewResultList['pass']    = '确认通过';
 $lang->message->storyReviewResultList['revert']  = '撤销变更';
 $lang->message->storyReviewResultList['clarify'] = '有待明确';
 $lang->message->storyReviewResultList['reject']  = '拒绝';
+
+$lang->message->reviewCommentTemplate = '审批意见：%s。';
 
 $lang->message->notice = new stdclass();
 $lang->message->notice->allMarkRead = '一键已读';
