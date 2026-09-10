@@ -2623,6 +2623,32 @@ class doc extends control
     }
 
     /**
+     * Show deliverable and baseline relations of a document version.
+     *
+     * @param  int    $docID
+     * @param  int    $version
+     * @access public
+     * @return void
+     */
+    public function ajaxVersionRelations(int $docID, int $version = 0)
+    {
+        $this->app->loadLang('deliverable');
+
+        $doc = $this->doc->getByID($docID);
+        if(!$doc || !$this->doc->checkPrivDoc($doc)) return $this->sendError($this->lang->notFound);
+
+        if(!$version) $version = $doc->version;
+        $versionMarkers = $this->doc->getVersionMarkers($docID);
+
+        $this->view->title            = $this->lang->doc->versionRelation;
+        $this->view->docID            = $docID;
+        $this->view->version          = $version;
+        $this->view->relationVersions = array_keys($versionMarkers);
+        $this->view->relations        = $this->doc->getVersionRelations($docID, $version);
+        $this->display();
+    }
+
+    /**
      * Get files by type and objectID.
      * 根据类型和对象ID获取文件列表。
      *

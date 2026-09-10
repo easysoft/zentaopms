@@ -1384,6 +1384,71 @@ class docModel extends model
     }
 
     /**
+     * Get deliverable and baseline relations of a document version.
+     *
+     * @param  int    $docID
+     * @param  int    $version
+     * @access public
+     * @return array
+     */
+    public function getVersionRelations(int $docID, int $version): array
+    {
+        if(!in_array($this->config->edition, array('max', 'ipd')) || !$docID || !$version) return array();
+
+        $deliverables = $this->dao->select('t1.id, t1.project, t1.review, t1.version AS `deliverableVersion`, t2.name AS `deliverableType`, t3.version AS `reviewVersion`, t3.`isBaseline`')
+            ->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->leftJoin(TABLE_REVIEW)->alias('t3')->on('t1.review = t3.id')
+            ->where('t1.doc')->eq($docID)
+            ->andWhere('t1.`docVersion`')->eq($version)
+            ->andWhere('(t1.`submittedBy`')->ne('')->orWhere('t3.`isBaseline`')->eq(1)->markRight()
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchAll('id');
+        if(!$deliverables) return array();
+
+        $projectIdList = array_unique(array_column($deliverables, 'project'));
+        $baselines = $this->dao->select('id, project, title, version, `categoryVersion`')
+            ->from(TABLE_OBJECT)
+            ->where('project')->in($projectIdList)
+            ->andWhere('type')->eq('taged')
+            ->andWhere('status')->eq('pass')
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll();
+
+        $relations = array();
+        foreach($deliverables as $deliverable)
+        {
+            $relation = new stdclass();
+            $relation->deliverableID      = $deliverable->id;
+            $relation->reviewID           = $deliverable->review;
+            $relation->deliverableType    = $deliverable->deliverableType;
+            $relation->deliverableVersion = $deliverable->reviewVersion ?: $deliverable->deliverableVersion;
+            $relation->baselineID         = 0;
+            $relation->baseline           = '';
+            $relation->baselineVersion    = '';
+
+            $hasBaseline = false;
+            foreach($baselines as $baseline)
+            {
+                if($baseline->project != $deliverable->project) continue;
+                $categoryVersion = json_decode($baseline->categoryVersion, true);
+                if(!isset($categoryVersion[$deliverable->id]) || $categoryVersion[$deliverable->id] != $deliverable->review) continue;
+
+                $baselineRelation = clone $relation;
+                $baselineRelation->baselineID      = $baseline->id;
+                $baselineRelation->baseline        = $baseline->title;
+                $baselineRelation->baselineVersion = $baseline->version;
+                $relations[] = $baselineRelation;
+                $hasBaseline = true;
+            }
+
+            if(!$hasBaseline) $relations[] = $relation;
+        }
+
+        return $relations;
+    }
+
+    /**
      * 处理文档数据。
      * Process doc data.
      *
