@@ -28,5 +28,6 @@ $lang->devops->issueList    = '问题列表';
 $lang->devops->pipeline     = '流水线列表';
 $lang->devops->artifact     = '制品库列表';
 $lang->devops->welcome      = "%s研发平台";
+$lang->devops->website      = "https://www.gitfox.net";
 
 include dirname(dirname(__FILE__)) . DS . 'gitfoxmenu.php';
