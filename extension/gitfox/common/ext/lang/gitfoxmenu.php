@@ -87,8 +87,10 @@ $lang->space->menu = new stdclass();
 $lang->space->menu->repos    = array('link' => "{$lang->devops->repo}|repo|maintain|inSpace=1&space=%s", 'alias' => 'create,edit,import,createrepo,binduser', 'exclude' => 'repo-setrules');
 $lang->space->menu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=%s&repoID=0&type=space", 'subModule' => 'pipeline');
 $lang->space->menu->artifact = array('link' => "{$lang->artifact->common}|artifact|browse|spaceID=%s&repoID=0&type=space", 'subModule' => 'artifact');
-$lang->space->menu->apps     = array('link' => "{$lang->devops->system}|repo|browsesystem|space=%s", 'subModule' => 'system');
-$lang->space->menu->settings = array('link' => "{$lang->devops->spaceSetting}|space|view|spaceID=%s", 'subModule' =>'space', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
+
+/* 空间下的应用列表由 space 模块承载（复用应用模块的列表配置），一级导航稳定为空间。*/
+$lang->space->menu->apps     = array('link' => "{$lang->devops->system}|space|apps|spaceID=%s", 'alias' => 'edit');
+$lang->space->menu->settings = array('link' => "{$lang->devops->spaceSetting}|space|view|spaceID=%s", 'subModule' =>'space', 'exclude' => 'repo-maintain,system-view,repo-create,repo-createrepo,repo-import,repo-edit,space-apps,space-edit');
 
 $lang->space->menu->settings['subMenu'] = new stdclass();
 $lang->space->menu->settings['subMenu']->overview = array('link' => "{$lang->devops->overview}|space|view|spaceID=%s");
