@@ -48,7 +48,7 @@ class mailTao extends mailModel
 
         /* Remove deleted users. */
         $this->app->loadConfig('message');
-        $users      = $this->loadModel('user')->getPairs('nodeleted|all');
+        $users      = $this->loadModel('user')->getPairs('nodeleted|all', implode(',', array_merge($toList, $ccList)));
         $blockUsers = isset($this->config->message->blockUser) ? explode(',', $this->config->message->blockUser) : array();
         $toList = array_unique(array_filter(array_map(function($to) use($users, $blockUsers) {$to = trim($to); return (isset($users[$to]) && !in_array($to, $blockUsers)) ? $to : '';}, $toList)));
         $ccList = array_unique(array_filter(array_map(function($cc) use($users, $blockUsers) {$cc = trim($cc); return (isset($users[$cc]) && !in_array($cc, $blockUsers)) ? $cc : '';}, $ccList)));
