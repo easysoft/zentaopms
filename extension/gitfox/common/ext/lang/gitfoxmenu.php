@@ -73,7 +73,7 @@ $lang->my->menuOrder[25] = 'ssh';
 $lang->system->common = $lang->devops->system;
 
 $lang->system->menu = new stdclass();
-$lang->system->menu->browse = array('link' => "{$lang->devops->appList}|product|browse|");
+$lang->system->menu->browse = array('link' => "{$lang->devops->appList}|product|browse|", 'alias' => 'create,edit');
 
 $lang->system->menuOrder    = array();
 $lang->system->menuOrder[5] = 'browse';
