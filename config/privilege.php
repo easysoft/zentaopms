@@ -319,6 +319,7 @@ $config->ajaxDependencies['doc.ajaxgetexecution']                             = 
 $config->ajaxDependencies['doc.ajaxgetmodules']                               = ['doc.create', 'doc.uploaddocs', 'doc.setdocbasic', 'doc.edit'];
 $config->ajaxDependencies['doc.ajaxquick']                                    = 'doc.quick';
 $config->ajaxDependencies['doc.ajaxgetscopetypes']                            = ['doc.movetemplate', 'doc.setdocbasic'];
+$config->ajaxDependencies['doc.ajaxversionrelations']                         = 'doc.view';
 $config->ajaxDependencies['doc.ajaxgetwhitelist']                             = ['api.createlib', 'api.editlib', 'doc.editspace', 'doc.createbasicinfo', 'doc.editlib'];
 $config->ajaxDependencies['doc.ajaxjudgecanbedeleted']                        = 'doc.managescope';
 $config->ajaxDependencies['epic.ajaxgetuserstories']                          = ['todo.create', 'todo.edit', 'todo.batchcreate'];

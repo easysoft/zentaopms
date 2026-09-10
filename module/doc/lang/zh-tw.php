@@ -205,6 +205,7 @@ $lang->doc->customShowLibs                 = '顯示設置';
 $lang->doc->customShowLibsList['zero']     = '顯示空文檔的庫';
 $lang->doc->customShowLibsList['children'] = '顯示子分類的文檔';
 $lang->doc->customShowLibsList['unclosed'] = '只顯示未關閉的' . $lang->executionCommon;
+$lang->doc->versionRelation                = '版本關聯詳情';
 
 $lang->doc->mail = new stdclass();
 $lang->doc->mail->create = new stdclass();
