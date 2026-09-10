@@ -18,7 +18,7 @@ public function buildProductForEdit(int $productID, int $workflowGroup = 0): obj
         {
             foreach($this->config->product->form->edit as $field => $fieldConfig)
             {
-                if(isset($this->post->$field)) continue;
+                if($this->post->$field !== false) continue;
                 if(!property_exists($product, $field)) continue;
 
                 $productData->$field = $product->$field;
