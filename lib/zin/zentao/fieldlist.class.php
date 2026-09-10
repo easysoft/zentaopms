@@ -33,6 +33,8 @@ class fieldList
 
     public ?string $autoLoadUrl = null;
 
+    public ?array $linkages = null;
+
     public function __construct(?string $name = null, ?array $fields = null)
     {
         if(is_null($name))

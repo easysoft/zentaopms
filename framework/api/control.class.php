@@ -815,6 +815,8 @@ class control extends baseControl
                 if($objectValue) $field->default = $objectValue;
             }
         }
+
+        if($action->linkages) $fields->linkages = zget($action->linkages, $uiID, array());
         return $this->loadModel('flow')->buildFormFields($fields, $fieldList, array(), $object);
     }
 
@@ -851,7 +853,6 @@ class control extends baseControl
         if(!empty($action->css)) $html .= "<style>$action->css</style>";
 
         $html .= $this->loadModel('flow')->getFormulaScript($moduleName, $action, $fieldList);
-        if(!empty($action->linkages)) $html .= $this->flow->getLinkageScript($action, $fieldList, $uiID);
         if(!empty($flow->js))         $html .= "<script>$flow->js</script>";
         if(!empty($action->js))       $html .= "<script>$action->js</script>";
 
