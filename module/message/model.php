@@ -124,7 +124,7 @@ class messageModel extends model
                     include file_exists($configRoot . 'my.php') ? $configRoot . 'my.php' : $configRoot . 'config.php';
                 }
 
-                if($objectType == 'feedback' || $objectType == 'ticket')
+                if(in_array($objectType, array('feedback', 'ticket', 'demand')))
                 {
                     $this->loadModel($objectType)->sendmail($objectID, $actionID);
                 }
@@ -359,7 +359,16 @@ class messageModel extends model
 
             $submitter = zget($users, $submitter);
         }
-        if($actionType == 'submitreview' && $role == 'to' && empty($account)) $role = 'other';
+        if($actionType == 'submitreview' && $role == 'to')
+        {
+            if(empty($account)) $role = 'other';
+            if(in_array($objectType, array('story', 'requirement', 'epic')) && $account)
+            {
+                static $reviewers = null;
+                if($reviewers === null) $reviewers = $this->loadModel('story')->getReviewerPairs($object->id, $object->version);
+                if(!isset($reviewers[$account])) $role = 'other';
+            }
+        }
 
         $action         = $this->loadModel('action')->getById($actionID);
         $actorName      = $action->actor == 'guest' ? 'guest' : zget($users, $action->actor);
@@ -390,7 +399,9 @@ class messageModel extends model
             if(strpos($result, '|') !== false) $result = explode('|', $result)[0];
             $reviewResult  = $objectType == 'projectchange' ? $action->extra : zget($this->lang->message->reviewResultList, strtolower($result), '');
             $reviewComment = trim(strip_tags((string)$action->comment));
-            $noticeText    = str_replace(array('{reviewResult}', '{reviewComment}', '{submitter}'), array($reviewResult, $reviewComment, $submitter), $noticeText);
+            if(!empty($reviewComment)) $reviewComment = sprintf($this->lang->message->reviewCommentTemplate, $reviewComment);
+
+            $noticeText = str_replace(array('{reviewResult}', '{reviewComment}', '{submitter}'), array($reviewResult, $reviewComment, $submitter), $noticeText);
         }
 
         return $noticeText;
