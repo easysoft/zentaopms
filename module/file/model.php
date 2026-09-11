@@ -38,10 +38,11 @@ class fileModel extends model
      * @param  string    $objectType
      * @param  int|array $objectID
      * @param  string    $extra
+     * @param  bool      $ignoreDeleted
      * @access public
      * @return array
      */
-    public function getByObject(string $objectType, int|array $objectID, string $extra = ''): array
+    public function getByObject(string $objectType, int|array $objectID, string $extra = '', bool $ignoreDeleted = false): array
     {
         if(!$objectID) return array();
         $files = $this->dao->select('*')->from(TABLE_FILE)
@@ -49,7 +50,7 @@ class fileModel extends model
             ->andWhere('objectID')->in($objectID)
             ->andWhere('extra')->ne('editor')
             ->beginIF($extra)->andWhere('extra')->in($extra)->fi()
-            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$ignoreDeleted)->andWhere('deleted')->eq('0')->fi()
             ->orderBy('id')
             ->fetchAll('id');
 
