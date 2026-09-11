@@ -3,25 +3,25 @@ global $config;
 
 $lang->navIcons['my']       = "<i class='icon icon-home'></i>";
 $lang->navIcons['system']   = "<i class='icon icon-has-authority-pack'></i>";
-$lang->navIcons['space']    = "<i class='icon icon-grid-2x2'></i>";
+$lang->navIcons['space']    = "<i class='icon icon-dashboard'></i>";
 $lang->navIcons['repo']     = "<i class='icon icon-code'></i>";
 $lang->navIcons['ppm']      = "<i class='icon icon-review'></i>";
 $lang->navIcons['codescan'] = "<i class='icon icon-test'></i>";
 $lang->navIcons['issue']    = "<i class='icon icon-issue'></i>";
 $lang->navIcons['pipeline'] = "<i class='icon icon-waterfall'></i>";
 $lang->navIcons['artifact'] = "<i class='icon icon-package'></i>";
-$lang->navIcons['admin']    = "<i class='icon icon-has-authority'></i>";
+$lang->navIcons['admin']    = "<i class='icon icon-backend'></i>";
 
 $lang->navIconNames['my']       = 'home';
 $lang->navIconNames['system']   = 'has-authority-pack';
-$lang->navIconNames['space']    = 'grid-2x2';
+$lang->navIconNames['space']    = 'dashboard';
 $lang->navIconNames['repo']     = 'code';
 $lang->navIconNames['ppm']      = 'review';
 $lang->navIconNames['codescan'] = 'test';
 $lang->navIconNames['issue']    = 'issue';
 $lang->navIconNames['pipeline'] = 'waterfall';
 $lang->navIconNames['artifact'] = 'package';
-$lang->navIconNames['admin']    = 'has-authority';
+$lang->navIconNames['admin']    = 'backend';
 
 /* Main Navigation. */
 $lang->mainNav           = new stdclass();
