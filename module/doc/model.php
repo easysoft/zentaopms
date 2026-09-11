@@ -1460,7 +1460,7 @@ class docModel extends model
     public function processDoc(object $doc, int $version, bool $setImgSize = false): object
     {
         /* When file change then version add one. */
-        $files      = $this->loadModel('file')->getByObject('doc', $doc->id);
+        $files      = $this->loadModel('file')->getByObject('doc', $doc->id, '', !empty($doc->deleted));
         $docFiles   = array();
         $docContent = $this->getContent($doc->id, $version);
         if($docContent)
