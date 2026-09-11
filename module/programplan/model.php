@@ -1247,6 +1247,33 @@ class programplanModel extends model
     }
 
     /**
+     * Check whether the gantt version can be rolled back.
+     * 检查甘特图版本是否可以回滚。
+     *
+     * @param  object $project
+     * @access public
+     * @return bool
+     */
+    public function canRollbackGanttVersion(object $project): bool
+    {
+        /* 已关闭项目禁止修改时不允许回滚。*/
+        if(!common::canModify('project', $project)) return false;
+
+        /* 已关闭执行禁止修改时，项目下存在已关闭执行也不允许回滚。*/
+        $closedStages = $this->dao->select('id,project,status')->from(TABLE_PROJECT)
+            ->where('project')->eq($project->id)
+            ->andWhere('status')->eq('closed')
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll();
+        foreach($closedStages as $closedStage)
+        {
+            if(!common::canModify('execution', $closedStage)) return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Rollback stage.
      * 回滚阶段。
      *
