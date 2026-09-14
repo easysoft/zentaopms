@@ -561,3 +561,5 @@ $config->ajaxDependencies['ppm.ajaxgetcreatechecklist']                       = 
 $config->ajaxDependencies['pipeline.ajaxexeclog']                             = 'pipeline.execview';
 $config->ajaxDependencies['pipeline.ajaxgetrunners']                          = 'pipeline.arrange';
 $config->ajaxDependencies['pipeline.ajaxgetrepos']                            = 'pipeline.arrange';
+$config->ajaxDependencies['pipeline.ajaxgetrepoids']                          = 'pipeline.arrange';
+$config->ajaxDependencies['codescan.ajaxgetscanplans']                        = 'pipeline.arrange';
