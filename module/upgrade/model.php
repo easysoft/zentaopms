@@ -13757,4 +13757,60 @@ class upgradeModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 记录 TR、DCP 评审点最近一次评审的交付物及版本。
+     * Record the latest review deliverables and versions of decision points.
+     *
+     * @access public
+     * @return bool
+     */
+    public function upgradeDecisionDeliverableSnapshot(): bool
+    {
+        $points = $this->dao->select('id, categoryVersion')->from(TABLE_OBJECT)
+            ->where('type')->eq('decision')
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll('id');
+        if(empty($points)) return true;
+
+        $reviews = $this->dao->select('id, object, status')->from(TABLE_REVIEW)
+            ->where('object')->in(array_keys($points))
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id_desc')
+            ->fetchAll();
+
+        $latestReviews = array();
+        foreach($reviews as $review)
+        {
+            if(isset($latestReviews[$review->object])) continue;
+            $latestReviews[$review->object] = $review;
+        }
+
+        $now = helper::now();
+        foreach($points as $pointID => $point)
+        {
+            $categoryVersion = json_decode($point->categoryVersion, true);
+            if(empty($categoryVersion) || !is_array($categoryVersion)) continue;
+            if(empty($latestReviews[$pointID])) continue;
+
+            $review  = $latestReviews[$pointID];
+            $existed = $this->dao->select('id')->from(TABLE_REVIEWDELIVERABLE)->where('review')->eq($review->id)->fetch('id');
+            if($existed) continue;
+
+            $deliverableReviews = $this->dao->select('id, version')->from(TABLE_REVIEW)->where('id')->in(array_values($categoryVersion))->fetchAll('id');
+            foreach($categoryVersion as $deliverableID => $deliverableReviewID)
+            {
+                $snapshot = new stdclass();
+                $snapshot->review             = (int)$review->id;
+                $snapshot->projectdeliverable = (int)$deliverableID;
+                $snapshot->deliverableReview  = (int)$deliverableReviewID;
+                $snapshot->version            = isset($deliverableReviews[$deliverableReviewID]) ? $deliverableReviews[$deliverableReviewID]->version : '';
+                $snapshot->createdBy          = 'system';
+                $snapshot->createdDate        = $now;
+                $this->dao->insert(TABLE_REVIEWDELIVERABLE)->data($snapshot)->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
 }
