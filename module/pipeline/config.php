@@ -17,7 +17,9 @@ $config->pipeline->editor->create = array('id' => 'desc', 'tools' => 'simpleTool
 
 $config->pipeline->jsonSchemaKeywords = array();
 $config->pipeline->jsonSchemaKeywords['repos']        = array('module' => 'pipeline', 'method' => 'ajaxGetRepos', 'params' => array('spaceID'));
+$config->pipeline->jsonSchemaKeywords['repoIDs']      = array('module' => 'pipeline', 'method' => 'ajaxGetRepoIDs', 'params' => array('spaceID'));
 $config->pipeline->jsonSchemaKeywords['artifactLibs'] = array('module' => 'artifact', 'method' => 'ajaxGetArtifactLibs', 'params' => array('spaceID', 'repoID'));
+$config->pipeline->jsonSchemaKeywords['scanPlans']    = array('module' => 'codescan', 'method' => 'ajaxGetScanPlans', 'params' => array('spaceID'));
 
 /* Search config. */
 $config->pipeline->search['module']           = 'pipeline';

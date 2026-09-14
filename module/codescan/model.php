@@ -528,6 +528,123 @@ class codescanModel extends model
     }
 
     /**
+     * 构建扫描计划步骤 schema 的分级下拉数据。
+     * Build scan plan picker items for step schema.
+     *
+     * 协议：分组为 {text, disabled, items}，叶子为 {text, value, keys}；层级：空间 > 代码库 > 扫描计划。
+     * 分组不设 value，否则会被 picker 当作可选项（默认选中第一个分组、且会覆盖同值叶子）。
+     * 计划叶子的 value 为计划 ID；repoID 为 0 时查询全部代码库的计划。
+     *
+     * @param  int    $spaceID 空间ID，0 为不限
+     * @param  int    $repoID  代码库ID，0 为不限
+     * @access public
+     * @return array
+     */
+    public function buildScanPlanSchemaItems(int $spaceID = 0, int $repoID = 0): array
+    {
+        $spaces = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $repos  = $this->loadModel('repo')->getByIdList(array_keys($this->loadModel('repo')->getRepoPairs()));
+
+        /* 按空间归组代码库，同时按传入的 spaceID、repoID 过滤。 */
+        $groupedRepos = array();
+        foreach($repos as $repo)
+        {
+            if($spaceID && (int)$repo->spaceID !== $spaceID) continue;
+            if($repoID && (int)$repo->id !== $repoID) continue;
+
+            $groupedRepos[(int)$repo->spaceID][(int)$repo->id] = $repo;
+        }
+
+        /* 不可见的空间、代码库直接返回空，不必再请求扫描服务。 */
+        if(empty($groupedRepos) || ($repoID && !isset($repos[$repoID]))) return array();
+
+        $plansByRepo = $this->getSchemaScanPlans($repoID);
+
+        $buildKeys = function(string $text): string
+        {
+            $pinyin = common::convert2Pinyin(array($text));
+            return trim($text . ' ' . urldecode(zget($pinyin, $text, '')));
+        };
+
+        $groups = array();
+        foreach($spaces as $id => $spaceName)
+        {
+            $id = (int)$id;
+            if(empty($groupedRepos[$id])) continue;
+
+            $repoNodes = array();
+            foreach($groupedRepos[$id] as $repo)
+            {
+                $planNodes = array();
+                foreach(zget($plansByRepo, (int)$repo->id, array()) as $planID => $plan)
+                {
+                    $planName    = zget($plan, 'name', '');
+                    $planNodes[] = array(
+                        'text'  => $planName,
+                        'value' => $planID,
+                        'keys'  => $buildKeys($spaceName . ' ' . $repo->name . ' ' . $planName)
+                    );
+                }
+
+                $repoNodes[] = array(
+                    'text'     => $repo->name,
+                    'disabled' => true,
+                    'keys'     => $buildKeys($spaceName . ' ' . $repo->name),
+                    'items'    => $planNodes
+                );
+            }
+
+            $groups[] = array(
+                'text'     => $spaceName,
+                'disabled' => true,
+                'keys'     => $buildKeys($spaceName),
+                'items'    => $repoNodes
+            );
+        }
+
+        return $groups;
+    }
+
+    /**
+     * 获取扫描计划并按代码库归组。
+     * Get scan plans grouped by repo.
+     *
+     * @param  int    $repoID 代码库ID，0 为全部代码库
+     * @access public
+     * @return array
+     */
+    public function getSchemaScanPlans(int $repoID = 0): array
+    {
+        $plansByRepo = array();
+        $planCount   = 0;
+        $pageSize    = 100;
+
+        /* 计划可能有多页，最多翻 10 页，避免取数过慢。 */
+        for($page = 1; $page <= 10; $page++)
+        {
+            $result = $this->getScanPlans($repoID, array('page' => $page, 'pageSize' => $pageSize));
+            $plans  = zget($result, 'data', array());
+            if(empty($plans)) break;
+
+            foreach($plans as $plan)
+            {
+                $planID = (int)zget($plan, 'id', 0);
+                if(empty($planID)) continue;
+
+                /* 全部代码库时按计划上的 repoID 归组，单个代码库时以入参兜底。 */
+                $plansByRepo[(int)zget($plan, 'repoID', $repoID)][$planID] = $plan;
+            }
+
+            $planCount += count($plans);
+            $planTotal  = (int)zget(zget($result, 'pager', array()), 'total', 0);
+            if($planTotal && $planCount >= $planTotal) break; /* 服务端给出总数时，取够即止。 */
+            if(count($plans) < $pageSize) break;              /* 未给出总数时，不足一页说明已是最后一页。 */
+        }
+
+        return $plansByRepo;
+    }
+
+    /**
      * 通过API删除扫描计划。
      * Api delete scan plan.
      *

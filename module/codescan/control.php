@@ -1204,6 +1204,23 @@ class codescan extends control
     }
 
     /**
+     * 获取扫描计划的分级下拉数据。
+     * Get scan plan picker items for step schema.
+     *
+     * 返回 空间 > 代码库 > 扫描计划 三级结构，repoID 为 0 时查询全部代码库的计划。
+     * Returns the space > repo > scan plan tree, all repos' plans are fetched when repoID is 0.
+     *
+     * @param  int    $spaceID 空间ID，0 为不限
+     * @param  int    $repoID  代码库ID，0 为不限
+     * @access public
+     * @return void
+     */
+    public function ajaxGetScanPlans(int $spaceID = 0, int $repoID = 0)
+    {
+        echo json_encode($this->codescan->buildScanPlanSchemaItems($spaceID, $repoID));
+    }
+
+    /**
      * 规则列表。
      * Issues list.
      *

@@ -1280,6 +1280,42 @@ class pipeline extends control
     }
 
     /**
+     * 获取代码库下拉数据，value 为代码库ID。
+     * Get repo picker items, the value of one item is the repo id.
+     *
+     * 与 ajaxGetRepos 的区别：value 是本地 ops_repo.id 而不是 git 地址，供需要 SCAN_REPO_ID 等数值参数的插件使用。
+     * 过滤口径与 ajaxGetRepos 一致：只保留 git 库、排除镜像库，并按空间过滤（0 为不限）。
+     *
+     * @param  int    $spaceID 空间ID，0 为不限
+     * @access public
+     * @return void
+     */
+    public function ajaxGetRepoIDs(int $spaceID = 0)
+    {
+        $buildKeys = function(string $text): string
+        {
+            $pinyin = common::convert2Pinyin(array($text));
+            return trim($text . ' ' . urldecode(zget($pinyin, $text, '')));
+        };
+
+        $repos     = $this->loadModel('repo')->getByIdList(array_keys($this->loadModel('repo')->getRepoPairs()));
+        $repoItems = array();
+        foreach($repos as $repoID => $repo)
+        {
+            if($repo->scmType != 'git' || $repo->mirror) continue;
+            if($spaceID && (int)$repo->spaceID != $spaceID) continue;
+
+            $repoItems[] = array(
+                'text'  => $repo->name,
+                'value' => (int)$repoID,
+                'keys'  => $buildKeys($repo->name)
+            );
+        }
+
+        echo json_encode($repoItems);
+    }
+
+    /**
      * 获取当前用户可访问的制品库树。
      * Get artifact lib picker tree items for step schema.
      *

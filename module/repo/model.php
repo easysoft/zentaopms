@@ -800,7 +800,8 @@ class repoModel extends model
             ->andWhere('id')->in($idList)->fetchAll('id', false);
         foreach($repos as $repo)
         {
-            if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
+            /* ops_repo 表没有 encrypt、password 列，取值前先判断，避免未定义属性告警。 */
+            if(!empty($repo->encrypt) && $repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
         }
 
         return $repos;
