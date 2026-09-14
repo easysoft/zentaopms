@@ -408,6 +408,7 @@ define('TABLE_RESEARCHPLAN',           '`' . $config->db->prefix . 'researchplan
 define('TABLE_RESEARCHREPORT',         '`' . $config->db->prefix . 'researchreport`');
 define('TABLE_REVIEW',                 '`' . $config->db->prefix . 'review`');
 define('TABLE_REVIEWCL',               '`' . $config->db->prefix . 'reviewcl`');
+define('TABLE_REVIEWDELIVERABLE',      '`' . $config->db->prefix . 'reviewdeliverable`');
 define('TABLE_REVIEWISSUE',            '`' . $config->db->prefix . 'reviewissue`');
 define('TABLE_REVIEWRESULT',           '`' . $config->db->prefix . 'reviewresult`');
 define('TABLE_RISK',                   '`' . $config->db->prefix . 'risk`');
