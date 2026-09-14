@@ -785,4 +785,88 @@ class codescanModelTest extends baseTest
         return $result;
     }
 
+    /**
+     * Test buildScanPlanSchemaItems method.
+     *
+     * @param  int   $spaceID
+     * @param  int   $repoID
+     * @access public
+     * @return array
+     */
+    public function buildScanPlanSchemaItemsTest(int $spaceID = 0, int $repoID = 0): array
+    {
+        $items = $this->instance->buildScanPlanSchemaItems($spaceID, $repoID);
+        if(dao::isError()) return array();
+
+        /* 汇总分组数、代码库名以及分组是否带 value（picker 协议要求分组不带 value）。 */
+        $repoNames = array();
+        $noValue   = true;
+        foreach($items as $group)
+        {
+            if(array_key_exists('value', $group)) $noValue = false;
+
+            foreach($group['items'] as $repoNode)
+            {
+                if(array_key_exists('value', $repoNode)) $noValue = false;
+                $repoNames[] = $repoNode['text'];
+            }
+        }
+
+        return array(
+            'groupCount' => count($items),
+            'repoNames'  => implode(',', $repoNames),
+            'noValue'    => $noValue ? 'yes' : 'no'
+        );
+    }
+
+    /**
+     * Test getSchemaScanPlans method.
+     *
+     * @param  int   $repoID
+     * @access public
+     * @return array
+     */
+    public function getSchemaScanPlansTest(int $repoID = 0): array
+    {
+        $plans = $this->instance->getSchemaScanPlans($repoID);
+        if(dao::isError()) return array();
+
+        return $plans;
+    }
+
+    /**
+     * Test getSchemaScanPlans method summary.
+     *
+     * 返回结构为 代码库ID => 计划ID => 计划对象 的两层数组。
+     * The result is a two-level array: repoID => planID => plan object.
+     *
+     * @param  int   $repoID
+     * @access public
+     * @return array
+     */
+    public function getSchemaScanPlansSummaryTest(int $repoID = 0): array
+    {
+        $plans = $this->getSchemaScanPlansTest($repoID);
+
+        $keysNumeric  = 'yes';
+        $valuesObject = 'yes';
+        foreach($plans as $repoKey => $repoPlans)
+        {
+            if((string)(int)$repoKey !== (string)$repoKey) $keysNumeric = 'no';
+
+            foreach($repoPlans as $planKey => $plan)
+            {
+                if((string)(int)$planKey !== (string)$planKey) $keysNumeric = 'no';
+                if(!is_object($plan)) $valuesObject = 'no';
+            }
+        }
+
+        return array(
+            'isArray'      => is_array($plans) ? 'yes' : 'no',
+            'keysNumeric'  => $keysNumeric,
+            'valuesObject' => $valuesObject,
+            'repoCount'    => count($plans)
+        );
+    }
+
 }
