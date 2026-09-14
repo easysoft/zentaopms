@@ -542,21 +542,23 @@ class codescanModel extends model
      */
     public function buildScanPlanSchemaItems(int $spaceID = 0, int $repoID = 0): array
     {
-        $spaces = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
-        $repos  = $this->loadModel('repo')->getByIdList(array_keys($this->loadModel('repo')->getRepoPairs()));
+        $spaces    = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $repoPairs = $this->loadModel('repo')->getRepoPairs();
+        $repos     = array_intersect_key($this->loadModel('repo')->getListByCondition('', 0), $repoPairs);
 
-        /* 按空间归组代码库，同时按传入的 spaceID、repoID 过滤。 */
+        /* 按空间归组代码库，并过滤掉不可扫描的（非 git 库、镜像库）和不在指定范围内的代码库。 */
         $groupedRepos = array();
         foreach($repos as $repo)
         {
+            if($repo->scmType != 'git' || $repo->mirror) continue;
             if($spaceID && (int)$repo->spaceID !== $spaceID) continue;
             if($repoID && (int)$repo->id !== $repoID) continue;
 
             $groupedRepos[(int)$repo->spaceID][(int)$repo->id] = $repo;
         }
 
-        /* 不可见的空间、代码库直接返回空，不必再请求扫描服务。 */
-        if(empty($groupedRepos) || ($repoID && !isset($repos[$repoID]))) return array();
+        /* 空间、代码库不可见或不可扫描时直接返回空，不必再请求扫描服务。 */
+        if(empty($groupedRepos)) return array();
 
         $plansByRepo = $this->getSchemaScanPlans($repoID);
 

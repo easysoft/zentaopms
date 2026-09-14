@@ -1298,7 +1298,10 @@ class pipeline extends control
             return trim($text . ' ' . urldecode(zget($pinyin, $text, '')));
         };
 
-        $repos     = $this->loadModel('repo')->getByIdList(array_keys($this->loadModel('repo')->getRepoPairs()));
+        /* getRepoPairs 决定权限口径，getListByCondition 一次取回带 spaceID、scmType 的整行。 */
+        $repoPairs = $this->loadModel('repo')->getRepoPairs();
+        $repos     = array_intersect_key($this->loadModel('repo')->getListByCondition('', 0), $repoPairs);
+
         $repoItems = array();
         foreach($repos as $repoID => $repo)
         {
