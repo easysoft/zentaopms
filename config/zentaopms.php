@@ -509,6 +509,7 @@ define('TABLE_PIPELINE',         '`ops_pipeline`');
 define('TABLE_PIPELINECONTENT',  '`ops_pipeline_content`');
 define('TABLE_PIPELINEEXEC',     '`ops_pipeline_executions`');
 define('TABLE_PIPELINETRIGGER',  '`ops_triggers`');
+define('TABLE_OPSWEBHOOK',       '`ops_webhooks`');
 define('TABLE_ARTIFACT',         '`ops_artifact_libs`');
 define('TABLE_ARTIFACTASSET',    '`ops_artifact_assets`');
 define('TABLE_ARTIFACTBLOBS',    '`ops_artifact_blobs`');

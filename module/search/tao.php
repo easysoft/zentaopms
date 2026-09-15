@@ -301,6 +301,12 @@ class searchTao extends searchModel
             }
         }
 
+        /* 下拉选择「空」时同时匹配空字符串和 0，兼容整型 ID 与 varchar 存 0 的字段。 */
+        if($control == 'select' && ($value === '' || $value === 'null') && ($operator == '=' || $operator == '!='))
+        {
+            return $where . " $andOr " . $this->getEmptySearchCondition($field, $operator);
+        }
+
         $condition = $this->setCondition($field, $operator, $value, $control);
         if($operator == '=' && preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
         {
@@ -329,6 +335,32 @@ class searchTao extends searchModel
             $where .= " $andOr " . '`' . $field . '` ' . $condition;
         }
         return $where;
+    }
+
+    /**
+     * 构建搜索「空」的条件。
+     * Build the condition for searching empty values.
+     *
+     * @param  string $field
+     * @param  string $operator
+     * @access protected
+     * @return string
+     */
+    protected function getEmptySearchCondition(string $field, string $operator): string
+    {
+        $quotedField = '`' . $field . '`';
+        if(in_array($this->config->db->driver, $this->config->pgsqlDriverList))
+        {
+            $emptySQL    = "(CAST($quotedField AS TEXT) = '' OR CAST($quotedField AS TEXT) = '0')";
+            $notEmptySQL = "(CAST($quotedField AS TEXT) != '' AND CAST($quotedField AS TEXT) != '0')";
+        }
+        else
+        {
+            $emptySQL    = "($quotedField = '' OR $quotedField = '0')";
+            $notEmptySQL = "($quotedField != '' AND $quotedField != '0')";
+        }
+
+        return $operator == '!=' ? $notEmptySQL : $emptySQL;
     }
 
     /**

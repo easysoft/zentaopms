@@ -69,6 +69,7 @@ cid=18875
 - 测试获取执行ID 0 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务 @0
 - 测试获取执行ID 0 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
 - 测试获取执行ID 1 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务第1条的name属性 @任务1
+- 测试获取执行ID 1 的任务带有所属执行第1条的execution属性 @1
 - 测试获取执行ID 1 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务数量 @10
 - 测试获取执行ID 1 product 1 type all module 空 orederBy 'status_asc, id_desc' 的任务第1条的name属性 @任务1
 - 测试获取执行ID 1 product 1 type all module 空 orederBy 'status_asc, id_desc' 的任务数量 @2
@@ -159,6 +160,7 @@ $task = new taskTaoTest();
 r($task->fetchExecutionTasksTest($executionIdList[0], $productIdList[0], $type[0], $modules[0], $orderBy[0], $count[0]))  && p()          && e('0');      // 测试获取执行ID 0 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务
 r($task->fetchExecutionTasksTest($executionIdList[0], $productIdList[0], $type[0], $modules[0], $orderBy[0], $count[1]))  && p()          && e('0');      // 测试获取执行ID 0 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务数量
 r($task->fetchExecutionTasksTest($executionIdList[1], $productIdList[0], $type[0], $modules[0], $orderBy[0], $count[0]))  && p('1:name')  && e('任务1');  // 测试获取执行ID 1 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务
+r($task->fetchExecutionTasksTest($executionIdList[1], $productIdList[0], $type[0], $modules[0], $orderBy[0], $count[0]))  && p('1:execution') && e('1'); // 测试获取执行ID 1 的任务带有所属执行
 r($task->fetchExecutionTasksTest($executionIdList[1], $productIdList[0], $type[0], $modules[0], $orderBy[0], $count[1]))  && p()          && e('10');     // 测试获取执行ID 1 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务数量
 r($task->fetchExecutionTasksTest($executionIdList[1], $productIdList[1], $type[0], $modules[0], $orderBy[0], $count[0]))  && p('1:name')  && e('任务1');  // 测试获取执行ID 1 product 1 type all module 空 orederBy 'status_asc, id_desc' 的任务
 r($task->fetchExecutionTasksTest($executionIdList[1], $productIdList[1], $type[0], $modules[0], $orderBy[0], $count[1]))  && p()          && e('2');      // 测试获取执行ID 1 product 1 type all module 空 orederBy 'status_asc, id_desc' 的任务数量

@@ -21,6 +21,7 @@ $config->user->form->create['gender']           = array('required' => false, 'ty
 $config->user->form->create['verifyPassword']   = array('required' => true,  'type' => 'string', 'default' => '');
 $config->user->form->create['passwordLength']   = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->user->form->create['passwordStrength'] = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->user->form->create['passwordPlain']    = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->user->form->batchCreate = array();
 $config->user->form->batchCreate['type']          = array('required' => true,  'type' => 'string', 'default' => 'inside');
@@ -79,6 +80,7 @@ $config->user->form->edit['zipcode']          = array('required' => false, 'type
 $config->user->form->edit['verifyPassword']   = array('required' => true,  'type' => 'string', 'default' => '');
 $config->user->form->edit['passwordLength']   = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->user->form->edit['passwordStrength'] = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->user->form->edit['passwordPlain']    = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->user->form->batchEdit = array();
 $config->user->form->batchEdit['dept']     = array('required' => false, 'type' => 'int',    'width' => '200px', 'name' => 'dept',     'label' => $lang->user->dept,     'control' => array('control' => 'picker', 'required' => true), 'default' => 0, 'ditto' => true, 'defaultDitto' => 'off');
@@ -108,6 +110,7 @@ $config->user->form->reset['password1']        = array('required' => true,  'typ
 $config->user->form->reset['password2']        = array('required' => true,  'type' => 'string', 'default' => '');
 $config->user->form->reset['passwordLength']   = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->user->form->reset['passwordStrength'] = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->user->form->reset['passwordPlain']    = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->user->form->forgetPassword = array();
 $config->user->form->forgetPassword['account'] = array('required' => true, 'type' => 'string', 'default' => '');
@@ -118,6 +121,7 @@ $config->user->form->resetPassword['password1']        = array('required' => tru
 $config->user->form->resetPassword['password2']        = array('required' => true,  'type' => 'string', 'default' => '');
 $config->user->form->resetPassword['passwordLength']   = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->user->form->resetPassword['passwordStrength'] = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->user->form->resetPassword['passwordPlain']    = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->user->form->cropAvatar = array();
 $config->user->form->cropAvatar['originWidth']  = array('required' => false, 'type' => 'int',  'default' => 0);

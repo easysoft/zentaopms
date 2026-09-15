@@ -128,6 +128,7 @@ $domBox = div
     ) : null,
     section
     (
+        setID('codeConflict'),
         div
         (
             setClass('border px-4 h-12 flex items-center'),

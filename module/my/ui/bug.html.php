@@ -34,35 +34,10 @@ $canBatchAction   = $canBatchEdit || $canBatchConfirm || $canBatchClose || $canB
 
 $currentBrowseType = $browseType;
 if($browseType == 'bysearch') $browseType = $this->session->myBugType;
-
-if($browseType == 'openedBy')
-{
-    unset($config->my->bug->dtable->fieldList['openedBy'], $config->my->bug->dtable->fieldList['openedDate'], $config->my->bug->dtable->fieldList['assignedDate']);
-}
-
-if($browseType == 'resolvedBy')
-{
-    unset($config->my->bug->dtable->fieldList['openedDate'], $config->my->bug->dtable->fieldList['resolvedBy']);
-}
-
-if($browseType == 'assignedBy') unset($config->my->bug->dtable->fieldList['openedDate']);
-if($browseType == 'closedBy')   unset($config->my->bug->dtable->fieldList['openedDate']);
-if($browseType == 'assignedTo') unset($config->my->bug->dtable->fieldList['assignedTo']);
-if($app->rawMethod == 'work')
-{
-    unset($config->my->bug->dtable->fieldList['status'], $config->my->bug->dtable->fieldList['openedDate']);
-}
-else
-{
-    unset($config->my->bug->dtable->fieldList['deadline']);
-}
-
 if(!$canBatchAction) $config->my->bug->dtable->fieldList['id']['type'] = 'id';
 
 $projectBrowseLink = createLink('project', 'browse');
-$productLink       = explode('-', $config->productLink);
-$productParam      = $config->productLink == 'product-all' ? '' : "productID={product}";
-$productBrowseLink = createLink('product', $productLink[1], $productParam);
+$productBrowseLink = createLink('product', 'view', "productID={product}");
 $config->my->bug->dtable->fieldList['product']['link'] = 'RAWJS<function(info){ if(info.row.data.shadow) return \'' . $projectBrowseLink . '\'; else return \'' . $productBrowseLink . '\'; }>RAWJS';
 
 $storyIdList = $taskIdList = $productIdList = array();
@@ -141,7 +116,7 @@ dtable
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::emptyTip($lang->bug->notice->noBug),
-    set::customData($browseType == 'resolvedBy' ? array('pageSummary' => $summary) : array())
+    set::customData($browseType == 'resolvedBy' ? array('pageSummary' => isset($summary) ? $summary : '') : array())
 );
 
 render();

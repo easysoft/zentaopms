@@ -205,6 +205,7 @@ detailBody
         (
             set::className('w-full'),
             set::id('buildTabs'),
+            on::shown('.tab-pane')->call('$.apps.updateAppUrl', jsRaw('$this.data("url")')),
 
             /* Linked story table. */
             tabPane
@@ -213,6 +214,7 @@ detailBody
                 set::key('linkStory'),
                 set::title($lang->build->stories),
                 set::active($type == 'story'),
+                setData('url', sprintf($tabUrl, 'story')),
                 div
                 (
                     setClass('tab-actions'),
@@ -253,6 +255,7 @@ detailBody
                 set::key('bug'),
                 set::title($lang->build->bugs),
                 set::active($type == 'bug'),
+                setData('url', sprintf($tabUrl, 'bug')),
                 div
                 (
                     setClass('tab-actions'),
@@ -298,6 +301,7 @@ detailBody
                 set::key('generatedBug'),
                 set::title($lang->build->generatedBugs),
                 set::active($type == 'generatedBug'),
+                setData('url', sprintf($tabUrl, 'generatedBug')),
                 dtable
                 (
                     setID('table-build-generatedBug'),
@@ -327,6 +331,8 @@ detailBody
                 to::prefix(icon('flag')),
                 set::key('buildInfo'),
                 set::title($lang->build->basicInfo),
+                set::active($type == 'buildInfo'),
+                setData('url', sprintf($tabUrl, 'buildInfo')),
                 div(
                     section(
                         set::title($lang->build->basicInfo),

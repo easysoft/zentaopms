@@ -32,6 +32,8 @@ if(isset($config->user->task->dtable->fieldList['relatedObject']))
     $config->user->task->dtable->fieldList['relatedObject']['link'] = hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={id}&objectType=task') . "'; }>RAWJS" : null;
 }
 $cols = $this->loadModel('datatable')->getSetting('user', 'task');
+if(isset($cols['execution'])) $cols['execution']['map'] = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
+if(isset($cols['project']))   $cols['project']['map']   = $this->loadModel('project')->getPairs();
 
 if($config->edition != 'open' && !empty($tasks))
 {

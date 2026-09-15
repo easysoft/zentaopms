@@ -81,6 +81,8 @@ class datatable extends control
             $account = $this->app->user->account;
             if($account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest.'));
 
+            $this->loadModel($module);
+
             $rawModule  = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
             if($rawModule == 'story' && $extra && $rawModule != $extra) $rawModule = $extra;
 

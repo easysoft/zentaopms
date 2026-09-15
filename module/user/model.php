@@ -124,6 +124,7 @@ class userModel extends model
     {
         if(empty($user->password1))
         {
+            unset($user->passwordPlain);
             if(!$canNoPassword) dao::$errors['password1'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
             return !dao::isError();
         }
@@ -139,6 +140,7 @@ class userModel extends model
         }
         $user->passwordLength   = strlen($passwordPlain);
         $user->passwordStrength = $this->computePasswordStrength($passwordPlain);
+        unset($user->passwordPlain);
 
         /* 检查密码强度是否符合安全设置。*/
         /* Check if the password strength meets the security settings. */
@@ -516,7 +518,7 @@ class userModel extends model
             $requiredFields = trim(str_replace(array(',dept,', ',commiter,'), '', ',' . $requiredFields . ','), ',');
         }
 
-        $this->dao->insert(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,passwordLength,passwordStrength')
+        $this->dao->insert(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,passwordLength,passwordStrength,passwordPlain')
             ->batchCheck($requiredFields, 'notempty')
             ->checkIF($user->account, 'account', 'unique')
             ->checkIF($user->account, 'account', 'account')
@@ -680,7 +682,7 @@ class userModel extends model
         /* Remove unavailable contact fields from available fields. */
         $requiredFields = implode(',', array_diff($requiredFields, $unAvailableContactFields));
 
-        $this->dao->update(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,passwordLength,passwordStrength')
+        $this->dao->update(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,passwordLength,passwordStrength,passwordPlain')
             ->batchCheck($requiredFields, 'notempty')
             ->checkIF($user->account, 'account', 'unique', "id != '$user->id'")
             ->checkIF($user->account, 'account', 'account')

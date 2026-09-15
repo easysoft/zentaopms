@@ -1,0 +1,29 @@
+---
+title: ops_webhooks 表数据配置 - backfillGitFoxWebhookSecret 方法测试
+desc: 为测试 repoModel::backfillGitFoxWebhookSecret() 方法提供 webhook 数据
+author: Codex
+version: 1.0
+
+fields:
+- field: id
+  note: Webhook ID
+  range: 1-8
+- field: repoID
+  note: 关联代码库 ID
+  range: '1,1,2,3,4,5,7,1'
+- field: url
+  note: 回调地址
+  prefix: 'https://zentao.example.com/api.php/v1/gitfox/webhook?repoID='
+  range: '1,1,2,3,4,5,7,1'
+- field: secret
+  note: Webhook 密钥
+  range: old-secret-1,old-secret-2,old-secret-3,old-secret-4,old-secret-5,old-secret-6,old-secret-7,old-secret-8
+- field: authMethod
+  note: 认证方式
+  range: 'none{8}'
+- field: authHeader
+  note: 认证请求头
+  range: old-header-1,old-header-2,old-header-3,old-header-4,old-header-5,old-header-6,old-header-7,old-header-8
+- field: deleted
+  note: 是否删除；id=8 已删除
+  range: '0,0,0,0,0,0,0,1'

@@ -50,7 +50,7 @@ window.fnLinkBugs = function(e)
 {
     const \$relatedBugs = $('#linkBugsBox').find('.picker-box').zui('picker');
     var linkedList = \$relatedBugs.$.valueList;
-    var linkedBugs = \$relatedBugs.options.items;
+    var linkedBugs = \$relatedBugs.options.items.slice(); // 复制一份选项，使用新的数组引用，否则下拉框不会重新渲染选项，导致新关联的 bug 只显示 bug ID
 
     const dtable      = zui.DTable.query(e.target);
     const checkedList = dtable.$.getChecks();

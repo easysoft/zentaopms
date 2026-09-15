@@ -7,18 +7,22 @@ title=测试 ppmModel::createMRLinkedAction();
 timeout=0
 cid=0
 
-- 执行ppmModel模块的createMRLinkedActionTest方法，参数是6501, 'linked2mr' @1
-- 执行ppmModel模块的createMRLinkedActionTest方法，参数是6501, 'unlinked' @1
-- 执行ppmModel模块的createMRLinkedActionTest方法，参数是9999, 'linked2mr' @1
-- 执行ppmModel模块的createMRLinkedActionTest方法，参数是6501, 'linked2mr', '2026-07-10 09:00:00' @1
-- 执行ppmModel模块的createMRLinkedActionTest方法，参数是0, 'linked2mr' @1
+- 执行ppmModel模块的createMRLinkedActionTest方法，参数是6501, 'editppm' @1
+- 编辑合并请求动态数量 @1
+- 编辑合并请求动态内容 @story|8201|editppm|admin
+- 编辑合并请求动态操作人使用realname @1
+- 执行ppmModel模块的createMRLinkedActionTest方法，参数是9999, 'editppm' @1
+- 执行ppmModel模块的createMRLinkedActionTest方法，参数是0, 'editppm' @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('user')->gen(3);
+$user = zenData('user');
+$user->account->range('admin,user1,user2');
+$user->realname->range('管理员,用户1,用户2');
+$user->gen(3);
 zenData('product')->gen(1);
 
 $repo = zenData('ops_repo')->loadYaml('ops_repo', false, 2);
@@ -58,8 +62,11 @@ su('admin');
 
 $ppmModel = new ppmModelTest();
 
-r($ppmModel->createMRLinkedActionTest(6501, 'linked2mr')) && p() && e('1');
-r($ppmModel->createMRLinkedActionTest(6501, 'unlinked')) && p() && e('1');
-r($ppmModel->createMRLinkedActionTest(9999, 'linked2mr')) && p() && e('1');
-r($ppmModel->createMRLinkedActionTest(6501, 'linked2mr', '2026-07-10 09:00:00')) && p() && e('1');
-r($ppmModel->createMRLinkedActionTest(0, 'linked2mr')) && p() && e('1');
+r($ppmModel->createMRLinkedActionTest(6501, 'editppm')) && p() && e('1');
+
+$editActions = $ppmModel->instance->dao->select('*')->from(TABLE_ACTION)->where('action')->eq('editppm')->fetchAll('', false);
+r(count($editActions)) && p() && e('1');
+r($editActions[0]) && p('objectType,objectID,action,actor') && e('story,8201,editppm,admin');
+r(strpos($editActions[0]->extra, '管理员') !== false) && p() && e('1');
+r($ppmModel->createMRLinkedActionTest(9999, 'editppm')) && p() && e('1');
+r($ppmModel->createMRLinkedActionTest(0, 'editppm')) && p() && e('1');

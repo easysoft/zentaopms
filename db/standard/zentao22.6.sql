@@ -5449,6 +5449,7 @@ CREATE TABLE `zt_workflowrule` (
   `type` varchar(10) NOT NULL DEFAULT 'regex',
   `name` varchar(30) NOT NULL DEFAULT '',
   `rule` text,
+  `builtin` tinyint unsigned NOT NULL DEFAULT 0,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',

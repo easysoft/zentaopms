@@ -53,15 +53,22 @@ window.copyCommand = function(selector)
 
 window.checkGitFoxServer = function()
 {
+    if(window.gitFoxUpgradeChecking) return;
+    window.gitFoxUpgradeChecking = true;
+
     $.getJSON($.createLink('gitfox', 'ajaxCheckGitfoxHealth', '_single=1'), function(res)
     {
         if(res.result != 'success' || res.status != 'healthy')
         {
+            window.gitFoxUpgradeChecking = false;
             zui.Messager.fail(res.message || upgradeFail);
         }
         else
         {
-            loadPage(nextLink);
+            loadPage(completeLink);
         }
-    })
+    }).fail(function()
+    {
+        window.gitFoxUpgradeChecking = false;
+    });
 }

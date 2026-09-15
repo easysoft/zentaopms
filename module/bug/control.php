@@ -312,7 +312,7 @@ class bug extends control
         $this->bugZen->buildCreateForm($bug, $params, $from);
 
         extract($params);
-        $extrasValue = 'productID={product},moduleID={module},projectID={project},executionID={execution},regionID={region},allBuilds={allBuilds},allUsers={allUsers}' . (empty($from) ? '' : "&from=$from");
+        $extrasValue = 'productID={product},moduleID={module},projectID={project},executionID={execution},regionID={region},allBuilds={allBuilds},allUsers={allUsers}' . (empty($from) ? '' : ",from=$from");
         if(!empty($fromType)) $extrasValue .= ",fromType={$fromType}";
         if(!empty($fromID))   $extrasValue .= ",fromID={$fromID}";
         $this->view->loadUrl = $this->createLink('bug', $this->app->rawMethod, "productID={$productID}&branch={branch}&extras={$extrasValue}");

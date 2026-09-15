@@ -16,6 +16,32 @@ $zd_user->jira->range('0');
 $zd_user->deleted->range('0');
 $zd_user->gen(1);
 
+$branchType = zenData('ops_branch_type');
+$branchType->id->range('1-2');
+$branchType->repo->range('0');
+$branchType->name->range('global1,global2');
+$branchType->key->range('global1,global2');
+$branchType->prefix->range('global1/,global2/');
+$branchType->createdBy->range('admin');
+$branchType->deleted->range('0');
+$branchType->gen(2);
+
+$entry = zenData('entry');
+$entry->id->range('1');
+$entry->name->range('GitFox');
+$entry->account->range('admin');
+$entry->code->range('gitfox');
+$entry->key->range('gitfox');
+$entry->freePasswd->range('1');
+$entry->ip->range('*');
+$entry->createdBy->range('admin');
+$entry->createdDate->range('`2026-01-01 00:00:00`');
+$entry->calledTime->range('0');
+$entry->editedBy->range('admin');
+$entry->editedDate->range('`2026-01-01 00:00:00`');
+$entry->deleted->range('0');
+$entry->gen(1);
+
 su('admin');
 
 $tester->loadModel('repobranchtype');

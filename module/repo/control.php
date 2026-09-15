@@ -206,7 +206,7 @@ class repo extends control
         $productIds = array(zget($object, 'product', 0));
         if($objectType == 'task') $productIds = $this->loadModel('product')->getProductIDByProject($object->execution, false);
 
-        $repoList  = $this->repo->getListByPriv('haspriv');
+        $repoList  = $this->repo->getListByPriv('haspriv', 'git', false);
         $repoPairs = array();
         foreach($repoList as $repo)
         {
@@ -221,7 +221,8 @@ class repo extends control
         if(!empty($_POST)) $repoID = (int)$this->post->codeRepo;
         if(!$repoID || !isset($repoPairs[$repoID])) $repoID = key($repoPairs);
 
-        $this->scm->setEngine($repoList[$repoID]);
+        $repo = $this->repo->getByID($repoID);
+        $this->scm->setEngine($repo);
         if(!empty($_POST))
         {
             $branch = form::data($this->config->repo->form->createBranch)->get();
@@ -2768,8 +2769,8 @@ class repo extends control
             $repoPairs[$repoID] = $repoInfo->name;
         }
 
-        $repoList  = $this->repo->getListByPriv('haspriv');
-        $this->scm->setEngine($repoList[$repoID]);
+        $repo = $this->repo->getByID($repoID);
+        $this->scm->setEngine($repo);
         if(!empty($_POST))
         {
             $branch = form::data($this->config->repo->form->createBranch)->get();
@@ -2783,8 +2784,6 @@ class repo extends control
             {
                 return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->notice->noPermissionToCreateBranch));
             }
-
-            $this->scm->setEngine($repoList[$repoID]);
 
             $this->scm->createBranch($branch->branchName, $branch->branchFrom);
             if(dao::isError()) return $this->sendError(dao::getError());
@@ -2829,15 +2828,14 @@ class repo extends control
                 foreach ($groups['items'] as $groupItem) $repoPairs[$groupItem['id']] = $groupItem['text'];
             }
         }
-        $repoList  = $this->repo->getListByPriv('haspriv');
-        $this->scm->setEngine($repoList[$repoID]);
+        $repo = $this->repo->getByID($repoID);
+        $this->scm->setEngine($repo);
         if(!empty($_POST))
         {
             $tag    = form::data($this->config->repo->form->createTag)->get();
             $repoID = $tag->codeRepo ? $tag->codeRepo : $repoID;
-            $this->scm->setEngine($repoList[$repoID]);
 
-            $result = $this->scm->createTag($repoList[$repoID]->id, $tag->tagName, $tag->tagFrom, $tag->comment);
+            $result = $this->scm->createTag($repo->id, $tag->tagName, $tag->tagFrom, $tag->comment);
 
             if(dao::isError()) return $this->sendError($this->lang->repo->error->createdFail . ': ' .  $this->parseErrorContent(dao::getError()['apiMessage']));
             if(empty($result)) return $this->sendError($this->lang->repo->error->createdFail);
@@ -2850,7 +2848,7 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
-        list($branchID, $branches, $tags) = $this->setBranchTag($repoList[$repoID], '');
+        list($branchID, $branches, $tags) = $this->setBranchTag($repo, '');
         unset($branches, $tags);
 
         $branchID = helper::safe64Encode(base64_encode($branchID));
@@ -2869,7 +2867,7 @@ class repo extends control
         if(isset($tagFrom[1])) unset($tagFrom[1]); /* Remove the tags. */
         $this->view->fromList = $tagFrom;
 
-        $commits = $this->repo->getCommits($repoList[$repoID], '', $branchID, 'dir', $pager, '', '', null);
+        $commits = $this->repo->getCommits($repo, '', $branchID, 'dir', $pager, '', '', null);
         $commit  = new stdClass();
         if(!empty($commits))
         {
@@ -3104,5 +3102,24 @@ class repo extends control
         }
 
         $this->send(array('result' => 'success', 'data' => $items));
+    }
+
+    /**
+     * 获取代码库diff信息。
+     * Ajax get repo diffs.
+     *
+     * @param  int    $repoID
+     * @param  string $fromRevision
+     * @param  string $toRevision
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDiffs(int $repoID, string $fromRevision, string $toRevision)
+    {
+        if(empty($fromRevision) || empty($toRevision)) return '';
+
+        $fromRevision = helper::safe64Decode($fromRevision);
+        $toRevision   = helper::safe64Decode($toRevision);
+        echo $this->loadModel('gitfox')->apiGetRepoDiffs($repoID, $fromRevision, $toRevision);
     }
 }

@@ -42,8 +42,9 @@ $_SESSION['ssoData'] = $ssoData;
 $ssoModel->addZTUser($data);
 r(dao::getError()) && p('password1:0') && e('密码必须10位及以上，且包含大小写字母、数字、特殊符号。'); //低密码强度。
 
-$data->password1        = 'Admin123';
-$data->password2        = 'Admin123';
+$strongPassword         = 'Admin123!xyz';
+$data->password1        = $strongPassword;
+$data->password2        = $strongPassword;
 $data->passwordStrength = '2';
 $data->passwordLength   = strlen($data->password1);
 $ssoModel->addZTUser($data);

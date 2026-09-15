@@ -25,6 +25,7 @@ cid=14877
  - 属性hasRendered @1
  - 属性comment @test
  - 属性commentEditable @1
+- 传入 actions，检查第三条记录的编辑合并请求动态操作人 @1
 - 切换 user1 账号， 传入 actions，检查第二条记录。
  - 属性id @2
  - 属性action @edited
@@ -60,6 +61,16 @@ $actions[2]->date       = date('Y-m-d H:i:s');
 $actions[2]->comment    = 'test';
 $actions[2]->extra      = 'test';
 
+$ppmAction = new stdclass();
+$ppmAction->id         = 3;
+$ppmAction->objectType = 'story';
+$ppmAction->objectID   = 1;
+$ppmAction->action     = 'editppm';
+$ppmAction->actor      = 'user1';
+$ppmAction->date       = date('Y-m-d H:i:s');
+$ppmAction->comment    = '';
+$ppmAction->extra      = '2026-09-09 10:00:00::user1::1';
+
 global $tester;
 $actionModel = $tester->loadModel('action');
 $list1 = $actionModel->buildActionList(array());
@@ -68,6 +79,7 @@ $list2 = $actionModel->buildActionList($actions);
 su('user1');
 $list3 = $actionModel->buildActionList($actions);
 $list4 = $actionModel->buildActionList($actions, array(), false);
+$list5 = $actionModel->buildActionList(array($ppmAction));
 
 $list2[1]->commentEditable = (int)$list2[1]->commentEditable;
 $list3[1]->commentEditable = (int)$list3[1]->commentEditable;
@@ -80,3 +92,4 @@ r((array)$list2[0]) && p('id,action,hasRendered')                         && e('
 r((array)$list2[1]) && p('id,action,hasRendered,comment,commentEditable') && e('2,edited,1,test,1'); // 传入 actions，检查第二条记录。
 r((array)$list3[1]) && p('id,action,hasRendered,comment,commentEditable') && e('2,edited,1,test,0'); // 切换 user1 账号， 传入 actions，检查第二条记录。
 r((array)$list4[1]) && p('id,action,hasRendered,comment,commentEditable') && e('2,edited,1,test,0'); // 将 commentEditable 参数为 false， 传入 actions，检查第二条记录。
+r(strpos($list5[0]->content, '用户1') !== false) && p() && e('1');                                  // 编辑合并请求动态操作人使用realname。

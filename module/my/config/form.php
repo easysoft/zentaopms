@@ -6,6 +6,7 @@ $config->my->form->changePassword['password1']        = array('required' => true
 $config->my->form->changePassword['password2']        = array('required' => true,  'type' => 'string', 'default' => '');
 $config->my->form->changePassword['passwordLength']   = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->my->form->changePassword['passwordStrength'] = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->my->form->changePassword['passwordPlain']    = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->my->form->editProfile = array();
 $config->my->form->editProfile['account']          = array('required' => true,  'type' => 'string', 'default' => '', 'skipRequired' => true);
@@ -30,6 +31,7 @@ $config->my->form->editProfile['zipcode']          = array('required' => false, 
 $config->my->form->editProfile['verifyPassword']   = array('required' => true,  'type' => 'string', 'default' => '');
 $config->my->form->editProfile['passwordLength']   = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->my->form->editProfile['passwordStrength'] = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->my->form->editProfile['passwordPlain']    = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->my->form->manageContacts = array();
 $config->my->form->manageContacts['listName'] = array('required' => true,  'type' => 'string', 'default' => '');

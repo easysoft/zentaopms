@@ -146,7 +146,6 @@ class gitfox extends control
 
         $this->view->title           = $this->lang->gitfox->upgradeGitFox;
         $this->view->script          = $script;
-        $this->view->nextLink        = $nextLink;
         $this->view->inPage          = $inPage;
         $this->view->fromVersion     = $fromVersion;
         $this->view->currentVersion  = $currentVersion === '' ? '' : 'v' . ltrim((string)$currentVersion, 'vV');

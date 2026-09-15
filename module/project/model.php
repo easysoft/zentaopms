@@ -1111,7 +1111,7 @@ class projectModel extends model
         $this->config->build->search['actionURL'] = helper::createLink($this->app->rawModule, $this->app->rawMethod, "{$objectIDField}=$projectID&browseType=bysearch&queryID=myQueryID");
         $this->config->build->search['queryID']   = (int)$queryID;
         $this->config->build->search['params']['product']['values'] = $products;
-        $this->config->build->search['params']['system']['values']  = $this->loadModel('system')->getPairs($queryID ? 0 : (int)$productID, '0');
+        $this->config->build->search['params']['system']['values']  = $this->loadModel('system')->getPairsByProducts(array_keys($products));
 
         $this->loadModel('search')->setSearchParams($this->config->build->search);
         return true;

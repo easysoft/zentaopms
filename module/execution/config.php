@@ -144,7 +144,6 @@ $config->execution->all->search['fields']['realEnd']        = $lang->execution->
 $config->execution->all->search['fields']['closedBy']       = $lang->execution->closedBy;
 $config->execution->all->search['fields']['lastEditedDate'] = $lang->execution->lastEditedDate;
 $config->execution->all->search['fields']['closedDate']     = $lang->execution->closedDate;
-$config->execution->all->search['fields']['teamCount']      = $lang->execution->teamCount;
 
 $config->execution->all->search['params']['name']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->execution->all->search['params']['id']             = array('operator' => '=',       'control' => 'input',  'values' => '');
@@ -160,7 +159,6 @@ $config->execution->all->search['params']['realEnd']        = array('operator' =
 $config->execution->all->search['params']['closedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->execution->all->search['params']['lastEditedDate'] = array('operator' => '=',       'control' => 'date',  'values' => '');
 $config->execution->all->search['params']['closedDate']     = array('operator' => '=',       'control' => 'date',  'values' => '');
-$config->execution->all->search['params']['teamCount']      = array('operator' => '=',       'control' => 'input',  'values' => '');
 
 $config->printKanban = new stdClass();
 $config->printKanban->col['story']  = 1;

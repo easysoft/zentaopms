@@ -79,7 +79,7 @@ $lang->aiapp->langData->zaiConfigNotValid   = '尚未进行ZAI配置，请联系
 $lang->aiapp->langData->unauthorizedError   = '授权失败，无效的API密钥，请联系管理员进行<a href="{zaiConfigUrl}">ZAI配置</a>。<br>若已完成相关配置，请尝试重新加载页面。';
 $lang->aiapp->langData->processDataPrefix   = "要进行处理的数据如下：\n{data}";
 $lang->aiapp->langData->processedDataResult = "处理后的数据如下：\n```json\n{data}\n```";
-$lang->aiapp->langData->agentResultSummary  = '对方案中数据的变化进行解释，尽量对变化的属性分别进行说明。';
+$lang->aiapp->langData->agentResultSummary  = '使用简短易懂的一句话对方案中数据的变化进行解释，禁止使用换行。';
 $lang->aiapp->langData->promptResultTitle   = '方案标题，如果没有合适标题可以省略';
 $lang->aiapp->langData->promptExtraLimit    = '通常工具 `{toolName}` 只需要调用一次，除非用户特殊要求提供多个方案。';
 $lang->aiapp->langData->promptResultReturn  = '已经在界面展示处理后的数据，无需对处理后的数据进行重复展示，也不需要进一步描述和解释，禁止向用户展示处理后的原始 JSON 数据，仅需要提醒我可以通过点击“应用到{formName}表单”按钮来使用这些数据即可。';

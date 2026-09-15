@@ -670,4 +670,42 @@ class searchTaoTest extends baseTest
         $where = '';
         return $this->instance->setWhere($where, $field, $operator, $value, $andOr, $control);
     }
+
+    /**
+     * 测试构建搜索「空」的条件。
+     * Test getEmptySearchCondition method.
+     *
+     * @param  string $field
+     * @param  string $operator
+     * @param  string $driver
+     * @access public
+     * @return string
+     */
+    public function getEmptySearchConditionTest(string $field, string $operator, string $driver = ''): string
+    {
+        $oldDriver = $this->instance->config->db->driver;
+        if($driver) $this->instance->config->db->driver = $driver;
+
+        $result = $this->invokeArgs('getEmptySearchCondition', [$field, $operator]);
+
+        $this->instance->config->db->driver = $oldDriver;
+        return $result;
+    }
+
+    /**
+     * 测试构建搜索「空」的条件查询数据。
+     * Test getEmptySearchCondition method with the generated data.
+     *
+     * @param  string $operator
+     * @access public
+     * @return int
+     */
+    public function getEmptySearchConditionDataTest(string $operator): int
+    {
+        $condition = $this->invokeArgs('getEmptySearchCondition', ['assignedTo', $operator]);
+        $tasks     = $this->instance->dao->select('id')->from(TABLE_TASK)->where($condition)->andWhere("name LIKE 'getemptysearchcondition%'")->fetchAll();
+        if(!is_array($tasks)) return -1;
+
+        return count($tasks);
+    }
 }

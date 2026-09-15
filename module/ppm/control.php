@@ -366,6 +366,7 @@ class ppm extends control
     public function view(int $id, string $type = 'basic', string $param = 'all', int $recTotal = 0, int $recPerPage = 20, int $pageID = 0)
     {
         $ppm  = $this->ppm->fetchByID($id);
+        if(!empty($ppm->repoID)) $this->loadModel('repo')->saveState((int)$ppm->repoID);
         $repo = $this->loadModel('repo')->getByID($ppm->repoID);
         $flow = $this->loadModel('reporeviewflow')->getByID(zget($ppm, 'reviewFlowID', 0));
         $scm  = $this->app->loadClass('scm');
@@ -398,7 +399,8 @@ class ppm extends control
         $this->view->bugPager         = $bugPager;
         $this->view->objectPager      = $objectPager;
         $this->view->type             = $type;
-        $this->view->diffText         = $this->loadModel('gitfox')->apiGetRepoDiffs($ppm->repoID, $fromRevision, $toRevision);
+        $this->view->fromRevision     = helper::safe64Encode($fromRevision);
+        $this->view->toRevision       = helper::safe64Encode($toRevision);
         $this->view->users            = $this->loadModel('user')->getPairs('noletter');
         $this->view->oldRevision      = $ppm->targetBranch;
         $this->view->newRevision      = $ppm->sourceBranch;

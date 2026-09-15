@@ -44,5 +44,4 @@ r($result === '') && p() && e('1'); // 步骤2：边界值输入
 r($testObj->getTargetFormLabelTest('abc', true, '')) && p() && e('abc'); // 步骤3：无效输入
 r($testObj->getTargetFormLabelTest('999999', true, '')) && p() && e('999999'); // 步骤4：大值输入
 r($testObj->getTargetFormLabelTest('test', true, '')) && p() && e('test'); // 步骤5：业务规则验证
-$noRedirect = $tester->lang->ai->prompts->noRedirect;
-r($testObj->getTargetFormLabelTest('empty.empty', true, '')) && p() && e($noRedirect); // 步骤6：无需返回禅道表单
+r($testObj->getTargetFormLabelTest('empty.empty', true, '')) && p() && e('无需返回禅道表单'); // 步骤6：无需返回禅道表单

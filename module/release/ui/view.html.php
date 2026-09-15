@@ -94,7 +94,7 @@ if(isset($bugCols['task']))        $bugCols['task']['map']       = array('') + $
 if(isset($bugCols['toTask']))      $bugCols['toTask']['map']     = array('') + $bugTasks;
 
 if(!common::hasPriv($releaseModule, 'unlinkStory') || $release->status == 'terminate') unset($config->release->dtable->story->fieldList['actions']['list']['unlinkStory']);
-if(!common::hasPriv($releaseModule, 'unlinkBug') || $release->status == 'terminate')   unset($config->release->dtable->bug->fieldList['actions']['list']['unlinkBug'], $config->release->dtable->leftBug->fieldList['actions']['list']['unlinkLeftBug']);
+if(!common::hasPriv($releaseModule, 'unlinkBug') || $release->status == 'terminate')   unset($bugCols['actions']['list']['unlinkBug'], $config->release->dtable->leftBug->fieldList['actions']['list']['unlinkLeftBug']);
 
 /* Table data and setting for finished stories tab. */
 jsVar('storyCases', $storyCases);

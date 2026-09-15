@@ -23,7 +23,7 @@ foreach($needProcess as $processKey => $processType)
 
 jsVar('window.finish', $finish);
 jsVar('window.needProcess', $needProcess);
-jsVar('window.processLink', inlink('afterExec', "fromVersion=$fromVersion&processed=yes&skipMoveFile=yes"));
+jsVar('window.processLink', inlink('afterExec', "fromVersion=$fromVersion&processed=yes&skipMoveFile=yes&skipUpdateDocs=yes&skipUpdateDocTemplates=yes&skipUpdateProjectReports=yes&skipInstallGitFox=yes&skipUpgradeGitFox=yes"));
 
 $tips = array();
 if(!empty($needProcess['changeEngine']))

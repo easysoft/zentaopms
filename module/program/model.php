@@ -595,7 +595,7 @@ class programModel extends model
      */
     public function getStakeholders(int $programID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.from,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
+        return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile AS phone,t2.weixin,t2.email,t1.id,t1.type,t1.from,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->where('t1.`objectID`')->eq($programID)
             ->andWhere('t1.`objectType`')->eq('program')

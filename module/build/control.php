@@ -192,6 +192,7 @@ class build extends control
         $this->view->actions      = $this->loadModel('action')->getList('build', $buildID);
         $this->view->link         = $link;
         $this->view->orderBy      = $orderBy;
+        $this->view->tabUrl       = $this->createLink($this->app->tab == 'project' ? 'projectbuild' : 'build', 'view', "buildID=$buildID&type=%s&link=$link&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
         $this->view->grades       = $this->loadModel('story')->getGradePairs('story', 'all');
         $this->view->showGrade    = $this->config->edition == 'ipd';
         $this->view->execution    = $this->loadModel('execution')->getByID((int)$build->execution);

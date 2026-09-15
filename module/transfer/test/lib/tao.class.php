@@ -151,7 +151,7 @@ class transferTaoTest extends baseTest
      */
     public function getQueryDatasTest(string $module = '', string $checkedItem = '')
     {
-        global $tester;
+        global $tester, $app;
 
         /* 设置是否导出选中数据。*/
         if($checkedItem)
@@ -165,6 +165,10 @@ class transferTaoTest extends baseTest
         {
             $execution = $tester->loadModel('execution');
             $execution->getTasks(0, 101, array(), 'unclosed', 0, 0, '', null);
+
+            /* 列表条件中带有join表的字段别名，导出时按单表查询，需要去掉别名前缀。*/
+            $condition = preg_replace('/\bt\d+\./', '', $tester->session->taskQueryCondition);
+            $tester->session->set('taskQueryCondition', $condition, $app->tab);
         }
 
         /* 设置story的查询条件(只有QueryCondition时)。*/

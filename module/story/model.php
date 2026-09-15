@@ -3006,7 +3006,13 @@ class storyModel extends model
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
         $storyQuery = preg_replace_callback("/AND `grade` (=|!=) '(\w+)(\d+)'/", function($matches){return "AND `grade` {$matches[1]} '" . $matches[3] . "' AND `type` = '" . $matches[2] . "'";}, $storyQuery);
-        $storyQuery = preg_replace_callback("/`release`\s*(=|!=)\s*'(\d+)'/i", function($matches){$op = $matches[1] == '!=' ? 'NOT ' : ''; return "{$op}EXISTS (SELECT 1 FROM " . TABLE_RELEASE . " WHERE " . TABLE_RELEASE . ".id = '{$matches[2]}' AND " . TABLE_RELEASE . ".deleted = '0' AND FIND_IN_SET(`id`, " . TABLE_RELEASE . ".stories))";}, $storyQuery);
+        $storyQuery = preg_replace_callback("/`release`\s*(=|!=)\s*'(\d*)'/i", function($matches)
+        {
+            /* An empty release means the story is not in any release, no release id clause is needed. */
+            $idClause  = $matches[2] === '' ? '' : TABLE_RELEASE . ".id = '{$matches[2]}' AND ";
+            $notExists = $matches[2] === '' ? ($matches[1] == '=') : ($matches[1] == '!=');
+            return ($notExists ? 'NOT EXISTS' : 'EXISTS') . "(SELECT 1 FROM " . TABLE_RELEASE . " WHERE " . $idClause . TABLE_RELEASE . ".deleted = '0' AND FIND_IN_SET(`id`, " . TABLE_RELEASE . ".stories))";
+        }, $storyQuery);
 
         return $this->getBySQL($queryProductID, $storyQuery, $orderBy, $pager, $type);
     }
@@ -4665,7 +4671,7 @@ class storyModel extends model
 
         /* Merge to get a new sort list. */
         $newSortIDList = array_merge($frontStoryIDList, $sortIDList, $behindStoryIDList);
-        if(strpos($orderBy, '`order`_desc') !== false) $newSortIDList = array_reverse($newSortIDList);
+        if(strpos($orderBy, '`order`_desc') !== false || strpos($orderBy, 'order_desc') !== false) $newSortIDList = array_reverse($newSortIDList);
 
         /* Loop update the story order of plan. */
         $order = 1;

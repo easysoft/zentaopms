@@ -1315,7 +1315,13 @@ class my extends control
         {
             $tickets = $this->loadModel('ticket')->getBySearch($queryID, $orderBy, $pager);
         }
-        foreach($tickets as $ticket) $ticket->feedbackTip = $ticket->feedback != 0 ? '#' . $ticket->feedback : '';
+        /* Processing tickets consumed hours. */
+        $allConsumed = $this->loadModel('ticket')->getConsumedByTicket(array_keys($tickets));
+        foreach($tickets as $ticket)
+        {
+            $ticket->consumed    = isset($allConsumed[$ticket->id]) ? round((float)$allConsumed[$ticket->id], 2) : 0;
+            $ticket->feedbackTip = $ticket->feedback != 0 ? '#' . $ticket->feedback : '';
+        }
 
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=ticket&browseType=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildTicketSearchForm($queryID, $actionURL);

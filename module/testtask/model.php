@@ -728,6 +728,35 @@ class testtaskModel extends model
     }
 
     /**
+     * 按指派人统计测试单中的用例。
+     * Get report data of a testtask by case assignee.
+     *
+     * @param  int    $taskID
+     * @param  string $caseQuery
+     * @param  int    $moduleID
+     * @access public
+     * @return array
+     */
+    public function getDataOfTestTaskPerAssignee(int $taskID, string $caseQuery, int $moduleID = 0): array
+    {
+        $datas = $this->dao->select('t1.`assignedTo` AS name, COUNT(1) AS value')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->where($caseQuery)
+            ->andWhere('t1.task')->eq($taskID)
+            ->andWhere('t2.deleted')->eq('0')
+            ->beginIF($moduleID)->andWhere('t2.module')->eq($moduleID)->fi()
+            ->groupBy('t1.`assignedTo`')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
+        if(!$datas) return array();
+
+        $users = $this->loadModel('user')->getPairs('noclosed|noletter');
+        foreach($datas as $result => $data) $data->name = $result ? zget($users, $result) : $this->lang->testtask->unassigned;
+
+        return $datas;
+    }
+
+    /**
      * 更新测试单。
      * Update a test task.
      *

@@ -158,7 +158,7 @@ ALTER TABLE `zt_ai_agent` ADD `cycleConfig` text NULL DEFAULT NULL COMMENT '周�
 ALTER TABLE `zt_ai_agent` ADD `notifyRule` text NULL DEFAULT NULL COMMENT '通知规则JSON：roles/users/methods' AFTER `cycleConfig`;
 ALTER TABLE `zt_ai_agent` ADD `lastRunDate` datetime NULL DEFAULT NULL COMMENT '最近一次定时执行时间' AFTER `editedDate`;
 
-UPDATE `zt_ai_agent` SET `targetForm` = 'task.batchcreate', `actionPurpose` = 'task.batchcreate' WHERE `targetForm` = 'execution.batchcreatetask' OR `actionPurpose` = 'execution.batchcreatetask';
+UPDATE `zt_ai_agent` SET `module` = 'task', `displayPosition` = 'form', `targetForm` = 'task.batchcreate', `actionPurpose` = 'task.batchcreate' WHERE `targetForm` = 'execution.batchcreatetask' OR `actionPurpose` = 'execution.batchcreatetask';
 
 CREATE TABLE IF NOT EXISTS `zt_ai_timerlog` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -190,7 +190,7 @@ CREATE INDEX `idx_agent_status` ON `zt_ai_timerqueue`(`agent`, `status`);
 CREATE INDEX `idx_agent_object` ON `zt_ai_timerqueue`(`agent`, `objectType`, `objectID`);
 
 REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
-('30', '8', '*', '*', '*', 'moduleName=ai&methodName=runTimerAgents', '执行定时智能体', 'zentao', 1, 'normal', NULL);
+('*/5', '*', '*', '*', '*', 'moduleName=ai&methodName=runTimerAgents', '执行定时智能体', 'zentao', 1, 'normal', NULL);
 
 ALTER TABLE `zt_ai_useragent` ADD COLUMN `type` varchar(30) NOT NULL DEFAULT '' COMMENT '类型：'' | executor' AFTER `agent`;
 
@@ -229,3 +229,6 @@ REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `typ
 
 DELETE FROM `zt_workflowfield`  WHERE `module` = 'ticket' AND `field` = 'consumed';
 DELETE FROM `zt_workflowlayout` WHERE `module` = 'ticket' AND `field` = 'consumed';
+
+ALTER TABLE `zt_workflowrule` ADD COLUMN `builtin` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否为内置规则(0:不是, 1:是)' AFTER `rule`;
+UPDATE `zt_workflowrule` SET `builtin` = 1 WHERE `type` = 'system';

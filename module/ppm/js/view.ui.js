@@ -65,6 +65,15 @@ function connectSSE() {
 }
 
 /**
+ * 页面加载后建立 SSE 连接，接收 GitFox 推送的合并请求事件。
+ * Connect SSE after page is ready to receive pull request events from GitFox.
+ */
+$(document).ready(function()
+{
+    connectSSE();
+});
+
+/**
  * 在当前页面用modal加载链接。
  * Load link object page.
  *

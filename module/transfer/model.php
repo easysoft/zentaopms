@@ -520,6 +520,10 @@ class transferModel extends model
                         $separator    = $field == 'mailto' ? ',' : "\n";
                         $multipleLsit = explode(',', (string) $value);
 
+                        /* 未关联计划时所属计划的值是 0，zget 取不到名称会原样返回该值，导致导出结果多出无意义的 0，这里先过滤掉。*/
+                        /* The plan value is 0 when no plan is linked, zget returns it as is and it shows up in the exported value, so filter it out. */
+                        if($field == 'plan') $multipleLsit = array_filter($multipleLsit, function($item){ return $item !== '0'; });
+
                         foreach($multipleLsit as $key => $tmpValue) $multipleLsit[$key] = zget($exportDatas[$field], $tmpValue);
                         $multiple = implode($separator, $multipleLsit);
                         $rows[$id]->$field = $multiple;

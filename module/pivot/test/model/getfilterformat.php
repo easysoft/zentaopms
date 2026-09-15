@@ -72,5 +72,5 @@ $maliciousFilters = array
 );
 list($sqlM, $filtersM) = $pivot->getFilterFormatTest($sqlList[1], $maliciousFilters);
 
-r(strpos($filtersM['name5']['value'], "') or") === false && substr($filtersM['name5']['value'], -1) === ')') && p('') && e('1'); // 注入payload不能逃逸select过滤值
-r(strpos($filtersM['name6']['value'], "') or") === false && substr($filtersM['name6']['value'], -1) === "'") && p('') && e('1'); // 注入payload不能逃逸input过滤值
+r(strpos($filtersM['name5']['value'], "x'") === false && strpos($filtersM['name5']['value'], "x\\'") !== false && substr($filtersM['name5']['value'], -1) === ')') && p('') && e('1'); // 注入payload不能逃逸select过滤值
+r(strpos($filtersM['name6']['value'], "x'") === false && strpos($filtersM['name6']['value'], "x\\'") !== false && substr($filtersM['name6']['value'], -1) === "'") && p('') && e('1'); // 注入payload不能逃逸input过滤值

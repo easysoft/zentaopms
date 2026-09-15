@@ -42,7 +42,7 @@ $_SERVER['REQUEST_URI'] = '/zentao/gitfox-browse.html';
 
 $gitfoxTest = new gitfoxModelTest();
 
-$repo = (object)array('id' => 1, 'name' => 'test');
+$repo = (object)array('id' => 1, 'name' => 'test', 'gitUID' => 'unit-test-git-uid');
 
 r($gitfoxTest->addPushWebhookErrorTest($repo)) && p() && e('0');
 r($gitfoxTest->addPushWebhookTest($repo)) && p() && e('1');

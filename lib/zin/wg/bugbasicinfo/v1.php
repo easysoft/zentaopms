@@ -114,18 +114,18 @@ class bugBasicInfo extends wg
 
         $items[$lang->bug->type] = zget($lang->bug->typeList, $bug->type, $bug->type);
 
-        $items[$lang->bug->severity] = array
+        $items[$lang->bug->severity] = $bug->severity ? array
         (
             'control' => 'severitylabel',
             'level'   => $bug->severity
-        );
+        ) : '';
 
-        $items[$lang->bug->pri] = array
+        $items[$lang->bug->pri] = $bug->pri ? array
         (
             'control' => 'pri',
             'pri'     => $bug->pri,
             'text'    => $lang->bug->priList
-        );
+        ) : '';
 
         $items[$lang->bug->status] = array
         (

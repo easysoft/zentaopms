@@ -240,7 +240,7 @@ class kanbanTao extends kanbanModel
             $excludeProducts = $this->dao->select('t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t2.type')->eq('project')
-                ->andWhere('t2.model')->ne('scrum')
+                ->andWhere('t2.`model`')->ne('scrum')
                 ->andWhere('t2.`hasProduct`')->eq('0')
                 ->fetchPairs();
         }
@@ -249,7 +249,7 @@ class kanbanTao extends kanbanModel
             $excludeProducts = $this->dao->select('t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t2.type')->eq('project')
-                ->andWhere('t2.model')->eq('kanban')
+                ->andWhere('t2.`model`')->eq('kanban')
                 ->andWhere('t2.`hasProduct`')->eq('0')
                 ->fetchPairs();
         }

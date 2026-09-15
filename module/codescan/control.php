@@ -1016,7 +1016,7 @@ class codescan extends control
 
         $pager->recTotal = empty($taskList->pager) ? 0 : zget($taskList->pager, 'total', 0);
 
-        $taskList = zget($taskList, 'data', array());
+        $taskList = empty($taskList) ? array() : zget($taskList, 'data', array());
         foreach($taskList as $task) $task = $this->codescanZen->processTaskData($task, $this->view->repoList);
 
         $this->view->title    = $this->lang->codescan->task;
@@ -1240,6 +1240,8 @@ class codescan extends control
     {
         $decodeExtras = str_replace(array(',', ' ', '*'), array('&', '', '-'), trim($extras, ','));
         parse_str($decodeExtras, $params);
+        if(!empty($params['branch64'])) $params['branch'] = helper::safe64Decode($params['branch64']);
+        if(!empty($params['path64']))   $params['path']   = helper::safe64Decode($params['path64']);
 
         if($repoID)
         {

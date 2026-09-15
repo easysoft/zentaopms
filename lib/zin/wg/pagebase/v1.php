@@ -40,9 +40,7 @@ class pageBase extends wg
     {
         global $lang, $config, $app;
 
-        $setXuanClass = str_contains($_SERVER['HTTP_USER_AGENT'], 'xuanxuan')
-            ? setClass('xxc-embed')
-            : null;
+        $setXuanClass = !empty($_SERVER['HTTP_USER_AGENT']) && str_contains($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') ? setClass('xxc-embed') : null;
 
         $zui  = $this->prop('zui');
         $head = $this->buildHead();

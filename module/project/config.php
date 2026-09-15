@@ -73,6 +73,7 @@ $config->project->search['fields']['parent']         = $lang->project->parent;
 $config->project->search['fields']['status']         = $lang->project->status;
 $config->project->search['fields']['desc']           = $lang->project->desc;
 $config->project->search['fields']['PM']             = $lang->project->PM;
+$config->project->search['fields']['teamCount']      = $lang->project->teamCount;
 $config->project->search['fields']['openedDate']     = $lang->project->openedDate;
 $config->project->search['fields']['begin']          = $lang->project->begin;
 $config->project->search['fields']['end']            = $lang->project->end;
@@ -92,6 +93,7 @@ $config->project->search['params']['parent']         = array('operator' => '='  
 $config->project->search['params']['status']         = array('operator' => '='      , 'control' => 'select', 'values' => $lang->project->statusList);
 $config->project->search['params']['desc']           = array('operator' => 'include', 'control' => 'input' , 'values' => '');
 $config->project->search['params']['PM']             = array('operator' => '='      , 'control' => 'select', 'values' => 'users');
+$config->project->search['params']['teamCount']      = array('operator' => '='      , 'control' => 'input' , 'values' => '');
 $config->project->search['params']['openedDate']     = array('operator' => '='      , 'control' => 'date',  'values' => '');
 $config->project->search['params']['begin']          = array('operator' => '='      , 'control' => 'date',  'values' => '');
 $config->project->search['params']['end']            = array('operator' => '='      , 'control' => 'date',  'values' => '');

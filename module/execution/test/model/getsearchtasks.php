@@ -20,6 +20,7 @@ $task = zenData('task');
 $task->id->range('1-10');
 $task->name->range('1-10')->prefix('任务');
 $task->execution->range('3');
+$task->project->range('1');
 $task->type->range('test,devel,design');
 $task->status->range('wait,doing');
 $task->estimate->range('1-10');
@@ -40,6 +41,8 @@ timeout=0
 cid=16337
 
 - 测试通过sql语句获取3个任务 id 倒序 execution = '3' and deleted = '0' and parent >= 0第10条的name属性 @任务10
+- 测试搜索任务带有所属执行第10条的execution属性 @3
+- 测试搜索任务带有所属项目第10条的project属性 @1
 - 测试通过sql语句获取3个任务 id 正序 execution = '3' and deleted = '0' and parent >= 0第1条的name属性 @任务1
 - 测试通过sql语句获取5个任务 id 倒序 execution = '3' and deleted = '0' and parent >= 0第10条的name属性 @任务10
 - 测试通过sql语句获取5个任务 id 正序 execution = '3' and deleted = '0' and parent >= 0第1条的name属性 @任务1
@@ -76,6 +79,8 @@ $beginDateOrderBy = array('beginDate_asc,id_asc', 'beginDate_desc,id_desc');
 
 $execution = new executionModelTest();
 r($execution->getSearchTasksTest($condition[0], $orderBy[0], $recPerPage[0])) && p('10:name') && e('任务10'); // 测试通过sql语句获取3个任务 id 倒序 execution = '3' and deleted = '0' and parent >= 0
+r($execution->getSearchTasksTest($condition[0], $orderBy[0], $recPerPage[0])) && p('10:execution') && e('3'); // 测试搜索任务带有所属执行
+r($execution->getSearchTasksTest($condition[0], $orderBy[0], $recPerPage[0])) && p('10:project') && e('1'); // 测试搜索任务带有所属项目
 r($execution->getSearchTasksTest($condition[0], $orderBy[1], $recPerPage[0])) && p('1:name')  && e('任务1');  // 测试通过sql语句获取3个任务 id 正序 execution = '3' and deleted = '0' and parent >= 0
 r($execution->getSearchTasksTest($condition[0], $orderBy[0], $recPerPage[1])) && p('10:name') && e('任务10'); // 测试通过sql语句获取5个任务 id 倒序 execution = '3' and deleted = '0' and parent >= 0
 r($execution->getSearchTasksTest($condition[0], $orderBy[1], $recPerPage[1])) && p('1:name')  && e('任务1');  // 测试通过sql语句获取5个任务 id 正序 execution = '3' and deleted = '0' and parent >= 0

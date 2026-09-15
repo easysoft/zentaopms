@@ -665,7 +665,7 @@ class dbh
                 if(!empty($columnName)) $sql .= " and COLUMN_NAME='$columnName'";
                 return $sql;
             case 'DROP':
-                $sql .= ' CASCADE';
+                $sql = rtrim($sql, ';') . ' CASCADE';
                 return $this->formatField($sql);
         }
 

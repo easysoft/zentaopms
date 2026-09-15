@@ -277,6 +277,7 @@ class repoModel extends model
         if($repoID)
         {
             $repo->id = $repoID;
+            if(isset($response->gitUID)) $repo->gitUID = $response->gitUID;
             $res = $this->loadModel('gitfox')->addPushWebhook($repo);
             if(!$res)
             {
@@ -1806,7 +1807,7 @@ class repoModel extends model
         $server = $this->loadModel('gitfox')->getServer();
 
         $singleRepo = $this->gitfox->apiGetSingleRepo((int)$repo->id);
-        $repo->path = $singleRepo->gitURL;
+        $repo->path = empty($singleRepo) ? '' : zget($singleRepo, 'gitURL', '');
 
         $repo->apiPath   = $server ? sprintf($this->config->repo->gitfox->apiPath, $server->url, $repo->id) : $repo->path;
         $repo->client    = $server ? $server->url : '';
@@ -3657,6 +3658,54 @@ class repoModel extends model
         if(empty($repo) || isset($repo->message)) return false;
 
         return $repo;
+    }
+
+    /**
+     * 直接更新GitFox webhook配置表中的密钥。
+     * Update GitFox webhook secret in ops_webhooks.
+     *
+     * @access public
+     * @return bool
+     */
+    public function backfillGitFoxWebhookSecret(): bool
+    {
+        /* 一次查出所有需要回填的 GitFox hook，避免在循环内逐条查询。 */
+        $hooks = $this->dao->select('w.id,w.`repoID`,w.url,r.`gitUID`')->from(TABLE_OPSWEBHOOK)->alias('w')
+            ->leftJoin(TABLE_REPO)->alias('r')->on('w.`repoID` = r.id')
+            ->where('w.deleted')->eq('0')
+            ->andWhere('w.url')->like('%gitfox/webhook%')
+            ->andWhere('r.deleted')->eq('0')
+            ->andWhere('r.`scmType`')->eq('git')
+            ->andWhere('r.mirror')->eq('0')
+            ->andWhere('r.`gitUID`')->ne('')
+            ->andWhere('r.`gitUID`')->notLike('empty_gituid_%')
+            ->fetchAll('id', false);
+        if(empty($hooks)) return true;
+
+        $webhookIDListByGitUID = array();
+        foreach($hooks as $hook)
+        {
+            if(empty($hook->id) || empty($hook->gitUID)) continue;
+            if(!preg_match('/[?&]repoID=' . preg_quote((string)$hook->repoID, '/') . '(&|$)/', $hook->url)) continue;
+
+            $webhookIDListByGitUID[$hook->gitUID][] = (int)$hook->id;
+        }
+        if(empty($webhookIDListByGitUID)) return true;
+
+        foreach($webhookIDListByGitUID as $gitUID => $hookIDs)
+        {
+            $this->dao->update(TABLE_OPSWEBHOOK)
+                ->set('secret')->eq($gitUID)
+                ->set('`authMethod`')->eq('token')
+                ->set('`authHeader`')->eq('X-Gitfox-Token')
+                ->set('`editedBy`')->eq('system')
+                ->set('`editedDate`')->eq(helper::now())
+                ->where('id')->in($hookIDs)
+                ->exec();
+            if(dao::isError()) return false;
+        }
+
+        return !dao::isError();
     }
 
     /**
