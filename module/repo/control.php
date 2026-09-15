@@ -449,6 +449,10 @@ class repo extends control
         set_time_limit(0);
         if($this->get->repoPath) $entry = $this->get->repoPath;
         if($repoID == 0) $repoID = $this->session->repoID;
+
+        /* 链接中的版本是编码过的，取出后需要转码。 */
+        $urlRevision = $revision;
+        if($revision != 'HEAD') $revision = urldecode(helper::safe64Decode($revision));
         if($revision != 'HEAD')
         {
             helper::setCookie("repoBranch", $revision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
@@ -457,7 +461,7 @@ class repo extends control
 
         $this->commonAction($repoID, $objectID);
         $this->repoZen->setBackSession('view', true);
-        $this->session->set('storyList', inlink('view',  "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"), 'product');
+        $this->session->set('storyList', inlink('view',  "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$urlRevision&showBug=$showBug&encoding=$encoding"), 'product');
 
         return print($this->fetch('repo', 'monaco', "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"));
     }
@@ -2402,7 +2406,7 @@ class repo extends control
             $changeFile = $this->repo->encodePath("{$file}#{$begin},{$end}");
             if(empty($v1))
             {
-                $link = $this->repo->createLink('view', "repoID=$repoID&objectID=0&entry={$changeFile}&revision=$v2&showBug=1", '', true) . "#L{$begin}";
+                $link = $this->repo->createLink('view', "repoID=$repoID&objectID=0&entry={$changeFile}&revision=" . helper::safe64Encode($v2) . "&showBug=1", '', true) . "#L{$begin}";
             }
             else
             {

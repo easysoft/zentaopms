@@ -37,7 +37,7 @@ foreach($bugs as $bug)
     {
         $v2   = strtr($v2, '*', '-');
         $revision  = $this->repo->getGitRevisionName($v2, (int)zget($historys, $v2));
-        $bug->link = $this->repo->createLink('view', "repoID={$bug->repo}&objectID={$objectID}&entry={$fileEntry}&revision={$v2}");
+        $bug->link = $this->repo->createLink('view', "repoID={$bug->repo}&objectID={$objectID}&entry={$fileEntry}&revision=" . helper::safe64Encode($v2));
     }
     else
     {
