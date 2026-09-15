@@ -200,6 +200,9 @@ $routes['/projects/:projectID/issues']     = array('redirect' => '/issues?object
 $routes['/executions/:executionID/issues'] = array('redirect' => '/issues?objectID=:executionID&from=execution', 'search' => array('enabled' => true));
 $routes['/issues/:issueID']                = array('response' => 'issue,actions(array)');
 
+$routes['/projects/:projectID/baselines'] = array('redirect' => '/cm/browse?projectID=:projectID', 'response' => 'baselines(array),pager');
+$routes['/baselines/:baselineID']         = array('redirect' => '/cm/view?baselineID=:baselineID', 'response' => 'baseline,actions(array),deliverables(array)');
+
 $routes['/weeklies']           = array('post' => array('response' => '*'));
 $routes['/weeklies/:reportID'] = array('put' => array('response' => '*'));
 
