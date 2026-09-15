@@ -39,7 +39,7 @@ jsVar('tree', $tree);
 jsVar('appTab', $app->tab);
 jsVar('openedFiles', array($entry));
 jsVar('urlParams', "repoID=$repoID&objectID=$objectID&entry=%s&revision=$revision&showBug=$showBug&encoding=$encoding");
-jsVar('currentLink', $this->createLink('repo', 'view', "repoID=$repoID&objectID=$objectID&entry=$file"));
+jsVar('currentLink', $this->createLink('repo', 'view', "repoID=$repoID&objectID=$objectID&entry=$file&revision=%s"));
 
 \zin\featureBar();
 
