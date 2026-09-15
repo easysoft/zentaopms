@@ -698,6 +698,8 @@ class pipeline extends control
             return $this->sendError(zget($error, 'apiMessage', 'api error'));
         }
         $groups = array();
+        if(empty($stepGroups)) return $this->send(array('result' => 'success', 'data' => $groups));
+
         foreach($stepGroups as $group)
         {
             $object = new stdClass();
