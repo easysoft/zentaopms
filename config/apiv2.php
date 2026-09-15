@@ -213,6 +213,8 @@ $routes['/deliverables/:deliverableID']      = array('redirect' => '/projects/vi
 $routes['/projects/:projectID/changes'] = array('redirect' => '/projectchanges/browse?projectID=:projectID', 'response' => 'projectchanges(array),pager');
 $routes['/changes/:changeID']           = array('redirect' => '/projectchanges/view?projectchangeID=:changeID', 'response' => 'projectchange,actions(array),deliverables(array)');
 
+$routes['/projects/:projectID/processes'] = array('redirect' => '/pssp/browse?projectID=:projectID', 'response' => 'processList(array)');
+
 $routes['/weeklies']           = array('post' => array('response' => '*'));
 $routes['/weeklies/:reportID'] = array('put' => array('response' => '*'));
 
