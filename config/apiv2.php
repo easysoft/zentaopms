@@ -146,7 +146,6 @@ $routes['/projects/testreport']         = array('response' => 'reports(array)|te
 $routes['/projects/team']               = array('response' => 'teamMembers(array)|members');
 $routes['/projects/:projectID/members'] = array('get' => array('redirect' => '/projects/team?projectID=:projectID'), 'put' => array('redirect' => '/projects/manageMembers?projectID=:projectID'));
 
-/* Keep redirect targets before the generic project route so they are not parsed as project IDs. */
 $routes['/projects/deliverable']        = array('response' => 'deliverables(array),pager');
 $routes['/projects/viewDeliverable']    = array('response' => 'deliverable,review,actions(array),doc,relatedObjects(array)');
 
