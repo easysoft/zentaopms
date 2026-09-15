@@ -38,6 +38,11 @@ cid=15942
  - 第id条的width属性 @80
  - 第title条的title属性 @Bug标题
  - 第title条的width属性 @0.44
+- 获取执行任务列表所属项目、所属执行字段，默认不勾选
+ - 第project条的title属性 @所属项目
+ - 第project条的show属性 @~~
+ - 第execution条的title属性 @所属执行
+ - 第execution条的show属性 @~~
 
 */
 
@@ -51,3 +56,4 @@ r($datatable->getFieldListTest('project', 'browse'))  && p('id:title;id:width;na
 r($datatable->getFieldListTest('execution', 'task'))  && p('id:title;id:width;name:title;name:width')      && e('ID,80,任务名称,0.5');       //获取执行模块task方法自定义列
 r($datatable->getFieldListTest('testcase', 'browse')) && p('id:title;id:width;title:title;title:width')    && e('ID,80,用例名称,0.44');      //获取测试用例模块browse方法自定义列
 r($datatable->getFieldListTest('bug', 'browse'))      && p('id:title;id:width;title:title;title:width')    && e('ID,80,Bug标题,0.44');      //获取Bug模块browse方法自定义列
+r($datatable->getFieldListTest('execution', 'task'))  && p('project:title,show;execution:title,show') && e('所属项目,~~,所属执行,~~'); //获取执行任务列表所属项目、所属执行字段，默认不勾选

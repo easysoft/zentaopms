@@ -98,7 +98,7 @@ if($artifact->type == 'container')
 {
     foreach($lang->artifact->pushImageTip as $content)
     {
-        $command           = str_replace(array('GITFOXURL', 'TYPECODE', 'LIBCODE', 'IMAGE'), array($gitfoxURL, $typeCode, zget($artifact, 'code')), $content['content']);
+        $command           = strtolower(str_replace(array('GITFOXURL', 'TYPECODE', 'LIBCODE', 'IMAGE'), array($gitfoxURL, $typeCode, zget($artifact, 'code')), $content['content']));
         $imageCommands[]   = $command;
         $maxCommandLength  = max($maxCommandLength, strlen($command));
     }

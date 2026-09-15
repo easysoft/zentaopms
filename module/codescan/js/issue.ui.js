@@ -113,7 +113,7 @@ window.issueTreeClick = function(info)
 {
     if(!info || !info.item || !info.item.isLeaf) return false;
 
-    $.cookie.set('issueFile', info.item.ref);
+    $.cookie.set('issueFile', info.item.fileRef || info.item.ref);
     loadPage(info.item.link);
     return false;
 }

@@ -220,7 +220,7 @@ class treeModel extends model
         {
             if(!strpos($menu, '|')) continue;
             list($label, $moduleID) = explode('|', $menu);
-            $lastMenu[$moduleID] = $label;
+            $lastMenu[$moduleID] = htmlspecialchars_decode((string)$label, ENT_QUOTES);
         }
 
         return $lastMenu;

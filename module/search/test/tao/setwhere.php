@@ -12,14 +12,16 @@ cid=18346
 - 测试小于等于某天的条件 @ and `createdDate` <= '2023-12-08 23:59:59'
 - 测试大于某天的条件 @ or `createdDate` > '2023-12-08 23:59:59'
 - 测试其他 @ and `title`  LIKE '%test%'
-- 测试下拉单选等于 @ and `status` = 'active' 
+- 测试下拉单选等于 @ and `status` = 'active'
 - 测试下拉多选等于 @ and (1 = 0)
 - 测试下拉多选不等于 @ and (1 = 0)
 - 测试下拉多选包含 @ and (`status` = 'active' OR `status` = 'closed')
 - 测试下拉多选不包含 @ and (`status` != 'active' AND `status` != 'closed')
 - 测试下拉多选其他操作符 @ and (1 = 0)
 - 测试输入框逗号值不按多选处理 @ and `title` = 'a,b,c'
-
+- 测试下拉空值等于 @ and (`story` = '' OR `story` = '0')
+- 测试下拉null等于 @ and (`story` = '' OR `story` = '0')
+- 测试下拉空值不等于 @ and (`story` != '' AND `story` != '0')
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -45,3 +47,6 @@ r($search->setWhereTest('status', 'include', 'active,closed', 'and', 'select')) 
 r($search->setWhereTest('status', 'notinclude', 'active,closed', 'and', 'select')) && p() && e(" and (`status` != 'active' AND `status` != 'closed')");                    //测试下拉多选不包含
 r($search->setWhereTest('status', '>', 'active,closed', 'and', 'select')) && p() && e(" and (1 = 0)");                                                                      //测试下拉多选其他操作符
 r($search->setWhereTest('title', '=', 'a,b,c', 'and', 'input')) && p() && e(" and `title` = 'a,b,c' ");                                                                    //测试输入框逗号值不按多选处理
+r($search->setWhereTest('story', '=', '', 'and', 'select')) && p() && e(" and (`story` = '' OR `story` = '0')");                                                           //测试下拉空值等于
+r($search->setWhereTest('story', '=', 'null', 'and', 'select')) && p() && e(" and (`story` = '' OR `story` = '0')");                                                       //测试下拉null等于
+r($search->setWhereTest('story', '!=', '', 'and', 'select')) && p() && e(" and (`story` != '' AND `story` != '0')");                                                       //测试下拉空值不等于

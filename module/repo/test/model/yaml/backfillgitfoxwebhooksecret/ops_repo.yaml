@@ -1,0 +1,25 @@
+---
+title: ops_repo 表数据配置 - backfillGitFoxWebhookSecret 方法测试
+desc: 为测试 repoModel::backfillGitFoxWebhookSecret() 方法提供仓库数据
+author: Codex
+version: 1.0
+
+fields:
+- field: id
+  note: 代码库 ID
+  range: 1-5
+- field: name
+  note: 代码库名称
+  range: repo1,repo2,repo3,repo4,repo5
+- field: scmType
+  note: 代码库类型
+  range: 'git{5}'
+- field: gitUID
+  note: GitFox 仓库唯一标识
+  range: repo-uid-1,repo-uid-2,empty_gituid_3,repo-uid-4,repo-uid-5
+- field: mirror
+  note: 是否镜像库；id=4 为镜像库
+  range: '0,0,0,1,0'
+- field: deleted
+  note: 是否删除；id=5 已删除
+  range: '0,0,0,0,1'

@@ -575,6 +575,8 @@ class productplan extends control
 
         /* Get story id list. */
         $storyIdList = json_decode($this->post->storyIdList, true);
+        if(empty($storyIdList)) return true;
+
         asort($storyIdList);
         $storyIdList = array_flip($storyIdList);
 

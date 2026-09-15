@@ -50,6 +50,8 @@ if(common::canModify('execution', $execution))
 }
 
 $cols = $this->loadModel('datatable')->getSetting('execution');
+if(isset($cols['execution'])) $cols['execution']['map'] = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
+if(isset($cols['project']))   $cols['project']['map']   = $this->loadModel('project')->getPairs();
 $tableData = initTableData($tasks, $cols, $this->task);
 $lang->task->statusList['changed'] = $lang->task->storyChange;
 foreach($tableData as $task)

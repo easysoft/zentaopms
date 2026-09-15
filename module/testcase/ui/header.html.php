@@ -26,6 +26,7 @@ $moduleID       = isset($moduleID) ? (int)$moduleID : 0;
 $rawMethod      = $app->rawMethod;
 $load           = $rawMethod !== 'browse' ? null : 'table';
 $product        = is_bool($product) ? new stdclass() : $product;
+$executionID    = isset($executionID) ? (int)$executionID : 0;
 
 $canModify = common::canModify('product', $product);
 if(!empty($project)) $canModify = $canModify && common::canModify('project', $project);
@@ -273,7 +274,7 @@ if($isFromDoc || $isFromAI)
 if($showProjectExecView)
 {
     $module      = $isProjectApp ? 'project' : 'execution';
-    $params      = $isProjectApp ? "projectID={$projectID}" : "executionID=$executionID";
+    $params      = $isProjectApp ? "projectID={$projectID}" : "executionID={$executionID}";
     $viewItemUrl = createLink($module, 'testcase', $params);
 }
 else

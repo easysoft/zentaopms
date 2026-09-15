@@ -1372,7 +1372,7 @@ class projectModelTest extends baseTest
      * @access public
      * @return array|object
      */
-    public function computeScheduleTest(string $begin, string $end, array $schedule, object $project = null): array|object
+    public function computeScheduleTest(string $begin, string $end, array $schedule, ?object $project = null): array|object
     {
         $result = $this->instance->computeSchedule($begin, $end, $schedule, $project);
         if(dao::isError()) return dao::getError();

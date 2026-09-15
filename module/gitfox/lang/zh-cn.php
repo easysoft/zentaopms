@@ -158,3 +158,10 @@ $lang->gitfox->completedUpgrade  = '我已完成升级';
 $lang->gitfox->laterUpgrade      = '稍后进行升级';
 $lang->gitfox->UpgradeScript     = '升级脚本';
 $lang->gitfox->upgradeGitFoxFail = 'GitFox升级尚未完成，请先在宿主机执行升级脚本后再点击“我已完成升级”。';
+
+global $config;
+if($config->inContainer)
+{
+    $lang->gitfox->upgradeGitFoxTip  = '当前已安装的GitFox引擎版本（%s）低于当前禅道DevOps最低版本要求（%s），请在容器内执行下列升级脚本对GitFox进行升级。';
+    $lang->gitfox->upgradeGitFoxFail = 'GitFox升级尚未完成，请先在容器内执行升级脚本后再点击“我已完成升级”。';
+}

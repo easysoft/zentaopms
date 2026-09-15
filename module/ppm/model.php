@@ -214,7 +214,10 @@ class ppmModel extends model
     {
         if(empty($actionDate)) $actionDate = helper::now();
 
-        $mrAction = $actionDate . '::' . $this->app->user->account . '::' . helper::createLink($this->moduleName, 'view', "id={$id}");
+        $users = $this->loadModel('user')->getPairs('noletter');
+        $actor = zget($users, $this->app->user->account, $this->app->user->account);
+
+        $mrAction = $actionDate . '::' . $actor . '::' . helper::createLink($this->moduleName, 'view', "id={$id}");
 
         $this->loadModel('action');
         foreach(array('story', 'task', 'bug') as $objectType)

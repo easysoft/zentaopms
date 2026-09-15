@@ -956,6 +956,6 @@ class upgradeZen extends upgrade
         unset($_SESSION['upgrading']);
 
         /* 清理数据处理步骤的完成标记，保证下一次升级重新执行数据处理。*/
-        $this->setting->deleteItems('owner=system&module=upgrade&section=dataProcessStep');
+        $this->loadModel('setting')->deleteItems('owner=system&module=upgrade&section=dataProcessStep');
     }
 }

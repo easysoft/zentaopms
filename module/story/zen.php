@@ -41,8 +41,13 @@ class storyZen extends story
             }
         }
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
+        $output['fromType'] = $output['fromType'] ?? '';
+
         /* Get objectID by tab. */
-        if(empty($objectID))
+        if(empty($objectID) && $output['fromType'] != 'feedback')
         {
             if($this->app->tab == 'project')   $objectID = (int)$this->session->project;
             if($this->app->tab == 'execution') $objectID = (int)$this->session->execution;
@@ -51,9 +56,6 @@ class storyZen extends story
         /* Set menu by tab. */
         if($this->app->tab == 'product')
         {
-            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-            parse_str($extra, $output);
-
             if(!empty($output['from']) && $output['from'] == 'global')
             {
                 $product = $this->product->getById($productID);
@@ -1340,7 +1342,7 @@ class storyZen extends story
             ->setIF(!isset($_POST['spec']), 'spec', $oldStory->spec)
             ->setIF(!isset($_POST['verify']), 'verify', $oldStory->verify)
             ->setIF(!isset($_POST['estimate']), 'estimate', $oldStory->estimate)
-            ->setIF(!empty($_POST['reviewer']), 'prevReviewers', implode(',', array_filter($_POST['reviewer'])))
+            ->setIF(is_array($_POST['reviewer']), 'prevReviewers', implode(',', array_filter($_POST['reviewer'])))
             ->get();
 
         if($this->post->linkStories)      $storyData->linkStories      = implode(',', array_unique($this->post->linkStories));
@@ -1370,6 +1372,7 @@ class storyZen extends story
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
         if(!$this->post->needNotReview and empty($_POST['reviewer'])) dao::$errors['reviewer'] = $this->lang->story->errorEmptyReviewedBy;
         if(dao::isError()) return false;
+        if(isset($_POST['status']) && $_POST['status'] == 'active') $_POST['reviewer'] = []; // 如果需求是激活的，则清空评审人
 
         $now    = helper::now();
         $fields = $this->config->story->form->change;

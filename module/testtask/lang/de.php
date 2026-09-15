@@ -199,6 +199,7 @@ $lang->testtask->action->testtaskstarted = '$date,  <strong>$actor</strong> star
 $lang->testtask->action->testtaskclosed  = '$date,  <strong>$actor</strong> hat die Testaufgabe abgeschlossen <strong>$extra</strong>.' . "\n";
 
 $lang->testtask->unexecuted = 'Nicht ausgeführt';
+$lang->testtask->unassigned = 'Nicht zugewiesen';
 
 /* Statistical statement. */
 $lang->testtask->report = new stdclass();
@@ -212,6 +213,7 @@ $lang->testtask->report->charts['testTaskPerRunResult'] = 'Ergebnisbericht';
 $lang->testtask->report->charts['testTaskPerType']      = 'Berichttyp';
 $lang->testtask->report->charts['testTaskPerModule']    = 'Modulbericht';
 $lang->testtask->report->charts['testTaskPerRunner']    = 'Ausgeführt von Bericht';
+$lang->testtask->report->charts['testTaskPerAssignee']  = 'Zugewiesen an Bericht';
 
 $lang->testtask->featureBar['browse']['totalStatus'] = $lang->testtask->totalStatus;
 $lang->testtask->featureBar['browse']['myinvolved']  = $lang->testtask->myInvolved;

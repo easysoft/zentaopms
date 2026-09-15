@@ -10,8 +10,8 @@ cid=19233
 - 执行testtaskTest模块的checkTaskForEditTest方法，参数是$validTask  @1
 - 执行testtaskTest模块的checkTaskForEditTest方法，参数是$taskMissingName 第name条的0属性 @『测试单名称』不能为空。
 - 执行testtaskTest模块的checkTaskForEditTest方法，参数是$taskMissingBuild 第build条的0属性 @『提测构建』不能为空。
-- 执行testtaskTest模块的checkTaskForEditTest方法，参数是$taskMissingBegin 第begin条的0属性 @『开始日期』不能为空。
-- 执行testtaskTest模块的checkTaskForEditTest方法，参数是$taskInvalidDateRange 第end条的0属性 @『结束日期』应当不小于『开始日期』。
+- 执行testtaskTest模块的checkTaskForEditTest方法，参数是$taskMissingBegin 第begin条的0属性 @『计划开始』不能为空。
+- 执行testtaskTest模块的checkTaskForEditTest方法，参数是$taskInvalidDateRange 第end条的0属性 @『计划完成』应当不小于『计划开始』。
 - 执行testtaskTest模块的checkTaskForEditTest方法，参数是$taskMissingType 第type条的0属性 @『测试类型』不能为空。
 - 执行testtaskTest模块的checkTaskForEditTest方法，参数是$taskMissingMembers 第members条的0属性 @『参与人』不能为空。
 
@@ -87,8 +87,8 @@ $taskMissingMembers->members = '';
 r($testtaskTest->checkTaskForEditTest($validTask)) && p() && e('1');
 r($testtaskTest->checkTaskForEditTest($taskMissingName)) && p('name:0') && e('『测试单名称』不能为空。');
 r($testtaskTest->checkTaskForEditTest($taskMissingBuild)) && p('build:0') && e('『提测构建』不能为空。');
-r($testtaskTest->checkTaskForEditTest($taskMissingBegin)) && p('begin:0') && e('『开始日期』不能为空。');
-r($testtaskTest->checkTaskForEditTest($taskInvalidDateRange)) && p('end:0') && e('『结束日期』应当不小于『开始日期』。');
+r($testtaskTest->checkTaskForEditTest($taskMissingBegin)) && p('begin:0') && e('『计划开始』不能为空。');
+r($testtaskTest->checkTaskForEditTest($taskInvalidDateRange)) && p('end:0') && e('『计划完成』应当不小于『计划开始』。');
 r($testtaskTest->checkTaskForEditTest($taskMissingType)) && p('type:0') && e('『测试类型』不能为空。');
 r($testtaskTest->checkTaskForEditTest($taskMissingMembers)) && p('members:0') && e('『参与人』不能为空。');
 

@@ -61,7 +61,18 @@ function createBug(event)
     formData.append('stepIdList', stepIdList);
 
     var link = $.createLink('bug', 'create', $form.data('params'));
-    postAndLoadPage(link, formData, '', {app: tab == 'my' ? 'qa' : tab});
+    zui.Modal.open(
+    {
+        key     : 'bugCreateModal',
+        type    : 'ajax',
+        size    : 'lg',
+        request :
+        {
+            url    : link,
+            method : 'post',
+            data   : formData
+        }
+    });
 }
 
 /**

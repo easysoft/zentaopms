@@ -197,7 +197,7 @@ class fileModel extends model
     public function saveUpload(string $objectType = '', int $objectID = 0, int|string $extra = '', string $filesName = 'files', string $labelsName = 'labels'): array|false
     {
         $fileTitles = array();
-        $now        = helper::today();
+        $now        = helper::now();
         $files      = $this->getUpload($filesName, $labelsName);
 
         foreach($files as $file)

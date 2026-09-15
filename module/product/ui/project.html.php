@@ -87,20 +87,6 @@ if($config->edition != 'open') $config->project->dtable->fieldList['workflowGrou
 $settings = $this->loadModel('datatable')->getSetting('product', 'project');
 $settings['id']['checkbox'] = false;
 
-if(in_array($this->config->systemMode, array('ALM', 'PLM')))
-{
-    $programCol = array(
-        'name'     => 'programName',
-        'title'    => $lang->project->program,
-        'type'     => 'shortTitle',
-        'sortType' => false,
-        'required' => true,
-        'show'     => true,
-        'group'    => 0,
-    );
-    $settings = array('program' => $programCol) + $settings;
-}
-
 if(!str_contains('all,undone', $status)) unset($settings['status']);
 
 $tableData = initTableData($projectStats, $settings, $this->project);

@@ -332,8 +332,8 @@ class myModel extends model
 
         // 转换字段名称
         $tableFields = array(
-            'projectName' => 't3.name',
-            'executionName' => 't2.name',
+            'projectName' => 't1.project',
+            'executionName' => 't1.execution',
             'executionType' => 't2.type',
             'executionMultiple' => 't2.multiple'
         );
@@ -886,7 +886,13 @@ class myModel extends model
         $myStoryQuery = $this->session->{$queryName};
         $myStoryQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $myStoryQuery);
         if(strpos($myStoryQuery, 'result') !== false) $myStoryQuery = str_replace('t1.`result`', 't5.`result`', $myStoryQuery);
-        $myStoryQuery = preg_replace_callback("/t1\.`release`\s*(=|!=)\s*'(\d+)'/i", function($matches){$op = $matches[1] == '!=' ? 'NOT ' : ''; return "{$op}EXISTS (SELECT 1 FROM " . TABLE_RELEASE . " WHERE " . TABLE_RELEASE . ".id = '{$matches[2]}' AND " . TABLE_RELEASE . ".deleted = '0' AND FIND_IN_SET(t1.`id`, " . TABLE_RELEASE . ".stories))";}, $myStoryQuery);
+        $myStoryQuery = preg_replace_callback("/t1\.`release`\s*(=|!=)\s*'(\d*)'/i", function($matches)
+        {
+            /* An empty release means the story is not in any release, no release id clause is needed. */
+            $idClause  = $matches[2] === '' ? '' : TABLE_RELEASE . ".id = '{$matches[2]}' AND ";
+            $notExists = $matches[2] === '' ? ($matches[1] == '=') : ($matches[1] == '!=');
+            return ($notExists ? 'NOT EXISTS' : 'EXISTS') . "(SELECT 1 FROM " . TABLE_RELEASE . " WHERE " . $idClause . TABLE_RELEASE . ".deleted = '0' AND FIND_IN_SET(t1.`id`, " . TABLE_RELEASE . ".stories))";
+        }, $myStoryQuery);
 
         return $this->myTao->fetchStoriesBySearch($myStoryQuery, $type, $orderBy, $pager, $type == 'contribute' ? $this->getAssignedByMe($this->app->user->account, null, $orderBy, 'story') : array());
     }

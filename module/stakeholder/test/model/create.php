@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 stakeholderModel->create();
+timeout=0
 cid=18426
 
 - 测试创建团队干系人时，不填写用户名属性user @『用户』不能为空。

@@ -2487,6 +2487,7 @@ class docModel extends model
 
             foreach($executionLibs as $executionID => &$libList)
             {
+                if(!isset($executionPairs[$executionID])) continue;
                 foreach($libList as &$lib)
                 {
                     $lib->originName    = $lib->name;

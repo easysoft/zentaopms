@@ -563,3 +563,4 @@ $config->ajaxDependencies['pipeline.ajaxgetrunners']                          = 
 $config->ajaxDependencies['pipeline.ajaxgetrepos']                            = 'pipeline.arrange';
 $config->ajaxDependencies['pipeline.ajaxgetrepoids']                          = 'pipeline.arrange';
 $config->ajaxDependencies['codescan.ajaxgetscanplans']                        = 'pipeline.arrange';
+$config->ajaxDependencies['repo.ajaxgetdiffs']                                = ['ppm.view', 'repo.diff'];

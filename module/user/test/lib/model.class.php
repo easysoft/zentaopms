@@ -277,7 +277,14 @@ class userModelTest extends baseTest
      */
     public function createTest(object $user): array
     {
-        $result = $this->instance->create($user);
+        $userData      = clone $user;
+        $passwordPlain = isset($userData->passwordPlain) ? trim((string)$userData->passwordPlain) : '';
+        unset($userData->passwordPlain);
+
+        if($passwordPlain !== '') $this->instance->post->passwordPlain = $passwordPlain;
+        $result = $this->instance->create($userData);
+        if($passwordPlain !== '') unset($this->instance->post->passwordPlain);
+
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -369,7 +376,14 @@ class userModelTest extends baseTest
      */
     public function updateTest(object $user): array
     {
-        $result = $this->instance->update($user);
+        $userData      = clone $user;
+        $passwordPlain = isset($userData->passwordPlain) ? trim((string)$userData->passwordPlain) : '';
+        unset($userData->passwordPlain);
+
+        if($passwordPlain !== '') $this->instance->post->passwordPlain = $passwordPlain;
+        $result = $this->instance->update($userData);
+        if($passwordPlain !== '') unset($this->instance->post->passwordPlain);
+
         $errors = dao::getError();
 
         foreach($errors as $key => $error)

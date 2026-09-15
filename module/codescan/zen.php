@@ -690,10 +690,12 @@ class codescanZen extends codescan
      * @param  array     $fileTree
      * @param  string    $urlParam
      * @param  array     $params
+     * @param  string    $branch   当前分支，由顶层节点的 path 逐层下传
+     * @param  bool      $topLevel 是否处于分支层（root 的直接子节点）
      * @access protected
      * @return array
      */
-    protected function processIssueFileTree(array $fileTree, string $urlParam, array $params = array()): array
+    protected function processIssueFileTree(array $fileTree, string $urlParam, array $params = array(), string $branch = '', bool $topLevel = false): array
     {
         if(isset($params['branch'])) unset($params['branch']);
         if(isset($params['path']))   unset($params['path']);
@@ -703,6 +705,7 @@ class codescanZen extends codescan
         $treeList = array();
         foreach($fileTree as $file)
         {
+            if(!is_object($file)) continue;
             if($file->name == 'root') $file->name = '/';
             $path = $file->path ? $file->path : $file->name;
             $path = str_replace(array('/', '-', '.'), '', $path);
@@ -710,14 +713,23 @@ class codescanZen extends codescan
             $file->id  = $path;
             if(!empty($file->children))
             {
-                $file->children = $this->processIssueFileTree($file->children, $urlParam, $params);
+                if($file->name == '/')
+                {
+                    $file->children = $this->processIssueFileTree($file->children, $urlParam, $params, '', true);
+                }
+                else
+                {
+                    $childBranch = $topLevel ? (string)zget($file, 'path', '') : $branch;
+                    $file->children = $this->processIssueFileTree($file->children, $urlParam, $params, $childBranch, false);
+                }
             }
             else
             {
-                $dirPath = explode('/', $file->path);
                 $ref     = !empty($file->ref) ? $file->ref : $file->path;
-                $file->ref = $ref;
-                $file->link = sprintf($urlParam, "{$extra},branch={$dirPath[0]},path=" . rawurlencode($ref));
+                $file->fileRef = $ref;
+                unset($file->ref);
+
+                $file->link = sprintf($urlParam, "{$extra},branch64=" . helper::safe64Encode($branch) . ",path64=" . helper::safe64Encode($ref));
             }
             $treeList[] = $file;
         }
@@ -762,6 +774,8 @@ class codescanZen extends codescan
                 if($ruleID == $rule->ref) $this->view->ruleName = $rule->name;
                 $rule->url = sprintf($urlParam, "{$extra},ruleID=$rule->ref");
             }
+            /* 同上：ref 已并入 id，不再把字符串 ref 暴露给 preact 树。 */
+            unset($rule->ref);
             $treeList[] = $rule;
         }
         return $treeList;

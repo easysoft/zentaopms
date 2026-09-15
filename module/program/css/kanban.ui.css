@@ -5,6 +5,8 @@
 .card-item-delay  .card {border-left: 2px solid rgba(var(--color-danger-500-rgb),var(--tw-text-opacity));}
 
 .card-prefix {position: absolute; right: 10px}
-.card-suffix {min-width: 46px;}
+.card-suffix {flex: none; min-width: 46px;}
+
+.card-heading .text-black {flex: 1; min-width: 0; overflow: hidden;}
 
 #mainContent > div.kanban-list > div.kanban-region {padding: unset;}

@@ -45,7 +45,7 @@ sidebar
                 set::required(true),
                 set::popWidth('auto'),
                 set::items($taskItems),
-                set::value(0),
+                set::value((int)zget($params, 'taskID', 0)),
                 on::change()->call('changeIssueTask')
             ),
             div

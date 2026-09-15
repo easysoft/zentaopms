@@ -97,10 +97,11 @@ class stakeholderModel extends model
         }
 
         /* Create new user. */
+        $userID = (int)$this->dao->select('MAX(id) AS id')->from(TABLE_USER)->fetch('id') + 1;
         $user = new stdclass();
         $user->type     = 'outside';
         $user->realname = $data->name;
-        $user->account  = mt_rand(1111, 99999);
+        $user->account  = 'u' . $userID;
         $user->company  = $companyID;
         $user->phone    = $data->phone;
         $user->qq       = $data->qq;
@@ -111,12 +112,8 @@ class stakeholderModel extends model
         $user->strategy = $data->strategy;
         $this->dao->insert(TABLE_USER)->data($user)->exec();
 
-        $userID  = $this->dao->lastInsertID();
-        $account = 'u' . $userID;
-        $this->dao->update(TABLE_USER)->set('account')->eq($account)->where('id')->eq($userID)->exec();
-
         if(dao::isError()) return false;
-        return $account;
+        return $user->account;
     }
 
     /**

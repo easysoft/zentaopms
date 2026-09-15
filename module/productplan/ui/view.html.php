@@ -188,12 +188,17 @@ foreach($planStories as $story)
     $story->mailto = implode(' ', $mailto);
 }
 
+$currentProjectID = ($app->tab == 'project' && !empty($this->session->project)) ? (int)$this->session->project : (int)$projectID;
+$project          = $currentProjectID ? $this->loadModel('project')->fetchByID($currentProjectID) : null;
+$canCreateUR      = $this->config->URAndSR && (empty($project) || empty($project->storyType) || str_contains($project->storyType, 'requirement'));
+$canCreateER      = $this->config->enableER && (empty($project) || empty($project->storyType) || str_contains($project->storyType, 'epic'));
+
 $createStoryLink            = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
 $batchCreateStoryLink       = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
-$createRequirementLink      = common::hasPriv('requirement', 'create') ? $this->createLink('requirement', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
-$batchCreateRequirementLink = common::hasPriv('requirement', 'batchCreate') ? $this->createLink('requirement', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
-$createEpicLink             = common::hasPriv('epic', 'create') ? $this->createLink('epic', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
-$batchCreateEpicLink        = common::hasPriv('epic', 'batchCreate') ? $this->createLink('epic', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
+$createRequirementLink      = $canCreateUR && common::hasPriv('requirement', 'create') ? $this->createLink('requirement', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
+$batchCreateRequirementLink = $canCreateUR && common::hasPriv('requirement', 'batchCreate') ? $this->createLink('requirement', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
+$createEpicLink             = $canCreateER && common::hasPriv('epic', 'create') ? $this->createLink('epic', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
+$batchCreateEpicLink        = $canCreateER && common::hasPriv('epic', 'batchCreate') ? $this->createLink('epic', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
 
 $branchNames = '';
 if($product->type != 'normal')
@@ -289,12 +294,12 @@ detailBody
                             set::url($createStoryLink)
                         ),
                         set::items(array(
-                            $this->config->URAndSR  ? array('text' => $lang->requirement->create, 'url' => $createRequirementLink, 'class' => empty($createRequirementLink) ? 'disabled' : '', 'data-app' => $app->tab) : null,
-                            $this->config->enableER ? array('text' => $lang->epic->create, 'url' => $createEpicLink, 'class' => empty($createEpicLink) ? 'disabled' : '', 'data-app' => $app->tab) : null,
+                            $canCreateUR ? array('text' => $lang->requirement->create, 'url' => $createRequirementLink, 'class' => empty($createRequirementLink) ? 'disabled' : '', 'data-app' => $app->tab) : null,
+                            $canCreateER ? array('text' => $lang->epic->create, 'url' => $createEpicLink, 'class' => empty($createEpicLink) ? 'disabled' : '', 'data-app' => $app->tab) : null,
                             array('text' => $lang->story->batchCreate, 'items' => array(
                                 array('text' => $lang->SRCommon, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : '', 'data-app' => $app->tab),
-                                $this->config->URAndSR  ? array('text' => $lang->URCommon, 'url' => $batchCreateRequirementLink, 'class' => empty($batchCreateRequirementLink) ? 'disabled' : '', 'data-app' => $app->tab) : null,
-                                $this->config->enableER ? array('text' => $lang->ERCommon, 'url' => $batchCreateEpicLink, 'class' => empty($batchCreateEpicLink) ? 'disabled' : '', 'data-app' => $app->tab) : null
+                                $canCreateUR ? array('text' => $lang->URCommon, 'url' => $batchCreateRequirementLink, 'class' => empty($batchCreateRequirementLink) ? 'disabled' : '', 'data-app' => $app->tab) : null,
+                                $canCreateER ? array('text' => $lang->ERCommon, 'url' => $batchCreateEpicLink, 'class' => empty($batchCreateEpicLink) ? 'disabled' : '', 'data-app' => $app->tab) : null
                             ))
                         )),
                         set::trigger('hover'),

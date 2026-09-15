@@ -34,20 +34,23 @@ class transferTao extends transferModel
         /* Parse params. */
         if(is_string($params)) $params = explode('&', $params);
 
-        foreach($params as $param => $value)
+        if(is_array($params))
         {
-            /* 如果参数是$开头的变量，则从SESSION中获取该变量。 */
-            /* If the param is $var, get it from SESSION. */
-            if(!is_string($value)) continue;
-            if(strpos($value, '$') === false) continue;
-            $params[$param] = isset($getParams[ltrim($value, '$')]) ? $getParams[ltrim($value, '$')] : '';
-            if(isset($this->config->transfer->convertInt[$callModule][$method][ltrim($value, '$')])) $params[$param] = (int)$params[$param];
-            if(isset($this->config->transfer->convertInt[$callModule][$method][$param]))             $params[$param] = (int)$params[$param];
+            foreach($params as $param => $value)
+            {
+                /* 如果参数是$开头的变量，则从SESSION中获取该变量。 */
+                /* If the param is $var, get it from SESSION. */
+                if(!is_string($value)) continue;
+                if(strpos($value, '$') === false) continue;
+                $params[$param] = isset($getParams[ltrim($value, '$')]) ? $getParams[ltrim($value, '$')] : '';
+                if(isset($this->config->transfer->convertInt[$callModule][$method][ltrim($value, '$')])) $params[$param] = (int)$params[$param];
+                if(isset($this->config->transfer->convertInt[$callModule][$method][$param]))             $params[$param] = (int)$params[$param];
+            }
         }
 
         /* 调用模块的方法。 */
         /* If this method has multiple parameters use call_user_func_array. */
-        if(is_array($params) and $params)
+        if(is_array($params) && $params)
         {
             $values = call_user_func_array(array($this->loadModel($callModule), $method), $params);
         }

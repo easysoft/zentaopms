@@ -93,21 +93,21 @@ $config->my->task->dtable->fieldList['status']['group']     = 'pri';
 $config->my->task->dtable->fieldList['status']['sortType']  = true;
 $config->my->task->dtable->fieldList['status']['show']      = true;
 
-$config->my->task->dtable->fieldList['projectName']['name']     = 'projectName';
-$config->my->task->dtable->fieldList['projectName']['title']    = $lang->task->project;
-$config->my->task->dtable->fieldList['projectName']['type']     = 'text';
-$config->my->task->dtable->fieldList['projectName']['link']     = array('module' => 'project', 'method' => 'view', 'params' => 'projectID={project}');
-$config->my->task->dtable->fieldList['projectName']['group']    = 'project';
-$config->my->task->dtable->fieldList['projectName']['sortType'] = true;
-$config->my->task->dtable->fieldList['projectName']['show']     = true;
+$config->my->task->dtable->fieldList['project']['name']     = 'project';
+$config->my->task->dtable->fieldList['project']['title']    = $lang->task->project;
+$config->my->task->dtable->fieldList['project']['type']     = 'text';
+$config->my->task->dtable->fieldList['project']['link']     = array('module' => 'project', 'method' => 'view', 'params' => 'projectID={project}');
+$config->my->task->dtable->fieldList['project']['group']    = 'project';
+$config->my->task->dtable->fieldList['project']['sortType'] = true;
+$config->my->task->dtable->fieldList['project']['show']     = true;
 
-$config->my->task->dtable->fieldList['executionName']['name']     = 'executionName';
-$config->my->task->dtable->fieldList['executionName']['title']    = $lang->task->execution;
-$config->my->task->dtable->fieldList['executionName']['type']     = 'text';
-$config->my->task->dtable->fieldList['executionName']['link']     = array('module' => 'execution', 'method' => 'task', 'params' => 'executionID={execution}');
-$config->my->task->dtable->fieldList['executionName']['group']    = 'project';
-$config->my->task->dtable->fieldList['executionName']['sortType'] = true;
-$config->my->task->dtable->fieldList['executionName']['show']     = true;
+$config->my->task->dtable->fieldList['execution']['name']     = 'execution';
+$config->my->task->dtable->fieldList['execution']['title']    = $lang->task->execution;
+$config->my->task->dtable->fieldList['execution']['type']     = 'text';
+$config->my->task->dtable->fieldList['execution']['link']     = array('module' => 'execution', 'method' => 'task', 'params' => 'executionID={execution}');
+$config->my->task->dtable->fieldList['execution']['group']    = 'project';
+$config->my->task->dtable->fieldList['execution']['sortType'] = true;
+$config->my->task->dtable->fieldList['execution']['show']     = true;
 
 $config->my->task->dtable->fieldList['type']['name']     = 'type';
 $config->my->task->dtable->fieldList['type']['title']    = $lang->task->typeAB;

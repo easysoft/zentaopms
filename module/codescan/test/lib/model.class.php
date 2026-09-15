@@ -101,7 +101,7 @@ class codescanModelTest extends baseTest
      * @access public
      * @return bool
      */
-    public function editRulesetTest(int $ruleID = 0, object $formData = null)
+    public function editRulesetTest(int $ruleID = 0, ?object $formData = null)
     {
         if($formData === null) $formData = new stdclass();
         $result = $this->instance->editRuleset($ruleID, $formData);
@@ -318,7 +318,7 @@ class codescanModelTest extends baseTest
      * @access public
      * @return bool
      */
-    public function editSolutionTest(int $solutionID = 0, object $formData = null)
+    public function editSolutionTest(int $solutionID = 0, ?object $formData = null)
     {
         if($formData === null) $formData = new stdclass();
         $result = $this->instance->editSolution($solutionID, $formData);
@@ -485,7 +485,7 @@ class codescanModelTest extends baseTest
      * @access public
      * @return bool
      */
-    public function editPlanTest(int $repoID = 0, int $planID = 0, object $formData = null)
+    public function editPlanTest(int $repoID = 0, int $planID = 0, ?object $formData = null)
     {
         if($formData === null) $formData = new stdclass();
         $result = $this->instance->editPlan($repoID, $planID, $formData);
@@ -575,7 +575,7 @@ class codescanModelTest extends baseTest
      * @access public
      * @return object|false
      */
-    public function execScanTaskTest(object $plan = null, string $branch = '')
+    public function execScanTaskTest(?object $plan = null, string $branch = '')
     {
         if($plan === null) $plan = new stdclass();
         $result = $this->instance->execScanTask($plan, $branch);
@@ -652,7 +652,7 @@ class codescanModelTest extends baseTest
      * @access public
      * @return object
      */
-    public function processIssueSnipeTest(object $issue = null)
+    public function processIssueSnipeTest(?object $issue = null)
     {
         if($issue === null) $issue = new stdclass();
         return $this->instance->processIssueSnipe($issue);

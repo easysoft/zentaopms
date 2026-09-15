@@ -11,9 +11,10 @@ $routes['/workflows/:module/tables'] = array(
     'get'  => array('redirect' => '/workflows/browseDB?parent=:module', 'response' => 'tables(array)'),
     'post' => array('redirect' => '/workflows/create?type=table&parent=:module', 'data' => 'type=table&parent=:module')
 );
-$routes['/workflows/tables/:tableID'] = array(
-    'put'    => array('redirect' => '/workflows/edit?flowID=:tableID', 'response' => '*'),
-    'delete' => array('redirect' => '/workflows/delete?flowID=:tableID', 'response' => '*')
+$routes['/workflows/:flowID'] = array(
+    'get' => array('response' => 'flow'),
+    'put' => array('response' => '*'),
+    'delete' => array('response' => '*')
 );
 $routes['/workflows/:flowID/copy']              = array('post' => array('response' => '*'));
 $routes['/workflows/:flowID/release']           = array('put' => array('response' => '*'));
@@ -22,44 +23,70 @@ $routes['/workflows/:flowID/activate']          = array('put' => array('response
 $routes['/workflows/:flowID/setJS']             = array('put' => array('response' => '*'));
 $routes['/workflows/:flowID/setCSS']            = array('put' => array('response' => '*'));
 $routes['/workflows/:flowID/setFulltextSearch'] = array('put' => array('response' => '*'));
-$routes['/workflows/:module/setValue']          = array('put' => array('response' => '*'));
-$routes['/workflows/:module/setExport']         = array('put' => array('response' => '*'));
-$routes['/workflows/:module/setSearch']         = array('put' => array('response' => '*'));
-$routes['/workflows/:module/setApproval']       = array('put' => array('response' => '*'));
+$routes['/workflows/:module/setApproval']       = array('put' => array('redirect' => '/workflow/setApproval?module=:module', 'response' => '*'));
+$routes['/workflows/:module/setValue']          = array('put' => array('redirect' => '/workflowfields/setValue?module=:module', 'response' => '*'));
+$routes['/workflows/:module/setExport']         = array('put' => array('redirect' => '/workflowfields/setExport?module=:module', 'response' => '*'));
+$routes['/workflows/:module/setSearch']         = array('put' => array('redirect' => '/workflowfields/setSearch?module=:module', 'response' => '*'));
 $routes['/workflows/:module/fields'] = array(
     'get'  => array('redirect' => '/workflowfields/browse?module=:module', 'response' => 'fields(array)'),
-    'post' => array('redirect' => '/workflowfields/create?module=:module', 'data' => 'module=:module')
-);
-$routes['/workflows/:module/fields/:fieldID'] = array(
-    'put' => array('redirect' => '/workflowfields/edit?module=:module&fieldID=:fieldID', 'response' => '*')
+    'post' => array('redirect' => '/workflowfields/create?module=:module')
 );
 $routes['/workflows/:module/actions'] = array(
     'get'  => array('redirect' => '/workflowactions/browse?module=:module', 'response' => 'actions(array)'),
-    'post' => array('redirect' => '/workflowactions/create?module=:module', 'data' => 'module=:module')
+    'post' => array('redirect' => '/workflowactions/create?module=:module')
 );
 $routes['/workflows/:module/labels'] = array(
     'get'  => array('redirect' => '/workflowlabels/browse?module=:module', 'response' => 'labels(array)'),
-    'post' => array('redirect' => '/workflowlabels/create?module=:module', 'data' => 'module=:module')
+    'post' => array('redirect' => '/workflowlabels/create?module=:module')
 );
 
-$routes['/workflowfields/:fieldID'] = array('delete' => array('response' => '*'));
+$routes['/workflowtables/:tableID'] = array(
+    'get'    => array('redirect' => '/workflows/:tableID', 'response' => 'flow'),
+    'put'    => array('redirect' => '/workflows/:tableID', 'response' => '*'),
+    'delete' => array('redirect' => '/workflows/:tableID', 'response' => '*')
+);
+
+$routes['/workflowfields/:fieldID'] = array(
+    'get' => array('response' => 'field'),
+    'put' => array('response' => '*'),
+    'delete' => array('response' => '*')
+);
 
 $routes['/workflowactions/:actionID'] = array(
-    'get'    => array('redirect' => '/workflowactions/view?actionID=:actionID', 'response' => 'action'),
-    'put'    => array('redirect' => '/workflowactions/edit?actionID=:actionID', 'response' => '*'),
-    'delete' => array('redirect' => '/workflowactions/delete?actionID=:actionID', 'response' => '*')
+    'get' => array('response' => 'action'),
+    'put' => array('response' => '*'),
+    'delete' => array('response' => '*')
 );
-$routes['/workflowsactions/:actionID/setVerification'] = array('put' => array('response' => '*'));
-$routes['/workflowsactions/:actionID/setNotice']       = array('put' => array('response' => '*'));
-$routes['/workflowsactions/:actionID/setJS']           = array('put' => array('response' => '*'));
-$routes['/workflowsactions/:actionID/setCSS']          = array('put' => array('response' => '*'));
+$routes['/workflowactions/:actionID/setVerification'] = array('put' => array('response' => '*'));
+$routes['/workflowactions/:actionID/setNotice']       = array('put' => array('response' => '*'));
+$routes['/workflowactions/:actionID/setJS']           = array('put' => array('response' => '*'));
+$routes['/workflowactions/:actionID/setCSS']          = array('put' => array('response' => '*'));
 
 $routes['/workflowlabels/:labelID'] = array(
-    'put'    => array('redirect' => '/workflowlabels/edit?labelID=:labelID', 'response' => '*'),
-    'delete' => array('redirect' => '/workflowlabels/delete?labelID=:labelID', 'response' => '*')
+    'get' => array('response' => 'label'),
+    'put' => array('response' => '*'),
+    'delete' => array('response' => '*')
 );
 
-$routes['/workflowdatasources'] = array('response' => 'datasources(array),pager');
+$routes['/workflowdatasources'] = array(
+    'get' => array('response' => 'datasources(array),pager'),
+    'post' => array('response' => '*')
+);
+$routes['/workflowdatasources/:datasourceID'] = array(
+    'get' => array('response' => 'datasource'),
+    'put' => array('response' => '*'),
+    'delete' => array('response' => '*')
+);
+
+$routes['/workflowrules'] = array(
+    'get' => array('response' => 'rules(array),pager'),
+    'post' => array('response' => '*')
+);
+$routes['/workflowrules/:ruleID'] = array(
+    'get' => array('response' => 'rule'),
+    'put' => array('response' => '*'),
+    'delete' => array('response' => '*')
+);
 
 $routes['/programs']                     = array('response' => 'programs(array),pager', 'search' => array('enabled' => true));
 $routes['/programs/:programID']          = array('redirect' => '/programs/:programID/edit', 'response' => 'program');

@@ -89,7 +89,7 @@ $lang->aiapp->langData->recentChats        = 'Recent Chats';
 $lang->aiapp->langData->aiTeammateTasks    = 'Digital Teammate Tasks';
 
 $lang->aiapp->langData->processedDataResult = "The processed data is as follows:\n```json\n{data}\n```";
-$lang->aiapp->langData->agentResultSummary  = 'Explain the changes of the data in the solution, try to explain each changed attribute.';
+$lang->aiapp->langData->agentResultSummary  = 'Explain the data changes in the solution with a short, easy-to-understand sentence. Do not use line breaks.';
 $lang->aiapp->langData->promptResultTitle   = 'Solution title, if no suitable title can be omitted';
 $lang->aiapp->langData->searchTasks         = 'Search Digital Teammate Tasks';
 $lang->aiapp->langData->formFillTitle       = 'Form Filling';

@@ -120,7 +120,7 @@ $config->upgrade->execFlow['22_1']        = array('functions' => 'computeDefault
 $config->upgrade->execFlow['22_2']        = array('functions' => 'importBuildinWorkflow,addUserGroup,addDefaultWorkflowAction', 'params' => array('importBuildinWorkflow' => array('all', 'testcase,caselib,release,productplan,task,bug,story,requirement,epic', 'testcase-runCase,caselib-viewCase,release-publish,productplan-start,productplan-finish,productplan-close,productplan-activate,task-copy,bug-copy,story-copy,testcase-copy,requirement-copy,epic-copy', 1), 'addUserGroup' => array(array(array('module' => 'bug', 'method' => 'create'), array('module' => 'task', 'method' => 'create'), array('module' => 'testcase', 'method' => 'create'), array('module' => 'story', 'method' => 'create'), array('module' => 'requirement', 'method' => 'create'), array('module' => 'epic', 'method' => 'create')), array(array('module' => 'bug', 'method' => 'copy'), array('module' => 'task', 'method' => 'copy'), array('module' => 'testcase', 'method' => 'copy'), array('module' => 'story', 'method' => 'copy'), array('module' => 'requirement', 'method' => 'copy'), array('module' => 'epic', 'method' => 'copy'))), 'addDefaultWorkflowAction' => array('copy')));
 $config->upgrade->execFlow['22_3']        = array('functions' => 'migrateDevOpsData');
 $config->upgrade->execFlow['22_4']        = array('functions' => 'dropCompanyField');
-$config->upgrade->execFlow['22_5']        = array('functions' => 'processPIRiskData');
+$config->upgrade->execFlow['22_5']        = array('functions' => 'processPIRiskData,repo-backfillGitFoxWebhookSecret');
 
 if(!empty($config->isINT))
 {

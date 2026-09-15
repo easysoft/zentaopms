@@ -33,7 +33,7 @@ window.getItem = function(info)
         info.item.titleUrl = $.createLink('release', 'view', `id=${info.item.id}`);
         if(info.item.marker == '1') info.item.suffix = {html: '<i class="icon icon-flag" style="color: var(--color-danger-500)"></i>'};
     }
-    info.item.titleAttrs = {'class': 'text-black clip', 'title' : info.item.title};
+    info.item.titleAttrs = {'class': 'text-black clip' + (info.item.status == 'doing' && !info.item.delay ? ' mr-8' : ''), 'title' : info.item.title};
 
     if(info.item.begin || info.item.end)
     {

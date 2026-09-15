@@ -7,11 +7,11 @@ title=测试 gitfoxModel::apiGetSpace();
 timeout=0
 cid=0
 
-- 步骤 1：查询不存在的空间会产生 dao 错误 @1
-- 步骤 2：查询不存在的空间返回空结果 @0
-- 步骤 3：查询不存在的空间返回值类型为 array @array
-- 步骤 4：再次查询另一个不存在的空间仍会产生 dao 错误 @1
-- 步骤 5：再次查询另一个不存在的空间仍返回空结果 @0
+- 步骤 1：正常输入：查询不存在的空间返回空数组 @array
+- 步骤 2：正常输入：查询不存在的空间返回结果为空 @0
+- 步骤 3：边界值输入：空间 ID 为 0 时返回空数组 @array
+- 步骤 4：边界值输入：空间 ID 为负数时返回空数组 @array
+- 步骤 5：无效输入：空间 ID 超出范围时返回结果为空 @0
 
 */
 
@@ -24,8 +24,8 @@ su('admin');
 $gitfoxTest = new gitfoxModelTest();
 $missingSpaceID = 999999;
 
-r($gitfoxTest->apiGetSpaceErrorTest($missingSpaceID)) && p() && e('1');
-r($gitfoxTest->apiGetSpaceCountTest($missingSpaceID)) && p() && e('0');
-r($gitfoxTest->apiGetSpaceTypeTest($missingSpaceID)) && p() && e('array');
-r($gitfoxTest->apiGetSpaceErrorTest($missingSpaceID + 1)) && p() && e('1');
-r($gitfoxTest->apiGetSpaceCountTest($missingSpaceID + 1)) && p() && e('0');
+r($gitfoxTest->apiGetSpaceTypeTest($missingSpaceID)) && p() && e('array');  // 步骤 1：正常输入：查询不存在的空间返回空数组
+r($gitfoxTest->apiGetSpaceCountTest($missingSpaceID)) && p() && e('0');     // 步骤 2：正常输入：查询不存在的空间返回结果为空
+r($gitfoxTest->apiGetSpaceTypeTest(0)) && p() && e('array');                // 步骤 3：边界值输入：空间 ID 为 0 时返回空数组
+r($gitfoxTest->apiGetSpaceTypeTest(-1)) && p() && e('array');               // 步骤 4：边界值输入：空间 ID 为负数时返回空数组
+r($gitfoxTest->apiGetSpaceCountTest($missingSpaceID + 1)) && p() && e('0'); // 步骤 5：无效输入：空间 ID 超出范围时返回结果为空

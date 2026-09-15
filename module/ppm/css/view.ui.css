@@ -1,3 +1,6 @@
+.mr-toolbar {z-index: 20; pointer-events: none;}
+.mr-toolbar .toolbar {pointer-events: auto;}
+
 .cell {border: 1px solid #efefef; padding: 10px; border-radius: 4px;}
 .cell-history {padding: 0px;}
 

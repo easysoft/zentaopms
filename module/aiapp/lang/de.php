@@ -79,7 +79,7 @@ $lang->aiapp->langData->zaiConfigNotValid  = 'ZAI-Konfiguration wurde noch nicht
 $lang->aiapp->langData->unauthorizedError  = 'Autorisierung fehlgeschlagen, ungültiger API-Schlüssel. Bitte wenden Sie sich an den Administrator, um <a href="{zaiConfigUrl}">ZAI zu konfigurieren</a>.<br>Falls die Konfiguration bereits abgeschlossen wurde, versuchen Sie bitte, die Seite neu zu laden.';
 $lang->aiapp->langData->processDataPrefix  = "Die zu verarbeitenden Daten lauten wie folgt:\n{data}";
 $lang->aiapp->langData->processedDataResult= "Die verarbeiteten Daten lauten wie folgt:\n```json\n{data}\n```";
-$lang->aiapp->langData->agentResultSummary = 'Erklären Sie die Änderungen an den Daten in der Lösung, versuchen Sie, jede geänderte Eigenschaft zu erklären.';
+$lang->aiapp->langData->agentResultSummary = 'Erklären Sie die Datenänderungen in der Lösung in einem kurzen, leicht verständlichen Satz. Verwenden Sie keine Zeilenumbrüche.';
 $lang->aiapp->langData->promptResultTitle  = 'Lösungstitel, wenn kein geeigneter Titel angegeben werden kann';
 $lang->aiapp->langData->promptExtraLimit   = 'Normalerweise muss das Werkzeug `{toolName}` nur einmal aufgerufen werden, es sei denn, der Benutzer fordert mehrere Lösungen an.';
 $lang->aiapp->langData->promptResultReturn = 'Die verarbeiteten Daten wurden auf der Oberfläche angezeigt. Keine Wiederholung der Anzeige erforderlich, auch keine weitere Beschreibung oder Erklärung. Zeigen Sie dem Benutzer nicht die rohen JSON-Daten des verarbeiteten Ergebnisses. Erinnern Sie mich lediglich daran, dass ich diese Daten verwenden kann, indem ich auf die Schaltfläche „Auf {formName}-Formular anwenden" klicke.';

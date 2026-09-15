@@ -2546,7 +2546,53 @@ class executionModel extends model
         $oldProductKeys = array_keys($oldProducts);
         $needUpdate     = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
         if($needUpdate) $this->user->updateUserView($needUpdate, 'product', $members);
+
+        $this->syncPlansToProject($executionID, $plans);
         return true;
+    }
+
+    /**
+     * 将执行关联的计划同步到所属项目。
+     * Sync execution linked plans to the parent project.
+     *
+     * @param  int   $executionID
+     * @param  array $plans
+     * @access public
+     * @return bool
+     */
+    public function syncPlansToProject(int $executionID, array $plans): bool
+    {
+        if(empty($plans)) return true;
+
+        $execution = $this->fetchByID($executionID);
+
+        $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->eq((int)$execution->project)
+            ->fetchAll();
+        if(empty($projectProducts)) return true;
+
+        $syncedProducts = array();
+        foreach($projectProducts as $projectProduct)
+        {
+            if(isset($syncedProducts[$projectProduct->product])) continue;
+
+            $newPlans = array_values(array_filter(array_map('intval', (array)zget($plans, $projectProduct->product, array()))));
+            $syncedProducts[$projectProduct->product] = true;
+            if(empty($newPlans)) continue;
+
+            $oldPlans = array_values(array_filter(array_map('intval', explode(',', trim((string)$projectProduct->plan, ',')))));
+            $merged   = array_values(array_unique(array_merge($oldPlans, $newPlans)));
+            if($oldPlans == $merged) continue;
+
+            $plan = empty($merged) ? 0 : ',' . implode(',', $merged) . ',';
+            $this->dao->update(TABLE_PROJECTPRODUCT)
+                ->set('plan')->eq($plan)
+                ->where('project')->eq((int)$execution->project)
+                ->andWhere('product')->eq($projectProduct->product)
+                ->exec();
+        }
+
+        return !dao::isError();
     }
 
     /**
@@ -2572,9 +2618,11 @@ class executionModel extends model
             ->fetchPairs('id');
 
         $branches = str_replace(',', "','", $branches);
-        return $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')->from(TABLE_TASK)->alias('t1')
+        return $this->dao->select('t1.*, t2.id AS `storyID`, t2.title AS `storyTitle`, t2.version AS `latestStoryVersion`, t2.status AS `storyStatus`, t3.realname AS `assignedToRealName`, t4.name AS `executionName`, t5.name AS `projectName`')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.`assignedTo` = t3.account')
+            ->leftJoin(TABLE_EXECUTION)->alias('t4')->on('t1.execution = t4.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t1.project = t5.id')
             ->where('t1.status')->in('wait,doing,pause,cancel')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.execution')->in(array_keys($executions))
@@ -3954,6 +4002,8 @@ class executionModel extends model
         $orderBy = str_replace('t1.`storyTitle`', 't2.title', implode(',', $orderBy));
         $orderBy = str_replace(array('t1.pri_', 't1.`pri'), array('priOrder_', '`priOrder_'), $orderBy);
         $orderBy = preg_replace('/t1\.`?beginDate`?/', 'beginDate', $orderBy);
+        $orderBy = str_replace(array('t1.`executionName`', 't1.executionName'), 't1.execution', $orderBy);
+        $orderBy = str_replace(array('t1.`projectName`', 't1.projectName'), 't1.project', $orderBy);
 
         if(strpos($condition, 't1.') === false)
         {
@@ -3962,19 +4012,18 @@ class executionModel extends model
         $condition = str_replace("AND deleted = '0'", '', $condition);
 
         $tasks = $this->dao->select('DISTINCT t1.*,
-            t2.id AS storyID,
-            t2.title AS storyTitle,
+            t2.id AS `storyID`,
+            t2.title AS `storyTitle`,
             t2.product,
             t2.branch,
-            t2.version AS latestStoryVersion,
-            t2.status AS storyStatus,
-            t3.realname AS assignedToRealName,
-            IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder,
-            IF(t1.`estStarted` IS NULL, t4.`begin`, t1.`estStarted`) as beginDate')
+            t2.version AS `latestStoryVersion`,
+            t2.status AS `storyStatus`,
+            t3.realname AS `assignedToRealName`,
+            IF(t1.`pri` = 0, 999, t1.`pri`) as `priOrder`,
+            t1.`estStarted` as `beginDate`')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.`assignedTo` = t3.account')
-            ->leftJoin(TABLE_EXECUTION)->alias('t4')->on('t1.execution = t4.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere($condition)
             ->filterTpl(false)
@@ -5114,6 +5163,7 @@ class executionModel extends model
             $execution->hasChild    = !empty($execution->isParent);
             $execution->isParent    = !empty($execution->isParent) or !empty($execution->tasks);
             $execution->actions     = array();
+            $execution->progress    = (float)$execution->progress;
 
             if(isset($this->config->project->execution->dtable->actionsRule[$execution->projectModel]))
             {

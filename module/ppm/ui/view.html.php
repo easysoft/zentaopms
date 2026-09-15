@@ -89,7 +89,7 @@ div
                     setClass('my-2 detail-header flex'),
                     set::style(array('justify-content' => 'space-between')),
                     div(setClass('mr-2'), span(html(sprintf($lang->ppm->MRHistory, zget($users, $ppm->createdBy), $ppm->createdDate, $ppm->sourceBranch, $commitPager->recTotal, $ppm->targetBranch)))),
-                    $ppm->status == 'opened' && $canMerge && !$checkMessage && $defaultMergeType ? div(img(set::src($config->ppm->mergeImages[$defaultMergeType]))) : null
+                    $ppm->status == 'opened' && $canMerge && !$checkMessage && $defaultMergeType && $type == 'basic' ? div(img(set::src($config->ppm->mergeImages[$defaultMergeType]))) : null
                 ),
                 div
                 (
@@ -175,7 +175,7 @@ div
         ),
         center
         (
-            setClass('pt-6 sticky bottom-0 mr-toolbar'),
+            setClass('pt-6 sticky bottom-0 mr-toolbar z-20'),
             floatToolbar
             (
                 set::prefix(array(array('icon' => 'back', 'text' => $lang->goback, 'hint' => $lang->goback, 'data-back' => 'ppm-browse', 'class' => 'open-url'))),

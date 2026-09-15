@@ -173,7 +173,7 @@ div
         setClass('sidebar sidebar-left basis-2/6'),
         panel
         (
-            set::title($lang->tree->child),
+            set::title($viewType == 'feedback' ? $title : $lang->tree->child),
             setStyle('max-width', '400px'),
             ($app->tab == 'product' and $viewType == 'story') ? to::headingActions
             (

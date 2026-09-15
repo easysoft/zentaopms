@@ -102,7 +102,7 @@ foreach($cards as $card)
                 div
                 (
                     setClass('flex items-center'),
-                    span(setClass("pri-{$card->pri}"), $lang->kanbancard->priList[$card->pri]),
+                    !empty($lang->kanbancard->priList[$card->pri]) ? span(setClass("pri-{$card->pri}"), $lang->kanbancard->priList[$card->pri]) : null,
                     span(setClass('date ml-1'), $beginAndEnd),
                     div
                     (

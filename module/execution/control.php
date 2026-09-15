@@ -647,7 +647,9 @@ class execution extends control
      */
     public function testcase(int $executionID = 0, int $productID = 0, string $branchID = 'all', string $browseType = 'all', int $param = 0, int $moduleID = 0, string $orderBy = 'sort_asc,id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->commonAction($executionID);
+        $execution   = $this->commonAction($executionID);
+        $executionID = $execution->id;
+
         $uri = $this->app->getURI(true);
         $this->session->set('caseList', $uri, 'execution');
         $this->session->set('bugList',  $uri, 'execution');
@@ -655,7 +657,6 @@ class execution extends control
         $products = $this->product->getProducts($executionID);
         if(count($products) == 1) $productID = key($products);
 
-        $execution     = $this->execution->getByID($executionID);
         $productOption = array();
         $branchOption  = array();
         if($execution->hasProduct)
@@ -1896,13 +1897,13 @@ class execution extends control
         $taskToOpen = $this->cookie->taskToOpen ? $this->cookie->taskToOpen : 0;
         helper::setcookie('taskToOpen', 0, 0);
 
-        $this->executionZen->assignKanbanVars($executionID);
+        $this->executionZen->assignKanbanVars($execution->id);
 
         $this->view->title            = $this->lang->kanban->view;
         $this->view->execution        = $execution;
         $this->view->executionList    = $this->loadModel('project')->getExecutionList(array($execution->project));
-        $this->view->executionID      = $executionID;
-        $this->view->kanbanList       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
+        $this->view->executionID      = $execution->id;
+        $this->view->kanbanList       = $this->loadModel('kanban')->getRDKanban($execution->id, $browseType, $orderBy, 0, $groupBy);
         $this->view->browseType       = $browseType;
         $this->view->orderBy          = $orderBy;
         $this->view->groupBy          = $groupBy;
@@ -3251,7 +3252,8 @@ class execution extends control
      */
     public function doc(int $executionID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'list', int $docID = 0, string $search = '')
     {
-        $this->commonAction($executionID);
+        $execution   = $this->commonAction($executionID);
+        $executionID = $execution->id;
         echo $this->fetch('doc', 'app', "type=execution&spaceID=$executionID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&noSpace=true");
     }
 

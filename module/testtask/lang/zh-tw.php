@@ -176,6 +176,7 @@ $lang->testtask->action->testtaskstarted = '$date, 由 <strong>$actor</strong> �
 $lang->testtask->action->testtaskclosed  = '$date, 由 <strong>$actor</strong> 完成測試單 <strong>$extra</strong>。' . "\n";
 
 $lang->testtask->unexecuted = '未執行';
+$lang->testtask->unassigned = '未指派';
 
 /* 統計報表。*/
 $lang->testtask->report = new stdclass();
@@ -187,6 +188,7 @@ $lang->testtask->report->charts['testTaskPerRunResult'] = '按用例結果統計
 $lang->testtask->report->charts['testTaskPerType']      = '按用例類型統計';
 $lang->testtask->report->charts['testTaskPerModule']    = '按用例模組統計';
 $lang->testtask->report->charts['testTaskPerRunner']    = '按用例執行人統計';
+$lang->testtask->report->charts['testTaskPerAssignee']  = '按用例指派人統計';
 
 $lang->testtask->featureBar['browse']['totalStatus'] = $lang->testtask->totalStatus;
 $lang->testtask->featureBar['browse']['wait']        = $lang->testtask->wait;

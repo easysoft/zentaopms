@@ -61,6 +61,7 @@ $cols = $this->loadModel('datatable')->getSetting('execution', 'task');
 if($execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'))) unset($cols['story']);
 if($execution->type != 'stage') unset($cols['design']);
 if(isset($cols['execution'])) $cols['execution']['map'] = $executions;
+if(isset($cols['project']))   $cols['project']['map']   = $this->loadModel('project')->getPairs();
 
 $footToolbar['items'][] = array(
     'text'      => $lang->execution->importTask,

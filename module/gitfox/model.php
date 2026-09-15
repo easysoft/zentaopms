@@ -457,6 +457,28 @@ class gitfoxModel extends model
     }
 
     /**
+     * 根据回调地址获取 webhook。
+     * Get webhook by callback URL.
+     *
+     * @param  int    $repoID
+     * @param  string $url
+     * @access public
+     * @return object|false
+     */
+    public function getWebhookByURL(int $repoID, string $url): object|false
+    {
+        $hookList = $this->apiGetHooks($repoID);
+        if(!is_array($hookList)) return false;
+
+        foreach($hookList as $hook)
+        {
+            if(isset($hook->url) && $hook->url == $url) return $hook;
+        }
+
+        return false;
+    }
+
+    /**
      * 添加一个推送和合并请求事件的webhook到gitfox项目。
      * Add webhook with push and merge request events to GitLab project.
      *
@@ -469,14 +491,39 @@ class gitfoxModel extends model
     {
         $systemURL = dirname(common::getSysURL() . $_SERVER['REQUEST_URI']);
 
+        $this->loadModel('repo');
+        if(empty($repo->gitUID) && !empty($repo->id))
+        {
+            $dbRepo = $this->repo->fetchByID((int)$repo->id);
+            if($dbRepo && !empty($dbRepo->gitUID)) $repo->gitUID = $dbRepo->gitUID;
+        }
+
+        $token = empty($repo->gitUID) ? $token : (string)$repo->gitUID;
+        if($token === '') return false;
+
         $hook = new stdClass;
         $hook->url         = $systemURL . '/api.php/v1/gitfox/webhook?repoID='. $repo->id;
         $hook->displayName = "zentao_{$repo->id}_" . date('Ymd');
         $hook->enabled     = true;
-        if($token) $hook->secret = $token;
+        $hook->secret      = $token;
+        $hook->authMethod  = 'token';
+        $hook->authHeader  = 'X-Gitfox-Token';
 
-        /* Return an empty array if where is one existing webhook. */
-        if($this->isWebhookExists($repo, $hook->url)) return true;
+        /* 已存在回调时补上缺失或不一致的 secret。 */
+        $existingHook = $this->getWebhookByURL((int)$repo->id, $hook->url);
+        if($existingHook)
+        {
+            if(!empty($existingHook->secret) && (string)$existingHook->secret === $token) return true;
+
+            $updateHook = new stdClass;
+            $updateHook->secret     = $token;
+            $updateHook->authMethod = 'token';
+            $updateHook->authHeader = 'X-Gitfox-Token';
+
+            $result = $this->apiUpdateWebhook((int)$repo->id, (int)$existingHook->id, $updateHook);
+            if(!empty($result->id)) return true;
+            return !dao::isError();
+        }
 
         $result = $this->apiCreateHook((int)$repo->id, $hook);
 

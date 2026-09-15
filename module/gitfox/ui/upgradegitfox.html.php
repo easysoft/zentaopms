@@ -17,7 +17,7 @@ $app->loadLang('install');
 
 jsVar('copySuccess', $lang->upgrade->copySuccess);
 jsVar('copyFail', $lang->upgrade->copyFail);
-jsVar('nextLink', $nextLink);
+jsVar('completeLink', inlink('upgradeGitFox', "inPage={$inPage}&skipUpgrade=1&fromVersion={$fromVersion}"));
 jsVar('upgradeFail', $lang->gitfox->upgradeGitFoxFail);
 
 div

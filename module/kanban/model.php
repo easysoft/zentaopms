@@ -1387,9 +1387,9 @@ class kanbanModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCardGroup();
 
-        $cards = $this->dao->select('t1.*, t2.type as columnType, t2.group')
+        $cards = $this->dao->select('t1.*, t2.type AS columnType, t2.`group`')
             ->from(TABLE_KANBANCELL)->alias('t1')
-            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column=t2.id')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column`=t2.id')
             ->where('t1.kanban')->eq($executionID)
             ->beginIF($browseType != 'all')->andWhere('t1.type')->eq($browseType)->fi()
             ->orderby($orderBy)
@@ -1464,7 +1464,7 @@ class kanbanModel extends model
         foreach($lanes as $lane) $this->refreshCards((array)$lane);
 
         $columns = $this->dao->select('t1.cards, t1.lane, t2.id, t2.type, t2.name, t2.color, t2.limit, t2.parent')->from(TABLE_KANBANCELL)->alias('t1')
-            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column = t2.id')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.lane')->in(array_keys($lanes))
             ->orderBy('id_asc')
@@ -3612,8 +3612,8 @@ class kanbanModel extends model
      */
     public function getColumnIDByLaneID(int $laneID, string $columnType)
     {
-        return $this->dao->select('t1.column')->from(TABLE_KANBANCELL)->alias('t1')
-            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column = t2.id')
+        return $this->dao->select('t1.`column`')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->where('t1.lane')->eq($laneID)
             ->andWhere('t2.type')->eq($columnType)
             ->fetch('column');

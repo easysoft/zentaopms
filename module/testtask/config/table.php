@@ -128,6 +128,20 @@ $config->testtask->cases->dtable->fieldList['actions']['menu']  = array(array('c
 $config->testtask->groupCase = new stdclass();
 $config->testtask->groupCase->dtable = new stdclass();
 $config->testtask->groupCase->dtable->fieldList = $config->testcase->group->dtable->fieldList;
+foreach($config->testtask->groupCase->dtable->fieldList as $field => $setting) $config->testtask->groupCase->dtable->fieldList[$field]['show'] = true;
+
+/* 复用测试单用例列表的列定义，保证分组视图自定义列的可选字段与用例列表一致。*/
+/* Reuse the testtask case list columns so the group view offers the same customizable fields. */
+$groupActions = $config->testtask->groupCase->dtable->fieldList['actions'];
+unset($config->testtask->groupCase->dtable->fieldList['actions']);
+foreach($config->testtask->cases->dtable->fieldList as $field => $setting)
+{
+    if($field == 'story' || isset($config->testtask->groupCase->dtable->fieldList[$field])) continue;
+
+    $setting['show'] = false;
+    $config->testtask->groupCase->dtable->fieldList[$field] = $setting;
+}
+$config->testtask->groupCase->dtable->fieldList['actions'] = $groupActions;
 
 $config->testtask->groupCase->actionList = $config->testcase->actionList;
 $config->testtask->groupCase->actionList['runCase']['url']             = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID={id}&caseID={case}&version={version}');
@@ -141,7 +155,6 @@ $config->testtask->groupCase->dtable->fieldList['id']['name']              = 'id
 $config->testtask->groupCase->dtable->fieldList['actions']['menu']         = array('runCase', 'edit', 'unlinkCase');
 $config->testtask->groupCase->dtable->fieldList['title']['link']['params'] = 'caseID={case}';
 $config->testtask->groupCase->dtable->fieldList['bugs']['link']['params']  = 'runID={id}&caseID={case}';
-foreach($config->testtask->groupCase->dtable->fieldList as $field => $setting) $config->testtask->groupCase->dtable->fieldList[$field]['show'] = true;
 
 $config->testtask->linkcase = new stdclass();
 $config->testtask->linkcase->dtable = new stdclass();

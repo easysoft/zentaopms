@@ -2708,6 +2708,32 @@ SQL);
     }
 
     /**
+     * Test backfillGitFoxWebhookSecret method.
+     *
+     * @access public
+     * @return object
+     */
+    public function backfillGitFoxWebhookSecretTest(): object
+    {
+        $result          = new stdclass();
+        $result->result  = $this->instance->backfillGitFoxWebhookSecret();
+        if(dao::isError()) return dao::getError();
+
+        $result->updatedCount = $this->instance->dao->select('COUNT(*) AS count')->from(TABLE_OPSWEBHOOK)
+            ->where('authMethod')->eq('token')
+            ->andWhere('authHeader')->eq('X-Gitfox-Token')
+            ->fetch('count');
+        $result->hook1 = $this->instance->dao->select('*')->from(TABLE_OPSWEBHOOK)->where('id')->eq(1)->fetch();
+        $result->hook2 = $this->instance->dao->select('*')->from(TABLE_OPSWEBHOOK)->where('id')->eq(2)->fetch();
+        $result->hook3 = $this->instance->dao->select('*')->from(TABLE_OPSWEBHOOK)->where('id')->eq(3)->fetch();
+        $result->hook4 = $this->instance->dao->select('*')->from(TABLE_OPSWEBHOOK)->where('id')->eq(4)->fetch();
+        $result->hook5 = $this->instance->dao->select('*')->from(TABLE_OPSWEBHOOK)->where('id')->eq(5)->fetch();
+        $result->hook8 = $this->instance->dao->select('*')->from(TABLE_OPSWEBHOOK)->where('id')->eq(8)->fetch();
+
+        return $result;
+    }
+
+    /**
      * Test parseRepoAcl method.
      *
      * @param  string $aclJson

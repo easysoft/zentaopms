@@ -55,5 +55,5 @@ $injectionFilters = array
 );
 $result = $testObj->getFilterFormatTest($injectionFilters);
 
-r(strpos($result['year']['value'], "') or") === false && substr($result['year']['value'], -1) === ')') && p('') && e(1); // 注入payload不能逃逸select过滤值
-r(strpos($result['name']['value'], "') or") === false && substr($result['name']['value'], -1) === "'") && p('') && e(1); // 注入payload不能逃逸input过滤值
+r(strpos($result['year']['value'], "x'") === false && strpos($result['year']['value'], "x\\'") !== false && substr($result['year']['value'], -1) === ')') && p('') && e(1); // 注入payload不能逃逸select过滤值
+r(strpos($result['name']['value'], "x'") === false && strpos($result['name']['value'], "x\\'") !== false && substr($result['name']['value'], -1) === "'") && p('') && e(1); // 注入payload不能逃逸input过滤值

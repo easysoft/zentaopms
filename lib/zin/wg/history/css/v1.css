@@ -1,3 +1,8 @@
 .history-panel-action .avatar {width: 21px !important; height: 21px !important;}
 .history-panel-body .listitem {padding: 0.4rem;}
 .history-panel-action > .item-inner {padding-left: 1.5rem;}
+
+/* 附件名称过长时换行显示，避免溢出。Allow long file names to wrap instead of overflowing. */
+.history-panel-action .file-list-item .item-content {flex-shrink: 1 !important;}
+.history-panel-action .file-list-item .item-title {min-width: 0; word-break: break-all;}
+.history-panel-action .file-list-item .item-subtitle {flex: none; white-space: nowrap;}

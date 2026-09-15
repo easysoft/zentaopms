@@ -199,6 +199,7 @@ $lang->testtask->action->testtaskstarted = '$date,  <strong>$actor</strong> a d�
 $lang->testtask->action->testtaskclosed  = '$date,  <strong>$actor</strong> a terminé campagne de recette <strong>$extra</strong>.' . "\n";
 
 $lang->testtask->unexecuted = 'En Attente';
+$lang->testtask->unassigned = 'Non assigné';
 
 /* Statistical statement. */
 $lang->testtask->report = new stdclass();
@@ -212,6 +213,7 @@ $lang->testtask->report->charts['testTaskPerRunResult'] = 'Résultat des CasTest
 $lang->testtask->report->charts['testTaskPerType']      = 'Type de CasTests';
 $lang->testtask->report->charts['testTaskPerModule']    = 'Module CasTests';
 $lang->testtask->report->charts['testTaskPerRunner']    = 'CasTests joués par';
+$lang->testtask->report->charts['testTaskPerAssignee']  = 'CasTests assignés à';
 
 $lang->testtask->featureBar['browse']['totalStatus'] = $lang->testtask->totalStatus;
 $lang->testtask->featureBar['browse']['myinvolved']  = $lang->testtask->myInvolved;

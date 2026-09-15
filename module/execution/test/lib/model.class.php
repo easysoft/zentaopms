@@ -1211,6 +1211,34 @@ class executionModelTest extends baseTest
     }
 
     /**
+     * 更新执行产品后，获取所属项目关联的计划。
+     * Update execution products and get the parent project's linked plans.
+     *
+     * @param  int   $executionID
+     * @param  array $param
+     * @param  int   $productID
+     * @access public
+     * @return string
+     */
+    public function updateProductsAndGetProjectPlanTest(int $executionID, array $param = array(), int $productID = 1): string
+    {
+        $postData = new stdclass();
+        foreach($param as $key => $value) $postData->$key = $value;
+
+        $this->instance->updateProducts($executionID, $postData);
+        if(dao::isError()) return json_encode(dao::getError());
+
+        $execution = $this->instance->fetchByID($executionID);
+        if(empty($execution)) return '';
+
+        $plan = $this->instance->dao->select('plan')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->eq((int)$execution->project)
+            ->andWhere('product')->eq($productID)
+            ->fetch('plan');
+        return (string)$plan;
+    }
+
+    /**
      * function getTasks2Imported test by execution
      *
      * @param  string $toExecution

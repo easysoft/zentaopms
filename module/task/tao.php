@@ -524,8 +524,10 @@ class taskTao extends taskModel
         if(is_string($type)) $type = strtolower($type);
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         $orderBy = str_replace('status', 'statusOrder', $orderBy);
-        $fields  = "DISTINCT t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, INSTR('wait,doing,done,pause,cancel,closed,', t1.status) as statusOrder";
-        ($this->config->edition == 'max' or $this->config->edition == 'ipd') && $fields .= ', t5.name as designName, t5.version as latestDesignVersion';
+        $orderBy = str_replace(array('`executionName`_', 'executionName_'), 't1.execution_', $orderBy);
+        $orderBy = str_replace(array('`projectName`_', 'projectName_'), 't1.project_', $orderBy);
+        $fields  = "DISTINCT t1.*, t2.id AS `storyID`, t2.title AS `storyTitle`, t2.product, t2.branch, t2.version AS `latestStoryVersion`, t2.status AS `storyStatus`, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as `priOrder`, INSTR('wait,doing,done,pause,cancel,closed,', t1.status) as `statusOrder`";
+        ($this->config->edition == 'max' or $this->config->edition == 'ipd') && $fields .= ', t5.name as `designName`, t5.version as `latestDesignVersion`';
 
         $actionIDList = array();
         if($type == 'assignedbyme') $actionIDList = $this->dao->select('`objectID`')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs('objectID', 'objectID');
@@ -589,9 +591,10 @@ class taskTao extends taskModel
     protected function fetchUserTasksByType(string $account, string $type, string $orderBy, int $projectID, int $limit, object|null $pager): array
     {
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
-        $orderBy = str_replace('project_', 't1.project_', $orderBy);
+        $orderBy = str_replace(array('executionName_', 'projectName_'), array('t1.execution_', 't1.project_'), $orderBy);
+        if(strpos($orderBy, 't1.project_') === false) $orderBy = str_replace('project_', 't1.project_', $orderBy);
 
-        return $this->dao->select("t1.*, t4.id AS project, t2.id AS `executionID`, t2.name AS executionName, t4.name AS projectName, t2.multiple AS executionMultiple, t2.type AS executionType, t3.id AS storyID, t3.title AS storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder")
+        return $this->dao->select("t1.*, t4.id AS `project`, t2.id AS `executionID`, t2.name AS `executionName`, t4.name AS `projectName`, t2.multiple AS `executionMultiple`, t2.type AS `executionType`, t3.id AS `storyID`, t3.title AS `storyTitle`, t3.status AS `storyStatus`, t3.version AS `latestStoryVersion`, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS `priOrder`")
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')

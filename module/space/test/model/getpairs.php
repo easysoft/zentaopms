@@ -82,7 +82,7 @@ $spaceTester->instance->app->user->admin = false;
 r($spaceTester->getPairsFieldEqualsTest('test1', $spaceID2, "ut-pairs-space-b-{$suffix}")) && p() && e('1'); // 非管理员模式下返回test1的reset空间名称匹配动态创建值
 r($spaceTester->getPairsCountTest('notexist'))           && p() && e('3');                            // 非管理员模式下查询不存在用户返回当前空间数量
 r($spaceTester->getPairsCountTest('test2'))              && p() && e('3');                            // 非管理员模式下查询test2返回当前空间数量
-r($spaceTester->getPairsCountTest('test1', true))        && p() && e('3');                            // filterRepoCreate=true时当前仍返回空间数量
+r($spaceTester->getPairsCountTest('test1', true))        && p() && e('2');                            // filterRepoCreate=true时仅返回公开空间数量
 
 /* 清理外部 GitFox 空间中创建的测试数据，保证用例可重复执行。*/
 $tester->app->user->admin = true;

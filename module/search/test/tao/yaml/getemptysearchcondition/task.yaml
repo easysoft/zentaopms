@@ -1,0 +1,16 @@
+---
+title: task表数据配置 - getEmptySearchCondition方法测试
+desc: 为测试searchTao::getEmptySearchCondition()方法提供测试数据
+author: Codex
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-4
+- field: name
+  note: 任务名称，用于标识本方法生成的数据
+  range: getemptysearchcondition1,getemptysearchcondition2,getemptysearchcondition3,getemptysearchcondition4
+- field: assignedTo
+  note: 指派给，覆盖空字符串、0 与非空值
+  range: "[]{1},0,admin,dev1"

@@ -1453,7 +1453,7 @@ class projectZen extends project
             $project->estimate = helper::formatHours($project->estimate);
             $project->consume  = helper::formatHours($project->consume);
             $project->left     = helper::formatHours($project->left);
-
+            $project->progress = (float)$project->progress;
         }
 
         /* 交付物提交进度。 */

@@ -1039,6 +1039,12 @@ class actionModel extends model
                 $action->extra = zget($users, $action->extra);
                 if(str_contains($action->extra, ':')) $action->extra = substr($action->extra, strpos($action->extra, ':') + 1);
             }
+            elseif(strpos('createppm,editppm,removeppm,createmr,editmr,removemr', $action->action) !== false && strpos($action->extra, '::') !== false)
+            {
+                $actionExtra = explode('::', $action->extra);
+                if(isset($actionExtra[1]) && isset($users[$actionExtra[1]]) && $actionExtra[1] === $action->actor) $actionExtra[1] = $users[$actionExtra[1]];
+                $action->extra = implode('::', $actionExtra);
+            }
 
             if(!isset($action->rawActor)) $action->rawActor = $action->actor;
             $action->actor = zget($users, $action->actor);

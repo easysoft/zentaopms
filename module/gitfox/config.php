@@ -133,14 +133,14 @@ $config->gitfox->downloadGitfoxURL['win']['arm']   = 'https://pkg.zentao.net/git
 $config->gitfox->installGitfox = array();
 $config->gitfox->installGitfox['linux'] = <<<EOT
 #!/bin/bash
-INSTALL_DIR="%s"
+INSTALL_DIR="{{INSTALL_DIR}}"
 if [ ! -d "\${INSTALL_DIR}" ]; then
     mkdir -p "\${INSTALL_DIR}"
 fi
 cd "\${INSTALL_DIR}" || { echo "Error: cd \${INSTALL_DIR} failed"; exit 1; }
 
 GITFOX_ZIP="gitfox_latest.zip"
-GITFOX_URL="%s"
+GITFOX_URL="{{GITFOX_URL}}"
 
 if command -v wget >/dev/null 2>&1; then
     wget --no-check-certificate -O "\${GITFOX_ZIP}" "\${GITFOX_URL}"
@@ -178,7 +178,7 @@ $config->gitfox->installGitfox['win'] = <<<EOT
 chcp 65001 >nul
 setlocal enabledelayedexpansion
 
-set "INSTALL_DIR=%s"
+set "INSTALL_DIR={{INSTALL_DIR}}"
 if not exist "%INSTALL_DIR%" (
     mkdir "%INSTALL_DIR%"
 )
@@ -189,7 +189,7 @@ cd /d "%INSTALL_DIR%" || (
 )
 
 set "GITFOX_ZIP=gitfox_latest.zip"
-set "GITFOX_URL=%s"
+set "GITFOX_URL={{GITFOX_URL}}"
 
 where certutil >nul 2>&1
 if %errorlevel% equ 0 (
@@ -218,14 +218,14 @@ EOT;
 $config->gitfox->upgradeGitfox = array();
 $config->gitfox->upgradeGitfox['linux'] = <<<EOT
 #!/bin/bash
-INSTALL_DIR="%s"
+INSTALL_DIR="{{INSTALL_DIR}}"
 if [ ! -d "\${INSTALL_DIR}" ]; then
     mkdir -p "\${INSTALL_DIR}"
 fi
 cd "\${INSTALL_DIR}" || { echo "Error: cd \${INSTALL_DIR} failed"; exit 1; }
 
 GITFOX_ZIP="gitfox_latest.zip"
-GITFOX_URL="%s"
+GITFOX_URL="{{GITFOX_URL}}"
 
 if command -v wget >/dev/null 2>&1; then
     wget --no-check-certificate -O "\${GITFOX_ZIP}" "\${GITFOX_URL}"
@@ -263,7 +263,7 @@ $config->gitfox->upgradeGitfox['win'] = <<<EOT
 chcp 65001 >nul
 setlocal enabledelayedexpansion
 
-set "INSTALL_DIR=%s"
+set "INSTALL_DIR={{INSTALL_DIR}}"
 if not exist "%INSTALL_DIR%" (
     mkdir "%INSTALL_DIR%"
 )
@@ -274,7 +274,7 @@ cd /d "%INSTALL_DIR%" || (
 )
 
 set "GITFOX_ZIP=gitfox_latest.zip"
-set "GITFOX_URL=%s"
+set "GITFOX_URL={{GITFOX_URL}}"
 
 where certutil >nul 2>&1
 if %errorlevel% equ 0 (

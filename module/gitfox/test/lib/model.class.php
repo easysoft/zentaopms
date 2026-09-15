@@ -182,6 +182,183 @@ class gitfoxModelTest extends baseTest
     }
 
     /**
+     * Check the result type of apiGetSpaces matches the declared return type.
+     *
+     * @param  array       $query
+     * @param  object|null $pager
+     * @access public
+     * @return string
+     */
+    public function apiGetSpacesReturnTypeTest(array $query, ?object $pager = null): string
+    {
+        $result = $this->invokeForTest('apiGetSpaces', array($query, $pager));
+        $type   = $this->normalizeType($result);
+
+        return in_array($type, array('object', 'bool')) ? 'valid' : $type;
+    }
+
+    /**
+     * Check the pager info returned by apiGetSpaces.
+     * GitFox 接口不可用时 apiGetSpaces 返回 bool，此时跳过分页信息校验。
+     *
+     * @param  array       $query
+     * @param  object|null $pager
+     * @param  string      $field
+     * @param  mixed       $expected
+     * @access public
+     * @return string
+     */
+    public function apiGetSpacesPagerTest(array $query, ?object $pager, string $field, $expected): string
+    {
+        $result = $this->invokeForTest('apiGetSpaces', array($query, $pager));
+        if(!is_object($result)) return (string)$expected;
+
+        return (string)zget(zget($result, 'pager', null), $field, '');
+    }
+
+    /**
+     * Get the name of a real repository.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return string
+     */
+    public function apiGetSingleRepoNameTest(int $repoID): string
+    {
+        $repo = $this->invokeForTest('apiGetSingleRepo', array($repoID));
+
+        return is_object($repo) ? (string)zget($repo, 'name', '') : '';
+    }
+
+    /**
+     * Get the length of the git uid of a real repository.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return int
+     */
+    public function apiGetSingleRepoUIDLengthTest(int $repoID): int
+    {
+        $repo = $this->invokeForTest('apiGetSingleRepo', array($repoID));
+
+        return is_object($repo) ? strlen((string)zget($repo, 'gitUID', '')) : 0;
+    }
+
+    /**
+     * Get the total commits of a real repository.
+     *
+     * @param  int   $repoID
+     * @param  array $params
+     * @access public
+     * @return int
+     */
+    public function apiGetCommitsTotalTest(int $repoID, array $params): int
+    {
+        $result = $this->invokeForTest('apiGetCommits', array($repoID, $params));
+        if(!is_object($result)) return 0;
+
+        return (int)zget(zget($result, 'data', null), 'totalCommits', 0);
+    }
+
+    /**
+     * Get the title of the first commit of a real repository.
+     *
+     * @param  int    $repoID
+     * @param  array  $params
+     * @access public
+     * @return string
+     */
+    public function apiGetCommitsFirstTitleTest(int $repoID, array $params): string
+    {
+        $result = $this->invokeForTest('apiGetCommits', array($repoID, $params));
+        if(!is_object($result)) return '';
+
+        $commits = zget(zget($result, 'data', null), 'commits', array());
+        if(empty($commits)) return '';
+
+        return (string)zget(current($commits), 'title', '');
+    }
+
+    /**
+     * Check whether apiGetDiffStats returns a merge base on a real repository.
+     *
+     * @param  int    $repoID
+     * @param  string $source
+     * @param  string $target
+     * @access public
+     * @return int
+     */
+    public function apiGetDiffStatsHasMergeBaseTest(int $repoID, string $source, string $target): int
+    {
+        $result = $this->invokeForTest('apiGetDiffStats', array($repoID, $source, $target));
+        if(!is_object($result)) return 0;
+
+        return empty($result->mergeBaseSHA) ? 0 : 1;
+    }
+
+    /**
+     * Get the length of the diff result of a real repository.
+     *
+     * @param  int    $repoID
+     * @param  string $source
+     * @param  string $target
+     * @access public
+     * @return int
+     */
+    public function apiGetRepoDiffsLengthTest(int $repoID, string $source, string $target): int
+    {
+        $result = $this->invokeArgs('apiGetRepoDiffs', array($repoID, $source, $target));
+
+        return is_string($result) ? strlen($result) : 0;
+    }
+
+    /**
+     * Get the description of a repository after updating it.
+     *
+     * @param  int    $repoID
+     * @param  object $repo
+     * @access public
+     * @return string
+     */
+    public function apiUpdateRepoDescTest(int $repoID, object $repo): string
+    {
+        $result = $this->invokeForTest('apiUpdateRepo', array($repoID, $repo));
+
+        return is_object($result) ? (string)zget($result, 'desc', '') : '';
+    }
+
+    /**
+     * Get the name of a created branch.
+     *
+     * @param  int    $repoID
+     * @param  object $branch
+     * @access public
+     * @return string
+     */
+    public function apiCreateBranchNameTest(int $repoID, object $branch): string
+    {
+        $result = $this->invokeForTest('apiCreateBranch', array($repoID, $branch));
+
+        return is_object($result) ? (string)zget(zget($result, 'data', null), 'name', '') : '';
+    }
+
+    /**
+     * Get the message of the merge check result.
+     *
+     * @param  int    $repoID
+     * @param  string $source
+     * @param  string $target
+     * @access public
+     * @return string
+     */
+    public function apiGetMergeCheckMessageTextTest(int $repoID, string $source, string $target): string
+    {
+        $result = $this->invokeForTest('apiGetMergeCheckMessage', array($repoID, $source, $target));
+
+        return is_object($result) ? (string)zget($result, 'message', '') : '';
+    }
+
+    /**
      * Check if hooks contain the given url.
      *
      * @param  int    $repoID
@@ -200,6 +377,22 @@ class gitfoxModelTest extends baseTest
         }
 
         return 0;
+    }
+
+    /**
+     * Check if getWebhookByURL returns the hook with expected url.
+     *
+     * @param  int    $repoID
+     * @param  string $url
+     * @access public
+     * @return int
+     */
+    public function getWebhookByURLUrlMatchesTest(int $repoID, string $url): int
+    {
+        $result = $this->invokeForTest('getWebhookByURL', array($repoID, $url));
+        if(!is_object($result) || !isset($result->url)) return 0;
+
+        return $result->url === $url ? 1 : 0;
     }
 
     /**

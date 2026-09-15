@@ -101,7 +101,8 @@ $_SESSION['ssoData'] = $ssoData;
 
 global $tester;
 if(!isset($tester->config->safe)) $tester->config->safe = new stdclass();
-$tester->config->safe->mode = 2;
+/* 密码强度校验由 addZTUser 用例单独覆盖，此处聚焦账号存在性和格式校验。*/
+$tester->config->safe->mode = 0;
 
 r($ssoTest->bindTest()) && p('0') && e('该用户名已经存在，请更换用户名，或直接绑定到该用户。');
 
