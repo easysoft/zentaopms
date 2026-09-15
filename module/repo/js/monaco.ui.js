@@ -56,7 +56,7 @@ $('body').off('click', '.dropmenu-tree .dropmenu-item').on('click', '.dropmenu-t
     if(url != 'javascript:;') return;
 
     if(branchOrTag != $.cookie.get('repoBranch')) $.cookie.set('repoBranch', branchOrTag, {expires:config.cookieLife, path:config.webRoot});
-    openUrl(currentLink.replace('%s', btoa(encodeURIComponent(branchOrTag))), {app: appTab});
+    openUrl(currentLink.replace('%s', btoa(encodeURIComponent(branchOrTag)).replace(/\+/g, '_').replace(/\//g, '.')), {app: appTab});
 })
 
 window.dropdownClick = function(event)
