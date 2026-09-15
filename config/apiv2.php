@@ -210,6 +210,9 @@ $routes['/baselines/:baselineID']         = array('redirect' => '/cm/view?baseli
 $routes['/projects/:projectID/deliverables'] = array('redirect' => '/projects/deliverable?projectID=:projectID', 'response' => 'deliverables(array),pager');
 $routes['/deliverables/:deliverableID']      = array('redirect' => '/projects/viewDeliverable?deliverableID=:deliverableID', 'response' => 'deliverable,review,actions(array),doc,relatedObjects(array)');
 
+$routes['/projects/:projectID/changes'] = array('redirect' => '/projectchanges/browse?projectID=:projectID', 'response' => 'projectchanges(array),pager');
+$routes['/changes/:changeID']           = array('redirect' => '/projectchanges/view?projectchangeID=:changeID', 'response' => 'projectchange,actions(array),deliverables(array)');
+
 $routes['/weeklies']           = array('post' => array('response' => '*'));
 $routes['/weeklies/:reportID'] = array('put' => array('response' => '*'));
 
