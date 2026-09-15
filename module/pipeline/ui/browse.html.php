@@ -84,6 +84,11 @@ $executionItem = array('text' => $lang->pipeline->execution,  'url' => inLink('e
 $config->pipeline->dtable->fieldList['actions']['list']['edit']    = array('icon' => 'edit', 'text' => $lang->pipeline->edit, 'hint' => $lang->pipeline->edit, 'url' => helper::createLink('pipeline', 'edit', "id={id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
 $config->pipeline->dtable->fieldList['actions']['list']['exec']['url'] = array('module' => 'pipeline', 'method' => 'exec', 'params' => "pipelineID={id}&space={$spaceID}&repoID={$repoID}&type={$type}");
 
+if($executionPriv)
+{
+    $config->pipeline->dtable->fieldList['name']['link'] = helper::createLink('pipeline', 'execution', "spaceID={spaceID}&repoID={repoID}&type={scope}&pipelineID={id}");
+}
+
 $cols = $this->loadModel('datatable')->getSetting('pipeline');
 if($needServer)
 {

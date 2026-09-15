@@ -22,7 +22,6 @@ $config->pipeline->dtable->fieldList['name']['hint']        = true;
 $config->pipeline->dtable->fieldList['name']['show']        = true;
 $config->pipeline->dtable->fieldList['name']['required']    = true;
 $config->pipeline->dtable->fieldList['name']['checkbox']    = false;
-$config->pipeline->dtable->fieldList['name']['data-toggle'] = 'modal';
 
 $config->pipeline->dtable->fieldList['lastExecStatus']['title']    = $lang->pipeline->lastExecResult;
 $config->pipeline->dtable->fieldList['lastExecStatus']['name']     = 'lastExecStatus';
