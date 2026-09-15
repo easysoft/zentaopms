@@ -145,6 +145,11 @@ $routes['/projects/testtask']           = array('response' => 'tasks(array)|test
 $routes['/projects/testreport']         = array('response' => 'reports(array)|testreports,pager');
 $routes['/projects/team']               = array('response' => 'teamMembers(array)|members');
 $routes['/projects/:projectID/members'] = array('get' => array('redirect' => '/projects/team?projectID=:projectID'), 'put' => array('redirect' => '/projects/manageMembers?projectID=:projectID'));
+
+/* Keep redirect targets before the generic project route so they are not parsed as project IDs. */
+$routes['/projects/deliverable']        = array('response' => 'deliverables(array),pager');
+$routes['/projects/viewDeliverable']    = array('response' => 'deliverable,review,actions(array),doc,relatedObjects(array)');
+
 $routes['/projects/:projectID']         = array('response' => 'project');
 $routes['/projects/:projectID/close']   = array('post' => array('response' => '*'));
 $routes['/projects/:projectID/tasks']   = array('post' => array('redirect' => '/task/create?executionID=0', 'data' => 'project=:projectID'));
@@ -202,6 +207,9 @@ $routes['/issues/:issueID']                = array('response' => 'issue,actions(
 
 $routes['/projects/:projectID/baselines'] = array('redirect' => '/cm/browse?projectID=:projectID', 'response' => 'baselines(array),pager');
 $routes['/baselines/:baselineID']         = array('redirect' => '/cm/view?baselineID=:baselineID', 'response' => 'baseline,actions(array),deliverables(array)');
+
+$routes['/projects/:projectID/deliverables'] = array('redirect' => '/projects/deliverable?projectID=:projectID', 'response' => 'deliverables(array),pager');
+$routes['/deliverables/:deliverableID']      = array('redirect' => '/projects/viewDeliverable?deliverableID=:deliverableID', 'response' => 'deliverable,review,actions(array),doc,relatedObjects(array)');
 
 $routes['/weeklies']           = array('post' => array('response' => '*'));
 $routes['/weeklies/:reportID'] = array('put' => array('response' => '*'));
