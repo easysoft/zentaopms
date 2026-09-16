@@ -422,6 +422,13 @@ class blockZen extends block
         if(!$usageDays) $usageDays = "0 {$this->lang->day}";
         if(strpos($this->app->getClientLang(), 'zh') !== false) $usageDays = str_replace(' ', '', $usageDays);
 
+        /* GitFox独立版本不存在任务相关功能，欢迎总览区域展示代码评审相关的统计数据。 */
+        if($this->config->edition == 'gitfox' || $this->config->vision == 'gitfox')
+        {
+            $this->printGitfoxWelcomeBlock($usageDays, $welcomeType);
+            return;
+        }
+
         $yesterday = strtotime("-1 day");
         $year  = date('Y', $yesterday);
         $month = date('m', $yesterday);
@@ -540,6 +547,36 @@ class blockZen extends block
         $this->view->assignToMe     = $assignToMe;
         $this->view->reviewByMe     = $reviewByMe;
         $this->view->welcomeSummary = $welcomeSummary;
+    }
+
+    /**
+     * 打印 GitFox 版本的欢迎总览区块。
+     * Print the welcome block of the GitFox version.
+     *
+     * @param  string    $usageDays
+     * @param  string    $welcomeType
+     * @access protected
+     * @return void
+     */
+    protected function printGitfoxWelcomeBlock(string $usageDays, string $welcomeType): void
+    {
+        $statistics = $this->loadModel('my')->getMyReviewStatistics();
+        $reviewList = $this->my->getReviewingList('ppm');
+
+        $reviewByMe = array();
+        $reviewByMe['reviewByMe']      = array('number' => count($reviewList),            'href' => common::hasPriv('my', 'audit')    ? helper::createLink('my', 'audit', 'browseType=ppm') : '');
+        $reviewByMe['myCreatedReview'] = array('number' => $statistics['createdReviews'], 'href' => common::hasPriv('ppm', 'browse')  ? helper::createLink('ppm', 'browse') : '');
+        $reviewByMe['myIssue']         = array('number' => $statistics['pendingIssues'],  'href' => common::hasPriv('repo', 'review') ? helper::createLink('repo', 'review', 'repoID=0&browseType=all') . '#app=issue' : '');
+
+        $this->view->todaySummary   = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())];
+        $this->view->welcomeType    = $welcomeType;
+        $this->view->usageDays      = $usageDays;
+        $this->view->finishTask     = 0;
+        $this->view->fixBug         = 0;
+        $this->view->honorary       = '';
+        $this->view->assignToMe     = array();
+        $this->view->reviewByMe     = $reviewByMe;
+        $this->view->welcomeSummary = sprintf($this->lang->block->summary->welcome, $usageDays, '');
     }
 
     /**
