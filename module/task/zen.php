@@ -567,7 +567,10 @@ class taskZen extends task
         if(dao::isError()) return false;
 
         $now  = helper::now();
-        $task = form::data($this->config->task->form->edit, $task->id)
+        $formConfig = $this->config->task->form->edit;
+        if(in_array($this->post->mode, array('multi', 'linear'))) $formConfig['assignedTo']['skipRequired'] = true;
+
+        $task = form::data($formConfig, $task->id)
             ->add('id', $task->id)
             ->add('lastEditedDate', $now)
             ->setDefault('design', $oldTask->design)

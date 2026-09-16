@@ -217,8 +217,11 @@ class task extends control
 
         if(!empty($_POST))
         {
+            $formConfig = $this->config->task->form->edit;
+            if(in_array($this->post->mode, array('multi', 'linear'))) $formConfig['assignedTo']['skipRequired'] = true;
+
             /* Prepare and check data. */
-            $task = form::data($this->config->task->form->edit)->add('id', $taskID)->get();
+            $task = form::data($formConfig)->add('id', $taskID)->get();
             $task = $this->taskZen->buildTaskForEdit($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

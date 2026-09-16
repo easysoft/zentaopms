@@ -808,6 +808,7 @@ class taskTao extends taskModel
         $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
 
         $requiredFields = ',' . $this->config->task->edit->requiredFields . ',';
+        if(!empty($task->mode) && in_array($task->mode, array('multi', 'linear'))) $requiredFields = str_replace(',assignedTo,', ',', $requiredFields);
         if($this->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
 
         if(strpos(',doing,pause,', $task->status) && empty($task->left))
