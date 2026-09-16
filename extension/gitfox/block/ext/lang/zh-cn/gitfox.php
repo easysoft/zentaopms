@@ -10,11 +10,19 @@ $lang->block->welcome->reviewList['myIssue']         = '待我解决的问题';
 $lang->block->moduleList['ppm'] = $lang->devops->ppm;
 
 $lang->block->modules['ppm'] = new stdclass();
-$lang->block->modules['ppm']->availableBlocks['reviewbyme'] = '待我评审';
+$lang->block->modules['ppm']->availableBlocks['reviewbyme']        = '待我评审';
+$lang->block->modules['ppm']->availableBlocks['reviewcreatedbyme'] = '我创建的评审';
 
-$lang->block->titleList['reviewbyme'] = '待我评审';
+$lang->block->titleList['reviewbyme']        = '待我评审';
+$lang->block->titleList['reviewcreatedbyme'] = '我创建的评审';
 
 $lang->block->reviewbyme = new stdclass();
 $lang->block->reviewbyme->featureBar['all']      = '全部';
 $lang->block->reviewbyme->featureBar['pending']  = '待评审';
 $lang->block->reviewbyme->featureBar['reviewed'] = '已评审';
+
+$lang->block->reviewcreatedbyme = new stdclass();
+$lang->block->reviewcreatedbyme->featureBar['all']    = '全部';
+$lang->block->reviewcreatedbyme->featureBar['opened'] = '开放中';
+$lang->block->reviewcreatedbyme->featureBar['merged'] = '已合并';
+$lang->block->reviewcreatedbyme->featureBar['closed'] = '已关闭';
