@@ -230,8 +230,8 @@ $routes['/meetings/:meetingID']              = array('get' => array('response' =
 $routes['/meetings/:meetingID/minutes']      = array('put' => array('method' => 'minutes', 'response' => '*'));
 
 $routes['/opportunities']                         = array('response' => 'opportunities(array),pager', 'search' => array('enabled' => true));
-$routes['/projects/:projectID/opportunities']     = array('redirect' => '/opportunities?projectID=:projectID', 'search' => array('enabled' => true));
-$routes['/executions/:executionID/opportunities'] = array('redirect' => '/opportunities?executionID=:executionID&from=execution', 'search' => array('enabled' => true));
+$routes['/projects/:projectID/opportunities']     = array('redirect' => '/opportunities?projectID=:projectID', 'response' => 'opportunities(array),pager', 'search' => array('enabled' => true));
+$routes['/executions/:executionID/opportunities'] = array('redirect' => '/opportunities?executionID=:executionID&from=execution', 'response' => 'opportunities(array),pager', 'search' => array('enabled' => true));
 $routes['/opportunities/:opportunityID']          = array('response' => 'opportunity,actions(array)');
 
 $routes['/auditplans']                          = array('response' => 'auditplans(array),pager', 'search' => array('enabled' => true));
