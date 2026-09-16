@@ -229,7 +229,7 @@ $routes['/executions/:executionID/meetings'] = array('redirect' => '/meetings?ob
 $routes['/meetings/:meetingID']              = array('get' => array('response' => 'meeting,actions(array)'), 'put' => array('response' => '*'), 'delete' => array('response' => '*'));
 $routes['/meetings/:meetingID/minutes']      = array('put' => array('method' => 'minutes', 'response' => '*'));
 
-$routes['/opportunities']                         = array('response' => 'opportunities(array),pager', 'search' => array('enabled' => true));
+$routes['/opportunities']                         = array('get' => array('response' => 'opportunities(array),pager', 'search' => array('enabled' => true)), 'post' => array('response' => '*'));
 $routes['/projects/:projectID/opportunities']     = array('redirect' => '/opportunities?projectID=:projectID', 'response' => 'opportunities(array),pager', 'search' => array('enabled' => true));
 $routes['/executions/:executionID/opportunities'] = array('redirect' => '/opportunities?executionID=:executionID&from=execution', 'response' => 'opportunities(array),pager', 'search' => array('enabled' => true));
 $routes['/opportunities/:opportunityID']          = array('response' => 'opportunity,actions(array)');
