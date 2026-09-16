@@ -1654,6 +1654,23 @@ class blockZenTest extends baseTest
     }
 
     /**
+     * Test printReviewByMeBlock method in zen layer.
+     *
+     * @param  object $block
+     * @param  array  $params
+     * @access public
+     * @return object
+     */
+    public function printReviewByMeBlockTest(?object $block = null, array $params = array())
+    {
+        $this->prepareContext();
+        $block = $this->prepareBlock($block);
+        $this->invokeArgs('printReviewByMeBlock', array($block, $params));
+        if(dao::isError()) return dao::getError();
+        return $this->getProperty('view');
+    }
+
+    /**
      * Test printZentaoDynamicBlock method in zen layer.
      *
      * @access public
