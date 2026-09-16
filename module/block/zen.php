@@ -606,6 +606,32 @@ class blockZen extends block
     }
 
     /**
+     * 打印我创建的评审区块。
+     * Print the review created by me block.
+     *
+     * @param  object    $block
+     * @param  array     $params
+     * @access protected
+     * @return void
+     */
+    protected function printReviewCreatedByMeBlock(object $block, array $params = array()): void
+    {
+        $this->loadModel('ppm');
+
+        $browseType = isset($params['browseType']) ? $params['browseType'] : 'all';
+        if(!isset($this->lang->block->reviewcreatedbyme->featureBar[$browseType])) $browseType = 'all';
+
+        $count = isset($block->params->count) ? (int)$block->params->count : 20;
+        if($count <= 0) $count = 20;
+
+        $this->app->loadClass('pager', true);
+        $pager = pager::init(0, $count, 1);
+
+        $this->view->browseType = $browseType;
+        $this->view->reviews    = $this->ppm->getReviewListByCreator($browseType, $this->app->user->account, 'createdDate_desc', $pager);
+    }
+
+    /**
      * 打印任务列表区块。
      * Print task block.
      *
