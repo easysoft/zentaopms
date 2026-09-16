@@ -1021,6 +1021,37 @@ class ppmModel extends model
     }
 
     /**
+     * 获取指定用户发起的评审请求。
+     * Get the review requests created by the given user.
+     *
+     * @param  string    $browseType
+     * @param  string    $account
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access public
+     * @return array
+     */
+    public function getReviewListByCreator(string $browseType = 'all', string $account = '', string $orderBy = 'createdDate_desc', ?object $pager = null): array
+    {
+        if(!$account) $account = $this->app->user->account;
+        if(!in_array($browseType, array('all', 'opened', 'merged', 'closed'))) $browseType = 'all';
+
+        $reviews = $this->dao->select('t1.*')->from(TABLE_PPM)->alias('t1')
+            ->where('t1.`deleted`')->eq('0')
+            ->andWhere('t1.`createdBy`')->eq($account)
+            /* 我创建的评审：全部展示，或者按照评审请求的状态筛选。 */
+            ->beginIF($browseType != 'all')->andWhere('t1.`status`')->eq($browseType)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
+        if(empty($reviews)) return array();
+
+        foreach($reviews as $review) $review->type = !empty($review->flow) ? 'pr' : 'mr';
+        return $reviews;
+    }
+
+    /**
      * 合并MR。
      * Merge MR.
      *
