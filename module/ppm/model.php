@@ -976,6 +976,51 @@ class ppmModel extends model
     }
 
     /**
+     * 获取指派给指定用户的评审请求。
+     * Get the review requests assigned to the given user.
+     *
+     * @param  string    $browseType
+     * @param  string    $account
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access public
+     * @return array
+     */
+    public function getReviewListByAccount(string $browseType = 'all', string $account = '', string $orderBy = 'createdDate_desc', ?object $pager = null): array
+    {
+        if(!$account) $account = $this->app->user->account;
+
+        $reviews = $this->dao->select('t1.*, t2.`decision`')->from(TABLE_PPM)->alias('t1')
+            ->leftJoin(TABLE_PPMREVIEWERS)->alias('t2')->on("t1.`id` = t2.`requestID` AND t2.`account` = '{$account}'")
+            ->where('t1.`deleted`')->eq('0')
+            /* 待我评审：评审人表中为待评审，或者当前节点评审人包含我且审批未通过。 */
+            ->beginIF($browseType == 'pending')
+            ->andWhere('t1.`status`')->ne('closed')
+            ->andWhere('t1.`reviewStatus`')->ne('pass')
+            ->andWhere('((t2.`id`')->gt(0)->andWhere('t2.`decision`')->eq('pending')->markRight(1)
+            ->orWhere("FIND_IN_SET('{$account}', t1.`reviewers`)")->markRight(1)
+            ->fi()
+            /* 我已评审：评审人表中已不是待评审。 */
+            ->beginIF($browseType == 'reviewed')
+            ->andWhere('t2.`id`')->gt(0)
+            ->andWhere('t2.`decision`')->ne('pending')
+            ->andWhere('t2.`decision`')->ne('')
+            ->fi()
+            /* 全部：与我相关的评审请求，包含只在当前节点评审人中的请求。 */
+            ->beginIF($browseType == 'all')
+            ->andWhere('(t2.`id`')->gt(0)->orWhere("FIND_IN_SET('{$account}', t1.`reviewers`)")->markRight(1)
+            ->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
+        if(empty($reviews)) return array();
+
+        foreach($reviews as $review) $review->type = !empty($review->flow) ? 'pr' : 'mr';
+        return $reviews;
+    }
+
+    /**
      * 合并MR。
      * Merge MR.
      *
