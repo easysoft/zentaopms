@@ -18,6 +18,16 @@ $config->block->params['reviewbyme']->count['control'] = 'input';
 /* 待我评审区块默认为长区块，也可以调整为短区块。 */
 $config->block->size['ppm']['reviewbyme'] = array(2 => 6, 1 => 6);
 
+/* 我创建的评审区块的默认展示数量，可在编辑区块中调整。 */
+$config->block->params['reviewcreatedbyme'] = new stdclass();
+$config->block->params['reviewcreatedbyme']->count['name']    = $lang->block->count;
+$config->block->params['reviewcreatedbyme']->count['default'] = 20;
+$config->block->params['reviewcreatedbyme']->count['control'] = 'input';
+
+/* 我创建的评审区块默认为长区块，也可以调整为短区块。 */
+$config->block->size['ppm']['reviewcreatedbyme'] = array(2 => 6, 1 => 6);
+
 $config->block->modules['ppm'] = new stdclass();
 $config->block->modules['ppm']->moreLinkList = new stdclass();
-$config->block->modules['ppm']->moreLinkList->reviewbyme = 'my|audit|browseType=ppm';
+$config->block->modules['ppm']->moreLinkList->reviewbyme        = 'my|audit|browseType=ppm';
+$config->block->modules['ppm']->moreLinkList->reviewcreatedbyme = 'ppm|browse|repoID=0&mode=status&param=creator';
