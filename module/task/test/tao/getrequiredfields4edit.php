@@ -79,3 +79,32 @@ $taskObj5->execution = 1;
 $taskObj5->status = 'wait';
 $taskObj5->left = 0;
 r($taskTest->getRequiredFields4EditTest($taskObj5)) && p() && e('execution,name,type'); // 步骤5：wait状态任务不受left限制
+
+$originRequiredFields = $taskTest->objectModel->config->task->edit->requiredFields;
+$taskTest->objectModel->config->task->edit->requiredFields = 'execution,name,type,assignedTo';
+
+$taskObj6 = new stdclass();
+$taskObj6->id = 6;
+$taskObj6->execution = 1;
+$taskObj6->status = 'wait';
+$taskObj6->left = 5;
+$taskObj6->mode = 'single';
+r($taskTest->getRequiredFields4EditTest($taskObj6)) && p() && e('execution,name,type,assignedTo'); // 步骤6：单人任务仍校验指派给
+
+$taskObj7 = new stdclass();
+$taskObj7->id = 7;
+$taskObj7->execution = 1;
+$taskObj7->status = 'wait';
+$taskObj7->left = 5;
+$taskObj7->mode = 'multi';
+r($taskTest->getRequiredFields4EditTest($taskObj7)) && p() && e('execution,name,type'); // 步骤7：多人并行任务不校验指派给
+
+$taskObj8 = new stdclass();
+$taskObj8->id = 8;
+$taskObj8->execution = 1;
+$taskObj8->status = 'wait';
+$taskObj8->left = 5;
+$taskObj8->mode = 'linear';
+r($taskTest->getRequiredFields4EditTest($taskObj8)) && p() && e('execution,name,type'); // 步骤8：多人串行任务不校验指派给
+
+$taskTest->objectModel->config->task->edit->requiredFields = $originRequiredFields;

@@ -151,7 +151,7 @@ if(!empty($task->team))
         set::name('assignedTo'),
         set::value($task->assignedTo),
         set::items($assignedToOptions),
-        set::required(true),
+        set::required(false),
         $task->mode == 'linear' && !in_array($taskStatus, array('done', 'closed')) ? set::disabled(true) : null,
         $taskStatus == 'closed' ? set::disabled(true) : null,
     );
@@ -332,7 +332,7 @@ detailBody
             item
             (
                 set::name($lang->task->assignedTo),
-                set::required(strpos(",{$this->config->task->edit->requiredFields},", ",assignedTo,") !== false),
+                set::required(empty($task->mode) && strpos(",{$this->config->task->edit->requiredFields},", ",assignedTo,") !== false),
                 inputGroup
                 (
                     div
