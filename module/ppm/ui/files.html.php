@@ -19,6 +19,7 @@ $domBox = div
         set::module(''),
         set::repoID($repoID),
         set::ppmID($ppm->id),
+        set::hight('calc(100vh - 286px)'),
         set::labels($lang->ppm->diffHub->labels)
     )
 );

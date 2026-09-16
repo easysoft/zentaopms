@@ -1638,6 +1638,22 @@ class blockZenTest extends baseTest
     }
 
     /**
+     * Test printGitfoxWelcomeBlock method in zen layer.
+     *
+     * @param  string $usageDays
+     * @param  string $welcomeType
+     * @access public
+     * @return object
+     */
+    public function printGitfoxWelcomeBlockTest(string $usageDays = '0天', string $welcomeType = '06:00')
+    {
+        $this->prepareContext();
+        $this->invokeArgs('printGitfoxWelcomeBlock', array($usageDays, $welcomeType));
+        if(dao::isError()) return dao::getError();
+        return $this->getProperty('view');
+    }
+
+    /**
      * Test printZentaoDynamicBlock method in zen layer.
      *
      * @access public

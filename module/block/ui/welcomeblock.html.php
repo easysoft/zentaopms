@@ -15,6 +15,9 @@ use zin\utils\style;
 
 $isEn = $app->getClientLang() == 'en';
 
+/* 只有"与我相关"一个统计栏时（如GitFox），统计项横向平铺并撑满整行。 */
+$hasAssignToMe = !empty($assignToMe);
+
 $getMeasureItem = function($data)
 {
     global $lang;
@@ -109,18 +112,18 @@ blockPanel
         divider(setClass('h-10 self-center')),
         cell
         (
-            setClass('col text-center py-4'),
-            set::width($isEn ? '20%' : '16%'),
+            setClass('col text-center py-4' . ($hasAssignToMe ? '' : ' flex-auto')),
+            $hasAssignToMe ? set::width($isEn ? '20%' : '16%') : null,
             div(span(setClass('font-bold text-md'), $lang->block->welcome->reviewByMe)),
-            div(set::className('flex-auto center'), $getMeasureItem($reviewByMe))
+            div(setClass('flex-auto ' . ($hasAssignToMe ? 'center' : 'flex justify-around text-center items-center')), $getMeasureItem($reviewByMe))
         ),
-        divider(setClass('h-10 self-center')),
-        cell
+        $hasAssignToMe ? divider(setClass('h-10 self-center')) : null,
+        $hasAssignToMe ? cell
         (
             setClass('col flex-auto py-4'),
             div(span(setClass('font-bold text-md ml-8'), $lang->block->welcome->assignToMe)),
             div(setClass('flex-auto flex justify-around text-center items-center'), $getMeasureItem($assignToMe))
-        )
+        ) : null
     ),
     h::css
     (
