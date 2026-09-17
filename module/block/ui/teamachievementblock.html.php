@@ -15,6 +15,89 @@ $isEn               = $app->getClientLang() === 'en';
 $yesterdayClassName = $isEn ? 'items-center text-gray border-r pr-2 col-reverse' : 'items-center text-gray border-r pr-2';
 $todayClassName     = $isEn ? 'items-center text-success pl-2 col-reverse' : 'items-center text-success pl-2';
 
+/* GitFox独立版不存在任务、需求、Bug等功能，展示GitFox相关的度量数据。The GitFox edition displays the metrics of GitFox. */
+if($config->edition == 'gitfox' || $config->vision == 'gitfox')
+{
+    $buildGitfoxItem = function(string $className, string $label, $todayCount, $yesterdayCount) use($lang, $yesterdayClassName, $todayClassName)
+    {
+        return cell
+        (
+            set::width('50%'),
+            setClass($className),
+            div(setClass('h-0 w-0'), div(setClass('item-icon h-9 w-9'))),
+            div(setClass('text-gray pl-1'), $label),
+            div
+            (
+                setClass('mt-2 items-center flex pl-1'),
+                cell
+                (
+                    setClass($yesterdayClassName),
+                    span(setClass('text-base'), $lang->yesterday),
+                    span(setClass('text-md pl-1 font-bold num'), $yesterdayCount)
+                ),
+                cell
+                (
+                    setClass($todayClassName),
+                    span(setClass('text-base'), $lang->today),
+                    span(setClass('text-md pl-1 font-bold num'), $todayCount)
+                )
+            )
+        );
+    };
+
+    blockPanel
+    (
+        to::titleSuffix
+        (
+            icon
+            (
+                setClass('text-light text-sm cursor-pointer'),
+                toggle::tooltip
+                (
+                    array
+                    (
+                        'title'     => sprintf($lang->block->tooltips['metricTime'], $metricTime),
+                        'placement' => 'bottom',
+                        'type'      => 'white',
+                        'className' => 'text-dark border border-light leading-5'
+                    )
+                ),
+                'help'
+            )
+        ),
+        setClass('teamachievement-block'),
+        set::bodyClass('ml-6'),
+        div
+        (
+            setClass('flex flex-wrap gap-y-3'),
+            div
+            (
+                setClass('flex mt-1 px-4 w-full item-row'),
+                cell
+                (
+                    set::width('100%'),
+                    setClass('flex'),
+                    $buildGitfoxItem('item-commit px-1 w-1/2', $lang->block->teamachievement->commits, $commits, $yesterdayCommits),
+                    $buildGitfoxItem('item-review pl-8 w-1/2', $lang->block->teamachievement->createdReviews, $createdReviews, $yesterdayCreatedReviews)
+                )
+            ),
+            div
+            (
+                setClass('flex px-4 w-full item-row'),
+                cell
+                (
+                    set::width('100%'),
+                    setClass('flex'),
+                    $buildGitfoxItem('item-review px-1 w-1/2', $lang->block->teamachievement->mergedReviews, $mergedReviews, $yesterdayMergedReviews),
+                    $buildGitfoxItem('item-issue pl-8 w-1/2', $lang->block->teamachievement->resolvedIssues, $resolvedIssues, $yesterdayResolvedIssues)
+                )
+            )
+        )
+    );
+
+    return;
+}
+
 
 blockPanel
 (
