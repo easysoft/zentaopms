@@ -511,11 +511,17 @@ class testtaskModel extends model
         $bugs = $this->dao->select('bugs')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('bugs');
         if(!$bugs) return array();
 
+        $caseIdList = $this->dao->select('`case`')->from(TABLE_BUG)->where('id')->in(trim($bugs, ','))->andWhere('`case`')->gt(0)->fetchPairs();
+
+        /* 可关联的用例包括已解决 Bug 创建的用例（用例的 fromBug 字段）和已解决 Bug 来源的用例（Bug 的 case 字段）。*/
+        $caseCondition = '`fromBug` ' . helper::dbIN($bugs);
+        if($caseIdList) $caseCondition .= ' OR `id` ' . helper::dbIN($caseIdList);
+
         return $this->dao->select('*')->from(TABLE_CASE)
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
             ->andWhere('status')->ne('wait')
-            ->andWhere('fromBug')->in(trim($bugs, ','))
+            ->andWhere("({$caseCondition})")
             ->beginIF($query)->andWhere($query)->fi()
             ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
             ->beginIF($task->branch !== '')->andWhere('branch')->in("0,{$task->branch}")->fi()
