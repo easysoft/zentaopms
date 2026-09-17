@@ -826,6 +826,7 @@ class taskZen extends task
         $now  = helper::now();
         $task = form::data($this->config->task->form->start, $oldTask->id)->add('id', $oldTask->id)
             ->setIF($oldTask->assignedTo != $this->app->user->account, 'assignedDate', $now)
+            ->remove('comment')
             ->get();
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->start['id'], (string)$this->post->uid);

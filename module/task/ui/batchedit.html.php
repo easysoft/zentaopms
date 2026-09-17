@@ -80,7 +80,6 @@ formBatchPanel
     on::click('[data-name=story] [data-type=ditto]', 'setStoryRelated'),
     set::formID('taskBatchEditForm' . $executionID),
     set::items($items)
-
 );
 /* ====== Render page ====== */
 render();

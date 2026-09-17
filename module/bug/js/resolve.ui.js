@@ -1,8 +1,9 @@
 $(document).off('change', "[name^='resolution']").on('change', "[name^='resolution']", function()
 {
+    $('#duplicateBugBox').closest('.form-row').toggleClass('hidden', $(this).val() != 'duplicate');
     if(requiredFields.indexOf('resolvedBuild') == -1)
     {
-        var resolvedBuildGroup = $('#resolvedBuildBox').find('label.form-label');
+        var resolvedBuildGroup = $('[data-name=resolvedBuild]').find('label.form-label');
         if($(this).val() == 'fixed')
         {
             resolvedBuildGroup.addClass('required');
@@ -16,19 +17,12 @@ $(document).off('change', "[name^='resolution']").on('change', "[name^='resoluti
 
 $(function()
 {
-    $('#createBuild').on('change', function()
+    $('#duplicateBugBox').closest('.form-row').addClass('hidden');
+    $('[data-name=newBuildBox]').closest('.form-row').addClass('hidden');
+    $('[name=createBuild]').on('change', function()
     {
-        if($(this).prop('checked'))
-        {
-            $('#resolvedBuildBox').addClass('hidden');
-            $('#newBuildBox').removeClass('hidden');
-            $('#newBuildExecutionBox').removeClass('hidden');
-        }
-        else
-        {
-            $('#resolvedBuildBox').removeClass('hidden');
-            $('#newBuildBox').addClass('hidden');
-            $('#newBuildExecutionBox').addClass('hidden');
-        }
+        $('[name=createBuild]').prop('checked', $(this).prop('checked'));
+        $('[data-name=resolvedBuild]').closest('.form-row').toggleClass('hidden', $(this).prop('checked'));
+        $('[data-name=newBuildBox]').closest('.form-row').toggleClass('hidden', !$(this).prop('checked'));
     })
 })

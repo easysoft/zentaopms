@@ -14016,6 +14016,46 @@ class upgradeModel extends model
     }
 
     /**
+     * 更新工作流字段的数据源.
+     * Update workflow field options.
+     *
+     * @param  string $version
+     * @access public
+     * @return bool
+     */
+    public function updateFieldOptions($version)
+    {
+        if($version == '22.6')
+        {
+            $sqls = "
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'taskMode'           LIMIT 1) WHERE `module` = 'task'     AND `field` = 'mode';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'storyCategory'      LIMIT 1) WHERE `module` = 'story'    AND `field` = 'category';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'taskDocs'           LIMIT 1) WHERE `module` = 'task'     AND `field` = 'docs';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'caseScene'          LIMIT 1) WHERE `module` = 'testcase' AND `field` = 'scene';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'bugInjection'       LIMIT 1) WHERE `module` = 'bug'      AND `field` = 'injection';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'bugIdentify'        LIMIT 1) WHERE `module` = 'bug'      AND `field` = 'identify';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'ticketClosedReason' LIMIT 1) WHERE `module` = 'ticket'   AND `field` = 'closedReason';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'feedbackPri'        LIMIT 1) WHERE `module` = 'feedback' AND `field` = 'pri';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'ticketRepeat'       LIMIT 1) WHERE `module` = 'ticket'   AND `field` = 'repeatTicket';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'feedbackRepeat'     LIMIT 1) WHERE `module` = 'feedback' AND `field` = 'repeatFeedback';";
+
+            foreach(explode(';', $sqls) as $sql)
+            {
+                if($sql) $this->dao->exec($sql);
+            }
+
+            $this->app->loadLang('workflowfield');
+            $this->dao->update(TABLE_WORKFLOWFIELD)
+                ->set('options')->eq(helper::jsonEncode((array)$this->lang->workflowfield->buildinList))
+                ->where('module')->eq('feedback')
+                ->andWhere('field')->eq('public')
+                ->exec();
+        }
+
+        return true;
+    }
+
+    /**
      * 修复其他交付物的检查环节。
      * Modify other deliverable.
      *

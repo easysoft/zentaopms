@@ -59,7 +59,7 @@ $config->task->list->customBatchEditFields   = 'module,assignedTo,status,pri,est
 $config->task->defaultLoadCount = 50;
 
 $config->task->custom = new stdclass();
-$config->task->custom->createFields      = $config->task->list->customCreateFields;
+$config->task->custom->createFields      = '';
 $config->task->custom->batchCreateFields = 'module,story,assignedTo,estimate,estStarted,deadline,desc,pri';
 $config->task->custom->batchEditFields   = 'module,assignedTo,status,pri,estimate,record,left';
 

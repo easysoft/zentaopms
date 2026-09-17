@@ -13,7 +13,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
 {
     /**
      * Execute the converter.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -36,8 +36,8 @@ class bugfree2ConvertModel extends bugfreeConvertModel
     }
 
     /**
-     * Set table names. 
-     * 
+     * Set table names.
+     *
      * @access public
      * @return void
      */
@@ -59,7 +59,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
 
     /**
      * Get the version of bugfree2.x.
-     * 
+     *
      * @access public
      * @return int
      */
@@ -74,7 +74,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert user.
-     * 
+     *
      * @access public
      * @return int      converted user count
      */
@@ -107,7 +107,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert groups.
-     * 
+     *
      * @access public
      * @return void     converted group count.
      */
@@ -144,7 +144,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert executions.
-     * 
+     *
      * @access public
      * @return int      converted executions count.
      */
@@ -165,7 +165,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert modules.
-     * 
+     *
      * @access public
      * @return int      converted modules count.
      */
@@ -175,12 +175,12 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         $modules = $this->dao
             ->dbh($this->sourceDBH)
             ->select(
-                'moduleID AS id, 
+                'moduleID AS id,
                 moduleType as type,
-                `executionID` AS root, 
-                moduleName AS name, 
-                moduleGrade AS grade, 
-                `parentID` AS parent, 
+                `executionID` AS root,
+                moduleName AS name,
+                moduleGrade AS grade,
+                `parentID` AS parent,
                 displayOrder AS `order`')
             ->from(BUGFREE_TABLE_MODULE)
             ->orderBy('id ASC')
@@ -206,7 +206,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert bugs.
-     * 
+     *
      * @access public
      * @return int      converted bugs count.
      */
@@ -215,17 +215,17 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         $bugs = $this->dao
             ->dbh($this->sourceDBH)
             ->select('
-            bugID AS id, 
-            `executionID` AS product, 
+            bugID AS id,
+            `executionID` AS product,
             moduleID AS module,
             bugTitle AS title,
             bugSeverity AS severity,
             bugPriority AS pri,
             bugType AS type,
             bugOS AS os,
-            bugBrowser AS browser, 
+            bugBrowser AS browser,
             bugMachine AS hardware,
-            howFound   AS found, 
+            howFound   AS found,
             reproSteps AS steps,
             bugStatus AS status,
             linkID    AS `relatedBug`,
@@ -284,7 +284,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert cases.
-     * 
+     *
      * @access public
      * @return int      converted cases count.
      */
@@ -293,8 +293,8 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         $cases = $this->dao
             ->dbh($this->sourceDBH)
             ->select('
-            caseID AS id, 
-            `executionID` AS product, 
+            caseID AS id,
+            `executionID` AS product,
             moduleID AS module,
             caseTitle AS title,
             caseSteps AS step,
@@ -334,7 +334,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             if($case->type == 'setup')         $case->type   = 'install';
             if($case->type == 'functional')    $case->type   = 'feature';
             if($case->status == 'active')      $case->status = 'normal';
-            
+
             /* Change product and module by zentao's product and module. */
             $case->product = $this->map['product'][$case->product];
             $case->module  = $this->map['module'][$case->module];
@@ -363,7 +363,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert results.
-     * 
+     *
      * @access public
      * @return int      converted results count.
      */
@@ -403,7 +403,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert actions.
-     * 
+     *
      * @access public
      * @return int      converted actions count.
      */
@@ -440,7 +440,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert histories.
-     * 
+     *
      * @access public
      * @return int      the converted histories count.
      */
@@ -460,7 +460,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert attachments.
-     * 
+     *
      * @access public
      * @return int      the converted files count.
      */
@@ -490,8 +490,8 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             unset($file->actionID);
 
             /* Compute the file size. */
-            if(strpos($file->size, 'KB')) $file->size = (int)(str_replace('KB', '', $file->size) * 1024); 
-            if(strpos($file->size, 'MB')) $file->size = (int)(str_replace('MB', '', $file->size) * 1024 * 1024); 
+            if(strpos($file->size, 'KB')) $file->size = (int)(str_replace('KB', '', $file->size) * 1024);
+            if(strpos($file->size, 'MB')) $file->size = (int)(str_replace('MB', '', $file->size) * 1024 * 1024);
 
             /* Insert into database. */
             $this->dao->dbh($this->dbh)->insert(TABLE_FILE)->data($file)->exec();
@@ -516,7 +516,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
 
     /**
      * Clear the converted records.
-     * 
+     *
      * @access public
      * @return void
      */

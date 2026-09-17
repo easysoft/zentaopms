@@ -32,8 +32,8 @@ function defineFieldList(string $name, string|array|field|fieldList|null ...$ext
 /**
  * Define a field.
  *
- * @param string                               $name     The name of field.
- * @param string|array|field|fieldList|null ...$extends  The extend fields and field list.
+ * @param string      $name     The name of field.
+ * @param string|null $listName The name of field list.
  *
  * @return field
  */
@@ -98,14 +98,21 @@ function loadFields(string $moduleName, string $methodName, string $viewDir = 'u
 {
     global $app;
 
-    $moduleName = strtolower(trim($moduleName));
-    $methodName = strtolower(trim($methodName));
-    $appName     = $app->getAppName();
-    $modulePath  = $app->getModulePath($appName, $moduleName);
-    $viewPath    = $modulePath . $viewDir;
+    $moduleName         = strtolower(trim($moduleName));
+    $methodName         = strtolower(trim($methodName));
+    $appName            = $app->getAppName();
+    $modulePath         = $app->getModulePath($appName, $moduleName);
+    $viewPath           = $modulePath . $viewDir;
+    $viewExtPath        = $app->getModuleExtPath($moduleName, $viewDir);
+    $commonExtHookFiles = glob($viewExtPath['common'] . $methodName . ".*.field.hook.php");
+    $siteExtHookFiles   = empty($viewExtPath['site']) ? array() : glob($viewExtPath['site'] . $methodName . ".*.field.hook.php");
+    $extHookFiles       = array_merge((array)$commonExtHookFiles, (array)$siteExtHookFiles);
+    $fieldFiles         = array();
 
-    $commonFieldFile = $viewPath . DS . 'common.field.php';
-    $methodFieldFile = $viewPath . DS . $methodName . '.field.php';
-    helper::import($commonFieldFile);
-    helper::import($methodFieldFile);
+    $fieldFiles[] = $viewPath . DS . 'common.field.php';
+    $fieldFiles[] = $viewPath . DS . $methodName . '.field.php';
+
+    $app->control->loadModel($moduleName);
+    foreach($fieldFiles as $fieldFile)     helper::import($fieldFile);
+    foreach($extHookFiles as $extHookFile) helper::import($extHookFile);
 }

@@ -851,12 +851,9 @@ class storyZen extends story
         $fields['assignedTo']['default']   = $story->assignedTo;
         $fields['pri']['default']          = $story->pri;
         $fields['estimate']['default']     = $story->estimate ? $story->estimate : 0;
-        $fields['status']['default']       = $story->status;
 
         $fields['closedReason']['required']   = true;
         $fields['duplicateStory']['required'] = true;
-
-        $fields['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'comment', 'title' => $this->lang->comment, 'width' => 'full');
 
         if(strpos($this->config->{$story->type}->review->requiredFields, 'reviewedDate') !== false) $fields['reviewedDate']['required'] = true;
         if(strpos($this->config->{$story->type}->review->requiredFields, 'comment') !== false)      $fields['comment']['required']      = true;
@@ -1370,7 +1367,7 @@ class storyZen extends story
         if(strpos($this->config->{$oldStory->type}->change->requiredFields, 'comment') !== false and !$this->post->comment) dao::$errors['comment']   = sprintf($this->lang->error->notempty, $this->lang->comment);
 
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
-        if(!$this->post->needNotReview and empty($_POST['reviewer'])) dao::$errors['reviewer'] = $this->lang->story->errorEmptyReviewedBy;
+        if(!isset($_POST['needNotReview']) && empty($_POST['reviewer'])) dao::$errors['reviewer'] = $this->lang->story->errorEmptyReviewedBy;
         if(dao::isError()) return false;
         if(isset($_POST['status']) && $_POST['status'] == 'active') $_POST['reviewer'] = []; // 如果需求是激活的，则清空评审人
 
