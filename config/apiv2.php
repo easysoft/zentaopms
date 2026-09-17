@@ -236,8 +236,11 @@ $routes['/projects/:projectID/opportunities']     = array('redirect' => '/opport
 $routes['/executions/:executionID/opportunities'] = array('redirect' => '/opportunities?executionID=:executionID&from=execution', 'response' => 'opportunities(array),pager', 'search' => array('enabled' => true));
 $routes['/opportunities/:opportunityID']          = array('get' => array('response' => 'opportunity,actions(array)'), 'put' => array('response' => '*'), 'delete' => array('response' => '*'));
 
-$routes['/auditplans']                          = array('response' => 'auditplans(array),pager', 'search' => array('enabled' => true));
-$routes['/projects/:projectID/auditplans']      = array('redirect' => '/auditplans?projectID=:projectID', 'search' => array('enabled' => true));
+$routes['/auditplans']                          = array(
+    'get'  => array('response' => 'auditplans(array),pager', 'search' => array('enabled' => true)),
+    'post' => array('response' => '*')
+);
+$routes['/projects/:projectID/auditplans']      = array('redirect' => '/auditplans?projectID=:projectID', 'response' => 'auditplans(array),pager', 'search' => array('enabled' => true));
 $routes['/executions/:executionID/auditplans']  = array('redirect' => '/auditplans?projectID=:executionID&from=execution', 'response' => 'auditplans(array),pager', 'search' => array('enabled' => true));
 $routes['/auditplans/:auditplanID']             = array('get' => array('response' => 'auditplan,actions(array),results(array),ncs(array)'));
 
