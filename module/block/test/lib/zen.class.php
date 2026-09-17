@@ -883,6 +883,36 @@ class blockZenTest extends baseTest
     }
 
     /**
+     * 测试GitFox独立版的团队成就区块。
+     * Test printGitfoxTeamAchievementBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printGitfoxTeamAchievementBlockTest()
+    {
+        $years  = array(date('Y'), date('Y', strtotime('-1 day')));
+        $months = array(date('m'), date('m', strtotime('-1 day')));
+
+        $this->invokeArgs('printGitfoxTeamAchievementBlock', array($years, $months));
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->getProperty('view');
+
+        $result = new stdClass();
+        $result->commits              = isset($view->commits)              ? $view->commits              : 0;
+        $result->yesterdayCommits     = isset($view->yesterdayCommits)     ? $view->yesterdayCommits     : 0;
+        $result->createdReviews       = isset($view->createdReviews)       ? $view->createdReviews       : 0;
+        $result->yesterdayCreatedReviews = isset($view->yesterdayCreatedReviews) ? $view->yesterdayCreatedReviews : 0;
+        $result->mergedReviews        = isset($view->mergedReviews)        ? $view->mergedReviews        : 0;
+        $result->yesterdayMergedReviews = isset($view->yesterdayMergedReviews) ? $view->yesterdayMergedReviews : 0;
+        $result->resolvedIssues       = isset($view->resolvedIssues)       ? $view->resolvedIssues       : 0;
+        $result->yesterdayResolvedIssues = isset($view->yesterdayResolvedIssues) ? $view->yesterdayResolvedIssues : 0;
+
+        return $result;
+    }
+
+    /**
      * Test printWaterfallEstimateBlock method.
      *
      * @access public

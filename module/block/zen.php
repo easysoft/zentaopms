@@ -3017,6 +3017,10 @@ class blockZen extends block
         }
 
         $this->loadModel('metric');
+
+        /* GitFox独立版不存在任务、需求、Bug等功能，展示GitFox相关的度量数据。The GitFox edition displays the metrics of GitFox. */
+        if($this->config->edition == 'gitfox' || $this->config->vision == 'gitfox') return $this->printGitfoxTeamAchievementBlock($years, $months);
+
         $finishedTaskGroup = $this->metric->getResultByCodeWithArray('count_of_daily_finished_task', array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 完成任务数。
         $createdStoryGroup = $this->metric->getResultByCodeWithArray('count_of_daily_created_story', array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 创建需求数。
         $closedBugGroup    = $this->metric->getResultByCodeWithArray('count_of_daily_closed_bug',    array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 关闭Bug数。
@@ -3098,6 +3102,45 @@ class blockZen extends block
         $this->view->yesterdayCases   = $yesterdayCases;
         $this->view->consumedHours    = $consumedHours;
         $this->view->yesterdayHours   = $yesterdayHours;
+    }
+
+    /**
+     * 打印GitFox独立版的团队成就区块数据。
+     * Print the team achievement block data of the GitFox edition.
+     *
+     * @param  array  $years
+     * @param  array  $months
+     * @access protected
+     * @return void
+     */
+    protected function printGitfoxTeamAchievementBlock(array $years, array $months)
+    {
+        $metrics = array
+        (
+            'commits'        => 'count_of_daily_gitfox_commits',
+            'createdReviews' => 'count_of_daily_gitfox_created_reviews',
+            'mergedReviews'  => 'count_of_daily_gitfox_merged_reviews',
+            'resolvedIssues' => 'count_of_daily_gitfox_resolved_issues'
+        );
+
+        foreach($metrics as $name => $code)
+        {
+            $group     = $this->metric->getResultByCodeWithArray($code, array('year' => join(',', $years), 'month' => join(',', $months)), 'cron');
+            $today     = 0;
+            $yesterday = 0;
+            if($group)
+            {
+                foreach($group as $data)
+                {
+                    $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
+                    if($currentDay == date('Y-m-d'))                      $today     = $data['value'];
+                    if($currentDay == date('Y-m-d', strtotime("-1 day"))) $yesterday = $data['value'];
+                }
+            }
+
+            $this->view->$name = $today;
+            $this->view->{'yesterday' . ucfirst($name)} = $yesterday;
+        }
     }
 
     /**
