@@ -7,8 +7,6 @@ $lang->block->welcome->reviewList['reviewByMe']      = 'My Pending Reviews';
 $lang->block->welcome->reviewList['myCreatedReview'] = 'Reviews I Created';
 $lang->block->welcome->reviewList['myIssue']         = 'Issues to Resolve';
 
-$lang->block->moduleList['ppm'] = $lang->devops->ppm;
-
 $lang->block->modules['ppm'] = new stdclass();
 $lang->block->modules['ppm']->availableBlocks['reviewbyme']        = 'My Pending Reviews';
 $lang->block->modules['ppm']->availableBlocks['reviewcreatedbyme'] = 'Reviews I Created';
@@ -31,3 +29,27 @@ $lang->block->teamachievement->commits        = 'Commits';
 $lang->block->teamachievement->createdReviews = 'Created Reviews';
 $lang->block->teamachievement->mergedReviews  = 'Merged Reviews';
 $lang->block->teamachievement->resolvedIssues = 'Resolved Issues';
+
+$lang->block->zentaoDynamic              = 'GitFox News';
+$lang->block->titleList['zentaodynamic'] = 'GitFox News';
+
+$lang->block->moduleList = array
+(
+    'ppm'             => $lang->devops->ppm,
+    'welcome'         => $lang->block->welcome->common,
+    'zentaodynamic'   => $lang->block->zentaoDynamic,
+    'teamachievement' => $lang->block->teamAchievement,
+    'assigntome'      => $lang->block->assignToMe,
+    'dynamic'         => $lang->block->dynamic,
+    'html'            => $lang->block->html
+);
+
+$lang->block->default['full']['my'] = array
+(
+    array('title' => 'Welcome',              'module' => 'welcome',         'code' => 'welcome',          'width' => '2'),
+    array('title' => 'My Pending Reviews',   'module' => 'ppm',             'code' => 'reviewbyme',       'width' => '2', 'params' => array('count' => '20')),
+    array('title' => 'Reviews I Created',    'module' => 'ppm',             'code' => 'reviewcreatedbyme','width' => '2', 'params' => array('count' => '20')),
+    array('title' => 'GitFox News',          'module' => 'zentaodynamic',   'code' => 'zentaodynamic',    'width' => '1'),
+    array('title' => 'Recents',              'module' => 'dynamic',         'code' => 'dynamic',          'width' => '1'),
+    array('title' => 'Team Achievements',    'module' => 'teamachievement', 'code' => 'teamachievement',  'width' => '1')
+);
