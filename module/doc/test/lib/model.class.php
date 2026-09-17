@@ -5677,6 +5677,37 @@ class docModelTest extends baseTest
     }
 
     /**
+     * Test getVersionMarkers method.
+     *
+     * @param  int $docID
+     * @access public
+     * @return array
+     */
+    public function getVersionMarkersTest(int $docID): array
+    {
+        $result = $this->instance->getVersionMarkers($docID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getVersionRelations method.
+     *
+     * @param  int $docID
+     * @param  int $version
+     * @access public
+     * @return array
+     */
+    public function getVersionRelationsTest(int $docID, int $version): array
+    {
+        $result = $this->instance->getVersionRelations($docID, $version);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 追加文档筛选条件。
      * Append doc filters.
      *

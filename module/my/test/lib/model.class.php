@@ -729,6 +729,21 @@ class myModelTest extends baseTest
     }
 
     /**
+     * Test getReviewActionGroup method.
+     *
+     * @param  array $objectTypeList
+     * @access public
+     * @return array
+     */
+    public function getReviewActionGroupTest(array $objectTypeList): array
+    {
+        $result = $this->invokeArgs('getReviewActionGroup', array($objectTypeList));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test getProductRelatedAssignedByMe method.
      *
      * @param  array  $objectIdList
