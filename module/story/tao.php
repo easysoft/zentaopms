@@ -1038,16 +1038,22 @@ class storyTao extends storyModel
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
-        /* add files to story from bug. */
         $files = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->eq($bugID)->fetchAll();
         if(empty($files)) return;
+
+        /* add files to story from bug. */
+        $copyFiles = array();
         foreach($files as $file)
         {
             $file->objectType = 'story';
             $file->objectID   = $storyID;
+            $file->extra      = 1;
             unset($file->id);
+
             $this->dao->insert(TABLE_FILE)->data($file)->exec();
+            $copyFiles[] = $this->dao->lastInsertID();
         }
+        if(!empty($copyFiles)) $this->dao->update(TABLE_STORYSPEC)->set('files')->eq(implode(',', $copyFiles))->where('story')->eq($storyID)->exec();
     }
 
     /**
