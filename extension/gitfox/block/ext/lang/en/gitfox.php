@@ -26,3 +26,8 @@ $lang->block->reviewcreatedbyme->featureBar['all']    = 'All';
 $lang->block->reviewcreatedbyme->featureBar['opened'] = 'Opened';
 $lang->block->reviewcreatedbyme->featureBar['merged'] = 'Merged';
 $lang->block->reviewcreatedbyme->featureBar['closed'] = 'Closed';
+
+$lang->block->teamachievement->commits        = 'Commits';
+$lang->block->teamachievement->createdReviews = 'Created Reviews';
+$lang->block->teamachievement->mergedReviews  = 'Merged Reviews';
+$lang->block->teamachievement->resolvedIssues = 'Resolved Issues';

@@ -26,3 +26,8 @@ $lang->block->reviewcreatedbyme->featureBar['all']    = '全部';
 $lang->block->reviewcreatedbyme->featureBar['opened'] = '开放中';
 $lang->block->reviewcreatedbyme->featureBar['merged'] = '已合并';
 $lang->block->reviewcreatedbyme->featureBar['closed'] = '已关闭';
+
+$lang->block->teamachievement->commits        = '代码提交次数';
+$lang->block->teamachievement->createdReviews = '发起的评审数';
+$lang->block->teamachievement->mergedReviews  = '合并的评审数';
+$lang->block->teamachievement->resolvedIssues = '解决的问题数';
