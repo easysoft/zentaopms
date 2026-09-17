@@ -48,7 +48,7 @@ class mailTao extends mailModel
 
         /* Remove deleted users. */
         $this->app->loadConfig('message');
-        $users      = $this->loadModel('user')->getPairs('nodeleted|all');
+        $users      = $this->loadModel('user')->getPairs('nodeleted|all', implode(',', array_merge($toList, $ccList)));
         $blockUsers = isset($this->config->message->blockUser) ? explode(',', $this->config->message->blockUser) : array();
         $toList = array_unique(array_filter(array_map(function($to) use($users, $blockUsers) {$to = trim($to); return (isset($users[$to]) && !in_array($to, $blockUsers)) ? $to : '';}, $toList)));
         $ccList = array_unique(array_filter(array_map(function($cc) use($users, $blockUsers) {$cc = trim($cc); return (isset($users[$cc]) && !in_array($cc, $blockUsers)) ? $cc : '';}, $ccList)));
@@ -197,6 +197,7 @@ class mailTao extends mailModel
     {
         if(empty($objectType) || empty($objectID)) return false;
 
+        if($objectType == 'case') $objectType = 'testcase';
         $objectModel = $objectType == 'kanbancard' ? $this->loadModel('kanban') : $this->loadModel($objectType);
         if(!$objectModel) return false;
 
@@ -237,13 +238,15 @@ class mailTao extends mailModel
     {
         if(empty($objectType) || empty($object) || empty($action) || empty($action->action)) return false;
 
+        if($objectType == 'case') $objectType = 'testcase';
         $objectModel = $this->loadModel($objectType);
         if(!$objectModel) return false;
 
-        if(in_array($objectType, array('epic', 'requirement', 'story', 'task', 'meeting', 'review', 'deploy', 'reviewissue'))) return $objectModel->getToAndCcList($object, $action->action);
-        if(in_array($objectType, array('ticket', 'rule'))) return $objectModel->getToAndCcList($object, $action);
-
-        return $objectModel->getToAndCcList($object);
+        if(method_exists($objectModel, 'getToAndCcList'))
+        {
+            if($objectType == 'rule') return $objectModel->getToAndCcList($object, $action);
+            return $objectModel->getToAndCcList($object, $action->action);
+        }
     }
 
     /**
@@ -259,6 +262,7 @@ class mailTao extends mailModel
     {
         if(empty($objectType) || empty($object) || empty($action)) return '';
 
+        if($objectType == 'case') $objectType = 'testcase';
         $this->loadModel('action');
 
         $domain     = zget($this->config->mail, 'domain', common::getSysURL());
@@ -303,9 +307,14 @@ class mailTao extends mailModel
     protected function getObjectTitle(object $object, string $objectType): string
     {
         $this->loadModel('action');
-        if($objectType == 'auditplan') return $this->lang->auditplan->common . ' #' . $object->id;
+        if($objectType == 'auditplan')
+        {
+            $table = $object->objectType == 'activity' ? TABLE_ACTIVITY : TABLE_DELIVERABLE;
+            $object->title = $this->dao->select('name')->from($table)->where('id')->eq($object->objectID)->fetch('name');
+        }
 
-        $nameFields = zget($this->config->action->objectNameFields, $objectType, array());
-        return zget($object, $nameFields, '');
+        $nameFields = zget($this->config->action->objectNameFields, $objectType, '');
+        if(empty($nameFields)) return '';
+        return (string)zget($object, $nameFields, '');
     }
 }

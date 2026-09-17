@@ -52,6 +52,28 @@ class productplanModel extends model
     }
 
     /**
+     * 获取产品计划邮件通知的收件人。
+     * Get toList and ccList.
+     *
+     * 与产品计划webhook通知人保持一致：创建人 + 产品负责人。
+     * @param  object $plan
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList(object $plan): bool|array
+    {
+        $toList = trim($plan->createdBy, ',');
+
+        $product = $this->loadModel('product')->fetchByID((int)$plan->product);
+        if($product) $toList .= ',' . $product->PO;
+
+        $toList = implode(',', array_unique(array_filter(explode(',', $toList))));
+        if(empty($toList)) return false;
+
+        return array($toList, '');
+    }
+
+    /**
      * 获取创建的最后一个计划。
      * Get last plan.
      *

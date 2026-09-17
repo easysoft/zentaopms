@@ -23,6 +23,7 @@ $lang->index->log            = 'View Release Notes';
 $lang->index->detailed       = 'Details';
 $lang->index->website        = 'Please visit our official website.';
 $lang->index->tutorialTip    = 'You are currently in tutorial mode. Would you like to continue?';
+$lang->index->notification   = 'Notification';
 
 $lang->index->chat = new stdclass();
 $lang->index->chat->chat = 'Chat';

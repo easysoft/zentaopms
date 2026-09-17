@@ -6,6 +6,13 @@ title=productpanModel->getByIDList();
 timeout=0
 cid=17630
 
+- 测试传入空的ID列表，获取计划列表信息 @0
+- 测试传入一个ID列表，获取计划列表信息
+ - 第1条的id属性 @1
+ - 第1条的product属性 @1
+ - 第1条的title属性 @计划1
+- 测试传入一个不存在的ID列表，获取计划列表信息 @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
