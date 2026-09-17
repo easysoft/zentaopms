@@ -1186,6 +1186,21 @@ class programplanModelTest extends baseTest
     }
 
     /**
+     * Test canRollbackGanttVersion method.
+     *
+     * @param  object $project
+     * @access public
+     * @return mixed
+     */
+    public function canRollbackGanttVersionTest(object $project)
+    {
+        $result = $this->instance->canRollbackGanttVersion($project);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 测试回滚评审点。
      * Test rollbackPoint method.
      *

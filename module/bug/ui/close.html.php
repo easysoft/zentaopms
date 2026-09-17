@@ -19,6 +19,17 @@ formPanel
         set::label($lang->comment),
         set::name('comment'),
         set::control('editor')
+    ),
+    formGroup
+    (
+        set::hidden(true),
+        set::label($lang->bug->status),
+        picker
+        (
+            set::name('status'),
+            set::items($lang->bug->statusList),
+            set::value('closed')
+        )
     )
 );
 hr();

@@ -31,3 +31,6 @@
 .dropmenu-item .tree-item-inner[data-type="lib"] {padding-left: 8px;}
 
 .doc-app .doc-editor-title {overflow: hidden; text-overflow: clip; white-space: nowrap;}
+
+.pick-diff-pop {width: 200px !important;}
+.pick-diff-pop .doc-version-markers {flex: none; white-space: nowrap;}

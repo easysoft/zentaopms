@@ -328,6 +328,10 @@ class formPanel extends panel
                 set::placeholder($field->placeholder)
             );
             if((bool)$field->readonly) $extraMain[] = formHidden($field->field, $field->value);
+            if($field->field == 'subStatus')
+            {
+                $extraMain[] = html($app->control->loadModel('flow')->getSubStatusScript($field));
+            }
         }
         return $extraMain;
     }

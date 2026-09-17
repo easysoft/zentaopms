@@ -121,6 +121,7 @@ $config->upgrade->execFlow['22_2']        = array('functions' => 'importBuildinW
 $config->upgrade->execFlow['22_3']        = array('functions' => 'migrateDevOpsData');
 $config->upgrade->execFlow['22_4']        = array('functions' => 'dropCompanyField');
 $config->upgrade->execFlow['22_5']        = array('functions' => 'processPIRiskData,repo-backfillGitFoxWebhookSecret,fixCronAndQueueTables');
+$config->upgrade->execFlow['22_6']        = array('functions' => 'modifyOtherDeliverable,upgradeDecisionDeliverableSnapshot');
 
 if(!empty($config->isINT))
 {
