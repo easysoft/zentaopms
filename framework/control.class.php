@@ -550,6 +550,9 @@ class control extends baseControl
                 if($objectValue) $field->default = $objectValue;
             }
         }
+
+        if($fieldList)        $fields->defaultOrders = array(implode(',', array_keys($fieldList)));
+        if($action->linkages) $fields->linkages = zget($action->linkages, $uiID, array());
         return $this->loadModel('flow')->buildFormFields($fields, $fieldList, array(), $object);
     }
 
@@ -586,7 +589,6 @@ class control extends baseControl
         if(!empty($action->css)) $html .= "<style>$action->css</style>";
 
         $html .= $this->loadModel('flow')->getFormulaScript($moduleName, $action, $fieldList);
-        if(!empty($action->linkages)) $html .= $this->flow->getLinkageScript($action, $fieldList, $uiID);
         if(!empty($flow->js))         $html .= "<script>$flow->js</script>";
         if(!empty($action->js))       $html .= "<script>$action->js</script>";
 
@@ -638,7 +640,7 @@ class control extends baseControl
 
             foreach($fieldList as $key => $field)
             {
-                if($field->buildin || !$field->show || !isset($layouts[$field->field]) || (!empty($field->position) && $position != $field->position)) unset($fieldList[$key]);
+                if(!$field->show || !isset($layouts[$field->field]) || (!empty($field->position) && $position != $field->position)) unset($fieldList[$key]);
 
                 if((is_numeric($field->default) || $field->default) && empty($field->defaultValue)) $field->defaultValue = $field->default;
                 if($object && empty($object->{$field->field}) && $field->defaultValue !== '') $object->{$field->field} = $field->defaultValue;

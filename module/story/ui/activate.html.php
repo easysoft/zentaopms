@@ -14,35 +14,13 @@ namespace zin;
 
 jsVar('storyType', $story->type);
 
+$fields = useFields('story.activate');
+
 modalHeader();
 formPanel
 (
     set::submitBtnText($lang->story->activate),
-    formGroup
-    (
-        set::name('assignedTo'),
-        set::label($lang->story->assignedTo),
-        set::width('1/3'),
-        set::value($story->closedBy),
-        set::items($users)
-    ),
-    empty($story->twins) ? null : formGroup
-    (
-        set::width('full'),
-        set::label(' '),
-        icon('exclamation-sign'),
-        $lang->story->assignSyncTip
-    ),
-    formGroup
-    (
-        set::label($lang->comment),
-        editor
-        (
-            set::name('comment')
-        )
-    ),
+    set::fields($fields)
 );
 hr();
 history();
-
-render();

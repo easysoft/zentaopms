@@ -67,7 +67,7 @@ function setStoryRelated(event)
     let $storyPri      = $currentRow.find('.form-batch-input[data-name="storyPri"]');
     let $storyDesc     = $currentRow.find('.form-batch-input[data-name="storyDesc"]');
     let $module        = $currentRow.find('input[name^="module"]');
-    let $preview       = $currentRow.find('.form-batch-input[data-name="preview"] + button');
+    let $preview       = $currentRow.find('td[data-name="preview"] button');
 
     if(storyID > 0)
     {
@@ -81,6 +81,7 @@ function setStoryRelated(event)
             $storyDesc.val(storyInfo.spec);
 
             $preview.removeClass('disabled');
+            $preview.prop('disabled', false);
             $preview.css('pointer-events', 'auto');
             $preview.attr('data-url', $.createLink('story', 'view', "storyID=" + storyID));
         });
@@ -92,6 +93,7 @@ function setStoryRelated(event)
         $storyDesc.val('');
 
         $preview.addClass('disabled');
+        $preview.prop('disabled', true);
         $preview.css('pointer-events', 'none');
         $preview.attr('data-url', '#');
     }

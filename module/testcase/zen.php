@@ -611,7 +611,6 @@ class testcaseZen extends testcase
         $this->view->browseType  = $browseType;
         $this->view->param       = $param;
         $this->view->moduleID    = $moduleID;
-        $this->view->moduleName  = $moduleID ? $tree->name : $this->lang->tree->all;
         $this->view->suiteID     = $suiteID;
         $this->view->caseType    = $caseType;
         $this->view->users       = $this->user->getPairs('noletter');
@@ -1449,7 +1448,7 @@ class testcaseZen extends testcase
         /* Initialize variables. */
         $now               = helper::now();
         $account           = $this->app->user->account;
-        $cases             = form::batchData($this->config->testcase->form->showImport)->get();
+        $cases             = form::batchData($this->config->testcase->form->showimport)->get();
         $forceNotReview    = $this->testcase->forceNotReview();
         $insert            = $this->post->insert;
         $caseIdList        = !$insert ? array_keys($this->post->title) : array();
@@ -1883,7 +1882,7 @@ class testcaseZen extends testcase
                 $field = trim($field);
                 if($field && empty($case->{$field}))
                 {
-                    $fieldName = $this->config->testcase->form->showImport[$field]['type'] != 'array' ? "{$field}[{$i}]" : "{$field}[{$i}][]";
+                    $fieldName = $this->config->testcase->form->showimport[$field]['type'] != 'array' ? "{$field}[{$i}]" : "{$field}[{$i}][]";
                     $caseErrors[$fieldName][] = sprintf($this->lang->error->notempty, $this->lang->testcase->{$field});
                 }
             }

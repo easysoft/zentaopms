@@ -12,19 +12,12 @@ declare(strict_types=1);
 
 namespace zin;
 
+$fields = useFields('task.close');
 modalHeader();
 formPanel
 (
     set::ajax(array('onValidateField' => jsRaw('showErrorTip'))),
-    formGroup
-    (
-        set::label($lang->comment),
-        editor
-        (
-            set::name('comment'),
-            set::rows('5')
-        )
-    )
+    set::fields($fields)
 );
 hr();
 history();

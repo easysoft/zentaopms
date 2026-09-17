@@ -12,25 +12,11 @@ declare(strict_types=1);
 
 namespace zin;
 
+$fields = useFields('task.cancel');
 modalHeader();
 formPanel
 (
-    formGroup
-    (
-        set::label($lang->comment),
-        editor
-        (
-            set::name('comment'),
-            set::rows('5')
-        ),
-        input(
-            set::className('hidden'),
-            set::name('status'),
-            set::value('cancel')
-        )
-    )
+    set::fields($fields)
 );
 hr();
 history();
-
-render();

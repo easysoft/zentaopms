@@ -10,55 +10,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
-modalHeader();
+$fields = useFields('bug.activate');
 
-formPanel
-(
-    formGroup
-    (
-        set::width('1/3'),
-        set::label($lang->bug->assignedTo),
-        picker
-        (
-            set::name('assignedTo'),
-            set::value($bug->resolvedBy),
-            set::items($users)
-        )
-    ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::label($lang->bug->openedBuild),
-        set::required(true),
-        picker
-        (
-            set::name('openedBuild[]'),
-            set::value($bug->openedBuild),
-            set::items($builds),
-            set::multiple(true)
-        ),
-        input
-        (
-            set::name('status'),
-            set::value('active'),
-            set::className('hidden')
-        )
-    ),
-    formGroup
-    (
-        set::label($lang->comment),
-        editor
-        (
-            set::name('comment'),
-            set::rows(6)
-        )
-    ),
-    formGroup
-    (
-        set::label($lang->bug->files),
-        fileSelector()
-    )
-);
+modalHeader();
+formPanel(set::fields($fields));
+
 hr();
 history();
 

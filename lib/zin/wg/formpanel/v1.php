@@ -336,7 +336,7 @@ class formPanel extends panel
         return $extraMain;
     }
 
-    protected function buildExtraBatchItem()
+    protected function buildExtraBatchItem($buildinItems = array())
     {
         global $app;
 
@@ -345,25 +345,64 @@ class formPanel extends panel
         $fields       = $app->control->appendExtendForm('info', $data, $moduleName, $methodName);
         $dittoControl = array('input', 'picker', 'datePicker', 'datetimePicker');
 
-        $formBatchItem = array();
+        if(empty($fields)) return $buildinItems;
+
+        $buildinItems = $buildinItems ? array_column($buildinItems, null, 'name') : array();
+
+        $items = array();
         foreach($fields as $field)
         {
-            $value = isset($field->defaultValue) && $field->defaultValue != '' ? $field->defaultValue : $field->default;
-            $value = isset($data->{$field->field}) ? $data->{$field->field} : $value;
-            $formBatchItem[] = formBatchItem
-            (
-                set::name($field->field),
-                set::label($field->name),
-                set::required($field->required),
-                set::control($field->control),
-                set::items($field->items),
-                set::ditto(in_array(zget($field->control, 'control', 'input'), $dittoControl) ? $field->ditto : false),
-                set::width('200px'),
-                set::value($value),
-                set::placeholder($field->placeholder)
-            );
+            if(!empty($buildinItems[$field->field]))
+            {
+                $items[$field->field] = $buildinItems[$field->field];
+            }
+            else
+            {
+                $value = isset($field->defaultValue) && $field->defaultValue != '' ? $field->defaultValue : $field->default;
+                $value = isset($data->{$field->field}) ? $data->{$field->field} : $value;
+                $items[$field->field] = !empty($buildinItems) ? array
+                (
+                    'name' => $field->field,
+                    'label' => $field->name,
+                    'required' => $field->required,
+                    'control' => $field->control,
+                    'items' => $field->items,
+                    'ditto' => in_array(zget($field->control, 'control', 'input'), $dittoControl) ? $field->ditto : false, 'width' => '200px',
+                    'value' => $value,
+                    'placeholder' => $field->placeholder
+                ) : formBatchItem
+                (
+                    set::name($field->field),
+                    set::label($field->name),
+                    set::required($field->required),
+                    set::control($field->control),
+                    set::items($field->items),
+                    set::ditto(in_array(zget($field->control, 'control', 'input'), $dittoControl) ? $field->ditto : false),
+                    set::width('200px'),
+                    set::value($value),
+                    set::placeholder($field->placeholder)
+                );
+            }
         }
-        return $formBatchItem;
+
+        foreach($buildinItems as $key => $field)
+        {
+            if(!isset($items[$key]))
+            {
+                if(empty($preKey))
+                {
+                    $items = array_merge(array($key => $field), $items);
+                }
+                else
+                {
+                    $index = array_search($preKey, array_keys($items)) + 1;
+                    $items = array_merge(array_slice($items, 0, $index, true), array($key => $field), array_slice($items, $index, null, true));
+                }
+            }
+            $preKey = $key;
+        }
+
+        return array_values($items);
     }
 
     /**
@@ -386,12 +425,17 @@ class formPanel extends panel
             $props = formBatch::definedPropsList();
             unset($props['id']);
 
+            $props = $this->props->pick(array_keys($props));
+            $items = zget($props, 'items', array());
+
+            if($this->prop('showExtra') && !empty($items)) $props['items'] = $this->buildExtraBatchItem($items);
+
             return new formBatch
             (
                 set::id($formID),
-                set($this->props->pick(array_keys($props))),
+                set($props),
                 $this->children(),
-                $this->prop('showExtra') ? $this->buildExtraBatchItem() : null,
+                $this->prop('showExtra') && empty($items) ? $this->buildExtraBatchItem($items) : null,
                 set::hiddenFields($hiddenFields),
                 jsVar('formBatch', true),
                 $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null

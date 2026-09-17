@@ -16,7 +16,7 @@ jsVar('grades', $grades);
 $buildModule = $app->rawModule == 'projectrelease' ? 'projectrelease' : 'release';
 
 $cols = array();
-foreach($config->release->dtable->defaultFields['linkStory'] as $field) $cols[$field] = zget($config->release->dtable->story->fieldList, $field, array());
+foreach($config->release->dtable->defaultFields['linkStory'] as $field) $cols[$field] = zget($config->release->story->dtable->fieldList, $field, array());
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $cols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
 $cols['title']['nestedToggle'] = false;

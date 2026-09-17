@@ -10,51 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
-modalHeader();
+$fields = useFields('testcase.review');
 
+modalHeader();
 formPanel
 (
-    formGroup
-    (
-        set::width('1/3'),
-        set::label($lang->testcase->reviewedDateAB),
-        datePicker
-        (
-            set::name('reviewedDate'),
-            set::value(helper::today())
-        )
-    ),
-    formGroup
-    (
-        set::width('1/3'),
-        set::label($lang->testcase->result),
-        set::required(true),
-        picker
-        (
-            set::name('result'),
-            set::items($lang->testcase->reviewResultList)
-        )
-    ),
-    formGroup
-    (
-        set::label($lang->testcase->reviewedByAB),
-        picker
-        (
-            set::name('reviewedBy[]'),
-            set::value($app->user->account),
-            set::items($users),
-            set::multiple(true)
-        )
-    ),
-    formGroup
-    (
-        set::label($lang->comment),
-        editor
-        (
-            set::name('comment'),
-            set::rows(8)
-        )
-    ),
+    set::fields($fields),
     set::actions(array('submit'))
 );
 hr();

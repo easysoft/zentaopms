@@ -1,6 +1,7 @@
 <?php
 namespace zin;
-global $lang,$config;
+global $lang, $config, $app;
+$app->loadLang('kanban');
 
 $fields = defineFieldList('task.create', 'task');
 
@@ -27,7 +28,7 @@ if($files)
 }
 
 $fields->field('files')->control('fileSelector', array('defaultFiles' => array_values($files)));
-$fields->field('fileList')->control('hidden')->value(data('task.files'));
+$fields->field('fileList')->label($lang->task->files)->control('hidden')->value(data('task.files'));
 
 /* Set foldable attribute. */
 $fields->field('module')->foldable();
@@ -55,7 +56,7 @@ $buildAssignedTo = function()
     $hiddenTeamBtn = empty(data('task.team')) ? 'hidden' : '';
     return div
         (
-            setClass('assignedToBox flex border rounded h-8'),
+            setClass('assignedTo flex border rounded h-8'),
             taskAssignedTo
             (
                 setClass($hiddenTeamBtn ? '' : 'hidden'),
@@ -95,7 +96,7 @@ if($config->vision != 'lite')
         ->items(data('parents'));
 }
 
-$fields->field('assignedToBox')
+$fields->field('assignedTo')
     ->data(['composite' => 'assignedTo'])
     ->label($lang->task->assignedTo)
     ->required(strpos($config->task->create->requiredFields, 'assignedTo') !== false)
@@ -103,7 +104,7 @@ $fields->field('assignedToBox')
     ->control($buildAssignedTo);
 
 /* Set name field width. */
-$nameWidth = 'w-full';
+$nameWidth = '';
 if(empty(data('features.story')) && data('execution.type') != 'kanban' && !empty(data('execution.multiple'))) $nameWidth .= ' full:w-full';
 if(data('execution.type') == 'kanban')  $nameWidth .= ' lite:w-full';
 if(data('execution.lifetime') == 'ops') $nameWidth  = ' w-1/2';
@@ -117,14 +118,14 @@ if(!empty(data('features.story')) && (data('execution.type') == 'kanban' || empt
 /* Set region and lane fieldList. */
 $fields->field('region')
     ->hidden(data('execution.type') != 'kanban')
-    ->label(data('lang.kanbancard.region'))
+    ->label($lang->kanbancard->region)
     ->control('picker', array('required' => true))
     ->items(data('regionPairs') ? data('regionPairs') : array())
     ->value(data('regionID'));
 
 $fields->field('lane')
     ->hidden(data('execution.type') != 'kanban')
-    ->label(data('lang.kanbancard.lane'))
+    ->label($lang->kanbancard->lane)
     ->control('picker', array('required' => true))
     ->items(data('lanePairs') ? data('lanePairs') : array())
     ->value(data('laneID'));
@@ -197,7 +198,7 @@ $buildStoryBox = function()
         );
 };
 
-$fields->field('storyBox')
+$fields->field('story')
     ->required(strpos($config->task->create->requiredFields, 'story') !== false)
     ->label($lang->task->story)
     ->checkbox(array('text' => $lang->task->syncStory, 'name' => 'copyButton'))
@@ -220,23 +221,28 @@ if(!empty(data('features.story')) && empty(data('storyID'))) $fields->field('typ
 
 /* Set hidden control. */
 $fields->field('storyEstimate')
+    ->label($lang->story->estimate)
     ->hidden()
     ->control('input');
 
 $fields->field('storyDesc')
+    ->label($lang->story->spec)
     ->hidden()
     ->control('input');
 
 $fields->field('storyPri')
+    ->label($lang->story->pri)
     ->hidden()
     ->control('input')
     ->value('0');
 
 $fields->field('taskName')
+    ->label($lang->task->name)
     ->hidden()
     ->control('input');
 
 $fields->field('taskEstimate')
+    ->label($lang->task->estimate)
     ->hidden()
     ->control('input');
 
@@ -252,3 +258,7 @@ $fields->field('testStoryBox')
     ->width('full')
     ->hidden()
     ->control($buildTestStoryBox);
+
+/* 工作流获取字段顺序与创建页一致。 */
+$parent = isset($fields->fields['parent']) ? 'parent,' : '';
+$fields->sort('type,module,story,testStoryBox', "type,module,story,testStoryBox,{$parent}assignedTo", 'desc,files,keywords,mailto');

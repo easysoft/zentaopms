@@ -10,81 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$fields = useFields('bug.confirm');
+
 jsVar('page', 'confirm');
 
 modalHeader();
+formPanel(set::fields($fields));
 
-formPanel
-(
-    formGroup
-    (
-        set::width('1/3'),
-        set::label($lang->bug->assignedTo),
-        picker
-        (
-            set::name('assignedTo'),
-            set::items($users),
-            set::value($bug->assignedTo),
-            set::required(strpos(",{$config->bug->confirm->requiredFields},", ',assignedTo,') !== false)
-        )
-    ),
-    formGroup
-    (
-        set::width('1/3'),
-        set::name('type'),
-        set::label($lang->bug->type),
-        set::control('picker'),
-        set::items($lang->bug->typeList),
-        set::value($bug->type),
-        set::required(strpos(",{$config->bug->confirm->requiredFields},", ',type,') !== false)
-    ),
-    formGroup
-    (
-        set::width('1/3'),
-        set::name('pri'),
-        set::label($lang->bug->pri),
-        set::control('priPicker'),
-        set::items($lang->bug->priList),
-        set::value($bug->pri),
-        set::required(strpos(",{$config->bug->confirm->requiredFields},", ',pri,') !== false)
-    ),
-    formGroup
-    (
-        set::width('1/3'),
-        set::label($lang->bug->deadline),
-        datePicker
-        (
-            setID('deadline'),
-            set::name('deadline'),
-            set::value($bug->deadline),
-            set::required(strpos(",{$config->bug->confirm->requiredFields},", ',deadline,') !== false)
-        )
-    ),
-    formRow
-    (
-        set::className('hidden'),
-        formGroup
-        (
-            set::width('1/3'),
-            set::name('status'),
-            set::control('hidden'),
-            set::value($bug->status)
-        )
-    ),
-    formGroup
-    (
-        set::label($lang->bug->lblMailto),
-        mailto(set::items($users), set::value($bug->mailto))
-    ),
-    formGroup
-    (
-        set::label($lang->comment),
-        editor
-        (
-            set::name('comment')
-        )
-    )
-);
 hr();
 history();
 
