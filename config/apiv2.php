@@ -238,7 +238,8 @@ $routes['/opportunities/:opportunityID']          = array('get' => array('respon
 
 $routes['/auditplans']                          = array('response' => 'auditplans(array),pager', 'search' => array('enabled' => true));
 $routes['/projects/:projectID/auditplans']      = array('redirect' => '/auditplans?projectID=:projectID', 'search' => array('enabled' => true));
-$routes['/executions/:executionID/auditplans']  = array('redirect' => '/auditplans?executionID=:executionID&from=execution', 'search' => array('enabled' => true));
+$routes['/executions/:executionID/auditplans']  = array('redirect' => '/auditplans?projectID=:executionID&from=execution', 'response' => 'auditplans(array),pager', 'search' => array('enabled' => true));
+$routes['/auditplans/:auditplanID']             = array('get' => array('response' => 'auditplan,actions(array),results(array),ncs(array)'));
 
 $routes['/feedbacks']                     = array('method' => 'admin', 'response' => 'feedbacks(array),pager', 'search' => array('enabled' => true));
 $routes['/products/:productID/feedbacks'] = array('redirect' => '/feedbacks?param=:productID', 'search' => array('enabled' => true));
