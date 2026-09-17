@@ -11972,14 +11972,19 @@ class upgradeModel extends model
         $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
         $deliverableID = $this->dao->lastInsertID();
 
+        /* “其他”类型；新加type，stage 与历史数据一致。 */
         $stageList = $this->config->edition != 'biz' ? $this->loadModel('deliverable')->buildStageList($workflowGroupID) : array();
-        foreach($stageList as $key => $stage)
+        foreach($stageList as $type => $stages)
         {
-            $deliverableStage = new stdclass();
-            $deliverableStage->deliverable = $deliverableID;
-            $deliverableStage->stage       = $key;
-            $deliverableStage->required    = '0';
-            $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+            foreach($stages as $stage => $label)
+            {
+                $deliverableStage = new stdclass();
+                $deliverableStage->deliverable = $deliverableID;
+                $deliverableStage->type        = $type;
+                $deliverableStage->stage       = $stage;
+                $deliverableStage->required    = '0';
+                $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+            }
         }
     }
 
@@ -14008,5 +14013,120 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * 修复其他交付物的检查环节。
+     * Modify other deliverable.
+     *
+     * @access public
+     * @return bool
+     */
+    public function modifyOtherDeliverable(): bool
+    {
+        $this->app->loadLang('task');
+
+        $deliverables = $this->dao->select('t1.`projectModel`,t2.*')->from(TABLE_WORKFLOWGROUP)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.id=t2.`workflowGroup`')
+            ->where('t2.category')->eq('other')
+            ->fetchAll();
+
+        $deliverableStage = new stdclass();
+        foreach($deliverables as $deliverable)
+        {
+            if($deliverable->projectModel != 'scrum' && $deliverable->projectModel != 'ipd')
+            {
+                foreach($this->lang->stage->typeList as $type => $label)
+                {
+                    if(!$type) continue;
+                    $deliverableStage->deliverable = $deliverable->id;
+                    $deliverableStage->type        = 'execution';
+                    $deliverableStage->stage       = $type;
+                    $deliverableStage->required    = 0;
+                    $this->dao->replace(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                }
+            }
+
+            if($deliverable->projectModel == 'ipd')
+            {
+                foreach($this->lang->stage->ipdTypeList as $type => $label)
+                {
+                    if(!$type) continue;
+                    $deliverableStage->deliverable = $deliverable->id;
+                    $deliverableStage->type        = 'execution';
+                    $deliverableStage->stage       = $type;
+                    $deliverableStage->required    = 0;
+                    $this->dao->replace(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                }
+            }
+
+            foreach($this->lang->task->typeList as $type => $label)
+            {
+                if(!$type) continue;
+                $deliverableStage->deliverable = $deliverable->id;
+                $deliverableStage->type        = 'task';
+                $deliverableStage->stage       = $type;
+                $deliverableStage->required    = 0;
+                $this->dao->replace(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * 记录 TR、DCP 评审点最近一次评审的交付物及版本。
+     * Record the latest review deliverables and versions of decision points.
+     *
+     * @access public
+     * @return bool
+     */
+    public function upgradeDecisionDeliverableSnapshot(): bool
+    {
+        $points = $this->dao->select('id, categoryVersion')->from(TABLE_OBJECT)
+            ->where('type')->eq('decision')
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll('id');
+        if(empty($points)) return true;
+
+        $reviews = $this->dao->select('id, object, status')->from(TABLE_REVIEW)
+            ->where('object')->in(array_keys($points))
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id_desc')
+            ->fetchAll();
+
+        $latestReviews = array();
+        foreach($reviews as $review)
+        {
+            if(isset($latestReviews[$review->object])) continue;
+            $latestReviews[$review->object] = $review;
+        }
+
+        $now = helper::now();
+        foreach($points as $pointID => $point)
+        {
+            $categoryVersion = json_decode($point->categoryVersion, true);
+            if(empty($categoryVersion) || !is_array($categoryVersion)) continue;
+            if(empty($latestReviews[$pointID])) continue;
+
+            $review  = $latestReviews[$pointID];
+            $existed = $this->dao->select('id')->from(TABLE_REVIEWDELIVERABLE)->where('review')->eq($review->id)->fetch('id');
+            if($existed) continue;
+
+            $deliverableReviews = $this->dao->select('id, version')->from(TABLE_REVIEW)->where('id')->in(array_values($categoryVersion))->fetchAll('id');
+            foreach($categoryVersion as $deliverableID => $deliverableReviewID)
+            {
+                $snapshot = new stdclass();
+                $snapshot->review             = (int)$review->id;
+                $snapshot->projectdeliverable = (int)$deliverableID;
+                $snapshot->deliverableReview  = (int)$deliverableReviewID;
+                $snapshot->version            = isset($deliverableReviews[$deliverableReviewID]) ? $deliverableReviews[$deliverableReviewID]->version : '';
+                $snapshot->createdBy          = 'system';
+                $snapshot->createdDate        = $now;
+                $this->dao->insert(TABLE_REVIEWDELIVERABLE)->data($snapshot)->exec();
+            }
+        }
+
+        return !dao::isError();
     }
 }

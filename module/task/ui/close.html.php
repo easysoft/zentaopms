@@ -15,6 +15,7 @@ namespace zin;
 modalHeader();
 formPanel
 (
+    set::ajax(array('onValidateField' => jsRaw('showErrorTip'))),
     formGroup
     (
         set::label($lang->comment),

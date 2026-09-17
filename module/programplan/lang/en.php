@@ -110,6 +110,7 @@ $lang->programplan->rollbackTip      = 'New executions and tasks will be deleted
 $lang->programplan->rollbackTip4IPD  = 'New executions and tasks will be deleted, deleted ones will be restored, and only some fields will be rolled back, and some TR and DCP review points need to be resubmitted. This operation will overwrite the current schedule and cannot be recovered. Please proceed with caution. Continue?';
 $lang->programplan->canNotCallback   = 'Unable to rollback. The execution plan dates would exceed the project plan dates. Please adjust the project plan dates first.';
 $lang->programplan->frozenCallback   = 'Version rollback is not allowed after the stage has been baselined.';
+$lang->programplan->closedCallback   = 'Unable to rollback. Modification of the closed project or execution is prohibited.';
 
 $lang->programplan->milestoneList[1] = 'Yes';
 $lang->programplan->milestoneList[0] = 'No';

@@ -623,11 +623,12 @@ CREATE TABLE `zt_deliverable` (
 CREATE TABLE IF NOT EXISTS `zt_deliverablestage` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `deliverable` int unsigned NOT NULL DEFAULT 0,
+  `type` varchar(30) NOT NULL DEFAULT 'execution',
   `stage` varchar(30) NOT NULL,
   `required` varchar(30) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE UNIQUE INDEX `unique` ON `zt_deliverablestage`(`deliverable`,`stage`);
+CREATE UNIQUE INDEX `unique` ON `zt_deliverablestage`(`deliverable`,`type`,`stage`);
 
 -- DROP TABLE IF EXISTS `zt_decision`;
 CREATE TABLE IF NOT EXISTS `zt_decision` (
@@ -1613,7 +1614,8 @@ CREATE INDEX `project` ON `zt_projectchange` (`project`);
 CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT 0 COMMENT '所属项目',
-  `submitFrom` int unsigned NOT NULL DEFAULT 0 COMMENT '提交来源',
+  `sourceType` varchar(20) NOT NULL DEFAULT 'project' COMMENT '来源类型',
+  `sourceID` int unsigned NOT NULL DEFAULT 0 COMMENT '来源对象',
   `review` int unsigned NOT NULL DEFAULT 0 COMMENT '关联评审',
   `deliverable` varchar(30) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -2067,6 +2069,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `fromBug` int unsigned NOT NULL DEFAULT 0,
   `feedback` int unsigned NOT NULL DEFAULT 0,
   `fromIssue` int unsigned NOT NULL DEFAULT 0,
+  `fromDeliverable` int unsigned NOT NULL DEFAULT 0 COMMENT '由交付物转的任务',
   `docs` text DEFAULT NULL,
   `docVersions` text DEFAULT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -2083,6 +2086,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `mailto` text DEFAULT NULL,
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext DEFAULT NULL,
+  `deliverable` text DEFAULT NULL COMMENT '任务关联的交付物类型',
   `version` smallint unsigned NOT NULL DEFAULT 1,
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime DEFAULT NULL,
@@ -14185,6 +14189,23 @@ CREATE TABLE IF NOT EXISTS `zt_review` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+
+-- DROP TABLE IF EXISTS `zt_reviewdeliverable`;
+CREATE TABLE IF NOT EXISTS `zt_reviewdeliverable` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `review` int unsigned NOT NULL DEFAULT 0 COMMENT '评审流程',
+  `projectdeliverable` int unsigned NOT NULL DEFAULT 0 COMMENT '项目交付物',
+  `deliverableReview` int unsigned NOT NULL DEFAULT 0 COMMENT '交付物评审',
+  `version` varchar(255) NOT NULL DEFAULT '' COMMENT '交付物版本',
+  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
+  `createdDate` datetime NULL COMMENT '创建时间',
+  `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁编辑',
+  `editedDate` datetime NULL COMMENT '编辑时间',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+CREATE UNIQUE INDEX `uk_review_projectdeliverable` ON `zt_reviewdeliverable` (`review`, `projectdeliverable`);
+CREATE INDEX `idx_projectdeliverable` ON `zt_reviewdeliverable` (`projectdeliverable`);
 
 -- DROP TABLE IF EXISTS `zt_reviewcl`;
 CREATE TABLE IF NOT EXISTS `zt_reviewcl` (

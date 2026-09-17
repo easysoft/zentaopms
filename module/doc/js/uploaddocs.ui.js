@@ -50,7 +50,7 @@ window.loadExecutions = function(e)
 
 window.openEditURL = function(docID, fileID)
 {
-    let editUrl = $.createLink('file', 'download', "fileID=" + fileID + "&mouse=left");
+    let editUrl = $.createLink('doc', 'downloadFile', "fileID=" + fileID + "&mouse=left");
     window.open(editUrl);
     loadPage($.createLink('doc', 'view', "docID=" + docID));
 }

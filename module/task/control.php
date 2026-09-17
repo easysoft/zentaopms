@@ -38,10 +38,11 @@ class task extends control
      * @param  int    $todoID
      * @param  string $cardPosition
      * @param  int    $bugID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function create(int $executionID = 0, int $storyID = 0, int $moduleID = 0, int $taskID = 0, int $todoID = 0, string $cardPosition = '', int $bugID = 0)
+    public function create(int $executionID = 0, int $storyID = 0, int $moduleID = 0, int $taskID = 0, int $todoID = 0, string $cardPosition = '', int $bugID = 0, string $type = '')
     {
         /* Analytic parameter. */
         $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
@@ -134,6 +135,7 @@ class task extends control
 
         /* Shows the variables needed to create the task page. */
         $this->taskZen->assignCreateVars($execution, $storyID, $moduleID, $taskID, $todoID, $bugID, $output, $cardPosition);
+        $this->view->type = $type;
         $this->display();
     }
 
@@ -180,7 +182,7 @@ class task extends control
         /* Check whether the execution has permission to create tasks. */
         if($this->taskZen->isLimitedInExecution($executionID)) return $this->send(array('load' => array('locate' => $this->createLink('execution', 'task', "executionID={$executionID}"), 'alert' => sprintf($this->lang->task->createDenied, $execution->multiple ? $this->lang->executionCommon : $this->lang->projectCommon))));
 
-        if(!empty($_POST))
+        if(!empty($_POST['name']))
         {
             $parent = $taskID > 0 ? $this->task->fetchById($taskID) : null;
             /* Process the request data for the batch create tasks. */
@@ -217,8 +219,11 @@ class task extends control
 
         if(!empty($_POST))
         {
+            $formConfig = $this->config->task->form->edit;
+            if(in_array($this->post->mode, array('multi', 'linear'))) $formConfig['assignedTo']['skipRequired'] = true;
+
             /* Prepare and check data. */
-            $task = form::data($this->config->task->form->edit)->add('id', $taskID)->get();
+            $task = form::data($formConfig)->add('id', $taskID)->get();
             $task = $this->taskZen->buildTaskForEdit($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

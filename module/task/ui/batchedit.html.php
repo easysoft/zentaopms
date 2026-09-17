@@ -43,6 +43,25 @@ jsVar('overChildDeadlineLang', $lang->task->overChildDeadline);
 jsVar('manageTeamMemberText', $lang->execution->manageTeamMember);
 jsVar('taskDateLimit', empty($project) ? '' : $project->taskDateLimit);
 
+$items = array();
+
+$items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'hidden', 'hidden' => true);
+$items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '64px');
+$items[] = array('name' => 'name', 'control' => 'colorInput', 'label' => $lang->task->name, 'width' => '240px');
+$items[] = array('name' => 'module', 'label' => $lang->task->module, 'control' => 'picker', 'items' => $modules, 'width' => '200px', 'ditto' => true, 'defaultDitto' => 'off');
+
+if(!$executionID || $execution->lifetime != 'ops') $items[] = array('name' => 'story', 'label' => $lang->task->story, 'control' => 'picker', 'items' => array(), 'width' => '300px', 'ditto' => true, 'defaultDitto' => 'off');
+
+$items[] = array('name' => 'assignedTo', 'label' => $lang->task->assignedTo, 'control' => array('control' => 'taskAssignedTo'), 'items' => array(), 'width' => '128px', 'ditto' => true, 'defaultDitto' => 'off');
+$items[] = array('name' => 'type', 'label' => $lang->task->type, 'control' => 'picker', 'items' => $lang->task->typeList, 'width' => '128px', 'ditto' => true, 'defaultDitto' => 'off');
+$items[] = array('name' => 'status', 'label' => $lang->task->status, 'control' => 'picker', 'items' => $lang->task->statusList, 'width' => '128px', 'ditto' => true, 'defaultDitto' => 'off');
+$items[] = array('name' => 'estStarted', 'label' => $lang->task->estStarted, 'control' => 'date', 'width' => '128px');
+$items[] = array('name' => 'deadline', 'label' => $lang->task->deadline, 'control' => 'date', 'width' => '128px');
+$items[] = array('name' => 'pri', 'label' => $lang->task->pri, 'control' => 'priPicker', 'ditto' => true, 'items' => $lang->task->priList, 'width' => '110px', 'defaultDitto' => 'off');
+$items[] = array('name' => 'estimate', 'label' => $lang->task->estimateAB, 'width' => '64px', 'control' => array('type' => 'inputControl', 'suffix' => $lang->task->suffixHour, 'suffixWidth' => 20));
+$items[] = array('name' => 'consumed', 'label' => $lang->task->consumedThisTime, 'width' => '64px', 'control' => array('type' => 'inputControl', 'suffix' => $lang->task->suffixHour, 'suffixWidth' => 20));
+$items[] = array('name' => 'left', 'label' => $lang->task->leftAB, 'width' => '64px', 'control' => array('type' => 'inputControl', 'suffix' => $lang->task->suffixHour, 'suffixWidth' => 20));
+
 /* ====== Define the page structure with zin widgets ====== */
 formBatchPanel
 (
@@ -52,6 +71,7 @@ formBatchPanel
     set::onRenderRow(jsRaw('renderRowData')),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
     set::ajax(array('beforeSubmit' =>  jsRaw('clickSubmit'))),
+    on::change('[data-name="type"]', 'changeType'),
     on::change('[data-name="status"]', 'statusChange'),
     on::change('[data-name="estStarted"], [data-name="deadline"]', 'checkBatchEstStartedAndDeadline'),
     on::change('[data-name="module"]', 'setStories'),
@@ -59,143 +79,8 @@ formBatchPanel
     on::change('[data-name="estimate"],[data-name="consumed"]', 'computeForParent'),
     on::click('[data-name=story] [data-type=ditto]', 'setStoryRelated'),
     set::formID('taskBatchEditForm' . $executionID),
-    formBatchItem
-    (
-        set::name('id'),
-        set::label($lang->idAB),
-        set::control('hidden'),
-        set::hidden(true)
-    ),
-    formBatchItem
-    (
-        set::name('id'),
-        set::label($lang->idAB),
-        set::control('index'),
-        set::width('64px')
-    ),
-    formBatchItem
-    (
-        set::name('name'),
-        set::control('colorInput'),
-        set::label($lang->task->name),
-        set::width('240px')
-    ),
-    formBatchItem
-    (
-        set::name('module'),
-        set::label($lang->task->module),
-        set::control('picker'),
-        set::items($modules),
-        set::width('200px'),
-        set::ditto(true),
-        set::defaultDitto('off')
-    ),
-    $executionID && $execution->lifetime == 'ops' ? null : formBatchItem
-    (
-        set::name('story'),
-        set::label($lang->task->story),
-        set::control('picker'),
-        set::items(array()),
-        set::width('300px'),
-        set::ditto(true),
-        set::defaultDitto('off')
-    ),
-    formBatchItem
-    (
-        set::name('assignedTo'),
-        set::label($lang->task->assignedTo),
-        set::control(array('control' => 'taskAssignedTo')),
-        set::items(array()),
-        set::width('128px'),
-        set::ditto(true),
-        set::defaultDitto('off')
-    ),
-    formBatchItem
-    (
-        set::name('type'),
-        set::label($lang->task->type),
-        set::control('picker'),
-        set::items($lang->task->typeList),
-        set::width('128px'),
-        set::ditto(true),
-        set::defaultDitto('off')
-    ),
-    formBatchItem
-    (
-        set::name('status'),
-        set::label($lang->task->status),
-        set::control('picker'),
-        set::items($lang->task->statusList),
-        set::width('128px'),
-        set::ditto(true),
-        set::defaultDitto('off')
-    ),
-    formBatchItem
-    (
-        set::name('estStarted'),
-        set::label($lang->task->estStarted),
-        set::control('date'),
-        set::width('128px')
-    ),
-    formBatchItem
-    (
-        set::name('deadline'),
-        set::label($lang->task->deadline),
-        set::control('date'),
-        set::width('128px')
-    ),
-    formBatchItem
-    (
-        set::name('pri'),
-        set::label($lang->task->pri),
-        set::control('priPicker'),
-        set::ditto(true),
-        set::items($lang->task->priList),
-        set::width('110px'),
-        set::defaultDitto('off')
-    ),
-    formBatchItem
-    (
-        set::name('estimate'),
-        set::label($lang->task->estimateAB),
-        set::width('64px'),
-        set::control
-        (
-            array(
-                'type' => 'inputControl',
-                'suffix' => $lang->task->suffixHour,
-                'suffixWidth' => 20
-            )
-        )
-    ),
-    formBatchItem
-    (
-        set::name('consumed'),
-        set::label($lang->task->consumedThisTime),
-        set::width('64px'),
-        set::control
-        (
-            array(
-                'type' => 'inputControl',
-                'suffix' => $lang->task->suffixHour,
-                'suffixWidth' => 20
-            )
-        )
-    ),
-    formBatchItem
-    (
-        set::name('left'),
-        set::label($lang->task->leftAB),
-        set::width('64px'),
-        set::control
-        (
-            array(
-                'type' => 'inputControl',
-                'suffix' => $lang->task->suffixHour,
-                'suffixWidth' => 20
-            )
-        )
-    )
+    set::items($items)
+
 );
 /* ====== Render page ====== */
 render();

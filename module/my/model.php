@@ -1602,7 +1602,7 @@ class myModel extends model
             ->fetchPairs();
 
         $objectTypeList = array();
-        $actions        = $this->dao->select('`objectType`,`objectID`,actor,action,`date`,extra')->from(TABLE_ACTION)->where('id')->in($actionIdList)->orderBy($orderBy)->fetchAll();
+        $actions        = $this->dao->select('`objectType`,`objectID`,actor,action,`date`,comment,extra')->from(TABLE_ACTION)->where('id')->in($actionIdList)->orderBy($orderBy)->fetchAll();
         foreach($actions as $action) $objectTypeList[$action->objectType][] = $action->objectID;
 
         $flows       = $this->config->edition == 'open' ? array() : $this->dao->select('module,`table`,name,`titleField`')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectTypeList))->andWhere('buildin')->eq(0)->fetchAll('module');
@@ -1631,7 +1631,8 @@ class myModel extends model
             }
         }
 
-        $reviewedList = $this->buildReviewedList($objectGroup, $actions, $flows);
+        $reviewActions = $this->getReviewActionGroup($objectTypeList);
+        $reviewedList  = $this->buildReviewedList($objectGroup, $actions, $flows, $reviewActions);
         if(!is_null($pager))
         {
             $pager->setRecTotal(count($reviewedList));
@@ -1645,16 +1646,53 @@ class myModel extends model
     }
 
     /**
+     * 获取对象最近一次审批动作。
+     * Get the latest review action for objects.
+     *
+     * @param  array  $objectTypeList
+     * @access private
+     * @return array
+     */
+    private function getReviewActionGroup(array $objectTypeList): array
+    {
+        $actionIdList = array();
+        foreach($objectTypeList as $objectType => $idList)
+        {
+            $idList = array_filter(array_unique($idList));
+            if(empty($idList)) continue;
+
+            $reviewActionIdList = $this->dao->select('MAX(`id`) AS `id`')->from(TABLE_ACTION)
+                ->where('objectType')->eq($objectType)
+                ->andWhere('objectID')->in($idList)
+                ->andWhere('action')->in('reviewed,approvalreview')
+                ->andWhere('vision')->eq($this->config->vision)
+                ->groupBy('`objectType`,`objectID`')
+                ->fetchPairs();
+
+            if(!empty($reviewActionIdList)) $actionIdList = array_merge($actionIdList, $reviewActionIdList);
+        }
+
+        if(empty($actionIdList)) return array();
+
+        $reviewActions     = $this->dao->select('`objectType`,`objectID`,actor,action,`date`,comment,extra')->from(TABLE_ACTION)->where('id')->in($actionIdList)->fetchAll();
+        $reviewActionGroup = array();
+        foreach($reviewActions as $reviewAction) $reviewActionGroup[$reviewAction->objectType][$reviewAction->objectID] = $reviewAction;
+
+        return $reviewActionGroup;
+    }
+
+    /**
      * 构建评审列表。
      * Build reviewed list.
      *
      * @param  array   $objectGroup
      * @param  array   $actions
      * @param  array   $flows
+     * @param  array   $reviewActions
      * @access private
      * @return array
      */
-    private function buildReviewedList(array $objectGroup, array $actions, array $flows): array
+    private function buildReviewedList(array $objectGroup, array $actions, array $flows, array $reviewActions = array()): array
     {
         $this->app->loadConfig('action');
         $reviewList = array();
@@ -1673,9 +1711,25 @@ class myModel extends model
             $review->result = strtolower($action->extra);
             $review->status = $objectType == 'attend' ? $object->reviewStatus : (isset($object->status) && !isset($flows[$objectType]) ? $object->status : 'done');
             if(strpos($review->result, ',') !== false) list($review->result) = explode(',', $review->result);
+            if(strpos($review->result, '|') !== false) list($review->result) = explode('|', $review->result);
 
-            $review->product = isset($object->product) ? $object->product : 0;
-            $review->project = isset($object->project) ? $object->project : 0;
+            $review->product    = isset($object->product) ? $object->product : 0;
+            $review->project    = isset($object->project) ? $object->project : 0;
+            $review->reviewer   = '';
+            $review->opinion    = '';
+            $review->reviewTime = '';
+
+            $reviewAction = isset($reviewActions[$objectType][$action->objectID]) ? $reviewActions[$objectType][$action->objectID] : null;
+            if(isset($action->action) && in_array($action->action, array('reviewed', 'approvalreview'))) $reviewAction = $action;
+            if($reviewAction)
+            {
+                $review->reviewer   = isset($reviewAction->actor) ? $reviewAction->actor : '';
+                $review->opinion    = isset($reviewAction->comment) ? trim(strip_tags((string)$reviewAction->comment)) : '';
+                $review->reviewTime = isset($reviewAction->date) ? substr($reviewAction->date, 0, 19) : '';
+                if(isset($reviewAction->extra) && $reviewAction->extra !== '') $review->result = strtolower((string)$reviewAction->extra);
+                if(strpos($review->result, ',') !== false) list($review->result) = explode(',', $review->result);
+                if(strpos($review->result, '|') !== false) list($review->result) = explode('|', $review->result);
+            }
 
             if($objectType == 'story')    $review->storyType = $object->type;
             if($review->type == 'review') $review->type = 'projectreview';
