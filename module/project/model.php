@@ -847,6 +847,23 @@ class projectModel extends model
     }
 
     /**
+     * 获取项目邮件通知的收件人。
+     * Get toList and ccList.
+     *
+     * @param  object     $project
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList(object $project): bool|array
+    {
+        $toList = trim($project->openedBy . ',' . $project->PM, ',');
+        $toList = implode(',', array_unique(array_filter(explode(',', $toList))));
+        if(empty($toList)) return false;
+
+        return array($toList, '');
+    }
+
+    /**
      * Get project pairs by id list.
      *
      * @param  array  $projectIdList

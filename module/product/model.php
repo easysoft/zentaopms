@@ -56,6 +56,23 @@ class productModel extends model
     }
 
     /**
+     * 获取产品邮件通知的收件人。
+     * Get toList and ccList.
+     *
+     * @param  object $product
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList(object $product): bool|array
+    {
+        $toList = trim($product->createdBy . ',' . $product->PO, ',');
+        $toList = implode(',', array_unique(array_filter(explode(',', $toList))));
+        if(empty($toList)) return false;
+
+        return array($toList, '');
+    }
+
+    /**
      * 根据权限控制范围获取产品。
      * Get products by acl.
      *
@@ -522,7 +539,7 @@ class productModel extends model
         $changes = common::createChanges($oldProduct, $product);
         if(!empty($product->comment) or !empty($changes))
         {
-            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', (string)$product->comment);
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', zget($product, 'comment', ''));
             $this->action->logHistory($actionID, $changes);
 
             if(!empty($product->comment))
@@ -559,7 +576,7 @@ class productModel extends model
         $changes = common::createChanges($oldProduct, $product);
         if(!empty($product->comment) or !empty($changes))
         {
-            $actionID = $this->loadModel('action')->create('product', $productID, 'Activated', (string)$product->comment);
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Activated', zget($product, 'comment', ''));
             $this->action->logHistory($actionID, $changes);
 
             if(!empty($product->comment))

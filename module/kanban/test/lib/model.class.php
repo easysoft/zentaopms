@@ -1615,6 +1615,26 @@ class kanbanModelTest extends baseTest
     }
 
     /**
+     * Test send kanban card due reminders by webhook.
+     *
+     * @param  array $cards
+     * @access public
+     * @return array
+     */
+    public function sendCardNoticeByWebhookTest(array $cards): array
+    {
+        global $tester;
+
+        $maxID = (int)$tester->dao->select('MAX(id) AS id')->from(TABLE_NOTIFY)->fetch('id');
+
+        $this->instance->sendCardNoticeByWebhook($cards);
+
+        if(dao::isError()) return dao::getError();
+
+        return $tester->dao->select('*')->from(TABLE_NOTIFY)->where('id')->gt($maxID)->orderBy('id')->fetchAll('id');
+    }
+
+    /**
      * Test get cards to import.
      *
      * @param  int     $kanbanID
