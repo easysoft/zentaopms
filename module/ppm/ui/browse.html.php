@@ -10,19 +10,31 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('repoID', $repo->id);
+jsVar('repoID', $repoID);
 
 dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
 if(isset($config->ppm->dtable->fieldList['repo'])) $config->ppm->dtable->fieldList['repo']['map'] = $repos;
 
 $ppms = initTableData($ppmList, $config->ppm->dtable->fieldList, $this->ppm);
 
+/* 空间、代码库筛选链接统一保留状态、排序和每页条数，并回到第一页。链接参数顺序需与 browse() 的形参顺序一致：repoID、mode、param、objectID、orderBy、recTotal、recPerPage、pageID、spaceID。 */
+$filterParams = "mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1";
+
 $spaceItems = array();
-$spaceItems[] = array('text' => $lang->ppm->allSpace, 'url' => createLink('ppm', 'browse'));
+$spaceItems[] = array('text' => $lang->ppm->allSpace, 'url' => createLink('ppm', 'browse', "repoID=0&{$filterParams}"));
 foreach($spaces as $id => $spaceName)
 {
-    $spaceItems[] = array('text' => $spaceName, 'url' => createLink('ppm', 'browse', "id={$repo->id}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&spaceID={$id}"));
+    $spaceItems[] = array('text' => $spaceName, 'url' => createLink('ppm', 'browse', "repoID=0&{$filterParams}&spaceID={$id}"));
 }
+
+/* 代码库下拉选项随空间变化：未选择空间时展示全部代码库，选中空间后仅展示该空间下的代码库。 */
+$repoItems = array();
+$repoItems[] = array('text' => $lang->ppm->allRepo, 'url' => createLink('ppm', 'browse', "repoID=0&{$filterParams}&spaceID={$spaceID}"));
+foreach($spaceRepos as $id => $repoName)
+{
+    $repoItems[] = array('text' => $repoName, 'url' => createLink('ppm', 'browse', "repoID={$id}&{$filterParams}&spaceID={$spaceID}"));
+}
+
 featureBar
 (
     $app->tab != 'ppm' ? null : to::before
@@ -31,40 +43,33 @@ featureBar
         (
             to('trigger', btn(zget($spaces, $spaceID, $lang->ppm->allSpace), setID('spaceDropdown'), setClass('ghost text-ellipsis text-left'))),
             set::items($spaceItems)
-        )
+        ),
+        /* 代码库筛选仅在代码评审一级导航下展示，节点需内联创建，避免在代码库tab下作为游离节点被渲染。 */
+        $config->vision == 'gitfox' ? dropdown
+        (
+            to('trigger', btn(zget($spaceRepos, $repoID, $lang->ppm->allRepo), setID('repoDropdown'), setClass('ghost text-ellipsis text-left'))),
+            set::items($repoItems)
+        ) : null
     ),
     set::current($mode != 'status' ? $mode : $param),
-    set::linkParams("repoID={$repo->id}&mode=status&param={key}")
+    set::linkParams("repoID={$repoID}&mode=status&param={key}&objectID={$objectID}&orderBy={$orderBy}&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1&spaceID={$spaceID}")
 );
 
-$linkParams = $app->tab == 'devops' ? "repoID={$repo->id}" : '';
-/* 镜像代码库（$repo->mirror == 1）不允许提交合并请求，按钮置灰禁点，并在左侧展示橙色提醒；无创建权限时整条工具条沉默。 */
-$canCreate    = hasPriv($app->rawModule, 'create');
-$isMirrorRepo = !empty($repo->mirror);
-
-/* 提取嵌套三元：按钮 class 与 url 在镜像态下的取值。 */
-$createBtnClass = 'btn primary';
-if($isMirrorRepo) $createBtnClass .= ' disabled';
-$createBtnUrl = $isMirrorRepo ? 'javascript:;' : createLink($app->rawModule, 'create', $linkParams);
-
-$mirrorRepoAlert = ($canCreate && $isMirrorRepo) ? div
-(
-    setClass('alert with-icon mr-3 text-warning flex items-center mb-0'),
-    /* 覆盖 .alert 默认 gap:.75rem，压紧惊叹号与文字的间隔。 */
-    setStyle(array('--alert-bg' => 'var(--color-warning-50)', 'gap' => '.25rem')),
-    h::span(setClass('icon icon-exclamation-sign')),
-    h::span($lang->ppm->mirrorRepoTip)
-) : null;
+/* 代码库tab（独立版）和devops（开源版）下的列表按代码库过滤，创建时带上当前代码库；评审一级导航下由用户在表单里选择。 */
+$linkParams = in_array($app->tab, array('devops', 'repo')) ? "repoID={$repo->id}" : '';
+/* 镜像代码库不能创建合并请求：镜像库不会出现在代码库筛选选项里，仓库级视图下也直接不展示创建入口，无需再提示。 */
+$canCreate    = hasPriv($app->rawModule, 'create') && !($repoID && !empty($repo->mirror));
+$createBtnUrl = createLink($app->rawModule, 'create', $linkParams);
 
 if($canCreate) toolBar
 (
-    $mirrorRepoAlert,
     item(set(array
     (
-        'text'  => $lang->ppm->create,
-        'icon'  => 'plus',
-        'class' => $createBtnClass,
-        'url'   => $createBtnUrl
+        'text'     => $lang->ppm->create,
+        'icon'     => 'plus',
+        'class'    => 'btn primary',
+        'data-app' => $app->tab,
+        'url'      => $createBtnUrl
     )))
 );
 
@@ -73,7 +78,7 @@ dtable
     set::userMap($users),
     set::cols($config->ppm->dtable->fieldList),
     set::data($ppms),
-    set::sortLink(createLink($app->rawModule, 'browse', "repoID={$repo->id}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+    set::sortLink(createLink($app->rawModule, 'browse', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID=1&spaceID={$spaceID}")),
     set::orderBy($orderBy),
     set::footPager(usePager())
 );
