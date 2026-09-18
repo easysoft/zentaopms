@@ -62,6 +62,7 @@ $lang->message->noticeText->aitaskfinished = 'Your AI task 《{objectTitle}》ha
 $lang->message->noticeText->aitaskfailed   = 'Your AI task 《{objectTitle}》has failed.';
 $lang->message->noticeText->minuted        = '{actor} recorded the meeting minutes titled 《{objectTitle}》.';
 $lang->message->noticeText->generic        = '{actor} {action}{objectType}《{objectTitle}》。';
+$lang->message->noticeText->moved          = '{actor} has moved kanban card《{objectTitle}》， from {fromColTitle} to {toColTitle}.';
 $lang->message->noticeText->ccSuffix       = "You have been CC'd.";
 
 $lang->message->noticeText->extend['submitreview']['cc']     = '{actor} has submitted a review for {objectType}《{objectTitle}》, and you have been CCed.';

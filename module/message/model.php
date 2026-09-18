@@ -407,6 +407,19 @@ class messageModel extends model
             $noticeText = str_replace(array('{reviewResult}', '{reviewComment}', '{submitter}'), array($reviewResult, $reviewComment, $submitter), $noticeText);
         }
 
+        if(in_array($objectType, array('kanban', 'kanbancard')) && $actionType == 'moved')
+        {
+            if(strpos((string)$action->extra, '|') !== false)
+            {
+                $columns      = explode('|', $action->extra);
+                $fromColID    = $columns[0];
+                $toColID      = $columns[1];
+                $fromColTitle = $this->dao->select('name')->from(TABLE_KANBANCOLUMN)->where('id')->eq($fromColID)->fetch('name');
+                $toColTitle   = $this->dao->select('name')->from(TABLE_KANBANCOLUMN)->where('id')->eq($toColID)->fetch('name');
+                $noticeText   = str_replace(array('{fromColTitle}', '{toColTitle}'), array($fromColTitle, $toColTitle), $noticeText);
+            }
+        }
+
         return $noticeText;
     }
 
