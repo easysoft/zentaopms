@@ -339,7 +339,8 @@ class installModel extends model
             $this->dao->update(TABLE_STAGE)->set('name')->eq($value)->where('`type`')->eq($key)->exec();
         }
 
-        if($this->config->edition != 'open') $this->updateWorkflowLang();
+        /* GitFox独立版与开源版一样，不涉及工作流等付费版功能。The GitFox edition does not have the workflow features of the paid editions. */
+        if($this->config->edition != 'open' && $this->config->edition != 'gitfox') $this->updateWorkflowLang();
         if($this->config->edition == 'max' || $this->config->edition == 'ipd') $this->updatePaidVersionLang();
 
         return true;

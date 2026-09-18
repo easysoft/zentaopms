@@ -61,7 +61,9 @@ window.checkGitFoxServer = function()
         }
         else
         {
-            loadPage(adminRegisterLink);
+            /* 检测到的版本低于当前禅道要求的版本时，跳转到升级页面。 */
+            /* If the installed version is lower than the required version, jump to the upgrade page. */
+            loadPage(res.status == 'upgrade' ? upgradeLink : adminRegisterLink);
         }
     })
 }

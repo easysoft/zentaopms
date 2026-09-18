@@ -16,6 +16,7 @@ cid=17211
 
 - 非管理员用户返回空字符串。 @0
 - 管理员用户开源版返回空字符串。 @0
+- 管理员用户GitFox独立版返回空字符串。 @0
 - 管理员用户企业版返回正常内容。 @1
 - 管理员用户企业版返回正常内容后数据库中记录已显示过。 @1
 - 管理员用户企业版返回正常内容一次后第二次返回空字符串。 @0
@@ -33,6 +34,9 @@ r($misc->getMetriclibRemind()) && p() && e(0); //非管理员用户返回空字�
 su('admin');
 
 r($misc->getMetriclibRemind()) && p() && e(0); //管理员用户开源版返回空字符串。
+
+$config->edition = 'gitfox';
+r($misc->getMetriclibRemind()) && p() && e(0); //管理员用户GitFox独立版返回空字符串。
 
 $config->edition = 'biz';
 r(mb_substr($misc->getMetriclibRemind(), 0, 36) == $remind) && p() && e(1); //管理员用户企业版返回正常内容。
