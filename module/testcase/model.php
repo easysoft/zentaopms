@@ -257,6 +257,23 @@ class testcaseModel extends model
     }
 
     /**
+     * 获取用例邮件通知的收件人。
+     * Get toList and ccList.
+     *
+     * @param  object     $case
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList(object $case): bool|array
+    {
+        $toList = trim($case->openedBy . ',' . $case->reviewedBy, ',');
+        $toList = implode(',', array_unique(array_filter(explode(',', $toList))));
+        if(empty($toList)) return false;
+
+        return array($toList, '');
+    }
+
+    /**
      * 测试通过 id 列表和查询语句获取用例。
      * Get cases by id list and query string.
      *

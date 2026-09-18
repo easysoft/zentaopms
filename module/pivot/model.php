@@ -2635,7 +2635,7 @@ class pivotModel extends model
                 $rowspan = isset($configs[$i][$j]) ? $configs[$i][$j] : 1;
                 $hidden  = (isset($configs[$i][$j]) && $configs[$i][$j]) ? false : (bool)$isGroup;
 
-                $showOrigin = $showOrigins[$j];
+                $showOrigin = zget($showOrigins, $j, false);
                 if($hasShowOrigin && !$isGroup && !$showOrigin)
                 {
                     $rowspan = isset($configs[$i]) ? end($configs[$i]) : 1;

@@ -43,7 +43,7 @@ class createTester extends tester
         if(isset($testtask['end']))       $form->dom->end->setValue($testtask['end']);
         if(isset($testtask['name']))      $form->dom->name->setValue($testtask['name']);
         $form->dom->submitBtn->click();
-        $form->wait(1);
+        $form->wait(3);
         if(!isset($testtask['build']) || $testtask['build'] == '')
         {
             if($form->dom->buildTip->getText() != sprintf($this->lang->error->notempty, $this->lang->testtask->build)) return $this->failed('提测构建为空时提示信息错误');

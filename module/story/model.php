@@ -1328,7 +1328,7 @@ class storyModel extends model
 
         $story = $this->updateStoryByReview($storyID, $oldStory, $story);
 
-        $skipFields      = 'finalResult,result,comment';
+        $skipFields      = 'finalResult,result,comment,checkAffection';
         $isSuperReviewer = $this->storyTao->isSuperReviewer();
         if($isSuperReviewer)
         {
@@ -3988,19 +3988,15 @@ class storyModel extends model
         if((strtolower($actionType) == 'changed' or strtolower($actionType) == 'reviewed') && $story->type == 'story')
         {
             $teamMembers = $this->getTeamMembers($story->id, $actionType);
-            if($teamMembers)
-            {
-                $ccList .= ',' . implode(',', $teamMembers);
-                $ccList = ltrim($ccList, ',');
-            }
+            if($teamMembers) $ccList = ltrim($ccList . ',' . implode(',', $teamMembers), ',');
         }
 
         if(in_array(strtolower($actionType), array('changed', 'opened', 'submitreview')))
         {
             $reviewerList = $this->getReviewerPairs($story->id, $story->version);
-            unset($reviewerList[$story->assignedTo]);
+            if($story->assignedTo && isset($reviewerList[$story->assignedTo])) unset($reviewerList[$story->assignedTo]);
 
-            $ccList .= ',' . implode(',', array_keys($reviewerList));
+            $toList = ltrim($toList . ',' . implode(',', array_keys($reviewerList)), ',');
         }
 
         if(empty($toList))
@@ -4021,6 +4017,7 @@ class storyModel extends model
         elseif($story->status == 'closed')
         {
             $ccList .= ',' . $story->openedBy;
+            $ccList  = ltrim($ccList, ',');
         }
 
         return array($toList, $ccList);

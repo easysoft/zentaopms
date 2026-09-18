@@ -225,6 +225,8 @@ class stage extends control
                 if(!$value || !$key) continue;
                 $this->custom->setItem("{$data->lang}.stage.typeList.{$key}", $value);
             }
+
+            if($this->config->edition == 'max' || $this->config->edition == 'ipd') $this->loadModel('deliverable')->addOtherDeliverbaleStage('execution');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 

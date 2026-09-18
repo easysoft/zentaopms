@@ -967,8 +967,6 @@ class kanban extends control
         }
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $this->loadModel('action')->create('kanbanCard', $cardID, 'moved');
-
         $card     = $this->kanban->getCardByID($cardID);
         $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
         return $this->send(array('result' => 'success', 'callback' => $callback, 'closeModal' => true));

@@ -55,10 +55,10 @@ class manageMembersTester extends tester
     public function remove($execution)
     {
         $form = $this->initForm('execution', 'team', array('execution' => $execution['id']), 'appIframe-execution');
-        $form->wait(1);
+        $form->wait(2);
         $numBefore = $form->dom->num->getText();
         $form->dom->firstRemoveBtn->click();
-        $form->wait(1);
+        $form->wait(2);
         $form->dom->alertModal();
         $form->wait(2);
         $numAfter = $form->dom->num->getText();
@@ -77,11 +77,12 @@ class manageMembersTester extends tester
     public function copyDeptMembers($execution)
     {
         $form = $this->initForm('execution', 'managemembers', array('execution' => $execution['id']), 'appIframe-execution');
-        $form->wait(1);
+        $form->wait(2);
         $form->dom->dept->picker($execution['dept']);
-        $form->wait(1);
+        $form->wait(2);
         $form->dom->btn($this->lang->save)->click();
         $form = $this->loadPage('execution', 'team');
+        $form->wait(2);
         if($form->dom->num->getText() == $execution['membersExpect']) return $this->success('复制部门成员成功');
         return $this->failed('复制部门成员失败');
     }

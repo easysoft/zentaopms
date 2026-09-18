@@ -16,7 +16,7 @@ class searchTao extends searchModel
         $flowModule = $module;
         if($module == 'projectStory' || $module == 'executionStory' || $module == 'projectstory') $flowModule = 'story';
         if($module == 'projectBuild' || $module == 'executionBuild') $flowModule = 'build';
-        if($module == 'projectBug') $flowModule = 'bug';
+        if($module == 'projectBug' || $module == 'executionBug') $flowModule = 'bug';
         if($module == 'executionCase') $flowModule = 'testcase';
 
         $buildin = false;

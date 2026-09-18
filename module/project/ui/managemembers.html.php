@@ -100,6 +100,8 @@ foreach($teamMembers as $member)
                     set::value($member->account),
                     set::items(array_values($userItems)),
                     set::maxItemsCount($config->maxCount),
+                    set::shareSelections('teamAccount'),
+                    set::menu(array('getItem' => jsRaw('getAccountMenuItem'))),
                     set('onchange', "setRole(event, '{$i}')")
                 )
             ),
@@ -154,7 +156,7 @@ foreach($teamMembers as $member)
             )
         );
 
-    if(in_array($member->memberType, array('default', 'dept'))) $userItems[$member->account]['disabled'] = true;
+    if(!empty($member->account) && isset($userItems[$member->account])) $userItems[$member->account]['disabled'] = true;
     $i ++;
 }
 
@@ -173,6 +175,8 @@ h::table
                 set::name("account[$i]"),
                 set::items(array_values($userItems)),
                 set::maxItemsCount($config->maxCount),
+                set::shareSelections('teamAccount'),
+                set::menu(array('getItem' => jsRaw('getAccountMenuItem'))),
                 set('onchange', "setRole(event, '{$i}')")
             )
         ),

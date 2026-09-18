@@ -18,11 +18,13 @@ class formTips extends wg
 
     protected function build()
     {
-        list($icon, $text) = $this->prop(array('icon', 'text'));
+        list($icon, $text, $theme) = $this->prop(array('icon', 'text', 'theme'));
+
+        if(empty($theme)) $theme = 'danger';
         return div
         (
-            setClass('border-danger border-2 bg-danger bg-opacity-5 rounded-lg w-full p-2'),
-            $icon ? icon(setClass('text-danger'), $icon) : null,
+            setClass($theme == 'danger' ? 'border-danger border-2 bg-danger bg-opacity-5 rounded-lg p-2' : '', "w-full"),
+            $icon ? icon(setClass("text-{$theme}"), $icon) : null,
             $icon ? span(setClass('ml-2'), $text) : span(html($text))
         );
     }

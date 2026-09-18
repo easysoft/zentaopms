@@ -57,7 +57,12 @@ class detailForm extends wg
         /* 返回按钮，可以为：`true` 显示默认的返回按钮，`false` 不显示返回按钮，或者指定返回按钮 backBtn 的 back 属性，或者通过数组指定 backBtn 所有属性。 */
         'backBtn'    => '?bool|string|array',
 
-        /* 主要栏表单字段列表。 */
+        /*
+         * 表单字段列表，布局规则如下：
+         * - 字段上设置 position 属性来决定字段显示的栏目，可选值：info（左侧主要栏目，默认），basic（侧边栏）
+         * - 字段上设置 group 属性来决定字段分组，相同的值展示在同一个分组内，比如所有 group 值为 基本信息 的字段展示在 “基本信息” 分组内，如果为空则不以分组展示
+         * - 当 position 为 info 时，忽略 group 属性，也就是左侧主要栏目不启用分组展示
+         */
         'fields'     => 'null|string|array|fieldList',
 
         /* 提交备注。 */
@@ -103,8 +108,14 @@ class detailForm extends wg
         CSS;
     }
 
-    protected ?array $fieldMap = null;
+    /** 左侧主要栏目字段列表（扁平，不分组）。 */
+    protected ?array $infoFields = null;
+
+    /** 侧边栏字段分组，键为 group 值（空字符串表示不分组），值为字段列表。 */
+    protected ?array $sideGroups = null;
+
     protected ?object $object = null;
+
     protected null|array|object $labelData = null;
 
     protected function created()
@@ -115,7 +126,7 @@ class detailForm extends wg
         $objectID   = $this->prop('objectID');
         $object     = $this->prop('object');
 
-        if(!$objectType) $objectType = $app->rawModule;
+        if(!$objectType) $objectType = $app->moduleName;
         if(!$object)     $object     = data($objectType);
         if(!$objectID)   $objectID   = $object ? $object->id : data($objectType . 'ID');
 
@@ -242,8 +253,10 @@ class detailForm extends wg
     protected function getFieldValue(string $name): ?string
     {
         $object = $this->object;
-        if(!$object) return null;
-        return isset($object->$name) ? strval($object->$name) : null;
+        if(!$object || !isset($object->$name)) return null;
+        $value = $object->$name;
+        if(!is_scalar($value)) return null;
+        return strval($value);
     }
 
     protected function buildField(array $field, bool $useRow = false)
@@ -258,31 +271,36 @@ class detailForm extends wg
         if(is_array($control) && !isset($control['id'])) $control['id'] = '';
         $field['control'] = $control;
 
-        $view = new formGroup(set($field));
-        if($useRow) $view = new formRow($view);
-        return $view;
-    }
-
-    protected function buildFields(string|array $groupOrFields = 'main', bool $useRow = false)
-    {
-        if(is_string($groupOrFields))
+        if($useRow)
         {
-            if(!isset($this->fieldMap[$groupOrFields])) return null;
-            $fields = $this->fieldMap[$groupOrFields];
+            $view = new formRow
+            (
+                empty($field['hidden']) ? null : set::hidden(),
+                setData('name', $name),
+                new formGroup
+                (
+                    set($field),
+                    set::hidden(false)
+                )
+            );
         }
         else
         {
-            $fields = $groupOrFields;
+            $view = new formGroup(set($field));
         }
+        return $view;
+    }
+
+    protected function buildFields(?array $fields = null, bool $useRow = false)
+    {
+        if($fields === null) $fields = $this->infoFields;
         if(!$fields) return null;
 
         $items = array();
         foreach($fields as $field)
         {
-            $item = $this->buildField($field, $useRow);
             if(empty($field)) continue;
-
-            $items[] = $item;
+            $items[] = $this->buildField($field, $useRow);
         }
 
         return $items;
@@ -325,19 +343,24 @@ class detailForm extends wg
 
     protected function buildSideGroups()
     {
+        if(!$this->sideGroups) return null;
+
         $groupTitles = $this->prop('groupTitles', array());
         $items       = array();
-        foreach($this->fieldMap as $group => $fields)
+        foreach($this->sideGroups as $group => $fields)
         {
-            if($group === 'main') continue;
+            $title = ($group !== '' && $group !== null)
+                ? (isset($groupTitles[$group]) ? $groupTitles[$group] : $group)
+                : null;
+
             $items[] = div
             (
                 setClass('form-horz col pt-2 pr-5'),
-                div
+                $title ? div
                 (
                     setClass('text-md font-bold sticky top-0 canvas py-2 px-4 z-5'),
-                    isset($groupTitles[$group]) ? $groupTitles[$group] : $group
-                ),
+                    $title
+                ) : null,
                 $this->buildFields($fields, true)
             );
         }
@@ -373,12 +396,22 @@ class detailForm extends wg
 
     protected function beforeBuild()
     {
+        global $app;
+
         list($object, $labelData, $fields) = $this->prop(array('object', 'labelData', 'fields'));
 
-        $this->object    = $object;
-        $this->labelData = $labelData ? $labelData : array();
-        $this->fieldMap  = array();
+        $this->object     = $object;
+        $this->labelData  = $labelData ? $labelData : array();
+        $this->infoFields = array();
+        $this->sideGroups = array();
+
+        $moduleName = $app->rawModule;
+        $methodName = $app->rawMethod;
+        $fields = $app->control->appendExtendFields($fields, $moduleName, $methodName, $object);
         if($fields instanceof fieldList) $fields = $fields->toArray();
+
+        if(!$fields) $fields = array();
+
         foreach($fields as $field)
         {
             if(!$field) continue;
@@ -386,9 +419,20 @@ class detailForm extends wg
             if(is_object($field)) $field = get_object_vars($field);
             if(!isset($field['name'])) continue;
 
-            $group = (isset($field['group']) && $field['group']) ? $field['group'] : 'main';
-            if(!isset($this->fieldMap[$group])) $this->fieldMap[$group] = array();
-            $this->fieldMap[$group][$field['name']] = $field;
+            /* position 决定栏目：info（左侧主栏，默认）或 basic（侧边栏）。 */
+            $position = (!empty($field['position'])) ? $field['position'] : 'info';
+
+            /* 左侧主栏忽略 group，扁平展示。 */
+            if($position === 'info')
+            {
+                $this->infoFields[$field['name']] = $field;
+                continue;
+            }
+
+            /* 侧边栏按 group 分组；group 为空则不以分组展示。 */
+            $group = (!empty($field['group'])) ? $field['group'] : '';
+            if(!isset($this->sideGroups[$group])) $this->sideGroups[$group] = array();
+            $this->sideGroups[$group][$field['name']] = $field;
         }
     }
 

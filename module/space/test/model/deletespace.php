@@ -55,6 +55,11 @@ $spaceID3 = (int)$spaceTester->createTest($spaceC);
 $spaceID4 = (int)$spaceTester->createTest($spaceD);
 $spaceID5 = (int)$spaceTester->createTest($spaceE);
 
+/* 清理空间中可能残留的代码库和制品库记录，保证空间可以真实删除。 */
+$spaceTester->cleanSpaceRecordsTest($spaceID3);
+$spaceTester->cleanSpaceRecordsTest($spaceID4);
+$spaceTester->cleanSpaceRecordsTest($spaceID5);
+
 r($spaceTester->deleteSpaceErrorTest(0))              && p() && e('Path 参数解析失败。');        // 删除空间ID=0返回路径解析错误
 r($spaceTester->deleteSpaceErrorTest(999999))         && p() && e('[zh-CN:space.delete_error]'); // 删除不存在的空间返回真实接口错误
 r($spaceTester->deleteSpaceSuccessTest($spaceID3))    && p() && e('1');                          // 删除真实空间返回成功

@@ -33,7 +33,7 @@ $tester->login();
 
 //设置项目发布数据
 $release = array(
-    array('name' => '第一个发布', 'status' => '已发布', 'plandate' => date('Y-m-d', strtotime('+1 day')), 'releasedate' => date('Y-m-d', strtotime('+1 month'))),
+    array('name' => '第一个发布', 'status' => '已发布', 'plandate' => date('Y-m-d', strtotime('+1 day'))),
     array('systemname' => '新建应用1', 'name' => '第二个发布', 'status' => '未开始', 'plandate' => date('Y-m-d', strtotime('+1 day'))),
     array('name' => '第二个发布', 'status' => '未开始', 'plandate' => date('Y-m-d', strtotime('+1 day'))),
 );

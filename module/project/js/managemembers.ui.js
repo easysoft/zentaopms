@@ -29,31 +29,11 @@ window.addItem = function(obj)
     const $currentTr = $(obj).closest('tr');
     $currentTr.after(item);
 
-    const $newRow = $currentTr.next();
     $('#teamForm .table tbody tr .actions-list .btn-link').eq(1).removeClass('hidden');
 
     itemIndex ++;
 
-    setTimeout(function()
-    {
-        let selectedAccounts = [];
-        $('#teamForm [name^=account]').each(function()
-        {
-            if(!$(this).val()) return true;
-            selectedAccounts.push($(this).val());
-        });
-
-        let $accountPicker = $newRow.find('input[name^=account]').zui('picker');
-        if(typeof $accountPicker == 'undefined') return true;
-
-        let userItems = $accountPicker.options.items;
-        for(let key in userItems)
-        {
-            let disabled = selectedAccounts.includes(userItems[key].value) ? true : false;
-            userItems[key].disabled = disabled;
-        }
-        $accountPicker.render({items: userItems});
-    }, 100);
+    setTimeout(resetAccountItems, 100);
 }
 
 /**
@@ -145,25 +125,50 @@ window.changeProjectMembers = function()
 
 function resetAccountItems()
 {
+    const selectedAccounts = getSelectedAccounts();
+
+    $('#teamForm [name^=account]').each(function()
+    {
+        let $accountPicker = $(this).zui('picker');
+        if(!$accountPicker || typeof $accountPicker == 'undefined') return true;
+
+        let userItems = $accountPicker.options.items;
+        if(!Array.isArray(userItems)) return true;
+
+        let currentAccount = $(this).val();
+        $accountPicker.render({items: userItems.map(function(item)
+        {
+            return $.extend({}, item, {disabled: selectedAccounts.includes(item.value) && item.value != currentAccount});
+        })});
+    });
+}
+
+/**
+ * Get already selected accounts.
+ *
+ * @access public
+ * @return array
+ */
+function getSelectedAccounts()
+{
     let selectedAccounts = [];
     $('#teamForm [name^=account]').each(function()
     {
         if(!$(this).val()) return true;
         selectedAccounts.push($(this).val());
     });
+    return selectedAccounts;
+}
 
-    $('#teamForm [name^=account]').each(function()
-    {
-        let $accountPicker = $(this).closest('input[name^=account]').zui('picker');
-        if(typeof $accountPicker == 'undefined') return true;
-
-        let userItems      = $accountPicker.options.items;
-        let currentAccount = $(this).val();
-        for(let key in userItems)
-        {
-            let disabled = selectedAccounts.includes(userItems[key].value) && userItems[key].value != currentAccount ? true : false;
-            userItems[key].disabled = disabled;
-        }
-        $accountPicker.render({items: userItems});
-    });
+/**
+ * Disable selected accounts in picker menu.
+ *
+ * @param  object $item
+ * @access public
+ * @return object
+ */
+window.getAccountMenuItem = function(item)
+{
+    item.disabled = getSelectedAccounts().includes(item.value) && !item.selected;
+    return item;
 }

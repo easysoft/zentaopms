@@ -5,7 +5,7 @@ class viewPage extends page
     {
         parent::__construct($webdriver);
         $xpath = array(
-            'basic'               => "//*[@id='mainContent']/div[2]/div/div/div/div/ul/li[4]/a/span",
+            'basic'               => "//*[@id='releaseTabs']/div[1]/ul/li[5]",
             'basicSystemName'     => "//*[@id='releaseInfo']/div[2]/div[1]/table/tbody/tr[2]/td",
             'basicreleasename'    => "//*[@id='releaseInfo']/div[2]/div[1]/table/tbody/tr[3]/td",
             'basicstatus'         => "//*[@id='releaseInfo']/div[2]/div[1]/table/tbody/tr[4]/td",

@@ -110,6 +110,7 @@ $lang->programplan->rollbackTip      = '新增的执行和任务将被删除，�
 $lang->programplan->rollbackTip4IPD  = '新增的执行和任务将被删除，已删除的将恢复，并仅回滚部分字段信息，部分TR和DCP评审点需重新提交。该操作将覆盖当前排期，且不可恢复，请谨慎操作。是否继续？';
 $lang->programplan->canNotCallback   = '无法回滚，回滚后执行计划起止日期超出项目计划起止日期，请先调整项目计划日期。';
 $lang->programplan->frozenCallback   = '阶段打基线后不允许回滚版本';
+$lang->programplan->closedCallback   = '无法回滚，已关闭的项目或执行禁止修改。';
 
 $lang->programplan->milestoneList[1] = '是';
 $lang->programplan->milestoneList[0] = '否';

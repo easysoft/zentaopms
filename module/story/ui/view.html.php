@@ -98,14 +98,8 @@ if($story->files)
 /* 子需求列表。 Children list. */
 if($story->children)
 {
-    $cols['id']         = $config->story->dtable->fieldList['id'];
-    $cols['title']      = $config->story->dtable->fieldList['title'];
-    $cols['pri']        = $config->story->dtable->fieldList['pri'];
-    $cols['assignedTo'] = $config->story->dtable->fieldList['assignedTo'];
-    $cols['estimate']   = $config->story->dtable->fieldList['estimate'];
-    $cols['status']     = $config->story->dtable->fieldList['status'];
-    if($this->config->vision != 'lite') $cols['stage'] = $config->story->dtable->fieldList['stage'];
-    $cols['actions']    = $config->story->dtable->fieldList['actions'];
+    $cols = $this->loadModel('datatable')->getSetting('story', 'children');
+
     $cols['title']['title']      = $lang->story->name;
     $cols['id']['checkbox']      = false;
     $cols['actions']['minWidth'] = 200;
@@ -114,7 +108,9 @@ if($story->children)
         $cols['title']['data-toggle'] = 'modal';
         $cols['title']['data-size']   = 'lg';
     }
+
     if(!hasPriv('story', 'view')) unset($cols['title']['link']);
+    if($this->config->vision == 'lite') unset($cols['stage']);
 
     if(($story->type == 'story' && $config->vision == 'or') || ($story->vision == 'or' && $config->vision == 'rnd')) unset($cols['actions']);
 
@@ -127,7 +123,9 @@ if($story->children)
     (
         'title'        => $lang->story->children,
         'control'      => 'dtable',
+        'methodName'   => 'children',
         'id'           => 'table-story-children',
+        'customCols'   => true,
         'cols'         => $cols,
         'userMap'      => $users,
         'data'         => array_values($story->children),

@@ -82,7 +82,7 @@ $task->execution->range('2');
 $task->story->range('0');
 $task->name->range('1-100');
 $task->type->range('devel');
-$task->consumed->range('0, 2{9}');
+$task->consumed->range('0, 2{3}, 0, 2{6}');
 $task->left->range('0, 1, 0, 1{7}');
 $task->deadline->range(' (-5D)-(-4D):1D, []{11}')->type('timestamp')->format('YY/MM/DD');
 $task->status->range('wait, doing, done, pause{5}, cancel, closed');

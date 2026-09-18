@@ -216,7 +216,7 @@ div
                 ),
                 div
                 (
-                    set::className('detail-content mt-4 overflow-hidden desc-box'),
+                    set::className('detail-content mt-4 overflow-hidden desc-box overflow-y-scroll scrollbar-thin scrollbar-hover'),
                     set::title(strip_tags($product->desc)),
                     html($product->desc)
                 )

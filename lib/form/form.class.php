@@ -215,7 +215,10 @@ class form extends fixer
         {
             foreach($fieldList as $key => $field)
             {
-                if($field->buildin || !$field->show || !isset($layouts[$field->field])) continue;
+                if(!$field->show || !isset($layouts[$field->field])) continue;
+                /* 页面原有的内置字段已经在表单配置里，不用重复追加；页面原本没有的内置字段需要按工作流配置追加，否则提交的数据会被丢弃。*/
+                if($field->buildin && isset($configObject[$field->field])) continue;
+                if(in_array($field->field, zget($config->workflow->layoutFields, $flow->module, array()))) continue;
                 if($field->control == 'file') continue;
 
                 $required = !$field->readonly && $notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false;

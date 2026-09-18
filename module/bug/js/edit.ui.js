@@ -17,15 +17,9 @@ function changeResolvedBuild(event)
 
 function changeResolution(event)
 {
-    const resolution = $(event.target).val();
-    if(resolution == 'duplicate')
-    {
-        $('[name=duplicateBug]').closest('tr').removeClass('hidden');
-    }
-    else
-    {
-        $('[name=duplicateBug]').closest('tr').addClass('hidden');
-    }
+    const $target = $(event.target);
+    const resolution = $target.val();
+    $target.closest('form').find('.form-row[data-name="duplicateBug"]').toggleClass('hidden', resolution != 'duplicate');
 }
 
 function linkBug()

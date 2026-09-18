@@ -45,9 +45,11 @@ $lang->testcase->real             = '实际情况';
 $lang->testcase->keywords         = '关键词';
 $lang->testcase->files            = '附件';
 $lang->testcase->linkCase         = '相关用例';
+$lang->testcase->relatedCase      = '相关用例';
 $lang->testcase->linkCases        = '关联相关用例';
 $lang->testcase->unlinkCase       = '移除相关用例';
 $lang->testcase->linkBug          = '相关Bug';
+$lang->testcase->relatedBug       = '相关Bug';
 $lang->testcase->linkBugs         = '关联相关Bug';
 $lang->testcase->unlinkBug        = '移除相关Bug';
 $lang->testcase->stage            = '适用环节';
@@ -106,6 +108,7 @@ $lang->testcase->allType          = '所有类型';
 $lang->testcase->automated        = '自动化';
 $lang->testcase->automation       = '自动化设置';
 $lang->testcase->runCase          = '执行';
+$lang->testcase->expects          = '预期';
 
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
@@ -115,6 +118,7 @@ $lang->testcase->stepExpect        = '预期';
 $lang->testcase->stepVersion       = '版本';
 $lang->testcase->stepSameLevel     = '同级';
 $lang->testcase->stepSubLevel      = '子级';
+$lang->testcase->stepTable         = '执行步骤';
 $lang->testcase->expectDisabledTip = '分层级后不可填写预期';
 $lang->testcase->deleteStepTip     = '此步骤含有层级，无法删除';
 $lang->testcase->dragNestedTip     = '最多支持三层嵌套，无法拖拽到此处';

@@ -591,21 +591,24 @@ class mailModel extends model
         $action     = $this->mailTao->getActionForMail($actionID);
         $objectType = $action->objectType;
         $object     = $this->mailTao->getObjectForMail($objectType, $objectID);
-        $title      = $this->mailTao->getObjectTitle($object, $objectType);
-        $subject    = $this->mailTao->getSubject($objectType, $object, $title, $action->action);
+        $title      = $object ? $this->mailTao->getObjectTitle($object, $objectType) : '';
+        $subject    = $object ? $this->getSubject($objectType, $object, $title, $action->action) : '';
         $domain     = zget($this->config->mail, 'domain', common::getSysURL());
         $domain     = rtrim($domain, '/');
 
         if(empty($title)) $action->appendLink = '';
         if($title and $action->appendLink) $action->appendLink = html::a($domain . helper::createLink($action->objectType, 'view', "id={$action->appendLink}"), "#{$action->appendLink} {$title}");
 
+        if($objectType == 'story' && isset($object->type)) $objectType = $object->type;
         if($objectType == 'kanbancard') $objectType = 'kanban';
-        $addressees = $this->mailTao->getAddressees($objectType, $object, $action);
+        $addressees = $object ? $this->mailTao->getAddressees($objectType, $object, $action) : '';
         if(!$addressees) return;
         list($toList, $ccList) = $addressees;
 
         if($objectType == 'review') $this->app->loadLang('baseline');
 
+        $users       = $this->loadModel('user')->getPairs('noletter|noclosed|noempty');
+        $subject     = $this->loadModel('message')->buildNoticeTextByAccount('', $object, $action->action, $action->id, $objectType, $subject, 'other', $users, true);
         $emails      = array();
         $mailContent = $this->mailTao->getMailContent($objectType, $object, $action);
 
@@ -628,41 +631,7 @@ class mailModel extends model
      */
     public function getSubject(string $objectType, object $object, string $title, string $actionType): string
     {
-        $suffix    = '';
-        $subject   = '';
-        $titleType = 'edit';
-
-        if($objectType == 'testtask')
-        {
-            $this->app->loadLang('testtask');
-
-            if($actionType == 'opened') $titleType = 'create';
-            if($actionType == 'closed') $titleType = 'close';
-            return sprintf($this->lang->testtask->mail->{$titleType}->title, $this->app->user->realname, $object->id, $object->name);
-        }
-
-        if($objectType == 'doc')
-        {
-            $this->app->loadLang('doc');
-
-            if($actionType == 'releaseddoc') $titleType = 'releasedDoc';
-            return sprintf($this->lang->doc->mail->{$titleType}->title, $this->app->user->realname, $object->id, $object->title);
-        }
-
-        if($objectType == 'story' or $objectType == 'bug')
-        {
-            $product = empty($object->product) ? false : $this->loadModel('product')->getById($object->product);
-            $suffix  = $product ? ' - ' . $product->name : '';
-        }
-        if($objectType == 'task')
-        {
-            $execution = empty($object->execution) ? false : $this->loadModel('execution')->getById($object->execution);
-            $suffix    = $execution ? ' - ' . $execution->name : '';
-        }
-
-        if($objectType == 'story') $objectType = $object->type; // 业务需求和用户需求的邮件标题不同。
-
-        return strtoupper($objectType) . ' #' . $object->id . ' ' . $title . $suffix;
+        return ' #' . $object->id . '::' . $title;
     }
 
     /**

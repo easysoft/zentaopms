@@ -274,17 +274,6 @@ class buildZen extends build
             ->setDefault('createdBy', $this->app->user->account)
             ->get();
 
-        if($newSystem && $this->post->systemName)
-        {
-            $system = new stdclass();
-            $system->name        = trim($this->post->systemName);
-            $system->product     = $this->post->product;
-            $system->createdBy   = $this->app->user->account;
-            $system->createdDate = helper::now();
-
-            $formData->system = $this->loadModel('system')->create($system);
-        }
-
         return $formData;
     }
 

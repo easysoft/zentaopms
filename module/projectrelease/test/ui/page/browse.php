@@ -13,7 +13,7 @@ class browsePage extends page
             'releaseSubmit'       => "//*[@id='zin_projectrelease_publish_form']/div[4]/div/button/span",
             'terminateBtn'        => "//*[@class='dtable-cell-content']/nav/a[3]/i",
             'terminateConfirm'    => "//*[@class='modal-dialog']/div/div[3]/nav/button[1]/span",
-            'activeBtn'           => "//*[@class='toolbar']/a[3]/i",
+            'activeBtn'           => "//*[@id='projectreleases']/div[2]/div[3]/div/div/div/nav/a[1]/i",
             'activeConfirm'       => "//*[@class='modal-dialog']/div/div[3]/nav/button[1]/span",
             'releaseName'         => "//*[@id='projectreleases']/div[2]/div[1]/div/div[3]/div",
             'releaseNameBrowse'   => "//*[@id='projectreleases']/div[2]/div[1]/div/div[3]/div/a",

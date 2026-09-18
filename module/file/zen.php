@@ -126,7 +126,7 @@ class fileZen extends file
         if(!$file) return array('result' => 'fail', 'code' => 404, 'message' => $this->lang->file->fileNotFound);
 
         $data = fixer::input('post')->get();
-        if(validater::checkLength($data->fileName, 80, 1) == false) return array('result' => 'fail', 'message' => sprintf($this->lang->error->length[1], $this->lang->file->title, 80, 1));
+        if(!validater::checkLength($data->fileName, 80, 1)) return array('result' => 'fail', 'message' => sprintf($this->lang->error->length[1], $this->lang->file->title, 80, 1));
 
         $fileName = $data->fileName;
         if(isset($data->extension))

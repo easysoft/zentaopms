@@ -39,7 +39,7 @@ $build = new buildModelTest();
 r($build->createTest($normalExecution)) && p('name')      && e('新增版本一');            //敏捷执行新增版本
 r($build->createTest($waterallBuild))   && p('product')   && e('2');                     //瀑布执行新增版本
 r($build->createTest($kanbanBuild))     && p('builder')   && e('dev10');                 //看板执行新增版本
-r($build->createTest($normalExecution)) && p('name:0')    && e('『名称』已经有『新增版本一』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。');//重复名称测试
+r($build->createTest($normalExecution)) && p('name')      && e('『名称』已经有『新增版本一』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。');//重复名称测试
 r($build->createTest($noName))          && p('name:0')    && e('『名称』不能为空。');//名称为空测试
 r($build->createTest($noProduct))       && p('product:0') && e('『所属产品』不能为空。');    //产品为空测试
 r($build->createTest($noBuilder))       && p('builder:0') && e('『构建者』不能为空。');  //构建者为空测试

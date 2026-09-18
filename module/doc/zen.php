@@ -872,6 +872,7 @@ class docZen extends doc
         $this->view->productID      = $doc->product;
         $this->view->projectID      = $doc->project;
         $this->view->executionID    = $doc->execution;
+        $this->view->versionMarkers = $this->doc->getVersionMarkers($docID);
     }
 
     /**

@@ -21,7 +21,7 @@ class taskExecutionTester extends tester
         if(!in_array($tab, $params)) $form->dom->more->click();
         $form->wait(1);
         $form->dom->$tab->click();
-        $form->wait(1);
+        $form->wait(3);
         $form->dom->xpath['numInLite'] = $form->dom->xpath[$tab] . '/span[2]';
         if(!in_array($tab, $params)) $form->dom->xpath['numInLite'] =  "//*[@id='featureBar']/menu/li[7]/a/span[2]";
         if($form->dom->numInLite->getText() == $expectNum) return $this->success($tab . '下显示条数正确');

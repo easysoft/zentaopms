@@ -285,8 +285,13 @@ class cron extends control
             {
                 if($setting->value < $expirDate)
                 {
-                    $this->dao->delete()->from(TABLE_CONFIG)->where('id')->eq($setting->id)->exec();
-                    continue;
+                    /* 心跳过期但名下仍有 doing 任务：可能正在执行长任务，保留名额，避免替换风暴。 */
+                    $doing = $this->dao->select('id')->from(TABLE_QUEUE)->where('status')->eq('doing')->andWhere('execId')->eq($setting->key)->fetch();
+                    if(!$doing)
+                    {
+                        $this->dao->delete()->from(TABLE_CONFIG)->where('id')->eq($setting->id)->exec();
+                        continue;
+                    }
                 }
                 $consumers[$setting->key] = $setting->key;
             }
@@ -327,6 +332,9 @@ class cron extends control
             $cron->datetime = isset($tasks[$cron->id]) ? $tasks[$cron->id]->datetime : '1970-01-01';
         }
 
+        /* 一次性查询已有 wait/doing 任务的 cron，避免循环内逐条查询。 */
+        $pendingCrons = $this->dao->select('`cron`')->from(TABLE_QUEUE)->where('status')->in(array('wait', 'doing'))->fetchPairs('cron', 'cron');
+
         $parsedCrons = $this->cron->parseCron($crons);
         $now         = date(DT_DATETIME1);
 
@@ -342,13 +350,33 @@ class cron extends control
             /* Check time. */
             if($now < $cron['time']->format(DT_DATETIME1)) continue;
 
+            /* 该 cron 已有排队/执行中的任务则跳过，避免重复入队。 */
+            if(isset($pendingCrons[$id])) continue;
+
             /* Push task into queue. */
             $task = new stdclass();
             $task->cron        = $id;
             $task->type        = $crons[$id]->type;
             $task->command     = $cron['command'];
+            $task->pending     = 1;
             $task->createdDate = $now;
-            $this->dao->insert(TABLE_QUEUE)->data($task)->exec();
+
+            /* 唯一索引 (cron, pending) 兜底并发：唯一键冲突转为可捕获异常，确认后跳过。 */
+            $oldThrowError = $this->app->throwError;
+            $this->app->throwError = true;
+            try
+            {
+                $this->dao->insert(TABLE_QUEUE)->data($task)->exec();
+            }
+            catch(Exception $e)
+            {
+                $pending = $this->dao->select('id')->from(TABLE_QUEUE)->where('cron')->eq($id)->andWhere('status')->in(array('wait', 'doing'))->fetch();
+                if(!$pending) $this->cron->logCron(date('G:i:s') . " schedule cron #{$id} insert failed: " . $e->getMessage() . "\n");
+            }
+            finally
+            {
+                $this->app->throwError = $oldThrowError;
+            }
 
             $log = date('G:i:s') . " schedule\ncronId: $id\nexecId: $execId\noutput: push task to queue\n\n";
             $this->cron->logCron($log);
@@ -394,6 +422,7 @@ class cron extends control
         {
             $affectedRows = $this->dao->update(TABLE_QUEUE)
                 ->set('status')->eq('doing')->set('execId')->eq($execId)
+                ->set('startedDate')->eq(date(DT_DATETIME1))
                 ->where('id')->eq($task->id)
                 ->andWhere('status')->eq('wait')
                 ->andWhere('execId')->eq('0')
@@ -451,7 +480,7 @@ class cron extends control
             }
         }
 
-        $this->dao->update(TABLE_QUEUE)->set('status')->eq('done')->where('id')->eq($task->id)->exec();
+        $this->dao->update(TABLE_QUEUE)->set('status')->eq('done')->set('pending')->eq(null)->where('id')->eq($task->id)->exec();
         $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('id')->eq($task->cron)->exec();
 
         $log = date('G:i:s') . " execute\ncronId: {$task->cron}\nexecId: $execId\ntaskId: {$task->id}\ncommand: {$task->command}\nreturn : $return\noutput : $output\n\n";

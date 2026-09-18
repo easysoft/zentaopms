@@ -15,9 +15,22 @@ jsVar('docID', $docID);
 if(!isInModal()) include 'lefttree.html.php';
 
 $versionList = array();
+$versionMarkers = isset($versionMarkers) ? $versionMarkers : array();
 for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--)
 {
-    $versionList[] = array('text' => "#$itemVersion", 'url' => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"), 'key' => $itemVersion, 'active' => $itemVersion == $version);
+    $versionText = "#$itemVersion";
+    $versionHtml = $versionText;
+    if(!empty($versionMarkers[$itemVersion]['deliverable'])) $versionHtml .= " <span class='label rounded-full size-sm outline m-1' title='{$lang->project->deliverableAbbr}'>{$lang->project->deliverableAbbr}</span>";
+    if(!empty($versionMarkers[$itemVersion]['baseline']))    $versionHtml .= " <span class='label rounded-full size-sm outline m-1' title='{$lang->project->baseline}'>{$lang->project->baseline}</span>";
+
+    $versionList[] = array
+    (
+        'text'    => $versionText,
+        'content' => array('html' => $versionHtml),
+        'url'     => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"),
+        'key'     => $itemVersion,
+        'active'  => $itemVersion == $version
+    );
 }
 
 $canCollect = hasPriv('doc', 'collect') && !$doc->deleted;

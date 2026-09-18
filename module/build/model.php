@@ -521,7 +521,25 @@ class buildModel extends model
                 dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
             }
         }
+        if(!empty($build->name))
+        {
+            $hasSameName = $this->dao->select('id')->from(TABLE_BUILD)->where('deleted')->eq(0)->andWhere('name')->eq($build->name)->andWhere('product')->eq($build->product)->andWhere('branch')->eq($build->branch)->fetch('id');
+            if($hasSameName) dao::$errors['name'] = sprintf($this->lang->error->unique, $this->lang->build->name, $build->name);
+        }
         if(dao::isError()) return false;
+
+        if($this->post->newSystem && $this->post->systemName)
+        {
+            $system = new stdclass();
+            $system->name        = trim($this->post->systemName);
+            $system->product     = $build->product;
+            $system->createdBy   = $this->app->user->account;
+            $system->createdDate = helper::now();
+
+            $systemID = $this->loadModel('system')->create($system);
+            if(dao::isError()) return false;
+            $build->system = $systemID;
+        }
 
         /* Process and insert build data. */
         $requiredFields = $this->config->build->create->requiredFields;
@@ -532,7 +550,6 @@ class buildModel extends model
         $this->dao->insert(TABLE_BUILD)->data($build)
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
-            ->check('name', 'unique', "product = {$build->product} AND branch = '{$build->branch}' AND deleted = '0'")
             ->checkFlow()
             ->exec();
         if(dao::isError()) return false;

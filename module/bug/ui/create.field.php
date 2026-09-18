@@ -3,11 +3,15 @@ namespace zin;
 
 global $lang, $app, $config;
 
+$app->loadLang('build');
+$app->loadLang('release');
+
 $isShadowProduct   = data('product.shadow');
 $noMultipleProject = (string)data('project.multiple') === '0';
 $isOriginalProduct = (int)data('bug.productID') === (int)data('productID');
-$resultFiles       = data('resultFiles');
-$copyFiles         = data('bug.files');
+$resultFiles       = data('resultFiles') ?: array();
+$copyFiles         = data('bug.files') ?: array();
+$builds            = data('builds') ?: array();
 $files             = $copyFiles ? array_values($copyFiles) : array_values($resultFiles);
 
 $productID   = (int)data('bug.productID');
@@ -39,16 +43,16 @@ $fields = defineFieldList('bug.create', 'bug');
 
 $fields->field('product')->hidden($isShadowProduct && $isOriginalProduct);
 
-$fields->field('deadline')->className($isShadowProduct && $isOriginalProduct ? 'w-1/2' : 'w-1/4')->className('full:w-1/2');
+$fields->field('deadline')->width($isShadowProduct && $isOriginalProduct ? '1/2' : '1/4')->className('full:w-1/2');
 
 $fields->field('project')
-     ->className($noMultipleProject ? 'w-1/2' : 'w-1/4')
+     ->width($noMultipleProject ? '1/2' : '1/4')
      ->className($isShadowProduct  ? 'full:w-1/2' : 'full:w-1/4');
 
  $fields->field('execution')
      ->label(data('project.model') === 'kanban' ? $lang->bug->kanban : $lang->bug->execution)
      ->hidden($noMultipleProject)
-     ->className('w-1/4')
+     ->width('1/4')
      ->className($isShadowProduct  ? 'full:w-1/2' : 'full:w-1/4');
 
 $fields->field('plan')
@@ -64,21 +68,22 @@ if(common::hasPriv('build', 'create'))
         ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal', 'id' => 'createBuild', 'data-size' => 'lg'))
         ->text($lang->build->create)->hint($lang->build->create)
         ->url(createLink('build', 'create', 'executionID=' . data('executionID') . '&productID=' . data('bug.productID') . '&projectID=' . data('projectID')))
-        ->className(count(data('builds')) > 1 || !data('executionID') ? 'hidden' : '')
+        ->className(count($builds) > 1 || !data('executionID') ? 'hidden' : '')
         ->itemEnd();
 }
 
 if(common::hasPriv('release', 'create') && !common::isTutorialMode())
 {
     $fields->field('openedBuild')
+        ->required(true)
         ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal', 'data-size' => 'lg','id' => 'createRelease'))
         ->text($lang->release->create)->hint($lang->release->create)
         ->url(createLink('release', 'create', 'productID=' . data('bug.productID') . '&branch=' . data('bug.branch') . '&status=normal'))
-        ->className(count(data('builds')) > 1 || data('executionID') ? 'hidden' : '')
+        ->className(count($builds) > 1 || data('executionID') ? 'hidden' : '')
         ->itemEnd();
 }
 
-$fields->field('title')->className($isShadowProduct ? 'full:w-1/2' : 'full:w-full');
+$fields->field('title')->required(true)->width('1/2')->className($isShadowProduct ? 'full:w-1/2' : 'full:w-full');
 
 $fields->field('steps')
     ->width('full')
@@ -114,12 +119,12 @@ $fields->field('mailto')->foldable();
 
 $fields->field('keywords')->foldable();
 
-$fields->field('module')->className($isShadowProduct && $isOriginalProduct ? 'w-1/2' : 'w-1/4')->className('full:w-1/2');
+$fields->field('module')->width($isShadowProduct && $isOriginalProduct ? '1/2' : '1/4')->className('full:w-1/2');
 
-$fields->field('openedBuild')->className('w-1/4')->className('full:w-1/2');
+$fields->field('openedBuild')->width('1/4')->className('full:w-1/2');
 
-$fields->field('assignedTo')->className('w-1/4')->className('full:w-1/2');
+$fields->field('assignedTo')->width('1/4')->className('full:w-1/2');
 
-$fields->field('fileList')->control('hidden')->value($copyFiles ? $copyFiles : $resultFiles);
+$fields->field('fileList')->label($lang->bug->copyFiles)->control('hidden')->value($copyFiles ? $copyFiles : $resultFiles);
 
 if($isShadowProduct && !$isOriginalProduct) $fields->moveAfter('module', 'product');

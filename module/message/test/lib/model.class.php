@@ -170,8 +170,8 @@ class messageModelTest extends baseTest
     }
 
     /**
-     * 测试获取要发送的人列表。
-     * Test get toList.
+     * 测试获取要发送人和抄送人列表。
+     * Test get toList and ccList.
      *
      * @param  string        $objectType
      * @param  int           $objectID
@@ -179,12 +179,12 @@ class messageModelTest extends baseTest
      * @access public
      * @return string|array
      */
-    public function getToListTest(string $objectType, int $objectID, int $actionID): string|array
+    public function getToAndCcListTest(string $objectType, int $objectID, int $actionID): string|array
     {
         global $tester;
         $table  = $tester->config->objectTables[$objectType];
         $object = $tester->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
-        $toList = $this->instance->getToList($object, $objectType, $actionID);
+        $list   = $this->instance->getToAndCcList($object, $objectType, $actionID);
 
         if(dao::isError())
         {
@@ -192,7 +192,53 @@ class messageModelTest extends baseTest
             return is_string($error) ? $error : 'dao_error';
         }
 
-        return trim($toList, ',');
+        return trim(implode(',', $list), ',');
+    }
+
+    /**
+     * 测试构建消息标题。
+     * Test build notice title.
+     *
+     * @param  string $objectType
+     * @param  string $actionType
+     * @param  string $account
+     * @param  object $object
+     * @param  string $role
+     * @param  array  $users
+     * @access public
+     * @return string
+     */
+    public function buildNoticeTitleTest(string $objectType, string $actionType, string $account, object $object, string $role = 'to', array $users = array()): string
+    {
+        $title = $this->instance->buildNoticeTitle($objectType, $actionType, $account, $object, $role, $users);
+
+        if(dao::isError()) return dao::getError();
+
+        return $title;
+    }
+
+    /**
+     * 测试构建通知内容。
+     * Test build notice text by account.
+     *
+     * @param  string $account
+     * @param  object $object
+     * @param  string $actionType
+     * @param  int    $actionID
+     * @param  string $objectType
+     * @param  string $objectTitle
+     * @param  string $role
+     * @param  array  $users
+     * @access public
+     * @return string
+     */
+    public function buildNoticeTextByAccountTest(string $account, object $object, string $actionType, int $actionID, string $objectType, string $objectTitle, string $role = 'to', array $users = array()): string
+    {
+        $text = $this->instance->buildNoticeTextByAccount($account, $object, $actionType, $actionID, $objectType, $objectTitle, $role, $users);
+
+        if(dao::isError()) return dao::getError();
+
+        return $text;
     }
 
     /**

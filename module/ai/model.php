@@ -3633,7 +3633,7 @@ class aiModel extends model
             elseif($displayPosition === 'detail')
             {
                 $entryModule = $reverseModuleMap[$prompt->module] ?? $prompt->module;
-                if(!commonModel::hasPriv($entryModule, 'view'))
+                if(!commonModel::hasPriv($entryModule, $entryModule == 'feedback' ? 'adminView' : 'view'))
                 {
                     if($keepUnauthorized) $prompts[$idx]->unauthorized = true;
                     else unset($prompts[$idx]);

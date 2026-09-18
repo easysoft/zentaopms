@@ -32,10 +32,11 @@ $buildMessageList = function($messageGroup) use ($lang)
         {
             $isUnread = $message->status != 'read';
             $dotColor = $isUnread ? 'danger' : 'gray';
+            $subject  = !empty($message->subject) ? $message->subject : $lang->message->browser;
 
             $liHtml  = "<li class='message-item break-all border rounded-lg p-2 mt-2 " . ($isUnread ? 'unread' : '') . "' data-msgid='{$message->id}'>";
             $liHtml .= "<div class='row text-gray justify-between'>";
-            $liHtml .= "<div class='cell'><span class='label label-dot {$dotColor} mr-2'></span>{$lang->message->browser}</div>";
+            $liHtml .= "<div class='cell'><span class='label label-dot {$dotColor} mr-2'></span>{$subject}</div>";
             $liHtml .= "<div class='cell'>{$message->showTime}<i class='icon icon-close ml-2 cursor-pointer delete-message-btn'></i></div>";
             $liHtml .= "</div>";
             $liHtml .= "<div class='pt-1'>{$message->data}</div>";

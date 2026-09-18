@@ -89,10 +89,10 @@ class createExecutionTester extends tester
         if(!isset($currentVision) || $currentVision != 'lite') $this->switchVision('lite');
         $this->inputFields($execution);
 
-        /* 创建成功会跳转至看板列表全部标签下，从url中获取status字段内容 */
+        /* 创建成功会跳转至看板列表全部标签下，从url中获取browseType字段内容 */
         $form = $this->loadPage();
         $form->wait(3);
-        $url = explode('status=', $this->response('url'));
+        $url = explode('browseType=', $this->response('url'));
         /* 根据url中是否包含status,判断是否创建成功 */
         if(!isset($url[1]))
         {

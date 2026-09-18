@@ -1106,6 +1106,14 @@ class baseControl
         helper::import($commonFieldFile);
         helper::import($methodFieldFile);
 
+        /* 加载扩展的 field hook 文件。Load extension field hook files. */
+        $lowerMethodName    = strtolower($methodName);
+        $viewExtPath        = $this->app->getModuleExtPath($moduleName, 'ui');
+        $commonExtHookFiles = empty($viewExtPath['common']) ? array() : glob($viewExtPath['common'] . $lowerMethodName . ".*.field.hook.php");
+        $siteExtHookFiles   = empty($viewExtPath['site'])   ? array() : glob($viewExtPath['site']   . $lowerMethodName . ".*.field.hook.php");
+        $extHookFiles       = array_merge((array)$commonExtHookFiles, (array)$siteExtHookFiles);
+        foreach($extHookFiles as $extHookFile) helper::import($extHookFile);
+
         $this->setResponseHeader();
 
         ob_start();

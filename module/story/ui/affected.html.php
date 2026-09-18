@@ -41,8 +41,6 @@ if($story->type == 'story' && $story->isParent == '0')
         return formGroup
         (
             setClass('w-full'),
-            set::label($lang->story->checkAffection),
-            set::required(false),
             tabs
             (
                 setClass('w-full'),
@@ -102,8 +100,6 @@ else
         return formGroup
         (
             setClass('w-full'),
-            set::label($lang->story->checkAffection),
-            set::required(false),
             tabs
             (
                 setClass('w-full'),

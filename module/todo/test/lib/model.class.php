@@ -787,4 +787,19 @@ class todoModelTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test getToAndCcList method.
+     *
+     * @param  object $todo
+     * @access public
+     * @return array|false
+     */
+    public function getToAndCcListTest(object $todo): array|false
+    {
+        $result = $this->instance->getToAndCcList($todo);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

@@ -52,3 +52,17 @@ DELETE FROM `zt_queue` WHERE `command` = 'moduleName=instance&methodName=cronCle
 
 DELETE FROM `zt_cron` WHERE `command` = 'moduleName=instance&methodName=syncGitFoxData';
 DELETE FROM `zt_queue` WHERE `command` = 'moduleName=instance&methodName=syncGitFoxData';
+
+ALTER TABLE `zt_queue` ADD COLUMN `pending` tinyint unsigned NULL DEFAULT NULL COMMENT '待处理标记：1 表示该 cron 已有 wait/doing 任务，NULL 表示已完成' AFTER `status`;
+ALTER TABLE `zt_queue` ADD COLUMN `startedDate` datetime DEFAULT NULL COMMENT '任务开始执行时间，用于超时自愈' AFTER `createdDate`;
+CREATE UNIQUE INDEX `uk_cron_pending` ON `zt_queue` (`cron`, `pending`);
+
+ALTER TABLE `zt_cron` ADD COLUMN `timeout` smallint unsigned NOT NULL DEFAULT 0 COMMENT '单次执行超时时间（秒），0 表示使用系统默认配置' AFTER `lastTime`;
+
+UPDATE `zt_queue` SET `status` = 'done', `pending` = NULL, `startedDate` = NULL WHERE `status` IN ('wait', 'doing');
+UPDATE `zt_queue` SET `pending` = 1 WHERE `status` IN ('wait', 'doing') AND `pending` IS NULL;
+
+UPDATE `zt_cron` SET `timeout` = 7200 WHERE `timeout` = 0 AND `command` LIKE 'moduleName=metric&methodName=updateMetricLib';
+UPDATE `zt_cron` SET `timeout` = 3600 WHERE `timeout` = 0 AND `command` LIKE 'moduleName=metric&methodName=updateDashboardMetricLib';
+UPDATE `zt_cron` SET `timeout` = 3600 WHERE `timeout` = 0 AND `command` LIKE 'moduleName=backup&methodName=backup';
+UPDATE `zt_cron` SET `timeout` = 300  WHERE `timeout` = 0;

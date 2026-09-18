@@ -72,16 +72,16 @@ $config->story->form->edit['renameFiles']    = array('type' => 'array',   'contr
 $config->story->form->edit['comment']        = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '');
 
 $config->story->form->batchCreate = array();
-$config->story->form->batchCreate['branch']     = array('ditto' => true,  'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '200px', 'default' => 0,  'options' => array());
+$config->story->form->batchCreate['branch']     = array('ditto' => true,  'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '200px', 'default' => 0,  'options' => array(), 'layout' => false);
 $config->story->form->batchCreate['module']     = array('ditto' => true,  'type' => 'int',    'control' => array('control' => 'picker', 'required' => true), 'required' => false, 'width' => '200px', 'default' => 0,  'options' => array());
 $config->story->form->batchCreate['plan']       = array('ditto' => true,  'type' => 'array',  'control' => 'select',    'required' => false, 'width' => '200px', 'default' => 0,  'options' => array(), 'filter' => 'join');
 $config->story->form->batchCreate['parent']     = array('ditto' => true,  'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '200px', 'default' => 0,  'options' => array());
 $config->story->form->batchCreate['grade']      = array('ditto' => true,  'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '136px', 'default' => 1,  'options' => array());
 $config->story->form->batchCreate['assignedTo'] = array('ditto' => false, 'type' => 'string', 'control' => 'select',    'required' => false, 'width' => '136px', 'default' => '', 'options' => 'users');
-$config->story->form->batchCreate['region']     = array('ditto' => false, 'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '136px', 'default' => 0,  'options' => array());
-$config->story->form->batchCreate['lane']       = array('ditto' => false, 'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '136px', 'default' => 0,  'options' => array());
+$config->story->form->batchCreate['region']     = array('ditto' => false, 'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '136px', 'default' => 0,  'options' => array(), 'layout' => false);
+$config->story->form->batchCreate['lane']       = array('ditto' => false, 'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '136px', 'default' => 0,  'options' => array(), 'layout' => false);
 $config->story->form->batchCreate['title']      = array('ditto' => false, 'type' => 'string', 'control' => 'text',      'required' => true,  'width' => '240px', 'default' => '', 'filter'  => 'trim', 'base' => true);
-$config->story->form->batchCreate['color']      = array('ditto' => false, 'type' => 'string', 'control' => 'text',      'required' => false,                     'default' => '', 'filter'  => 'trim');
+$config->story->form->batchCreate['color']      = array('ditto' => false, 'type' => 'string', 'control' => 'text',      'required' => false,                     'default' => '', 'filter'  => 'trim', 'layout' => false);
 $config->story->form->batchCreate['spec']       = array('ditto' => false, 'type' => 'string', 'control' => 'textarea',  'required' => false, 'width' => '240px', 'default' => '');
 $config->story->form->batchCreate['source']     = array('ditto' => true,  'type' => 'string', 'control' => 'select',    'required' => false, 'width' => '200px', 'default' => '', 'options' => $lang->story->sourceList);
 $config->story->form->batchCreate['sourceNote'] = array('ditto' => false, 'type' => 'string', 'control' => 'text',      'required' => false, 'width' => '200px', 'default' => '', 'filter'  => 'trim');
@@ -94,12 +94,12 @@ $config->story->form->batchCreate['keywords']   = array('ditto' => false, 'type'
 $config->story->form->batchCreate['mailto']     = array('ditto' => false, 'type' => 'array',  'control' => 'select',    'required' => false, 'width' => '200px', 'default' => array(''), 'multiple' => true, 'options' => 'users', 'filter' => 'join');
 
 $config->story->form->batchEdit = array();
-$config->story->form->batchEdit['branch']       = array('type' => 'string', 'width' => '200px', 'control' => 'picker', 'required' => false, 'default' => '', 'options' => array());
+$config->story->form->batchEdit['branch']       = array('type' => 'string', 'width' => '200px', 'control' => 'picker', 'required' => false, 'default' => '', 'options' => array(), 'layout' => false);
 $config->story->form->batchEdit['module']       = array('type' => 'int',    'width' => '200px', 'control' => array('control' => 'picker', 'required' => true), 'required' => false, 'default' => 0, 'options' => array());
 $config->story->form->batchEdit['roadmap']      = array('type' => 'int',    'width' => '200px', 'control' => 'picker', 'required' => false, 'default' => 0, 'options' => array());
 $config->story->form->batchEdit['plan']         = array('type' => 'array',  'width' => '200px', 'control' => 'picker', 'required' => false, 'default' => 0, 'options' => array(), 'filter' => 'join');
 $config->story->form->batchEdit['title']        = array('type' => 'string', 'width' => '240px', 'control' => array('control' => 'colorInput', 'inputClass' => 'filter-none'), 'required' => true,  'filter'  => 'trim', 'base' => true);
-$config->story->form->batchEdit['color']        = array('type' => 'string',                     'control' => 'color',  'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->story->form->batchEdit['color']        = array('type' => 'string',                     'control' => 'color',  'required' => false, 'default' => '', 'filter'  => 'trim', 'layout' => false);
 $config->story->form->batchEdit['estimate']     = array('type' => 'float',  'width' => '76px',  'control' => 'text',   'required' => false, 'default' => '0');
 $config->story->form->batchEdit['category']     = array('type' => 'string', 'width' => '160px', 'control' => 'picker', 'required' => false, 'default' => 'feature', 'options' => array_filter($lang->story->categoryList));
 $config->story->form->batchEdit['pri']          = array('type' => 'string', 'width' => '110px', 'control' => array('control' => 'picker', 'required' => true), 'required' => false, 'default' => $config->story->defaultPriority,  'options' => array_filter($lang->story->priList));
@@ -143,8 +143,6 @@ $config->story->form->review['closedReason']   = array('type' => 'string', 'cont
 $config->story->form->review['pri']            = array('type' => 'int',    'control' => 'priPicker',      'required' => false, 'default' => '', 'options' => $lang->story->priList);
 $config->story->form->review['estimate']       = array('type' => 'string', 'control' => 'text',           'required' => false, 'default' => '');
 $config->story->form->review['duplicateStory'] = array('type' => 'string', 'control' => 'picker',         'required' => false, 'default' => '');
-$config->story->form->review['status']         = array('type' => 'string', 'control' => 'hidden',         'required' => false, 'default' => '');
-$config->story->form->review['comment']        = array('type' => 'string', 'control' => 'editor',         'required' => false, 'default' => '');
 
 $config->story->form->activate = array();
 $config->story->form->activate['assignedTo']      = array('type' => 'string',   'required' => false, 'default' => '');

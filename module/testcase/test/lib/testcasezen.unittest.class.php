@@ -823,7 +823,7 @@ class testcaseZenTest
             // 初始化必要的配置
             if(!isset($tester->config->testcase)) $tester->config->testcase = new stdClass();
             if(!isset($tester->config->testcase->form)) $tester->config->testcase->form = new stdClass();
-            if(!isset($tester->config->testcase->form->showImport)) $tester->config->testcase->form->showImport = array();
+            if(!isset($tester->config->testcase->form->showimport)) $tester->config->testcase->form->showimport = array();
 
             // 模拟POST数据
             $_POST = array();

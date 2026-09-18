@@ -41,22 +41,22 @@ if(!empty($task->team))
 $isEn = $app->getClientLang() == 'en';
 
 $fields = useFields('task.create');
-$fields->autoLoad('execution', 'execution,type,name,assignedToBox,region,lane,module,storyBox,datePlan,pri,estimate,desc,files,mailto,keywords,after,testStoryBox');
+$fields->autoLoad('execution', 'execution,type,name,assignedTo,region,lane,module,story,datePlan,pri,estimate,desc,files,mailto,keywords,after,testStoryBox');
 
-$fields->orders('type,testStoryBox', 'type,testStoryBox,parent,assignedToBox', 'desc,module,storyBox');
-$fields->fullModeOrders('type,module,storyBox,testStoryBox', 'desc,files,mailto,keywords');
+$fields->orders('type,testStoryBox', 'type,testStoryBox,parent,assignedTo', 'desc,module,story');
+$fields->fullModeOrders('type,module,story,testStoryBox', 'desc,files,mailto,keywords');
 if($execution->type == 'kanban' || empty(data('execution.multiple')))
 {
-    $fields->orders('desc,module,storyBox', 'type,parent,assignedToBox,testStoryBox,region,lane');
-    $fields->fullModeOrders('name,assignedToBox', 'type,module,storyBox,testStoryBox', 'desc,files,mailto,keywords');
-    if(empty($features['story'])) $fields->fullModeOrders('type,module,storyBox', 'name,assignedToBox', 'desc,files,mailto,keywords');
+    $fields->orders('desc,module,story', 'type,parent,assignedTo,testStoryBox,region,lane');
+    $fields->fullModeOrders('name,assignedTo', 'type,module,story,testStoryBox', 'desc,files,mailto,keywords');
+    if(empty($features['story'])) $fields->fullModeOrders('type,module,story', 'name,assignedTo', 'desc,files,mailto,keywords');
 }
 
 if(empty($features['story']) && $execution->type != 'kanban' && !empty(data('execution.multiple')))
 {
-    $fields->fullModeOrders('type,module,storyBox,testStoryBox,parent,assignedToBox', 'desc,files,mailto,keywords');
+    $fields->fullModeOrders('type,module,story,testStoryBox,parent,assignedTo', 'desc,files,mailto,keywords');
 }
-if($execution->lifetime == 'ops') $fields->fullModeOrders('type,module,storyBox,testStoryBox,parent,name,assignedToBox', 'desc,files,mailto,keywords');
+if($execution->lifetime == 'ops') $fields->fullModeOrders('type,module,story,testStoryBox,parent,name,assignedTo', 'desc,files,mailto,keywords');
 
 formGridPanel
 (

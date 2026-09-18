@@ -22,6 +22,7 @@ unset($lang->testcase->typeList['unit']);
 $fields->field('product')
     ->hidden(data('product.shadow'))
     ->control('inputGroup')
+    ->required(true)
     ->items(false)
     ->itemBegin('product')->control('picker')->items(data('products'))->required(true)->value(data('productID'))->itemEnd()
     ->item(data('product.type') == 'normal' ? null : field('branch')->control('picker', array('required' => true))->width('100px')->items(data('branches'))->value((int)data('branch')));
@@ -51,6 +52,7 @@ $fields->field('scene')
 $fields->field('type')
     ->checkbox(helper::hasFeature('automated') ? array('id' => 'auto', 'name' => 'auto', 'text' => $lang->testcase->automated, 'checked' => data('case.auto') == 'auto' || data('onlyAutoCase')) : null)
     ->items($lang->testcase->typeList)
+    ->required(true)
     ->value(data('case.type'));
 
 $fields->field('stage')
@@ -72,6 +74,7 @@ $fields->field('script')
 
 $fields->field('title')
     ->width('5/6')
+    ->required(true)
     ->value(data('case.title'))
     ->control('colorInput', array('colorValue' => data('case.color')))
     ->checkbox(data('needReview') ? array('name' => 'needReview', 'text' => $lang->testcase->forceReview, 'checked' => true) : null);

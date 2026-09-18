@@ -93,7 +93,7 @@ $tester->login();
 
 /* 检查标签下统计数据 */
 r($tester->checkTab('allTab', '18'))       && p('status,message') && e('SUCCESS,allTab下显示条数正确');
-r($tester->checkTab('unresolvedTab', '4')) && p('status,message') && e('SUCCESS,unresolvedTab下显示条数正确');
+r($tester->checkTab('unresolvedTab', '10')) && p('status,message') && e('SUCCESS,unresolvedTab下显示条数正确');
 /* 指派bug */
 r($tester->assignTo('USER1')) && p('status,message') && e('SUCCESS,指派bug成功');
 r($tester->batchAssignTo())   && p('status,message') && e('SUCCESS,批量指派bug成功');
