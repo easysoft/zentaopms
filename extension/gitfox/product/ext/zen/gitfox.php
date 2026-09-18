@@ -46,7 +46,8 @@ public function responseAfterEdit(int $productID, int $programID): array
         $product = $this->product->fetchByID($productID);
         if($product) $this->product->updateSystemsByProduct($productID, $product->name);
 
-        $response['load'] = $this->createLink('product', 'browse');
+        $spaceID = (int)$this->get->spaceID;
+        $response['load'] = $this->createLink('product', 'browse', $spaceID ? "spaceID={$spaceID}" : '');
     }
 
     return $response;

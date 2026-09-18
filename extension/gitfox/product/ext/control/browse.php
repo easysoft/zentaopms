@@ -34,6 +34,15 @@ class myProduct extends product
     {
         if($this->config->vision != 'gitfox') return parent::browse($productID, $branch, $browseType, $param, $storyType, $orderBy, $recTotal, $recPerPage, $pageID, $projectID, $from, $blockID);
 
+        /* 从空间进入时保持空间上下文和菜单高亮。 */
+        $spaceID = (int)$this->get->spaceID;
+        if($spaceID)
+        {
+            $this->app->tab = 'space';
+            $this->loadModel('space')->setMenu($spaceID);
+            $this->config->excludeDropmenuList[] = 'product-browse';
+        }
+
         $browseType = $browseType === '' ? 'noclosed' : strtolower($browseType);
         $orderBy    = $orderBy    === '' ? 'order_desc' : $orderBy;
 
@@ -49,7 +58,7 @@ class myProduct extends product
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $products = $this->product->getProductsInGitfox($browseType, $orderBy, $keyword, $pager);
+        $products = $this->product->getProductsInGitfox($browseType, $orderBy, $keyword, $pager, $spaceID);
         $repos    = $this->loadModel('repo')->getProductRepos();
 
         foreach($products as $product)
@@ -77,6 +86,7 @@ class myProduct extends product
         $this->view->param      = $param;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pager->pageID;
+        $this->view->spaceID    = $spaceID;
 
         $this->display();
     }
