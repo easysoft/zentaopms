@@ -108,8 +108,6 @@ class storyTester extends tester
         $form->dom->value1->click();
         $form->wait(1);
         $form->dom->searchSubmitBtn->click();
-        $form->wait(1);
-
     }
 
     /**
@@ -124,7 +122,7 @@ class storyTester extends tester
     public function batchEditPhase($status, $phase)
     {
         $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
-        #$form->wait(3);
+        $form->wait(1);
         $storyStatus = $this->lang->story->statusList->$status;
         $storyPhase  = $this->lang->story->stageList->$phase;
 
