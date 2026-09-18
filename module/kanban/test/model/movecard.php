@@ -4,6 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
+zenData('kanbanlane')->gen(10);
+zenData('kanbancolumn')->gen(10);
 zenData('kanbancell')->gen(10);
 
 /**
@@ -13,7 +15,7 @@ timeout=0
 cid=16950
 
 - 将卡片1从泳道1 列1转移到泳道1 列2属性cards @,3,4,803,1,
-- 将卡片2从泳道1 列1转移到泳道1 列2属性cards @,3,4,803,1,2, 
+- 将卡片2从泳道1 列1转移到泳道1 列2属性cards @,3,4,803,1,2,
 - 将卡片3从泳道1 列2转移到泳道1 列3属性cards @,5,6,805,3,
 - 将卡片4从泳道1 列2转移到泳道1 列3属性cards @,5,6,805,3,4,
 - 将卡片5从泳道1 列3转移到泳道1 列1属性cards @,801,5,

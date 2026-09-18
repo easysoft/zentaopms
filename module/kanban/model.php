@@ -3233,9 +3233,9 @@ class kanbanModel extends model
      * @param  int    $toLaneID
      * @param  int    $kanbanID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function moveCard(int $cardID, int $fromColID, int $toColID, int $fromLaneID, int $toLaneID, int $kanbanID = 0)
+    public function moveCard(int $cardID, int $fromColID, int $toColID, int $fromLaneID, int $toLaneID, int $kanbanID = 0): bool
     {
         $groupBy = ($this->session->execGroupBy && ($this->app->tab == 'execution' || $this->config->vision == 'lite')) ? $this->session->execGroupBy : '';
 
@@ -3284,6 +3284,10 @@ class kanbanModel extends model
 
         $toLane = $this->getLaneById($toLaneID);
         $this->dao->update(TABLE_KANBANCARD)->set('group')->eq($toLane->group)->where('id')->eq($cardID)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('kanbanCard', $cardID, 'moved', '', "{$fromColID}|{$toColID}");
+        return !dao::isError();
     }
 
     /**
