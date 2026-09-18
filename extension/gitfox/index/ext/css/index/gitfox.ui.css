@@ -1,0 +1,3 @@
+#menu {display: flex; flex-direction: column;}
+#menuNav {display: flex; flex-direction: column; flex: auto;}
+#menuToggleNav {margin-top: auto;}
