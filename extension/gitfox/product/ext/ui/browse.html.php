@@ -13,8 +13,13 @@ namespace zin;
 
 jsVar('orderBy', $orderBy);
 
+$spaceID = isset($spaceID) ? (int)$spaceID : 0;
+$fields  = $config->product->dtable->fieldList;
+/* 空间下编辑应用带上 #app=space，否则前端会根据模块把页面归到“应用”一级导航下。 */
+if($spaceID && isset($fields['actions']['list']['edit'])) $fields['actions']['list']['edit']['url'] = helper::createLink('product', 'edit', "productID={id}&spaceID={$spaceID}") . '#app=space';
+
 /* 字段配置同步 product-all 的 dtable 配置。 */
-$products = initTableData($products, $config->product->dtable->fieldList, $this->product);
+$products = initTableData($products, $fields, $this->product);
 
 /* 普通搜索：按应用名称模糊查询，关键词随 URL 传递并保存到 cookie。 */
 $keyword = empty($keyword) ? '' : trim((string)$keyword);
@@ -35,6 +40,7 @@ $linkParams = array
     'from'       => 'product',
     'blockID'    => 0
 );
+if($spaceID) $linkParams['spaceID'] = $spaceID;
 
 $featureBarLink = createLink('product', 'browse', $linkParams);
 
@@ -72,7 +78,9 @@ featureBar
     li(setClass('ml-3'), $searchBox)
 );
 
-$canCreate = hasPriv('product', 'create');
+/* 空间下的应用列表不显示创建应用按钮。 */
+$canCreate  = !$spaceID && hasPriv('product', 'create');
+$createLink = $canCreate ? createLink('product', 'create') : '';
 toolbar
 (
     $canCreate ? btn
@@ -80,7 +88,7 @@ toolbar
         set::text($lang->product->create),
         set::icon('plus'),
         set::type('primary'),
-        set::url(createLink('product', 'create')),
+        set::url($createLink),
         set::className('create-product-btn')
     ) : null
 );
@@ -90,12 +98,12 @@ $sortLink = createLink('product', 'browse', $linkParams);
 dtable
 (
     set::id('products'),
-    set::cols($config->product->dtable->fieldList),
+    set::cols($fields),
     set::data($products),
     set::userMap($users),
     set::footPager(usePager()),
     set::sortLink($sortLink),
     set::emptyTip($lang->product->noProduct),
-    set::createTip($lang->product->create),
-    set::createLink($canCreate ? createLink('product', 'create') : '')
+    set::createTip($spaceID ? '' : $lang->product->create),
+    set::createLink($createLink)
 );
