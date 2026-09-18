@@ -48,9 +48,12 @@ class install extends control
         /* If the versionName variable has been defined in the max version, it cannot be defined here to avoid being overwritten. */
         if(!isset($this->view->versionName)) $this->view->versionName = $this->config->version;
 
+        /* GitFox独立版展示GitFox版本号，如GitFox 4.3。*/
+        if($this->config->edition == 'gitfox') $this->view->versionName = $this->lang->gitfoxName . ' ' . $this->config->gitfoxVersion;
+
         /* 配置DevOps平台版。*/
         /* Configure devOps platform version. */
-        if($this->config->inQuickon)
+        elseif($this->config->inQuickon)
         {
             $editionName = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
             if($this->config->edition === 'max') $editionName = '';
@@ -250,7 +253,9 @@ class install extends control
         if(!empty($_POST))
         {
             if(!isset($this->config->installed) || !$this->config->installed) return $this->send(array('result' => 'fail', 'message' => $this->lang->install->errorNotSaveConfig));
-            return $this->send(array('result' => 'success', 'message' => '', 'load' => inlink('step4')));
+
+            $nextStep = $this->config->edition == 'gitfox' ? 'step5' : 'step4';
+            return $this->send(array('result' => 'success', 'message' => '', 'load' => inlink($nextStep)));
         }
 
         /* 当session保存路径为空时设置session保存路径。*/
@@ -295,6 +300,8 @@ class install extends control
      */
     public function step4()
     {
+        if($this->config->edition == 'gitfox') return $this->locate(inlink('step5'));
+
         if(!empty($_POST))
         {
             if(!isset($this->config->installed) || !$this->config->installed) return $this->send(array('result' => 'fail', 'message' => $this->lang->install->errorNotSaveConfig, 'load' => 'step3'));
@@ -370,9 +377,17 @@ class install extends control
             $this->setting->setItem('system.common.global.cron', '1');
             $this->setting->setItem('system.common.userview.relatedTablesUpdateTime', time());
 
+            /* GitFox独立版跳过"选择使用模式"页面，按默认的ALM模式完成相关设置。*/
+            /* The GitFox edition skips the mode selection page and saves the settings of the default ALM mode. */
+            if($this->config->edition == 'gitfox')
+            {
+                $this->setting->setItem('system.common.global.mode', 'ALM');
+                $this->loadModel('custom')->disableFeaturesByMode('ALM');
+            }
+
             /* 处理BI数据表, 内置流程数据。*/
             /* Process BI dataview. */
-            if($this->config->edition != 'open')
+            if($this->config->edition != 'open' && $this->config->edition != 'gitfox')
             {
                 $this->loadModel('upgrade')->processDataset();
                 $this->loadModel('workflowGroup')->initAllWorkflowGroup();
@@ -420,8 +435,15 @@ class install extends control
             $this->lang->install->successNoticeLabel = str_replace('IPD', '', $this->lang->install->successNoticeLabel);
         }
 
-        $editionName           = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
-        $this->config->version = $editionName . str_replace(array('max', 'biz', 'ipd', 'gitfox'), '', $this->config->version);
+        if($this->config->edition == 'gitfox')
+        {
+            $this->config->version = $this->config->gitfoxVersion;
+        }
+        else
+        {
+            $editionName           = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
+            $this->config->version = $editionName . str_replace(array('max', 'biz', 'ipd', 'gitfox'), '', $this->config->version);
+        }
 
         $canDelFile  = is_writable($this->app->getAppRoot() . 'www');
         $installFile = $this->app->getAppRoot() . 'www/install.php';
