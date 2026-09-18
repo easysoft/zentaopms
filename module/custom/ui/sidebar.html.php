@@ -35,15 +35,6 @@ if(!empty($lang->custom->{$module}->fields) && $module != 'reviewcl')
             $tab           = 'admin';
         }
 
-        if($module == 'project' && $key == 'alert')
-        {
-            $currentModule = 'alert';
-            $method        = 'browse';
-            $params        = '';
-            $tab           = 'admin';
-            $active        = ($app->rawModule == 'alert') ? 'active' : '';
-        }
-
         if($module == 'setDate')
         {
             if($key == 'holiday')
