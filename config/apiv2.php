@@ -258,6 +258,7 @@ $routes['/auditplans/:auditplanID']              = array(
 $routes['/auditplans/:auditplanID/check']        = array('post' => array('method' => 'check', 'response' => '*'));
 $routes['/projects/:projectID/ncs']              = array('post' => array('redirect' => '/nc/create?projectID=:projectID', 'response' => '*'));
 $routes['/executions/:executionID/ncs']          = array('post' => array('redirect' => '/nc/create?projectID=:executionID&from=execution', 'data' => 'execution=:executionID', 'response' => '*'));
+$routes['/ncs/:ncID']                            = array('put' => array('redirect' => '/nc/:ncID', 'response' => '*'));
 
 $routes['/feedbacks']                     = array('method' => 'admin', 'response' => 'feedbacks(array),pager', 'search' => array('enabled' => true));
 $routes['/products/:productID/feedbacks'] = array('redirect' => '/feedbacks?param=:productID', 'search' => array('enabled' => true));
