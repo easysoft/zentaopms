@@ -112,7 +112,6 @@ class ppm extends control
         {
             if($repoID && !isset($repoList[$repoID])) return $this->locate($this->createLink('repo', 'browse', "repoID=$repoID&objectID=$objectID"));
 
-            /* 未选择代码库时仍以会话代码库作为菜单和权限上下文，仅列表查询不做代码库限制。 */
             $contextRepoID = $this->repo->saveState($repoID, $objectID);
             $repo = zget($repoList, $contextRepoID, reset($repoList));
         }
@@ -133,7 +132,6 @@ class ppm extends control
         $reviewResults = $this->ppm->getReviewResults(array_keys($ppmList), $repoID);
         $spaces = $this->config->vision == 'gitfox' ? $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account) : array();
 
-        /* 代码库下拉选项：复用 repo->getRepoPairs() 取当前用户可见的代码库，按空间过滤，镜像代码库不能创建评审不参与筛选。 */
         $spaceRepos = array();
         foreach($this->repo->getRepoPairs() as $listRepoID => $listRepoName)
         {
