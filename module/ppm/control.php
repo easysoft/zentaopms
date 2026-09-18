@@ -97,11 +97,25 @@ class ppm extends control
         $repoList = $this->repo->getListByPriv('all', '', false);
         if(empty($repoList)) $this->locate($this->repo->createLink('createRepo'));
 
-        if(!$repoID) $repoID = key($repoList);
-        $repoID = $this->repo->saveState($repoID, $objectID);
-        if(!isset($repoList[$repoID])) return $this->locate($this->createLink('repo', 'browse', "repoID=$repoID&objectID=$objectID"));
+        /* GitFox独立版代码评审一级导航下，repoID为0表示全部代码库，列表不做代码库限制。 */
+        $browseAllRepos = $this->config->vision == 'gitfox' && $this->app->tab == 'ppm';
 
-        $repo = $repoList[$repoID];
+        if(!$browseAllRepos)
+        {
+            if(!$repoID) $repoID = key($repoList);
+            $repoID = $this->repo->saveState($repoID, $objectID);
+            if(!isset($repoList[$repoID])) return $this->locate($this->createLink('repo', 'browse', "repoID=$repoID&objectID=$objectID"));
+
+            $repo = $repoList[$repoID];
+        }
+        else
+        {
+            if($repoID && !isset($repoList[$repoID])) return $this->locate($this->createLink('repo', 'browse', "repoID=$repoID&objectID=$objectID"));
+
+            $contextRepoID = $this->repo->saveState($repoID, $objectID);
+            $repo = zget($repoList, $contextRepoID, reset($repoList));
+        }
+
         $this->loadModel('ci')->setMenu($repo->id);
 
         if($param == 'assignee' || $param == 'creator')
@@ -116,28 +130,40 @@ class ppm extends control
         $ppmList       = $this->ppm->getList($mode, $param, $orderBy, array(), $repoID, 0, $pager, $spaceID);
         $canEdit       = common::hasPriv($this->app->rawModule, 'edit');
         $reviewResults = $this->ppm->getReviewResults(array_keys($ppmList), $repoID);
-        $spaces = $this->config->vision == 'gitfox' ? $this->loadModel('space')->getPairs() : array();
+        $spaces = $this->config->vision == 'gitfox' ? $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account) : array();
+
+        $spaceRepos = array();
+        foreach($this->repo->getRepoPairs() as $listRepoID => $listRepoName)
+        {
+            if(!isset($repoList[$listRepoID])) continue;
+            if(!empty($repoList[$listRepoID]->mirror)) continue;
+            if($spaceID && (int)$repoList[$listRepoID]->spaceID !== (int)$spaceID) continue;
+            $spaceRepos[$listRepoID] = $listRepoName;
+        }
+
         foreach($ppmList as $ppm)
         {
             $ppm->canEdit        = $canEdit ? '' : 'disabled';
             $ppm->approvalStatus = !empty($reviewResults[$ppm->id]) && $reviewResults[$ppm->id]['result'] ? $this->lang->ppm->approve : $this->lang->ppm->reject;
 
             if($ppm->status == 'merged' || $ppm->status == 'closed') $ppm->mergeStatus = $ppm->status;
-            $ppm->space = zget($spaces , $repoList[$ppm->repoID]->spaceID, '');
+            $ppm->space = empty($repoList[$ppm->repoID]) ? '' : zget($spaces, $repoList[$ppm->repoID]->spaceID, '');
         }
 
-        $this->view->title    = $this->lang->ppm->common . $this->lang->hyphen . $this->lang->ppm->browse;
-        $this->view->ppmList  = $ppmList;
-        $this->view->pager    = $pager;
-        $this->view->mode     = $mode;
-        $this->view->param    = $param;
-        $this->view->objectID = $objectID;
-        $this->view->repo     = $repo;
-        $this->view->orderBy  = $orderBy;
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
-        $this->view->repos    = empty($repoList) ? array() : array_column($repoList, 'name', 'id');
-        $this->view->spaces   = $spaces;
-        $this->view->spaceID  = $spaceID;
+        $this->view->title      = $this->lang->ppm->common . $this->lang->hyphen . $this->lang->ppm->browse;
+        $this->view->ppmList    = $ppmList;
+        $this->view->pager      = $pager;
+        $this->view->mode       = $mode;
+        $this->view->param      = $param;
+        $this->view->objectID   = $objectID;
+        $this->view->repo       = $repo;
+        $this->view->repoID     = $repoID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->repos      = empty($repoList) ? array() : array_column($repoList, 'name', 'id');
+        $this->view->spaceRepos = $spaceRepos;
+        $this->view->spaces     = $spaces;
+        $this->view->spaceID    = $spaceID;
         $this->display();
     }
 

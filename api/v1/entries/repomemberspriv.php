@@ -56,7 +56,7 @@ class repomembersprivEntry extends baseEntry
         else
         {
             $spaceMembers  = $this->space->getSpaceMembers($space->id);
-            $repo->members = $space->acl == 'private' ? $spaceMembers : $this->user->getPairs('noletter|noempty|nodeleted|noclosed');
+            $repo->members = $space->acl == 'private' ? $spaceMembers : $this->user->getPairs('noletter|noempty|nodeleted|noclosed', '', 0, '', true, false);
         }
 
         $privs   = array();
@@ -72,6 +72,6 @@ class repomembersprivEntry extends baseEntry
             );
         }
 
-        return $this->send(200, $privs);
+        return $this->send(200, (object)$privs);
     }
 }

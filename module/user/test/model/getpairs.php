@@ -4,6 +4,7 @@
 /**
 
 title=测试 userModel->getPairs();
+timeout=0
 cid=19621
 
 - 查找带有Closed用户的外部用户键值对属性closed @Closed
@@ -15,6 +16,9 @@ cid=19621
 - 使用limit参数来限制最多获取50个用户键值对 @3
 - 使用pofirst参数来将系统中的产品经理用户放到返回值前列属性account1 @A:用户名1
 - 使用pmfirst参数来将系统中的项目经理内部和外部用户放到返回值前列属性account3 @A:用户名3
+- 执行user模块的getPairsTest方法，参数是'noempty|noclosed', '', 0, array  @0
+- 执行user模块的getPairsTest方法，参数是'noempty|noclosed', '', 0, array  @1
+- 执行user模块的getPairsTest方法，参数是'noempty|noclosed', '', 0, array  @1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -55,3 +59,11 @@ r(count($limit2Users))               && p()             && e('2');            //
 r(count($limit50Users))              && p()             && e('3');            //使用limit参数来限制最多获取50个用户键值对
 r($firstPO)                          && p('account1')   && e('A:用户名1');    //使用pofirst参数来将系统中的产品经理用户放到返回值前列
 r($firstPM)                          && p('account3')   && e('A:用户名3');    //使用pmfirst参数来将系统中的项目经理内部和外部用户放到返回值前列
+
+/* GitFox 内部接口没有会话上下文，vision 会取默认值，这里验证按 vision 过滤和跳过过滤两种取用户的行为。 */
+$config->vision = 'rnd';
+$user->instance->dao->update(TABLE_USER)->set('visions')->eq('gitfox')->where('account')->eq('account1')->exec();
+
+r(count($user->getPairsTest('noempty|noclosed', '', 0, array('account1')))) && p() && e('0');
+r(count($user->getPairsTest('noempty|noclosed', '', 0, array('account1'), null, false))) && p() && e('1');
+r(count($user->getPairsTest('noempty|noclosed', '', 0, array('account2'), null, false))) && p() && e('1');

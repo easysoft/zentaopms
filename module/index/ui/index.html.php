@@ -18,6 +18,7 @@ else
 {
     $version     = $config->version;
     $versionName = $lang->pmsName . $config->version;
+    if($config->edition == 'gitfox') $versionName = $config->version;
     $upgradeBtn  = $config->systemMode != 'PLM' ? btn
     (
         setID('bizLink'),

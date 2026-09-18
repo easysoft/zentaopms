@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-if($this->app->tab != 'devops')
+if(!in_array($this->app->tab, array('devops', 'repo')))
 {
     dropmenu
     (
