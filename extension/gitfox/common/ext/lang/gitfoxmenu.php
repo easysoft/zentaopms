@@ -50,7 +50,7 @@ $lang->mainNav->menuOrder[45] = 'artifact';
 $lang->mainNav->menuOrder[50] = 'admin';
 
 /* 分组：地盘 | 应用、空间、代码库、评审、扫描、问题 | 流水线、制品库 | 后台 */
-$lang->dividerMenu = ',system,pipeline,admin,';
+$lang->dividerMenu = ',system,ppm,pipeline,admin,';
 
 $lang->dashboard = isset($lang->dashboard->common) ? $lang->dashboard->common : $lang->dashboard;
 

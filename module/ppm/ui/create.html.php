@@ -33,6 +33,9 @@ dropmenu
     set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
+/* 只有项目/执行视角的表单里有 repoID 字段；其他视角的 loadUrl 里 {repoID} 占位符取不到值会变成空，导致切换分支后丢掉 repoID。 */
+$loadRepoID = $notInDevOps ? '{repoID}' : $repoID;
+
 formGridPanel
 (
     setID('createForm'),
@@ -40,7 +43,7 @@ formGridPanel
     set::title($title),
     set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '10em'),
     set::fields($fields),
-    set::loadUrl(createLink('ppm', 'create', "repoID={repoID}&objectID={$objectID}&sourceBranch={sourceBranch|base64}&targetBranch={targetBranch|base64}")),
+    set::loadUrl(createLink('ppm', 'create', "repoID={$loadRepoID}&objectID={$objectID}&sourceBranch={sourceBranch|base64}&targetBranch={targetBranch|base64}")),
     on::formloaded()->call('loadReviewers', '>>> formload', jsRaw('event'), jsRaw('args'))
 );
 
