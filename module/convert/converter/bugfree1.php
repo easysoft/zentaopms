@@ -13,7 +13,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
 {
     /**
      * Execute the convert.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -34,7 +34,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert groups.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -66,7 +66,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert user.
-     * 
+     *
      * @access public
      * @return int      converted user count
      */
@@ -86,7 +86,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         /* Merge them. */
         foreach($allUsers as $key => $account)
         {
-            if(isset($activeUsers[$account])) 
+            if(isset($activeUsers[$account]))
             {
                 $allUsers[$key] = $activeUsers[$account];
             }
@@ -116,7 +116,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert execution in bugfree to product in zentao.
-     * 
+     *
      * @access public
      * @return int      converted execution count
      */
@@ -134,7 +134,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert modules.
-     * 
+     *
      * @access public
      * @return int      converted modules count
      */
@@ -144,11 +144,11 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         $modules = $this->dao
             ->dbh($this->sourceDBH)
             ->select(
-                'moduleID AS id, 
-                `executionID` AS root, 
-                moduleName AS name, 
-                moduleGrade AS grade, 
-                `parentID` AS parent, 
+                'moduleID AS id,
+                `executionID` AS root,
+                moduleName AS name,
+                moduleGrade AS grade,
+                `parentID` AS parent,
                 "bug" AS type')
             ->from('BugModule')
             ->orderBy('id ASC')
@@ -173,7 +173,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert bugs.
-     * 
+     *
      * @access public
      * @return int      converted bugs count.
      */
@@ -182,8 +182,8 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         $bugs = $this->dao
             ->dbh($this->sourceDBH)
             ->select('
-            bugID AS id, 
-            `executionID` AS product, 
+            bugID AS id,
+            `executionID` AS product,
             moduleID AS module,
             bugTitle AS title,
             bugSeverity AS severity,
@@ -227,7 +227,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert actions.
-     * 
+     *
      * @access public
      * @return int      converted actions count.
      */
@@ -236,11 +236,11 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         $actions = $this->dao
             ->dbh($this->sourceDBH)
             ->select("
-                'bug' AS `objectType`, 
-                bugID AS `objectID`, 
-                userName AS actor, 
-                action, 
-                fullInfo AS comment, 
+                'bug' AS `objectType`,
+                bugID AS `objectID`,
+                userName AS actor,
+                action,
+                fullInfo AS comment,
                 actionDate AS date")
             ->from('BugHistory')
             ->orderBy('bugID, historyID')
@@ -270,7 +270,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
 
     /**
      * Convert files.
-     * 
+     *
      * @access public
      * @return int      converted files count.
      */
@@ -294,8 +294,8 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         foreach($files as $file)
         {
             $file->objectID = $this->map['bug'][(int)$file->objectID];
-            if(strpos($file->size, 'KB')) $file->size = (int)(str_replace('KB', '', $file->size) * 1024); 
-            if(strpos($file->size, 'MB')) $file->size = (int)(str_replace('MB', '', $file->size) * 1024 * 1024); 
+            if(strpos($file->size, 'KB')) $file->size = (int)(str_replace('KB', '', $file->size) * 1024);
+            if(strpos($file->size, 'MB')) $file->size = (int)(str_replace('MB', '', $file->size) * 1024 * 1024);
             $this->dao->dbh($this->dbh)->insert(TABLE_FILE)->data($file)->exec();
 
             /* Copy files. */

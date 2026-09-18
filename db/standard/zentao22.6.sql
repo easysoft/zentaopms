@@ -2068,6 +2068,7 @@ CREATE TABLE `zt_cron` (
   `buildin` tinyint unsigned NOT NULL DEFAULT '0',
   `status` varchar(20) NOT NULL DEFAULT '',
   `lastTime` datetime DEFAULT NULL,
+  `timeout` smallint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `lastTime` (`lastTime`)
 ) ENGINE=InnoDB;
@@ -3966,12 +3967,15 @@ CREATE TABLE `zt_queue` (
   `type` varchar(255) NOT NULL DEFAULT '',
   `command` text,
   `status` varchar(10) NOT NULL DEFAULT 'wait',
+  `pending` tinyint unsigned NULL DEFAULT NULL,
   `execId` int unsigned NOT NULL DEFAULT '0',
   `createdDate` datetime DEFAULT NULL,
+  `startedDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `status_createdDate` (`status`,`createdDate`),
   KEY `cron_createdDate` (`cron`,`createdDate`)
+  UNIQUE KEY `uk_cron_pending` (`cron`, `pending`);
 ) ENGINE=InnoDB;
 CREATE TABLE `zt_relation` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,

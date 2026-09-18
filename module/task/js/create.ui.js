@@ -10,21 +10,21 @@ window.waitDom('#form-task-create [name=story]', function(){setStoryRelated();})
  */
 function toggleTeam()
 {
-    $assignedToBox = $('.assignedToBox');
+    $assignedTo = $('.assignedTo');
     if($('[name^=multiple]').prop('checked'))
     {
-        $assignedToBox.find('.add-team').removeClass('hidden');
-        $assignedToBox.find('.picker-box').addClass('hidden');
-        $assignedToBox.find('.assignedToList').removeClass('hidden');
+        $assignedTo.find('.add-team').removeClass('hidden');
+        $assignedTo.find('.picker-box').addClass('hidden');
+        $assignedTo.find('.assignedToList').removeClass('hidden');
         $('input[name=estimate]').attr('disabled', true);
         $('[name=parent]').zui('picker').$.setValue('');
         $('[name=parent]').zui('picker').render({disabled: true});
     }
     else
     {
-        $assignedToBox.find('.add-team').addClass('hidden');
-        $assignedToBox.find('.picker-box').removeClass('hidden');
-        $assignedToBox.find('.assignedToList').addClass('hidden');
+        $assignedTo.find('.add-team').addClass('hidden');
+        $assignedTo.find('.picker-box').removeClass('hidden');
+        $assignedTo.find('.assignedToList').addClass('hidden');
         $('input[name=estimate]').removeAttr('disabled');
         $('[name=parent]').zui('picker').render({disabled: false});
     }
@@ -46,8 +46,8 @@ function typeChange()
     const $assignedToPicker = $('#form-task-create [name^=assignedTo]').zui('picker');
     if(result == 'affair')
     {
-        $('.assignedToBox .assignedToList').addClass('hidden');
-        $('.assignedToBox .add-team').addClass('hidden');
+        $('.assignedTo .assignedToList').addClass('hidden');
+        $('.assignedTo .add-team').addClass('hidden');
         $('[name=multiple]').prop("checked", false);
         toggleTeam();
 
@@ -88,13 +88,13 @@ function toggleSelectTestStory()
     if(!$('#form-task-create [name=selectTestStory]').hasClass('hidden') && $('#form-task-create [name=selectTestStory]').prop('checked'))
     {
         $('#form-task-create [data-name=module]').addClass('hidden');
-        $('#form-task-create [data-name=storyBox]').addClass('hidden');
+        $('#form-task-create [data-name=story]').addClass('hidden');
         $('#form-task-create [data-name=datePlan]').addClass('hidden');
         $('#form-task-create [data-name=estimate]').addClass('hidden');
         $('#form-task-create [data-name=parent]').addClass('hidden');
         $('.panel-actions .btn').attr('disabled', 'disabled');
         if($('[name=parent]').length) $('[name=parent]').zui('picker').$.setValue('');
-        $('#form-task-create [data-name=assignedToBox]').insertAfter('#form-task-create [data-name=name]');
+        $('#form-task-create [data-name=assignedTo]').insertAfter('#form-task-create [data-name=name]');
         $('#form-task-create [name=multiple]').closest('.checkbox-primary').addClass('hidden');
         $('#form-task-create [data-name=name]').removeClass('w-full').addClass('w-1/2');
         $('#form-task-create [data-name=testStoryBox]').removeClass('hidden');
@@ -106,11 +106,11 @@ function toggleSelectTestStory()
         {
             $('#form-task-create [data-name=name]').removeClass('lite:w-full');
             $('#form-task-create [data-name=pri]').removeClass('w-1/4').addClass('w-1/2 full:w-1/4');
-            $('#form-task-create [data-name=assignedToBox]').addClass('full:w-1/4');
+            $('#form-task-create [data-name=assignedTo]').addClass('full:w-1/4');
         }
         else
         {
-            $('#form-task-create [data-name=assignedToBox]').removeClass('w-1/2').addClass('w-1/4');
+            $('#form-task-create [data-name=assignedTo]').removeClass('w-1/2').addClass('w-1/4');
         }
 
         $('#form-task-create [name^=multiple]').prop('checked', false);
@@ -121,11 +121,11 @@ function toggleSelectTestStory()
         $('.panel-actions .btn').removeAttr('disabled');
         $('#form-task-create [data-name=name]').removeClass('w-1/2').addClass('w-full');
         $('#form-task-create [data-name=module]').removeClass('hidden');
-        $('#form-task-create [data-name=storyBox]').removeClass('hidden');
+        $('#form-task-create [data-name=story]').removeClass('hidden');
         $('#form-task-create [data-name=datePlan]').removeClass('hidden');
         $('#form-task-create [data-name=estimate]').removeClass('hidden');
         $('#form-task-create [data-name=parent]').removeClass('hidden');
-        $('#form-task-create [data-name=assignedToBox]').insertBefore('#form-task-create [data-name=name]');
+        $('#form-task-create [data-name=assignedTo]').insertBefore('#form-task-create [data-name=name]');
         $('#form-task-create [data-name=testStoryBox]').addClass('hidden');
         if($('#form-task-create [name=type]').val() != 'affair') $('#form-task-create [name=multiple]').closest('.checkbox-primary').removeClass('hidden');
 
@@ -133,11 +133,11 @@ function toggleSelectTestStory()
         {
             $('#form-task-create [data-name=name]').addClass('lite:w-full');
             $('#form-task-create [data-name=pri]').addClass('w-1/4').removeClass('w-1/2 full:w-1/4');
-            $('#form-task-create [data-name=assignedBox]').removeClass('full:w-1/4');
+            $('#form-task-create [data-name=assignedTo]').removeClass('full:w-1/4');
         }
         else
         {
-            $('#form-task-create [data-name=assignedToBox]').removeClass('w-1/4').addClass('w-1/2');
+            $('#form-task-create [data-name=assignedTo]').removeClass('w-1/4').addClass('w-1/2');
         }
     }
 }
@@ -158,7 +158,7 @@ function loadAll()
     /* If the execution doesn't have story list, hide the related fields.*/
     if(lifetime == 'ops' || attribute == 'request' || attribute == 'review')
     {
-        $('.storyBox').addClass('hidden');
+        $('[data-name=story]').addClass('hidden');
 
         $("input[name='after'][value='toStoryList']").parent().hide();
         $("input[name='after'][value='continueAdding']").parent().hide();
@@ -167,7 +167,7 @@ function loadAll()
     /* If story field is showed, show the story field. */
     else if(fieldList.indexOf('story') >= 0)
     {
-        $('.storyBox').removeClass('hidden');
+        $('[data-name=story]').removeClass('hidden');
         if($('#selectTestStory').prop('checked')) $('#selectTestStory').removeClass('hidden');
 
         $("input[name='after'][value='toStoryList']").parent().show();
@@ -567,7 +567,7 @@ window.copyStoryTitle = function(e)
 {
     if(!$('[name=story]').val() || $('[name=story]').val() == 0) return;
 
-    let storyTitle = $('[data-name=storyBox] .setStoryBox span.picker-single-selection').text();
+    let storyTitle = $('[data-name=story] .setStoryBox span.picker-single-selection').text();
     let startPosition = storyTitle.indexOf(':') + 1;
     if (startPosition > 0) {
         let endPosition   = storyTitle.lastIndexOf('(');

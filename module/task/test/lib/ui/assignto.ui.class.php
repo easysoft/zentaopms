@@ -42,7 +42,7 @@ class assignToTester extends tester
         }
         /* 指派弹窗 */
         $form->dom->assignBtn->click();
-        $form->wait(3);
+        $form->wait(5);
         if(empty($account)) $form->dom->assignedToDelBtn->click();
         if(!empty($account)) $form->dom->assignedTo->picker($account);
         if($form->dom->taskStatus->getText() != $this->lang->task->statusList->done) $form->dom->left->setValue($left);

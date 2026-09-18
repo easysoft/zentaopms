@@ -429,6 +429,21 @@ class productModelTest extends baseTest
     }
 
     /**
+     * Test get toList and ccList of a product.
+     *
+     * @param  object $product
+     * @access public
+     * @return array|false|string
+     */
+    public function getToAndCcListTest(object $product): array|false|string
+    {
+        $result = $this->instance->getToAndCcList($product);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test get product pairs by project.
      *
      * @param  int    $productID

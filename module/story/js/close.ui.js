@@ -1,10 +1,10 @@
-function setStory(event)
+window.setStory = function(event)
 {
     var $form         = $(event.target).closest('form');
     var closedReason  = $form.find('#closedReason').find('.pick-value').val();
     var $duplicateBox = $form.find('#duplicateStoryBox');
 
-    $duplicateBox.toggleClass('hidden', closedReason != 'duplicate');
+    $duplicateBox.closest('.form-row').toggleClass('hidden', closedReason != 'duplicate');
 }
 
 async function checkUndoneTasks()
@@ -19,3 +19,8 @@ window.checkSubmit = function()
 {
     return checkUndoneTasks();
 };
+
+$(function()
+{
+    $('#duplicateStoryBox').closest('.form-row').addClass('hidden');
+});

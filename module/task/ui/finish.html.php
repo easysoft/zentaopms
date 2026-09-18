@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+$fields = useFields('task.finish');
+
 if(!$canRecordEffort)
 {
     modalHeader();
@@ -35,46 +37,6 @@ else
     jsVar('consumed', empty($task->team) ? $task->consumed : (float)$task->myConsumed);
     jsVar('task', $task);
     jsVar('consumedEmpty', $lang->task->error->consumedEmptyAB);
-
-    $realStarted = substr((string)$task->realStarted, 0, 19);
-    if(helper::isZeroDate($realStarted)) $realStarted = '';
-
-    if(!empty($task->team))
-    {
-        $consumedControl = formGroup
-            (
-                set::width('1/2'),
-                set::label($lang->task->my . $lang->task->hasConsumed),
-                div(
-                    set::className('consumed'),
-                    $task->myConsumed . $lang->task->suffixHour
-                )
-            );
-
-        $assignedToControl = formGroup
-            (
-                set::width('1/2'),
-                set::label($lang->story->assignTo),
-                set::control('input'),
-                set::disabled(true),
-                set::value(zget($members, $task->nextBy)),
-                formHidden('assignedTo', $task->nextBy)
-            );
-    }
-    else
-    {
-        $consumedControl = null;
-
-        $assignedToControl = formGroup
-            (
-                set::width('1/2'),
-                set::name('assignedTo'),
-                set::label($lang->story->assignTo),
-                set::control('picker'),
-                set::value($task->nextBy),
-                set::items($members)
-            );
-    }
 
     modalHeader
     (
@@ -112,58 +74,7 @@ else
     (
         setID('finishForm'),
         set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
-        $consumedControl,
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->task->currentConsumed),
-            inputControl
-            (
-                input
-                (
-                    set::name('currentConsumed'),
-                    set::value(0),
-                    set::type('text')
-                ),
-                to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20)
-            )
-        ),
-        $assignedToControl,
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->project->realBeganAB),
-            set::required(true),
-            datetimePicker
-            (
-                set::name('realStarted'),
-                set::value($realStarted),
-                set('disabled', !empty($realStarted))
-            ),
-            !empty($realStarted) ? formHidden('realStarted', $realStarted) : null
-        ),
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->project->realEndAB),
-            datetimePicker
-            (
-                set::name('finishedDate'),
-                set::value(helper::now())
-            )
-        ),
-        formGroup
-        (
-            set::label($lang->story->files),
-            fileSelector()
-        ),
-        formGroup
-        (
-            set::name('comment'),
-            set::label($lang->comment),
-            set::control("editor")
-        )
+        set::fields($fields)
     );
     hr();
     history();

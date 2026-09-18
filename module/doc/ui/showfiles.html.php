@@ -42,10 +42,11 @@ elseif($files)
     $cardsBox = null;
     foreach($files as $file)
     {
-        $url  = helper::createLink('file', 'download', "fileID={$file->id}");
+        $url  = helper::createLink('doc', 'downloadFile', "fileID={$file->id}");
         $url .= strpos($url, '?') === false ? '?' : '&';
         $url .= session_name() . '=' . session_id();
 
+        $downloadLink = $this->createLink('doc', 'downloadFile', "fileID={$file->id}&mouse=left");
         $cardsBox[] = div
          (
              setClass('col'),

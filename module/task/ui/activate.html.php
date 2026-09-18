@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+$fields = useFields('task.activate');
 /* ====== Preparing and processing page data ====== */
 jsVar('oldConsumed', $task->consumed);
 jsVar('currentUser', $app->user->account);
@@ -63,107 +64,11 @@ if(!empty($task->team))
 
 /* zin: Set variables to define control for form. */
 modalHeader();
-$taskModeBox = '';
-if($isMultiple)
-{
-    $taskModeBox = formGroup
-    (
-        set::width('1/4'),
-        set::label($lang->task->mode),
-        inputGroup
-        (
-            setClass('no-background'),
-            zget($lang->task->modeList, $task->mode),
-            input
-            (
-                setClass('hidden'),
-                set::name('mode'),
-                set::value($task->mode)
-            )
-        )
-    );
-}
-
-$manageTeamBox = '';
-if($isMultiple)
-{
-    $manageTeamBox = formGroup(
-        set::width('1/10'),
-        setClass('items-center'),
-        checkbox
-        (
-            setID('multiple'),
-            set::name('multiple'),
-            set::text($lang->task->manageTeam),
-            set::rootClass('ml-4'),
-            on::click('manageTeam')
-        )
-    );
-}
-
-$leftBox = '';
-if($task->isParent == '0')
-{
-    $leftBox = formGroup(
-        set::width('1/2'),
-        set::label($lang->task->left),
-        set::name('left'),
-        inputControl
-        (
-            to::suffix($lang->task->suffixHour),
-            set::suffixWidth(20)
-        )
-    );
-}
-
-$modalTeamBtn = array();
-if($isMultiple)
-{
-    $modalTeamBtn = btn(
-        set::text($lang->task->team),
-        setClass('team-group hidden'),
-        set::url('#modalTeam'),
-        $task->mode == 'multi' ? on::click('disableMembers') : null,
-        setData(array('toggle' => 'modal'))
-    );
-}
-
 /* ====== Define the page structure with zin widgets ====== */
 formPanel
 (
     set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
-    $taskModeBox,
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->task->assignedTo),
-            set::required($isMultiple || strpos(",{$this->config->task->activate->requiredFields},", ',assignedTo,')),
-            inputGroup
-            (
-                picker
-                (
-                    setID('assignedTo'),
-                    set::name('assignedTo'),
-                    set::items($isMultiple ? $teamMembers : $members),
-                    set::value($isMultiple ? '' : $task->finishedBy),
-                    set::required(strpos(",{$this->config->task->activate->requiredFields},", ',assignedTo,') !== false),
-                    on::change('setTeamUser')
-                ),
-                $modalTeamBtn
-            )
-        ),
-        $manageTeamBox
-    ),
-    $leftBox,
-    formGroup
-    (
-        set::label($lang->comment),
-        set::control('editor'),
-        set::name('comment'),
-        set::rows('5')
-    ),
+    set::fields($fields),
     modalTrigger
     (
         modal

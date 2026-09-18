@@ -625,10 +625,13 @@ class programplan extends control
      */
     public function rollbackGanttVersion(int $projectID, int $versionID = 0)
     {
+        /* 已关闭项目和执行禁止修改时不允许回滚版本。*/
+        $project = $this->programplan->fetchByID($projectID, 'project');
+        if(!empty($project) && !$this->programplan->canRollbackGanttVersion($project)) return $this->send(array('result' => 'fail', 'message' => $this->lang->programplan->closedCallback));
+
         /* 目标版本中执行的起止日期超出项目起止日期时提示无法回滚。*/
         $targetVersion = $this->programplan->getGanttDataByVersion($versionID);
         $targetData    = $targetVersion['data'] ?? array();
-        $project       = $this->programplan->fetchByID($projectID, 'project');
         $minPlanBegin  = $maxPlanEnd = '';
         foreach($targetData as $version)
         {

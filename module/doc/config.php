@@ -8,6 +8,8 @@ $config->doc->create    = new stdclass();
 $config->doc->createTemplate    = new stdclass();
 $config->doc->edit      = new stdclass();
 $config->doc->showfiles = new stdclass();
+$config->doc->groupPrivs['downloadfile'] = 'view';
+$config->doc->groupPrivs['previewfile']  = 'view';
 
 $config->doc->createlib->requiredFields      = 'name';
 $config->doc->editlib->requiredFields        = 'name';

@@ -1,6 +1,6 @@
-window.switchShow = function(obj)
+window.switchShow = function(event)
 {
-    var result = $(obj).val();
+    var result = $(event.target).val();
 
     $('#priBox').addClass('hidden');
     $('#estimateBox').addClass('hidden');
@@ -36,9 +36,9 @@ window.switchShow = function(obj)
     }
 }
 
-window.setStory = function(obj)
+window.setStory = function(event)
 {
-    var reason = $(obj).val();
+    var reason = $(event.target).val();
     $('#duplicateStoryBox').toggleClass('hidden', reason != 'duplicate');
 }
 

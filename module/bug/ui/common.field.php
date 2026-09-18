@@ -82,6 +82,8 @@ $fields->field('files')
     ->width('full')
     ->control('fileSelector');
 
+$fields->field('plan')->control('input')->hidden();
+
 $fields->field('case')
     ->label($lang->bug->fromCase)
     ->control('picker')

@@ -16,6 +16,10 @@ class changeStatus extends tester
         $form->wait(2);
         $form->dom->closeBtn->click();
         $form->wait(2);
+        $form->dom->closeReason->click();
+        $form->wait(2);
+        $form->dom->doneReason->click();
+        $form->wait(2);
         $form->dom->closestoryBtn->click();
         $viewPage = $this->initForm('projectstory', 'view', $storyUrl, 'appIframe-project');
         $viewPage->wait(2);

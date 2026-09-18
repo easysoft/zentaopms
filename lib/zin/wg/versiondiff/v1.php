@@ -13,7 +13,8 @@ class versiondiff extends wg
         'browseTemplate:string',
         'diffLang:array',
         'versionItems?:array',
-        'settingsItems?:array'
+        'settingsItems?:array',
+        'objectType?:string'
     );
 
     public static function getPageCSS(): string
@@ -28,7 +29,7 @@ class versiondiff extends wg
 
     protected function build()
     {
-        list($versionID, $currentVersion, $canDiffVersion, $diffMode, $browseTemplate, $diffLang, $versionItems, $baseline, $settingsItems) = $this->prop(array('versionID', 'currentVersion', 'canDiffVersion', 'diffMode', 'browseTemplate', 'diffLang', 'versionItems', 'baseline', 'settingsItems'));
+        list($versionID, $currentVersion, $canDiffVersion, $diffMode, $browseTemplate, $diffLang, $versionItems, $baseline, $settingsItems, $objectType) = $this->prop(array('versionID', 'currentVersion', 'canDiffVersion', 'diffMode', 'browseTemplate', 'diffLang', 'versionItems', 'baseline', 'settingsItems', 'objectType'));
 
         global $app;
 
@@ -43,7 +44,7 @@ class versiondiff extends wg
             jsVar('canDiffVersion', $canDiffVersion),
             jsVar('+diffMode', $diffMode),
             jsVar('browseTemplate', $browseTemplate),
-            jsVar('appTab', $app->tab),
+            jsVar('objectType', $objectType),
             div
             (
                 setClass($this->prop('class')),

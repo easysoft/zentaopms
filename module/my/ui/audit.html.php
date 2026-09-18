@@ -50,6 +50,7 @@ jsVar('hasReviewedTip', $lang->hasReviewed);
 
 $rawMethod = $app->rawMethod;
 if($rawMethod != 'audit' && isset($lang->my->featureBar[$rawMethod]['audit'])) $lang->my->featureBar[$rawMethod] = $lang->my->featureBar[$rawMethod]['audit'];
+$tableMethod = $rawMethod == 'contribute' ? 'contributeAudit' : 'audit';
 
 $linkParam = "browseType={key}&param=&orderBy={$orderBy}";
 if($rawMethod == 'contribute') $linkParam = "mode=$mode&$linkParam";
@@ -61,8 +62,7 @@ featureBar
 );
 
 if($rawMethod != 'audit') unset($config->my->audit->dtable->fieldList['actions']);
-if($rawMethod == 'contribute') $config->my->audit->dtable->fieldList['title']['sortType'] = false;
-if($rawMethod != 'contribute' || $browseType != 'reviewedbyme') unset($config->my->audit->dtable->fieldList['result']);
+if($rawMethod != 'contribute') unset($config->my->audit->dtable->fieldList['result']);
 
 foreach($reviewList as $review)
 {
@@ -121,13 +121,13 @@ foreach($reviewList as $review)
     $review->type   = $typeName;
     $review->status = zget($statusList, $review->status, '');
 
-    if($rawMethod == 'contribute' && $browseType == 'reviewedbyme')
+    if($rawMethod == 'contribute')
     {
         $reviewResultList = array();
         if(isset($lang->$type)) $reviewResultList = zget($lang->$type, 'reviewResultList', array());
         if($isOAObject)         $reviewResultList = zget($lang->$type, 'reviewStatusList', array());
 
-        $review->result = zget($reviewResultList, $review->result);
+        $review->result = zget($reviewResultList, $review->result, $review->result);
     }
 
     if($review->project && strpos((string)$review->project, ',') !== false)
@@ -150,8 +150,8 @@ foreach($reviewList as $review)
     $review->product = zget($products, $review->product, '');
 }
 
-$reviewList = initTableData($reviewList, $config->my->audit->dtable->fieldList, $this->my);
-$cols       = $this->loadModel('datatable')->getSetting('my', 'audit');
+$reviewList = initTableData($reviewList, $config->my->{$tableMethod}->dtable->fieldList, $this->my);
+$cols       = $this->loadModel('datatable')->getSetting('my', $tableMethod);
 $sortLink   = $app->rawMethod == 'audit' ? createLink('my', 'audit', "browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}") : createLink('my', $app->rawMethod, "mode={$mode}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 $data       = array_values($reviewList);
 
@@ -159,6 +159,8 @@ dtable
 (
     set::cols($cols),
     set::data($data),
+    set::moduleName('my'),
+    set::methodName($tableMethod),
     set::userMap($users),
     set::customCols(true),
     set::onRenderCell(jsRaw('window.onRenderCell')),

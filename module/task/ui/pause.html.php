@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-/* ====== Define the page structure with zin widgets ====== */
+$fields = useFields('task.pause');
 
 modalHeader();
 if(!empty($task->members) and (!isset($task->members[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear')))
@@ -46,23 +46,8 @@ else
     formPanel
     (
         setID('taskPauseForm'),
-        formGroup
-        (
-            set::label($lang->comment),
-            editor
-            (
-                set::name('comment'),
-                set::rows('5')
-            ),
-            input(
-                setClass('hidden'),
-                set::name('status'),
-                set::value('pause')
-            )
-        )
+        set::fields($fields)
     );
     hr();
     history();
 }
-
-render();

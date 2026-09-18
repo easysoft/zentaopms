@@ -1026,6 +1026,13 @@ class doc extends control
 
             if(!$isOpen && !$isAuthorOrAdmin && !$isInEditUsers && !$isInEditGroups) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
 
+            if(isset($_POST['renameFileID']))
+            {
+                $this->loadModel('file');
+                $result = $this->doc->renameFile($docID, (int)$this->post->renameFileID, (string)$this->post->fileName, (string)$this->post->extension);
+                return $this->send($result);
+            }
+
             if($doc->type == 'chapter') $this->lang->doc->title = $this->lang->doc->chapterName;
 
             $changes = $files = array();
@@ -1889,6 +1896,46 @@ class doc extends control
     }
 
     /**
+     * 下载文档附件。
+     * Download doc file.
+     *
+     * @param  int    $fileID
+     * @param  string $mouse
+     * @access public
+     * @return void
+     */
+    public function downloadFile(int $fileID, string $mouse = '')
+    {
+        $this->loadModel('file');
+        $file = $this->file->getByID($fileID);
+        if(empty($file) || $file->objectType != 'doc') return $this->sendError($this->lang->file->fileNotFound);
+        $doc = $this->doc->getByID((int)$file->objectID);
+        if(!$doc || !$this->doc->checkPrivDoc($doc)) return $this->sendError($this->lang->file->accessDenied);
+
+        return print($this->fetch('file', 'download', "fileID=$fileID&mouse=$mouse"));
+    }
+
+    /**
+     * 预览文档附件。
+     * Preview doc file.
+     *
+     * @param  int    $fileID
+     * @param  string $mouse
+     * @access public
+     * @return void
+     */
+    public function previewFile(int $fileID, string $mouse = '')
+    {
+        $this->loadModel('file');
+        $file = $this->file->getByID($fileID);
+        if(empty($file) || $file->objectType != 'doc') return $this->sendError($this->lang->file->fileNotFound);
+        $doc = $this->doc->getByID((int)$file->objectID);
+        if(!$doc || !$this->doc->checkPrivDoc($doc)) return $this->sendError($this->lang->file->accessDenied);
+
+        return print($this->fetch('file', 'preview', "fileID=$fileID&mouse=$mouse"));
+    }
+
+    /**
      * 移动文档库
      * Move Lib.
      *
@@ -2541,6 +2588,7 @@ class doc extends control
 
         $docID = (int)$docID;
         $doc = $this->doc->getByID($docID, $version);
+        $doc->versionMarkers = $this->doc->getVersionMarkers($docID);
         $doc->lib     = (int)$doc->lib;
         $doc->module  = (int)$doc->module;
         $doc->privs   = array('edit' => common::hasPriv('doc', 'edit', $doc) && $doc->acl == 'open');
@@ -2585,6 +2633,32 @@ class doc extends control
         if($docID) $this->doc->createAction($docID, 'view');
 
         $this->send(array('result' => 'success', 'doc' => $doc));
+    }
+
+    /**
+     * Show deliverable and baseline relations of a document version.
+     *
+     * @param  int    $docID
+     * @param  int    $version
+     * @access public
+     * @return void
+     */
+    public function ajaxVersionRelations(int $docID, int $version = 0)
+    {
+        $this->app->loadLang('deliverable');
+
+        $doc = $this->doc->getByID($docID);
+        if(!$doc || !$this->doc->checkPrivDoc($doc)) return $this->sendError($this->lang->notFound);
+
+        if(!$version) $version = $doc->version;
+        $versionMarkers = $this->doc->getVersionMarkers($docID);
+
+        $this->view->title            = $this->lang->doc->versionRelation;
+        $this->view->docID            = $docID;
+        $this->view->version          = $version;
+        $this->view->relationVersions = array_keys($versionMarkers);
+        $this->view->relations        = $this->doc->getVersionRelations($docID, $version);
+        $this->display();
     }
 
     /**

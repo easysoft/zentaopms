@@ -3233,9 +3233,9 @@ class kanbanModel extends model
      * @param  int    $toLaneID
      * @param  int    $kanbanID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function moveCard(int $cardID, int $fromColID, int $toColID, int $fromLaneID, int $toLaneID, int $kanbanID = 0)
+    public function moveCard(int $cardID, int $fromColID, int $toColID, int $fromLaneID, int $toLaneID, int $kanbanID = 0): bool
     {
         $groupBy = ($this->session->execGroupBy && ($this->app->tab == 'execution' || $this->config->vision == 'lite')) ? $this->session->execGroupBy : '';
 
@@ -3284,6 +3284,10 @@ class kanbanModel extends model
 
         $toLane = $this->getLaneById($toLaneID);
         $this->dao->update(TABLE_KANBANCARD)->set('group')->eq($toLane->group)->where('id')->eq($cardID)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('kanbanCard', $cardID, 'moved', '', "{$fromColID}|{$toColID}");
+        return !dao::isError();
     }
 
     /**
@@ -3690,21 +3694,96 @@ class kanbanModel extends model
         {
             foreach($cardList as $card)
             {
-                $url   = helper::createLink('kanban', 'view', "kanbanID={$card->kanban}") . "#app=kanban";
-                $data  = $today > $card->deadline ? $this->lang->kanban->due : $this->lang->kanban->nearing;
-                $data .= html::a($url, "#{$card->id} {$card->name}");
+                $url         = helper::createLink('kanban', 'view', "kanbanID={$card->kanban}") . "#app=kanban";
+                $noticeType  = $today > $card->deadline ? 'due' : 'nearing';
+                $objectTitle = html::a($url, "#{$card->id} {$card->name}");
 
                 $notify = new stdclass();
                 $notify->objectType  = 'message';
                 $notify->action      = 0;
                 $notify->toList      = ",{$user},";
-                $notify->data        = $data;
+                $notify->subject     = zget($this->lang->kanban, $noticeType);
+                $notify->data        = str_replace(array('{objectTitle}', '{deadline}'), array($objectTitle, $card->deadline), zget($this->lang->kanban->noticeText, $noticeType));
                 $notify->status      = 'wait';
                 $notify->createdBy   = 'admin';
                 $notify->createdDate = helper::now();
                 $notify->sendTime    = null;
 
                 $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+            }
+        }
+    }
+
+    /**
+     * 发送看板卡片到期提醒的webhook通知。
+     * Send kanban card due reminders by webhook.
+     *
+     * @param  array $cards
+     * @access public
+     * @return void
+     */
+    public function sendCardNoticeByWebhook(array $cards)
+    {
+        if(empty($cards)) return;
+
+        $this->loadModel('webhook');
+        static $webhooks = array();
+        if(!$webhooks) $webhooks = $this->webhook->getList();
+        if(!$webhooks) return;
+
+        $today = helper::today();
+        $users = $this->dao->select('account,mobile,email')->from(TABLE_USER)->fetchAll('account');
+
+        foreach($cards as $user => $cardList)
+        {
+            foreach($cardList as $card)
+            {
+                $noticeType = $today > $card->deadline ? 'due' : 'nearing';
+                $title      = zget($this->lang->kanban, $noticeType);
+                $cardUser   = zget($users, $user, null);
+
+                foreach($webhooks as $id => $webhook)
+                {
+                    $host     = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
+                    $viewLink = $host . helper::createLink('kanban', 'view', "kanbanID={$card->kanban}") . '#app=kanban';
+                    $text     = sprintf(zget($this->lang->kanban->noticeWebhookText, $noticeType), $card->id, $card->name, $viewLink, $card->deadline);
+                    $mobile   = $cardUser ? $cardUser->mobile : '';
+                    $email    = $cardUser ? $cardUser->email : '';
+
+                    if($webhook->type == 'dinggroup' || $webhook->type == 'dinguser')
+                    {
+                        $data = $this->webhook->getDingdingData($title, $text, $webhook->type == 'dinguser' ? '' : $mobile);
+                    }
+                    elseif($webhook->type == 'bearychat')
+                    {
+                        $data = $this->webhook->getBearychatData($text, $mobile, $email, 'kanbancard', (int)$card->id);
+                    }
+                    elseif($webhook->type == 'wechatgroup' || $webhook->type == 'wechatuser')
+                    {
+                        $data = $this->webhook->getWeixinData($text, $mobile);
+                    }
+                    elseif($webhook->type == 'feishuuser' || $webhook->type == 'feishugroup')
+                    {
+                        $data = $this->webhook->getFeishuData($title, $text);
+                    }
+                    else
+                    {
+                        $data = new stdclass();
+                        $data->text = $text;
+                    }
+
+                    $postData = json_encode($data);
+                    if(!$postData) continue;
+
+                    if($webhook->sendType == 'async')
+                    {
+                        $this->webhook->saveData($id, 0, $postData);
+                        continue;
+                    }
+
+                    $result = $this->webhook->fetchHook($webhook, $postData, 0, $user);
+                    if(!empty($result)) $this->webhook->saveLog($webhook, 0, $postData, (string)$result);
+                }
             }
         }
     }
@@ -3792,8 +3871,9 @@ class kanbanModel extends model
     {
         /* Set toList and ccList. */
         $toList = $card->createdBy;
-        $ccList = trim($card->assignedTo, ',');
+        $ccList = '';
 
+        if($card->assignedTo) $toList .= ',' . trim($card->assignedTo, ',');
         if(empty($toList))
         {
             if(empty($ccList)) return false;

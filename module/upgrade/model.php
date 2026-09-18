@@ -12018,14 +12018,19 @@ class upgradeModel extends model
         $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
         $deliverableID = $this->dao->lastInsertID();
 
+        /* “其他”类型；新加type，stage 与历史数据一致。 */
         $stageList = $this->config->edition != 'biz' ? $this->loadModel('deliverable')->buildStageList($workflowGroupID) : array();
-        foreach($stageList as $key => $stage)
+        foreach($stageList as $type => $stages)
         {
-            $deliverableStage = new stdclass();
-            $deliverableStage->deliverable = $deliverableID;
-            $deliverableStage->stage       = $key;
-            $deliverableStage->required    = '0';
-            $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+            foreach($stages as $stage => $label)
+            {
+                $deliverableStage = new stdclass();
+                $deliverableStage->deliverable = $deliverableID;
+                $deliverableStage->type        = $type;
+                $deliverableStage->stage       = $stage;
+                $deliverableStage->required    = '0';
+                $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+            }
         }
     }
 
@@ -14007,5 +14012,207 @@ class upgradeModel extends model
             if(dao::isError()) return false;
         }
         return true;
+    }
+
+    /**
+     * 检查并修复 cron 和 queue 表结构。
+     * Check and fix cron and queue table structure.
+     *
+     * @access public
+     * @return bool
+     */
+    public function fixCronAndQueueTables()
+    {
+        $fields = $this->dao->descTable(TABLE_CRON);
+        if(isset($fields['timeout'])) return true;
+
+        $sqls[] = "ALTER TABLE `zt_queue` ADD COLUMN `pending` tinyint unsigned NULL DEFAULT NULL COMMENT '待处理标记：1 表示该 cron 已有 wait/doing 任务，NULL 表示已完成' AFTER `status`;";
+        $sqls[] = "ALTER TABLE `zt_queue` ADD COLUMN `startedDate` datetime DEFAULT NULL COMMENT '任务开始执行时间，用于超时自愈' AFTER `createdDate`;";
+        $sqls[] = "CREATE UNIQUE INDEX `uk_cron_pending` ON `zt_queue` (`cron`, `pending`);";
+        $sqls[] = "ALTER TABLE `zt_cron` ADD COLUMN `timeout` smallint unsigned NOT NULL DEFAULT 0 COMMENT '单次执行超时时间（秒），0 表示使用系统默认配置' AFTER `lastTime`;";
+        $sqls[] = "UPDATE `zt_queue` SET `status` = 'done', `pending` = NULL, `startedDate` = NULL WHERE `status` IN ('wait', 'doing');";
+        $sqls[] = "UPDATE `zt_queue` SET `pending` = 1 WHERE `status` IN ('wait', 'doing') AND `pending` IS NULL;";
+        $sqls[] = "UPDATE `zt_cron` SET `timeout` = 7200 WHERE `timeout` = 0 AND `command` LIKE 'moduleName=metric&methodName=updateMetricLib';";
+        $sqls[] = "UPDATE `zt_cron` SET `timeout` = 3600 WHERE `timeout` = 0 AND `command` LIKE 'moduleName=metric&methodName=updateDashboardMetricLib';";
+        $sqls[] = "UPDATE `zt_cron` SET `timeout` = 3600 WHERE `timeout` = 0 AND `command` LIKE 'moduleName=backup&methodName=backup';";
+        $sqls[] = "UPDATE `zt_cron` SET `timeout` = 300  WHERE `timeout` = 0;";
+
+        $this->loadModel('install');
+
+        foreach($sqls as $sql)
+        {
+            try
+            {
+                $sql = $this->install->replaceContantsInSQL($sql);
+                $sql = $this->install->appendMySQLTableOptions($sql);
+                $this->dbh->exec($sql);
+            }
+            catch(Exception $e)
+            {
+                $errorInfo = $e->errorInfo;
+                $errorCode = !empty($errorInfo) ? $errorInfo[1] : '';
+                if(strpos($ignoreCode, "|$errorCode|") !== false) continue;
+
+                static::$errors[] = $e->getMessage();
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 更新工作流字段的数据源.
+     * Update workflow field options.
+     *
+     * @param  string $version
+     * @access public
+     * @return bool
+     */
+    public function updateFieldOptions($version)
+    {
+        if($version == '22.6')
+        {
+            $sqls = "
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'taskMode'           LIMIT 1) WHERE `module` = 'task'     AND `field` = 'mode';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'storyCategory'      LIMIT 1) WHERE `module` = 'story'    AND `field` = 'category';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'taskDocs'           LIMIT 1) WHERE `module` = 'task'     AND `field` = 'docs';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'caseScene'          LIMIT 1) WHERE `module` = 'testcase' AND `field` = 'scene';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'bugInjection'       LIMIT 1) WHERE `module` = 'bug'      AND `field` = 'injection';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'bugIdentify'        LIMIT 1) WHERE `module` = 'bug'      AND `field` = 'identify';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'ticketClosedReason' LIMIT 1) WHERE `module` = 'ticket'   AND `field` = 'closedReason';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'feedbackPri'        LIMIT 1) WHERE `module` = 'feedback' AND `field` = 'pri';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'ticketRepeat'       LIMIT 1) WHERE `module` = 'ticket'   AND `field` = 'repeatTicket';
+                UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'feedbackRepeat'     LIMIT 1) WHERE `module` = 'feedback' AND `field` = 'repeatFeedback';";
+
+            foreach(explode(';', $sqls) as $sql)
+            {
+                if($sql) $this->dao->exec($sql);
+            }
+
+            $this->app->loadLang('workflowfield');
+            $this->dao->update(TABLE_WORKFLOWFIELD)
+                ->set('options')->eq(helper::jsonEncode((array)$this->lang->workflowfield->buildinList))
+                ->where('module')->eq('feedback')
+                ->andWhere('field')->eq('public')
+                ->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * 修复其他交付物的检查环节。
+     * Modify other deliverable.
+     *
+     * @access public
+     * @return bool
+     */
+    public function modifyOtherDeliverable(): bool
+    {
+        $this->app->loadLang('task');
+
+        $deliverables = $this->dao->select('t1.`projectModel`,t2.*')->from(TABLE_WORKFLOWGROUP)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.id=t2.`workflowGroup`')
+            ->where('t2.category')->eq('other')
+            ->fetchAll();
+
+        $deliverableStage = new stdclass();
+        foreach($deliverables as $deliverable)
+        {
+            if($deliverable->projectModel != 'scrum' && $deliverable->projectModel != 'ipd')
+            {
+                foreach($this->lang->stage->typeList as $type => $label)
+                {
+                    if(!$type) continue;
+                    $deliverableStage->deliverable = $deliverable->id;
+                    $deliverableStage->type        = 'execution';
+                    $deliverableStage->stage       = $type;
+                    $deliverableStage->required    = 0;
+                    $this->dao->replace(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                }
+            }
+
+            if($deliverable->projectModel == 'ipd')
+            {
+                foreach($this->lang->stage->ipdTypeList as $type => $label)
+                {
+                    if(!$type) continue;
+                    $deliverableStage->deliverable = $deliverable->id;
+                    $deliverableStage->type        = 'execution';
+                    $deliverableStage->stage       = $type;
+                    $deliverableStage->required    = 0;
+                    $this->dao->replace(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                }
+            }
+
+            foreach($this->lang->task->typeList as $type => $label)
+            {
+                if(!$type) continue;
+                $deliverableStage->deliverable = $deliverable->id;
+                $deliverableStage->type        = 'task';
+                $deliverableStage->stage       = $type;
+                $deliverableStage->required    = 0;
+                $this->dao->replace(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * 记录 TR、DCP 评审点最近一次评审的交付物及版本。
+     * Record the latest review deliverables and versions of decision points.
+     *
+     * @access public
+     * @return bool
+     */
+    public function upgradeDecisionDeliverableSnapshot(): bool
+    {
+        $points = $this->dao->select('id, categoryVersion')->from(TABLE_OBJECT)
+            ->where('type')->eq('decision')
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll('id');
+        if(empty($points)) return true;
+
+        $reviews = $this->dao->select('id, object, status')->from(TABLE_REVIEW)
+            ->where('object')->in(array_keys($points))
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id_desc')
+            ->fetchAll();
+
+        $latestReviews = array();
+        foreach($reviews as $review)
+        {
+            if(isset($latestReviews[$review->object])) continue;
+            $latestReviews[$review->object] = $review;
+        }
+
+        $now = helper::now();
+        foreach($points as $pointID => $point)
+        {
+            $categoryVersion = json_decode($point->categoryVersion, true);
+            if(empty($categoryVersion) || !is_array($categoryVersion)) continue;
+            if(empty($latestReviews[$pointID])) continue;
+
+            $review  = $latestReviews[$pointID];
+            $existed = $this->dao->select('id')->from(TABLE_REVIEWDELIVERABLE)->where('review')->eq($review->id)->fetch('id');
+            if($existed) continue;
+
+            $deliverableReviews = $this->dao->select('id, version')->from(TABLE_REVIEW)->where('id')->in(array_values($categoryVersion))->fetchAll('id');
+            foreach($categoryVersion as $deliverableID => $deliverableReviewID)
+            {
+                $snapshot = new stdclass();
+                $snapshot->review             = (int)$review->id;
+                $snapshot->projectdeliverable = (int)$deliverableID;
+                $snapshot->deliverableReview  = (int)$deliverableReviewID;
+                $snapshot->version            = isset($deliverableReviews[$deliverableReviewID]) ? $deliverableReviews[$deliverableReviewID]->version : '';
+                $snapshot->createdBy          = 'system';
+                $snapshot->createdDate        = $now;
+                $this->dao->insert(TABLE_REVIEWDELIVERABLE)->data($snapshot)->exec();
+            }
+        }
+
+        return !dao::isError();
     }
 }

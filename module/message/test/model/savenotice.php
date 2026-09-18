@@ -17,7 +17,10 @@ $task->gen(7);
 
 zenData('notify')->gen(0);
 zenData('action')->gen(20);
-zenData('user')->gen(2);
+$user = zenData('user');
+$user->account->range('admin,user1,user2,user3,dev1,dev2,dev3');
+$user->realname->range('admin,用户1,用户2,用户3,开发1,开发2,开发3');
+$user->gen(7);
 
 su('admin');
 

@@ -39,8 +39,8 @@ CREATE TABLE IF NOT EXISTS `zt_ai_vectorqueue` (
 CREATE UNIQUE INDEX `uk_object` ON `zt_ai_vectorqueue` (`objectType`, `objectID`);
 CREATE INDEX `idx_retries` ON `zt_ai_vectorqueue` (`retries`);
 
-INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES
-('*/5', '*', '*', '*', '*', 'moduleName=zai&methodName=syncVectorization', '自动同步向量化数据', 'zentao', 1, 'normal');
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`, `timeout`) VALUES
+('*/5', '*', '*', '*', '*', 'moduleName=zai&methodName=syncVectorization', '自动同步向量化数据', 'zentao', 1, 'normal', NULL, 300);
 
 CREATE TABLE IF NOT EXISTS `zt_teamgroup` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -189,8 +189,8 @@ CREATE TABLE IF NOT EXISTS `zt_ai_timerqueue` (
 CREATE INDEX `idx_agent_status` ON `zt_ai_timerqueue`(`agent`, `status`);
 CREATE INDEX `idx_agent_object` ON `zt_ai_timerqueue`(`agent`, `objectType`, `objectID`);
 
-REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
-('*/5', '*', '*', '*', '*', 'moduleName=ai&methodName=runTimerAgents', '执行定时智能体', 'zentao', 1, 'normal', NULL);
+REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`, `timeout`) VALUES
+('*/5', '*', '*', '*', '*', 'moduleName=ai&methodName=runTimerAgents', '执行定时智能体', 'zentao', 1, 'normal', NULL, 300);
 
 ALTER TABLE `zt_ai_useragent` ADD COLUMN `type` varchar(30) NOT NULL DEFAULT '' COMMENT '类型：'' | executor' AFTER `agent`;
 
@@ -224,8 +224,8 @@ CREATE INDEX `idx_requestID`   ON `zt_errorlogreq`(`requestID`);
 CREATE INDEX `idx_md5`         ON `zt_errorlogreq`(`md5`);
 CREATE INDEX `idx_createdDate` ON `zt_errorlogreq`(`createdDate`);
 
-REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
-('*/5', '*', '*', '*', '*', 'moduleName=errorlog&methodName=deleteLog', '删除过期错误日志', 'zentao', 1, 'normal', NULL);
+REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`, `timeout`) VALUES
+('*/5', '*', '*', '*', '*', 'moduleName=errorlog&methodName=deleteLog', '删除过期错误日志', 'zentao', 1, 'normal', NULL, 300);
 
 DELETE FROM `zt_workflowfield`  WHERE `module` = 'ticket' AND `field` = 'consumed';
 DELETE FROM `zt_workflowlayout` WHERE `module` = 'ticket' AND `field` = 'consumed';

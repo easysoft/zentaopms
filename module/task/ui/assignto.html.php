@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+$fields = useFields('task.assignTo');
+
 /* zin: Define the form in main content */
 if(!empty($task->members) && strpos('wait,doing,pause', $task->status) !== false && (!isset($task->members[$app->user->account]) || $task->mode == 'linear'))
 {
@@ -46,40 +48,7 @@ modalHeader
 formPanel
 (
     set::submitBtnText($lang->task->assignedTo),
-    formGroup
-    (
-        set::width("1/3"),
-        set::name("assignedTo"),
-        set::label($lang->task->assignedTo),
-        set::value((empty($task->team) or strpos('done,cancel,closed', $task->status) !== false) ? $task->assignedTo : $task->nextUser),
-        set::control(array('control' => 'taskAssignedTo', 'manageLink' => ($manageLink ? $manageLink : ''))),
-        set::items($members)
-    ),
-    $task->status != 'done' && $task->status != 'closed' && $task->isParent == '0' ? formGroup
-    (
-        set::width("1/3"),
-        set::label($lang->task->left),
-        set::required(true),
-        inputControl
-        (
-            input
-            (
-                setID('left'),
-                set::name('left'),
-                set::value($task->left),
-                set::type('text'),
-                set::disabled(false)
-            ),
-            to::suffix($lang->task->suffixHour),
-            set::suffixWidth(20)
-        )
-    ) : null,
-    formGroup
-    (
-        set::name("comment"),
-        set::label($lang->comment),
-        set::control("editor")
-    )
+    set::fields($fields)
 );
 hr();
 history

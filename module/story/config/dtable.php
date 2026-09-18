@@ -566,3 +566,15 @@ $config->story->caseTable->fieldList['lastRunResult']['type']     = 'category';
 $config->story->caseTable->fieldList['lastRunResult']['map']      = $lang->testcase->resultList;
 $config->story->caseTable->fieldList['lastRunResult']['sortType'] = true;
 $config->story->caseTable->fieldList['lastRunResult']['group']    = 5;
+
+$config->story->children = new stdclass();
+$config->story->children->dtable = new stdclass();
+$config->story->children->dtable->fieldList = array();
+$config->story->children->dtable->fieldList['id']         = $config->story->dtable->fieldList['id'];
+$config->story->children->dtable->fieldList['title']      = $config->story->dtable->fieldList['title'];
+$config->story->children->dtable->fieldList['pri']        = $config->story->dtable->fieldList['pri'];
+$config->story->children->dtable->fieldList['assignedTo'] = $config->story->dtable->fieldList['assignedTo'];
+$config->story->children->dtable->fieldList['estimate']   = $config->story->dtable->fieldList['estimate'];
+$config->story->children->dtable->fieldList['status']     = $config->story->dtable->fieldList['status'];
+$config->story->children->dtable->fieldList['stage']      = $config->story->dtable->fieldList['stage'];
+$config->story->children->dtable->fieldList['actions']    = $config->story->dtable->fieldList['actions'];

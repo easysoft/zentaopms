@@ -22,6 +22,8 @@ class viewPage extends page
             /*lite操作弹窗*/
             'closestoryBtn'    => '//*[@id="zin_story_close_1_form"]/div[4]/div/button',
             'activateStoryBtn' => '//*[@id="zin_story_activate_1_form"]/div[3]/div/button',
+            'closeReason'      => '//*[@id="closedReason"]/div',
+            'doneReason'       => '//li[@z-key="done"]',
             'submitReviewBtn'  => '//*[@id="zin_story_submitreview_1_form"]/div[2]/div/button',
             'assignSubmitBtn'  => '//*[@id="zin_story_assignto_1_form"]/div[3]/div/button',
             'confirmBtn'       => '//button[@z-key="confirm"]'

@@ -7,16 +7,20 @@ $fields = defineFieldList('task');
 $fields->field('execution')
     ->hidden((data('execution.type') == 'kanban' && $config->vision != 'lite') || empty(data('execution.multiple')))
     ->control('picker')
+    ->required(true)
     ->items(data('executions'))
     ->value(data('execution.id'));
 
 $fields->field('type')
     ->control('picker')
+    ->required(true)
     ->items($lang->task->typeList)
     ->value(data('task.type'));
 
 $fields->field('name')
     ->control('colorInput', array('colorValue' => data('task.color')))
+    ->width('full')
+    ->required(true)
     ->value(data('task.name'));
 
 $fields->field('datePlan')

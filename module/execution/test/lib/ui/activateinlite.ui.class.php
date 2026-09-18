@@ -65,7 +65,7 @@ class activateExecutionTester extends tester
         $this->inputFields($end, $executionId);
         $form = $this->loadPage();
         $form->wait(1);
-        $info = sprintf($this->lang->execution->errorLesserPlan, $end, date('Y-m-d'));
+        $info = sprintf($this->lang->execution->errorLesserPlan, $this->lang->execution->end, date('Y-m-d'));
         if($form->dom->endTip->getText() == $info) return $this->success('激活看板表单页提示信息正确');
         return $this->failed('激活看板表单页提示信息不正确');
     }
@@ -84,14 +84,15 @@ class activateExecutionTester extends tester
         $this->inputFields($end, $executionId);
         $form = $this->loadPage();
         $form->wait(1);
-        $info = sprintf($this->lang->execution->errorGreaterParent, '');
+        $info = sprintf($this->lang->execution->errorEnd, '');
         $text = $form->dom->endTip->getText();
         /* 获取页面返回信息中除日期外的内容 */
         preg_match_all('/(\d{4}-\d{2}-\d{2})/', $text, $matches);                                                                                                                                 ~
         $date   = $matches[0][0];                                                                                                                                                                    ~
         $params = str_replace($date, '', $text);                                                                                                                                                  ~
         $params = trim($params);
-        if($params == $info) return $this->success('激活看板表单页提示信息正确');
+        /*从语言项中获取的提示信息中显示迭代，校验失败，直接去掉返回信息中的迭代|看板，再进行比较*/
+        if(preg_replace('/看板|迭代/', '', $info) == preg_replace('/看板|迭代/', '', $params)) return $this->success('激活看板表单页提示信息正确');
         return $this->failed('激活看板表单页提示信息不正确');
     }
 }

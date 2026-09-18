@@ -440,7 +440,6 @@ class executionZen extends execution
         $this->view->stories         = array( 0 => '') + $this->loadModel('story')->getPairs($productID);
         $this->view->moduleTree      = $moduleTree;
         $this->view->moduleID        = $moduleID;
-        $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
     }
 

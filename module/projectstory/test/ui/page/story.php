@@ -18,9 +18,6 @@ class storyPage extends page
             'num'                  => "//*[@id='stories_table']/div/div[3]/div[2]/strong[1]",
             'allTabNum'            => "//*[@id='main']/div/div[1]/div[1]/menu/li[1]/a/span[2]",
             /* 导出 */
-            'format'         => "//*[@data-name='fileType']/div/div/span[1]",
-            'encoding'       => "//*[@data-name='encode']/div/div/span[1]",
-            'data'           => "//*[@data-name='exportType']/div/div/span[1]",
             'exportBtnAlert' => "//*[@class='modal-content']/div[3]/div/div/form/div[8]/div/div/button/span",
             /* 关联需求 */
             'allTabNum'      => "//*[@id='main']/div/div[1]/div[1]/menu/li[1]/a/span[2]",

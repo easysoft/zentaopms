@@ -77,7 +77,7 @@ class taskZen extends task
         $this->view->from              = $storyID || $todoID || $bugID  ? 'other' : 'task';
         $this->view->taskID            = $taskID;
         $this->view->parents           = $parents;
-        $this->view->loadUrl           = $this->createLink('task', $this->app->rawMethod, "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}");
+        $this->view->loadUrl           = $this->createLink('task', $this->app->rawMethod, "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}&type={type}");
         $this->view->assignedToOptions = $this->getAssignedToOptions($manageLink);
         $this->view->manageLink        = $manageLink;
     }
@@ -567,7 +567,10 @@ class taskZen extends task
         if(dao::isError()) return false;
 
         $now  = helper::now();
-        $task = form::data($this->config->task->form->edit, $task->id)
+        $formConfig = $this->config->task->form->edit;
+        if(in_array($this->post->mode, array('multi', 'linear'))) $formConfig['assignedTo']['skipRequired'] = true;
+
+        $task = form::data($formConfig, $task->id)
             ->add('id', $task->id)
             ->add('lastEditedDate', $now)
             ->setDefault('design', $oldTask->design)
@@ -823,6 +826,7 @@ class taskZen extends task
         $now  = helper::now();
         $task = form::data($this->config->task->form->start, $oldTask->id)->add('id', $oldTask->id)
             ->setIF($oldTask->assignedTo != $this->app->user->account, 'assignedDate', $now)
+            ->remove('comment')
             ->get();
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->start['id'], (string)$this->post->uid);
@@ -1008,7 +1012,7 @@ class taskZen extends task
      * @access protected
      * @return object
      */
-    protected function buildTaskForClose(object $oldTask): object
+    public function buildTaskForClose(object $oldTask): object
     {
         $task = form::data($this->config->task->form->close, $oldTask->id)->add('id', $oldTask->id)
             ->setIF($oldTask->status == 'done',   'closedReason', 'done')
@@ -1912,7 +1916,7 @@ class taskZen extends task
      * @access protected
      * @return array
      */
-    protected function responseAfterbatchCreate(array $taskIdList, object $execution): array
+    public function responseAfterbatchCreate(array $taskIdList, object $execution): array
     {
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 

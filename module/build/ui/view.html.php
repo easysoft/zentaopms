@@ -124,16 +124,16 @@ else
     }
 }
 
+$storyCols = $this->loadModel('datatable')->getSetting('build', 'story');
+
 /* Init table data for dtable. */
-$config->build->bug->dtable->fieldList['actions']['list']['unlinkBug']['url']     = array('module' => $buildModule, 'method' => 'unlinkBug',   'params' => "buildID={$build->id}&bugID={id}");
-$config->build->story->dtable->fieldList['actions']['list']['unlinkStory']['url'] = array('module' => $buildModule, 'method' => 'unlinkStory', 'params' => "buildID={$build->id}&storyID={id}");
+$config->build->bug->dtable->fieldList['actions']['list']['unlinkBug']['url'] = array('module' => $buildModule, 'method' => 'unlinkBug',   'params' => "buildID={$build->id}&bugID={id}");
+$storyCols['actions']['list']['unlinkStory']['url'] = array('module' => $buildModule, 'method' => 'unlinkStory', 'params' => "buildID={$build->id}&storyID={id}");
 if(!$canBeChanged)
 {
     unset($config->build->bug->dtable->fieldList['actions']['list']);
-    unset($config->build->story->dtable->fieldList['actions']['list']);
+    unset($storyCols['actions']['list']);
 }
-
-$stories = initTableData($stories, $config->build->story->dtable->fieldList, $this->build);
 
 $bugCols          = $this->loadModel('datatable')->getSetting('build', 'bug');
 $generatedBugCols = $this->loadModel('datatable')->getSetting('build', 'generatedBug');
@@ -158,6 +158,7 @@ if(isset($generatedBugCols['toTask']))         $generatedBugCols['toTask']['map'
 if(isset($generatedBugCols['activatedCount'])) $generatedBugCols['activatedCount']['map'] = array('');
 
 $bugModel      = $this->loadModel('bug');
+$stories       = initTableData($stories, $storyCols, $this->build);
 $bugs          = initTableData($bugs, $bugCols, $this->build);
 $generatedBugs = initTableData($generatedBugs, $generatedBugCols, $bugModel);
 if(isset($bugCols['actions']))
@@ -229,9 +230,11 @@ detailBody
                 dtable
                 (
                     setID('linkStoryDTable'),
+                    set::methodName('story'),
                     set::style(array('min-width' => '100%')),
                     set::userMap($users),
-                    set::cols(array_values($config->build->story->dtable->fieldList)),
+                    set::cols(array_values($storyCols)),
+                    set::customCols(true),
                     set::data($stories),
                     set::checkable($canBatchUnlinkStory || $canBatchCloseStory),
                     set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.noCheckBox ? 'disabled' : true;}")),

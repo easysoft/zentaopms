@@ -24,7 +24,7 @@ class casesPage extends page
             'lastResult'         => "//*[@id='table-testtask-cases']/div[2]/div[2]/div/div[@data-type='status'][last()]",
             'lastRunBtn'         => "//*[@id='table-testtask-cases']/div[2]/div[3]/div/div[5]/div/nav//a[contains(@href, 'index.php?m=testtask&f=runCase')]",
             /* 执行弹窗 */
-            'result'    => "//*[@id='caseStepForm']/table/tbody/tr[1]/td[3]/div/div/input",
+            'result'    => "//*[@id='zin_testtask_runcase_picker']/div/input",
             'submitBtn' => "//*[@id='caseStepForm']//button[@type='submit']",
             'close'     => "//*[@id='runCaseModal']/div/div[2]/button/span",
             /* 批量执行modal */

@@ -33,8 +33,10 @@ class reportZen extends report
 
         $cardMailSetting    = isset($messageSetting['mail']['setting']['kanbancard']) ? $messageSetting['mail']['setting']['kanbancard'] : array();
         $cardMessageSetting = isset($messageSetting['message']['setting']['kanbancard']) ? $messageSetting['message']['setting']['kanbancard'] : array();
-        if(in_array('nearing', $cardMailSetting))    $cards = $this->report->getUserKanbanCards();
+        $cardWebhookSetting = isset($messageSetting['webhook']['setting']['kanbancard']) ? $messageSetting['webhook']['setting']['kanbancard'] : array();
+        if(in_array('nearing', $cardMailSetting) || in_array('nearing', $cardWebhookSetting)) $cards = $this->report->getUserKanbanCards();
         if(in_array('nearing', $cardMessageSetting)) $this->loadModel('kanban')->saveCardNotice($cards);
+        if(in_array('nearing', $cardWebhookSetting)) $this->loadModel('kanban')->sendCardNoticeByWebhook($cards);
 
         /* Get user who need reminders, and set reminder data to them. */
         $reminder = array();

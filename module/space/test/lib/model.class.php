@@ -1375,6 +1375,21 @@ class spaceModelTest extends baseTest
     }
 
     /**
+     * 清理空间中关联的代码库记录和制品库记录，保证真实删除空间时不被历史数据阻塞。
+     * Clean the repo and artifact records of the space, so the real space can be deleted.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return void
+     */
+    public function cleanSpaceRecordsTest(int $spaceID): void
+    {
+        $this->instance->dao->delete()->from(TABLE_REPO)->where('spaceID')->eq($spaceID)->exec();
+        $this->instance->dao->delete()->from(TABLE_ARTIFACT)->where('spaceID')->eq($spaceID)->exec();
+        dao::$errors = array();
+    }
+
+    /**
      * Test deleteSpace method success result.
      *
      * @param  int $spaceID

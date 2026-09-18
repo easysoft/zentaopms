@@ -2087,7 +2087,7 @@ class biModel extends model
                 $drillConditions[$field] = $this->processDrills($field, $drillFields, $columns);
                 $isDrill[$field]         = isset($columns[$field]['link']) && $totalColspan === 0;
 
-                if(is_string($value)) $columnMaxLen[$field] = max($columnMaxLen[$field], mb_strlen($value));
+                if(is_string($value)) $columnMaxLen[$field] = max(zget($columnMaxLen, $field, 0), mb_strlen($value));
 
                 /* 定义数据表格合并单元格的配置。*/
                 /* Define configuration to merge cell of the data table. */
@@ -2147,7 +2147,7 @@ class biModel extends model
      */
     public function processDrills(string $field, array $drillFields, array $columns): array
     {
-        $column = $columns[$field];
+        $column = zget($columns, $field, array());
         if(!isset($column['drillField'])) return array();
 
         return $this->prepareDrillConditions($drillFields, $column['condition'], $column['drillField']);

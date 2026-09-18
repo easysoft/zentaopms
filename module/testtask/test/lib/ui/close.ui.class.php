@@ -17,7 +17,7 @@ class closeTester extends tester
         $form->wait(1);
         if(isset($date)) $form->dom->realFinishedDate->setValue($date);
         $form->dom->submitBtn->click();
-        $form->wait(1);
+        $form->wait(3);
         if(isset($date) && strtotime($date) < strtotime($form->dom->begin->getText()))
         {
             if($form->dom->realFinishedDateTip->getText() != sprintf($this->lang->testtask->finishedDateLess, $form->dom->begin->getText())) return $this->failed('实际完成日期小于开始日期时提示错误');

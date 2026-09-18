@@ -778,6 +778,7 @@ class my extends control
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->doc;
         $this->view->docs       = $docs;
+        $this->view->libs       = $this->doc->getLibs();
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->browseType = $browseType;
         $this->view->recTotal   = $recTotal;
@@ -1439,9 +1440,6 @@ class my extends control
     {
         $this->lang->navGroup->my = 'system';
 
-        /* Save session. */
-        $this->session->set('userList', $this->app->getURI(true), 'my');
-
         /* Set the pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -1803,7 +1801,7 @@ class my extends control
      */
     public function ajaxSaveVisionTips()
     {
-        $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.hideVisionTips", 1);
+        if(isset($this->app->user->account)) $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.hideVisionTips", 1);
         return $this->send(array('result' => 'success', 'load' => helper::createLink('index', 'index')));
     }
 

@@ -17,44 +17,15 @@ jsVar('storyID', $story->id);
 jsVar('undoneTasks', $undoneTasks);
 jsVar('confirmCloseTips', sprintf($lang->story->undoneTasksTips, $undoneTasks));
 
+$fields = useFields('story.close');
+
 modalHeader();
 formPanel
 (
     set::submitBtnText($lang->story->closeAction),
     set::ajax(array('beforeSubmit' => jsRaw('checkSubmit'))),
-    formGroup
-    (
-        setID('closedReason'),
-        set::name('closedReason'),
-        set::label($lang->story->closedReason),
-        set::width('1/3'),
-        set::value(''),
-        set::items($reasonList),
-        on::change('#closedReason', 'setStory')
-    ),
-    formGroup
-    (
-        set::hidden(true),
-        setID('duplicateStoryBox'),
-        set::required(true),
-        set::label($lang->story->duplicateStory),
-        set::width('1/2'),
-        set::value(''),
-        picker
-        (
-            set::name('duplicateStory'),
-            set::items(createLink('story', 'ajaxGetDuplicatedStories', "storyID=$story->id&productID=$story->product")),
-            set::maxItemsCount(100)
-        )
-    ),
-    formGroup
-    (
-        set::label($lang->comment),
-        set::control('editor'),
-        set::name('comment')
-    )
+    set::fields($fields)
 );
+
 hr();
 history();
-
-render();

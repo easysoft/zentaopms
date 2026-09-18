@@ -516,4 +516,20 @@ class productplanModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return array('测试通过');
     }
+
+    /**
+     * 测试获取产品计划的邮件通知收件人。
+     * Test getToAndCcList method.
+     *
+     * @param  object $plan
+     * @access public
+     * @return array|false|string
+     */
+    public function getToAndCcListTest(object $plan): array|false|string
+    {
+        $result = $this->productplan->getToAndCcList($plan);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

@@ -267,8 +267,8 @@ class transferModel extends model
             }
 
             $fieldList[$field->field]['name']  = $field->field;
-            $fieldList[$field->field]['label'] = $field->name;
-            $fieldList[$field->field]['title'] = $field->name;
+            if(!empty($field->name)) $fieldList[$field->field]['label'] = $field->name;
+            if(!empty($field->name)) $fieldList[$field->field]['title'] = $field->name;
 
             if($notEmptyRule && strpos(",{$field->rules},", ",{$notEmptyRule->id},") !== false) $fieldList[$field->field]['required'] = true;
 
