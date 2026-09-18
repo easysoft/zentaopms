@@ -28,7 +28,7 @@ class storyPage extends page
             'phaseBtn'       => "//*[@id='table-execution-story']/div[3]/nav[1]/button[4]",
             'phases'         => "//*[@data-page='execution-story']/div[4]/menu/menu",
             /* 需求指派弹窗 */
-            'submitBtn' => "//*[@data-name='assignedTo']/../div[3]/div/button",
+            'submitBtn' => "//div[contains(@id,'modal')]//button[@type='submit']",
             /* 需求估算弹窗 */
             'reestimate' => "//*[@id='storyEstimateTable']/../../div/button",
             'estimateA'  => "//*[@id='storyEstimateTable']/tbody/tr[2]/td[last()]/input",
