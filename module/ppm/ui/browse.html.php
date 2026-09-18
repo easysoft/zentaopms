@@ -17,7 +17,6 @@ if(isset($config->ppm->dtable->fieldList['repo'])) $config->ppm->dtable->fieldLi
 
 $ppms = initTableData($ppmList, $config->ppm->dtable->fieldList, $this->ppm);
 
-/* 空间、代码库筛选链接统一保留状态、排序和每页条数，并回到第一页。链接参数顺序需与 browse() 的形参顺序一致：repoID、mode、param、objectID、orderBy、recTotal、recPerPage、pageID、spaceID。 */
 $filterParams = "mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1";
 
 $spaceItems = array();
@@ -27,7 +26,6 @@ foreach($spaces as $id => $spaceName)
     $spaceItems[] = array('text' => $spaceName, 'url' => createLink('ppm', 'browse', "repoID=0&{$filterParams}&spaceID={$id}"));
 }
 
-/* 代码库下拉选项随空间变化：未选择空间时展示全部代码库，选中空间后仅展示该空间下的代码库。 */
 $repoItems = array();
 $repoItems[] = array('text' => $lang->ppm->allRepo, 'url' => createLink('ppm', 'browse', "repoID=0&{$filterParams}&spaceID={$spaceID}"));
 foreach($spaceRepos as $id => $repoName)
@@ -44,7 +42,6 @@ featureBar
             to('trigger', btn(zget($spaces, $spaceID, $lang->ppm->allSpace), setID('spaceDropdown'), setClass('ghost text-ellipsis text-left'))),
             set::items($spaceItems)
         ),
-        /* 代码库筛选仅在代码评审一级导航下展示，节点需内联创建，避免在代码库tab下作为游离节点被渲染。 */
         $config->vision == 'gitfox' ? dropdown
         (
             to('trigger', btn(zget($spaceRepos, $repoID, $lang->ppm->allRepo), setID('repoDropdown'), setClass('ghost text-ellipsis text-left'))),
@@ -55,9 +52,7 @@ featureBar
     set::linkParams("repoID={$repoID}&mode=status&param={key}&objectID={$objectID}&orderBy={$orderBy}&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1&spaceID={$spaceID}")
 );
 
-/* 代码库tab（独立版）和devops（开源版）下的列表按代码库过滤，创建时带上当前代码库；评审一级导航下由用户在表单里选择。 */
-$linkParams = in_array($app->tab, array('devops', 'repo')) ? "repoID={$repo->id}" : '';
-/* 镜像代码库不能创建合并请求：镜像库不会出现在代码库筛选选项里，仓库级视图下也直接不展示创建入口，无需再提示。 */
+$linkParams   = in_array($app->tab, array('devops', 'repo')) ? "repoID={$repo->id}" : '';
 $canCreate    = hasPriv($app->rawModule, 'create') && !($repoID && !empty($repo->mirror));
 $createBtnUrl = createLink($app->rawModule, 'create', $linkParams);
 

@@ -58,7 +58,7 @@ class artifactmembersprivEntry extends baseEntry
         if(empty($spaceID) && empty($repoID))
         {
             /* 公开制品库：所有有效用户均可访问。 */
-            $members = $this->user->getPairs('noletter|noempty|nodeleted|noclosed');
+            $members = $this->user->getPairs('noletter|noempty|nodeleted|noclosed', '', 0, '', true, false);
         }
         elseif(!empty($spaceID) && empty($repoID))
         {
@@ -68,7 +68,7 @@ class artifactmembersprivEntry extends baseEntry
 
             $spaceMembers      = $this->space->getSpaceMembers($space->id);
             $fakeRepo          = new stdclass();
-            $fakeRepo->members = $space->acl == 'private' ? $spaceMembers : $this->user->getPairs('noletter|noempty|nodeleted|noclosed');
+            $fakeRepo->members = $space->acl == 'private' ? $spaceMembers : $this->user->getPairs('noletter|noempty|nodeleted|noclosed', '', 0, '', true, false);
             $members           = $this->repo->getRepoMembers($fakeRepo);
         }
         else
@@ -87,7 +87,7 @@ class artifactmembersprivEntry extends baseEntry
             else
             {
                 $spaceMembers  = $this->space->getSpaceMembers($space->id);
-                $repo->members = $space->acl == 'private' ? $spaceMembers : $this->user->getPairs('noletter|noempty|nodeleted|noclosed');
+                $repo->members = $space->acl == 'private' ? $spaceMembers : $this->user->getPairs('noletter|noempty|nodeleted|noclosed', '', 0, '', true, false);
             }
             $members = $this->repo->getRepoMembers($repo);
         }
@@ -104,6 +104,6 @@ class artifactmembersprivEntry extends baseEntry
             );
         }
 
-        return $this->send(200, $privs);
+        return $this->send(200, (object)$privs);
     }
 }
