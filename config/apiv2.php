@@ -251,9 +251,13 @@ $routes['/projects/:projectID/auditplans']       = array('redirect' => '/auditpl
 $routes['/projects/:projectID/auditplans/batch'] = array('post' => array('redirect' => '/auditplans/batchCreate?projectID=:projectID', 'response' => '*'));
 $routes['/executions/:executionID/auditplans']   = array('redirect' => '/auditplans?projectID=:executionID&from=execution', 'response' => 'auditplans(array),pager', 'search' => array('enabled' => true));
 $routes['/auditplans/:auditplanID']              = array(
-    'get' => array('response' => 'auditplan,actions(array),results(array),ncs(array)'),
-    'put' => array('response' => '*')
+    'get'    => array('response' => 'auditplan,actions(array),results(array),ncs(array)'),
+    'put'    => array('response' => '*'),
+    'delete' => array('response' => '*')
 );
+$routes['/auditplans/:auditplanID/check']        = array('post' => array('method' => 'check', 'response' => '*'));
+$routes['/projects/:projectID/ncs']              = array('post' => array('redirect' => '/nc/create?projectID=:projectID', 'response' => '*'));
+$routes['/executions/:executionID/ncs']          = array('post' => array('redirect' => '/nc/create?projectID=:executionID&from=execution', 'data' => 'execution=:executionID', 'response' => '*'));
 
 $routes['/feedbacks']                     = array('method' => 'admin', 'response' => 'feedbacks(array),pager', 'search' => array('enabled' => true));
 $routes['/products/:productID/feedbacks'] = array('redirect' => '/feedbacks?param=:productID', 'search' => array('enabled' => true));
