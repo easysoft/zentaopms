@@ -1154,7 +1154,7 @@ class upgrade extends control
     public function ajaxUpgradeDoc(int $docID)
     {
         $doc = $this->dao->select('t1.*,t2.title,t2.content,t2.type as `contentType`,t2.`rawContent`,t1.version')->from(TABLE_DOC)->alias('t1')
-            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc AND t1.version=t2.version')
             ->where('t1.id')->eq($docID)
             ->fetch();
 
@@ -1235,7 +1235,7 @@ class upgrade extends control
     public function ajaxUpgradeDocTemplate(int $docID)
     {
         $docTemplate = $this->dao->select('t1.*, t2.title, t2.content, t2.type as `contentType`, t1.version')->from(TABLE_DOC)->alias('t1')
-            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc AND t1.version=t2.version')
             ->where('t1.id')->eq($docID)
             ->fetch();
         if(empty($docTemplate)) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
