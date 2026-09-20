@@ -27,7 +27,7 @@ modalHeader();
 div
 (
     setClass('panel-form mx-auto'),
-    formPanel(set::fields($fields)),
+    form(set::fields($fields)),
     h::hr(setClass('mt-6 mb-6')),
     history(set::objectID($story->id))
 );
