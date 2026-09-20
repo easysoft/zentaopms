@@ -2635,7 +2635,7 @@ class repo extends control
         /* Save the original $repoID to this variable to check if $repoID is 0. */
         $isAllRepo = !$repoID;
 
-        if($repoID == 0) $repoID = $this->repo->saveState($repoID);
+        if($repoID) $repoID = $this->repo->saveState($repoID);
         $this->commonAction($repoID, (int)$objectID);
 
         $firstOpen  = empty($browseType);
@@ -2647,7 +2647,7 @@ class repo extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $bugs = $this->repo->getBugsByRepo($objectID && $isAllRepo ? 0 : $repoID, $browseType, $objectID, array(), $orderBy, $pager);
+        $bugs = $this->repo->getBugsByRepo($repoID, $browseType, $objectID, array(), $orderBy, $pager);
         if($firstOpen && empty($bugs)) return $this->locate(inLink('review', "repoID={$repoID}&browseType=all"));
 
         $repo = $this->repo->getById($repoID);
@@ -2657,7 +2657,7 @@ class repo extends control
             $revisions[] = $bug->v2;
             if(!empty($bug->v1)) $revisions[] = $bug->v1;
         }
-        $this->view->historys = $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repoID)->fetchPairs('revision', 'commit');
+        $this->view->historys = $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->beginIF($repoID)->andWhere('repo')->eq($repoID)->fi()->fetchPairs('revision', 'commit');
 
         if($this->app->tab == 'execution') $this->view->executionID = $objectID;
 

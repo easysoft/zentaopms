@@ -1317,6 +1317,7 @@ class codescan extends control
         $this->view->title         = $this->lang->codescan->issue;
         $this->view->type          = 'issue';
         $this->view->issues        = zget($issueList, 'data', array());
+        $this->view->repoList      = $repoList;
         $this->view->pager         = $pager;
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $type;

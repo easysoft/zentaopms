@@ -22,8 +22,8 @@ jsVar('appTab', $app->tab);
 
 foreach($bugs as $bug)
 {
-    $repo          = zget($repos, $bug->repo, $repo);
-    $bug->repoName = $repo->name;
+    $bugRepo       = zget($repos, $bug->repo, $repo);
+    $bug->repoName = is_object($bugRepo) ? $bugRepo->name : '';
 
     $v1 = $bug->v1;
     $v2 = $bug->v2;
@@ -64,8 +64,28 @@ if(hasPriv('bug', 'batchAssignTo'))
 $bugs = initTableData($bugs, $config->repo->reviewDtable->fieldList);
 
 if($app->tab == 'project' || $app->tab == 'execution') $repoID = 0;
-\zin\featureBar
+
+/* 代码库筛选下拉。The repo filter dropdown. */
+$repoItems = array();
+if($config->vision == 'gitfox' && $app->tab == 'issue')
+{
+    $repoItems[] = array('text' => $lang->repo->allRepo, 'data-app' => 'issue', 'url' => createLink('repo', 'review', "repoID=0&browseType={$browseType}&objectID={$objectID}"));
+    foreach($repoPairs as $repoId => $repoName)
+    {
+        $repoItems[] = array('text' => $repoName, 'data-app' => 'issue', 'url' => createLink('repo', 'review', "repoID={$repoId}&browseType={$browseType}&objectID={$objectID}"));
+    }
+}
+
+featureBar
 (
+    $config->vision != 'gitfox' || $app->tab != 'issue' ? null : to::before
+    (
+        dropdown
+        (
+            to('trigger', btn(zget($repoPairs, $repoID, $lang->repo->allRepo), setID('repoDropdown'), setClass('ghost text-ellipsis text-left'))),
+            set::items($repoItems)
+        )
+    ),
     set::current($browseType),
     set::linkParams("repoID={$repoID}&browseType={key}&objectID={$objectID}")
 );

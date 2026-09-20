@@ -65,8 +65,24 @@ foreach($severityList as &$value)
     if($value) $value = $lang->codescan->severityList[$value];
 }
 
+/* 代码库筛选下拉。The repo filter dropdown. */
+$repoItems = array();
+if($config->vision == 'gitfox' && $app->tab == 'issue')
+{
+    $repoItems[] = array('text' => $lang->codescan->allRepo, 'data-app' => 'issue', 'url' => createLink('codescan', 'issue', "repoID=0&taskID=0&serviceRepoID=0&type={$browseType}&queryID={$queryID}&severity={$severity}&extras={$extras}"));
+    foreach($repoList as $repoId => $repoName)
+    {
+        $repoItems[] = array('text' => $repoName, 'data-app' => 'issue', 'url' => createLink('codescan', 'issue', "repoID={$repoId}&taskID=0&serviceRepoID=0&type={$browseType}&queryID={$queryID}&severity={$severity}&extras={$extras}"));
+    }
+}
+
 $featureBar = $isInModal ? null : featureBar
 (
+    $config->vision == 'gitfox' && $app->tab == 'issue' ? to::before(dropdown
+    (
+        to('trigger', btn(zget($repoList, $repoID, $lang->codescan->allRepo), setID('repoDropdown'), setClass('ghost text-ellipsis text-left'))),
+        set::items($repoItems)
+    )) : null,
     set::current($browseType),
     set::load('table'),
     empty($taskID) ? null : set::link("javascript:changeType('repoID={$repoID}&taskID={$taskID}&serviceRepoID={$serviceRepoID}&type={key}&queryID=0&severity={$severity}&extras={$extras}');"),
