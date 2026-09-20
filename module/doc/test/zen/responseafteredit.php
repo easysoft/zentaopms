@@ -18,6 +18,8 @@ cid=16217
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
+zenData('webhook')->gen(0);
+
 $doc = zenData('doc');
 $doc->id->range('1-10');
 $doc->lib->range('1-5');
@@ -25,6 +27,7 @@ $doc->title->range('Document`10');
 $doc->status->range('normal{5},draft{5}');
 $doc->type->range('text');
 $doc->addedBy->range('admin');
+$doc->mailto->range('admin');
 $doc->deleted->range('0');
 $doc->gen(10);
 

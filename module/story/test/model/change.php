@@ -22,18 +22,20 @@ cid=18479
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
+
+zenData('user')->gen(0);
+$user = zenData('user');
+$user->id->range('1-2');
+$user->account->range('admin,user1');
+$user->realname->range('管理员,用户1');
+$user->gen(2);
+
 su('admin');
 
 zenData('story')->gen(30);
 zenData('storyspec')->gen(90);
 zenData('doc')->gen(30);
 zenData('notify')->gen(0);
-
-$user = zenData('user');
-$user->account->range('admin,user1');
-$user->realname->range('管理员,用户1');
-$user->gen(2);
-
 
 $story  = new storyModelTest();
 
@@ -88,6 +90,10 @@ $types = array();
 $types['story']       = array('mentioned');
 $types['requirement'] = array('mentioned');
 $tester->config->message->setting = array('message' => array('setting' => $types));
+
+global $app;
+$app->loadLang('action');
+$app->loadLang('message');
 
 $story->changeTest(5, $mentionStory);
 r($story->getLastMentionNotifyInfo()) && p('notifyCount,mentionUser') && e('1,user1'); // 测试变更时在 spec 中提到的用户发送 mention 通知

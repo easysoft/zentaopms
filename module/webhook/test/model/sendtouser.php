@@ -20,6 +20,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
+zenData('oauth')->gen(0);
+
 $webhook = zenData('webhook');
 $webhook->id->range('1-5');
 $webhook->type->range('dinguser{1},wechatuser{1},feishuuser{1},dinggroup{1},default{1}');
