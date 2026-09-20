@@ -3099,7 +3099,7 @@ class baseRouter
     {
         global $dao;
 
-        $driver = $this->config->db->driver;
+        $driver = $this->dbh->getPdoDriver();
 
         $classFile = $this->coreLibRoot . 'dao' . DS . $driver . '.class.php';
         include_once($classFile);
