@@ -411,12 +411,23 @@ class messageModel extends model
         {
             if(strpos((string)$action->extra, '|') !== false)
             {
-                $columns      = explode('|', $action->extra);
-                $fromColID    = $columns[0];
-                $toColID      = $columns[1];
+                $extraList    = explode('|', $action->extra);
+                $fromLaneID   = $extraList[0];
+                $fromColID    = $extraList[1];
+                $toLaneID     = $extraList[2];
+                $toColID      = $extraList[3];
                 $fromColTitle = $this->dao->select('name')->from(TABLE_KANBANCOLUMN)->where('id')->eq($fromColID)->fetch('name');
                 $toColTitle   = $this->dao->select('name')->from(TABLE_KANBANCOLUMN)->where('id')->eq($toColID)->fetch('name');
-                $noticeText   = str_replace(array('{fromColTitle}', '{toColTitle}'), array($fromColTitle, $toColTitle), $noticeText);
+                if($fromLaneID == $toLaneID)
+                {
+                    $noticeText .= str_replace(array('{fromColTitle}', '{toColTitle}'), array($fromColTitle, $toColTitle), $this->lang->message->noticeText->skipColSuffix);
+                }
+                else
+                {
+                    $fromLaneTitle = $this->dao->select('name')->from(TABLE_KANBANLANE)->where('id')->eq($fromLaneID)->fetch('name');
+                    $toLaneTitle   = $this->dao->select('name')->from(TABLE_KANBANLANE)->where('id')->eq($toLaneID)->fetch('name');
+                    $noticeText   .= str_replace(array('{fromLaneTitle}', '{fromColTitle}', '{toLaneTitle}', '{toColTitle}'), array($fromLaneTitle, $fromColTitle, $toLaneTitle, $toColTitle), $this->lang->message->noticeText->skipLaneSuffix);
+                }
             }
         }
 
