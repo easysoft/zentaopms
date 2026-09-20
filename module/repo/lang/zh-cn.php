@@ -61,6 +61,7 @@ $lang->repo->unlink          = '解除关联';
 $lang->repo->visit           = '访问';
 $lang->repo->space           = '所属空间';
 $lang->repo->allSpace        = '全部空间';
+$lang->repo->allRepo         = '全部代码库';
 $lang->repo->members         = '成员';
 $lang->repo->sshManager      = 'SSH密钥管理';
 $lang->repo->defaultArtifact = '默认制品库';

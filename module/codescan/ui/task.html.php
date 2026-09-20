@@ -14,8 +14,24 @@ jsVar('planList', $planList);
 if($repoID && !$isInPlanView) dropmenu(set::objectID($repoID), set::tab('repo'));
 if($isInPlanView) include 'plan.header.html.php';
 
+/* 代码库筛选下拉。The repo filter dropdown. */
+$repoItems = array();
+if($config->vision == 'gitfox' && $app->tab == 'codescan')
+{
+    $repoItems[] = array('text' => $lang->codescan->allRepo, 'data-app' => 'codescan', 'url' => createLink('codescan', 'task', "repoID=0&serviceRepoID=0&planID=0&type={$type}&queryID={$queryID}"));
+    foreach($repoList as $repoId => $repoName)
+    {
+        $repoItems[] = array('text' => $repoName, 'data-app' => 'codescan', 'url' => createLink('codescan', 'task', "repoID={$repoId}&serviceRepoID=0&planID=0&type={$type}&queryID={$queryID}"));
+    }
+}
+
 $isInPlanView ? null : featureBar
 (
+    $config->vision == 'gitfox' && $app->tab == 'codescan' ? to::before(dropdown
+    (
+        to('trigger', btn(zget($repoList, $repoID, $lang->codescan->allRepo), setID('repoDropdown'), setClass('ghost text-ellipsis text-left'))),
+        set::items($repoItems)
+    )) : null,
     div(searchToggle(set::module('codeScanTask'), set::open($type == 'bySearch')))
 );
 $config->codescan->task->dtable->fieldList['repo']['map']   = $repoList;
