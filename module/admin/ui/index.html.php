@@ -14,7 +14,8 @@ namespace zin;
 /* Get latest data from zentao.net if ZenTaoPMS has internet and the user is admin. */
 jsVar('hasInternet', $zentaoData->hasData || $hasInternet);
 jsVar('isAdminUser', $this->app->user->admin);
-$isEn = $app->getClientLang() == 'en';
+$isEn     = $app->getClientLang() == 'en';
+$isGitfox = $config->vision == 'gitfox';
 
 $buildHeader = function(string $title, string $actionUrl = '', string $titleIcon = '', string $actionLang = '', string $actionIcon = ''): h
 {
@@ -136,7 +137,8 @@ foreach($lang->admin->menuList as $menuKey => $menu)
 }
 
 $pluginItems = array();
-if($zentaoData->plugins)
+/* GitFox独立版不展示插件推荐区块。 */
+if(!$isGitfox && $zentaoData->plugins)
 {
     foreach($zentaoData->plugins as $plugin)
     {
@@ -163,7 +165,8 @@ if($zentaoData->plugins)
 }
 
 $classItems = array();
-if($zentaoData->classes)
+/* GitFox独立版不展示公开课区块，此处不生成卡片节点，避免节点游离到页面顶部。 */
+if(!$isGitfox && $zentaoData->classes)
 {
     foreach($zentaoData->classes as $class)
     {
@@ -213,21 +216,24 @@ foreach($zentaoData->dynamics as $dynamic)
 }
 
 $patchItems = array();
-foreach($zentaoData->patches as $patch)
+if(!$isGitfox)
 {
-    $patchItems[] = div
-    (
-        setClass('border-t pt-2.5 pb-3 px-4'),
-        $buildPluginHeader($patch->name, $patch->viewLink),
-        div
-        (
-            setClass('overflow-hidden h-10'),
-            $patch->desc
-        )
-    );
+    foreach($zentaoData->patches as $patch)
+    {
+        $patchItems[] = div
+            (
+                setClass('border-t pt-2.5 pb-3 px-4'),
+                $buildPluginHeader($patch->name, $patch->viewLink),
+                div
+                (
+                    setClass('overflow-hidden h-10'),
+                    $patch->desc
+                )
+            );
+    }
 }
 
-if($config->edition != 'ipd')
+if($config->edition != 'ipd' && !$isGitfox)
 {
     $upgradeEditions = array('biz', 'max', 'ipd');
     if($config->edition == 'biz') $upgradeEditions = array('max', 'ipd');
@@ -304,19 +310,19 @@ div
             setClass('flex'),
             div
             (
-                setClass('bg-white rounded-md mb-4 w-1/3'),
+                setClass('bg-white rounded-md mb-4 ' . ($isGitfox ? 'w-full' : 'w-1/3')),
                 $buildHeader($lang->admin->officialAccount),
                 div
                 (
                     setClass('flex px-4'),
                     img
                     (
-                        setClass('w-1/3'),
-                        set::src('static/images/wechat.jpg')
+                        setClass($isGitfox ? 'w-28' : 'w-1/3'),
+                        set::src($isGitfox ? 'static/images/qucheng-wechat.jpg' : 'static/images/wechat.jpg')
                     ),
                     div
                     (
-                        setClass('pl-2 w-2/3'),
+                        setClass($isGitfox ? 'pl-2 flex-1' : 'pl-2 w-2/3'),
                         $lang->admin->followUs,
                         div
                         (
@@ -325,7 +331,7 @@ div
                         )
                     )
                 ),
-                !$bind && !$ignore && $hasInternet && common::hasPriv('admin', 'register') ? div
+                !$bind && !$ignore && $hasInternet && common::hasPriv('admin', 'register') && !$isGitfox ? div
                 (
                     setClass('px-4 pb-4'),
                     substr($lang->admin->notice->register, 0, strpos($lang->admin->notice->register, '%s')),
@@ -337,7 +343,7 @@ div
                     substr($lang->admin->notice->register, strpos($lang->admin->notice->register, '%s') + 2)
                 ) : null
             ),
-            div
+            $isGitfox ? null : div
             (
                 setID('publicClass'),
                 setClass('bg-white rounded-md ml-4 mb-4 w-2/3'),
@@ -384,13 +390,13 @@ div
             $buildHeader($lang->admin->updateDynamics, $config->admin->dynamicURL),
             $dynamicItems
         ),
-        div
+        $isGitfox ? null : div
         (
             setClass('border rounded-md mb-4'),
             $buildHeader($lang->admin->updatePatch, $config->admin->patchURL),
             $patchItems
         ),
-        $config->edition != 'ipd' ? div
+        $config->edition != 'ipd' && !$isGitfox ? div
         (
             setClass('border rounded-md mb-4'),
             $buildHeader($lang->admin->upgradeRecommend),

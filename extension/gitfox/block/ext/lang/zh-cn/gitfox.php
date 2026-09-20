@@ -39,7 +39,6 @@ $lang->block->moduleList = array
     'welcome'         => $lang->block->welcome->common,
     'zentaodynamic'   => $lang->block->zentaoDynamic,
     'teamachievement' => $lang->block->teamAchievement,
-    'assigntome'      => $lang->block->assignToMe,
     'dynamic'         => $lang->block->dynamic,
     'html'            => $lang->block->html
 );
