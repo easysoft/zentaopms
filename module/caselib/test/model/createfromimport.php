@@ -3,6 +3,8 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+error_reporting(E_ERROR);
+
 zenData('case')->gen(220);
 zenData('casestep')->gen(0);
 zenData('casespec')->gen(0);

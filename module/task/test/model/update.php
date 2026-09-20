@@ -61,6 +61,7 @@ $execution->gen(9);
 
 $task = zenData('task');
 $task->id->range('1-9');
+$task->project->range('1');
 $task->execution->range('1-9');
 $task->story->range('1-9');
 $task->name->prefix("任务")->range('1-9');

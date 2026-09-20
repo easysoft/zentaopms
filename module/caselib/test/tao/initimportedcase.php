@@ -3,6 +3,8 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
+error_reporting(E_ERROR);
+
 su('admin');
 
 /**

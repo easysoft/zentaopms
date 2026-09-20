@@ -2,4 +2,6 @@
 #mainContent > .panel .panel-body {padding: 0px 16px 16px 16px;}
 #mainContent > .panel .panel-body .move-extfile-tip {background-color: var(--color-secondary-50);}
 #mainContent > .panel .panel-body .cell label[for='checkAll'] {font-size: 14px; font-weight: 600;}
-#mainContent > .panel .panel-body .extfiles {height: 360px; overflow-y: auto; margin-top: 0px;}
+#mainContent > .panel .panel-body .extfiles {overflow-y: auto; margin-top: 0px;}
+#mainContent > .panel .panel-body .extfiles.has-list {height: 360px;}
+#mainContent > .panel .panel-body .extfiles:not(.has-list) {padding: 16px 0 24px;}
