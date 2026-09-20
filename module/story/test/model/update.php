@@ -25,6 +25,14 @@ cid=18593
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
+
+zenData('user')->gen(0);
+$user = zenData('user');
+$user->id->range('1-2');
+$user->account->range('admin,user1');
+$user->realname->range('管理员,用户1');
+$user->gen(2);
+
 su('admin');
 
 zenData('story')->loadYaml('story')->gen(2);
@@ -45,15 +53,14 @@ r($result1) && p('title,pri,sourceNote,estimate') && e('编辑后的名称1,1,�
 r($result2) && p('title,pri,sourceNote,estimate') && e('编辑后的名称2,2,来源备注2,2.00'); // 编辑需求，判断返回的信息
 
 zenData('notify')->gen(0);
-$user = zenData('user');
-$user->account->range('admin,user1');
-$user->realname->range('管理员,用户1');
-$user->gen(2);
 
 $types = array();
 $types['story']         = array('mentioned');
 $types['requirement']   = array('mentioned');
 $tester->config->message->setting = array('message' => array('setting' => $types));
+
+$app->loadLang('action');
+$app->loadLang('message');
 
 $mentionSpan = '<span class="mention-label" data-type="mention" data-id="user1">@user1</span>';
 $mentionParams = array('id' => 1, 'title' => '编辑mention需求', 'spec' => $mentionSpan, 'oldDocs' => array(), 'docVersions' => array(), 'docs' => null, 'linkStories' => '', 'comment' => '');
