@@ -1,5 +1,5 @@
 <?php
-$lang->block->summary->welcome = 'GitFox has been with you for %s';
+$lang->block->summary->welcome = 'gitfox has been with you for %s';
 
 $lang->block->welcome->reviewByMe = 'Related to Me';
 
@@ -30,8 +30,8 @@ $lang->block->teamachievement->createdReviews = 'Created Reviews';
 $lang->block->teamachievement->mergedReviews  = 'Merged Reviews';
 $lang->block->teamachievement->resolvedIssues = 'Resolved Issues';
 
-$lang->block->zentaoDynamic              = 'GitFox News';
-$lang->block->titleList['zentaodynamic'] = 'GitFox News';
+$lang->block->zentaoDynamic              = 'gitfox News';
+$lang->block->titleList['zentaodynamic'] = 'gitfox News';
 
 $lang->block->moduleList = array
 (
@@ -49,7 +49,7 @@ $lang->block->default['full']['my'] = array
     array('title' => 'Welcome',              'module' => 'welcome',         'code' => 'welcome',          'width' => '2'),
     array('title' => 'My Pending Reviews',   'module' => 'ppm',             'code' => 'reviewbyme',       'width' => '2', 'params' => array('count' => '20')),
     array('title' => 'Reviews I Created',    'module' => 'ppm',             'code' => 'reviewcreatedbyme','width' => '2', 'params' => array('count' => '20')),
-    array('title' => 'GitFox News',          'module' => 'zentaodynamic',   'code' => 'zentaodynamic',    'width' => '1'),
+    array('title' => 'gitfox News',          'module' => 'zentaodynamic',   'code' => 'zentaodynamic',    'width' => '1'),
     array('title' => 'Recents',              'module' => 'dynamic',         'code' => 'dynamic',          'width' => '1'),
     array('title' => 'Team Achievements',    'module' => 'teamachievement', 'code' => 'teamachievement',  'width' => '1')
 );

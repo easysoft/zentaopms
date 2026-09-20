@@ -1,5 +1,5 @@
 <?php
-$lang->block->summary->welcome = 'GitFox已陪伴您%s';
+$lang->block->summary->welcome = 'gitfox已陪伴您%s';
 
 $lang->block->welcome->reviewByMe = '与我相关';
 
@@ -30,8 +30,8 @@ $lang->block->teamachievement->createdReviews = '发起的评审数';
 $lang->block->teamachievement->mergedReviews  = '合并的评审数';
 $lang->block->teamachievement->resolvedIssues = '解决的问题数';
 
-$lang->block->zentaoDynamic              = 'GitFox动态';
-$lang->block->titleList['zentaodynamic'] = 'GitFox动态';
+$lang->block->zentaoDynamic              = 'gitfox动态';
+$lang->block->titleList['zentaodynamic'] = 'gitfox动态';
 
 $lang->block->moduleList = array
 (
@@ -49,7 +49,7 @@ $lang->block->default['full']['my'] = array
     array('title' => '欢迎总览',     'module' => 'welcome',         'code' => 'welcome',          'width' => '2'),
     array('title' => '待我评审',     'module' => 'ppm',             'code' => 'reviewbyme',       'width' => '2', 'params' => array('count' => '20')),
     array('title' => '我创建的评审', 'module' => 'ppm',             'code' => 'reviewcreatedbyme','width' => '2', 'params' => array('count' => '20')),
-    array('title' => 'GitFox动态',   'module' => 'zentaodynamic',   'code' => 'zentaodynamic',    'width' => '1'),
+    array('title' => 'gitfox动态',   'module' => 'zentaodynamic',   'code' => 'zentaodynamic',    'width' => '1'),
     array('title' => '最新动态',     'module' => 'dynamic',         'code' => 'dynamic',          'width' => '1'),
     array('title' => '团队成就',     'module' => 'teamachievement', 'code' => 'teamachievement',  'width' => '1')
 );

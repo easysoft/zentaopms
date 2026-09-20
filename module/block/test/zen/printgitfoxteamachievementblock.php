@@ -54,7 +54,7 @@ $metriclib->metricCode->range('count_of_daily_gitfox_commits{2},count_of_daily_g
 $metriclib->system->range('1{8}');
 $metriclib->year->range(date('Y') . '{8}');
 $metriclib->month->range(date('m') . '{8}');
-$metriclib->day->range(date('d') . '{4},' . date('d', strtotime('-1 day')) . '{4}');
+$metriclib->day->range(date('d') . ',' . date('d', strtotime('-1 day')) . ',' . date('d') . ',' . date('d', strtotime('-1 day')) . ',' . date('d') . ',' . date('d', strtotime('-1 day')) . ',' . date('d') . ',' . date('d', strtotime('-1 day')));
 $metriclib->value->range('8,18,6,16,7,17,9,19');
 $metriclib->calcType->range('cron{8}');
 $metriclib->gen(8);
