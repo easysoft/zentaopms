@@ -1252,27 +1252,14 @@ class testtaskModel extends model
             ->orderBy('grade_desc, sort_asc')
             ->fetchAll('id', false);
 
-        $displayScenes = array();
         foreach($runs as $run)
         {
-            if(!empty($run->scene)) $displayScenes[] = $run->scene;
             if(empty($run->scene) || !isset($scenes[$run->scene])) continue;
             $run->parent  = 'scene-' . $run->scene;
             $run->isScene = false;
         }
 
         foreach($scenes as $scene)
-        {
-            foreach($displayScenes as $displayScene)
-            {
-                if(str_contains($scene->path, $displayScene . ','))
-                {
-                    $displayScenes = array_merge($displayScenes, explode(',', trim($scene->path, ',')));
-                }
-            }
-        }
-
-        foreach($scenes as $id => $scene)
         {
             $scene->parent  = !empty($scene->parent) && isset($scenes[$scene->parent]) ? 'scene-' . $scene->parent : 0;
             $scene->id      = 'scene-' . $scene->id;
