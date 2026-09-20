@@ -36,9 +36,6 @@ $config->repo->dtable->fieldList['actions']['list']['edit']['url'] = $this->crea
 $config->repo->dtable->fieldList['space']['map']                   = $spaces;
 if($inSpace) unset($config->repo->dtable->fieldList['space']);
 
-/* GitFox 独立版的 repo 一级导航只展示代码库列表，不展示空间筛选。 */
-$isGitfox = $config->vision == 'gitfox' || $config->edition == 'gitfox';
-
 if(empty($config->repo->maintain->showRepoPath))
 {
     unset($config->repo->dtable->fieldList['path']);
@@ -61,7 +58,7 @@ foreach($spaces as $id => $spaceName)
 
 featureBar
 (
-    ($inSpace || $isGitfox) ? null : to::before
+    $inSpace ? null : to::before
     (
         dropdown
         (
