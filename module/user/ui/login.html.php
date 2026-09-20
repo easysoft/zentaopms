@@ -98,7 +98,7 @@ div
                     setID('logo-box'),
                     set::style(array('background-image' => 'url(' . $imgBasePath . $config->user->loginImg['bg'] . ')')),
                     h::img(setID('login-logo'), set::style(array('top' => $logoVerticalMargin)),  set::src($imgBasePath . $logoImg)),
-                    ($config->edition == 'gitfox') ? null : h::img(setID('login-ai'), set::style(array('bottom' => $aiVerticalMargin)), set::src($imgBasePath . $config->user->loginImg['ai']))
+                    h::img(setID('login-ai'), set::style(array('bottom' => $aiVerticalMargin)), set::src($imgBasePath . ($config->edition == 'gitfox' ? $config->user->loginImg['gitfox'] : $config->user->loginImg['ai'])))
                 ),
                 cell
                 (
