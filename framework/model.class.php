@@ -67,8 +67,15 @@ class model extends baseModel
 
         if(!isset($config->biDB)) return;
 
-        $driver = $config->db->driver;
-        $biDAO = new $driver();
+        /* DAO 类名可能与驱动名不同，例如 postgres 对应 pgsql 类。 */
+        /* The dao class name may differ from the driver name, e.g. postgres uses the pgsql class. */
+        $daoClass = $this->app->getDaoClassName();
+        if(!class_exists($daoClass))
+        {
+            $classFile = $this->app->coreLibRoot . 'dao' . DS . $daoClass . '.class.php';
+            include_once($classFile);
+        }
+        $biDAO = new $daoClass();
 
         $biDAO->slaveDBH = $this->app->connectByPDO($config->biDB, 'BI');
 

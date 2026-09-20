@@ -139,13 +139,15 @@ class zandRouter extends router
         {
             global $config;
 
-            $driver = $config->db->driver;
-            if(!class_exists($driver))
+            /* DAO 类名可能与驱动名不同，例如 postgres 对应 pgsql 类。 */
+            /* The dao class name may differ from the driver name, e.g. postgres uses the pgsql class. */
+            $daoClass = $this->getDaoClassName();
+            if(!class_exists($daoClass))
             {
-                $classFile = $this->coreLibRoot . 'dao' . DS . $driver . '.class.php';
+                $classFile = $this->coreLibRoot . 'dao' . DS . $daoClass . '.class.php';
                 include($classFile);
             }
-            $dao = new $driver();
+            $dao = new $daoClass();
 
             $ztSessionHandler = new zandSession($dao);
             session_set_save_handler(
