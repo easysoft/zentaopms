@@ -894,6 +894,9 @@ class blockZenTest extends baseTest
         $years  = array(date('Y'), date('Y', strtotime('-1 day')));
         $months = array(date('m'), date('m', strtotime('-1 day')));
 
+        /* 与printTeamAchievementBlock保持一致，先加载metric模块，再获取度量数据。 */
+        $this->instance->loadModel('metric');
+
         $this->invokeArgs('printGitfoxTeamAchievementBlock', array($years, $months));
         if(dao::isError()) return dao::getError();
 
