@@ -45,8 +45,6 @@ class changeStoryInLiteTester extends tester
             {
                 $srCommon = $form->dom->srCommon->getText();
                 $nameTip = sprintf($this->lang->error->notempty, $srCommon);
-                var_dump($nameTip);
-                die;
                 if($form->dom->titleTip->getText() == $nameTip) return $this->success('变更目标页面名称为空提示正确');
             }
 
