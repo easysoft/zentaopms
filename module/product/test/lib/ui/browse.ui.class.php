@@ -39,12 +39,14 @@ class browseTester extends tester
         ];
         if (!$form->dom->$tab)
         {
-            $form->dom->more->click();
-            $form->wait(1);
+            $form->dom->{$type == 'SR' ? 'moreSR' : 'more'}->click();
+            $form->wait(2);
         }
         $form->dom->$tab->click();
         $form->wait(2);
-        $num = $form->dom->$tab ? $form->dom->$numDom->getText() : $form->dom->moreNum->getText();
+        $num = $form->dom->$tab
+            ? $form->dom->$numDom->getText()
+            : $form->dom->{$type == 'SR' ? 'moreNumSR' : 'moreNum'}->getText();
         if (isset($typeMessage[$type]) && isset($tabMessage[$tab]))
         {
             return ($num == $expectNum)
