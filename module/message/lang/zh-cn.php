@@ -62,7 +62,9 @@ $lang->message->noticeText->aitaskfinished = '您的数字员工任务《{object
 $lang->message->noticeText->aitaskfailed   = '您的数字员工任务《{objectTitle}》执行失败。';
 $lang->message->noticeText->minuted        = '{actor}记录了会议纪要《{objectTitle}》。';
 $lang->message->noticeText->generic        = '{actor} {action}{objectType}《{objectTitle}》。';
-$lang->message->noticeText->moved          = '{actor} 移动了看板卡片《{objectTitle}》，从 {fromColTitle} 列到 {toColTitle} 列。';
+$lang->message->noticeText->moved          = '{actor} 移动了看板卡片《{objectTitle}》，';
+$lang->message->noticeText->skipColSuffix  = '从 {fromColTitle} 列到 {toColTitle} 列。';
+$lang->message->noticeText->skipLaneSuffix = '从 {fromLaneTitle}泳道的 {fromColTitle} 列到 {toLaneTitle}泳道的 {toColTitle} 列。';
 $lang->message->noticeText->ccSuffix       = '您已被抄送。';
 
 $lang->message->noticeText->extend['submitreview']['cc']     = '{actor} 提交了{objectType}《{objectTitle}》的评审，您已被抄送。';

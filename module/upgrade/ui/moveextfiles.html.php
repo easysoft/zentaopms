@@ -13,6 +13,8 @@ namespace zin;
 set::zui(true);
 
 jsVar('result', $result);
+jsVar('copySuccess', $lang->upgrade->copySuccess);
+jsVar('copyFail', $lang->upgrade->copyFail);
 
 $checkList = array();
 if($result == 'success')
@@ -62,11 +64,12 @@ div
             ) : null,
             cell
             (
-                setClass('extfiles'),
+                setClass($result == 'success' ? 'extfiles has-list' : 'extfiles'),
                 $result == 'success' ? $checkList : div
                 (
                     h::code
                     (
+                        setID('command'),
                         setClass('bg-surface'),
                         $command
                     )
@@ -84,12 +87,19 @@ div
                 )
             ) : cell
             (
+                setClass('flex items-center'),
                 $lang->upgrade->moveEXTFileFail,
                 btn
                 (
                     on::click('loadCurrentPage()'),
                     setClass('px-6 ml-4'),
                     set::text($lang->refresh)
+                ),
+                btn
+                (
+                    on::click('copyCommand("#command")'),
+                    setClass('px-6 ml-4'),
+                    set::text($lang->upgrade->copyCommand)
                 )
             )
         )

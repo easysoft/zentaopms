@@ -16,7 +16,7 @@ class bugPage extends page
             'batchAssignBtn' => "//*[@id='table-execution-bug']/div[3]/nav[1]/button",
             'assignToAdmin'  => "//li//div[text() = 'admin']",
             /* bug指派弹窗 */
-            'submitBtn' => "//*[@id='assignedTo']/../../div[4]/div/button",
+            'submitBtn' => "//div[contains(@id,'modal')]//button[@type='submit']",
             /*1.5级产品导航 */
             'productNav'    => "//*[@id='pick-execution-menu']",
             'firstProduct'  => "(//div[@data-type='product'])[1]",

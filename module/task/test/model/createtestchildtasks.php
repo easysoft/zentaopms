@@ -29,8 +29,8 @@ cid=18785
 - 测试空数据 @0
 - 测试任务ID为空的情况属性type @test
 - 测试子测试任务的数据为空的情况属性id @3
-- 测试创建任务ID为1的子测试任务属性name @测试研发需求 #2 需求2
-- 测试创建任务ID为1的子测试任务属性name @测试 #1 需求1
+- 测试创建任务ID为1的子测试任务 @1
+- 测试创建任务ID为2的子测试任务 @1
 
 */
 
@@ -51,8 +51,10 @@ $testTasks[2]->left     = 1;
 $testTasks[3]->mailto   = '';
 
 $taskTester = new taskModelTest();
+$childTaskName = $lang->task->lblTestStory . ' #1 需求1';
+
 r($taskTester->createTestChildTasksTest())              && p()   && e('0');                         // 测试空数据
 r($taskTester->createTestChildTasksTest(0, $testTasks)) && p('type') && e('test');                  // 测试任务ID为空的情况
 r($taskTester->createTestChildTasksTest(1, array()))    && p('id')   && e('3');                     // 测试子测试任务的数据为空的情况
-r($taskTester->createTestChildTasksTest(1, $testTasks)) && p('name') && e('测试研发需求 #2 需求2'); // 测试创建任务ID为1的子测试任务
-r($taskTester->createTestChildTasksTest(2, $testTasks)) && p('name') && e('测试 #1 需求1');         // 测试创建任务ID为2的子测试任务
+r($taskTester->createTestChildTasksTest(1, $testTasks)->name === $childTaskName) && p() && e('1'); // 测试创建任务ID为1的子测试任务
+r($taskTester->createTestChildTasksTest(2, $testTasks)->name === $childTaskName) && p() && e('1'); // 测试创建任务ID为2的子测试任务

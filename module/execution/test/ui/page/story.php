@@ -11,6 +11,11 @@ class storyPage extends page
             'draftTab'     => "//*[@data-page='execution-story']//div[@id='featureBar']/menu/li[3]/a",
             'reviewingTab' => "//*[@data-page='execution-story']//div[@id='featureBar']/menu/li[4]/a",
             'num'          => "//*[@id='table-execution-story']/div[3]/div[2]/strong[1]",
+            /* 搜索 */
+            'searchBtn'       => "//*[@id='featureBar']/menu/li[5]/button",
+            'value1Picker'    => "//*[@name='value1[]']//parent::div",
+            'searchSubmitBtn' => "//*[@id='mainContentCell']/div[1]/div/form/div[2]/button[1]",
+            'searchResetBtn'  => "//*[@id='mainContentCell']/div[1]/div/form/div[2]/button[2]",
             /* 列表 */
             'firstCheckbox'  => "//*[@id='table-execution-story']/div[2]/div[1]/div/div[1]/div/div",
             'firstName'      => "//*[@id='table-execution-story']/div[2]/div[1]//div[@data-col='title']//a",
@@ -20,10 +25,10 @@ class storyPage extends page
             /* 批量操作按钮 */
             'batchAssignBtn' => "//*[@id='table-execution-story']/div[3]/nav[1]/button[1]",
             'assignToAdmin'  => "//li//div[text() = 'admin']",
-            'phaseBtn'       => "//*[@id='table-execution-story']/div[3]/nav[1]/button[3]",
+            'phaseBtn'       => "//*[@id='table-execution-story']/div[3]/nav[1]/button[4]",
             'phases'         => "//*[@data-page='execution-story']/div[4]/menu/menu",
             /* 需求指派弹窗 */
-            'submitBtn' => "//*[@data-name='assignedTo']/../div[3]/div/button",
+            'submitBtn' => "//div[contains(@id,'modal')]//button[@type='submit']",
             /* 需求估算弹窗 */
             'reestimate' => "//*[@id='storyEstimateTable']/../../div/button",
             'estimateA'  => "//*[@id='storyEstimateTable']/tbody/tr[2]/td[last()]/input",

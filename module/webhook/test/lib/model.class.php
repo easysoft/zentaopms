@@ -333,26 +333,6 @@ class webhookModelTest extends baseTest
     }
 
     /**
-     * Test getOpenIdList method.
-     *
-     * @param  int $webhookID
-     * @param  int $actionID
-     * @param  string|array $toList
-     * @access public
-     * @return mixed
-     */
-    public function getOpenIdListTest($webhookID, $actionID, $toList = '')
-    {
-        try {
-            $result = $this->instance->getOpenIdList($webhookID, $actionID, $toList);
-            if(dao::isError()) return dao::getError();
-            return $result;
-        } catch (Exception $e) {
-            return false;
-        }
-    }
-
-    /**
      * Save data Test
      *
      * @param  int    $webhookID
