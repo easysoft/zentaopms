@@ -3286,7 +3286,7 @@ class kanbanModel extends model
         $this->dao->update(TABLE_KANBANCARD)->set('group')->eq($toLane->group)->where('id')->eq($cardID)->exec();
         if(dao::isError()) return false;
 
-        $this->loadModel('action')->create('kanbanCard', $cardID, 'moved', '', "{$fromColID}|{$toColID}");
+        $this->loadModel('action')->create('kanbanCard', $cardID, 'moved', '', "{$fromLaneID}|{$fromColID}|{$toLaneID}|{$toColID}");
         return !dao::isError();
     }
 

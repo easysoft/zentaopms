@@ -85,6 +85,32 @@ class storyTester extends tester
     }
 
     /**
+     * 搜索。
+     * Search.
+     *
+     * @param  string $operator
+     * @param  string $value
+     * @access public
+     * @return object
+     */
+    public function search($operator, $value)
+    {
+        $form = $this->loadPage();
+        $form->wait(1);
+        $form->dom->searchBtn->click();
+        $form->wait(1);
+        $form->dom->searchResetBtn->click();
+        $form->wait(1);
+        $form->dom->field1->picker($this->lang->story->status);
+        $form->dom->operator1->picker($operator);
+        $form->dom->value1Picker->click();
+        $form->dom->xpath['value1'] = "//*[@class='pick-container']//div[text()='{$value}']";
+        $form->dom->value1->click();
+        $form->wait(1);
+        $form->dom->searchSubmitBtn->click();
+    }
+
+    /**
      * 批量编辑阶段。
      * Batch edit phase.
      *
@@ -96,13 +122,13 @@ class storyTester extends tester
     public function batchEditPhase($status, $phase)
     {
         $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
-        $form->wait(3);
+        $form->wait(1);
         $storyStatus = $this->lang->story->statusList->$status;
         $storyPhase  = $this->lang->story->stageList->$phase;
 
         $form->dom->xpath['stage'] = $form->dom->xpath['phases'] . "//*[text() = '{$storyPhase}']";
 
-        $form->dom->search(array("{$this->lang->story->status},=,{$storyStatus}"));
+        $this->search("=", $storyStatus);
         $form->wait(2);
         /* 因为阶段字段被遮挡，所以需要滚动到可见区域 */
         $form->dom->firstPhase->scrollToElement();

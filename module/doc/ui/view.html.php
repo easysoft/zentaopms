@@ -16,12 +16,14 @@ if(!isInModal()) include 'lefttree.html.php';
 
 $versionList = array();
 $versionMarkers = isset($versionMarkers) ? $versionMarkers : array();
+$deliverableLabel = isset($lang->project->deliverableAbbr) ? $lang->project->deliverableAbbr : '';
+$baselineLabel    = isset($lang->project->baseline) ? $lang->project->baseline : '';
 for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--)
 {
     $versionText = "#$itemVersion";
     $versionHtml = $versionText;
-    if(!empty($versionMarkers[$itemVersion]['deliverable'])) $versionHtml .= " <span class='label rounded-full size-sm outline m-1' title='{$lang->project->deliverableAbbr}'>{$lang->project->deliverableAbbr}</span>";
-    if(!empty($versionMarkers[$itemVersion]['baseline']))    $versionHtml .= " <span class='label rounded-full size-sm outline m-1' title='{$lang->project->baseline}'>{$lang->project->baseline}</span>";
+    if($deliverableLabel && !empty($versionMarkers[$itemVersion]['deliverable'])) $versionHtml .= " <span class='label rounded-full size-sm outline m-1' title='{$deliverableLabel}'>{$deliverableLabel}</span>";
+    if($baselineLabel && !empty($versionMarkers[$itemVersion]['baseline']))       $versionHtml .= " <span class='label rounded-full size-sm outline m-1' title='{$baselineLabel}'>{$baselineLabel}</span>";
 
     $versionList[] = array
     (

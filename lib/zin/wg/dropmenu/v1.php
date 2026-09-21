@@ -273,7 +273,7 @@ class dropmenu extends wg
             if($tab == 'execution')
             {
                 $project = $app->control->loadModel('project')->getByID((int)$object->project);
-                $text = $project->name . ' / ' . $text;
+                $text = $project->name . ' / ' . htmlspecialchars_decode((string)$text, ENT_QUOTES);
             }
         }
 

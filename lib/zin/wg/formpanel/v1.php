@@ -265,6 +265,12 @@ class formPanel extends panel
 
     protected function getHeadingActions(): array
     {
+        /* Use cached build results to omit empty AI entries before checking the heading. */
+        $this->blocks['headingActions'] = array_filter($this->block('headingActions'), function($item)
+        {
+            return !($item instanceof aiAgentEntry) || !empty($item->buildAll());
+        });
+
         $actions = parent::getHeadingActions();
 
         /* Custom fields. */
