@@ -604,7 +604,7 @@ class testtaskZen extends testtask
         /* If cases come from my, check the version of these cases, if not the latest version, remove them. */
         if($from == 'work' && $runIdList)
         {
-            $runs = $this->dao->select('t1.id, t1.`case`, t1.`caseVersion`, t1.version, t1.task, t2.name AS taskName')->from(TABLE_TESTRUN)->alias('t1')
+            $runs = $this->dao->select('t1.id, t1.`case`, t1.`caseVersion`, t1.version, t1.task, t2.name AS `taskName`')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_TESTTASK)->alias('t2')->on('t1.task = t2.id')
                 ->where('t1.id')->in($runIdList)
                 ->orderBy('t1.id_desc')

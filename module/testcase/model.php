@@ -96,7 +96,7 @@ class testcaseModel extends model
         $isProjectTab   = $this->app->tab == 'project' && $from != 'doc';
         $isExecutionTab = $this->app->tab == 'execution' && $from != 'doc';
 
-        $stmt = $this->dao->select('t1.*, t2.title as storyTitle, t2.deleted as storyDeleted')->from(TABLE_CASE)->alias('t1')
+        $stmt = $this->dao->select('t1.*, t2.title as `storyTitle`, t2.deleted as `storyDeleted`')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id');
 
         if($isProjectTab)   $stmt = $stmt->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id=t3.case');
@@ -211,7 +211,7 @@ class testcaseModel extends model
         }
         else
         {
-            $objects = $this->dao->select('t1.project as objectID, t2.type')->from(TABLE_PROJECTCASE)->alias('t1')
+            $objects = $this->dao->select('t1.project as `objectID`, t2.type')->from(TABLE_PROJECTCASE)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.case')->eq($caseID)
                 ->fetchPairs();
@@ -223,7 +223,7 @@ class testcaseModel extends model
         }
 
         /* Set related variables. */
-        $toBugs       = $this->dao->select('id, title, severity, openedDate, status')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
+        $toBugs       = $this->dao->select('id, title, severity, `openedDate`, status')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
         $case->toBugs         = array();
         $case->fromBugData    = array();
         $case->linkCaseTitles = array();
@@ -235,7 +235,7 @@ class testcaseModel extends model
             $case->storyStatus        = $story->status;
             $case->latestStoryVersion = $story->version;
         }
-        if($case->fromBug) $case->fromBugData = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('id, title, severity, openedDate, status')->fetch();
+        if($case->fromBug) $case->fromBugData = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('id, title, severity, `openedDate`, status')->fetch();
         if($case->linkCase || $case->fromCaseID) $case->linkCaseTitles = $this->dao->select('id,title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->orWhere('id')->eq($case->fromCaseID)->fetchPairs();
 
         $case->currentVersion = $version ? $version : $case->version;
@@ -384,7 +384,7 @@ class testcaseModel extends model
         $caseQuery .= ')';
 
         /* Search criteria under compatible project. */
-        $sql = $this->dao->select('DISTINCT t1.*,t3.title as storyTitle')->from(TABLE_CASE)->alias('t1');
+        $sql = $this->dao->select('DISTINCT t1.*,t3.title as `storyTitle`')->from(TABLE_CASE)->alias('t1');
         if($this->app->tab == 'project') $sql->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id = t2.case');
         $sql->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id');
         return $sql->where($caseQuery)
@@ -412,7 +412,7 @@ class testcaseModel extends model
      */
     public function getByAssignedTo(string $account, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        $cases = $this->dao->select('t1.id AS run, t1.task, t1.case, t1.version, t1.`assignedTo`, t1.`lastRunner`, t1.`lastRunDate`, t1.`lastRunResult`, t1.status AS lastRunStatus, t2.id AS id, t2.project, t2.pri, t2.title, t2.type, t2.`openedBy`, t2.`openedDate`, t2.color, t2.product, t2.lib, t2.branch, t2.module, t2.status, t2.auto, t2.stage, t2.story, t2.`storyVersion`, t2.scene, t2.precondition, t2.keywords, t2.reviewedBy, t2.reviewedDate, t2.`lastEditedBy`, t2.`lastEditedDate`, t3.name AS taskName')->from(TABLE_TESTRUN)->alias('t1')
+        $cases = $this->dao->select('t1.id AS run, t1.task, t1.case, t1.version, t1.`assignedTo`, t1.`lastRunner`, t1.`lastRunDate`, t1.`lastRunResult`, t1.status AS `lastRunStatus`, t2.id AS id, t2.project, t2.pri, t2.title, t2.type, t2.`openedBy`, t2.`openedDate`, t2.color, t2.product, t2.lib, t2.branch, t2.module, t2.status, t2.auto, t2.stage, t2.story, t2.`storyVersion`, t2.scene, t2.precondition, t2.keywords, t2.`reviewedBy`, t2.`reviewedDate`, t2.`lastEditedBy`, t2.`lastEditedDate`, t3.name AS `taskName`')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
             ->where('t1.`assignedTo`')->eq($account)
@@ -470,7 +470,7 @@ class testcaseModel extends model
     {
         $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
 
-        $cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
+        $cases = $this->dao->select('t1.*, t2.title AS `storyTitle`')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('1=1')
             ->beginIF($productID)->andWhere('t1.product')->eq((int) $productID)->fi()
@@ -538,7 +538,7 @@ class testcaseModel extends model
      */
     public function getStoryCases(int $storyID): array
     {
-        return $this->dao->select('id, project, title, pri, type, status, lastRunner, lastRunDate, lastRunResult')
+        return $this->dao->select('id, project, title, pri, type, status, `lastRunner`, `lastRunDate`, `lastRunResult`')
             ->from(TABLE_CASE)
             ->where('story')->eq((int)$storyID)
             ->andWhere('deleted')->eq(0)
@@ -1115,7 +1115,7 @@ class testcaseModel extends model
             $storyVersion = zget($stories, $case->story, 0);
             if(!$storyVersion) continue;
 
-            $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($storyVersion)->where('id')->eq($case->id)->exec();
+            $this->dao->update(TABLE_CASE)->set('`storyVersion`')->eq($storyVersion)->where('id')->eq($case->id)->exec();
             $this->action->create('case', $case->id, 'confirmed', '', $storyVersion);
         }
 
@@ -1291,8 +1291,8 @@ class testcaseModel extends model
 
                 $this->dao->delete()->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->exec();
 
-                $removeFiles = $this->dao->select('id,pathname')->from(TABLE_FILE)->where('`objectID`')->eq($caseID)->andWhere('objectType')->eq('testcase')->fetchAll('id');
-                $this->dao->delete()->from(TABLE_FILE)->where('`objectID`')->eq($caseID)->andWhere('objectType')->eq('testcase')->exec();
+                $removeFiles = $this->dao->select('id,pathname')->from(TABLE_FILE)->where('`objectID`')->eq($caseID)->andWhere('`objectType`')->eq('testcase')->fetchAll('id');
+                $this->dao->delete()->from(TABLE_FILE)->where('`objectID`')->eq($caseID)->andWhere('`objectType`')->eq('testcase')->exec();
                 foreach($removeFiles as $fileID => $file)
                 {
                     if(empty($file->pathname)) continue;
@@ -1304,7 +1304,7 @@ class testcaseModel extends model
 
                 if(!empty($oldCase) && $oldCase->lib && empty($oldCase->product))
                 {
-                    $fromcaseVersion = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($case->id)->fetch('fromCaseVersion');
+                    $fromcaseVersion = $this->dao->select('`fromCaseVersion`')->from(TABLE_CASE)->where('`fromCaseID`')->eq($case->id)->fetch('fromCaseVersion');
                     $fromcaseVersion = (int)$fromcaseVersion + 1;
                     $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($case->id)->exec();
                 }
@@ -1421,7 +1421,7 @@ class testcaseModel extends model
         /* Get result fails of the the testcases. */
         if($type != 'case') $queryField = '`run`';
         $caseFails  = $this->dao->select('COUNT(1) AS count, `case`')->from(TABLE_TESTRESULT)
-            ->where('caseResult')->eq('fail')
+            ->where('`caseResult`')->eq('fail')
             ->andWhere($queryField)->in($caseIdList)
             ->groupBy('`case`')
             ->fetchPairs('case','count');
@@ -1557,8 +1557,8 @@ class testcaseModel extends model
         if(!empty($projectDeliverables))
         {
             $this->dao->update(TABLE_PROJECTDELIVERABLE)
-                ->set('submittedBy')->eq($this->app->user->account)
-                ->set('submittedDate')->eq(helper::now())
+                ->set('`submittedBy`')->eq($this->app->user->account)
+                ->set('`submittedDate`')->eq(helper::now())
                 ->where('id')->in($projectDeliverables)
                 ->exec();
         }
@@ -2109,7 +2109,7 @@ class testcaseModel extends model
     {
         $browseType = $this->session->caseBrowseType && $this->session->caseBrowseType != 'bysearch' ? $this->session->caseBrowseType : 'all';
 
-        $stmt = $this->dao->select('t1.*,t3.title as storyTitle')->from(TABLE_CASE)->alias('t1');
+        $stmt = $this->dao->select('t1.*,t3.title as `storyTitle`')->from(TABLE_CASE)->alias('t1');
         if($this->app->tab == 'project') $stmt = $stmt->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case');
         $stmt->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id');
 
@@ -2506,7 +2506,7 @@ class testcaseModel extends model
     public function getSceneByProductAndModule($productID, $moduleID): array
     {
         /* Get scenes by product and module. */
-        $sceneList = $this->dao->select('id as sceneID, title as sceneName, path, parent as parentID, product as productID, module as moduleID')
+        $sceneList = $this->dao->select('id as `sceneID`, title as `sceneName`, path, parent as `parentID`, product as `productID`, module as `moduleID`')
             ->from(TABLE_SCENE)
             ->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
@@ -2720,7 +2720,7 @@ class testcaseModel extends model
     public function appendCaseFails(object $case, string $from, int $taskID): object
     {
         $caseFails = $this->dao->select('COUNT(1) AS count')->from(TABLE_TESTRESULT)
-            ->where('caseResult')->eq('fail')
+            ->where('`caseResult`')->eq('fail')
             ->andwhere('`case`')->eq($case->id)
             ->beginIF($from == 'testtask')->andwhere('`run`')->eq($taskID)->fi()
             ->fetch('count');
@@ -2803,7 +2803,7 @@ class testcaseModel extends model
         $branchModules = array();
         foreach($branches as $branch) $branchModules[$branch] = $this->tree->getOptionMenu($productID, 'case', 0, (string)$branch);
 
-        $caseModuleCount = $this->dao->select('fromCaseID,count(module) AS moduleCount')
+        $caseModuleCount = $this->dao->select('`fromCaseID`,count(module) AS `moduleCount`')
             ->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id and t1.product = t2.root')
             ->where('t1.product')->eq($productID)
@@ -2813,7 +2813,7 @@ class testcaseModel extends model
             ->orWhere('t1.module')->eq('0')->markRight(1)
             ->groupBy('t1.`fromCaseID`')
             ->fetchPairs();
-        $branchModuleCount = $this->dao->select('branch,count(id) + 1 as moduleCount')
+        $branchModuleCount = $this->dao->select('branch,count(id) + 1 as `moduleCount`')
             ->from(TABLE_MODULE)
             ->where('root')->eq($productID)
             ->andWhere('type')->in('story,case')
@@ -2867,10 +2867,10 @@ class testcaseModel extends model
      */
     public function getCanImportedModules(int $productID, int $libID, int|string $branch, string $returnType = 'pairs', array $libCases = array()): array
     {
-        $importedModules = $this->dao->select('fromCaseID,module')->from(TABLE_CASE)
+        $importedModules = $this->dao->select('`fromCaseID`,module')->from(TABLE_CASE)
             ->where('product')->eq($productID)
             ->beginIF($branch != 'all')->andWhere('branch')->eq($branch)->fi()
-            ->andWhere('fromCaseID')->ne('0')
+            ->andWhere('`fromCaseID`')->ne('0')
             ->andWhere('deleted')->eq('0')
             ->fetchGroup('fromCaseID', 'module');
         foreach($importedModules as $fromCaseID => $modules) $importedModules[$fromCaseID] = array_combine(array_keys($modules), array_keys($modules));
@@ -3073,7 +3073,7 @@ class testcaseModel extends model
         /* Update case base information. */
         $this->dao->update(TABLE_CASE)
             ->set('version')->eq($version)
-            ->set('fromCaseVersion')->eq($version)
+            ->set('`fromCaseVersion`')->eq($version)
             ->set('precondition')->eq($libCase->precondition)
             ->set('title')->eq($libCase->title)
             ->set('keywords')->eq($libCase->keywords)
@@ -3098,7 +3098,7 @@ class testcaseModel extends model
 
         /* 更新用例文件。 */
         /* Update case files. */
-        $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->eq($caseID)->exec();
+        $this->dao->delete()->from(TABLE_FILE)->where('`objectType`')->eq('testcase')->andWhere('`objectID`')->eq($caseID)->exec();
         foreach($libCase->files as $file)
         {
             $fileName = pathinfo($file->pathname, PATHINFO_FILENAME);
@@ -3121,9 +3121,9 @@ class testcaseModel extends model
         }
 
         $testtaskCases = $this->dao->select('id')->from(TABLE_TESTRUN)->where('case')->eq($caseID)->andWhere('task')->ne(0)->fetchPairs();
-        if(!empty($testtaskCases)) $this->dao->update(TABLE_TESTRUN)->set('caseVersion')->eq($version)->where('id')->in($testtaskCases)->exec();
+        if(!empty($testtaskCases)) $this->dao->update(TABLE_TESTRUN)->set('`caseVersion`')->eq($version)->where('id')->in($testtaskCases)->exec();
 
         $testsuiteCases = $this->dao->select('id')->from(TABLE_SUITECASE)->where('case')->eq($caseID)->andWhere('suite')->ne(0)->fetchPairs();
-        if(!empty($testsuiteCases)) $this->dao->update(TABLE_SUITECASE)->set('caseVersion')->eq($version)->where('id')->in($testsuiteCases)->exec();
+        if(!empty($testsuiteCases)) $this->dao->update(TABLE_SUITECASE)->set('`caseVersion`')->eq($version)->where('id')->in($testsuiteCases)->exec();
     }
 }

@@ -46,8 +46,8 @@ class fileModel extends model
     {
         if(!$objectID) return array();
         $files = $this->dao->select('*')->from(TABLE_FILE)
-            ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->in($objectID)
+            ->where('`objectType`')->eq($objectType)
+            ->andWhere('`objectID`')->in($objectID)
             ->andWhere('extra')->ne('editor')
             ->beginIF($extra)->andWhere('extra')->in($extra)->fi()
             ->beginIF(!$ignoreDeleted)->andWhere('deleted')->eq('0')->fi()
@@ -70,8 +70,8 @@ class fileModel extends model
     public function groupByObjectID(string $objectType, string|array $objectID): array
     {
         $fileGroup = $this->dao->select('*')->from(TABLE_FILE)
-            ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->in($objectID)
+            ->where('`objectType`')->eq($objectType)
+            ->andWhere('`objectID`')->in($objectID)
             ->andWhere('deleted')->eq('0')
             ->orderBy('id')
             ->fetchGroup('objectID', 'id');
@@ -94,8 +94,8 @@ class fileModel extends model
     public function deleteByObject($objectType, $objectID)
     {
         $files = $this->dao->select('*')->from(TABLE_FILE)
-            ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->in($objectID)
+            ->where('`objectType`')->eq($objectType)
+            ->andWhere('`objectID`')->in($objectID)
             ->andWhere('deleted')->eq('0')
             ->fetchAll('id');
 
@@ -157,8 +157,8 @@ class fileModel extends model
     public function query(string $objectType, int $objectID = 0, string $title = '', string $extra = ''): object|false
     {
         $file = $this->dao->select('*')->from(TABLE_FILE)
-            ->where('objectType')->eq($objectType)
-            ->beginIF($objectID)->andWhere('objectID')->eq($objectID)->fi()
+            ->where('`objectType`')->eq($objectType)
+            ->beginIF($objectID)->andWhere('`objectID`')->eq($objectID)->fi()
             ->beginIF($title)->andWhere('title')->eq($title)->fi()
             ->beginIF($extra)->andWhere('extra')->eq($extra)->fi()
             ->fetch();
@@ -1199,7 +1199,7 @@ class fileModel extends model
      */
     public function updateTestcaseVersion(object $file): void
     {
-        $oldCase = $this->dao->select('*')->from(TABLE_CASE)->where('fromCaseID')->eq($file->objectID)->fetch();
+        $oldCase = $this->dao->select('*')->from(TABLE_CASE)->where('`fromCaseID`')->eq($file->objectID)->fetch();
         if(empty($oldCase)) return;
 
         $isLibCase = $oldCase->lib && empty($oldCase->product);
@@ -1223,8 +1223,8 @@ class fileModel extends model
         if(empty($storySpec)) return;
 
         $files = $this->dao->select('id')->from(TABLE_FILE)
-            ->where('objectType')->eq('story')
-            ->andWhere('objectID')->eq($storyID)
+            ->where('`objectType`')->eq('story')
+            ->andWhere('`objectID`')->eq($storyID)
             ->orderBy('id')
             ->fetchAll();
 

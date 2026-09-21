@@ -1114,14 +1114,14 @@ class metricModel extends model
         if($cycle == 'year')
         {
             $this->dao->delete()->from(TABLE_METRICLIB)
-                ->where('metricCode')->eq($code)
+                ->where('`metricCode`')->eq($code)
                 ->andWhere('year')->eq($year)
                 ->exec();
         }
         elseif($cycle == 'month')
         {
             $this->dao->delete()->from(TABLE_METRICLIB)
-                ->where('metricCode')->eq($code)
+                ->where('`metricCode`')->eq($code)
                 ->andWhere('year')->eq($year)
                 ->andWhere('month')->eq($month)
                 ->exec();
@@ -1129,7 +1129,7 @@ class metricModel extends model
         elseif($cycle == 'week')
         {
             $this->dao->delete()->from(TABLE_METRICLIB)
-                ->where('metricCode')->eq($code)
+                ->where('`metricCode`')->eq($code)
                 ->andWhere('year')->eq($year)
                 ->andWhere('week')->eq($week)
                 ->exec();
@@ -1137,7 +1137,7 @@ class metricModel extends model
         elseif($cycle == 'day')
         {
             $this->dao->delete()->from(TABLE_METRICLIB)
-                ->where('metricCode')->eq($code)
+                ->where('`metricCode`')->eq($code)
                 ->andWhere('year')->eq($year)
                 ->andWhere('month')->eq($month)
                 ->andWhere('day')->eq($day)
@@ -1179,8 +1179,8 @@ class metricModel extends model
             $time = helper::now();
 
             $this->dao->update(TABLE_METRIC)
-                ->set('lastCalcRows')->eq($rows)
-                ->set('lastCalcTime')->eq($time)
+                ->set('`lastCalcRows`')->eq($rows)
+                ->set('`lastCalcTime`')->eq($time)
                 ->where('code')->eq($code)
                 ->exec();
 
@@ -1511,7 +1511,7 @@ class metricModel extends model
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_ARTIFACTREPO)
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->eq('gitfox')
-                    ->andWhere('serverID')->eq($serverID)
+                    ->andWhere('`serverID`')->eq($serverID)
                     ->fetchPairs();
                 break;
             default:
@@ -1541,9 +1541,9 @@ class metricModel extends model
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PRODUCT)
                     ->where('deleted')->eq(0)
                     ->andWhere('shadow')->eq(0)
-                    ->andWhere('createdDate')->le($date)
+                    ->andWhere('`createdDate`')->le($date)
                     ->andWhere("`closedDate` IS NULL OR YEAR(`closedDate`)='0000'", true)
-                    ->orWhere('closedDate')->ge($date)
+                    ->orWhere('`closedDate`')->ge($date)
                     ->markRight(1)
                     ->andWhere("vision LIKE '%{$vision}%'", true)
                     ->orWhere("vision")->isNull()->markRight(1)
@@ -1553,9 +1553,9 @@ class metricModel extends model
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->eq('project')
-                    ->andWhere('openedDate')->le($date)
+                    ->andWhere('`openedDate`')->le($date)
                     ->andWhere("`closedDate` IS NULL OR YEAR(`closedDate`)='0000'", true)
-                    ->orWhere('closedDate')->ge($date)
+                    ->orWhere('`closedDate`')->ge($date)
                     ->markRight(1)
                     ->andWhere("vision LIKE '%{$vision}%'", true)
                     ->orWhere("vision")->isNull()->markRight(1)
@@ -1565,9 +1565,9 @@ class metricModel extends model
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->in('sprint,stage,kanban')
-                    ->andWhere('openedDate')->le($date)
+                    ->andWhere('`openedDate`')->le($date)
                     ->andWhere("`closedDate` IS NULL OR YEAR(`closedDate`)='0000'", true)
-                    ->orWhere('closedDate')->ge($date)
+                    ->orWhere('`closedDate`')->ge($date)
                     ->markRight(1)
                     ->andWhere("vision LIKE '%{$vision}%'", true)
                     ->orWhere("vision")->isNull()->markRight(1)
@@ -2423,7 +2423,7 @@ class metricModel extends model
      */
     public function updateMetricDate()
     {
-        $this->dao->update(TABLE_METRIC)->set('createdDate')->eq(helper::now())->where('createdDate')->isNull()->exec();
+        $this->dao->update(TABLE_METRIC)->set('`createdDate`')->eq(helper::now())->where('`createdDate`')->isNull()->exec();
     }
 
     /**
@@ -2760,8 +2760,8 @@ class metricModel extends model
         if($dateType == 'week') list($startDate, $endDate) = $this->getStartAndEndOfWeek($parsedDate['year'], $parsedDate['week']);
 
         $record = $this->dao->select('id')->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
-            ->andWhere('calcType')->eq('cron')
+            ->where('`metricCode`')->eq($code)
+            ->andWhere('`calcType`')->eq('cron')
             ->andWhere('date')->ge($startDate)
             ->andWhere('date')->le($endDate)
             ->limit(1)
@@ -2863,8 +2863,8 @@ class metricModel extends model
 
         $date = $this->parseDateStr($date, $dateType);
         $records = $this->dao->select('id')->from(TABLE_METRICLIB)
-           ->where('metricCode')->eq($code)
-           ->andWhere('calcType')->eq('inference')
+           ->where('`metricCode`')->eq($code)
+           ->andWhere('`calcType`')->eq('inference')
            ->beginIF($dateType == 'year')->andWhere('year')->eq($date['year'])->fi()
            ->beginIF($dateType == 'month')->andWhere('year')->eq($date['year'])->andWhere('month')->eq($date['month'])->fi()
            ->beginIF($dateType == 'week')->andWhere('year')->eq($date['year'])->andWhere('week')->eq($date['week'])->fi()
@@ -2884,9 +2884,9 @@ class metricModel extends model
     public function isFirstInference($codes = null)
     {
         $inferenceRecordCount = $this->dao->select('COUNT(id) AS count')->from(TABLE_METRICLIB)
-            ->where('calcType')->eq('inference')
-            ->beginIF($codes != null && !is_array($codes))->andWhere('metricCode')->eq($codes)->fi()
-            ->beginIF($codes != null && is_array($codes))->andWhere('metricCode')->in($codes)->fi()
+            ->where('`calcType`')->eq('inference')
+            ->beginIF($codes != null && !is_array($codes))->andWhere('`metricCode`')->eq($codes)->fi()
+            ->beginIF($codes != null && is_array($codes))->andWhere('`metricCode`')->in($codes)->fi()
             ->fetch('count');
 
         return $inferenceRecordCount == 0;

@@ -27,7 +27,7 @@ class releaseModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getRelease();
 
-        $release = $this->dao->select('t1.*, t2.name as productName, t2.type as productType')
+        $release = $this->dao->select('t1.*, t2.name as `productName`, t2.type as `productType`')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.id')->eq((int)$releaseID)
@@ -139,7 +139,7 @@ class releaseModel extends model
         }
         $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs();
 
-        $builds = $this->dao->select("t1.id, t1.name, t1.branch, t1.project, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName")
+        $builds = $this->dao->select("t1.id, t1.name, t1.branch, t1.project, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS `projectName`")
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where("t1.product")->in($productIdList)
@@ -204,7 +204,7 @@ class releaseModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getReleases();
 
-        $releases = $this->dao->select('t1.*, t2.name as productName, t2.type as productType')->from(TABLE_RELEASE)->alias('t1')
+        $releases = $this->dao->select('t1.*, t2.name as `productName`, t2.type as `productType`')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
@@ -221,7 +221,7 @@ class releaseModel extends model
         foreach($releases as $release) $projectIdList .= trim($release->project, ',') . ',';
         $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs();
 
-        $builds = $this->dao->select("t1.id, t1.name, t1.branch, t1.project, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName")
+        $builds = $this->dao->select("t1.id, t1.name, t1.branch, t1.project, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS `projectName`")
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where("t1.product")->eq($productID)
@@ -701,8 +701,8 @@ class releaseModel extends model
             {
                 /* Reset story stagedBy field for auto compute stage. */
                 $storyID = (int)$storyID;
-                $this->dao->update(TABLE_STORY)->set('stagedBy')->eq('')->where('id')->eq($storyID)->exec();
-                if($product->type != 'normal') $this->dao->update(TABLE_STORYSTAGE)->set('stagedBy')->eq('')->where('story')->eq($storyID)->andWhere('branch')->in(explode(',', (string)$release->branch))->exec();
+                $this->dao->update(TABLE_STORY)->set('`stagedBy`')->eq('')->where('id')->eq($storyID)->exec();
+                if($product->type != 'normal') $this->dao->update(TABLE_STORYSTAGE)->set('`stagedBy`')->eq('')->where('story')->eq($storyID)->andWhere('branch')->in(explode(',', (string)$release->branch))->exec();
 
                 $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
                 if($release->status == 'normal') $this->story->setStage($storyID, array('type' => 'linkRelease', 'objectID' => $releaseID));
@@ -1059,12 +1059,12 @@ class releaseModel extends model
 
         $storyNotifyList = $this->dao->select('id,title,`notifyEmail`')->from(TABLE_STORY)
             ->where('id')->in($stories)
-            ->andWhere('notifyEmail')->ne('')
+            ->andWhere('`notifyEmail`')->ne('')
             ->fetchGroup('notifyEmail', 'id');
 
         $bugNotifyList = $this->dao->select('id,title,`notifyEmail`')->from(TABLE_BUG)
             ->where('id')->in($bugs)
-            ->andWhere('notifyEmail')->ne('')
+            ->andWhere('`notifyEmail`')->ne('')
             ->fetchGroup('notifyEmail', 'id');
 
         /* Get notify email and object name. */
@@ -1170,7 +1170,7 @@ class releaseModel extends model
      */
     public function getReleaseCount(string $type = 'all'): int
     {
-        return $this->dao->select('COUNT(t1.id) as releaseCount')->from(TABLE_RELEASE)->alias('t1')
+        return $this->dao->select('COUNT(t1.id) as `releaseCount`')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
@@ -1276,7 +1276,7 @@ class releaseModel extends model
      */
     public function getStoryList(string $storyIdList, string|int $branch, string $orderBy = '', ?object $pager = null): array
     {
-        $stories = $this->dao->select("t1.*,t2.id as buildID, t2.name as buildName, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1')
+        $stories = $this->dao->select("t1.*,t2.id as `buildID`, t2.name as `buildName`, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as `priOrder`")->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on("FIND_IN_SET(t1.id, t2.stories)")
             ->where('t1.id')->in($storyIdList)
             ->andWhere('t1.deleted')->eq(0)
@@ -1318,7 +1318,7 @@ class releaseModel extends model
 
         if($bugIdList)
         {
-            $bugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
+            $bugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as `severityOrder`")->from(TABLE_BUG)
                 ->where('id')->in($bugIdList)
                 ->andWhere('deleted')->eq(0)
                 ->beginIF($orderBy)->orderBy($orderBy)->fi()
@@ -1377,10 +1377,10 @@ class releaseModel extends model
         $conditions = array();
         foreach($buildIdList as $buildID) $conditions[] = "FIND_IN_SET('{$buildID}', openedBuild)";
 
-        $bugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
+        $bugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS `severityOrder`")->from(TABLE_BUG)
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($release->product)
-            ->andWhere('openedDate')->ge($release->releasedDate)
+            ->andWhere('`openedDate`')->ge($release->releasedDate)
             ->andWhere('(' . implode(' OR ', $conditions) . ')')
             ->beginIF($orderBy)->orderBy($orderBy)->fi()
             ->page($pager)
@@ -1436,7 +1436,7 @@ class releaseModel extends model
         if(empty($storyIdList)) return;
 
         /* Reset story stagedBy field for auto compute stage. */
-        $this->dao->update(TABLE_STORY)->set('stagedBy')->eq('')->where('id')->in($storyIdList)->exec();
+        $this->dao->update(TABLE_STORY)->set('`stagedBy`')->eq('')->where('id')->in($storyIdList)->exec();
 
         $this->loadModel('story');
         foreach($storyIdList as $storyID) $this->story->setStage((int)$storyID, $trigger);
@@ -1483,7 +1483,7 @@ class releaseModel extends model
 
         $objectIdList = array_unique(array_filter($objectIdList));
 
-        $this->dao->delete()->from(TABLE_RELEASERELATED)->where('release')->eq($releaseID)->andWhere('objectType')->eq($objectType)->exec();
+        $this->dao->delete()->from(TABLE_RELEASERELATED)->where('release')->eq($releaseID)->andWhere('`objectType`')->eq($objectType)->exec();
 
         $related = new stdClass();
         $related->release    = $releaseID;
@@ -1517,7 +1517,7 @@ class releaseModel extends model
 
         if(is_array($objectIdList)) $objectIdList = array_unique(array_filter($objectIdList));
 
-        $this->dao->delete()->from(TABLE_RELEASERELATED)->where('release')->eq($releaseID)->andWhere('objectType')->eq($objectType)->andWhere('objectID')->in($objectIdList)->exec();
+        $this->dao->delete()->from(TABLE_RELEASERELATED)->where('release')->eq($releaseID)->andWhere('`objectType`')->eq($objectType)->andWhere('`objectID`')->in($objectIdList)->exec();
         return !dao::isError();
     }
 

@@ -1170,7 +1170,7 @@ class dataset
             ->fetch('value');
         if(empty($defaultHours)) $defaultHours = 7;
 
-        return $this->dao->select("$fieldList, $defaultHours as defaultHours")
+        return $this->dao->select("$fieldList, $defaultHours as `defaultHours`")
             ->from(TABLE_EFFORT)->alias('t1')
             ->where('t1.deleted')->eq('0');
     }
@@ -1192,7 +1192,7 @@ class dataset
             ->fetch('value');
         if(empty($defaultHours)) $defaultHours = 7;
 
-        $stmt = $this->dao->select("$fieldList, $defaultHours as defaultHours")
+        $stmt = $this->dao->select("$fieldList, $defaultHours as `defaultHours`")
             ->from(TABLE_EFFORT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.deleted')->eq('0')
@@ -1288,7 +1288,7 @@ class dataset
 
         if(strpos($fieldList, '`t2`.') === false)
         {
-            $stmt = $this->dao->select("$fieldList, $defaultHours AS defaultHours")
+            $stmt = $this->dao->select("$fieldList, $defaultHours AS `defaultHours`")
                 ->from(TABLE_PROJECT)->alias('t1')
                 ->where('t1.type')->eq('project')
                 ->andWhere('t1.deleted')->eq('0');
@@ -1316,7 +1316,7 @@ class dataset
             $this->dao->exec("CREATE INDEX `project` ON `{$table}` (`project`)");
         }
 
-        $stmt = $this->dao->select("$fieldList, $defaultHours AS defaultHours")
+        $stmt = $this->dao->select("$fieldList, $defaultHours AS `defaultHours`")
             ->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin($table)->alias('t2')->on('t1.id = t2.project')
             ->where('t1.type')->eq('project')
@@ -1460,7 +1460,7 @@ class dataset
             ->where('deleted')->eq(0)
             ->fetch('count');
 
-        return $this->dao->select("COUNT(1) AS count, {$count} as instanceCount")->from(TABLE_PIPELINE)
+        return $this->dao->select("COUNT(1) AS count, {$count} as `instanceCount`")->from(TABLE_PIPELINE)
             ->where('deleted')->eq(0);
 
     }

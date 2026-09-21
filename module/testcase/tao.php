@@ -63,7 +63,7 @@ class testcaseTao extends testcaseModel
      */
     protected function getModuleProjectCases(int|array $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('DISTINCT t1.product, t1.case, t1.version, t2.*, t4.title AS storyTitle')->from(TABLE_PROJECTCASE)->alias('t1')
+        return $this->dao->select('DISTINCT t1.product, t1.case, t1.version, t2.*, t4.title AS `storyTitle`')->from(TABLE_PROJECTCASE)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t3.story = t2.story')
             ->leftJoin(TABLE_STORY)->alias('t4')->on('t3.story = t4.id')
@@ -97,7 +97,7 @@ class testcaseTao extends testcaseModel
      */
     protected function getNeedConfirmList(int|array $productID, string|int $branch, array $modules, string $auto, string $caseType, string $sort, ?object $pager = null): array
     {
-        return $this->dao->select('distinct t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
+        return $this->dao->select('distinct t1.*, t2.title AS `storyTitle`')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id = t3.case')
             ->where('t2.status')->eq('active')
@@ -131,7 +131,7 @@ class testcaseTao extends testcaseModel
      */
     public function getBySuite(int $productID, int|string $branch = 0, int $suiteID = 0, array|int $moduleIdList = 0, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
+        return $this->dao->select('t1.*, t2.title AS `storyTitle`')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_SUITECASE)->alias('t3')->on('t1.id = t3.case')
             ->where('t1.product')->eq($productID)
@@ -353,7 +353,7 @@ class testcaseTao extends testcaseModel
      */
     protected function getRelatedFiles(array $caseIdList): array
     {
-        return $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->in($caseIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID', 'id');
+        return $this->dao->select('*')->from(TABLE_FILE)->where('`objectType`')->eq('testcase')->andWhere('`objectID`')->in($caseIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID', 'id');
     }
 
     /**
@@ -457,7 +457,7 @@ class testcaseTao extends testcaseModel
                 if($projects)
                 {
                     $projects   = array_keys($projects);
-                    $lastOrders = $this->dao->select('project, MAX(`order`) AS lastOrder')->from(TABLE_PROJECTCASE)->where('project')->in($projects)->groupBy('project')->fetchPairs();
+                    $lastOrders = $this->dao->select('project, MAX(`order`) AS `lastOrder`')->from(TABLE_PROJECTCASE)->where('project')->in($projects)->groupBy('project')->fetchPairs();
 
                     foreach($projects as $projectID)
                     {
@@ -492,16 +492,16 @@ class testcaseTao extends testcaseModel
     {
         if($oldCase->lib && empty($oldCase->product))
         {
-            $fromcaseVersion = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($case->id)->fetch('fromCaseVersion');
+            $fromcaseVersion = $this->dao->select('`fromCaseVersion`')->from(TABLE_CASE)->where('`fromCaseID`')->eq($case->id)->fetch('fromCaseVersion');
             $fromcaseVersion = (int)$fromcaseVersion + 1;
             $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($case->id)->exec();
         }
 
         $testtaskCases = $this->dao->select('id')->from(TABLE_TESTRUN)->where('case')->eq($case->id)->andWhere('task')->ne(0)->fetchPairs();
-        if(!empty($testtaskCases)) $this->dao->update(TABLE_TESTRUN)->set('caseVersion')->eq($case->version)->where('id')->in($testtaskCases)->exec();
+        if(!empty($testtaskCases)) $this->dao->update(TABLE_TESTRUN)->set('`caseVersion`')->eq($case->version)->where('id')->in($testtaskCases)->exec();
 
         $testsuiteCases = $this->dao->select('id')->from(TABLE_SUITECASE)->where('case')->eq($case->id)->andWhere('suite')->ne(0)->fetchPairs();
-        if(!empty($testsuiteCases)) $this->dao->update(TABLE_SUITECASE)->set('caseVersion')->eq($case->version)->where('id')->in($testsuiteCases)->exec();
+        if(!empty($testsuiteCases)) $this->dao->update(TABLE_SUITECASE)->set('`caseVersion`')->eq($case->version)->where('id')->in($testsuiteCases)->exec();
 
         if($case->steps)
         {
@@ -543,7 +543,7 @@ class testcaseTao extends testcaseModel
 
         foreach($newBugs as $bugID)
         {
-            $this->dao->update(TABLE_BUG)->set('`case`')->eq($caseID)->set('caseVersion')->eq($case->version)->set('`story`')->eq($case->story)->set('storyVersion')->eq($case->storyVersion)->where('id')->eq($bugID)->exec();
+            $this->dao->update(TABLE_BUG)->set('`case`')->eq($caseID)->set('`caseVersion`')->eq($case->version)->set('`story`')->eq($case->story)->set('`storyVersion`')->eq($case->storyVersion)->where('id')->eq($bugID)->exec();
 
             if($this->config->edition != 'open')
             {
@@ -559,16 +559,16 @@ class testcaseTao extends testcaseModel
         }
         foreach($removeBugs as $bugID)
         {
-            $this->dao->update(TABLE_BUG)->set('`case`')->eq(0)->set('caseVersion')->eq(0)->set('`story`')->eq(0)->set('storyVersion')->eq(0)->where('id')->eq($bugID)->exec();
+            $this->dao->update(TABLE_BUG)->set('`case`')->eq(0)->set('`caseVersion`')->eq(0)->set('`story`')->eq(0)->set('`storyVersion`')->eq(0)->where('id')->eq($bugID)->exec();
 
             if($this->config->edition != 'open')
             {
                 $this->dao->delete()->from(TABLE_RELATION)
                     ->where('relation')->eq('generated')
                     ->andWhere('AID')->eq($bugID)
-                    ->andWhere('AType')->eq('bug')
+                    ->andWhere('`AType`')->eq('bug')
                     ->andWhere('BID')->eq($caseID)
-                    ->andWhere('BType')->eq('testcase')
+                    ->andWhere('`BType`')->eq('testcase')
                     ->exec();
             }
         }

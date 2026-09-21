@@ -541,7 +541,7 @@ class admin extends control
             $sqlite->exec($query->sql);
             $this->dao->update(TABLE_SQLITE_QUEUE)
                 ->set('status')->eq('done')
-                ->set('execDate')->eq($now)
+                ->set('`execDate`')->eq($now)
                 ->where('id')->eq($query->id)
                 ->exec();
         }

@@ -3,6 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('testtask')->gen(5);
 zenData('case')->gen(5);
 zenData('casestep')->gen(5);
 zenData('testresult')->loadYaml('testresult')->gen(5);

@@ -317,7 +317,7 @@ class testreportZen extends testreport
                 if(!empty($testtask->members)) $taskMembers .= ',' . (string)$testtask->members;
             }
             $taskMembers = explode(',', $taskMembers);
-            $members     = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
+            $members     = $this->dao->select('DISTINCT `lastRunner`')->from(TABLE_TESTRUN)->where('task')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
             $this->view->members = implode(',', array_merge($members, $taskMembers));
         }
 

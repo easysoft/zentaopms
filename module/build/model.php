@@ -27,7 +27,7 @@ class buildModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBuild();
 
-        $build = $this->dao->select('t1.*, t2.name as executionName, t3.name as productName, t3.type as productType')
+        $build = $this->dao->select('t1.*, t2.name as `executionName`, t3.name as `productName`, t3.type as `productType`')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
@@ -77,7 +77,7 @@ class buildModel extends model
     public function getProjectBuilds(int $projectID = 0, string $type = 'all', string $param = '', string $orderBy = 't1.date_desc,t1.id_desc', ?object $pager = null): array
     {
         $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where("FIND_IN_SET({$projectID}, project)")->fetchPairs('shadow', 'shadow');
-        $builds  = $this->dao->select('t1.*, t2.name as productName')
+        $builds  = $this->dao->select('t1.*, t2.name as `productName`')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
@@ -175,7 +175,7 @@ class buildModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBuilds();
 
-        return $this->dao->select('t1.*, t2.name as executionName, t3.name as productName')
+        return $this->dao->select('t1.*, t2.name as `executionName`, t3.name as `productName`')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
@@ -432,7 +432,7 @@ class buildModel extends model
      */
     public function getRelatedReleases(array|int $productIdList, string|int $buildIdList = '', array|bool $shadows = false, string $objectType = '', int $objectID = 0, string $params = ''): array
     {
-        $releases = $this->dao->select('DISTINCT t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t1.status,t3.name as `branchName`,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
+        $releases = $this->dao->select('DISTINCT t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t1.status,t3.name as `branchName`,t4.type as `productType`')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_RELEASERELATED)->alias('t5')->on("t1.id=t5.release AND t5.`objectType`='build'")
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t5.`objectID`=t2.id')
             ->leftJoin(TABLE_RELEASERELATED)->alias('t6')->on("t1.id=t6.release AND t6.`objectType`='branch'")
@@ -454,7 +454,7 @@ class buildModel extends model
         if($shadows)
         {
             /* Append releases of only shadow and not link build. */
-            $releases += $this->dao->select('DISTINCT t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t2.name as `branchName`,t3.type as productType')->from(TABLE_RELEASE)->alias('t1')
+            $releases += $this->dao->select('DISTINCT t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t2.name as `branchName`,t3.type as `productType`')->from(TABLE_RELEASE)->alias('t1')
                 ->leftJoin(TABLE_RELEASERELATED)->alias('t4')->on("t1.id=t4.release AND t4.`objectType`='branch'")
                 ->leftJoin(TABLE_BRANCH)->alias('t2')->on('t4.`objectID`=t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
@@ -948,7 +948,7 @@ class buildModel extends model
      */
     public function getStoryList(string $storyIdList, int $branch = 0, string $orderBy = '', ?object $pager = null): array
     {
-        $stories = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
+        $stories = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as `priOrder`")->from(TABLE_STORY)
             ->where('id')->in($storyIdList)
             ->andWhere('deleted')->eq(0)
             ->beginIF($orderBy)->orderBy($orderBy)->fi()

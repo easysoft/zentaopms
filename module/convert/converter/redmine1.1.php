@@ -145,7 +145,7 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get group list */
         $groups = $this->dao->dbh($this->sourceDBH)
-            ->select("id, lastName AS name")
+            ->select("id, `lastName` AS name")
             ->from(REDMINE_TABLE_USERS)
             ->where('type')->eq('Group')
             ->fetchAll('id');
@@ -437,7 +437,7 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get team list */
         $teams = $this->dao->dbh($this->sourceDBH)
-            ->select("t2.login as account, t1.execution_id, t1.created_on AS joinDate")
+            ->select("t2.login as account, t1.execution_id, t1.created_on AS `joinDate`")
             ->from(REDMINE_TABLE_MEMBERS)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.user_id = t2.id')
             ->where('t2.type')->eq('User')

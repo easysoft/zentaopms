@@ -102,7 +102,7 @@ class systemModel extends model
      */
     public function getProductListBySystemIds(array $systemIDs)
     {
-        return $this->dao->select('t1.id,t1.name as `appName`,t1.product,t2.name as productName')
+        return $this->dao->select('t1.id,t1.name as `appName`,t1.product,t2.name as `productName`')
             ->from(TABLE_SYSTEM)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq('0')
@@ -211,7 +211,7 @@ class systemModel extends model
             $releasedDate = $release ? $release->createdDate : null;
         }
 
-        $this->dao->update(TABLE_SYSTEM)->set('latestDate')->eq($releasedDate)->set('latestRelease')->eq($releaseID)->where('id')->eq($systemID)->exec();
+        $this->dao->update(TABLE_SYSTEM)->set('`latestDate`')->eq($releasedDate)->set('`latestRelease`')->eq($releaseID)->where('id')->eq($systemID)->exec();
         return !dao::isError();
     }
 

@@ -54,7 +54,7 @@ class biTao extends biModel
     protected function updateSyncTime($tables)
     {
         $this->dao->update(TABLE_DUCKDBQUEUE)
-            ->set('syncTime')->eq(helper::now())
+            ->set('`syncTime`')->eq(helper::now())
             ->where('object')->in($tables)
             ->exec();
     }
@@ -67,7 +67,7 @@ class biTao extends biModel
      */
     protected function fetchActionDate()
     {
-        return $this->dao->select('min(date) as minDate, max(date) as maxDate')
+        return $this->dao->select('min(date) as `minDate`, max(date) as `maxDate`')
             ->from(TABLE_ACTION)
             ->where('date')->ge('2009-01-01')
             ->fetch();

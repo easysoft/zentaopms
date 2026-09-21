@@ -152,8 +152,8 @@ class actionModel extends model
     {
         $this->dao->update(TABLE_ACTION)
             ->set('`read`')->eq(1)
-            ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->eq($objectID)
+            ->where('`objectType`')->eq($objectType)
+            ->andWhere('`objectID`')->eq($objectID)
             ->andWhere('`read`')->eq(0)
             ->exec();
 
@@ -462,14 +462,14 @@ class actionModel extends model
         $extra   = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
         $trashes = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('action')->eq('deleted')
-            ->beginIF($objectType != 'all')->andWhere('objectType')->eq($objectType)->fi()
-            ->beginIF($objectType == 'execution')->andWhere('objectID')->notIn($noMultipleExecutions)->fi()
+            ->beginIF($objectType != 'all')->andWhere('`objectType`')->eq($objectType)->fi()
+            ->beginIF($objectType == 'execution')->andWhere('`objectID`')->notIn($noMultipleExecutions)->fi()
             ->beginIF($objectType == 'all')
-            ->andWhere('objectType', true)->ne('execution')
-            ->orWhere('(`objectType`')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
+            ->andWhere('`objectType`', true)->ne('execution')
+            ->orWhere('(`objectType`')->eq('execution')->andWhere('`objectID`')->notIn($noMultipleExecutions)
             ->markRight(2)
             ->fi()
-            ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
+            ->andWhere('`objectType`')->notIn($this->config->action->hiddenTrashObjects)
             ->andWhere('extra')->eq($extra)
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy($orderBy)
@@ -595,7 +595,7 @@ class actionModel extends model
             ->andWhere($trashQuery)
             ->andWhere('t1.extra')->eq($extra)
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
+            ->andWhere('`objectType`')->notIn($this->config->action->hiddenTrashObjects)
             ->beginIF($objectType != 'all')->andWhere('t1.`objectType`')->eq($objectType)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -619,11 +619,11 @@ class actionModel extends model
         return $this->dao->select('`objectType`')->from(TABLE_ACTION)
             ->where('action')->eq('deleted')
             ->andWhere('extra')->eq($extra)
-            ->andWhere('objectType', true)->ne('execution')
-            ->orWhere('(`objectType`')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
+            ->andWhere('`objectType`', true)->ne('execution')
+            ->orWhere('(`objectType`')->eq('execution')->andWhere('`objectID`')->notIn($noMultipleExecutions)
             ->markRight(2)
             ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
+            ->andWhere('`objectType`')->notIn($this->config->action->hiddenTrashObjects)
             ->fetchAll('objectType');
     }
 
@@ -1316,7 +1316,7 @@ class actionModel extends model
 
         return $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
             ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
-            ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
+            ->where('`objectType`')->notIN($this->config->action->ignoreObjectType4Dynamic)
             ->andWhere('action.action')->notIN($this->config->action->ignoreActions4Dynamic)
             ->andWhere("({$sql})")
             ->andWhere("({$condition})")
@@ -1871,7 +1871,7 @@ class actionModel extends model
      */
     public function deleteByType(string $objectType): bool
     {
-        $this->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq($objectType)->exec();
+        $this->dao->delete()->from(TABLE_ACTION)->where('`objectType`')->eq($objectType)->exec();
 
         return !dao::isError();
     }
@@ -1911,7 +1911,7 @@ class actionModel extends model
             $module = $this->loadModel('tree')->getById($action->objectID);
             if($module->type == 'doc' && $module->parent > 0)
             {
-                $parentActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('objectType')->eq('module')->andWhere('objectID')->eq($module->parent)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
+                $parentActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('`objectType`')->eq('module')->andWhere('`objectID`')->eq($module->parent)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
                 if($parentActionID) $this->undelete($parentActionID);
             }
         }
@@ -1921,7 +1921,7 @@ class actionModel extends model
             $reviewID = $this->dao->select('id')->from(TABLE_REVIEW)->where('type')->eq('projectchange')->andWhere('object')->eq($action->objectID)->andWhere('deleted')->eq('1')->fetch('id');
             if($reviewID)
             {
-                $reviewActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('action')->eq('deleted')->andWhere('objectType')->eq('review')->andWhere('objectID')->eq($reviewID)->andWhere('extra')->eq(self::CAN_UNDELETED)->fetch('id');
+                $reviewActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('action')->eq('deleted')->andWhere('`objectType`')->eq('review')->andWhere('`objectID`')->eq($reviewID)->andWhere('extra')->eq(self::CAN_UNDELETED)->fetch('id');
                 if($reviewActionID) $this->undelete($reviewActionID);
             }
         }
@@ -1931,7 +1931,7 @@ class actionModel extends model
             $review = $this->dao->select('*')->from(TABLE_REVIEW)->where('id')->eq($action->objectID)->fetch();
             if($review->type == 'projectchange')
             {
-                $projectchangeActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('action')->eq('deleted')->andWhere('objectType')->eq('projectchange')->andWhere('objectID')->eq($review->object)->andWhere('extra')->eq(self::CAN_UNDELETED)->fetch('id');
+                $projectchangeActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('action')->eq('deleted')->andWhere('`objectType`')->eq('projectchange')->andWhere('`objectID`')->eq($review->object)->andWhere('extra')->eq(self::CAN_UNDELETED)->fetch('id');
                 if($projectchangeActionID) $this->undelete($projectchangeActionID);
             }
         }
@@ -1955,7 +1955,7 @@ class actionModel extends model
         if($action->objectType == 'release' && !empty($object->system)) $this->loadModel('system')->setSystemRelease((int)$object->system, $action->objectID);
         if(in_array($action->objectType, array('release', 'build')) && !empty($object->system))
         {
-            $systemActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('objectType')->eq('system')->andWhere('objectID')->eq($object->system)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
+            $systemActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('`objectType`')->eq('system')->andWhere('`objectID`')->eq($object->system)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
             if($systemActionID) $this->undelete($systemActionID);
         }
 
@@ -1963,7 +1963,7 @@ class actionModel extends model
         {
             if(!empty($object) && $object->mirror)
             {
-                $providerID = $this->dao->select('id')->from(TABLE_ACTION)->where('objectType')->eq('provider')->andWhere('objectID')->eq($object->providerID)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
+                $providerID = $this->dao->select('id')->from(TABLE_ACTION)->where('`objectType`')->eq('provider')->andWhere('`objectID`')->eq($object->providerID)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
                 if($providerID) $this->undelete($providerID);
             }
         }
@@ -2165,8 +2165,8 @@ class actionModel extends model
         }
 
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->eq($objectID)
+            ->where('`objectType`')->eq($objectType)
+            ->andWhere('`objectID`')->eq($objectID)
             ->orderBy('id asc')
             ->fetchAll();
         foreach($actions as $action)
@@ -2334,8 +2334,8 @@ class actionModel extends model
     public function restoreStages(array $stageList): bool
     {
         $deletedActions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectID')->in(array_keys($stageList))
-            ->andWhere('objectType')->eq('execution')
+            ->where('`objectID`')->in(array_keys($stageList))
+            ->andWhere('`objectType`')->eq('execution')
             ->andWhere('action')->eq('deleted')
             ->orderBy('id_desc')
             ->fetchGroup('objectID');
