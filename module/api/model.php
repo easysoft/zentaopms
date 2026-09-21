@@ -474,7 +474,7 @@ class apiModel extends model
      */
     public function getStructByQuery(int $libID, ?object $pager = null, string $orderBy = ''): array
     {
-        return $this->dao->select('t1.*,t2.realname as addedName')->from(TABLE_APISTRUCT)->alias('t1')
+        return $this->dao->select('t1.*,t2.realname as `addedName`')->from(TABLE_APISTRUCT)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t2.account = t1.`addedBy`')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.lib')->eq($libID)
@@ -507,7 +507,7 @@ class apiModel extends model
         }
         if($strJoin) $where .= 'and (' . implode(' or ', $strJoin) . ')';
 
-        return $this->dao->select('object.id,object.lib,spec.name,spec.type,spec.desc,spec.attribute,spec.version,spec.`addedBy`,spec.`addedDate`,user.realname as addedName')
+        return $this->dao->select('object.id,object.lib,spec.name,spec.type,spec.desc,spec.attribute,spec.version,spec.`addedBy`,spec.`addedDate`,user.realname as `addedName`')
             ->from(TABLE_APISTRUCT)->alias('object')
             ->leftJoin(TABLE_APISTRUCT_SPEC)->alias('spec')->on('object.name = spec.name')
             ->leftJoin(TABLE_USER)->alias('user')->on('user.account = spec.`addedBy`')
@@ -895,7 +895,7 @@ class apiModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t2.id')->in(array_keys($libs))
-            ->orderBy('t1.hasProduct_asc, order_asc')
+            ->orderBy('t1.`hasProduct`_asc, order_asc')
             ->fetchAll('id');
 
         foreach($projects as $id => $project)
@@ -937,7 +937,7 @@ class apiModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t2.id')->in($libIDs)
-            ->orderBy('t1.hasProduct_asc, order_asc')
+            ->orderBy('t1.`hasProduct`_asc, order_asc')
             ->fetchAll('id');
 
         $nolinks = array();

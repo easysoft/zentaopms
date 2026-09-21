@@ -131,8 +131,8 @@ class repobranchruleModel extends model
     {
         return $this->dao->select('*')->from(TABLE_BRANCHRULESET)
             ->where('repo')->eq($repoID)
-            ->andWhere('branchType')->eq($typeID)
-            ->andWhere('branchName')->eq($branchName)
+            ->andWhere('`branchType`')->eq($typeID)
+            ->andWhere('`branchName`')->eq($branchName)
             ->fetch();
     }
 
@@ -193,8 +193,8 @@ class repobranchruleModel extends model
     {
         return $this->dao->select('*')->from(TABLE_BRANCHRULESET)
             ->where('repo')->eq($repoID)
-            ->beginIF(!empty($branchTypes))->andWhere('branchType')->in($branchTypes)->fi()
-            ->beginIF(!empty($branchNames))->andWhere('branchName')->in($branchNames)->fi()
+            ->beginIF(!empty($branchTypes))->andWhere('`branchType`')->in($branchTypes)->fi()
+            ->beginIF(!empty($branchNames))->andWhere('`branchName`')->in($branchNames)->fi()
             ->fetchAll('id');
     }
 

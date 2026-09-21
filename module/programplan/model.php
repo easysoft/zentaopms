@@ -472,8 +472,8 @@ class programplanModel extends model
                 ->fetch('id');
 
             $this->dao->update(TABLE_PROJECTDELIVERABLE)
-                ->set('submittedBy')->eq($this->app->user->account)
-                ->set('submittedDate')->eq(helper::now())
+                ->set('`submittedBy`')->eq($this->app->user->account)
+                ->set('`submittedDate`')->eq(helper::now())
                 ->where('id')->eq($projectDeliverableID)
                 ->exec();
         }
@@ -936,7 +936,7 @@ class programplanModel extends model
         }
         elseif(!empty($planIdList))
         {
-            $tasks = $this->dao->select('t1.*,t2.version AS latestStoryVersion, t2.status AS storyStatus, IF(t1.`estStarted` IS NULL, t3.`begin`, t1.`estStarted`) as beginDate')->from(TABLE_TASK)->alias('t1')
+            $tasks = $this->dao->select('t1.*,t2.version AS `latestStoryVersion`, t2.status AS `storyStatus`, IF(t1.`estStarted` IS NULL, t3.`begin`, t1.`estStarted`) as `beginDate`')->from(TABLE_TASK)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
                 ->where('t1.deleted')->eq(0)
@@ -946,7 +946,7 @@ class programplanModel extends model
                 ->beginIF($browseType != 'nowait')->andWhere('t1.status')->ne('cancel')->fi()
                 ->beginIF($browseType != 'nowait')->andWhere('t1.`closedReason`')->ne('cancel')->fi()
                 ->filterTpl('skip')
-                ->orderBy("{$type}_asc,beginDate_asc,id_asc")
+                ->orderBy("{$type}_asc,`beginDate`_asc,id_asc")
                 ->fetchAll('id', false);
         }
 
@@ -1046,7 +1046,7 @@ class programplanModel extends model
             ->fetch('disabledFeatures');
 
         /* 2. 交付物的项目计划。 Project plan of deliverable. */
-        $deliverableVersions = strpos(",{$disabledFeatures},", ',deliverable,') !== false ? array() : $this->dao->select('t1.*, t2.type AS `reviewType`, t2.deliverable, t2.id AS reviewID')->from(TABLE_OBJECT)->alias('t1')
+        $deliverableVersions = strpos(",{$disabledFeatures},", ',deliverable,') !== false ? array() : $this->dao->select('t1.*, t2.type AS `reviewType`, t2.deliverable, t2.id AS `reviewID`')->from(TABLE_OBJECT)->alias('t1')
             ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
             ->leftJoin(TABLE_DELIVERABLE)->alias('t3')->on('t1.category = t3.id')
             ->where('t1.project')->eq($projectID)
@@ -1163,9 +1163,9 @@ class programplanModel extends model
         $pausedTasksDate = array();
         if($pausedTasks)
         {
-            $pausedTasksDate = $this->dao->select('`objectID`,`date`')->from(TABLE_ACTION)->where('objectType')->eq('task')
+            $pausedTasksDate = $this->dao->select('`objectID`,`date`')->from(TABLE_ACTION)->where('`objectType`')->eq('task')
                 ->andWhere('action')->eq('paused')
-                ->andWhere('objectID')->in($pausedTasks)
+                ->andWhere('`objectID`')->in($pausedTasks)
                 ->orderBy('id')
                 ->fetchPairs('objectID', 'date');
         }
@@ -1330,8 +1330,8 @@ class programplanModel extends model
 
             /* 标记为已还原。*/
             $deleteActionID = $this->dao->select('id')->from(TABLE_ACTION)
-                ->where('objectType')->eq('execution')
-                ->andWhere('objectID')->eq($oldStage->id)
+                ->where('`objectType`')->eq('execution')
+                ->andWhere('`objectID`')->eq($oldStage->id)
                 ->andWhere('project')->eq($oldStage->project)
                 ->andWhere('execution')->eq($oldStage->id)
                 ->andWhere('action')->eq('deleted')
@@ -1421,8 +1421,8 @@ class programplanModel extends model
         {
             /* 标记为已还原。*/
             $deleteActionID = $this->dao->select('id')->from(TABLE_ACTION)
-                ->where('objectType')->eq('task')
-                ->andWhere('objectID')->eq($oldTask->id)
+                ->where('`objectType`')->eq('task')
+                ->andWhere('`objectID`')->eq($oldTask->id)
                 ->andWhere('project')->eq($oldTask->project)
                 ->andWhere('execution')->eq($oldTask->execution)
                 ->andWhere('action')->eq('deleted')
@@ -1497,8 +1497,8 @@ class programplanModel extends model
 
         /* 评审节点更新为done。*/
         $approvalID = $this->dao->select('approval')->from(TABLE_APPROVALOBJECT)
-            ->where('objectType')->eq('review')
-            ->andWhere('objectID')->eq($reviewID)
+            ->where('`objectType`')->eq('review')
+            ->andWhere('`objectID`')->eq($reviewID)
             ->orderBy('id_desc')
             ->limit(1)
             ->fetch('approval');
@@ -1613,7 +1613,7 @@ class programplanModel extends model
                 $this->action->create('task', (int)$taskID, 'deletedbyrollback');
 
                 $task = $this->task->fetchByID((int)$taskID);
-                if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
+                if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('`toTask`')->eq(0)->where('id')->eq($task->fromBug)->exec();
                 if($task->story) $this->story->setStage($task->story);
             }
         }
@@ -1640,11 +1640,11 @@ class programplanModel extends model
         $children = $this->dao->select('id')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('parent')->eq($taskID)->fetchPairs('id');
         if(empty($children))
         {
-            $this->dao->update(TABLE_TASK)->set('isParent')->eq(0)->where('id')->eq($taskID)->exec();
+            $this->dao->update(TABLE_TASK)->set('`isParent`')->eq(0)->where('id')->eq($taskID)->exec();
             return true;
         }
 
-        $this->dao->update(TABLE_TASK)->set('isParent')->eq(1)->where('id')->eq($taskID)->exec();
+        $this->dao->update(TABLE_TASK)->set('`isParent`')->eq(1)->where('id')->eq($taskID)->exec();
 
         foreach($children as $id) $this->setTaskPath($id);
         return true;

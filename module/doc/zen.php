@@ -1025,7 +1025,7 @@ class docZen extends doc
         $systemMineLibCount = $this->dao->select('count(1) as count')->from(TABLE_DOCLIB)
             ->where('type')->eq('mine')
             ->andWhere('main')->eq(1)
-            ->andWhere('addedBy')->eq($this->app->user->account)
+            ->andWhere('`addedBy`')->eq($this->app->user->account)
             ->andWhere('vision')->eq($this->config->vision)
             ->fetch('count');
         if(!empty($systemMineLibCount)) return;

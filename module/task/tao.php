@@ -112,8 +112,8 @@ class taskTao extends taskModel
     protected function buildTaskForUpdateEffort(object $task, object $oldEffort, object $effort): object
     {
         $lastEffort = $this->dao->select('*')->from(TABLE_EFFORT)
-            ->where('objectID')->eq($task->id)
-            ->andWhere('objectType')->eq('task')
+            ->where('`objectID`')->eq($task->id)
+            ->andWhere('`objectType`')->eq('task')
             ->andWhere('deleted')->eq('0')
             ->orderBy('date_desc,id_desc')->limit(1)->fetch();
 
@@ -362,9 +362,9 @@ class taskTao extends taskModel
 
         /* 将父任务的日志记录更新到子任务下。 */
         /* Update the logs of the parent task under the subtask. */
-        $this->dao->update(TABLE_EFFORT)->set('objectID')->eq($copyTaskID)
-            ->where('objectID')->eq($task->id)
-            ->andWhere('objectType')->eq('task')
+        $this->dao->update(TABLE_EFFORT)->set('`objectID`')->eq($copyTaskID)
+            ->where('`objectID`')->eq($task->id)
+            ->andWhere('`objectType`')->eq('task')
             ->exec();
 
         return !dao::isError() ? $copyTaskID : false;
@@ -530,7 +530,7 @@ class taskTao extends taskModel
         ($this->config->edition == 'max' or $this->config->edition == 'ipd') && $fields .= ', t5.name as `designName`, t5.version as `latestDesignVersion`';
 
         $actionIDList = array();
-        if($type == 'assignedbyme') $actionIDList = $this->dao->select('`objectID`')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs('objectID', 'objectID');
+        if($type == 'assignedbyme') $actionIDList = $this->dao->select('`objectID`')->from(TABLE_ACTION)->where('`objectType`')->eq('task')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs('objectID', 'objectID');
 
         if(is_numeric($executionID) && $executionID) $execution = $this->fetchByID($executionID, 'project');
 
@@ -683,8 +683,8 @@ class taskTao extends taskModel
         if($effort->isLast)
         {
             $lastTwoEfforts = $this->dao->select('`left`')->from(TABLE_EFFORT)
-                ->where('objectID')->eq($effort->objectID)
-                ->andWhere('objectType')->eq('task')
+                ->where('`objectID`')->eq($effort->objectID)
+                ->andWhere('`objectType`')->eq('task')
                 ->andWhere('deleted')->eq('0')
                 ->orderBy('date desc,id desc')->limit(2)->fetchAll();
             $lastTwoEfforts  = isset($lastTwoEfforts[1]) ? $lastTwoEfforts[1] : '';
@@ -995,8 +995,8 @@ class taskTao extends taskModel
         foreach($members as $account)
         {
             $this->dao->update(TABLE_EFFORT)->set('`left`')->eq(0)->where('account')->eq($account)
-                ->andWhere('objectID')->eq($taskID)
-                ->andWhere('objectType')->eq('task')
+                ->andWhere('`objectID`')->eq($taskID)
+                ->andWhere('`objectType`')->eq('task')
                 ->orderBy('date_desc,id_desc')
                 ->limit('1')
                 ->exec();
@@ -1101,9 +1101,9 @@ class taskTao extends taskModel
 
         /* Update estimate started and deadline of a task. */
         $this->dao->update(TABLE_TASK)
-            ->set('estStarted')->eq($postData->startDate)
+            ->set('`estStarted`')->eq($postData->startDate)
             ->set('deadline')->eq($postData->endDate)
-            ->set('lastEditedBy')->eq($this->app->user->account)
+            ->set('`lastEditedBy`')->eq($this->app->user->account)
             ->where('id')->eq($postData->id)
             ->exec();
 
@@ -1146,13 +1146,13 @@ class taskTao extends taskModel
     {
         if(empty($childID)) return;
 
-        $relation = $this->dao->select('*')->from(TABLE_RELATION)->where('AID')->eq($childID)->andWhere('relation')->eq('subdividefrom')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->fetch();
+        $relation = $this->dao->select('*')->from(TABLE_RELATION)->where('AID')->eq($childID)->andWhere('relation')->eq('subdividefrom')->andWhere('`AType`')->eq('task')->andWhere('`BType`')->eq('task')->fetch();
         if($relation)
         {
             if($parentID && $relation->BID == $parentID) return;
 
-            $this->dao->delete()->from(TABLE_RELATION)->where('BID')->eq($childID)->andWhere('relation')->eq('subdivideinto')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->exec();
-            $this->dao->delete()->from(TABLE_RELATION)->where('AID')->eq($childID)->andWhere('relation')->eq('subdividefrom')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->exec();
+            $this->dao->delete()->from(TABLE_RELATION)->where('BID')->eq($childID)->andWhere('relation')->eq('subdivideinto')->andWhere('`AType`')->eq('task')->andWhere('`BType`')->eq('task')->exec();
+            $this->dao->delete()->from(TABLE_RELATION)->where('AID')->eq($childID)->andWhere('relation')->eq('subdividefrom')->andWhere('`AType`')->eq('task')->andWhere('`BType`')->eq('task')->exec();
         }
 
         if(empty($parentID)) return;

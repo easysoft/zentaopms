@@ -50,7 +50,7 @@ class stageModel extends model
             ->exec();
         $stageID = $this->dao->lastInsertID();
 
-        $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_STAGE)->where('workflowGroup')->eq($stage->workflowGroup)->andWhere('deleted')->eq('0')->fetch('maxOrder');
+        $maxOrder = $this->dao->select('MAX(`order`) AS `maxOrder`')->from(TABLE_STAGE)->where('`workflowGroup`')->eq($stage->workflowGroup)->andWhere('deleted')->eq('0')->fetch('maxOrder');
         $this->dao->update(TABLE_STAGE)->set('order')->eq((int)$maxOrder + 1)->where('id')->eq($stageID)->exec();
 
         if(dao::isError()) return false;
@@ -86,7 +86,7 @@ class stageModel extends model
             }
         }
 
-        $stageNames = $this->dao->select('id,name')->from(TABLE_STAGE)->where('workflowGroup')->eq($groupID)->andWhere('deleted')->eq('0')->fetchPairs('name');
+        $stageNames = $this->dao->select('id,name')->from(TABLE_STAGE)->where('`workflowGroup`')->eq($groupID)->andWhere('deleted')->eq('0')->fetchPairs('name');
         foreach($stages as $rowID => $stage)
         {
             if(in_array($stage->name, $stageNames))
@@ -97,7 +97,7 @@ class stageModel extends model
             $stageNames[] = $stage->name;
         }
 
-        $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_STAGE)->where('workflowGroup')->eq($groupID)->andWhere('deleted')->eq('0')->fetch('maxOrder');
+        $maxOrder = $this->dao->select('MAX(`order`) AS `maxOrder`')->from(TABLE_STAGE)->where('`workflowGroup`')->eq($groupID)->andWhere('deleted')->eq('0')->fetch('maxOrder');
 
         $this->loadModel('action');
         $now = helper::now();
@@ -195,8 +195,8 @@ class stageModel extends model
 
         $stages = $this->dao->select('*')->from(TABLE_STAGE)
             ->where('deleted')->eq(0)
-            ->andWhere('workflowGroup')->eq($groupID)
-            ->beginIF($this->config->edition != 'ipd')->andWhere('projectType')->ne('ipd')->fi()
+            ->andWhere('`workflowGroup`')->eq($groupID)
+            ->beginIF($this->config->edition != 'ipd')->andWhere('`projectType`')->ne('ipd')->fi()
             ->andWhere('type')->ne('lifecycle')
             ->orderBy($orderBy)
             ->fetchAll('id');
@@ -243,7 +243,7 @@ class stageModel extends model
      */
     public function getTotalPercent(int $groupID): float
     {
-        return (float)$this->dao->select('sum(percent) as total')->from(TABLE_STAGE)->where('deleted')->eq('0')->andWhere('workflowGroup')->eq($groupID)->fetch('total');
+        return (float)$this->dao->select('sum(percent) as total')->from(TABLE_STAGE)->where('deleted')->eq('0')->andWhere('`workflowGroup`')->eq($groupID)->fetch('total');
     }
 
     /**
@@ -258,7 +258,7 @@ class stageModel extends model
         $workflowGroup = $this->dao->select('*')->from(TABLE_WORKFLOWGROUP)->where('id')->eq($groupID)->fetch();
 
         $this->app->loadConfig('project');
-        $stageList = $this->dao->select('*')->from(TABLE_STAGE)->where('workflowGroup')->eq($groupID)->fetchAll('id');
+        $stageList = $this->dao->select('*')->from(TABLE_STAGE)->where('`workflowGroup`')->eq($groupID)->fetchAll('id');
         if(empty($stageList))
         {
             $stageTypeList = array();
@@ -288,7 +288,7 @@ class stageModel extends model
         }
         if($workflowGroup->projectModel != 'ipd') return;
 
-        $builtinPoints = $this->dao->select('*')->from(TABLE_DECISION)->where('workflowGroup')->eq($groupID)->andWhere('builtin')->eq('1')->fetchAll();
+        $builtinPoints = $this->dao->select('*')->from(TABLE_DECISION)->where('`workflowGroup`')->eq($groupID)->andWhere('builtin')->eq('1')->fetchAll();
         if(!empty($builtinPoints)) return;
 
         $decision = new stdClass();
@@ -368,8 +368,8 @@ class stageModel extends model
                     $this->dao->update(TABLE_DECISION)
                         ->set('title')->eq($point->title)
                         ->set('order')->eq($index)
-                        ->set('editedBy')->eq($this->app->user->account)
-                        ->set('editedDate')->eq(helper::now())
+                        ->set('`editedBy`')->eq($this->app->user->account)
+                        ->set('`editedDate`')->eq(helper::now())
                         ->where('id')->eq($point->id)
                         ->exec();
                     if(dao::isError()) return false;
@@ -378,8 +378,8 @@ class stageModel extends model
                 {
                     $this->dao->update(TABLE_APPROVALFLOWOBJECT)
                         ->set('flow')->eq($point->flow)
-                        ->where('objectID')->eq($point->id)
-                        ->andWhere('objectType')->eq('decision')
+                        ->where('`objectID`')->eq($point->id)
+                        ->andWhere('`objectType`')->eq('decision')
                         ->andWhere('root')->eq($stage->workflowGroup)
                         ->exec();
                     if(dao::isError()) return false;
@@ -418,8 +418,8 @@ class stageModel extends model
         {
             $this->dao->update(TABLE_DECISION)->set('deleted')->eq('1')->where('id')->in(array_keys($oldStagePoints))->exec();
             $approvalFlowObjectIDList = $this->dao->select('id')->from(TABLE_APPROVALFLOWOBJECT)
-                ->where('objectID')->in(array_keys($oldStagePoints))
-                ->andWhere('objectType')->eq('decision')
+                ->where('`objectID`')->in(array_keys($oldStagePoints))
+                ->andWhere('`objectType`')->eq('decision')
                 ->andWhere('root')->eq($stage->workflowGroup)
                 ->fetchPairs();
 

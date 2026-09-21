@@ -366,8 +366,8 @@ class executionModel extends model
                 ->fetch('id');
 
             $this->dao->update(TABLE_PROJECTDELIVERABLE)
-                ->set('submittedBy')->eq($this->app->user->account)
-                ->set('submittedDate')->eq(helper::now())
+                ->set('`submittedBy`')->eq($this->app->user->account)
+                ->set('`submittedDate`')->eq(helper::now())
                 ->where('id')->eq($projectDeliverableID)
                 ->exec();
         }
@@ -714,7 +714,7 @@ class executionModel extends model
         /* There are already tasks consuming work in this phase or its sub-phases already have start times. */
         $hasStartedChildren = $this->dao->select('id')->from(TABLE_EXECUTION)
             ->where('deleted')->eq('0')
-            ->andWhere('realBegan')->notNULL()
+            ->andWhere('`realBegan`')->notNULL()
             ->andWhere('id')->in(array_keys($selfAndChildren))
             ->andWhere('id')->ne($executionID)
             ->fetchPairs();
@@ -1021,7 +1021,7 @@ class executionModel extends model
 
                     if($estStarted > $execution->end) $estStarted = $execution->end;
                     if($deadline > $execution->end)   $deadline   = $execution->end;
-                    $this->dao->update(TABLE_TASK)->set('estStarted')->eq($estStarted)->set('deadline')->eq($deadline)->where('id')->eq($task->id)->exec();
+                    $this->dao->update(TABLE_TASK)->set('`estStarted`')->eq($estStarted)->set('deadline')->eq($deadline)->where('id')->eq($task->id)->exec();
                 }
                 else
                 {
@@ -1252,13 +1252,13 @@ class executionModel extends model
             /* Waterfall execution, when all phases are closed, in reverse order of date. */
             if(in_array($projectModel, array('waterfall', 'waterfallplus')))
             {
-                $statistic = $this->dao->select("count(id) as executions, sum(IF(INSTR('closed', status) < 1, 0, 1)) as closedExecutions")->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetch();
+                $statistic = $this->dao->select("count(id) as executions, sum(IF(INSTR('closed', status) < 1, 0, 1)) as `closedExecutions`")->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetch();
                 if($statistic->executions == $statistic->closedExecutions) $orderBy = 'sortStatus_asc,begin_desc,id_asc';
             }
         }
 
         /* Order by status's content whether or not done. */
-        $executions = $this->dao->select("*, IF(INSTR('done,closed', status) < 2, 0, 1) AS isDone, INSTR('doing,wait,suspended,closed', status) AS sortStatus")->from(TABLE_EXECUTION)
+        $executions = $this->dao->select("*, IF(INSTR('done,closed', status) < 2, 0, 1) AS `isDone`, INSTR('doing,wait,suspended,closed', status) AS `sortStatus`")->from(TABLE_EXECUTION)
             ->where('1=1')
             ->beginIF(!$ignoreVision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->beginIF((!$this->session->multiple && $this->app->tab == 'execution') || strpos($mode, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
@@ -1348,7 +1348,7 @@ class executionModel extends model
         }
         else
         {
-            return $this->dao->select("*, `desc`, IF(INSTR(' done,closed', status) < 2, 0, 1) AS isDone")->from(TABLE_EXECUTION)
+            return $this->dao->select("*, `desc`, IF(INSTR(' done,closed', status) < 2, 0, 1) AS `isDone`")->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF($type == 'all')->andWhere('type')->in('sprint,stage,kanban')->fi()
@@ -1413,7 +1413,7 @@ class executionModel extends model
         }
         else
         {
-            return $this->dao->select("t1.*, IF(INSTR(' done,closed', t1.status) < 2, 0, 1) AS isDone")->from(TABLE_EXECUTION)->alias('t1')
+            return $this->dao->select("t1.*, IF(INSTR(' done,closed', t1.status) < 2, 0, 1) AS `isDone`")->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_TEAM)->alias('t2')->on('t2.root=t1.id')
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.type')->in('sprint,stage,kanban')
@@ -1458,7 +1458,7 @@ class executionModel extends model
      */
     public function getExecutionCounts(int $projectID = 0, string $browseType = 'all'): int
     {
-        $executions = $this->dao->select('t1.*,t2.`name` as projectName, t2.`model` as `projectModel`')->from(TABLE_EXECUTION)->alias('t1')
+        $executions = $this->dao->select('t1.*,t2.`name` as `projectName`, t2.`model` as `projectModel`')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.deleted')->eq('0')
@@ -1573,7 +1573,7 @@ class executionModel extends model
      */
     public function fetchExecutionsByProjectIdList(array $projectIdList = array()): array
     {
-        return $this->dao->select('t1.*,t2.`name` projectName, t2.`model` as `projectModel`')->from(TABLE_EXECUTION)->alias('t1')
+        return $this->dao->select('t1.*,t2.`name` `projectName`, t2.`model` as `projectModel`')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.deleted')->eq('0')
@@ -1603,7 +1603,7 @@ class executionModel extends model
         $executionQuery = $browseType == 'bysearch' ? $this->getExecutionQuery($param) : '';
         $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
 
-        return $this->dao->select('t1.*,t2.`name` as projectName, t2.`model` as `projectModel`')->from(TABLE_EXECUTION)->alias('t1')
+        return $this->dao->select('t1.*,t2.`name` as `projectName`, t2.`model` as `projectModel`')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->beginIF($productID)->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')->fi()
             ->where('t1.type')->in('sprint,stage,kanban')
@@ -2225,7 +2225,7 @@ class executionModel extends model
             }
         }
 
-        $totalHours = $this->dao->select('sum(t1.days * t1.hours) AS totalHours')->from(TABLE_TEAM)->alias('t1')
+        $totalHours = $this->dao->select('sum(t1.days * t1.hours) AS `totalHours`')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')
             ->on('t1.account=t2.account')
             ->where('t1.root')->eq($execution->id)
@@ -2756,14 +2756,14 @@ class executionModel extends model
      */
     public function statRelatedData(int $executionID): object
     {
-        $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
+        $storyCount = $this->dao->select('count(t2.story) as `storyCount`')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
             ->where('t2.project')->eq($executionID)
             ->andWhere('t1.deleted')->eq(0)
             ->fetch('storyCount');
 
-        $taskCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->fetch('taskCount');
-        $bugCount  = $this->dao->select('count(id) as bugCount')->from(TABLE_BUG)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->fetch('bugCount');
+        $taskCount = $this->dao->select('count(id) as `taskCount`')->from(TABLE_TASK)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->fetch('taskCount');
+        $bugCount  = $this->dao->select('count(id) as `bugCount`')->from(TABLE_BUG)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->fetch('bugCount');
 
         $statData = new stdclass();
         $statData->storyCount = $storyCount;
@@ -2805,7 +2805,7 @@ class executionModel extends model
             if($task->story !== false) $this->story->setStage($task->story);
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
 
-            $this->dao->update(TABLE_BUG)->set('toTask')->eq($taskID)->where('id')->eq($key)->exec();
+            $this->dao->update(TABLE_BUG)->set('`toTask`')->eq($taskID)->where('id')->eq($key)->exec();
             $this->action->create('bug', $key, 'Totask', '', $taskID);
 
             $mails[$key] = new stdClass();
@@ -2862,7 +2862,7 @@ class executionModel extends model
             $newBug->duplicateBug   = '0';
 
             $this->dao->update(TABLE_BUG)->data($newBug)->autoCheck()->where('id')->eq($bug->id)->exec();
-            $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq($bug->id)->exec();
+            $this->dao->update(TABLE_BUG)->set('`activatedCount` = `activatedCount` + 1')->where('id')->eq($bug->id)->exec();
 
             $actionID = $this->action->create('bug', $bug->id, 'Activated');
             $changes  = common::createChanges($bug, $newBug);
@@ -3069,8 +3069,8 @@ class executionModel extends model
             ->fetch('id');
 
         $this->dao->update(TABLE_PROJECTDELIVERABLE)
-            ->set('submittedBy')->eq($this->app->user->account)
-            ->set('submittedDate')->eq(helper::now())
+            ->set('`submittedBy`')->eq($this->app->user->account)
+            ->set('`submittedDate`')->eq(helper::now())
             ->where('id')->eq($projectDeliverableID)
             ->exec();
 
@@ -3121,8 +3121,8 @@ class executionModel extends model
         if(!empty($projectDeliverables))
         {
             $this->dao->update(TABLE_PROJECTDELIVERABLE)
-                ->set('submittedBy')->eq($this->app->user->account)
-                ->set('submittedDate')->eq(helper::now())
+                ->set('`submittedBy`')->eq($this->app->user->account)
+                ->set('`submittedDate`')->eq(helper::now())
                 ->where('id')->in($projectDeliverables)
                 ->exec();
         }
@@ -3331,7 +3331,7 @@ class executionModel extends model
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembers();
 
-        return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as `userID`, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
+        return $this->dao->select("t1.*, t1.hours * t1.days AS `totalHours`, t2.id as `userID`, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$executionID)
             ->andWhere('t1.type')->eq('execution')
@@ -3397,7 +3397,7 @@ class executionModel extends model
             ->andWhere('type')->ne('project')
             ->markRight(1)
             ->orWhere('id')->eq($projectID)
-            ->orderBy('type_asc,openedDate_desc')
+            ->orderBy('type_asc,`openedDate`_desc')
             ->limit('11')
             ->fetchPairs();
 
@@ -4491,7 +4491,7 @@ class executionModel extends model
     public function getKanbanTasks(int $executionID, string $orderBy = 'status_asc, id_desc', array $excludeTasks = array(), ?object $pager = null): array
     {
         $excludeTasks = array_filter($excludeTasks);
-        $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
+        $tasks = $this->dao->select('t1.*, t2.id AS `storyID`, t2.title AS `storyTitle`, t2.version AS `latestStoryVersion`, t2.status AS `storyStatus`, t3.realname AS `assignedToRealName`')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.`assignedTo` = t3.account')
@@ -4892,7 +4892,7 @@ class executionModel extends model
 
         $branchQuery .= " OR branch = '')";
 
-        $plans = $this->dao->select('t1.id,t1.title,t1.product,t1.parent,t1.begin,t1.end,t1.branch,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
+        $plans = $this->dao->select('t1.id,t1.title,t1.product,t1.parent,t1.begin,t1.end,t1.branch,t2.type as `productType`')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
             ->where('t1.product')->in($productIdList)
             ->andWhere('t1.deleted')->eq(0)

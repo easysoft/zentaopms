@@ -201,7 +201,7 @@ class testtaskModel extends model
     {
         $testtaskQuery = '';
         if($browseType == 'bysearch') $testtaskQuery = $this->testtaskTao->processSearchQuery($productID, $queryID, 'projectTesttask');
-        $tasks = $this->dao->select('t1.*, t1.id AS idName, t5.multiple, IF(t4.shadow = 1, t5.name, t4.name) AS productName, t3.name AS executionName, t2.name AS buildName, t2.branch AS branch, t5.name AS projectName, t4.`order` AS productOrder')
+        $tasks = $this->dao->select('t1.*, t1.id AS `idName`, t5.multiple, IF(t4.shadow = 1, t5.name, t4.name) AS `productName`, t3.name AS `executionName`, t2.name AS `buildName`, t2.branch AS branch, t5.name AS `projectName`, t4.`order` AS `productOrder`')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
@@ -212,7 +212,7 @@ class testtaskModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF($testtaskQuery)->andWhere($testtaskQuery)->fi()
-            ->orderBy('productOrder_asc, ' . $orderBy)
+            ->orderBy('`productOrder`_asc, ' . $orderBy)
             ->page($pager)
             ->fetchAll('id', false);
 
@@ -239,7 +239,7 @@ class testtaskModel extends model
         $testtaskQuery = '';
         if($browseType == 'bysearch') $testtaskQuery = $this->testtaskTao->processSearchQuery($productID, $queryID, 'executionTesttask');
 
-        return $this->dao->select('t1.*, t2.name AS buildName, t3.name AS productName')
+        return $this->dao->select('t1.*, t2.name AS `buildName`, t3.name AS `productName`')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
@@ -369,7 +369,7 @@ class testtaskModel extends model
     {
         $testtaskQuery = '';
         if($type == 'bySearch') $testtaskQuery = $this->testtaskTao->processSearchQuery(0, $queryID, 'myTesttask');
-        return $this->dao->select("t1.*, t2.name AS executionName, t2.multiple AS executionMultiple, t5.name AS projectName, t3.name AS buildName, t4.name AS productName, CONCAT(t2.name, '/', t3.name) as executionBuild")
+        return $this->dao->select("t1.*, t2.name AS `executionName`, t2.multiple AS `executionMultiple`, t5.name AS `projectName`, t3.name AS `buildName`, t4.name AS `productName`, CONCAT(t2.name, '/', t3.name) as `executionBuild`")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
@@ -479,7 +479,7 @@ class testtaskModel extends model
         if(!$stories) return array();
 
         $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
-        return $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
+        return $this->dao->select('t1.*, t2.title AS `storyTitle`')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.product')->eq($productID)
@@ -933,7 +933,7 @@ class testtaskModel extends model
 
         $users      = array();
         $caseIdList = array_unique(array_filter(array_map(function($run){return $run->case;}, $runs)));
-        if($type == 'bybuild' && $caseIdList) $users = $this->dao->select('`case`, assignedTo')->from(TABLE_TESTRUN)->where('`case`')->in($caseIdList)->fetchPairs();
+        if($type == 'bybuild' && $caseIdList) $users = $this->dao->select('`case`, `assignedTo`')->from(TABLE_TESTRUN)->where('`case`')->in($caseIdList)->fetchPairs();
 
         $testtask = $this->dao->select('*')->from(TABLE_TESTTASK)->where('id')->eq($taskID)->fetch();
 
@@ -1077,7 +1077,7 @@ class testtaskModel extends model
         $cases = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('`case`')->in($caseIdList)->fetchPairs();
         if(!$cases) return false;
 
-        $this->dao->update(TABLE_TESTRUN)->set('assignedTo')->eq($account)->where('task')->eq($taskID)->andWhere('`case`')->in($cases)->exec();
+        $this->dao->update(TABLE_TESTRUN)->set('`assignedTo`')->eq($account)->where('task')->eq($taskID)->andWhere('`case`')->in($cases)->exec();
         if(dao::isError()) return false;
 
         $this->loadModel('action');
@@ -1117,7 +1117,7 @@ class testtaskModel extends model
     {
         $orderBy = $this->addPrefixToOrderBy($orderBy);
 
-        $runs = $this->dao->select("t2.*, t1.*, IF(t1.caseVersion = 0, t2.version, t1.caseVersion) AS caseVersion, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
+        $runs = $this->dao->select("t2.*, t1.*, IF(t1.`caseVersion` = 0, t2.version, t1.`caseVersion`) AS `caseVersion`, COALESCE(t3.title, '') AS `storyTitle`, t2.status AS `caseStatus`, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.`case` = t4.`case` AND t1.version = t4.version')
@@ -1149,7 +1149,7 @@ class testtaskModel extends model
         $orderBy = $this->addPrefixToOrderBy($orderBy);
         $cases   = $this->loadModel('testsuite')->getLinkedCasePairs($suiteID);
 
-        $runs = $this->dao->select("t2.*, t1.*, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus, t2.version AS caseVersion, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
+        $runs = $this->dao->select("t2.*, t1.*, COALESCE(t3.title, '') AS `storyTitle`, t2.status AS `caseStatus`, t2.version AS `caseVersion`, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case AND t1.version = t4.version')
@@ -1174,7 +1174,7 @@ class testtaskModel extends model
      */
     public function getRunsForUnitCases(int $taskID, string $orderBy = 't1.id_desc'): array
     {
-        return $this->dao->select("t2.*, t1.*, t2.version AS caseVersion, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus, t4.suite, t5.name AS suiteTitle")->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select("t2.*, t1.*, t2.version AS `caseVersion`, COALESCE(t3.title, '') AS `storyTitle`, t2.status AS `caseStatus`, t4.suite, t5.name AS `suiteTitle`")->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->leftJoin(TABLE_SUITECASE)->alias('t4')->on('t1.case = t4.case')
@@ -1201,7 +1201,7 @@ class testtaskModel extends model
     {
         $orderBy = $this->addPrefixToOrderBy($orderBy);
 
-        $runs = $this->dao->select("t2.*, t1.*, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus,t2.version AS caseVersion, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
+        $runs = $this->dao->select("t2.*, t1.*, COALESCE(t3.title, '') AS `storyTitle`, t2.status AS `caseStatus`,t2.version AS `caseVersion`, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case AND t1.version = t4.version')
@@ -1321,7 +1321,7 @@ class testtaskModel extends model
             $caseQuery = str_replace(array('t2.`assignedTo`', 't2.`lastRunner`', 't2.`lastRunDate`', 't2.`lastRunResult`'), array('t1.`assignedTo`', 't1.`lastRunner`', 't1.`lastRunDate`', 't1.`lastRunResult`'), $caseQuery);
 
             $orderBy = $this->addPrefixToOrderBy($sort);
-            $runs    = $this->dao->select("t2.*, t1.*, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus, t2.version AS caseVersion, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
+            $runs    = $this->dao->select("t2.*, t1.*, COALESCE(t3.title, '') AS `storyTitle`, t2.status AS `caseStatus`, t2.version AS `caseVersion`, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
                 ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case AND t1.version = t4.version')
@@ -1683,8 +1683,8 @@ class testtaskModel extends model
         $results = $this->dao->select('*,`stepResults`,`ZTFResult`')->from(TABLE_TESTRESULT)
             ->beginIF($runID > 0)->where('run')->eq($runID)->fi()
             ->beginIF($runID <= 0)->where('`case`')->eq($caseID)->fi()
-            ->beginIF($status == 'done')->andWhere('caseResult')->ne('')->fi()
-            ->beginIF($type != 'all')->andWhere('caseResult')->eq($type)->fi()
+            ->beginIF($status == 'done')->andWhere('`caseResult`')->ne('')->fi()
+            ->beginIF($type != 'all')->andWhere('`caseResult`')->eq($type)->fi()
             ->beginIF($deployID)->andWhere('deploy')->eq($deployID)->fi()
             ->orderBy('id desc')
             ->fetchAll('id', false);
@@ -1800,8 +1800,8 @@ class testtaskModel extends model
         $resultFiles = array();
         $stepFiles   = array();
         $files       = $this->dao->select('*')->from(TABLE_FILE)
-            ->where('objectType')->in('caseResult, stepResult')
-            ->andWhere('objectID')->in($resultIdList)
+            ->where('`objectType`')->in('caseResult, stepResult')
+            ->andWhere('`objectID`')->in($resultIdList)
             ->andWhere('extra')->ne('editor')
             ->orderBy('id')
             ->fetchAll('id', false);

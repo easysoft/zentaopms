@@ -66,8 +66,8 @@ class bugfree2ConvertModel extends bugfreeConvertModel
     public function getBugFreeVersion()
     {
         return $this->dao->dbh($this->sourceDBH)
-            ->select("optionValue as version")->from(BUGFREE_TABLE_OPTION)
-            ->where('OptionName')->eq('dbVersion')
+            ->select("`optionValue` as version")->from(BUGFREE_TABLE_OPTION)
+            ->where('`OptionName`')->eq('dbVersion')
             ->fetch('version');
 
     }
@@ -83,9 +83,9 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         /* Get all user list. */
         $users = $this->dao
             ->dbh($this->sourceDBH)
-            ->select("username AS account, userpassword AS password, realname, email, isDroped AS deleted")
+            ->select("username AS account, userpassword AS password, realname, email, `isDroped` AS deleted")
             ->from(BUGFREE_TABLE_USER)
-            ->orderBy('userID ASC')
+            ->orderBy('`userID` ASC')
             ->fetchAll('account');
 
         /* Insert into zentao. */
@@ -115,7 +115,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
     {
         if(!$this->tableExists(BUGFREE_TABLE_GROUP)) return false;
         $groups = $this->dao->dbh($this->sourceDBH)
-            ->select("`groupID` AS id, groupName AS name, groupUser AS users")
+            ->select("`groupID` AS id, `groupName` AS name, `groupUser` AS users")
             ->from(BUGFREE_TABLE_GROUP)
             ->fetchAll('id');
         foreach($groups as $groupID => $group)
@@ -151,7 +151,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
     public function convertExecution()
     {
         $executions = $this->dao->dbh($this->sourceDBH)
-            ->select("`executionID` AS id, executionName AS name, isDroped AS deleted")
+            ->select("`executionID` AS id, `executionName` AS name, `isDroped` AS deleted")
             ->from(BUGFREE_TABLE_EXECUTION)
             ->fetchAll('id');
         foreach($executions as $executionID => $execution)
@@ -175,13 +175,13 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         $modules = $this->dao
             ->dbh($this->sourceDBH)
             ->select(
-                'moduleID AS id,
-                moduleType as type,
+                '`moduleID` AS id,
+                `moduleType` as type,
                 `executionID` AS root,
-                moduleName AS name,
-                moduleGrade AS grade,
+                `moduleName` AS name,
+                `moduleGrade` AS grade,
                 `parentID` AS parent,
-                displayOrder AS `order`')
+                `displayOrder` AS `order`')
             ->from(BUGFREE_TABLE_MODULE)
             ->orderBy('id ASC')
             ->fetchAll('id');
@@ -215,35 +215,35 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         $bugs = $this->dao
             ->dbh($this->sourceDBH)
             ->select('
-            bugID AS id,
+            `bugID` AS id,
             `executionID` AS product,
-            moduleID AS module,
-            bugTitle AS title,
-            bugSeverity AS severity,
-            bugPriority AS pri,
-            bugType AS type,
-            bugOS AS os,
-            bugBrowser AS browser,
-            bugMachine AS hardware,
-            howFound   AS found,
-            reproSteps AS steps,
-            bugStatus AS status,
-            linkID    AS `relatedBug`,
-            duplicateID AS `duplicateBug`,
-            caseID AS `case`,
+            `moduleID` AS module,
+            `bugTitle` AS title,
+            `bugSeverity` AS severity,
+            `bugPriority` AS pri,
+            `bugType` AS type,
+            `bugOS` AS os,
+            `bugBrowser` AS browser,
+            `bugMachine` AS hardware,
+            `howFound`   AS found,
+            `reproSteps` AS steps,
+            `bugStatus` AS status,
+            `linkID`    AS `relatedBug`,
+            `duplicateID` AS `duplicateBug`,
+            `caseID` AS `case`,
             1      AS `caseVersion`,
-            resultID AS result,
+            `resultID` AS result,
             mailto,
             `openedBy`, `openedDate`, `openedBuild`,
             `assignedTo`, `assignedDate`,
             `resolvedBy`, resolution, `resolvedBuild`, `resolvedDate`,
             `closedBy`, `closedDate`,
             `lastEditedBy`, `lastEditedDate`,
-            bugKeyword AS keywords
+            `bugKeyword` AS keywords
             ')
             ->from(BUGFREE_TABLE_BUGINFO)
-            ->where('isDroped')->eq(0)
-            ->orderBy('bugID')
+            ->where('`isDroped`')->eq(0)
+            ->orderBy('`bugID`')
             ->fetchAll('id');
         foreach($bugs as $bugID => $bug)
         {
@@ -277,7 +277,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         /* Update duplicated bugs. */
         foreach($this->map['bug'] as $oldBugID => $newBugID)
         {
-            $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('duplicateBug')->eq($newBugID)->where('duplicateBug')->eq($oldBugID)->exec();
+            $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('`duplicateBug`')->eq($newBugID)->where('`duplicateBug`')->eq($oldBugID)->exec();
         }
         return count($bugs);
     }
@@ -293,27 +293,27 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         $cases = $this->dao
             ->dbh($this->sourceDBH)
             ->select('
-            caseID AS id,
+            `caseID` AS id,
             `executionID` AS product,
-            moduleID AS module,
-            caseTitle AS title,
-            caseSteps AS step,
-            casePriority AS pri,
-            caseType AS type,
-            caseStatus AS status,
-            caseMethod AS `howRun`,
-            casePlan AS stage,
+            `moduleID` AS module,
+            `caseTitle` AS title,
+            `caseSteps` AS step,
+            `casePriority` AS pri,
+            `caseType` AS type,
+            `caseStatus` AS status,
+            `caseMethod` AS `howRun`,
+            `casePlan` AS stage,
             `openedBy`, `openedDate`,
             `lastEditedBy`, `lastEditedDate`,
             `scriptedBy`, `scriptedDate`, `scriptStatus`, `scriptLocation`,
-            linkID AS `linkCase`,
+            `linkID` AS `linkCase`,
             casekeyword AS keywords,
             1 AS version,
-            bugID
+            `bugID`
             ')
             ->from(BUGFREE_TABLE_CASEINFO)
-            ->where('isDroped')->eq(0)
-            ->orderBy('caseID')
+            ->where('`isDroped`')->eq(0)
+            ->orderBy('`caseID`')
             ->fetchAll('id');
         foreach($cases as $caseID => $case)
         {
@@ -371,12 +371,12 @@ class bugfree2ConvertModel extends bugfreeConvertModel
     {
         $results = $this->dao->dbh($this->sourceDBH)
             ->select('
-            resultID AS id,
-            caseID AS `case`,
-            resultValue AS `caseResult`,
+            `resultID` AS id,
+            `caseID` AS `case`,
+            `resultValue` AS `caseResult`,
             1 AS version,
             `openedDate` as date,
-            bugID
+            `bugID`
             ')
             ->from(BUGFREE_TABLE_RESULTINFO)
             ->orderBy('id')
@@ -411,17 +411,17 @@ class bugfree2ConvertModel extends bugfreeConvertModel
     {
         $actions = $this->dao
             ->dbh($this->sourceDBH)
-            ->select("actionID AS id,
-                actionTarget AS `objectType`,
-                idValue AS `objectID`,
-                actionUser AS actor,
-                actionType AS action,
-                actionDate AS date,
-                actionNote AS comment
+            ->select("`actionID` AS id,
+                `actionTarget` AS `objectType`,
+                `idValue` AS `objectID`,
+                `actionUser` AS actor,
+                `actionType` AS action,
+                `actionDate` AS date,
+                `actionNote` AS comment
                 ")
             ->from(BUGFREE_TABLE_ACTION)
-            ->where('actionTarget' != 'Result')
-            ->orderBy('actionID')
+            ->where('`actionTarget`' != 'Result')
+            ->orderBy('`actionID`')
             ->fetchAll('id');
 
         foreach($actions as $actionID => $action)
@@ -447,9 +447,9 @@ class bugfree2ConvertModel extends bugfreeConvertModel
     public function convertHistory()
     {
         $histories = $this->dao->dbh($this->sourceDBH)
-            ->select('actioID, actionField AS field, `oldValue` AS old, `newValue` AS new')
+            ->select('`actioID`, `actionField` AS field, `oldValue` AS old, `newValue` AS new')
             ->from(BUGFREE_TABLE_HISTORY)
-            ->orderBy('historyID')
+            ->orderBy('`historyID`')
             ->fetchAll();
         foreach($histories as $history)
         {
@@ -469,14 +469,14 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         $this->setPath();
         $files = $this->dao->dbh($this->sourceDBH)
             ->select("
-                actionID,
-                fileName AS pathname,
-                fileTitle AS title,
-                fileType AS extension,
+                `actionID`,
+                `fileName` AS pathname,
+                `fileTitle` AS title,
+                `fileType` AS extension,
                 `fileSize` AS size
                 ")
             ->from(BUGFREE_TABLE_FILE)
-            ->orderBy('fileID')
+            ->orderBy('`fileID`')
             ->fetchAll();
         foreach($files as $file)
         {
