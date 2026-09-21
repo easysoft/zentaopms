@@ -254,7 +254,7 @@ class convertModel extends model
         $table    = zget($this->config->convert->objectTables, $module, '');
         if($module == 'user')
         {
-            $dataList = $this->dao->dbh($this->sourceDBH)->select('t1.`ID`, t1.`lower_user_name` as account, t1.`lower_display_name` as realname, t1.`lower_email_address` as email, t1.created_date as `join`, t2.user_key as userCode')->from(JIRA_USERINFO)->alias('t1')
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('t1.`ID`, t1.`lower_user_name` as account, t1.`lower_display_name` as realname, t1.`lower_email_address` as email, t1.created_date as `join`, t2.user_key as `userCode`')->from(JIRA_USERINFO)->alias('t1')
                 ->leftJoin(JIRA_USER)->alias('t2')->on('t1.`lower_user_name` = t2.`lower_user_name`')
                 ->where('1 = 1')
                 ->beginIF($lastID)->andWhere('t1.`ID`')->gt($lastID)->fi()
@@ -538,7 +538,7 @@ EOT;
         if($this->session->jiraMethod == 'api')  $this->deleteJsonFile();
 
         /* 更新各项目的统计数据。 */
-        $projectList = $this->dao->dbh($this->dbh)->select('`BID`')->from(JIRA_TMPRELATION)->where('BType')->in('zproject,zexecution')->fetchPairs();
+        $projectList = $this->dao->dbh($this->dbh)->select('`BID`')->from(JIRA_TMPRELATION)->where('`BType`')->in('zproject,zexecution')->fetchPairs();
         $this->loadModel('program')->updateStats($projectList);
 
         unset($_SESSION['jiraDB']);
@@ -870,7 +870,7 @@ EOT;
      */
     public function getJiraFieldGroupByProject($relations): array
     {
-        $fieldList  = $this->dao->dbh($this->dbh)->select('`AID`, extra, `BID` AS field')->from(JIRA_TMPRELATION)->where('AType')->eq('jcustomfield')->andWhere('BType')->eq('zworkflowfield')->fetchGroup('AID', 'extra');
+        $fieldList  = $this->dao->dbh($this->dbh)->select('`AID`, extra, `BID` AS field')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jcustomfield')->andWhere('`BType`')->eq('zworkflowfield')->fetchGroup('AID', 'extra');
         if($this->session->jiraMethod == 'api')
         {
             $projectList = $this->getJiraDataFromJson('projectissuefield');
@@ -1304,7 +1304,7 @@ EOT;
     public function getJiraSprintIssue(): array
     {
         $issueGroup     = array();
-        $sprintRelation = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)->where('AType')->eq('jsprint')->andWhere('BType')->eq('zexecution')->fetchPairs();
+        $sprintRelation = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jsprint')->andWhere('`BType`')->eq('zexecution')->fetchPairs();
         if($this->session->jiraMethod != 'db')
         {
             foreach($sprintRelation as $sprintID => $executionID)

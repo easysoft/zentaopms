@@ -71,7 +71,7 @@ class errorlogModel extends model
     {
         return $this->dao->select($this->getSelectFields())->from(TABLE_ERRORLOGREQ)->alias('t1')
             ->leftJoin(TABLE_ERRORLOG)->alias('t2')->on('t1.md5 = t2.md5')
-            ->where('t1.requestID')->eq($requestID)
+            ->where('t1.`requestID`')->eq($requestID)
             ->orderBy('t1.id_asc')
             ->fetchAll('', false);
     }
@@ -154,8 +154,8 @@ class errorlogModel extends model
      */
     public function deleteByDate(string $date): bool
     {
-        $md5s = $this->dao->select('md5')->from(TABLE_ERRORLOGREQ)->where('createdDate')->lt($date)->fetchPairs('md5', 'md5');
-        $this->dao->delete()->from(TABLE_ERRORLOGREQ)->where('createdDate')->lt($date)->exec();
+        $md5s = $this->dao->select('md5')->from(TABLE_ERRORLOGREQ)->where('`createdDate`')->lt($date)->fetchPairs('md5', 'md5');
+        $this->dao->delete()->from(TABLE_ERRORLOGREQ)->where('`createdDate`')->lt($date)->exec();
         $this->deleteOrphanErrorLogs(array_keys($md5s));
         return !dao::isError();
     }

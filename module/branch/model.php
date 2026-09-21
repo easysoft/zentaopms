@@ -337,7 +337,7 @@ class branchModel extends model
     {
         $this->dao->update(TABLE_BRANCH)
             ->set('status')->eq('closed')
-            ->set('closedDate')->eq(helper::now())
+            ->set('`closedDate`')->eq(helper::now())
             ->set('`default`')->eq('0')
             ->where('id')->eq($branchID)
             ->exec();
@@ -356,7 +356,7 @@ class branchModel extends model
     {
         $this->dao->update(TABLE_BRANCH)
             ->set('status')->eq('active')
-            ->set('closedDate')->eq(null)
+            ->set('`closedDate`')->eq(null)
             ->where('id')->eq($branchID)
             ->exec();
         return !dao::isError();

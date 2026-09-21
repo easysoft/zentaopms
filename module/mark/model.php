@@ -27,8 +27,8 @@ class markModel extends model
     public function getNeededMarks(array $objectIDs, string $objectType, string $version, string $mark): array
     {
         return $this->dao->select('`objectID`, version')->from(TABLE_MARK)
-            ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->in($objectIDs)
+            ->where('`objectType`')->eq($objectType)
+            ->andWhere('`objectID`')->in($objectIDs)
             ->beginIF($version != 'all')->andWhere('version')->eq($version)->fi()
             ->andWhere('account')->eq($this->app->user->account)
             ->andWhere('mark')->eq($mark)
@@ -56,8 +56,8 @@ class markModel extends model
     public function isMark(string $objectType, int $objectID, string $version, string $mark = 'view')
     {
         return $this->dao->select('*')->from(TABLE_MARK)
-            ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->in($objectID)
+            ->where('`objectType`')->eq($objectType)
+            ->andWhere('`objectID`')->in($objectID)
             ->andWhere('version')->eq($version)
             ->andWhere('account')->eq($this->app->user->account)
             ->andWhere('mark')->eq($mark)
@@ -78,8 +78,8 @@ class markModel extends model
     public function hasMark(string $objectType, int $objectID, string $version = 'all', string $mark = 'view', bool $onlyMajor = false)
     {
         $mark = $this->dao->select('id')->from(TABLE_MARK)
-            ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->in($objectID)
+            ->where('`objectType`')->eq($objectType)
+            ->andWhere('`objectID`')->in($objectID)
             ->beginIF($version != 'all')->andWhere('version')->eq($version)->fi()
             ->beginIF($onlyMajor)->andWhere('version')->notlike('%.%')->fi()
             ->andWhere('account')->eq($this->app->user->account)

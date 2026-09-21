@@ -607,13 +607,13 @@ class searchModel extends model
             $filterObjects[] = $object;
         }
 
-        $typeCount = $this->dao->select("`objectType`, COUNT(1) AS objectCount")->from(TABLE_SEARCHINDEX)
+        $typeCount = $this->dao->select("`objectType`, COUNT(1) AS `objectCount`")->from(TABLE_SEARCHINDEX)
             ->where('((vision')->eq($this->config->vision)
-            ->andWhere('objectType')->in($allowedObjects)
+            ->andWhere('`objectType`')->in($allowedObjects)
             ->markRight(1)
             ->orWhere('(`objectType`')->in($filterObjects)
             ->markRight(2)
-            ->andWhere('addedDate')->le(helper::now())
+            ->andWhere('`addedDate`')->le(helper::now())
             ->groupBy('`objectType`')
             ->fetchPairs();
         arsort($typeCount);
@@ -677,12 +677,12 @@ class searchModel extends model
         $stmt  = $this->dao->select('*')->from("({$table})")->alias('t1')
             ->where("(score >= {$score} {$likeCondition})")
             ->andWhere('((vision')->eq($this->config->vision)
-            ->andWhere('objectType')->in($allowedObjects)
+            ->andWhere('`objectType`')->in($allowedObjects)
             ->markRight(1)
             ->orWhere('(`objectType`')->in($filterObjects)
             ->markRight(2)
-            ->andWhere('addedDate')->le(helper::now())
-            ->orderBy('score_desc, editedDate_desc')
+            ->andWhere('`addedDate`')->le(helper::now())
+            ->orderBy('score_desc, `editedDate`_desc')
             ->query();
 
         $results     = array();
@@ -747,7 +747,7 @@ class searchModel extends model
         $index->content = $contentSplited['words'];
 
         $this->saveDict($titleSplited['dict'] + $contentSplited['dict']);
-        $this->dao->delete()->from(TABLE_SEARCHINDEX)->where('objectType')->eq($index->objectType)->andWhere('objectID')->eq($index->objectID)->exec();
+        $this->dao->delete()->from(TABLE_SEARCHINDEX)->where('`objectType`')->eq($index->objectType)->andWhere('`objectID`')->eq($index->objectID)->exec();
         $this->dao->insert(TABLE_SEARCHINDEX)->data($index)->exec();
 
         return !dao::isError();
@@ -883,7 +883,7 @@ class searchModel extends model
      */
     public function deleteIndex(string $objectType, int $objectID): bool
     {
-        $this->dao->delete()->from(TABLE_SEARCHINDEX)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->exec();
+        $this->dao->delete()->from(TABLE_SEARCHINDEX)->where('`objectType`')->eq($objectType)->andWhere('`objectID`')->eq($objectID)->exec();
         return !dao::isError();
     }
 }

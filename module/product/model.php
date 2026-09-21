@@ -1029,7 +1029,7 @@ class productModel extends model
         $hasWaterfallplus = in_array('waterfallplus', helper::arrayColumn($projects, 'model'));
         $waterfallOrderBy = ($hasWaterfall || $hasWaterfallplus) ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
 
-        $executions = $this->dao->select('t2.id,t2.name,t2.project,t2.grade,t2.path,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executions = $this->dao->select('t2.id,t2.name,t2.project,t2.grade,t2.path,t2.parent,t2.attribute,t2.multiple,t3.name as `projectName`')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
             ->where('t1.product')->eq($productID)
@@ -1750,7 +1750,7 @@ class productModel extends model
         $finishClosedStory = $this->dao->select('product, count(1) as finish')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('status')->eq('closed')
-            ->andWhere('closedReason')->eq('done')
+            ->andWhere('`closedReason`')->eq('done')
             ->groupBy('product')
             ->fetchPairs('product', 'finish');
         $launchedStory = $this->dao->select('product, count(1) as launched')->from(TABLE_STORY)

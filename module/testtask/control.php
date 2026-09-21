@@ -1350,7 +1350,7 @@ class testtask extends control
     public function ignoreCaseChange(int $caseID, int $taskID)
     {
         $testtaskCaseVersion = $this->dao->select('version')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('case')->eq($caseID)->fetch('version');
-        $this->dao->update(TABLE_TESTRUN)->set('caseVersion')->eq($testtaskCaseVersion)->where('case')->eq($caseID)->andWhere('task')->eq($taskID)->exec();
+        $this->dao->update(TABLE_TESTRUN)->set('`caseVersion`')->eq($testtaskCaseVersion)->where('case')->eq($caseID)->andWhere('task')->eq($taskID)->exec();
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
 
@@ -1366,7 +1366,7 @@ class testtask extends control
     {
         $caseIdList  = zget($_POST, 'caseIdList',  array());
         $caseList    = $this->loadModel('testcase')->getByList($caseIdList);
-        $versionList = $this->dao->select('`case`,caseVersion,version')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('case')->in($caseIdList)->fetchAll('case');
+        $versionList = $this->dao->select('`case`,`caseVersion`,version')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('case')->in($caseIdList)->fetchAll('case');
         foreach($caseList as $case)
         {
             $versionInfo = $versionList[$case->id];
@@ -1395,7 +1395,7 @@ class testtask extends control
     {
         $caseIdList  = zget($_POST, 'caseIdList',  array());
         $versionList = $this->dao->select('`case`,version')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('case')->in($caseIdList)->fetchPairs('case');
-        foreach($versionList as $caseID => $taskCaseVersion) $this->dao->update(TABLE_TESTRUN)->set('caseVersion')->eq($taskCaseVersion)->where('case')->eq($caseID)->andWhere('task')->eq($taskID)->exec();
+        foreach($versionList as $caseID => $taskCaseVersion) $this->dao->update(TABLE_TESTRUN)->set('`caseVersion`')->eq($taskCaseVersion)->where('case')->eq($caseID)->andWhere('task')->eq($taskID)->exec();
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 }

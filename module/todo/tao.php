@@ -52,8 +52,8 @@ class todoTao extends todoModel
             ->andWhere('deleted')->eq('0')
             ->andWhere('vision')->eq($vision)
             ->andWhere('account', true)->eq($account)
-            ->orWhere('assignedTo')->eq($account)
-            ->orWhere('finishedBy')->eq($account)
+            ->orWhere('`assignedTo`')->eq($account)
+            ->orWhere('`finishedBy`')->eq($account)
             ->markRight(1)
             ->fetch('count');
     }
@@ -139,10 +139,10 @@ class todoTao extends todoModel
         $now = helper::now();
         $this->dao->update(TABLE_TODO)
             ->set('status')->eq('closed')
-            ->set('closedBy')->eq($this->app->user->account)
-            ->set('closedDate')->eq($now)
-            ->set('assignedTo')->eq('closed')
-            ->set('assignedDate')->eq($now)
+            ->set('`closedBy`')->eq($this->app->user->account)
+            ->set('`closedDate`')->eq($now)
+            ->set('`assignedTo`')->eq('closed')
+            ->set('`assignedDate`')->eq($now)
             ->where('id')->eq($todoID)
             ->exec();
         return !dao::isError();
@@ -164,7 +164,7 @@ class todoTao extends todoModel
         return $this->dao->select('*')->from(TABLE_TODO)
             ->where('type')->eq('custom')
             ->andWhere('deleted')->eq('0')
-            ->andWhere('objectID')->in(array_keys($todoList))
+            ->andWhere('`objectID`')->in(array_keys($todoList))
             ->orderBy($orderBy)
             ->fetchAll('objectID');
     }
@@ -371,8 +371,8 @@ class todoTao extends todoModel
             ->andWhere('deleted')->eq('0')
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('account', true)->eq($account)
-            ->orWhere('assignedTo')->eq($account)
-            ->orWhere('finishedBy')->eq($account)
+            ->orWhere('`assignedTo`')->eq($account)
+            ->orWhere('`finishedBy`')->eq($account)
             ->markRight(1)
             ->fetch('count');
     }
@@ -451,9 +451,9 @@ class todoTao extends todoModel
             ->where('deleted')->eq('0')
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($type == 'assignedtoother')->andWhere('account', true)->eq($account)->fi()
-            ->beginIF($type != 'assignedtoother')->andWhere('assignedTo', true)->eq($account)->fi()
-            ->orWhere('finishedBy')->eq($account)
-            ->orWhere('closedBy')->eq($account)
+            ->beginIF($type != 'assignedtoother')->andWhere('`assignedTo`', true)->eq($account)->fi()
+            ->orWhere('`finishedBy`')->eq($account)
+            ->orWhere('`closedBy`')->eq($account)
             ->markRight(1)
             ->beginIF($begin && $type != 'future')->andWhere('date')->ge($begin)->fi()
             ->beginIF($end   && $type != 'future')->andWhere('date')->le($end)->fi()
@@ -461,7 +461,7 @@ class todoTao extends todoModel
             ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
             ->beginIF($type == 'cycle')->andWhere('cycle')->eq('1')->fi()
             ->beginIF($type != 'cycle')->andWhere('cycle')->eq('0')->fi()
-            ->beginIF($type == 'assignedtoother')->andWhere('assignedTo')->notin(array($account, ''))->fi()
+            ->beginIF($type == 'assignedtoother')->andWhere('`assignedTo`')->notin(array($account, ''))->fi()
             ->beginIF($type == 'future')
             ->andWhere('(date')->eq(FUTURE_TIME)
             ->orWhere('(begin')->eq('2400')

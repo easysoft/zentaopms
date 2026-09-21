@@ -1057,8 +1057,8 @@ class programplanTao extends programplanModel
         $this->dao->update(TABLE_BUILD)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('deleted')->eq('0')->exec();
         $this->dao->update(TABLE_TESTTASK)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('deleted')->eq('0')->exec();
         $this->dao->update(TABLE_TESTREPORT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('deleted')->eq('0')->exec();
-        $this->dao->update(TABLE_ACTION)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('objectType')->ne('execution')->exec();
-        $this->dao->update(TABLE_ACTIONRECENT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('objectType')->ne('execution')->exec();
+        $this->dao->update(TABLE_ACTION)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('`objectType`')->ne('execution')->exec();
+        $this->dao->update(TABLE_ACTIONRECENT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('`objectType`')->ne('execution')->exec();
         $this->dao->update(TABLE_DOCLIB)->set('execution')->eq($executionID)->where('type')->eq('execution')->andWhere('execution')->eq($parentID)->andWhere('main')->eq('0')->andWhere('deleted')->eq('0')->exec();
 
         $storyIdSQL = $this->dao->select('id')->from(TABLE_STORY)->where('deleted')->eq('0')->get();

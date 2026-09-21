@@ -44,8 +44,8 @@ class designModel extends model
         $this->dao->insert(TABLE_DESIGNSPEC)->data($spec)->exec();
 
         $this->dao->update(TABLE_PROJECTDELIVERABLE)
-            ->set('submittedBy')->eq($design->createdBy)
-            ->set('submittedDate')->eq($design->createdDate)
+            ->set('`submittedBy`')->eq($design->createdBy)
+            ->set('`submittedDate`')->eq($design->createdDate)
             ->where('project')->eq($design->project)
             ->andWhere('deliverable')->eq($design->type)
             ->exec();
@@ -105,8 +105,8 @@ class designModel extends model
         }
 
         $this->dao->update(TABLE_PROJECTDELIVERABLE)
-            ->set('submittedBy')->eq($this->app->user->account)
-            ->set('submittedDate')->eq(helper::now())
+            ->set('`submittedBy`')->eq($this->app->user->account)
+            ->set('`submittedDate`')->eq(helper::now())
             ->where('project')->eq($projectID)
             ->andWhere('deliverable')->in($designTypes)
             ->exec();
@@ -237,7 +237,7 @@ class designModel extends model
     {
         /* Delete linked commit in the relation table. */
         $this->dao->delete()->from(TABLE_RELATION)
-            ->where('AType')->eq('design')
+            ->where('`AType`')->eq('design')
             ->andwhere('AID')->eq($designID)
             ->andwhere('BType')->eq('commit')
             ->andwhere('relation')->eq('completedin')
@@ -245,7 +245,7 @@ class designModel extends model
             ->exec();
 
         $this->dao->delete()->from(TABLE_RELATION)
-            ->where('AType')->eq('commit')
+            ->where('`AType`')->eq('commit')
             ->andwhere('BID')->eq($designID)
             ->andwhere('BType')->eq('design')
             ->andwhere('relation')->eq('completedfrom')
@@ -253,7 +253,7 @@ class designModel extends model
             ->exec();
 
         /* Update linked commit in the design table. */
-        $commit = $this->dao->select('`BID`')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->andWhere('BType')->eq('commit')->andwhere('relation')->eq('completedin')->fetchAll('BID');
+        $commit = $this->dao->select('`BID`')->from(TABLE_RELATION)->where('`AType`')->eq('design')->andWhere('AID')->eq($designID)->andWhere('`BType`')->eq('commit')->andwhere('relation')->eq('completedin')->fetchAll('BID');
         $commit = implode(",", array_keys($commit));
 
         $this->dao->update(TABLE_DESIGN)->set('commit')->eq($commit)->where('id')->eq($designID)->exec();
@@ -513,7 +513,7 @@ class designModel extends model
         if($design)
         {
             $story  = $this->loadModel('story')->fetchByID((int)$design->story);
-            if($story) $this->dao->update(TABLE_DESIGN)->set('storyVersion')->eq($story->version)->where('id')->eq($designID)->exec();
+            if($story) $this->dao->update(TABLE_DESIGN)->set('`storyVersion`')->eq($story->version)->where('id')->eq($designID)->exec();
         }
         return dao::isError();
     }

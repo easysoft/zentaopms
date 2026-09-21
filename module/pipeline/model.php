@@ -54,7 +54,7 @@ class pipelineModel extends model
      */
     public function getList(int $spaceID = 0, int $repoID = 0, $type = '', string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        $pipelines = $this->dao->select('t1.*, t2.`spaceID` AS space, t2.name AS `repoName`, t3.variables as variables, t4.name AS providerName')->from(TABLE_PIPELINE)->alias('t1')
+        $pipelines = $this->dao->select('t1.*, t2.`spaceID` AS space, t2.name AS `repoName`, t3.variables as variables, t4.name AS `providerName`')->from(TABLE_PIPELINE)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.`repoID`=t2.id')
             ->leftJoin(TABLE_PIPELINECONTENT)->alias('t3')->on('t1.id=t3.`pipelineID`')
             ->leftJoin(TABLE_PROVIDER)->alias('t4')->on('t1.`providerID`=t4.id')
@@ -108,7 +108,7 @@ class pipelineModel extends model
      */
     public function getExecutionList(int $spaceID = 0, int $repoID = 0, string $type = '', int $pipelineID = 0, string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('t1.*, t2.`scope`, t2.`spaceID` AS space, t2.`repoID` AS repo, t2.`name` AS pipelineName')->from(TABLE_PIPELINEEXEC)->alias('t1')
+        return $this->dao->select('t1.*, t2.`scope`, t2.`spaceID` AS space, t2.`repoID` AS repo, t2.`name` AS `pipelineName`')->from(TABLE_PIPELINEEXEC)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.`pipelineID`=t2.id')
             ->where('1=1')
             ->beginIF($repoID)->andWhere('t2.`repoID`')->eq($repoID)->fi()
@@ -133,7 +133,7 @@ class pipelineModel extends model
     public function getExecutionByPipeline(array $pipelineIdList, bool $showLast = false): array
     {
         $executions = $this->dao->select('*')->from(TABLE_PIPELINEEXEC)
-            ->where('pipelineID')->in($pipelineIdList)
+            ->where('`pipelineID`')->in($pipelineIdList)
             ->fetchAll('id', false);
         if(empty($executions)) return array();
         if(!$showLast) return $executions;
@@ -166,7 +166,7 @@ class pipelineModel extends model
     {
         return $this->dao->select('id, name')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
-            ->andWhere('repoID')->eq($repoID)
+            ->andWhere('`repoID`')->eq($repoID)
             ->orderBy('id_desc')
             ->fetchPairs();
     }
@@ -252,7 +252,7 @@ class pipelineModel extends model
             $content->createdDate = helper::now();
             if($hasCopy)
             {
-                $copyPipelineContent = $this->dao->select('*')->from(TABLE_PIPELINECONTENT)->where('pipelineID')->eq($copyPipelineID)->fetch();
+                $copyPipelineContent = $this->dao->select('*')->from(TABLE_PIPELINECONTENT)->where('`pipelineID`')->eq($copyPipelineID)->fetch();
 
                 $content->data      = $copyPipelineContent->data;
                 $content->variables = $copyPipelineContent->variables;
@@ -286,7 +286,7 @@ class pipelineModel extends model
 
             if($hasCopy)
             {
-                $copyTrigger = $this->dao->select('*')->from(TABLE_PIPELINETRIGGER)->where('pipelineID')->eq($copyPipelineID)->fetch();
+                $copyTrigger = $this->dao->select('*')->from(TABLE_PIPELINETRIGGER)->where('`pipelineID`')->eq($copyPipelineID)->fetch();
 
                 $content->event = $copyTrigger->event;
                 $content->cron    = $copyTrigger->cron;
@@ -514,7 +514,7 @@ class pipelineModel extends model
     public function getBySpaces(array $spaceIdList): array
     {
         return $this->dao->select('*')->from(TABLE_PIPELINE)
-            ->where('spaceID')->in($spaceIdList)
+            ->where('`spaceID`')->in($spaceIdList)
             ->andWhere('deleted')->eq('0')
             ->fetchAll('id');
     }
@@ -534,8 +534,8 @@ class pipelineModel extends model
         if(!$provider) return false;
 
         $existPipeline = $this->dao->select('id')->from(TABLE_PIPELINE)
-            ->where('spaceID')->eq($repo->spaceID)
-            ->andWhere('repoID')->eq($repo->id)
+            ->where('`spaceID`')->eq($repo->spaceID)
+            ->andWhere('`repoID`')->eq($repo->id)
             ->andWhere('name')->eq($formData->name)
             ->andWhere('deleted')->eq('0')
             ->fetch();
@@ -657,7 +657,7 @@ class pipelineModel extends model
     public function updateContent(int $pipelineID, object $content): bool
     {
         $this->dao->update(TABLE_PIPELINECONTENT)->data($content)
-            ->where('pipelineID')->eq($pipelineID)
+            ->where('`pipelineID`')->eq($pipelineID)
             ->exec();
 
         return !dao::isError();
@@ -772,7 +772,7 @@ class pipelineModel extends model
     public function getTriggers(int $pipelineID): array
     {
         return $this->dao->select('*')->from(TABLE_PIPELINETRIGGER)
-            ->where('pipelineID')->eq($pipelineID)
+            ->where('`pipelineID`')->eq($pipelineID)
             ->fetchAll();
     }
 
@@ -789,8 +789,8 @@ class pipelineModel extends model
     {
         $this->dao->update(TABLE_PIPELINETRIGGER)
             ->set($field)->eq($value)
-            ->set('editedBy')->eq($this->app->user->account)
-            ->set('editedDate')->eq(helper::now())
+            ->set('`editedBy`')->eq($this->app->user->account)
+            ->set('`editedDate`')->eq(helper::now())
             ->where('id')->eq($triggerID)
             ->exec();
     }

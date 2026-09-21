@@ -54,9 +54,9 @@ class webhookModel extends model
     public function getBindAccount(int $webhookID, string $webhookType, string $openID)
     {
         return $this->dao->select('account')->from(TABLE_OAUTH)
-            ->where('providerID')->eq($webhookID)
-            ->andWhere('providerType')->eq($webhookType)
-            ->andWhere('openID')->eq($openID)
+            ->where('`providerID`')->eq($webhookID)
+            ->andWhere('`providerType`')->eq($webhookType)
+            ->andWhere('`openID`')->eq($openID)
             ->fetch('account');
     }
 
@@ -91,8 +91,8 @@ class webhookModel extends model
     public function getLogList(int $id, string $orderBy = 'date_desc', ?object $pager = null): array
     {
         $logs = $this->dao->select('*')->from(TABLE_LOG)
-            ->where('objectType')->eq('webhook')
-            ->andWhere('objectID')->eq($id)
+            ->where('`objectType`')->eq('webhook')
+            ->andWhere('`objectID`')->eq($id)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
@@ -145,14 +145,14 @@ class webhookModel extends model
         $now = helper::now();
         $dataList  = $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('status')->eq('wait')
-            ->andWhere('objectType')->eq('webhook')
+            ->andWhere('`objectType`')->eq('webhook')
             ->andWhere('(`sendTime` IS NULL OR `sendTime` <= "' . $now . '")')
             ->orderBy('id')
             ->fetchAll('id', false);
         $threeHoursAgo = date('Y-m-d H:i:s', time() - 3 * 3600);
         $dataList += $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('status')->eq('senting')
-            ->andWhere('objectType')->eq('webhook')
+            ->andWhere('`objectType`')->eq('webhook')
             ->andWhere('(`sendTime` IS NULL OR (`sendTime` <= "' . $now . '" AND sendTime >= "' . $threeHoursAgo . '"))')
             ->orderBy('id')
             ->fetchAll('id', false);
@@ -170,8 +170,8 @@ class webhookModel extends model
      */
     public function getBoundUsers(int $webhookID, array|string $users = array())
     {
-        return $this->dao->select('*')->from(TABLE_OAUTH)->where('providerType')->eq('webhook')
-            ->andWhere('providerID')->eq($webhookID)
+        return $this->dao->select('*')->from(TABLE_OAUTH)->where('`providerType`')->eq('webhook')
+            ->andWhere('`providerID`')->eq($webhookID)
             ->beginIF($users)->andWhere('account')->in($users)->fi()
             ->fetchPairs('account', 'openID');
     }
@@ -289,8 +289,8 @@ class webhookModel extends model
         if(!$userList) return false;
 
         $this->dao->delete()->from(TABLE_OAUTH)
-            ->where('providerType')->eq('webhook')
-            ->andWhere('providerID')->eq($webhookID)
+            ->where('`providerType`')->eq('webhook')
+            ->andWhere('`providerID`')->eq($webhookID)
             ->andWhere('account')->in(array_keys($userList))
             ->exec();
 
@@ -630,7 +630,7 @@ class webhookModel extends model
         if(!empty($_FILES['files']['name'][0]))
         {
             $this->loadModel('file');
-            $files = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->orderBy('addedDate_desc,id_desc')->limit(count($_FILES['files']['name']))->fetchAll();
+            $files = $this->dao->select('*')->from(TABLE_FILE)->where('`objectType`')->eq($objectType)->andWhere('`objectID`')->eq($objectID)->orderBy('`addedDate`_desc,id_desc')->limit(count($_FILES['files']['name']))->fetchAll();
             if($files)
             {
                 foreach($files as $file)
@@ -896,7 +896,7 @@ class webhookModel extends model
     {
         $this->dao->update(TABLE_NOTIFY)
             ->set('status')->eq($status)
-            ->beginIF(!empty($time))->set('sendTime')->eq($time)->fi()
+            ->beginIF(!empty($time))->set('`sendTime`')->eq($time)->fi()
             ->where('id')->in($idList)
             ->exec();
     }

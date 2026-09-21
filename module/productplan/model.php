@@ -249,7 +249,7 @@ class productplanModel extends model
             }
         }
 
-        $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.type as productType,t1.branch')->from(TABLE_PRODUCTPLAN)->alias('t1')
+        $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.type as `productType`,t1.branch')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
             ->where('t1.deleted')->eq('0')
             ->beginIF($productIdList)->andWhere('t1.product')->in($productIdList)->fi()
@@ -319,7 +319,7 @@ class productplanModel extends model
      */
     public function getGroupByProduct(array $productIdList = array(), string $param = '', string $orderBy = 'id_desc'): array
     {
-        $plans = $this->dao->select('t1.*,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
+        $plans = $this->dao->select('t1.*,t2.type as `productType`')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
             ->where('t1.deleted')->eq(0)
             ->beginIF($productIdList)->andWhere('t1.product')->in($productIdList)->fi()
@@ -387,7 +387,7 @@ class productplanModel extends model
     public function getPlansByStories(array $storyIdList): array
     {
         if(empty($storyIdList)) return array();
-        return $this->dao->select('t2.id as storyID, t3.*')->from(TABLE_PLANSTORY)->alias('t1')
+        return $this->dao->select('t2.id as `storyID`, t3.*')->from(TABLE_PLANSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t2.id=t1.story')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t3')->on('t3.id=t1.plan')
             ->where('t2.id')->in($storyIdList)
