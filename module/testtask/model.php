@@ -1704,17 +1704,27 @@ class testtaskModel extends model
             ->andWhere('version')->in($relatedVersions)
             ->orderBy('id')
             ->fetchGroup('version', 'id');
-        $runs = $this->dao->select('t1.id, t1.task, t2.build')->from(TABLE_TESTRUN)->alias('t1')
-            ->leftJoin(TABLE_TESTTASK)->alias('t2')->on('t1.task=t2.id')
-            ->where('t1.id')->in($runIdList)
-            ->fetchAll('id');
+        $runs = array();
+        if($runIdList)
+        {
+            $productID   = $this->dao->select('product')->from(TABLE_CASE)->where('id')->in($runCaseID)->fetch('product');
+            $runs        = $this->dao->select('id, task')->from(TABLE_TESTRUN)->where('id')->in($runIdList)->fetchAll('id');
+            $tasks       = $this->dao->select('id,build,joint')->from(TABLE_TESTTASK)->where('id')->in(array_unique(array_column($runs, 'task')))->fetchAll('id');
+            $jointIdList = array_filter(array_map(function($task) {if($task->joint) return $task->id;}, $tasks));
+            $jointTasks  = empty($jointIdList) ? array() : $this->dao->select('task,build')->from(TABLE_TESTTASKPRODUCT)->where('task')->in($jointIdList)->andWhere('product')->eq($productID)->fetchAll('task');
+            foreach($runs as $run)
+            {
+                $run->build = $tasks[$run->task]->build;
+                if(isset($jointTasks[$run->task])) $run->build = $jointTasks[$run->task]->build;
+            }
+        }
         $nodes = $this->dao->select('id,name')->from(TABLE_ZAHOST)->where('id')->in($nodeIdList)->fetchPairs();
 
         foreach($results as $resultID => $result)
         {
             $result->stepResults = $result->stepResults ? unserialize($result->stepResults) : array();
-            $result->build       = !empty($runs[$result->run]->build) ? $runs[$result->run]->build : 0;
-            $result->task        = !empty($runs[$result->run]->task) ? $runs[$result->run]->task : 0;
+            $result->build       = !empty($runs[$result->run]) ? $runs[$result->run]->build : 0;
+            $result->task        = !empty($runs[$result->run]) ? $runs[$result->run]->task : 0;
             $result->nodeName    = zget($nodes, $result->node, '');
             $result->files       = zget($resultFiles, $resultID, array()); //Get files of case result.
             if(isset($relatedSteps[$result->version])) $result->stepResults = $this->processResultSteps($result, $relatedSteps[$result->version]);
