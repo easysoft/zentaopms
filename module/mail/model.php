@@ -485,7 +485,7 @@ class mailModel extends model
     public function getQueue(string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null, bool $mergeByUser = true): array
     {
         $mails = $this->dao->select('*')->from(TABLE_NOTIFY)
-            ->where('objectType')->eq('mail')
+            ->where('`objectType`')->eq('mail')
             ->beginIF(!empty($status) && $status != 'all')->andWhere('status')->eq($status)->fi()
             ->orderBy($orderBy)
             ->page($pager)

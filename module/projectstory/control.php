@@ -47,7 +47,7 @@ class projectStory extends control
 
             if(!$projectID)
             {
-                $projectProducts = $this->dao->select('project, count(1) AS productCount')->from(TABLE_PROJECTPRODUCT)
+                $projectProducts = $this->dao->select('project, count(1) AS `productCount`')->from(TABLE_PROJECTPRODUCT)
                     ->where('project')->in(array_keys($projects))
                     ->groupBy('project')
                     ->fetchPairs();

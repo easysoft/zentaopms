@@ -394,7 +394,7 @@ class upgradeZen extends upgrade
         if(empty($hourPoint)) $this->setting->setItem('system.custom.hourPoint', 0);
 
         $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll('id');
-        $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->andWhere('objectType')->eq('project')->exec();
+        $this->dao->update(TABLE_ACTION)->set('`objectType`')->eq('execution')->where('`objectID`')->in(array_keys($sprints))->andWhere('`objectType`')->eq('project')->exec();
 
         $this->loadModel('custom')->disableFeaturesByMode('light');
     }
@@ -474,7 +474,7 @@ class upgradeZen extends upgrade
 
         /* Update sprints history. */
         $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll('id');
-        $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->andWhere('objectType')->eq('project')->exec();
+        $this->dao->update(TABLE_ACTION)->set('`objectType`')->eq('execution')->where('`objectID`')->in(array_keys($sprints))->andWhere('`objectType`')->eq('project')->exec();
         $this->locate($this->createLink('upgrade', 'mergeRepo'));
     }
 
@@ -642,7 +642,7 @@ class upgradeZen extends upgrade
             foreach(array_keys($products) as $productID) $productPairs[$productID] = $productID;
         }
 
-        $projects = $this->dao->select('t1.*, t2.product AS productID')->from(TABLE_PROJECT)->alias('t1')
+        $projects = $this->dao->select('t1.*, t2.product AS `productID`')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
             ->where('t2.product')->in($productPairs)
             ->andWhere('t1.vision')->eq('rnd')

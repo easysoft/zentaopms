@@ -1202,7 +1202,7 @@ class testcaseZen extends testcase
 
         if($from == 'testsuite')
         {
-            $suiteCaseVersion = $this->dao->select('caseVersion')->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->andWhere('`case`')->eq($case->id)->fetch('caseVersion');
+            $suiteCaseVersion = $this->dao->select('`caseVersion`')->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->andWhere('`case`')->eq($case->id)->fetch('caseVersion');
             $case->version    = $suiteCaseVersion ?: $case->version;
         }
 
@@ -1674,8 +1674,8 @@ class testcaseZen extends testcase
         $fromSteps      = $this->testcase->fetchStepsByList($caseIdList);
         $fromFiles      = $this->testcase->getRelatedFiles($caseIdList);
         $libCases       = $this->dao->select('*')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('product')->eq(0)->andWhere('deleted')->eq('0')->fetchGroup('fromCaseID', 'id');
-        $maxOrder       = $this->dao->select('max(`order`) as maxOrder')->from(TABLE_CASE)->where('deleted')->eq(0)->fetch('maxOrder');
-        $maxModuleOrder = $this->dao->select('max(`order`) as maxOrder')->from(TABLE_MODULE)->where('deleted')->eq(0)->fetch('maxOrder');
+        $maxOrder       = $this->dao->select('max(`order`) as `maxOrder`')->from(TABLE_CASE)->where('deleted')->eq(0)->fetch('maxOrder');
+        $maxModuleOrder = $this->dao->select('max(`order`) as `maxOrder`')->from(TABLE_MODULE)->where('deleted')->eq(0)->fetch('maxOrder');
         foreach($fromCases as $caseID => $case)
         {
             /* 初始化用例。 */

@@ -100,7 +100,7 @@ class weeklyModel extends model
         $monday = $this->getThisMonday($date);
         return $this->dao->select('*')
             ->from(TABLE_WEEKLYREPORT)
-            ->where('weekStart')->eq($monday)
+            ->where('`weekStart`')->eq($monday)
             ->andWhere('project')->eq($project)
             ->fetch();
     }
@@ -208,7 +208,7 @@ class weeklyModel extends model
         $executionIdList = array_keys($executions);
         return $this->dao->select('count(distinct account) as count')
             ->from(TABLE_EFFORT)
-            ->where('objectType')->eq('task')
+            ->where('`objectType`')->eq('task')
             ->andWhere('execution')->in($executionIdList)
             ->andWhere('date')->ge($monday)
             ->andWhere('date')->le($sunday)
@@ -238,8 +238,8 @@ class weeklyModel extends model
             ->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere("(status = 'done' or `closedReason` = 'done')")
-            ->andWhere('finishedDate')->ge($monday)
-            ->andWhere('finishedDate')->le($sunday)
+            ->andWhere('`finishedDate`')->ge($monday)
+            ->andWhere('`finishedDate`')->le($sunday)
             ->andWhere('deleted')->eq(0)
             ->fetchAll();
         return $this->loadModel('task')->processTasks($tasks);
@@ -274,7 +274,7 @@ class weeklyModel extends model
         $postponed = $this->dao->select('*')
             ->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
-            ->andWhere('finishedDate')->gt($nextMonday)
+            ->andWhere('`finishedDate`')->gt($nextMonday)
             ->andWhere('deadline')->ge($monday)
             ->andWhere('deadline')->lt($nextMonday)
             ->andWhere('deleted')->eq(0)
@@ -337,7 +337,7 @@ class weeklyModel extends model
             ->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq(0)
-            ->andWhere('isParent')->eq('0')
+            ->andWhere('`isParent`')->eq('0')
             ->groupBy('type')
             ->fetchPairs();
     }
@@ -389,7 +389,7 @@ class weeklyModel extends model
         $executions = $this->dao->select('id,begin,end,`realBegan`,`realEnd`,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
         $stmt       = $this->dao->select('*')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
-            ->andWhere("isParent")->eq(0)
+            ->andWhere("`isParent`")->eq(0)
             ->andWhere("deleted")->eq(0)
             ->andWhere("status")->ne('cancel')
             ->query();
@@ -478,7 +478,7 @@ class weeklyModel extends model
         $executions = $this->dao->select('id,begin,end,`realBegan`,`realEnd`,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
         $stmt       = $this->dao->select('*')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
-            ->andWhere('isParent')->eq('0')
+            ->andWhere('`isParent`')->eq('0')
             ->andWhere("deleted")->eq(0)
             ->andWhere("status")->ne('cancel')
             ->query();
@@ -703,7 +703,7 @@ class weeklyModel extends model
         $now         = helper::now();
         $cycleConfig = array('turnon' => 'on', 'frequency' => 'week', 'acl' => 'open', 'readGroups' => '', 'readUsers' => '', 'groups' => '', 'users' => '');
 
-        $objects = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->in('waterfall,waterfallplus,ipd')->andWhere('status')->eq('normal')->andWhere('vision')->eq($this->config->vision)->andWhere('objectID')->eq(0)->andWhere('deleted')->eq(0)->fetchPairs('id');
+        $objects = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('`projectModel`')->in('waterfall,waterfallplus,ipd')->andWhere('status')->eq('normal')->andWhere('vision')->eq($this->config->vision)->andWhere('`objectID`')->eq(0)->andWhere('deleted')->eq(0)->fetchPairs('id');
 
         $template = new stdclass();
         $template->lib          = $libID;

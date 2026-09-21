@@ -45,7 +45,7 @@ class aiappModel extends model
             ->from(TABLE_AI_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->andWhere('published')->eq('1')
-            ->andWhere('publishedDate')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
+            ->andWhere('`publishedDate`')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
             ->orderBy($order)
             ->page($pager)
             ->fetchAll('id', false);
@@ -63,7 +63,7 @@ class aiappModel extends model
             ->from(TABLE_AI_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->andWhere('published')->eq('1')
-            ->andWhere('createdDate')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
+            ->andWhere('`createdDate`')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
             ->fetch('count');
     }
 
@@ -104,7 +104,7 @@ class aiappModel extends model
     {
         $this->dao->delete()
             ->from(TABLE_AI_MESSAGE)
-            ->where('appID')->eq($appID)
+            ->where('`appID`')->eq($appID)
             ->andWhere('user')->eq($userID)
             ->andWhere('id')->notin($messageIDs)
             ->exec();
@@ -122,9 +122,9 @@ class aiappModel extends model
     {
         $messages = $this->dao->select('*')
             ->from(TABLE_AI_MESSAGE)
-            ->where('appID')->eq($appID)
+            ->where('`appID`')->eq($appID)
             ->andWhere('user')->eq($this->app->user->id)
-            ->orderBy('createdDate_desc')
+            ->orderBy('`createdDate`_desc')
             ->limit($limit)
             ->fetchAll('id', false);
 
@@ -151,8 +151,8 @@ class aiappModel extends model
     {
         $programs = $this->dao->select('*')
             ->from(TABLE_AI_MINIPROGRAMSTAR)
-            ->where('userID')->eq($userID)
-            ->orderBy('createdDate_desc')
+            ->where('`userID`')->eq($userID)
+            ->orderBy('`createdDate`_desc')
             ->page($pager)
             ->fetchAll('appID', false);
         return array_keys($programs);

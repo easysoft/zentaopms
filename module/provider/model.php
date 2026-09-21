@@ -161,7 +161,7 @@ class providerModel extends model
     public function getReposByProviderID(int $providerID, bool $showMirrors = false): array
     {
         return $this->dao->select('*')->from(TABLE_REPO)
-            ->where('providerID')->eq($providerID)
+            ->where('`providerID`')->eq($providerID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($showMirrors)->andWhere('mirror')->eq(1)->fi()
             ->fetchAll('id');

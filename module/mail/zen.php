@@ -123,7 +123,7 @@ class mailZen extends mail
      */
     protected function deleteSentQueue()
     {
-        $lastMail  = $this->dao->select('id,status')->from(TABLE_NOTIFY)->where('objectType')->eq('mail')->orderBy('id_desc')->limit(1)->fetch();
+        $lastMail  = $this->dao->select('id,status')->from(TABLE_NOTIFY)->where('`objectType`')->eq('mail')->orderBy('id_desc')->limit(1)->fetch();
         if(!empty($lastMail) and $lastMail->id > 1000000)
         {
             $unSendNum = $this->dao->select('count(id) as count')->from(TABLE_NOTIFY)->where('status')->eq('wait')->fetch('count');
@@ -131,6 +131,6 @@ class mailZen extends mail
         }
 
         /* Delete two days ago queues. */
-        $this->dao->delete()->from(TABLE_NOTIFY)->where('status')->eq('sended')->andWhere('sendTime')->le(date('Y-m-d H:i:s', time() - 2 * 24 * 3600))->exec();
+        $this->dao->delete()->from(TABLE_NOTIFY)->where('status')->eq('sended')->andWhere('`sendTime`')->le(date('Y-m-d H:i:s', time() - 2 * 24 * 3600))->exec();
     }
 }

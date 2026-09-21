@@ -542,13 +542,13 @@ class aiModel extends model
     {
         $this->dao->update(TABLE_AI_MODEL)
             ->set('enabled')->eq(empty($enabled) ? '0' : '1')
-            ->set('editedDate')->eq(helper::now())
-            ->set('editedBy')->eq($this->app->user->account)
+            ->set('`editedDate`')->eq(helper::now())
+            ->set('`editedBy`')->eq($this->app->user->account)
             ->where('id')->eq($modelID)
             ->exec();
 
         $this->dao->update(TABLE_IM_CHAT)
-            ->set('archiveDate')->eq(empty($enabled) ? helper::now() : null)
+            ->set('`archiveDate`')->eq(empty($enabled) ? helper::now() : null)
             ->where('gid')->like( "%&ai-$modelID")
             ->exec();
 
@@ -566,19 +566,19 @@ class aiModel extends model
     {
         $this->dao->update(TABLE_AI_MODEL)
             ->set('deleted')->eq('1')
-            ->set('editedDate')->eq(helper::now())
-            ->set('editedBy')->eq($this->app->user->account)
+            ->set('`editedDate`')->eq(helper::now())
+            ->set('`editedBy`')->eq($this->app->user->account)
             ->where('id')->eq($modelID)
             ->exec();
 
         $this->dao->update(TABLE_IM_CHAT)
-            ->set('dismissDate')->eq(helper::now())
+            ->set('`dismissDate`')->eq(helper::now())
             ->where('gid')->like( "%&ai-$modelID")
             ->exec();
 
         $this->dao->update(TABLE_AI_ASSISTANT)
             ->set('deleted')->eq('1')
-            ->where('modelId')->eq($modelID)
+            ->where('`modelId`')->eq($modelID)
             ->exec();
 
         return !dao::isError();
@@ -1159,7 +1159,7 @@ class aiModel extends model
             ->from(TABLE_AI_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->andWhere('published')->eq('1')
-            ->andWhere('publishedDate')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
+            ->andWhere('`publishedDate`')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
             ->orderBy($order)
             ->page($pager)
             ->fetchAll('id', false);
@@ -1177,7 +1177,7 @@ class aiModel extends model
             ->from(TABLE_AI_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->andWhere('published')->eq('1')
-            ->andWhere('createdDate')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
+            ->andWhere('`createdDate`')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
             ->fetch('count');
     }
 
@@ -1218,7 +1218,7 @@ class aiModel extends model
     {
         $this->dao->delete()
             ->from(TABLE_AI_MESSAGE)
-            ->where('appID')->eq($appID)
+            ->where('`appID`')->eq($appID)
             ->andWhere('user')->eq($userID)
             ->andWhere('id')->notin($messageIDs)
             ->exec();
@@ -1236,9 +1236,9 @@ class aiModel extends model
     {
         $messages = $this->dao->select('*')
             ->from(TABLE_AI_MESSAGE)
-            ->where('appID')->eq($appID)
+            ->where('`appID`')->eq($appID)
             ->andWhere('user')->eq($this->app->user->id)
-            ->orderBy('createdDate_desc')
+            ->orderBy('`createdDate`_desc')
             ->limit($limit)
             ->fetchAll('id', false);
 
@@ -1446,7 +1446,7 @@ class aiModel extends model
             ->beginIF(!empty($category))->andWhere('category')->eq($category)->fi()
             ->beginIF($status === 'active')->andWhere('published')->eq('1')->fi()
             ->beginIF($status === 'draft')->andWhere('published')->ne('1')->fi()
-            ->beginIF($status === 'createdByMe')->andWhere('createdBy')->eq($this->app->user->account)->fi()
+            ->beginIF($status === 'createdByMe')->andWhere('`createdBy`')->eq($this->app->user->account)->fi()
             ->orderBy($order)
             ->page($pager)
             ->fetchAll('id', false);
@@ -1465,7 +1465,7 @@ class aiModel extends model
     {
         return $this->dao->select('*')
             ->from(TABLE_AI_MINIPROGRAMFIELD)
-            ->where('appID')->eq($appID)
+            ->where('`appID`')->eq($appID)
             ->fetchAll('id', false);
     }
 
@@ -1478,7 +1478,7 @@ class aiModel extends model
     {
         $users = $this->dao->select('user')
             ->from(TABLE_AI_MESSAGE)
-            ->where('appID')->eq($appID)
+            ->where('`appID`')->eq($appID)
             ->fetchAll('user');
         $users = array_keys($users);
 
@@ -1493,7 +1493,7 @@ class aiModel extends model
 
             $this->dao->delete()
                 ->from(TABLE_AI_MESSAGE)
-                ->where('appID')->eq($appID)
+                ->where('`appID`')->eq($appID)
                 ->andWhere('user')->eq($user)
                 ->andWhere('type')->eq('ntf')
                 ->exec();
@@ -1552,8 +1552,8 @@ class aiModel extends model
         {
             $this->dao->delete()
                 ->from(TABLE_AI_MINIPROGRAMSTAR)
-                ->where('appID')->eq($appID)
-                ->beginIF(!empty($userID))->andWhere('userID')->eq($userID)->fi()
+                ->where('`appID`')->eq($appID)
+                ->beginIF(!empty($userID))->andWhere('`userID`')->eq($userID)->fi()
                 ->exec();
             return !dao::isError();
         }
@@ -1703,14 +1703,14 @@ class aiModel extends model
         if(isset($data->knowledgeLib))
         {
             $this->dao->update(TABLE_AI_MINIPROGRAM)
-                ->set('knowledgeLib')->eq($data->knowledgeLib)
+                ->set('`knowledgeLib`')->eq($data->knowledgeLib)
                 ->where('id')->eq($appID)
                 ->exec();
         }
 
         $this->dao->delete()
             ->from(TABLE_AI_MINIPROGRAMFIELD)
-            ->where('appID')->eq($appID)
+            ->where('`appID`')->eq($appID)
             ->exec();
 
         $fields = $data->fields;
@@ -1812,7 +1812,7 @@ class aiModel extends model
 
         if($agent->type == 'timer')
         {
-            $agent->logs = $this->dao->select('*')->from(TABLE_AI_TIMERLOG)->where('agent')->eq($id)->orderBy('createdDate_desc')->limit(20)->fetchAll('id', false);
+            $agent->logs = $this->dao->select('*')->from(TABLE_AI_TIMERLOG)->where('agent')->eq($id)->orderBy('`createdDate`_desc')->limit(20)->fetchAll('id', false);
         }
 
         return $agent;
@@ -1829,7 +1829,7 @@ class aiModel extends model
     {
         return $this->dao->select('*')
             ->from(TABLE_AI_AGENTFIELD)
-            ->where('appID')->eq($promptID)
+            ->where('`appID`')->eq($promptID)
             ->fetchAll('id', false);
     }
 
@@ -1917,7 +1917,7 @@ class aiModel extends model
     {
         $this->dao->delete()
             ->from(TABLE_AI_AGENTFIELD)
-            ->where('appID')->eq($promptID)
+            ->where('`appID`')->eq($promptID)
             ->exec();
 
         foreach($fields as $field)
@@ -2917,15 +2917,15 @@ class aiModel extends model
         switch($module)
         {
             case 'product':
-                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PRODUCT)
+                return $this->dao->select('MAX(id) AS `maxId`')->from(TABLE_PRODUCT)
                     ->where('id')->in($this->app->user->view->products)
                     ->fetch('maxId');
             case 'productplan':
-                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PRODUCTPLAN)
+                return $this->dao->select('MAX(id) AS `maxId`')->from(TABLE_PRODUCTPLAN)
                     ->where('product')->in($this->app->user->view->products)
                     ->fetch('maxId');
             case 'release':
-                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_RELEASE)
+                return $this->dao->select('MAX(id) AS `maxId`')->from(TABLE_RELEASE)
                     ->where('project')->in($this->app->user->view->projects)
                     ->orWhere('product')->in($this->app->user->view->products)
                     ->fetch('maxId');
@@ -2933,19 +2933,19 @@ class aiModel extends model
                 /* programplan/create only exist in the waterfall model project. */
                 if(strpos($prompt->actionPurpose, 'programplan/create'))
                 {
-                    return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PROJECT)
+                    return $this->dao->select('MAX(id) AS `maxId`')->from(TABLE_PROJECT)
                         ->where('id')->in($this->app->user->view->projects)
                         ->andWhere('model')->eq('waterfall')
                         ->fetch('maxId');
                 }
 
-                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PROJECT)
+                return $this->dao->select('MAX(id) AS `maxId`')->from(TABLE_PROJECT)
                     ->where('id')->in($this->app->user->view->projects)
                     ->fetch('maxId');
             case 'epic':
             case 'requirement':
             case 'story':
-                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_STORY)
+                return $this->dao->select('MAX(id) AS `maxId`')->from(TABLE_STORY)
                     ->where('product')->in($this->app->user->view->products)
                     ->andWhere('type')->eq($module)
                     ->fetch('maxId');
@@ -2953,36 +2953,36 @@ class aiModel extends model
                 $executionIds = array_map('intval', explode(',', $this->app->user->view->sprints));
                 return max($executionIds);
             case 'task':
-                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_TASK)
+                return $this->dao->select('MAX(id) AS `maxId`')->from(TABLE_TASK)
                     ->where('project')->in($this->app->user->view->projects)
                     ->fetch('maxId');
             case 'case':
-                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_CASE)
+                return $this->dao->select('MAX(id) AS `maxId`')->from(TABLE_CASE)
                     ->where('project')->in($this->app->user->view->projects)
                     ->orWhere('product')->in($this->app->user->view->products)
                     ->fetch('maxId');
             case 'bug':
-                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_BUG)
+                return $this->dao->select('MAX(id) AS `maxId`')->from(TABLE_BUG)
                     ->where('project')->in($this->app->user->view->projects)
                     ->orWhere('product')->in($this->app->user->view->products)
                     ->fetch('maxId');
             case 'ticket':
-                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_TICKET)
+                return $this->dao->select('MAX(id) AS `maxId`')->from(TABLE_TICKET)
                     ->where('product')->in($this->app->user->view->products)
                     ->andWhere('deleted')->eq(0)
                     ->fetch('maxId');
             case 'risk':
-                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_RISK)
+                return $this->dao->select('MAX(id) AS `maxId`')->from(TABLE_RISK)
                     ->where('project')->in($this->app->user->view->projects)
                     ->andWhere('deleted')->eq(0)
                     ->fetch('maxId');
             case 'issue':
-                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_ISSUE)
+                return $this->dao->select('MAX(id) AS `maxId`')->from(TABLE_ISSUE)
                     ->where('project')->in($this->app->user->view->projects)
                     ->andWhere('deleted')->eq(0)
                     ->fetch('maxId');
             case 'doc':
-                $objectId = $this->dao->select('MAX(id) AS maxId')->from(TABLE_DOC)
+                $objectId = $this->dao->select('MAX(id) AS `maxId`')->from(TABLE_DOC)
                     ->where('project')->in($this->app->user->view->projects)
                     ->orWhere('product')->in($this->app->user->view->products)
                     ->fetch('maxId');
@@ -2990,11 +2990,11 @@ class aiModel extends model
 
                 $userDocLibs = $this->dao->select('id')->from(TABLE_DOCLIB)
                     ->where('type')->eq('mine')
-                    ->andWhere('addedBy')->eq($this->app->user->account)
+                    ->andWhere('`addedBy`')->eq($this->app->user->account)
                     ->fetchPairs();
                 if(empty($userDocLibs)) return false;
 
-                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_DOC)
+                return $this->dao->select('MAX(id) AS `maxId`')->from(TABLE_DOC)
                     ->where('lib')->in($userDocLibs)
                     ->fetch('maxId');
             default:
@@ -3183,14 +3183,14 @@ class aiModel extends model
                     case 'product': // story, branch, productplan, execution, task, bug, case, project, doc
                         if(in_array($objectName, array('story', 'branch', 'productplan', 'task', 'bug', 'case', 'doc')))
                         {
-                            $vars[] = $this->dao->select('max(id) as maxId')->from(constant(strtoupper("TABLE_$objectName")))
+                            $vars[] = $this->dao->select('max(id) as `maxId`')->from(constant(strtoupper("TABLE_$objectName")))
                                 ->where('product')->eq($objectId)
                                 ->andWhere('deleted')->eq(0)
                                 ->fetch('maxId');
                         }
                         elseif($objectName == 'project')
                         {
-                            $vars[] = $this->dao->select('max(tpp.project) as maxId')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
+                            $vars[] = $this->dao->select('max(tpp.project) as `maxId`')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
                                 ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tpp.project')
                                 ->where('tpp.product')->eq($objectId)
                                 ->andWhere('tp.type')->eq('project')
@@ -3199,7 +3199,7 @@ class aiModel extends model
                         }
                         elseif($objectName == 'execution')
                         {
-                            $vars[] = $this->dao->select('max(tpp.project) as maxId')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
+                            $vars[] = $this->dao->select('max(tpp.project) as `maxId`')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
                                 ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tpp.project')
                                 ->where('tpp.product')->eq($objectId)
                                 ->andWhere('tp.project')->ne(0)
@@ -3213,7 +3213,7 @@ class aiModel extends model
                         if($objectName == 'productplan') $vars[] = $this->dao->select('plan')->from(TABLE_STORY)->where('id')->eq($objectId)->fetch('plan');
                         if(in_array($objectName, array('task', 'bug', 'case', 'doc')))
                         {
-                            $vars[] = $this->dao->select('max(id) as maxId')->from(constant(strtoupper("TABLE_$objectName")))->where('story')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                            $vars[] = $this->dao->select('max(id) as `maxId`')->from(constant(strtoupper("TABLE_$objectName")))->where('story')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
                         }
                         if($objectName == 'execution')
                         {
@@ -3239,11 +3239,11 @@ class aiModel extends model
                         if($objectName == 'branch')  $vars[] = $this->dao->select('branch')->from(TABLE_PRODUCTPLAN)->where('id')->eq($objectId)->fetch('branch');
                         if(in_array($objectName, array('story', 'bug')))
                         {
-                            $vars[] = $this->dao->select('max(id) as maxId')->from(constant(strtoupper("TABLE_$objectName")))->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                            $vars[] = $this->dao->select('max(id) as `maxId`')->from(constant(strtoupper("TABLE_$objectName")))->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
                         }
                         if($objectName == 'execution')
                         {
-                            $vars[] = $this->dao->select('max(tpp.project) as maxId')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
+                            $vars[] = $this->dao->select('max(tpp.project) as `maxId`')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
                                 ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tpp.project')
                                 ->where('tpp.plan')->eq($objectId)
                                 ->andWhere('tp.project')->ne(0)
@@ -3252,7 +3252,7 @@ class aiModel extends model
                         }
                         if($objectName == 'project')
                         {
-                            $vars[] = $this->dao->select('max(tpp.project) as maxId')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
+                            $vars[] = $this->dao->select('max(tpp.project) as `maxId`')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
                                 ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tpp.project')
                                 ->where('tpp.plan')->eq($objectId)
                                 ->andWhere('tp.type')->eq('project')
@@ -3280,7 +3280,7 @@ class aiModel extends model
                                 ->leftJoin(TABLE_RELEASE)->alias('tr')->on('tr.build = tb.id')
                                 ->where('tr.id')->eq($objectId)
                                 ->fetch('tb.execution');
-                            $vars[] = empty($execution) ? '' : $this->dao->select('max(tpp.plan) as maxId')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
+                            $vars[] = empty($execution) ? '' : $this->dao->select('max(tpp.plan) as `maxId`')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
                                 ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tpp.project')
                                 ->where('tp.id')->eq($execution)
                                 ->andWhere('tp.deleted')->eq(0)
@@ -3311,11 +3311,11 @@ class aiModel extends model
                         }
                         if(in_array($objectName, array('execution', 'bug', 'task', 'case', 'doc')))
                         {
-                            $vars[] = $this->dao->select('max(id) as maxId')->from(constant(strtoupper("TABLE_$objectName")))->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                            $vars[] = $this->dao->select('max(id) as `maxId`')->from(constant(strtoupper("TABLE_$objectName")))->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
                         }
                         if($objectName == 'story')
                         {
-                            $vars[] = $this->dao->select('max(tps.story) as maxId')->from(TABLE_PROJECTSTORY)->alias('tps')
+                            $vars[] = $this->dao->select('max(tps.story) as `maxId`')->from(TABLE_PROJECTSTORY)->alias('tps')
                                 ->leftJoin(TABLE_STORY)->alias('ts')->on('ts.id = tps.story')
                                 ->where('tps.project')->eq($objectId)
                                 ->andWhere('ts.deleted')->eq(0)
@@ -3325,13 +3325,13 @@ class aiModel extends model
                     case 'execution': // product, story, branch, productplan, task, bug, case, project, doc
                         if($objectName == 'project')     $vars[] = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($objectId)->fetch('project');
                         if($objectName == 'product')     $vars[] = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectId)->fetch('product');
-                        if($objectName == 'story')       $vars[] = $this->dao->select('max(story) as maxId')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectId)->fetch('maxId');
-                        if($objectName == 'branch')      $vars[] = $this->dao->select('max(branch) as maxId')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectId)->fetch('maxId');
+                        if($objectName == 'story')       $vars[] = $this->dao->select('max(story) as `maxId`')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectId)->fetch('maxId');
+                        if($objectName == 'branch')      $vars[] = $this->dao->select('max(branch) as `maxId`')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectId)->fetch('maxId');
                         if($objectName == 'productplan') $vars[] = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectId)->fetch('plan');
-                        if($objectName == 'task')        $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_TASK)->where('execution')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
-                        if($objectName == 'bug')         $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
-                        if($objectName == 'case')        $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_CASE)->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
-                        if($objectName == 'doc')         $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'task')        $vars[] = $this->dao->select('max(id) as `maxId`')->from(TABLE_TASK)->where('execution')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'bug')         $vars[] = $this->dao->select('max(id) as `maxId`')->from(TABLE_BUG)->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'case')        $vars[] = $this->dao->select('max(id) as `maxId`')->from(TABLE_CASE)->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'doc')         $vars[] = $this->dao->select('max(id) as `maxId`')->from(TABLE_DOC)->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
                         break;
                     case 'task': // product, story, branch, productplan, execution, bug, case, project, doc
                         if($objectName == 'product')
@@ -3357,7 +3357,7 @@ class aiModel extends model
                                 ->fetch('plan');
                         }
                         if($objectName == 'execution') $vars[] = $this->dao->select('execution')->from(TABLE_TASK)->where('id')->eq($objectId)->fetch('execution');
-                        if($objectName == 'bug')       $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->where('task')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'bug')       $vars[] = $this->dao->select('max(id) as `maxId`')->from(TABLE_BUG)->where('task')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
                         if($objectName == 'case')      $vars[] = '';
                         if($objectName == 'doc')       $vars[] = '';
                         break;
@@ -3381,8 +3381,8 @@ class aiModel extends model
                                 ->where('tc.id')->eq($objectId)
                                 ->fetch('plan');
                         }
-                        if($objectName == 'task') $vars[] = $this->dao->select('max(task) as maxId')->from(TABLE_BUG)->where('case')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
-                        if($objectName == 'bug')  $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->where('case')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'task') $vars[] = $this->dao->select('max(task) as `maxId`')->from(TABLE_BUG)->where('case')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'bug')  $vars[] = $this->dao->select('max(id) as `maxId`')->from(TABLE_BUG)->where('case')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
                         if($objectName == 'doc')  $vars[] = '';
                         break;
                     case 'doc': // product, story, branch, productplan, execution, task, bug, case, project
@@ -3392,7 +3392,7 @@ class aiModel extends model
                         }
                         if($objectName == 'story')
                         {
-                            $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_STORY)->alias('ts')
+                            $vars[] = $this->dao->select('max(id) as `maxId`')->from(TABLE_STORY)->alias('ts')
                                 ->leftJoin(TABLE_DOC)->alias('td')->on('td.product = ts.product')
                                 ->where('td.id')->eq($objectId)
                                 ->andWhere('ts.deleted')->eq(0)
@@ -3416,7 +3416,7 @@ class aiModel extends model
                         }
                         if($objectName == 'task')
                         {
-                            $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_TASK)->alias('tt')
+                            $vars[] = $this->dao->select('max(id) as `maxId`')->from(TABLE_TASK)->alias('tt')
                                 ->leftJoin(TABLE_DOC)->alias('td')->on('td.project = tt.project or td.execution = tt.execution')
                                 ->where('td.id')->eq($objectId)
                                 ->andWhere('tt.deleted')->eq(0)
@@ -3424,7 +3424,7 @@ class aiModel extends model
                         }
                         if($objectName == 'bug')
                         {
-                            $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->alias('tb')
+                            $vars[] = $this->dao->select('max(id) as `maxId`')->from(TABLE_BUG)->alias('tb')
                                 ->leftJoin(TABLE_DOC)->alias('td')->on('td.product = tb.product')
                                 ->where('td.id')->eq($objectId)
                                 ->andWhere('tb.deleted')->eq(0)
@@ -3432,7 +3432,7 @@ class aiModel extends model
                         }
                         if($objectName == 'case')
                         {
-                            $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_CASE)->alias('tc')
+                            $vars[] = $this->dao->select('max(id) as `maxId`')->from(TABLE_CASE)->alias('tc')
                                 ->leftJoin(TABLE_DOC)->alias('td')->on('td.product = tc.product')
                                 ->where('td.id')->eq($objectId)
                                 ->andWhere('tc.deleted')->eq(0)
@@ -3564,7 +3564,7 @@ class aiModel extends model
         $prompts = $this->dao->select('*')->from(TABLE_AI_AGENT)
             ->where('deleted')->eq(0)
             ->andWhere('status')->eq('active')
-            ->andWhere('displayPosition')->eq($displayPosition)
+            ->andWhere('`displayPosition`')->eq($displayPosition)
             ->andWhere('type')->ne('timer');
 
         if($displayPosition === 'detail')
@@ -3949,7 +3949,7 @@ class aiModel extends model
     public function getAssistantsByModel($modelId, $enabled = true)
     {
         return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
-            ->where('modelId')->eq($modelId)
+            ->where('`modelId`')->eq($modelId)
             ->andWhere('deleted')->eq('0')
             ->andWhere('enabled')->eq($enabled ? '1' : '0')
             ->fetchAll('id', false);
@@ -4065,7 +4065,7 @@ class aiModel extends model
     {
         $this->dao->update(TABLE_AI_ASSISTANT)
             ->set('enabled')->eq($enabled ? '1' : '0')
-            ->set('publishedDate')->eq($enabled ? helper::now() : null)
+            ->set('`publishedDate`')->eq($enabled ? helper::now() : null)
             ->where('id')->eq($assistantId)
             ->exec();
         if(dao::isError()) return false;
@@ -4087,7 +4087,7 @@ class aiModel extends model
     {
         return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
             ->where('name')->eq($AssistantName)
-            ->andWhere('modelId')->eq($modelId)
+            ->andWhere('`modelId`')->eq($modelId)
             ->andWhere('deleted')->eq('0')
             ->fetch();
     }

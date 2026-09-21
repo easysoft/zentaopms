@@ -12,7 +12,7 @@ class bugTao extends bugModel
      */
     protected function fetchBugInfo(int $bugID): object|false
     {
-        return $this->dao->select('t1.*, t2.name AS executionName, t3.title AS storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, t4.name AS taskName, t5.title AS planName')
+        return $this->dao->select('t1.*, t2.name AS `executionName`, t3.title AS `storyTitle`, t3.status AS `storyStatus`, t3.version AS `latestStoryVersion`, t4.name AS `taskName`, t5.title AS `planName`')
             ->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
@@ -49,10 +49,10 @@ class bugTao extends bugModel
         if($browseType == 'longlifebugs') $lastEditedDate = date(DT_DATE1, time() - $this->config->bug->longlife * 24 * 3600);
 
         $bugIdListAssignedByMe = array();
-        if($browseType == 'assignedbyme') $bugIdListAssignedByMe = $this->dao->select('`objectID`')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs();
+        if($browseType == 'assignedbyme') $bugIdListAssignedByMe = $this->dao->select('`objectID`')->from(TABLE_ACTION)->where('`objectType`')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs();
 
         $executionIdList[] = '0';
-        $bugList = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
+        $bugList = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS `priOrder`, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS `severityOrder`")->from(TABLE_BUG)
             ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
@@ -61,10 +61,10 @@ class bugTao extends bugModel
             ->beginIF($moduleIdList)->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
 
-            ->beginIF($browseType == 'assigntome')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
-            ->beginIF($browseType == 'openedbyme')->andWhere('openedBy')->eq($this->app->user->account)->fi()
-            ->beginIF($browseType == 'resolvedbyme')->andWhere('resolvedBy')->eq($this->app->user->account)->fi()
-            ->beginIF($browseType == 'assigntonull')->andWhere('assignedTo')->eq('')->fi()
+            ->beginIF($browseType == 'assigntome')->andWhere('`assignedTo`')->eq($this->app->user->account)->fi()
+            ->beginIF($browseType == 'openedbyme')->andWhere('`openedBy`')->eq($this->app->user->account)->fi()
+            ->beginIF($browseType == 'resolvedbyme')->andWhere('`resolvedBy`')->eq($this->app->user->account)->fi()
+            ->beginIF($browseType == 'assigntonull')->andWhere('`assignedTo`')->eq('')->fi()
             ->beginIF($browseType == 'unconfirmed')->andWhere('confirmed')->eq(0)->fi()
             ->beginIF($browseType == 'unclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF($browseType == 'unresolved')->andWhere('status')->eq('active')->fi()
@@ -75,8 +75,8 @@ class bugTao extends bugModel
             ->beginIF($browseType == 'feedback')->andWhere('feedback')->ne('0')->fi()
 
             ->beginIF($browseType == 'longlifebugs')
-            ->andWhere('lastEditedDate')->lt($lastEditedDate)
-            ->andWhere('openedDate')->lt($lastEditedDate)
+            ->andWhere('`lastEditedDate`')->lt($lastEditedDate)
+            ->andWhere('`openedDate`')->lt($lastEditedDate)
             ->andWhere('status')->ne('closed')
             ->fi()
 
@@ -115,7 +115,7 @@ class bugTao extends bugModel
      */
     protected function getNeedConfirmList(array $productIdList, int $projectID, array $executionIdList, int|string $branch, array $moduleIdList, string $orderBy, ?object $pager = null): array
     {
-        return $this->dao->select("t1.*, t2.title AS storyTitle, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder")->from(TABLE_BUG)->alias('t1')
+        return $this->dao->select("t1.*, t2.title AS `storyTitle`, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS `priOrder`, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS `severityOrder`")->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.status')->eq('active')

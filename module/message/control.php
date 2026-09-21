@@ -120,7 +120,7 @@ class message extends control
         $messages = array();
         $newline  = $windowBlur ? "\n" : '<br />';
         foreach($waitMessages as $message) $messages[$message->id] = $message->data;
-        $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sended')->set('sendTime')->eq(helper::now())->where('id')->in(array_keys($messages))->exec();
+        $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sended')->set('`sendTime`')->eq(helper::now())->where('id')->in(array_keys($messages))->exec();
 
         foreach($messages as $id => $message)
         {
@@ -173,8 +173,8 @@ class message extends control
     public function ajaxMarkRead(string $messageID)
     {
         if($messageID != 'all') $messageID = (int)$messageID;
-        $this->dao->update(TABLE_NOTIFY)->set('status')->eq('read')->where('objectType')->eq('message')
-            ->andWhere('toList')->eq(",{$this->app->user->account},")
+        $this->dao->update(TABLE_NOTIFY)->set('status')->eq('read')->where('`objectType`')->eq('message')
+            ->andWhere('`toList`')->eq(",{$this->app->user->account},")
             ->beginIF(is_int($messageID))->andWhere('id')->eq($messageID)->fi()
             ->exec();
     }
@@ -190,8 +190,8 @@ class message extends control
     public function ajaxMarkUnread(int $messageID)
     {
         $messageID = (int)$messageID;
-        $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sended')->where('objectType')->eq('message')
-            ->andWhere('toList')->eq(",{$this->app->user->account},")
+        $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sended')->where('`objectType`')->eq('message')
+            ->andWhere('`toList`')->eq(",{$this->app->user->account},")
             ->beginIF(is_int($messageID))->andWhere('id')->eq($messageID)->fi()
             ->exec();
     }
@@ -207,8 +207,8 @@ class message extends control
     public function ajaxDelete(string $messageID)
     {
         if($messageID != 'all' && $messageID != 'allread') $messageID = (int)$messageID;
-        $this->dao->delete()->from(TABLE_NOTIFY)->where('objectType')->eq('message')
-            ->andWhere('toList')->eq(",{$this->app->user->account},")
+        $this->dao->delete()->from(TABLE_NOTIFY)->where('`objectType`')->eq('message')
+            ->andWhere('`toList`')->eq(",{$this->app->user->account},")
             ->beginIF($messageID == 'allread')->andWhere('status')->eq('read')->fi()
             ->beginIF(is_int($messageID))->andWhere('id')->eq($messageID)->fi()
             ->exec();

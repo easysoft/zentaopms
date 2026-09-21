@@ -282,7 +282,7 @@ class upgradeTao extends upgradeModel
     {
         return $this->dao->select('`objectID`, extra, max(`date`) as date, action')
             ->from(TABLE_ACTION)
-            ->where('objectType')->eq('story')
+            ->where('`objectType`')->eq('story')
             ->andWhere('action')->eq('linked2release')
             ->groupBy('`objectID`,extra,action')
             ->get();
@@ -528,7 +528,7 @@ class upgradeTao extends upgradeModel
                 foreach($output[1] as $path) $files[$path] = $path;
             }
             /* If the file exists, update the file. */
-            if($files) $this->dao->update(TABLE_FILE)->set('objectType')->eq($type)->set('objectID')->eq($object->{$idField})->set('extra')->eq('editor')->where('pathname')->in($files)->exec();
+            if($files) $this->dao->update(TABLE_FILE)->set('`objectType`')->eq($type)->set('`objectID`')->eq($object->{$idField})->set('extra')->eq('editor')->where('pathname')->in($files)->exec();
         }
 
         return array(count($objects), isset($object) ? $object->{$idField} : 0);
@@ -570,7 +570,7 @@ class upgradeTao extends upgradeModel
         $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'execution' and execution " . helper::dbIN($sprintIdList) . ')')->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
-        $this->dao->update(TABLE_EFFORT)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('objectType')->eq('task')->exec();
+        $this->dao->update(TABLE_EFFORT)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('`objectType`')->eq('task')->exec();
     }
 
     /**
@@ -700,8 +700,8 @@ class upgradeTao extends upgradeModel
 
         $linkedSprintIdList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->fetchPairs();
         $linkedSprintIdList += $sprintIdList;
-        $minRealBegan        = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('started')->orderBy('date_asc')->fetch('date');
-        $maxRealEnd          = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('closed')->orderBy('date_desc')->fetch('date');
+        $minRealBegan        = $this->dao->select('date')->from(TABLE_ACTION)->where('`objectID`')->in($linkedSprintIdList)->andWhere('`objectType`')->eq('project')->andWhere('action')->eq('started')->orderBy('date_asc')->fetch('date');
+        $maxRealEnd          = $this->dao->select('date')->from(TABLE_ACTION)->where('`objectID`')->in($linkedSprintIdList)->andWhere('`objectType`')->eq('project')->andWhere('action')->eq('closed')->orderBy('date_desc')->fetch('date');
 
         return array($minRealBegan, $maxRealEnd);
     }
@@ -913,7 +913,7 @@ class upgradeTao extends upgradeModel
     protected function getWorkflowGroupForProcess()
     {
         return $this->dao->select('id,`projectModel`,`projectType`,main')->from(TABLE_WORKFLOWGROUP)
-            ->where('projectModel')->in('scrum,waterfall,agileplus,waterfallplus')
+            ->where('`projectModel`')->in('scrum,waterfall,agileplus,waterfallplus')
             ->andWhere('deleted')->eq('0')
             ->fetchAll('id');
     }
@@ -929,11 +929,11 @@ class upgradeTao extends upgradeModel
      */
     protected function handleBuildinWorkflowGroup(object $group, int $groupID, array $classifyModule)
     {
-        $this->dao->update(TABLE_PROCESS)->set('workflowGroup')->eq($groupID)->where('model')->eq($group->projectModel)->exec();
+        $this->dao->update(TABLE_PROCESS)->set('`workflowGroup`')->eq($groupID)->where('model')->eq($group->projectModel)->exec();
 
         /* 更新活动的流程。 */
-        $processList = $this->dao->select('id')->from(TABLE_PROCESS)->where('workflowGroup')->eq($groupID)->andWhere('deleted')->eq('0')->fetchPairs();
-        $this->dao->update(TABLE_ACTIVITY)->set('workflowGroup')->eq($groupID)->where('process')->in(array_keys($processList))->exec();
+        $processList = $this->dao->select('id')->from(TABLE_PROCESS)->where('`workflowGroup`')->eq($groupID)->andWhere('deleted')->eq('0')->fetchPairs();
+        $this->dao->update(TABLE_ACTIVITY)->set('`workflowGroup`')->eq($groupID)->where('process')->in(array_keys($processList))->exec();
 
         $this->migrateOutputToDeliverable($group);
 
@@ -1010,7 +1010,7 @@ class upgradeTao extends upgradeModel
      */
     protected function handleNeedCopyWorkflowGroup(object $group, int $groupID, array $classifyModule)
     {
-        $projectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('workflowGroup')->eq($group->id)->fetchPairs();
+        $projectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('`workflowGroup`')->eq($group->id)->fetchPairs();
         $processList   = $this->dao->select('*')->from(TABLE_PROCESS)->where('model')->eq($group->projectModel)->andWhere('deleted')->eq('0')->fetchAll('id');
         $activityGroup = $this->dao->select('*')->from(TABLE_ACTIVITY)->where('process')->in(array_keys($processList))->andWhere('deleted')->eq('0')->fetchGroup('process', 'id');
         $outputGroup   = $this->dao->select('t1.*')->from(TABLE_ZOUTPUT)
@@ -1085,8 +1085,8 @@ class upgradeTao extends upgradeModel
 
         $newActivityID = $this->dao->lastInsertID();
 
-        $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($newActivityID)->where('objectID')->eq($oldActivityID)->andWhere('objectType')->eq('activity')->andWhere('project')->in($projectIdList)->exec();
-        $this->dao->update(TABLE_AUDITCL)->set('objectID')->eq($newActivityID)->where('objectID')->eq($oldActivityID)->andWhere('workflowGroup')->eq($groupID)->andWhere('objectType')->eq('activity')->exec();
+        $this->dao->update(TABLE_AUDITPLAN)->set('`objectID`')->eq($newActivityID)->where('`objectID`')->eq($oldActivityID)->andWhere('`objectType`')->eq('activity')->andWhere('project')->in($projectIdList)->exec();
+        $this->dao->update(TABLE_AUDITCL)->set('`objectID`')->eq($newActivityID)->where('`objectID`')->eq($oldActivityID)->andWhere('`workflowGroup`')->eq($groupID)->andWhere('`objectType`')->eq('activity')->exec();
         $this->dao->update(TABLE_PROGRAMACTIVITY)->set('activity')->eq($newActivityID)->where('activity')->eq($oldActivityID)->andWhere('project')->in($projectIdList)->exec();
 
         $idMap = array();
@@ -1105,8 +1105,8 @@ class upgradeTao extends upgradeModel
 
         foreach($idMap as $oldID => $newOutputID)
         {
-            $this->dao->update(TABLE_AUDITCL)->set('objectID')->eq($newOutputID)->where('objectID')->eq($oldID)->andWhere('workflowGroup')->eq($groupID)->andWhere('objectType')->eq('zoutput')->exec();
-            $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($newOutputID)->where('objectID')->eq($oldID)->andWhere('objectType')->eq('zoutput')->andWhere('project')->in($projectIdList)->exec();
+            $this->dao->update(TABLE_AUDITCL)->set('`objectID`')->eq($newOutputID)->where('`objectID`')->eq($oldID)->andWhere('`workflowGroup`')->eq($groupID)->andWhere('`objectType`')->eq('zoutput')->exec();
+            $this->dao->update(TABLE_AUDITPLAN)->set('`objectID`')->eq($newOutputID)->where('`objectID`')->eq($oldID)->andWhere('`objectType`')->eq('zoutput')->andWhere('project')->in($projectIdList)->exec();
         }
     }
 
@@ -1151,7 +1151,7 @@ class upgradeTao extends upgradeModel
             $idMap[$output->id] = $deliverableID;
         }
 
-        $projectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('workflowGroup')->eq($group->id)->fetchPairs();
+        $projectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('`workflowGroup`')->eq($group->id)->fetchPairs();
 
         $projectOutputList = $this->dao->select('id,output')->from(TABLE_PROGRAMOUTPUT)->where('project')->in($projectIdList)->andWhere('output')->in(array_keys($idMap))->fetchPairs();
         foreach($projectOutputList as $id => $outputID)
@@ -1161,28 +1161,28 @@ class upgradeTao extends upgradeModel
         }
 
         $auditplans = $this->dao->select('id,`objectID`')->from(TABLE_AUDITPLAN)
-            ->where('objectType')->eq('zoutput')
-            ->andWhere('objectID')->in(array_keys($idMap))
+            ->where('`objectType`')->eq('zoutput')
+            ->andWhere('`objectID`')->in(array_keys($idMap))
             ->andWhere('project')->in($projectIdList)
             ->fetchPairs();
 
         foreach($auditplans as $id => $objectID)
         {
             $newID = $idMap[$objectID];
-            $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($newID)->where('id')->eq($id)->exec();
+            $this->dao->update(TABLE_AUDITPLAN)->set('`objectID`')->eq($newID)->where('id')->eq($id)->exec();
         }
 
         $auditcls = $this->dao->select('id, `objectID`')->from(TABLE_AUDITCL)
-            ->where('objectType')->eq('zoutput')
-            ->andWhere('workflowGroup')->eq($group->id)
-            ->andWhere('objectID')->in(array_keys($outputList))
+            ->where('`objectType`')->eq('zoutput')
+            ->andWhere('`workflowGroup`')->eq($group->id)
+            ->andWhere('`objectID`')->in(array_keys($outputList))
             ->andWhere('deleted')->eq('0')
             ->fetchPairs();
 
         foreach($auditcls as $id => $objectID)
         {
             $newID = $idMap[$objectID];
-            $this->dao->update(TABLE_AUDITCL)->set('objectID')->eq($newID)->where('id')->eq($id)->exec();
+            $this->dao->update(TABLE_AUDITCL)->set('`objectID`')->eq($newID)->where('id')->eq($id)->exec();
         }
     }
 
@@ -1198,7 +1198,7 @@ class upgradeTao extends upgradeModel
         {
             foreach($modules as $key => $moduleID)
             {
-                $this->dao->update(TABLE_PROCESS)->set('module')->eq($moduleID)->where('workflowGroup')->eq($groupID)->andWhere('type')->eq($key)->exec();
+                $this->dao->update(TABLE_PROCESS)->set('module')->eq($moduleID)->where('`workflowGroup`')->eq($groupID)->andWhere('type')->eq($key)->exec();
             }
         }
     }

@@ -193,9 +193,9 @@ class myModel extends model
         }
         else
         {
-            $overview->myTaskTotal  = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
-            $overview->myStoryTotal = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
-            $overview->myBugTotal   = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
+            $overview->myTaskTotal  = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_TASK)->where('`assignedTo`')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
+            $overview->myStoryTotal = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_STORY)->where('`assignedTo`')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
+            $overview->myBugTotal   = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_BUG)->where('`assignedTo`')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
         }
 
         return $overview;
@@ -214,16 +214,16 @@ class myModel extends model
         $inTeam  = $this->dao->select('root')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('account')->eq($account)->fetchPairs('root', 'root');
 
         $contribute = new stdclass();
-        $contribute->myTaskTotal          = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($account)->andWhere('deleted')->eq(0)->fetch('count');
-        $contribute->myStoryTotal         = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($account)->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
-        $contribute->myBugTotal           = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($account)->andWhere('deleted')->eq(0)->fetch('count');
-        $contribute->docCreatedTotal      = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_DOC)->where('addedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $contribute->myTaskTotal          = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_TASK)->where('`assignedTo`')->eq($account)->andWhere('deleted')->eq(0)->fetch('count');
+        $contribute->myStoryTotal         = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_STORY)->where('`assignedTo`')->eq($account)->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
+        $contribute->myBugTotal           = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_BUG)->where('`assignedTo`')->eq($account)->andWhere('deleted')->eq(0)->fetch('count');
+        $contribute->docCreatedTotal      = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_DOC)->where('`addedBy`')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
         $contribute->ownerProductTotal    = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_PRODUCT)->where('PO')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
         $contribute->involvedProjectTotal = (int)$this->dao->select('COUNT(DISTINCT id) AS count')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('project')
             ->andWhere('id', true)->in($inTeam)
-            ->orWhere('openedBy')->eq($account)
+            ->orWhere('`openedBy`')->eq($account)
             ->orWhere('PO')->eq($account)
             ->orWhere('PM')->eq($account)
             ->orWhere('QD')->eq($account)
@@ -267,7 +267,7 @@ class myModel extends model
         $module       = in_array($objectType, array('epic', 'requirement')) ? 'story' : $objectType;
         $objectIdList = $this->dao->select('`objectID`')->from(TABLE_ACTION)
             ->where('actor')->eq($account)
-            ->andWhere('objectType')->eq($module)
+            ->andWhere('`objectType`')->eq($module)
             ->andWhere('action')->eq('assigned')
             ->fetchPairs('objectID');
         if(empty($objectIdList)) return array();
@@ -340,7 +340,7 @@ class myModel extends model
 
         $orderBy = str_replace(array_keys($tableFields), array_values($tableFields), $orderBy);
 
-        $objectList = $this->dao->select("t1.*, t3.id as project, t2.name as executionName, t2.multiple as executionMultiple, t3.name as projectName, t2.type as executionType, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_TASK)->alias('t1')
+        $objectList = $this->dao->select("t1.*, t3.id as project, t2.name as `executionName`, t2.multiple as `executionMultiple`, t3.name as `projectName`, t2.type as `executionType`, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as `priOrder`")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id")
             ->where('t1.deleted')->eq(0)
@@ -437,7 +437,7 @@ class myModel extends model
         }
         else
         {
-            $cases = $this->dao->select('t1.*,t3.name AS taskName')->from(TABLE_CASE)->alias('t1')
+            $cases = $this->dao->select('t1.*,t3.name AS `taskName`')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
                 ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t2.task = t3.id')
                 ->where($myTestcaseQuery)
@@ -729,9 +729,9 @@ class myModel extends model
             $risks = $this->dao->select('*')->from(TABLE_RISK)
                 ->where($riskQuery)
                 ->andWhere('deleted')->eq('0')
-                ->andWhere('createdBy',1)->eq($this->app->user->account)
+                ->andWhere('`createdBy`',1)->eq($this->app->user->account)
                 ->orWhere('id')->in(array_keys($assignedByMe))
-                ->orWhere('closedBy')->eq($this->app->user->account)
+                ->orWhere('`closedBy`')->eq($this->app->user->account)
                 ->markRight(1)
                 ->orderBy($orderBy)
                 ->page($pager)
@@ -742,7 +742,7 @@ class myModel extends model
             $risks = $this->dao->select('*')->from(TABLE_RISK)
                 ->where($riskQuery)
                 ->andWhere('deleted')->eq('0')
-                ->andWhere('assignedTo')->eq($this->app->user->account)
+                ->andWhere('`assignedTo`')->eq($this->app->user->account)
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
@@ -1236,7 +1236,7 @@ class myModel extends model
 
         if($checkExists) return !empty($reviewList);
 
-         $actions = $this->dao->select('`objectID`, `date`')->from(TABLE_ACTION)->where('objectType')->eq('demand')->andWhere('objectID')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
+         $actions = $this->dao->select('`objectID`, `date`')->from(TABLE_ACTION)->where('`objectType`')->eq('demand')->andWhere('`objectID`')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
          foreach($actions as $demandID => $date) $reviewList[$demandID]->time = $date;
 
          return array_values($reviewList);
@@ -1304,7 +1304,7 @@ class myModel extends model
 
         if($checkExists) return !empty($reviewList);
 
-        $actions = $this->dao->select('`objectID`,`date`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('objectID')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs();
+        $actions = $this->dao->select('`objectID`,`date`')->from(TABLE_ACTION)->where('`objectType`')->eq('story')->andWhere('`objectID`')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs();
         foreach($actions as $storyID => $date) $reviewList[$storyID]->time = $date;
 
         return array_values($reviewList);
@@ -1471,17 +1471,17 @@ class myModel extends model
         $dataList = $this->dao->select('t2.`objectType`,t2.`objectID`')->from(TABLE_APPROVALNODE)->alias('t1')
             ->leftJoin(TABLE_APPROVALOBJECT)->alias('t2')->on('t2.approval = t1.approval')
             ->where('t2.`objectType`')->ne('review')
-            ->andWhere('objectType')->ne('projectchange')
-            ->andWhere('objectType')->ne('baseline')
+            ->andWhere('`objectType`')->ne('projectchange')
+            ->andWhere('`objectType`')->ne('baseline')
             ->beginIF($objectType != 'all')->andWhere('t2.`objectType`')->eq($objectType)->fi()
             ->andWhere('t1.account')->eq($this->app->user->account)
             ->andWhere('t1.status')->eq('doing')
             ->andWhere('t1.type')->eq('review')
-            ->beginIF(!helper::hasFeature('project_cm'))->andWhere('objectType')->ne('baseline')->fi()
-            ->beginIF(!helper::hasFeature('project_risk'))->andWhere('objectType')->ne('risk')->fi()
-            ->beginIF(!helper::hasFeature('project_issue'))->andWhere('objectType')->ne('issue')->fi()
-            ->beginIF(!helper::hasFeature('project_opportunity'))->andWhere('objectType')->ne('opportunity')->fi()
-            ->beginIF($this->config->systemMode == 'light' || (!helper::hasFeature('program') && $this->config->edition != 'ipd'))->andWhere('objectType')->ne('charter')->fi()
+            ->beginIF(!helper::hasFeature('project_cm'))->andWhere('`objectType`')->ne('baseline')->fi()
+            ->beginIF(!helper::hasFeature('project_risk'))->andWhere('`objectType`')->ne('risk')->fi()
+            ->beginIF(!helper::hasFeature('project_issue'))->andWhere('`objectType`')->ne('issue')->fi()
+            ->beginIF(!helper::hasFeature('project_opportunity'))->andWhere('`objectType`')->ne('opportunity')->fi()
+            ->beginIF($this->config->systemMode == 'light' || (!helper::hasFeature('program') && $this->config->edition != 'ipd'))->andWhere('`objectType`')->ne('charter')->fi()
             ->orderBy("t2.{$orderBy}")
             ->fetchAll();
 
@@ -1662,8 +1662,8 @@ class myModel extends model
             if(empty($idList)) continue;
 
             $reviewActionIdList = $this->dao->select('MAX(`id`) AS `id`')->from(TABLE_ACTION)
-                ->where('objectType')->eq($objectType)
-                ->andWhere('objectID')->in($idList)
+                ->where('`objectType`')->eq($objectType)
+                ->andWhere('`objectID`')->in($idList)
                 ->andWhere('action')->in('reviewed,approvalreview')
                 ->andWhere('vision')->eq($this->config->vision)
                 ->groupBy('`objectType`,`objectID`')
@@ -1788,7 +1788,7 @@ class myModel extends model
      */
     public function getProducts(string $type = 'undone'): object
     {
-        $products = $this->dao->select('t1.*, t2.name as programName')->from(TABLE_PRODUCT)->alias('t1')
+        $products = $this->dao->select('t1.*, t2.name as `programName`')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($type == 'undone')->andWhere('t1.status')->eq('normal')->fi()
