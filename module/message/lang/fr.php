@@ -115,11 +115,6 @@ $lang->message->reviewResultList['reject']  = 'Reject';
 $lang->message->reviewResultList['revert']  = 'Revert';
 $lang->message->reviewResultList['clarify'] = 'Clarify';
 
-$lang->message->storyReviewResultList['pass']    = 'Pass';
-$lang->message->storyReviewResultList['revert']  = 'Revoke';
-$lang->message->storyReviewResultList['clarify'] = 'To Be Clarified';
-$lang->message->storyReviewResultList['reject']  = 'Reject';
-
 $lang->message->reviewCommentTemplate = 'Approval comment: %s.';
 
 $lang->message->notice = new stdclass();

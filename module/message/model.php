@@ -388,11 +388,23 @@ class messageModel extends model
         if($role == 'cc' && !$skipCCSuffix && $appendCCSuffix) $noticeText .= $this->lang->message->noticeText->ccSuffix;
 
         if(isset($assignedTo)) $noticeText = str_replace(array('{assignedTo}'), array($assignedTo), $noticeText);
-        if(in_array($objectType, array('story', 'requirement', 'epic')) && $actionType == 'otherreviewed')
+        if($actionType == 'otherreviewed')
         {
-            $storyResult  = (string)$action->extra;
-            if(strpos($storyResult, ',') !== false) $storyResult = explode(',', $storyResult)[0];
-            $reviewResult = zget($this->lang->message->storyReviewResultList, strtolower($storyResult), '');
+            $reviewResult  = (string)$action->extra;
+            if(strpos($reviewResult, ',') !== false) $reviewResult = explode(',', $reviewResult)[0];
+
+            $reviewResultList = $this->lang->message->reviewResultList;
+            if(in_array($objectType, array('story', 'requirement', 'epic')))
+            {
+                $this->loadModel('story');
+                $reviewResultList = $this->lang->story->reviewResultList;
+            }
+            elseif($objectType == 'case')
+            {
+                $this->loadModel('testcase');
+                $reviewResultList = $this->lang->testcase->reviewResultList;
+            }
+            $reviewResult = zget($reviewResultList, strtolower($reviewResult), '');
             $noticeText   = str_replace(array('{submitter}', '{reviewResult}'), array($submitter, $reviewResult), $noticeText);
         }
 
