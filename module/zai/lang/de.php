@@ -15,15 +15,17 @@ $lang->zai->vectorizedAlreadyEnabled = 'Datenvektorisierung ist bereits aktivier
 $lang->zai->vectorizedEnabled        = 'Datenvektorisierung aktiviert.';
 $lang->zai->authenticationFailed     = 'Authentifizierung fehlgeschlagen!';
 $lang->zai->syncRequestFailed        = 'Synchronisierungsanfrage fehlgeschlagen, bitte versuchen Sie es später erneut';
-$lang->zai->syncingHint              = 'Die Vektorisierungsdaten werden automatisch synchronisiert.';
-$lang->zai->enqueueHint              = 'Lassen Sie diese Seite geöffnet, bis das Einreihen abgeschlossen ist. Bei Unterbrechung auf Weiter einreihen klicken.';
+$lang->zai->syncingHint              = 'Die Vektorisierungsdaten werden im Hintergrund automatisch synchronisiert.';
+$lang->zai->enqueueHint              = 'Es wurden historische Daten erkannt, die noch nicht eingereiht wurden. Klicken Sie auf „Weiter einreihen“, um das Einreihen zu starten.';
 $lang->zai->enqueueResult            = "%s einreihen, bereits <strong class='%scount'>%s</strong> Datensätze in Warteschlange;";
 $lang->zai->enqueueFinished          = 'Einreihen historischer Daten abgeschlossen. Der Cron-Job synchronisiert automatisch.';
 $lang->zai->enqueueContinue          = 'Weiter einreihen';
 $lang->zai->syncedWithFailedHint     = 'Einige Datensynchronisierungen sind fehlgeschlagen. Das System versucht es automatisch erneut.';
 $lang->zai->cannotFindMemoryInZai    = 'Kann Wissensdatenbank mit angegebenem Schlüssel in ZAI nicht finden, bitte aktivieren Sie die Vektorisierung erneut.';
 $lang->zai->confirmResetSync         = 'Möchten Sie den Synchronisierungsstatus zurücksetzen? Dies erstellt eine neue Wissensdatenbank in ZAI.';
-$lang->zai->settingTips              = 'Please install <a class="btn btn-link text-primary px-1" style="text-decoration: none;" href="%s" target="_blank">ZAI service</a> to get the key.';
+$lang->zai->lastFailReason           = 'Fehlerursache';
+$lang->zai->settingTips              = 'Bitte installieren Sie den <a class="btn btn-link text-primary px-1" style="text-decoration: none;" href="%s" target="_blank">ZAI-Dienst</a>, um den Schlüssel zu erhalten.';
+$lang->zai->settingSavedSuccess      = 'ZAI-Konfiguration erfolgreich geändert. Bitte aktualisieren Sie den Browser, damit die Änderungen wirksam werden.';
 
 $lang->zai->zentaoVectorization       = 'Zentao Datenvektorisierung';
 $lang->zai->vectorized                = 'Datenvektorisierung';

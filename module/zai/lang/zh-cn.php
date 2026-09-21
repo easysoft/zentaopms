@@ -25,6 +25,7 @@ $lang->zai->cannotFindMemoryInZai    = '无法在 ZAI 中找到指定 key 的知
 $lang->zai->confirmResetSync         = '是否重置同步状态，这将在 ZAI 中创建新的知识库。';
 $lang->zai->lastFailReason           = '失败原因';
 $lang->zai->settingTips              = '请安装<a class="btn btn-link text-primary px-1" style="text-decoration: none;" href="%s" target="_blank">ZAI服务</a>获取密钥。';
+$lang->zai->settingSavedSuccess      = 'ZAI配置修改成功，刷新浏览器后生效。';
 
 $lang->zai->zentaoVectorization       = '禅道数据向量化';
 $lang->zai->vectorized                = '数据向量化';
