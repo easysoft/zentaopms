@@ -2,6 +2,7 @@
 namespace zin;
 global $app, $lang, $config;
 
+$app->loadLang('product');
 $app->loadLang('productplan');
 
 $uid          = uniqid();
@@ -25,13 +26,15 @@ $fields->field('product')
 
 $fields->field('module')
     ->wrapAfter(true)
+    ->hidden(isset($createFields['branch']) && $type == 'story')
     ->required(!empty($createFields['module']['required']))
     ->control(array('control' => 'modulePicker', 'required' => true, 'manageLink' => createLink('tree', 'browse', 'rootID=' . data('productID') . '&view=story&currentModuleID=0&branch=' . data('branch'))))
     ->items(isset($createFields['module']['options']) ? $createFields['module']['options'] : array())
     ->value(isset($createFields['module']['default']) ? $createFields['module']['default'] : 0);
 
-if(isset($createFields['branch']) && $type == 'story') $fields->remove('module');
 $fields->field('twinsStory')
+    ->label(sprintf($lang->product->branch, $lang->product->branchName[data('product.type') ?? 'branch']) . '&' . $lang->story->module)
+    ->labelClass('hidden')
     ->width('full')
     ->hidden(!isset($createFields['branch']) || $type != 'story')
     ->control(array
