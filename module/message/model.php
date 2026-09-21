@@ -462,7 +462,8 @@ class messageModel extends model
         if(empty($toList) and $objectType == 'demandpool') $toList = trim($object->owner, ',') . ',' . trim($object->reviewer, ',');
         if(empty($toList) && in_array($objectType, array('release', 'doc', 'execution', 'build')))
         {
-            list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object);
+            $toAndCcList = $this->loadModel($objectType)->getToAndCcList($object);
+            if(!empty($toAndCcList)) list($toList, $ccList) = $toAndCcList;
             $toList = $toList . ',' . $ccList;
         }
         if($objectType == 'case') $objectType = 'testcase';
