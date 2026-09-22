@@ -3089,6 +3089,34 @@ class baseRouter
     }
 
     /**
+     * 获取 DAO 类名。
+     * Get the dao class name. The config driver name may differ from the dao class name, e.g. postgres => pgsql.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDaoClassName(): string
+    {
+        $driver  = $this->config->db->driver ?? '';
+        $daoRoot = $this->coreLibRoot . 'dao' . DS;
+
+        /* 插件配置的显式映射优先级最高。 */
+        /* The explicit map configured by plugins has the highest priority. */
+        if($driver && isset($this->config->db->driverDaoMap[$driver])) return $this->config->db->driverDaoMap[$driver];
+
+        /* 配置驱动名同名类存在时优先使用，例如 dm/highgo/kingbase/gauss。 */
+        /* Use the dao class named after the config driver when it exists, e.g. dm/highgo/kingbase/gauss. */
+        if($driver && file_exists($daoRoot . $driver . '.class.php')) return $driver;
+
+        /* 回退到 PDO 驱动同名类，例如 postgres => pgsql。 */
+        /* Fall back to the pdo driver name, e.g. postgres => pgsql. */
+        $pdoDriver = $this->dbh ? $this->dbh->getPdoDriver() : $driver;
+        if($pdoDriver && file_exists($daoRoot . $pdoDriver . '.class.php')) return $pdoDriver;
+
+        return 'dao';
+    }
+
+    /**
      * 加载DAO。
      * Load DAO.
      *
@@ -3099,12 +3127,11 @@ class baseRouter
     {
         global $dao;
 
-        $driver = $this->config->db->driver;
-
-        $classFile = $this->coreLibRoot . 'dao' . DS . $driver . '.class.php';
+        $daoClass  = $this->getDaoClassName();
+        $classFile = $this->coreLibRoot . 'dao' . DS . $daoClass . '.class.php';
         include_once($classFile);
 
-        $dao = new $driver($this);
+        $dao = new $daoClass($this);
         $this->dao = $dao;
 
         $this->loadClass('mao', true);

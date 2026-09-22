@@ -1,6 +1,6 @@
 $(function()
 {
-    $('.extfiles').css('height', window.innerHeight - (result == 'success' ? 300 : 180));
+    if(result == 'success') $('.extfiles').css('height', window.innerHeight - 300);
 });
 
 /**

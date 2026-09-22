@@ -253,7 +253,7 @@ class userModel extends model
      * 获取用户名和真实姓名的键值对。
      * Get account and realname pairs.
      *
-     * @param  string       $params           noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname|outside|inside|all, can be sets of theme
+     * @param  string       $params           noletter|noempty|nodeleted|noclosed|withguest|nofeedback|pofirst|devfirst|qafirst|pmfirst|realname|outside|inside|all, can be sets of theme
      * @param  string|array $usersToAppended  account1,account2
      * @param  int          $maxCount
      * @param  string|array $accounts
@@ -288,9 +288,10 @@ class userModel extends model
         $users = $this->dao->select($fields)->from(TABLE_USER)
             ->where('1=1')
             ->beginIF(strpos($params, 'nodeleted') !== false || empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
+            ->beginIF(strpos($params, 'nofeedback') !== false)->andWhere('visions')->ne('lite')->fi()
             ->beginIF(!$showAll)->andWhere('type')->eq($type)->fi()
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
-            ->beginIF($filterVision && $this->config->vision && $this->app->rawModule !== 'kanban')->andWhere("FIND_IN_SET('{$this->config->vision}', visions)")->fi()
+            ->beginIF($filterVision && $this->config->vision && !in_array($this->app->rawModule, array('kanban', 'feedback')))->andWhere("FIND_IN_SET('{$this->config->vision}', visions)")->fi()
             ->orderBy($orderBy)
             ->beginIF($maxCount)->limit($maxCount)->fi()
             ->fetchAll($keyField);

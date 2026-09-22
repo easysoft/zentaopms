@@ -70,12 +70,28 @@ su('user4');
 
 $task = new taskTaoTest();
 
+zenData('project')->gen(0);
+$project = zenData('project');
+$project->id->range('1');
+$project->workflowGroup->range('1');
+$project->gen(1);
+
+zenData('workflowgroup')->gen(0);
+$group = zenData('workflowgroup');
+$group->id->range('1');
+$group->disabledFeatures->range('deliverable');
+$group->createdDate->range('(M)-(w)')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+$group->editedDate->range('(M)-(w)')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+$group->gen(1);
+
 $taskTable = zenData('task');
 $taskTable->story->range(0);
 $taskTable->gen(10);
 
 $parentTask = new stdclass();
 $parentTask->id         = 1;
+$parentTask->project    = 1;
+$parentTask->execution  = 1;
 $parentTask->openedBy   = 'user1';
 $parentTask->assignedTo = 'user2';
 $parentTask->status     = 'doing';

@@ -167,7 +167,7 @@ class dbh
      * @access private
      * @return string
      */
-    private function getPdoDriver()
+    public function getPdoDriver()
     {
         if($this->dbConfig->driver == 'kingbase') return 'kdb';
         if(in_array($this->dbConfig->driver, $this->config->mysqlDriverList)) return 'mysql';
@@ -652,6 +652,10 @@ class dbh
                 $sql = $this->formatField($sql);
                 $sql = $this->formatAttr($sql);
 
+                /* Remove comment. */
+                $pattern = '/\s+COMMENT\s+[\'"].*?[\'"]\s*/i';
+                $sql     = preg_replace($pattern, '', $sql);
+
                 return $sql;
             case 'SET':
                 if(stripos($sql, 'SET SCHEMA') === 0) return $sql;
@@ -773,6 +777,11 @@ class dbh
             case 'ALTER':
                 $sql = $this->formatField($sql);
                 $sql = $this->formatAttr($sql);
+
+                /* Remove comment. */
+                $pattern = '/\s+COMMENT\s+[\'"].*?[\'"]\s*/i';
+                $sql     = preg_replace($pattern, '', $sql);
+
                 return $sql;
             case 'SET':
                 if(stripos($sql, 'SET SCHEMA') === 0) return $sql;

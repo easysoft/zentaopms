@@ -17,7 +17,7 @@ cid=0
  - 属性moduleID @0
 - 步骤3:指定模块ID浏览
  - 属性moduleID @5
- - 属性moduleName @模块E
+ - 属性hasModules @1
 - 步骤4:分支产品浏览
  - 属性projectID @2
  - 属性browseType @all
@@ -96,7 +96,7 @@ $testcaseTest = new testcaseZenTest();
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($testcaseTest->assignForBrowseTest(1, '0', 'all', 1, 0, 0, 0, 'feature')) && p('projectID,browseType,moduleID') && e('1,all,0'); // 步骤1:正常产品浏览(有项目)
 r($testcaseTest->assignForBrowseTest(2, '0', 'all', 0, 0, 0, 0, 'feature')) && p('projectID,browseType,moduleID') && e('0,all,0'); // 步骤2:正常产品浏览(无项目)
-r($testcaseTest->assignForBrowseTest(1, '0', 'all', 0, 0, 5, 0, 'feature')) && p('moduleID,moduleName') && e('5,模块E'); // 步骤3:指定模块ID浏览
+r($testcaseTest->assignForBrowseTest(1, '0', 'all', 0, 0, 5, 0, 'feature')) && p('moduleID,hasModules') && e('5,1'); // 步骤3:指定模块ID浏览
 r($testcaseTest->assignForBrowseTest(2, '1', 'all', 2, 0, 0, 0, 'feature')) && p('projectID,browseType') && e('2,all'); // 步骤4:分支产品浏览
 r($testcaseTest->assignForBrowseTest(1, '0', 'all', 0, 0, 0, 3, 'feature')) && p('suiteID,caseType') && e('3,feature'); // 步骤5:指定测试套件浏览
 r($testcaseTest->assignForBrowseTest(1, '0', 'wait', 0, 0, 0, 0, 'feature')) && p('browseType,param') && e('wait,0'); // 步骤6:按状态浏览
