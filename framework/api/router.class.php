@@ -1231,16 +1231,39 @@ class api extends router
         /* Check assignedTo. */
         if(isset($_POST['assignedTo']) && $_POST['assignedTo'])
         {
-            $user = $this->dao->select('*')->from(TABLE_USER)
-                ->where('account')->eq($_POST['assignedTo'])
-                ->fetch();
-            if(!$user) return $this->control->sendError('User does not exist.');
+            $assignedToList = is_array($_POST['assignedTo']) ? $_POST['assignedTo'] : array($_POST['assignedTo']);
+            $assignedToList = array_filter($assignedToList, function($account)
+            {
+                return $account !== '' && $account !== null;
+            });
+            $assignedToList = array_values(array_unique(array_map('strval', $assignedToList)));
+            if($assignedToList)
+            {
+                $users = $this->dao->select('account')->from(TABLE_USER)
+                    ->where('account')->in($assignedToList)
+                    ->fetchPairs('account', 'account');
+
+                foreach($assignedToList as $assignedTo)
+                {
+                    if(!isset($users[$assignedTo])) return $this->control->sendError('User does not exist.');
+                }
+            }
         }
 
         $params = array_merge($this->params, $_POST);
         foreach($params as $key => $value)
         {
-            if(!isset($objectMap[$key]) || !$value) continue;
+            if(!isset($objectMap[$key])) continue;
+
+            if(is_array($value))
+            {
+                $value = array_filter($value, function($objectID)
+                {
+                    return !empty($objectID);
+                });
+                $value = array_values(array_unique($value));
+            }
+            if(!$value) continue;
 
             $table  = $objectMap[$key];
             $result = $this->checkObjectExists($table, $value);
