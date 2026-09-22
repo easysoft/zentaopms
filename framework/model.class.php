@@ -456,11 +456,21 @@ class model extends baseModel
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $moduleName);
         $uiID   = $this->loadModel('workflowlayout')->getUIByDataID($moduleName, $methodName, $objectID);
         $fields = $this->workflowaction->getPageFields($moduleName, $action->action, '', null, $uiID, $action->group);
-        foreach($fields as $field)
+
+        if(!empty($_POST))
         {
-            if($field->control == 'file' && $field->show && !$field->readonly)
+            $oldObject = new stdclass();
+            $oldObject->id = $objectID;
+
+            $newObject = new stdclass();
+            $newObject->deleteFiles = $_POST['deleteFiles'] ?? array();
+            $newObject->renameFiles = $_POST['renameFiles'] ?? array();
+            foreach($fields as $field)
             {
-                $this->file->saveUpload($moduleName, $objectID, $field->field, $field->field, $field->field);
+                if($field->control == 'file' && $field->show && !$field->readonly)
+                {
+                    $this->file->processFileDiffsForObject($moduleName, $oldObject, $newObject, $field->field, $field->field, $field->field);
+                }
             }
         }
 
