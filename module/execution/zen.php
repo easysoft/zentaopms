@@ -2230,13 +2230,11 @@ class executionZen extends execution
         $from    = $rawModule == 'projectstory' ? 'project' : ($rawModule == 'execution' ? 'execution' : '');
         $stories = isset($_POST['stories']) ? $_POST['stories'] : array();
 
-        if(!in_array($from, array('project', 'execution'), true)) return array('result' => 'fail', 'code' => 400, 'message' => 'from must be project or execution.');
-        if(empty($stories) || !is_array($stories)) return array('result' => 'fail', 'code' => 400, 'message' => 'stories must be a non-empty array.');
-
-        $storyIdList = array();
+        $storyIDError = sprintf($this->lang->error->int[0], $this->lang->story->story);
+        $storyIdList  = array();
         foreach($stories as $storyID)
         {
-            if((!is_int($storyID) && !is_string($storyID)) || !preg_match('/^[1-9][0-9]*$/', (string)$storyID)) return array('result' => 'fail', 'code' => 400, 'message' => 'stories must contain positive integers.');
+            if((!is_int($storyID) && !is_string($storyID)) || !preg_match('/^[1-9][0-9]*$/', (string)$storyID)) return array('status' => 'fail', 'message' => $storyIDError);
             $storyIdList[] = (int)$storyID;
         }
         $storyIdList = array_values(array_unique($storyIdList));
@@ -2244,10 +2242,10 @@ class executionZen extends execution
         $linkedObject = $this->loadModel('project')->getByID($objectID, 'project,sprint,stage,kanban');
         if(empty($linkedObject) || ($from == 'project' && $linkedObject->type != 'project') || ($from == 'execution' && $linkedObject->type == 'project'))
         {
-            return array('result' => 'fail', 'code' => 404, 'message' => '404 Not found');
+            return array('status' => 'fail', 'message' => '404 Not found');
         }
 
-        return array('result' => 'success', 'stories' => $storyIdList);
+        return array('status' => 'success', 'stories' => $storyIdList);
     }
 
     /**

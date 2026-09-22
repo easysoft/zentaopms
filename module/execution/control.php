@@ -2473,7 +2473,7 @@ class execution extends control
         if($isAPIRequest)
         {
             $apiData = $this->executionZen->prepareLinkStoryApiData($originObjectID, $this->app->rawModule);
-            if($apiData['result'] == 'fail') return $this->send($apiData);
+            if($apiData['status'] == 'fail') return $this->send($apiData);
 
             $_POST['stories'] = $apiData['stories'];
         }
