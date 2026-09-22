@@ -1629,7 +1629,7 @@ class testcaseZen extends testcase
             $case->fromCaseVersion = $case->version;
             if(isset($modules[$case->id]))  $case->module = $modules[$case->id];
             if(isset($branches[$case->id])) $case->branch = $branches[$case->id];
-            unset($case->id);
+            unset($case->id, $case->lastRunResult, $case->lastRunner, $case->lastRunDate);
 
             foreach($case as $key => $value)
             {
@@ -2046,10 +2046,7 @@ class testcaseZen extends testcase
         {
             $case->openedBy   = $this->app->user->account;
             $case->openedDate = helper::now();
-            unset($case->id);
-            unset($case->version);
-            unset($case->lastEditedBy);
-            unset($case->lastEditedDate);
+            unset($case->id, $case->version, $case->lastEditedBy, $case->lastEditedDate);
         }
         else
         {
@@ -2062,9 +2059,7 @@ class testcaseZen extends testcase
             $case->id             = $libCaseID;
         }
 
-        unset($case->scriptedDate);
-        unset($case->reviewedDate);
-        unset($case->lastRunDate);
+        unset($case->scriptedDate, $case->reviewedDate, $case->lastRunDate, $case->lastRunResult, $case->lastRunner);
 
         foreach($case as $key => $value)
         {
