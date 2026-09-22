@@ -264,6 +264,19 @@ foreach($actions as $key => $action)
         $actions[$key]['data-load'] = 'modal';
         $actions[$key]['data-size'] = 'lg';
     }
+
+    /* 在模态框中查看需求详情时，服务端返回的关闭确认提示不会被模态框处理，改为由前端弹出确认框。 */
+    if($isInModal && !empty($action['url']) && (zget($action, 'name') == 'close' || zget($action, 'key') == 'close'))
+    {
+        $childIdList = $this->story->getAllChildId($story->id, false, false, 'closed');
+        if(!empty($childIdList))
+        {
+            $closeUrl                      = $config->story->actionList['close']['url'];
+            $closeUrl['params']           .= "&confirm=yes";
+            $actions[$key]['url']          = createLink($closeUrl['module'], $closeUrl['method'], $closeUrl['params']);
+            $actions[$key]['data-confirm'] = sprintf($this->lang->story->closeParentTips, '#' . implode(',#', $childIdList));
+        }
+    }
 }
 
 if($config->edition == 'ipd' && $config->vision == 'rnd' && $story->type == 'story') $story = $this->story->getAffectObject(array(), $story->type, $story);
