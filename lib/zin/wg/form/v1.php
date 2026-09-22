@@ -300,7 +300,7 @@ class form extends formBase
         $after = parent::buildAfter();
         if($this->isLayout('grid'))
         {
-            $options = $this->props->pick(array('loadUrl', 'autoLoad', 'fullModeOrders', 'linkages'));
+            $options = $this->props->pick(array('loadUrl', 'autoLoad', 'fullModeOrders'));
             $after[] = zui::formGrid
             (
                 set::_to('#' . $this->id()),
