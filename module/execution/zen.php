@@ -2217,6 +2217,51 @@ class executionZen extends execution
     }
 
     /**
+     * 校验并整理关联需求的 API 请求数据。
+     * Prepare and validate API request data for linking stories.
+     *
+     * @param  int    $objectID
+     * @param  string $rawModule
+     * @access protected
+     * @return array
+     */
+    protected function prepareLinkStoryApiData(int $objectID, string $rawModule): array
+    {
+        $from = '';
+        if($rawModule == 'projectstory')
+        {
+            $from = 'project';
+        }
+        elseif($rawModule == 'execution')
+        {
+            $from = 'execution';
+        }
+
+        $stories = isset($_POST['stories']) ? $_POST['stories'] : array();
+
+        $storyIDError = sprintf($this->lang->error->int[0], $this->lang->story->story);
+        $storyIdList  = array();
+        foreach($stories as $storyID)
+        {
+            if((!is_int($storyID) && !is_string($storyID)) || !preg_match('/^[1-9][0-9]*$/', (string)$storyID)) return array('status' => 'fail', 'message' => $storyIDError);
+            $storyIdList[] = (int)$storyID;
+        }
+        $storyIdList = array_values(array_unique($storyIdList));
+
+        $validObjectTypes = array(
+            'project'   => array('project'),
+            'execution' => array('sprint', 'stage', 'kanban')
+        );
+        $linkedObject = $this->loadModel('project')->getByID($objectID, 'project,sprint,stage,kanban');
+        if(empty($linkedObject) || !in_array($linkedObject->type, $validObjectTypes[$from], true))
+        {
+            return array('status' => 'fail', 'message' => '404 Not found');
+        }
+
+        return array('status' => 'success', 'stories' => $storyIdList);
+    }
+
+    /**
      * 获取执行关联的对象，如关联的产品、分支、需求等。
      * Get linked objects of this execution.
      *
