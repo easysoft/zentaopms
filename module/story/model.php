@@ -2356,6 +2356,7 @@ class storyModel extends model
         $story->status = $this->getActivateStatus($storyID);
 
         $this->dao->update(TABLE_STORY)->data($story, 'comment')->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
+        if(dao::isError()) return false;
 
         /* Update parent story status. */
         if(!empty($oldStory->parent) && $oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
