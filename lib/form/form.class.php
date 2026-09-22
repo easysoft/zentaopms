@@ -126,6 +126,8 @@ class form extends fixer
         $moduleName = $moduleName ? $moduleName : $app->rawModule;
         $methodName = $methodName ? $methodName : $app->rawMethod;
 
+        if($moduleName == 'projectstory') $moduleName = 'story';
+
         /* 项目发布和项目版本用自己的工作流。 */
         if($moduleName == 'projectrelease') $moduleName = 'release';
         if($moduleName == 'projectbuild')   $moduleName = 'build';
