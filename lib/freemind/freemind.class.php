@@ -56,13 +56,25 @@ class freemind
     {
         $config     = $context['config'];
         $topScenes  = $context['topScenes'];
-        $caseScenes = array_column($context['caseList'], 'moduleID');
+        $sceneMaps  = $context['sceneMaps'];
+        $caseScenes = array_column($context['caseList'], 'sceneID');
         $caseScenes = array_filter($caseScenes);
         $caseScenes = array_combine($caseScenes, $caseScenes);
 
-        foreach($topScenes as $key => $scene)
+        /* 保留有用例的场景及其所有父场景，避免场景层级丢失。Keep ancestors of scenes that have cases. */
+        foreach($caseScenes as $sceneID)
         {
-            if(!isset($caseScenes[$key])) continue;
+            $parentID = isset($sceneMaps[$sceneID]) ? $sceneMaps[$sceneID]->parentID : 0;
+            while($parentID && isset($sceneMaps[$parentID]) && !isset($caseScenes[$parentID]))
+            {
+                $caseScenes[$parentID] = $parentID;
+                $parentID              = $sceneMaps[$parentID]->parentID;
+            }
+        }
+
+        foreach($topScenes as $scene)
+        {
+            if(!isset($caseScenes[$scene->sceneID])) continue;
 
             $suffix    = $config['scene'] . ':' . $scene->sceneID;
             $sceneNode = $this->createNode($xmlDoc, $scene->sceneName, $suffix, array('nodeType' => 'scene'));
