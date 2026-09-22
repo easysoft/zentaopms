@@ -6,7 +6,7 @@ class changePage extends page
         parent::__construct($webdriver);
 
         $xpath = array(
-            'srCommon' => "//*[@id='dataform']/div[1]/div/div[1]/div[1]/div[2]/div[1]",
+            'srCommon' => "//div[@data-name='title']/label[contains(@class,'form-label')]",
             /*运营界面*/
             'reviewerAdmin' => "//*[@class='pick-container']//menu//a/div/div[text()='admin']"
         );

@@ -145,6 +145,10 @@ $routes['/projects/testtask']           = array('response' => 'tasks(array)|test
 $routes['/projects/testreport']         = array('response' => 'reports(array)|testreports,pager');
 $routes['/projects/team']               = array('response' => 'teamMembers(array)|members');
 $routes['/projects/:projectID/members'] = array('get' => array('redirect' => '/projects/team?projectID=:projectID'), 'put' => array('redirect' => '/projects/manageMembers?projectID=:projectID'));
+
+$routes['/projects/deliverable']        = array('response' => 'deliverables(array),pager');
+$routes['/projects/viewDeliverable']    = array('response' => 'deliverable,review,actions(array),doc,relatedObjects(array)');
+
 $routes['/projects/:projectID']         = array('response' => 'project');
 $routes['/projects/:projectID/close']   = array('post' => array('response' => '*'));
 $routes['/projects/:projectID/tasks']   = array('post' => array('redirect' => '/task/create?executionID=0', 'data' => 'project=:projectID'));
@@ -200,11 +204,32 @@ $routes['/projects/:projectID/issues']     = array('redirect' => '/issues?object
 $routes['/executions/:executionID/issues'] = array('redirect' => '/issues?objectID=:executionID&from=execution', 'search' => array('enabled' => true));
 $routes['/issues/:issueID']                = array('response' => 'issue,actions(array)');
 
+$routes['/projects/:projectID/baselines'] = array('redirect' => '/cm/browse?projectID=:projectID', 'response' => 'baselines(array),pager');
+$routes['/baselines/:baselineID']         = array('redirect' => '/cm/view?baselineID=:baselineID', 'response' => 'baseline,actions(array),deliverables(array)');
+
+$routes['/projects/:projectID/deliverables'] = array('redirect' => '/projects/deliverable?projectID=:projectID', 'response' => 'deliverables(array),pager');
+$routes['/deliverables/:deliverableID']      = array('redirect' => '/projects/viewDeliverable?deliverableID=:deliverableID', 'response' => 'deliverable,review,actions(array),doc,relatedObjects(array)');
+
+$routes['/projects/:projectID/changes'] = array('redirect' => '/projectchanges/browse?projectID=:projectID', 'response' => 'projectchanges(array),pager');
+$routes['/changes/:changeID']           = array('redirect' => '/projectchanges/view?projectchangeID=:changeID', 'response' => 'projectchange,actions(array),deliverables(array)');
+
+$routes['/projects/:projectID/processes'] = array(
+    'get'  => array('redirect' => '/pssp/browse?projectID=:projectID', 'response' => 'processList(array)'),
+    'post' => array('redirect' => '/pssp/update?projectID=:projectID', 'response' => '*')
+);
+$routes['/executions/:executionID/processes'] = array(
+    'get'  => array('redirect' => '/pssp/browse?projectID=:executionID', 'response' => 'processList(array)'),
+    'post' => array('redirect' => '/pssp/update?projectID=:executionID', 'response' => '*')
+);
+
 $routes['/weeklies']           = array('post' => array('response' => '*'));
 $routes['/weeklies/:reportID'] = array('put' => array('response' => '*'));
 
 $routes['/risks']                         = array('get' => array('response' => 'risks(array),pager', 'search' => array('enabled' => true)), 'post' => array('response' => '*'));
-$routes['/projects/:projectID/risks']     = array('redirect' => '/risks?projectID=:projectID', 'response' => 'risks(array),pager', 'search' => array('enabled' => true));
+$routes['/projects/:projectID/risks']     = array(
+    'get'  => array('redirect' => '/risks?projectID=:projectID', 'response' => 'risks(array),pager', 'search' => array('enabled' => true)),
+    'post' => array('redirect' => '/risks?projectID=:projectID&from=project', 'response' => '*')
+);
 $routes['/executions/:executionID/risks'] = array('redirect' => '/risks?executionID=:executionID&from=execution', 'response' => 'risks(array),pager', 'search' => array('enabled' => true));
 $routes['/risks/:riskID']                 = array('get' => array('response' => 'risk,actions(array)'), 'put' => array('response' => '*'));
 
@@ -214,14 +239,36 @@ $routes['/executions/:executionID/meetings'] = array('redirect' => '/meetings?ob
 $routes['/meetings/:meetingID']              = array('get' => array('response' => 'meeting,actions(array)'), 'put' => array('response' => '*'), 'delete' => array('response' => '*'));
 $routes['/meetings/:meetingID/minutes']      = array('put' => array('method' => 'minutes', 'response' => '*'));
 
-$routes['/opportunities']                         = array('response' => 'opportunities(array),pager', 'search' => array('enabled' => true));
-$routes['/projects/:projectID/opportunities']     = array('redirect' => '/opportunities?projectID=:projectID', 'search' => array('enabled' => true));
-$routes['/executions/:executionID/opportunities'] = array('redirect' => '/opportunities?executionID=:executionID&from=execution', 'search' => array('enabled' => true));
-$routes['/opportunities/:opportunityID']          = array('response' => 'opportunity,actions(array)');
+$routes['/opportunities']                         = array('get' => array('response' => 'opportunities(array),pager', 'search' => array('enabled' => true)), 'post' => array('response' => '*'));
+$routes['/opportunities/batch']                   = array('post' => array('redirect' => '/opportunities/batchCreate', 'response' => '*'));
+$routes['/opportunities/batchCreate']             = array('post' => array('response' => '*'));
+$routes['/projects/:projectID/opportunities']     = array(
+    'get'  => array('redirect' => '/opportunities?projectID=:projectID', 'response' => 'opportunities(array),pager', 'search' => array('enabled' => true)),
+    'post' => array('redirect' => '/opportunities?projectID=:projectID&from=project', 'response' => '*')
+);
+$routes['/projects/:projectID/opportunities/batch'] = array('post' => array('redirect' => '/opportunities/batchCreate?projectID=:projectID&from=project', 'response' => '*'));
+$routes['/executions/:executionID/opportunities']   = array('redirect' => '/opportunities?projectID=:executionID&from=execution', 'response' => 'opportunities(array),pager', 'search' => array('enabled' => true));
+$routes['/opportunities/:opportunityID']            = array('get' => array('response' => 'opportunity,actions(array)'), 'put' => array('response' => '*'), 'delete' => array('response' => '*'));
 
-$routes['/auditplans']                          = array('response' => 'auditplans(array),pager', 'search' => array('enabled' => true));
-$routes['/projects/:projectID/auditplans']      = array('redirect' => '/auditplans?projectID=:projectID', 'search' => array('enabled' => true));
-$routes['/executions/:executionID/auditplans']  = array('redirect' => '/auditplans?executionID=:executionID&from=execution', 'search' => array('enabled' => true));
+$routes['/auditplans']                          = array(
+    'get'  => array('response' => 'auditplans(array),pager', 'search' => array('enabled' => true)),
+    'post' => array('response' => '*')
+);
+$routes['/projects/:projectID/auditplans']       = array('redirect' => '/auditplans?projectID=:projectID', 'response' => 'auditplans(array),pager', 'search' => array('enabled' => true));
+$routes['/projects/:projectID/auditplans/batch'] = array('post' => array('redirect' => '/auditplans/batchCreate?projectID=:projectID', 'response' => '*'));
+$routes['/executions/:executionID/auditplans']   = array('redirect' => '/auditplans?projectID=:executionID&from=execution', 'response' => 'auditplans(array),pager', 'search' => array('enabled' => true));
+$routes['/auditplans/:auditplanID']              = array(
+    'get'    => array('response' => 'auditplan,actions(array),results(array),ncs(array)'),
+    'put'    => array('response' => '*'),
+    'delete' => array('response' => '*')
+);
+$routes['/auditplans/:auditplanID/check']        = array('post' => array('method' => 'check', 'response' => '*'));
+$routes['/projects/:projectID/ncs']              = array('post' => array('redirect' => '/nc/create?projectID=:projectID', 'response' => '*'));
+$routes['/executions/:executionID/ncs']          = array('post' => array('redirect' => '/nc/create?projectID=:executionID&from=execution', 'data' => 'execution=:executionID', 'response' => '*'));
+$routes['/ncs/:ncID']                            = array(
+    'put'    => array('redirect' => '/nc/:ncID', 'response' => '*'),
+    'delete' => array('redirect' => '/nc/:ncID', 'response' => '*')
+);
 
 $routes['/feedbacks']                     = array('method' => 'admin', 'response' => 'feedbacks(array),pager', 'search' => array('enabled' => true));
 $routes['/products/:productID/feedbacks'] = array('redirect' => '/feedbacks?param=:productID', 'search' => array('enabled' => true));
@@ -241,7 +288,10 @@ $routes['/systems']                     = array('response' => 'appList(array)|sy
 $routes['/products/:productID/systems'] = array('redirect' => '/systems?productID=:productID');
 $routes['/systems/:systemID']           = array('response' => 'system,actions(array)');
 
-$routes['/custom/relations/:objectType/:objectID/:relatedObjectType']                  = array('post' => array('redirect' => '/custom/relateObject?objectID=:objectID&objectType=:objectType&relatedObjectType=:relatedObjectType', 'response' => '*'));
+$routes['/custom/relations/:objectType/:objectID']                                                   = array('get' => array('redirect' => '/custom/showRelationGraph?objectID=:objectID&objectType=:objectType', 'response' => 'relations,graphData,usersAvatar,objectID,objectType'));
+$routes['/custom/relations/:objectType/:objectID/candidates/:relatedObjectType']                     = array('get' => array('redirect' => '/custom/relateObject?objectID=:objectID&objectType=:objectType&relatedObjectType=:relatedObjectType', 'response' => 'objects(array),cols,relationPairs,objectTypes,canSearch,users,objectID,objectType,relatedObjectType,browseType,orderBy,pager'));
+$routes['/custom/relations/:objectType/:objectID/:relatedObjectType']                                = array('post' => array('redirect' => '/custom/relateObject?objectID=:objectID&objectType=:objectType&relatedObjectType=:relatedObjectType', 'response' => '*'));
+$routes['/custom/relations/:objectType/:objectID/:relatedObjectType/:relatedObjectID/:relationName'] = array('delete' => array('redirect' => '/custom/removeObjects?objectID=:objectID&objectType=:objectType&relationName=:relationName&relatedObjectID=:relatedObjectID&relatedObjectType=:relatedObjectType', 'response' => '*'));
 
 $routes['/todos/my']      = array('redirect' => '/my/todo', 'response' => 'todos(array),pager');
 $routes['/todos/:todoID'] = array('response' => 'todo');

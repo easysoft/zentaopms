@@ -1058,7 +1058,16 @@ class dom
             $pickerInput->sendKeys(trim($value));
             sleep(3);
 
-            $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
+            /* 优先按选项值（选项节点的 z-key 属性）定位，搜索关键词未命中选项文本时也能选中。 */
+            try
+            {
+                $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//li[@z-key='" . trim($value) . "']//a"))->click();
+            }
+            catch(Exception $e)
+            {
+                $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
+            }
+
             $pickerInput->clear();
         }
     }
