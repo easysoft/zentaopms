@@ -76,13 +76,25 @@ class xmind
     {
         $config     = $context['config'];
         $topScenes  = $context['topScenes'];
-        $caseScenes = array_column($context['caseList'], 'moduleID');
+        $sceneMaps  = $context['sceneMaps'];
+        $caseScenes = array_column($context['caseList'], 'sceneID');
         $caseScenes = array_filter($caseScenes);
         $caseScenes = array_combine($caseScenes, $caseScenes);
 
-        foreach($topScenes as $key => $scene)
+        /* 保留有用例的场景及其所有父场景，避免场景层级丢失。Keep ancestors of scenes that have cases. */
+        foreach($caseScenes as $sceneID)
         {
-            if(!isset($caseScenes[$key])) continue;
+            $parentID = isset($sceneMaps[$sceneID]) ? $sceneMaps[$sceneID]->parentID : 0;
+            while($parentID && isset($sceneMaps[$parentID]) && !isset($caseScenes[$parentID]))
+            {
+                $caseScenes[$parentID] = $parentID;
+                $parentID              = $sceneMaps[$parentID]->parentID;
+            }
+        }
+
+        foreach($topScenes as $scene)
+        {
+            if(!isset($caseScenes[$scene->sceneID])) continue;
 
             $suffix     = $config['scene'] . ':' . $scene->sceneID;
             $sceneTopic = $this->createTopic($xmlDoc, $scene->sceneName, $suffix, array('nodeType' => 'scene'));
@@ -92,7 +104,7 @@ class xmind
             $sceneChildren->appendChild($sceneChildrenTopics);
             $sceneTopic->appendChild($sceneChildren);
 
-            $this->createNextChildScenesTopic($scene, $sceneTopic, $xmlDoc, $context, $moduleTopics, $sceneTopics);
+            $this->createNextChildScenesTopic($scene, $sceneChildrenTopics, $xmlDoc, $context, $moduleTopics, $sceneTopics);
 
             if(isset($moduleTopics[$scene->moduleID]))
             {
@@ -112,7 +124,7 @@ class xmind
      * Create next child scene node.
      *
      * @param  object      $parentScene
-     * @param  object      $parentTopic
+     * @param  DOMElement  $parentTopics
      * @param  DOMDocument $xmlDoc
      * @param  array       $context
      * @param  array       $moduleTopics
@@ -120,7 +132,7 @@ class xmind
      * @access public
      * @return void
      */
-    function createNextChildScenesTopic($parentScene,$parentTopic, $xmlDoc, $context, &$moduleTopics, &$sceneTopics)
+    function createNextChildScenesTopic($parentScene,$parentTopics, $xmlDoc, $context, &$moduleTopics, &$sceneTopics)
     {
         $sceneMaps = $context['sceneMaps'];
         $config    = $context['config'];
@@ -132,12 +144,14 @@ class xmind
             $suffix     = $config['scene'] . ':' . $scene->sceneID;
             $sceneTopic = $this->createTopic($xmlDoc, $scene->sceneName, $suffix, array('nodeType'=>'scene'));
 
-            $this->createNextChildScenesTopic($scene, $sceneTopic, $xmlDoc, $context, $moduleTopics, $sceneTopics);
-
             $sceneChildrenTopics = $this->createTopics($xmlDoc);
             $sceneChildren       = $xmlDoc->createElement('children');
             $sceneChildren->appendChild($sceneChildrenTopics);
             $sceneTopic->appendChild($sceneChildren);
+
+            $this->createNextChildScenesTopic($scene, $sceneChildrenTopics, $xmlDoc, $context, $moduleTopics, $sceneTopics);
+
+            $parentTopics->appendChild($sceneTopic);
 
             $sceneTopics[$scene->sceneID] = $sceneChildrenTopics;
         }
