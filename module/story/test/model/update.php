@@ -59,6 +59,7 @@ $types['story']         = array('mentioned');
 $types['requirement']   = array('mentioned');
 $tester->config->message->setting = array('message' => array('setting' => $types));
 
+$app::$loadedLangs = array();
 $app->loadLang('action');
 $app->loadLang('message');
 
