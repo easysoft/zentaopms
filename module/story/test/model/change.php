@@ -92,6 +92,7 @@ $types['requirement'] = array('mentioned');
 $tester->config->message->setting = array('message' => array('setting' => $types));
 
 global $app;
+$app::$loadedLangs = array();
 $app->loadLang('action');
 $app->loadLang('message');
 
