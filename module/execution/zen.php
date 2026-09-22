@@ -2227,7 +2227,16 @@ class executionZen extends execution
      */
     protected function prepareLinkStoryApiData(int $objectID, string $rawModule): array
     {
-        $from    = $rawModule == 'projectstory' ? 'project' : ($rawModule == 'execution' ? 'execution' : '');
+        $from = '';
+        if($rawModule == 'projectstory')
+        {
+            $from = 'project';
+        }
+        elseif($rawModule == 'execution')
+        {
+            $from = 'execution';
+        }
+
         $stories = isset($_POST['stories']) ? $_POST['stories'] : array();
 
         $storyIDError = sprintf($this->lang->error->int[0], $this->lang->story->story);
@@ -2239,8 +2248,12 @@ class executionZen extends execution
         }
         $storyIdList = array_values(array_unique($storyIdList));
 
+        $validObjectTypes = array(
+            'project'   => array('project'),
+            'execution' => array('sprint', 'stage', 'kanban')
+        );
         $linkedObject = $this->loadModel('project')->getByID($objectID, 'project,sprint,stage,kanban');
-        if(empty($linkedObject) || ($from == 'project' && $linkedObject->type != 'project') || ($from == 'execution' && $linkedObject->type == 'project'))
+        if(empty($linkedObject) || !in_array($linkedObject->type, $validObjectTypes[$from], true))
         {
             return array('status' => 'fail', 'message' => '404 Not found');
         }
