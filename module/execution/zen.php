@@ -2217,6 +2217,40 @@ class executionZen extends execution
     }
 
     /**
+     * 校验并整理关联需求的 API 请求数据。
+     * Prepare and validate API request data for linking stories.
+     *
+     * @param  int    $objectID
+     * @param  string $rawModule
+     * @access protected
+     * @return array
+     */
+    protected function prepareLinkStoryApiData(int $objectID, string $rawModule): array
+    {
+        $from    = $rawModule == 'projectstory' ? 'project' : ($rawModule == 'execution' ? 'execution' : '');
+        $stories = isset($_POST['stories']) ? $_POST['stories'] : array();
+
+        if(!in_array($from, array('project', 'execution'), true)) return array('result' => 'fail', 'code' => 400, 'message' => 'from must be project or execution.');
+        if(empty($stories) || !is_array($stories)) return array('result' => 'fail', 'code' => 400, 'message' => 'stories must be a non-empty array.');
+
+        $storyIdList = array();
+        foreach($stories as $storyID)
+        {
+            if((!is_int($storyID) && !is_string($storyID)) || !preg_match('/^[1-9][0-9]*$/', (string)$storyID)) return array('result' => 'fail', 'code' => 400, 'message' => 'stories must contain positive integers.');
+            $storyIdList[] = (int)$storyID;
+        }
+        $storyIdList = array_values(array_unique($storyIdList));
+
+        $linkedObject = $this->loadModel('project')->getByID($objectID, 'project,sprint,stage,kanban');
+        if(empty($linkedObject) || ($from == 'project' && $linkedObject->type != 'project') || ($from == 'execution' && $linkedObject->type == 'project'))
+        {
+            return array('result' => 'fail', 'code' => 404, 'message' => '404 Not found');
+        }
+
+        return array('result' => 'success', 'stories' => $storyIdList);
+    }
+
+    /**
      * 获取执行关联的对象，如关联的产品、分支、需求等。
      * Get linked objects of this execution.
      *
