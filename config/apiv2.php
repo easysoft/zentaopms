@@ -104,9 +104,11 @@ $routes['/projects/:projectID/stories']     = array(
     'get' => array('redirect' => '/projectstories/story?projectID=:projectID', 'response' => 'stories(array),pager', 'search' => array('enabled' => true, 'searchModule' => 'projectstory', 'querySessionKey' => 'projectstory')),
     'post' => array('redirect' => '/story/create?productID=0&branch=0&objectID=:projectID', 'data' => 'project=:projectID')
 );
-$routes['/executions/:executionID/stories'] = array('redirect' => '/executions/story?executionID=:executionID', 'search' => array('enabled' => true, 'searchModule' => 'executionStory', 'querySessionKey' => 'executionStory'));
-$routes['/stories/:storyID']                = array('response' => 'story,actions(array)');
-$routes['/storygrades']                     = array('redirect' => '/story/ajaxGetGradeList', 'response' => 'grades(array)');
+$routes['/projects/:projectID/stories/link']     = array('post' => array('redirect' => '/execution/linkStory?objectID=:projectID', 'rawModule' => 'projectstory', 'response' => '*'));
+$routes['/executions/:executionID/stories']      = array('redirect' => '/executions/story?executionID=:executionID', 'search' => array('enabled' => true, 'searchModule' => 'executionStory', 'querySessionKey' => 'executionStory'));
+$routes['/executions/:executionID/stories/link'] = array('post' => array('redirect' => '/execution/linkStory?objectID=:executionID', 'rawModule' => 'execution', 'response' => '*'));
+$routes['/stories/:storyID']                     = array('response' => 'story,actions(array)');
+$routes['/storygrades']                          = array('redirect' => '/story/ajaxGetGradeList', 'response' => 'grades(array)');
 
 $routes['/products/:productID/epics']     = array('redirect' => '/products/browse?productID=:productID&storyType=epic', 'response' => 'stories(array)|epics,pager', 'search' => array('enabled' => true));
 $routes['/epics/:storyID'] = array(

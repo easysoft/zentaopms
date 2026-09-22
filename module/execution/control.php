@@ -2469,6 +2469,15 @@ class execution extends control
         /* Save old objectID to use later. */
         $originObjectID = $objectID;
 
+        $isAPIRequest = helper::isApiRequest();
+        if($isAPIRequest)
+        {
+            $apiData = $this->executionZen->prepareLinkStoryApiData($originObjectID, $this->app->rawModule);
+            if($apiData['status'] == 'fail') return $this->send($apiData);
+
+            $_POST['stories'] = $apiData['stories'];
+        }
+
         /* Use the projectID of Kanban as objectID if vision is lite. */
         if($this->config->vision == 'lite')
         {
@@ -2496,6 +2505,12 @@ class execution extends control
         {
             if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project, $this->post->stories ? $this->post->stories : array(), '', array(), $storyType);
             $this->execution->linkStory($objectID, $this->post->stories ? $this->post->stories : array(), $extra, array(), $storyType);
+
+            if($isAPIRequest)
+            {
+                if(dao::isError()) return $this->send(array('status' => 'fail', 'message' => dao::getError()));
+                return $this->send(array('status' => 'success', 'message' => $this->lang->saveSuccess, 'stories' => $_POST['stories'], 'storyType' => $storyType));
+            }
 
             if(isInModal()) return $this->sendSuccess(array('closeModal' => true, 'load' => true, 'callback' => "refreshKanban()"));
 

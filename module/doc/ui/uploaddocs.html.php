@@ -96,7 +96,7 @@ formPanel
     (
         setClass('uploadFileBox'),
         set::label($lang->doc->uploadFile),
-        fileSelector(set::defaultFiles(!empty($doc->files) ? array_values($doc->files) : null)),
+        fileSelector(set::defaultFiles(!empty($doc->files) ? array_values($doc->files) : null), set::removeBtn(true)),
         set::required(true)
     ),
     formGroup
