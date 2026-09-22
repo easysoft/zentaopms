@@ -2154,6 +2154,7 @@ class blockZen extends block
         if((common::hasPriv('task',  'view') && $this->config->vision == 'rnd') || (common::hasPriv('researchtask', 'view') && $this->config->vision == 'or')) $hasViewPriv['task'] = true;
         if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                                   $hasViewPriv['story']       = true;
         if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite')         $hasViewPriv['requirement'] = true;
+        if($this->config->enableER && common::hasPriv('story', 'view') && $this->config->vision != 'lite')        $hasViewPriv['epic']        = true;
         if(common::hasPriv('bug',   'view')       && !in_array($this->config->vision, array('lite', 'or')))       $hasViewPriv['bug']         = true;
         if(common::hasPriv('testcase', 'view')    && !in_array($this->config->vision, array('lite', 'or')))       $hasViewPriv['testcase']    = true;
         if(common::hasPriv('testtask', 'cases')   && !in_array($this->config->vision, array('lite', 'or')))       $hasViewPriv['testtask']    = true;
@@ -2164,7 +2165,7 @@ class blockZen extends block
         if((common::hasPriv('feedback', 'view') || common::hasPriv('feedback', 'adminView')) && in_array($this->config->edition, array('max', 'biz', 'ipd')))                       $hasViewPriv['feedback']    = true;
         if(common::hasPriv('ticket', 'view')    && in_array($this->config->edition, array('max', 'biz', 'ipd')) && $this->config->vision != 'or') $hasViewPriv['ticket']   = true;
 
-        $objectList = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories', 'requirement' => 'requirements');
+        $objectList = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories', 'requirement' => 'requirements', 'epic' => 'epics');
         if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             if($hasRisk) $objectList += array('risk' => 'risks');
@@ -2183,7 +2184,7 @@ class blockZen extends block
             $table   = $objectType == 'requirement' ? TABLE_STORY : $this->config->objectTables[$objectType];
             $orderBy = $objectType == 'todo' ? '`date` desc' : 'id_desc';
             $objects = $this->dao->select('t1.*')->from($table)->alias('t1')
-                ->beginIF($objectType == 'story' || $objectType == 'requirement')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
+                ->beginIF(in_array($objectType, array('epic', 'requirement', 'story')))->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'bug')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'task')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')->fi()
                 ->beginIF(in_array($objectType, array('issue', 'risk', 'reviewissue')))->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')->fi()
@@ -2191,10 +2192,11 @@ class blockZen extends block
                 ->beginIF($objectType == 'demand')->leftJoin(TABLE_DEMANDPOOL)->alias('t2')->on('t1.pool = t2.id')->fi()
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.`assignedTo`')->eq($this->app->user->account)->fi()
+                ->beginIF($objectType == 'epic')->andWhere('t1.type')->eq('epic')->andWhere('t2.deleted')->eq('0')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
                 ->beginIF($objectType == 'story')->andWhere('t1.type')->eq('story')->andWhere('t2.deleted')->eq('0')->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF($objectType == 'requirement')->andWhere('t1.type')->eq('requirement')->andWhere('t2.deleted')->eq('0')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
                 ->beginIF($objectType == 'bug')->andWhere('t2.deleted')->eq('0')->fi()
-                ->beginIF($objectType == 'story' || $objectType == 'requirement')->andWhere('t2.deleted')->eq('0')->fi()
+                ->beginIF(in_array($objectType, array('epic', 'requirement', 'story')))->andWhere('t2.deleted')->eq('0')->fi()
                 ->beginIF($objectType == 'todo')->andWhere('t1.cycle')->eq(0)->andWhere('t1.status')->eq('wait')->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF($objectType != 'todo')->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($objectType == 'feedback')->andWhere('t1.status')->in('wait, noreview')->fi()

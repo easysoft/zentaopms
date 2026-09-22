@@ -99,6 +99,7 @@ foreach($hasViewPriv as $type => $bool)
 {
     $configType = $type;
     if($type == 'testcase')    $configType = 'case';
+    if($type == 'epic')        $configType = 'story';
     if($type == 'requirement') $configType = 'story';
 
     $data = $type == 'story' ? $stories : ${"{$type}s"};
@@ -151,9 +152,12 @@ foreach($hasViewPriv as $type => $bool)
         }
         $config->block->review->dtable->fieldList['status']['statusMap'] = $statusList;
     }
-    if($type == 'requirement') $config->block->story->dtable->fieldList['title']['title']    = str_replace($lang->story->story, $lang->story->requirement, $lang->story->title);
-    if($type == 'epic')        $config->block->story->dtable->fieldList['title']['title']    = str_replace($lang->story->story, $lang->story->epic, $lang->story->title);
-    if(in_array($type, array('story', 'epic', 'requirement'))) $config->block->story->dtable->fieldList['title']['link']['module'] = $type;
+    if(in_array($type, array('story', 'epic', 'requirement')))
+    {
+        $storyTypeName = $type == 'epic' ? $lang->ERCommon : $lang->story->$type;
+        $config->block->story->dtable->fieldList['title']['title']          = str_replace($lang->story->story, $storyTypeName, $lang->story->title);
+        $config->block->story->dtable->fieldList['title']['link']['module'] = $type;
+    }
     if($type == 'ticket')      $config->block->ticket->dtable->fieldList['product']['map']   = $products;
     if($type == 'feedback')    $config->block->feedback->dtable->fieldList['product']['map'] = $products;
     if($type == 'meeting')     $config->block->meeting->dtable->fieldList['dept']['map']     = $depts;
