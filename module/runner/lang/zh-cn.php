@@ -44,6 +44,7 @@ $lang->runner->archList['arm64'] = 'arm64';
 
 $lang->runner->cmdList = array();
 $lang->runner->cmdList['windows'] = <<<EOF
+# 注意：请以管理员身份运行 PowerShell，并先切换到目标安装目录再执行以下命令
 # 1. 下载runner及依赖工具到指定的路径
 powershell -command "Invoke-WebRequest -Uri '%PACKAGE_URL%' -OutFile 'runner-plugin-installer.exe'"
 
@@ -51,14 +52,14 @@ powershell -command "Invoke-WebRequest -Uri '%PACKAGE_URL%' -OutFile 'runner-plu
 Unblock-File .\\runner-plugin-installer.exe; .\\runner-plugin-installer.exe install
 
 # 3. 安装服务
-.\install.bat %GITFOX_URL% %GITFOX_TOKEN% %RUNNER_RUNTIME% %RUNNER_LABELS%
+.\\install.bat %GITFOX_URL% %GITFOX_TOKEN% %RUNNER_RUNTIME% %RUNNER_LABELS%
 EOF;
 $lang->runner->cmdList['linux'] = <<<EOF
 # 1. 下载runner及依赖工具到指定的路径
 sudo curl --output "runner-plugin-installer" "%PACKAGE_URL%"
 
 # 2. 赋予执行权限后执行工具安装
-sudo chmod +x runner-plugin-installer && ./runner-plugin-installer install
+sudo chmod +x runner-plugin-installer && sudo ./runner-plugin-installer install
 
 # 3. 安装服务
 sudo gitfox-runner install --url=%GITFOX_URL% --token=%GITFOX_TOKEN% --runtime=%RUNNER_RUNTIME% %RUNNER_LABELS%

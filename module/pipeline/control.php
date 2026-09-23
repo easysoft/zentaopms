@@ -639,6 +639,7 @@ class pipeline extends control
         $this->view->executionList = $executionList;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->repos         = $this->repo->getRepoPairs('', 0, false);
+        $this->view->canCancel     = $this->pipeline->hasCancelPriv();
 
         $this->display();
     }
@@ -1126,6 +1127,7 @@ class pipeline extends control
         $this->view->repoID    = $repoID;
         $this->view->type      = $type;
         $this->view->repo      = $this->loadModel('repo')->getByID($repoID);
+        $this->view->canCancel = $this->pipeline->hasCancelPriv();
 
         $this->display();
     }
