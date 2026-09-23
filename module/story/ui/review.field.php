@@ -39,6 +39,7 @@ foreach($pageFields as $field => $attr)
 
     if(in_array($field, array('assignedTo', 'duplicateStory', 'pri', 'estimate'))) $fields->field($fieldName)->id($field . 'Box');
     if(in_array($field, array('closedReason', 'duplicateStory', 'status')))        $fields->field($fieldName)->hidden(true);
+    if(in_array($field, array('closedReason', 'duplicateStory')))                  $fields->field($fieldName)->skipCustomUI();
 }
 
 $fields->field('checkAffection')->width('full')->hidden(strpos('or,lite', $config->vision) !== false);
