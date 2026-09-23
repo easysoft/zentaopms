@@ -102,12 +102,12 @@ $config->my->contributeAudit->actionList = $config->my->audit->actionList;
 $config->my->contributeAudit->dtable = new stdclass();
 $config->my->contributeAudit->dtable->fieldList = $config->my->audit->dtable->fieldList;
 
-unset($config->my->contributeAudit->dtable->fieldList['openedBy']);
-
 $config->my->contributeAudit->dtable->fieldList['title']['sortType']      = false;
 $config->my->contributeAudit->dtable->fieldList['status']['sortType']     = false;
 $config->my->contributeAudit->dtable->fieldList['project']['sortType']    = false;
 $config->my->contributeAudit->dtable->fieldList['product']['sortType']    = false;
+$config->my->contributeAudit->dtable->fieldList['openedBy']['show']       = true;
+$config->my->contributeAudit->dtable->fieldList['openedBy']['sortType']   = false;
 $config->my->contributeAudit->dtable->fieldList['reviewer']['show']       = true;
 $config->my->contributeAudit->dtable->fieldList['reviewer']['sortType']   = false;
 $config->my->contributeAudit->dtable->fieldList['opinion']['show']        = true;
