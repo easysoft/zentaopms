@@ -55,12 +55,13 @@ $config->repo->dtable->fieldList['actions']['menu']  = array('edit', 'delete');
 
 $config->repo->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->repo->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->repo->edit;
+$config->repo->dtable->fieldList['actions']['list']['edit']['url']  = array('module' => 'repo', 'method' => 'edit', 'params' => 'repoID={id}');
 
 $config->repo->dtable->fieldList['actions']['list']['delete']['icon']         = 'trash';
 $config->repo->dtable->fieldList['actions']['list']['delete']['hint']         = $lang->repo->delete;
 $config->repo->dtable->fieldList['actions']['list']['delete']['data-confirm'] = array('message' => $lang->repo->notice->delete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->repo->dtable->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
-$config->repo->dtable->fieldList['actions']['list']['delete']['url']          = helper::createLink('repo', 'delete', 'repoID={id}');
+$config->repo->dtable->fieldList['actions']['list']['delete']['url']          = array('module' => 'repo', 'method' => 'delete', 'params' => 'repoID={id}');
 
 $config->repo->repoDtable = new stdclass();
 
