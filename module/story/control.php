@@ -1685,7 +1685,7 @@ class story extends control
 
         $parent = $this->story->fetchByID($story->parent);
 
-        $this->dao->update(TABLE_STORY)->set('parentVersion')->eq($parent->version)->where('id')->eq($storyID)->exec();
+        $this->dao->update(TABLE_STORY)->set('`parentVersion`')->eq($parent->version)->where('id')->eq($storyID)->exec();
         return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
     }
 

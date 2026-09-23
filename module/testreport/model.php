@@ -105,7 +105,7 @@ class testreportModel extends model
             ->where('deleted')->eq(0)
             ->beginIF($objectType == 'execution')->andWhere('execution')->eq($objectID)->fi()
             ->beginIF($objectType == 'project')->andWhere('project')->eq($objectID)->fi()
-            ->beginIF($objectType == 'product' && $extra)->andWhere('objectID')->eq($extra)->andWhere('objectType')->eq('testtask')->fi()
+            ->beginIF($objectType == 'product' && $extra)->andWhere('`objectID`')->eq($extra)->andWhere('`objectType`')->eq('testtask')->fi()
             ->beginIF($objectType == 'product' && !$extra)->andWhere('product')->eq($objectID)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($reportQuery)->fi()
             ->orderBy($orderBy)
@@ -194,7 +194,7 @@ class testreportModel extends model
      */
     public function getTaskCases(array $tasks, string $begin, string $end, string $idList = '', ?object $pager = null): array
     {
-        $cases = $this->dao->select('t2.*, t1.task, t1.`assignedTo`, t1.status, t1.`lastRunDate` AS maxRunDate')->from(TABLE_TESTRUN)->alias('t1')
+        $cases = $this->dao->select('t2.*, t1.task, t1.`assignedTo`, t1.status, t1.`lastRunDate` AS `maxRunDate`')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->in(array_keys($tasks))
             ->andWhere('t2.deleted')->eq('0')
@@ -381,9 +381,9 @@ class testreportModel extends model
         $bugIdList = array_unique(array_filter(explode(',', $bugIdList)));
         return $this->dao->select('*')->from(TABLE_BUG)->where('deleted')->eq(0)
             ->andWhere('product')->in($product)
-            ->andWhere('openedDate')->lt("{$begin} 23:59:59")
+            ->andWhere('`openedDate`')->lt("{$begin} 23:59:59")
             ->beginIF(is_array($builds) && $type == 'build')->andWhere('id')->in($bugIdList)->fi()
-            ->beginIF(!is_array($builds) && $type == 'build')->andWhere("(resolvedBuild = 'trunk' and resolvedDate >= '{$begin}' and resolvedDate <= '{$end} 23:59:59')")->fi()
+            ->beginIF(!is_array($builds) && $type == 'build')->andWhere("(`resolvedBuild` = 'trunk' and `resolvedDate` >= '{$begin}' and `resolvedDate` <= '{$end} 23:59:59')")->fi()
             ->beginIF(in_array($type, array('project', 'execution')))->andWhere('id')->in($bugIdList)->fi()
             ->fetchAll('id', false);
     }

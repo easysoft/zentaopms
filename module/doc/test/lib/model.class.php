@@ -1530,6 +1530,48 @@ class docModelTest extends baseTest
     }
 
     /**
+     * 重命名文档附件。
+     * Rename doc file.
+     *
+     * @param  int    $docID
+     * @param  int    $fileID
+     * @param  string $fileName
+     * @param  string $extension
+     * @access public
+     * @return object
+     */
+    public function renameFileTest(int $docID, int $fileID, string $fileName, string $extension = ''): object
+    {
+        /* 与 control 层保持一致，先加载 file 模块，保证 file 语言项可用。*/
+        /* Keep consistent with the control layer and load the file module to make file language items available. */
+        $this->instance->loadModel('file');
+
+        $result = $this->instance->renameFile($docID, $fileID, $fileName, $extension);
+        if(dao::isError()) return (object)dao::getError();
+
+        /* 回读数据库，便于用例断言重命名后的附件信息与操作日志。*/
+        /* Read back the database to make it convenient for the case to assert the renamed file and the action log. */
+        $file    = $this->instance->dao->select('id,title,extension')->from(TABLE_FILE)->where('id')->eq($fileID)->fetch();
+        $action  = $this->instance->dao->select('id')->from(TABLE_ACTION)->where('objectType')->eq('doc')->andWhere('objectID')->eq($docID)->andWhere('action')->eq('editfile')->orderBy('id_desc')->fetch();
+        $history = $action ? $this->instance->dao->select('field,`old`,`new`')->from(TABLE_HISTORY)->where('action')->eq($action->id)->andWhere('field')->eq('fileName')->fetch() : null;
+
+        $message = is_array($result) ? zget($result, 'message', '') : '';
+
+        $testResult = new stdclass();
+        $testResult->result       = is_array($result) ? zget($result, 'result', '') : '';
+        $testResult->message      = $message;
+        $testResult->notFound     = (is_string($message) && $message == $this->instance->lang->file->fileNotFound) ? 1 : 0;
+        $testResult->lengthError  = (is_string($message) && $message == sprintf($this->instance->lang->error->length[1], $this->instance->lang->file->title, 80, 1)) ? 1 : 0;
+        $testResult->title        = $file ? $file->title : '';
+        $testResult->extension    = $file ? $file->extension : '';
+        $testResult->actionExists = $action ? 1 : 0;
+        $testResult->oldName      = $history ? $history->old : '';
+        $testResult->newName      = $history ? $history->new : '';
+
+        return $testResult;
+    }
+
+    /**
      * 获取文档库的文档列表。
      * Get doc list.
      *

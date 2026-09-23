@@ -86,7 +86,7 @@ class myTao extends myModel
         if(strpos($query, "t1.`execution` = 'all'") !== false) $query = str_replace("t1.`execution` = 'all'", "t1.`execution` != '0'", $query);
 
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
-        return $this->dao->select("t1.*, t4.id as project, t2.id as `executionID`, t2.name as executionName, t2.multiple as executionMultiple, t4.name as projectName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
+        return $this->dao->select("t1.*, t4.id as project, t2.id as `executionID`, t2.name as `executionName`, t2.multiple as `executionMultiple`, t4.name as `projectName`, t2.type as `executionType`, t3.id as `storyID`, t3.title as `storyTitle`, t3.status AS `storyStatus`, t3.version AS `latestStoryVersion`, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as `priOrder`")
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
@@ -137,7 +137,7 @@ class myTao extends myModel
         if($type == 'contribute')
         {
             $storyIdList = !empty($storiesAssignedByMe) ? array_keys($storiesAssignedByMe) : array();
-            $stories     = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
+            $stories     = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as `priOrder`, t2.name as `productTitle`, t2.shadow as shadow, t4.title as `planTitle`")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.story')
                 ->leftJoin(TABLE_PRODUCTPLAN)->alias('t4')->on('t3.plan = t4.id')
@@ -156,7 +156,7 @@ class myTao extends myModel
         }
         else
         {
-            $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
+            $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as `priOrder`, t2.name as `productTitle`, t2.shadow as shadow, t4.title as `planTitle`")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.story')
                 ->leftJoin(TABLE_PRODUCTPLAN)->alias('t4')->on('t3.plan = t4.id')
@@ -191,7 +191,7 @@ class myTao extends myModel
     {
          if($type == 'contribute')
          {
-            $epics = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle")->from(TABLE_STORY)->alias('t1')
+            $epics = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as `priOrder`, t2.name as `productTitle`")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story')
                 ->where($myEpicQuery)
@@ -212,7 +212,7 @@ class myTao extends myModel
          }
          else
          {
-             $epics = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle")->from(TABLE_STORY)->alias('t1')
+             $epics = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as `priOrder`, t2.name as `productTitle`")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story')
                 ->where($myEpicQuery)
@@ -248,7 +248,7 @@ class myTao extends myModel
     {
          if($type == 'contribute')
          {
-            $requirements = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle")->from(TABLE_STORY)->alias('t1')
+            $requirements = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as `priOrder`, t2.name as `productTitle`")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story')
                 ->where($myRequirementQuery)
@@ -266,7 +266,7 @@ class myTao extends myModel
          }
          else
          {
-             $requirements = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle")->from(TABLE_STORY)->alias('t1')
+             $requirements = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as `priOrder`, t2.name as `productTitle`")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story')
                 ->where($myRequirementQuery)
@@ -312,14 +312,15 @@ class myTao extends myModel
             foreach($objects as $object)
             {
                 $data = new stdclass();
-                $data->id      = $object->id;
-                $data->title   = !empty($flow) && !empty($dataPairs[$flow->module][$object->id]) ? $dataPairs[$flow->module][$object->id] : zget($object, $titleFieldName, $object->id);
-                $data->type    = $objectType;
-                $data->time    = $object->{$openedDateField};
-                $data->status  = $objectType == 'charter' ? $object->reviewStatus : 'doing';
-                $data->app     = isset($flows[$objectType]->app) ? $flows[$objectType]->app : zget($this->lang->navGroup, $objectType, '');
-                $data->product = isset($object->product) ? $object->product : 0;
-                $data->project = isset($object->project) ? $object->project : 0;
+                $data->id       = $object->id;
+                $data->title    = !empty($flow) && !empty($dataPairs[$flow->module][$object->id]) ? $dataPairs[$flow->module][$object->id] : zget($object, $titleFieldName, $object->id);
+                $data->type     = $objectType;
+                $data->time     = $object->{$openedDateField};
+                $data->status   = $objectType == 'charter' ? $object->reviewStatus : 'doing';
+                $data->app      = isset($flows[$objectType]->app) ? $flows[$objectType]->app : zget($this->lang->navGroup, $objectType, '');
+                $data->product  = isset($object->product) ? $object->product : 0;
+                $data->project  = isset($object->project) ? $object->project : 0;
+                $data->openedBy = $this->getAuditObjectOpenedBy($object);
 
                 if(isset($object->type) && $object->type == 'project') $data->project = $object->id;
 

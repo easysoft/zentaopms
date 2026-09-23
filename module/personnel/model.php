@@ -265,14 +265,14 @@ class personnelModel extends model
             ->fetchAll('id');
         $requirement = $this->dao->select('`openedBy`, count(id) as number')->from(TABLE_STORY)
             ->where('product')->in($productKeys)
-            ->andWhere('openedBy')->in(array_keys($accounts))
+            ->andWhere('`openedBy`')->in(array_keys($accounts))
             ->andWhere('type')->eq('requirement')
             ->andWhere('deleted')->eq(0)
             ->groupBy('`openedBy`')
             ->fetchPairs('openedBy');
         $story = $this->dao->select('`openedBy`, count(id) as number')->from(TABLE_STORY)
             ->where('product')->in($productKeys)
-            ->andWhere('openedBy')->in(array_keys($accounts))
+            ->andWhere('`openedBy`')->in(array_keys($accounts))
             ->andWhere('type')->eq('story')
             ->andWhere('deleted')->eq(0)
             ->groupBy('`openedBy`')
@@ -431,8 +431,8 @@ class personnelModel extends model
         $effortList = $this->dao->select('id,account,`objectID`,`left`,consumed')->from(TABLE_EFFORT)
             ->where('account')->in($accounts)
             ->andWhere('deleted')->eq(0)
-            ->andWhere('objectID')->in($taskIdList)
-            ->andWhere('objectType')->eq('task')
+            ->andWhere('`objectID`')->in($taskIdList)
+            ->andWhere('`objectType`')->eq('task')
             ->orderBy('id_asc')
             ->fetchGroup('account', 'id');
         foreach($effortList as $account => $efforts)
@@ -478,7 +478,7 @@ class personnelModel extends model
                 ->where('project')->eq($parentID)
                 ->andWhere('id')->in($this->app->user->view->sprints)
                 ->andWhere('deleted')->eq(0)
-                ->orderBy('openedDate_desc')
+                ->orderBy('`openedDate`_desc')
                 ->limit('10')
                 ->fetchPairs();
         }
@@ -553,7 +553,7 @@ class personnelModel extends model
      */
     public function getWhitelistAccount(int $objectID = 0, string $objectType = ''): array
     {
-        return $this->dao->select('account,account')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchPairs();
+        return $this->dao->select('account,account')->from(TABLE_ACL)->where('`objectID`')->eq($objectID)->andWhere('`objectType`')->eq($objectType)->fetchPairs();
     }
 
     /**
@@ -571,8 +571,8 @@ class personnelModel extends model
      */
     public function updateWhitelist(array $users = array(), string $objectType = '', int $objectID = 0, string $type = 'whitelist', string $source = 'add', string $updateType = 'replace'): bool
     {
-        $oldWhitelist = $this->dao->select('account,`objectType`,`objectID`,type,source')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchAll('account');
-        if($updateType == 'replace') $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->exec();
+        $oldWhitelist = $this->dao->select('account,`objectType`,`objectID`,type,source')->from(TABLE_ACL)->where('`objectID`')->eq($objectID)->andWhere('`objectType`')->eq($objectType)->fetchAll('account');
+        if($updateType == 'replace') $this->dao->delete()->from(TABLE_ACL)->where('`objectID`')->eq($objectID)->andWhere('`objectType`')->eq($objectType)->exec();
 
         $users    = array_unique(array_filter($users));
         $accounts = array();
@@ -671,9 +671,9 @@ class personnelModel extends model
 
         /* Delete the account's acl in the product. */
         $result = $this->dao->delete()->from(TABLE_ACL)
-             ->where('objectID')->eq($productID)
+             ->where('`objectID`')->eq($productID)
              ->andWhere('account')->eq($account)
-             ->andWhere('objectType')->eq('product')
+             ->andWhere('`objectType`')->eq('product')
              ->andWhere('source')->eq('sync')
              ->exec();
 
@@ -707,15 +707,15 @@ class personnelModel extends model
 
         /* Get the product's whitelist in the program. */
         $products  = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq('0')->fetchPairs('id');
-        $whitelist = $this->dao->select('*')->from(TABLE_ACL)->where('objectID')->in($products)->andWhere('account')->eq($account)->andWhere('objectType')->eq('product')->fetch();
+        $whitelist = $this->dao->select('*')->from(TABLE_ACL)->where('`objectID`')->in($products)->andWhere('account')->eq($account)->andWhere('`objectType`')->eq('product')->fetch();
 
         /* Determine if the user exists in other products in the program set. */
         if(empty($whitelist))
         {
             $result = $this->dao->delete()->from(TABLE_ACL)
-                ->where('objectID')->eq($programID)
+                ->where('`objectID`')->eq($programID)
                 ->andWhere('account')->eq($account)
-                ->andWhere('objectType')->eq('program')
+                ->andWhere('`objectType`')->eq('program')
                 ->andWhere('source')->eq('sync')
                 ->exec();
 
@@ -752,15 +752,15 @@ class personnelModel extends model
         /* Get project's whitelist. */
         $projectID = $project->project ? $project->project : $objectID;
         $sprints   = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetchPairs('id');
-        $whitelist = $this->dao->select('*')->from(TABLE_ACL)->where('objectID')->in($sprints)->andWhere('account')->eq($account)->andWhere('objectType')->eq('sprint')->fetch();
+        $whitelist = $this->dao->select('*')->from(TABLE_ACL)->where('`objectID`')->in($sprints)->andWhere('account')->eq($account)->andWhere('`objectType`')->eq('sprint')->fetch();
 
         /* Determine if the user exists in other sprints in the project set. */
         if(empty($whitelist))
         {
             $result = $this->dao->delete()->from(TABLE_ACL)
-                ->where('objectID')->eq($projectID)
+                ->where('`objectID`')->eq($projectID)
                 ->andWhere('account')->eq($account)
-                ->andWhere('objectType')->eq('project')
+                ->andWhere('`objectType`')->eq('project')
                 ->andWhere('source')->eq('sync')
                 ->exec();
 
@@ -795,9 +795,9 @@ class personnelModel extends model
 
         /* Delete account's acl in the execution. */
         $result = $this->dao->delete()->from(TABLE_ACL)
-             ->where('objectID')->eq($executionID)
+             ->where('`objectID`')->eq($executionID)
              ->andWhere('account')->eq($account)
-             ->andWhere('objectType')->eq('sprint')
+             ->andWhere('`objectType`')->eq('sprint')
              ->andWhere('source')->eq('sync')
              ->exec();
 
@@ -886,7 +886,7 @@ class personnelModel extends model
                 if($shadowProduct)
                 {
                     $this->dao->update(TABLE_PRODUCT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($shadowProduct->id)->exec();
-                    $this->dao->delete()->from(TABLE_ACL)->where('objectType')->eq('product')->andWhere('objectID')->eq($shadowProduct->id)->andWhere('account')->eq($acl->account)->exec();
+                    $this->dao->delete()->from(TABLE_ACL)->where('`objectType`')->eq('product')->andWhere('`objectID`')->eq($shadowProduct->id)->andWhere('account')->eq($acl->account)->exec();
 
                     if($shadowProduct->program) $this->deleteProgramWhitelist($shadowProduct->program, $acl->account);
                     $this->loadModel('user')->updateUserView(array($shadowProduct->id), 'product', array($acl->account));

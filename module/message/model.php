@@ -351,8 +351,8 @@ class messageModel extends model
             $submitter = $this->dao->select('actor')->from(TABLE_ACTION)
                 ->where('id')->lt($actionID)
                 ->andWhere('action')->eq($submitAction)
-                ->andWhere('objectType')->eq($actionObjectType)
-                ->andWhere('objectID')->eq($object->id)
+                ->andWhere('`objectType`')->eq($actionObjectType)
+                ->andWhere('`objectID`')->eq($object->id)
                 ->orderBy('id desc')
                 ->limit(1)
                 ->fetch('actor');
@@ -388,11 +388,23 @@ class messageModel extends model
         if($role == 'cc' && !$skipCCSuffix && $appendCCSuffix) $noticeText .= $this->lang->message->noticeText->ccSuffix;
 
         if(isset($assignedTo)) $noticeText = str_replace(array('{assignedTo}'), array($assignedTo), $noticeText);
-        if(in_array($objectType, array('story', 'requirement', 'epic')) && $actionType == 'otherreviewed')
+        if($actionType == 'otherreviewed')
         {
-            $storyResult  = (string)$action->extra;
-            if(strpos($storyResult, ',') !== false) $storyResult = explode(',', $storyResult)[0];
-            $reviewResult = zget($this->lang->message->storyReviewResultList, strtolower($storyResult), '');
+            $reviewResult  = (string)$action->extra;
+            if(strpos($reviewResult, ',') !== false) $reviewResult = explode(',', $reviewResult)[0];
+
+            $reviewResultList = $this->lang->message->reviewResultList;
+            if(in_array($objectType, array('story', 'requirement', 'epic')))
+            {
+                $this->loadModel('story');
+                $reviewResultList = $this->lang->story->reviewResultList;
+            }
+            elseif($objectType == 'case')
+            {
+                $this->loadModel('testcase');
+                $reviewResultList = $this->lang->testcase->reviewResultList;
+            }
+            $reviewResult = zget($reviewResultList, strtolower($reviewResult), '');
             $noticeText   = str_replace(array('{submitter}', '{reviewResult}'), array($submitter, $reviewResult), $noticeText);
         }
 
@@ -556,7 +568,7 @@ class messageModel extends model
     public function getUnreadCount(): int
     {
         $account = $this->app->user->account;
-        return $this->dao->select('COUNT(1) as count')->from(TABLE_NOTIFY)->where('toList')->eq(",{$account},")->andWhere('objectType')->eq('message')->andWhere('status')->ne('read')->fetch('count');
+        return $this->dao->select('COUNT(1) as count')->from(TABLE_NOTIFY)->where('`toList`')->eq(",{$account},")->andWhere('`objectType`')->eq('message')->andWhere('status')->ne('read')->fetch('count');
     }
 
     /**
@@ -572,7 +584,7 @@ class messageModel extends model
         $account    = $this->app->user->account;
         $expiryDate = date('Y-m-d 00:00:00', time() - 86400 * ($days + 1));
 
-        $expiredIdList = $this->dao->select('id')->from(TABLE_NOTIFY)->where('toList')->eq(",{$account},")->andWhere('objectType')->eq('message')->andWhere('createdDate')->lt($expiryDate)->fetchPairs('id', 'id');
+        $expiredIdList = $this->dao->select('id')->from(TABLE_NOTIFY)->where('`toList`')->eq(",{$account},")->andWhere('`objectType`')->eq('message')->andWhere('`createdDate`')->lt($expiryDate)->fetchPairs('id', 'id');
         if(empty($expiredIdList)) return;
 
         $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->in($expiredIdList)->exec();

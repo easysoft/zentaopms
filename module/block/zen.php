@@ -736,7 +736,7 @@ class blockZen extends block
         if(preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
         $this->view->projects  = $this->loadModel('project')->getPairsByProgram();
-        $this->view->testtasks = $this->dao->select("DISTINCT t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as projectName, CONCAT(t4.name, '/', t3.name) as executionBuild")->from(TABLE_TESTTASK)->alias('t1')
+        $this->view->testtasks = $this->dao->select("DISTINCT t1.*,t2.name as `productName`,t2.shadow,t3.name as `buildName`,t4.name as `projectName`, CONCAT(t4.name, '/', t3.name) as `executionBuild`")->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.execution=t4.id')
@@ -812,7 +812,7 @@ class blockZen extends block
 
         $type = $block->params->type;
         $this->app->loadLang('release');
-        $this->view->releases = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_RELEASE)->alias('t1')
+        $this->view->releases = $this->dao->select('t1.*,t2.name as `productName`')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.shadow')->eq(0)
@@ -921,7 +921,7 @@ class blockZen extends block
         $this->session->set('buildList', $this->createLink('my', 'index'), 'execution');
         $this->app->loadLang('build');
 
-        $builds = $this->dao->select('t1.*, t2.name AS productName, t2.shadow, t3.name AS projectName')->from(TABLE_BUILD)->alias('t1')
+        $builds = $this->dao->select('t1.*, t2.name AS `productName`, t2.shadow, t3.name AS `projectName`')->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project=t3.id')
             ->where('t1.deleted')->eq('0')
@@ -1155,7 +1155,7 @@ class blockZen extends block
             ->andWhere('execution.type')->eq('sprint')
             ->andWhere('relation.product')->in($productIdList)
             ->andWhere('execution.status')->eq('doing')
-            ->orderBy('realBegan_desc,id_desc')
+            ->orderBy('`realBegan`_desc,id_desc')
             ->fetchGroup('product');
 
         /* 根据产品列表获取发布日期距离现在最近且发布日期小于当前日期的发布。 */
@@ -1434,7 +1434,7 @@ class blockZen extends block
         $workhour  = $this->loadModel('project')->getWorkhour($projectID);
         if(empty($budget)) $budget = new stdclass();
 
-        $consumed = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->andWhere('isParent')->eq('0')->fetch('consumed');
+        $consumed = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->andWhere('`isParent`')->eq('0')->fetch('consumed');
 
         $this->view->people    = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('project')->eq($this->session->project)->fetch('people');
         $this->view->members   = count($members) ? count($members) - 1 : 0;
@@ -1458,7 +1458,7 @@ class blockZen extends block
         $this->app->loadLang('execution');
 
         $projectID     = $this->session->project;
-        $projectWeekly = $this->dao->select('*')->from(TABLE_WEEKLYREPORT)->where('project')->eq($projectID)->orderBy('weekStart_asc')->fetchAll('weekStart');
+        $projectWeekly = $this->dao->select('*')->from(TABLE_WEEKLYREPORT)->where('project')->eq($projectID)->orderBy('`weekStart`_asc')->fetchAll('weekStart');
 
         $progresses = $this->dao->select('t2.*')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCBLOCK)->alias('t2')->on('t1.id = t2.doc')
@@ -1714,7 +1714,7 @@ class blockZen extends block
         $this->app->loadLang('testtask');
 
         $this->view->project   = $this->loadModel('project')->getByID($this->session->project);
-        $this->view->testtasks = $this->dao->select("DISTINCT t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as executionName, CONCAT(t4.name, '/', t3.name) as executionBuild")->from(TABLE_TESTTASK)->alias('t1')
+        $this->view->testtasks = $this->dao->select("DISTINCT t1.*,t2.name as `productName`,t2.shadow,t3.name as `buildName`,t4.name as `executionName`, CONCAT(t4.name, '/', t3.name) as `executionBuild`")->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.execution=t4.id')
@@ -2243,6 +2243,7 @@ class blockZen extends block
         if((common::hasPriv('task',  'view') && $this->config->vision == 'rnd') || (common::hasPriv('researchtask', 'view') && $this->config->vision == 'or')) $hasViewPriv['task'] = true;
         if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                                   $hasViewPriv['story']       = true;
         if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite')         $hasViewPriv['requirement'] = true;
+        if($this->config->enableER && common::hasPriv('story', 'view') && $this->config->vision != 'lite')        $hasViewPriv['epic']        = true;
         if(common::hasPriv('bug',   'view')       && !in_array($this->config->vision, array('lite', 'or')))       $hasViewPriv['bug']         = true;
         if(common::hasPriv('testcase', 'view')    && !in_array($this->config->vision, array('lite', 'or')))       $hasViewPriv['testcase']    = true;
         if(common::hasPriv('testtask', 'cases')   && !in_array($this->config->vision, array('lite', 'or')))       $hasViewPriv['testtask']    = true;
@@ -2253,7 +2254,7 @@ class blockZen extends block
         if((common::hasPriv('feedback', 'view') || common::hasPriv('feedback', 'adminView')) && in_array($this->config->edition, array('max', 'biz', 'ipd')))                       $hasViewPriv['feedback']    = true;
         if(common::hasPriv('ticket', 'view')    && in_array($this->config->edition, array('max', 'biz', 'ipd')) && $this->config->vision != 'or') $hasViewPriv['ticket']   = true;
 
-        $objectList = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories', 'requirement' => 'requirements');
+        $objectList = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories', 'requirement' => 'requirements', 'epic' => 'epics');
         if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             if($hasRisk) $objectList += array('risk' => 'risks');
@@ -2272,7 +2273,7 @@ class blockZen extends block
             $table   = $objectType == 'requirement' ? TABLE_STORY : $this->config->objectTables[$objectType];
             $orderBy = $objectType == 'todo' ? '`date` desc' : 'id_desc';
             $objects = $this->dao->select('t1.*')->from($table)->alias('t1')
-                ->beginIF($objectType == 'story' || $objectType == 'requirement')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
+                ->beginIF(in_array($objectType, array('epic', 'requirement', 'story')))->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'bug')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'task')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')->fi()
                 ->beginIF(in_array($objectType, array('issue', 'risk', 'reviewissue')))->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')->fi()
@@ -2280,10 +2281,11 @@ class blockZen extends block
                 ->beginIF($objectType == 'demand')->leftJoin(TABLE_DEMANDPOOL)->alias('t2')->on('t1.pool = t2.id')->fi()
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.`assignedTo`')->eq($this->app->user->account)->fi()
+                ->beginIF($objectType == 'epic')->andWhere('t1.type')->eq('epic')->andWhere('t2.deleted')->eq('0')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
                 ->beginIF($objectType == 'story')->andWhere('t1.type')->eq('story')->andWhere('t2.deleted')->eq('0')->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF($objectType == 'requirement')->andWhere('t1.type')->eq('requirement')->andWhere('t2.deleted')->eq('0')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
                 ->beginIF($objectType == 'bug')->andWhere('t2.deleted')->eq('0')->fi()
-                ->beginIF($objectType == 'story' || $objectType == 'requirement')->andWhere('t2.deleted')->eq('0')->fi()
+                ->beginIF(in_array($objectType, array('epic', 'requirement', 'story')))->andWhere('t2.deleted')->eq('0')->fi()
                 ->beginIF($objectType == 'todo')->andWhere('t1.cycle')->eq(0)->andWhere('t1.status')->eq('wait')->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF($objectType != 'todo')->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($objectType == 'feedback')->andWhere('t1.status')->in('wait, noreview')->fi()
@@ -2623,7 +2625,7 @@ class blockZen extends block
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productIdList)
             ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
-            ->orderBy('product,status,editedDate_desc')
+            ->orderBy('product,status,`editedDate`_desc')
             ->query();
         $docGroup = array();
         while($doc = $stmt->fetch())
@@ -3201,7 +3203,7 @@ class blockZen extends block
             ->andWhere('execution.type')->eq('sprint')
             ->andWhere('relation.product')->eq($productID)
             ->andWhere('execution.status')->eq('doing')
-            ->orderBy('realBegan_desc,id_desc')
+            ->orderBy('`realBegan`_desc,id_desc')
             ->fetch();
 
         /* 根据产品列表获取发布日期距离现在最近且发布日期小于当前日期的发布。 */
@@ -3371,7 +3373,7 @@ class blockZen extends block
         $productID = $this->session->product;
 
         $this->app->loadLang('release');
-        $this->view->releases = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_RELEASE)->alias('t1')
+        $this->view->releases = $this->dao->select('t1.*,t2.name as `productName`')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.product')->eq($productID)

@@ -1530,7 +1530,7 @@ class taskZen extends task
 
         /* Get related objects title or names. */
         $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
-        $relatedFiles   = $this->dao->select('id, `objectID`, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+        $relatedFiles   = $this->dao->select('id, `objectID`, pathname, title')->from(TABLE_FILE)->where('`objectType`')->eq('task')->andWhere('`objectID`')->in(array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
         $relatedModules = $this->loadModel('tree')->getAllModulePairs('task');
 
         $bugs = $this->loadModel('bug')->getByIdList($relatedBugIdList);

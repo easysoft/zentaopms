@@ -23,7 +23,7 @@ class kanbanModel extends model
      */
     public function createGroup(int $kanbanID, int $regionID): int|false
     {
-        $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANGROUP)
+        $maxOrder = $this->dao->select('MAX(`order`) AS `maxOrder`')->from(TABLE_KANBANGROUP)
             ->where('region')->eq($regionID)
             ->fetch('maxOrder');
 
@@ -112,7 +112,7 @@ class kanbanModel extends model
 
         if(empty($region))
         {
-            $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANREGION)
+            $maxOrder = $this->dao->select('MAX(`order`) AS `maxOrder`')->from(TABLE_KANBANREGION)
                 ->where('kanban')->eq($kanban->id)
                 ->fetch('maxOrder');
 
@@ -372,7 +372,7 @@ class kanbanModel extends model
             if($parentColumn->limit != -1)
             {
                 /* The WIP of the child column is infinite or greater than the WIP of the parent column. */
-                $sumChildLimit = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($column->parent)->andWhere('deleted')->eq(0)->fetch('sumChildLimit');
+                $sumChildLimit = $this->dao->select('SUM(`limit`) AS `sumChildLimit`')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($column->parent)->andWhere('deleted')->eq(0)->fetch('sumChildLimit');
                 if($limit == -1 || (((int)$limit + (int)$sumChildLimit) > $parentColumn->limit)) dao::$errors['limit'][] = $this->lang->kanban->error->parentLimitNote;
                 if(dao::isError()) return false;
             }
@@ -418,7 +418,7 @@ class kanbanModel extends model
     {
         $this->loadModel('action');
         $column        = $this->getColumnByID($columnID);
-        $maxOrder      = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->fetch('maxOrder');
+        $maxOrder      = $this->dao->select('MAX(`order`) AS `maxOrder`')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->fetch('maxOrder');
         $order         = $maxOrder ? $maxOrder + 1 : 1;
         $sumChildLimit = 0;
 
@@ -1203,7 +1203,7 @@ class kanbanModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('kanban')->eq($kanbanID)
             ->andWhere('archived')->eq(0)
-            ->andWhere('fromID')->eq(0)
+            ->andWhere('`fromID`')->eq(0)
             ->fetchAll('id', false);
 
         foreach($this->config->kanban->fromType as $fromType) $cards = $this->getImportedCards($kanbanID, $cards, $fromType);
@@ -1276,7 +1276,7 @@ class kanbanModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('kanban')->eq($kanbanID)
             ->andWhere('archived')->eq($archived)
-            ->andWhere('fromType')->eq($fromType)
+            ->andWhere('`fromType`')->eq($fromType)
             ->beginIF($regionID)->andWhere('region')->eq($regionID)->fi()
             ->fetchGroup('fromID', 'id');
 
@@ -1292,8 +1292,8 @@ class kanbanModel extends model
             if($fromType == 'productplan' || $fromType == 'release')
             {
                 $creators = $this->dao->select('`objectID`, actor')->from(TABLE_ACTION)
-                    ->where('objectID')->in(array_keys($objectCards))
-                    ->andWhere('objectType')->eq($fromType)
+                    ->where('`objectID`')->in(array_keys($objectCards))
+                    ->andWhere('`objectType`')->eq($fromType)
                     ->andWhere('action')->eq('opened')
                     ->fetchPairs();
             }
@@ -1387,7 +1387,7 @@ class kanbanModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCardGroup();
 
-        $cards = $this->dao->select('t1.*, t2.type AS columnType, t2.`group`')
+        $cards = $this->dao->select('t1.*, t2.type AS `columnType`, t2.`group`')
             ->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column`=t2.id')
             ->where('t1.kanban')->eq($executionID)
@@ -1835,7 +1835,7 @@ class kanbanModel extends model
     public function getCols4Group(int $executionID, string $browseType): array
     {
         $execution = $this->loadModel('execution')->getByID($executionID);
-        $cards     = $this->dao->select('t1.*, t1.cards, t2.`type` as columnType, t2.parent, t2.limit, t2.name as columnName, t2.color')->from(TABLE_KANBANCELL)->alias('t1')
+        $cards     = $this->dao->select('t1.*, t1.cards, t2.`type` as `columnType`, t2.parent, t2.limit, t2.name as `columnName`, t2.color')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->leftJoin(TABLE_KANBANLANE)->alias('t3')->on('t1.lane = t3.id')
             ->leftJoin(TABLE_KANBANREGION)->alias('t4')->on('t1.kanban = t4.kanban')
@@ -2180,7 +2180,7 @@ class kanbanModel extends model
                 return false;
             }
 
-            $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANLANE)
+            $maxOrder = $this->dao->select('MAX(`order`) AS `maxOrder`')->from(TABLE_KANBANLANE)
                 ->where('region')->eq($regionID)
                 ->fetch('maxOrder');
 
@@ -2246,7 +2246,7 @@ class kanbanModel extends model
 
         if(!empty($kanban->space))
         {
-            $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBAN)
+            $maxOrder = $this->dao->select('MAX(`order`) AS `maxOrder`')->from(TABLE_KANBAN)
                 ->where('space')->eq($kanban->space)
                 ->fetch('maxOrder');
             $kanban->order = $maxOrder ? $maxOrder + 1 : 1;
@@ -2938,7 +2938,7 @@ class kanbanModel extends model
             if(!$updated) $updated = true;
         }
 
-        if($updated) $this->dao->update(TABLE_KANBANLANE)->set('lastEditedTime')->eq(helper::now())->where('id')->eq($laneID)->exec();
+        if($updated) $this->dao->update(TABLE_KANBANLANE)->set('`lastEditedTime`')->eq(helper::now())->where('id')->eq($laneID)->exec();
     }
 
     /**
@@ -3395,8 +3395,8 @@ class kanbanModel extends model
 
         $this->dao->update(TABLE_KANBANCARD)
             ->set('archived')->eq(1)
-            ->set('archivedBy')->eq($this->app->user->account)
-            ->set('archivedDate')->eq(helper::now())
+            ->set('`archivedBy`')->eq($this->app->user->account)
+            ->set('`archivedDate`')->eq(helper::now())
             ->where('id')->eq($cardID)
             ->exec();
 
@@ -3428,8 +3428,8 @@ class kanbanModel extends model
 
         $this->dao->update(TABLE_KANBANCARD)
             ->set('archived')->eq(0)
-            ->set('archivedBy')->eq('')
-            ->set('archivedDate')->eq(null)
+            ->set('`archivedBy`')->eq('')
+            ->set('`archivedDate`')->eq(null)
             ->where('id')->eq($cardID)
             ->exec();
 
@@ -3572,7 +3572,7 @@ class kanbanModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getColumn();
 
-        $column = $this->dao->select('t1.*, t2.type as laneType')->from(TABLE_KANBANCOLUMN)->alias('t1')
+        $column = $this->dao->select('t1.*, t2.type as `laneType`')->from(TABLE_KANBANCOLUMN)->alias('t1')
             ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.column')
             ->where('t1.id')->eq($columnID)
             ->fetch();
@@ -3805,7 +3805,7 @@ class kanbanModel extends model
         return $this->dao->select('*')->from(TABLE_KANBANCARD)
             ->where('deleted')->eq(0)
             ->andWhere('archived')->eq(0)
-            ->andWhere('fromID')->eq(0)
+            ->andWhere('`fromID`')->eq(0)
             ->andWhere('kanban')->in($kanbanIdList)
             ->beginIF($kanbanID)->andWhere('kanban')->eq($kanbanID)->fi()
             ->beginIF($excludedID)->andWhere('kanban')->ne($excludedID)->fi()

@@ -90,8 +90,8 @@ class transferTao extends transferModel
     {
         if(in_array($module, array('epic', 'requirement'))) $module = "{$module},story";
         return $this->dao->select('id, `objectID`, pathname, title')->from(TABLE_FILE)
-            ->where('objectType')->in($module)
-            ->beginIf($idList)->andWhere('objectID')->in($idList)->fi()
+            ->where('`objectType`')->in($module)
+            ->beginIf($idList)->andWhere('`objectID`')->in($idList)->fi()
             ->andWhere('extra')->ne('editor')
             ->fetchGroup('objectID');
     }

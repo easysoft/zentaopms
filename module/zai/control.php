@@ -32,7 +32,7 @@ class zai extends control
             $this->zai->setSetting($setting);
 
             if(dao::isError()) return $this->sendError(dao::getError());
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('zai', 'setting')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->zai->settingSavedSuccess, 'load' => $this->createLink('zai', 'setting')));
         }
 
         $setting = $this->zai->getSetting(true);

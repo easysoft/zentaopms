@@ -196,8 +196,8 @@ class sso extends control
         if($user) $account = $user->account;
 
         $datas = array();
-        $datas['task'] = $this->dao->select("id,name")->from(TABLE_TASK)->where('assignedTo')->eq($account)->andWhere('status')->in('wait,doing')->andWhere('deleted')->eq(0)->fetchPairs();
-        $datas['bug']  = $this->dao->select("id,title")->from(TABLE_BUG)->where('assignedTo')->eq($account)->andWhere('status')->eq('active')->andWhere('deleted')->eq(0)->fetchPairs();
+        $datas['task'] = $this->dao->select("id,name")->from(TABLE_TASK)->where('`assignedTo`')->eq($account)->andWhere('status')->in('wait,doing')->andWhere('deleted')->eq(0)->fetchPairs();
+        $datas['bug']  = $this->dao->select("id,title")->from(TABLE_BUG)->where('`assignedTo`')->eq($account)->andWhere('status')->eq('active')->andWhere('deleted')->eq(0)->fetchPairs();
         echo json_encode($datas);
     }
 

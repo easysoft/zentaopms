@@ -39,22 +39,24 @@ $normalContext = array(
 
 $fullContext = array(
     'caseList' => array(
-        (object)array('id' => 1, 'title' => '测试用例1', 'productName' => '测试产品A', 'module' => 1, 'scene' => 1),
-        (object)array('id' => 2, 'title' => '测试用例2', 'productName' => '测试产品A', 'module' => 2, 'scene' => 2)
+        (object)array('testcaseID' => 1, 'name' => '测试用例1', 'pri' => 1, 'productName' => '测试产品A', 'moduleID' => 1, 'sceneID' => 1, 'precondition' => ''),
+        (object)array('testcaseID' => 2, 'name' => '测试用例2', 'pri' => 1, 'productName' => '测试产品A', 'moduleID' => 2, 'sceneID' => 2, 'precondition' => '')
     ),
     'stepList' => array(
-        1 => array(
-            (object)array('id' => 1, 'desc' => '步骤1', 'expect' => '期望结果1'),
-            (object)array('id' => 2, 'desc' => '步骤2', 'expect' => '期望结果2')
-        ),
-        2 => array(
-            (object)array('id' => 3, 'desc' => '步骤3', 'expect' => '期望结果3')
-        )
+        (object)array('testcaseID' => 1, 'stepID' => 1, 'parentID' => '0', 'desc' => '步骤1', 'expect' => '期望结果1'),
+        (object)array('testcaseID' => 1, 'stepID' => 2, 'parentID' => '0', 'desc' => '步骤2', 'expect' => '期望结果2'),
+        (object)array('testcaseID' => 2, 'stepID' => 3, 'parentID' => '0', 'desc' => '步骤3', 'expect' => '期望结果3')
     ),
-    'sceneMaps' => array(1 => '场景1', 2 => '场景2'),
-    'topScenes' => array(1, 2),
+    'sceneMaps' => array(
+        1 => (object)array('sceneID' => 1, 'sceneName' => '场景1', 'parentID' => 0, 'moduleID' => 1),
+        2 => (object)array('sceneID' => 2, 'sceneName' => '场景2', 'parentID' => 0, 'moduleID' => 2)
+    ),
+    'topScenes' => array(
+        (object)array('sceneID' => 1, 'sceneName' => '场景1', 'parentID' => 0, 'moduleID' => 1),
+        (object)array('sceneID' => 2, 'sceneName' => '场景2', 'parentID' => 0, 'moduleID' => 2)
+    ),
     'moduleList' => array(1 => '用户管理', 2 => '权限管理'),
-    'config' => array('root' => '0', 'child' => '1', 'grandchild' => '2')
+    'config' => array('module' => 'module', 'scene' => 'scene', 'case' => 'case', 'precondition' => 'precondition', 'pri' => 'pri', 'group' => 'group')
 );
 
 $emptyContext = array(

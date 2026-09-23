@@ -1322,7 +1322,7 @@ class userModel extends model
 
         $groups = $this->dao->select('id, name, vision')->from(TABLE_GROUP)
             ->where('project')->eq(0)
-            ->andWhere('devopsSpace')->eq(0)
+            ->andWhere('`devopsSpace`')->eq(0)
             ->andWhere('role')->ne('projectAdmin')
             ->andWhere('vision')->in($visions)
             ->fetchAll('id');
@@ -2063,8 +2063,8 @@ class userModel extends model
     {
         $stakeholderGroups = array();
         $stmt = $this->dao->select('`objectID`,user')->from(TABLE_STAKEHOLDER)
-            ->where('objectType')->eq('program')
-            ->andWhere('objectID')->in(array_keys($programProduct))
+            ->where('`objectType`')->eq('program')
+            ->andWhere('`objectID`')->in(array_keys($programProduct))
             ->query();
 
         while($programStakeholder = $stmt->fetch())
@@ -2110,8 +2110,8 @@ class userModel extends model
 
         /* Get linked projects stakeholders. */
         $stmt = $this->dao->select('`objectID`,user')->from(TABLE_STAKEHOLDER)
-            ->where('objectType')->eq('project')
-            ->andWhere('objectID')->in(array_keys($projectProducts))
+            ->where('`objectType`')->eq('project')
+            ->andWhere('`objectID`')->in(array_keys($projectProducts))
             ->andWhere('deleted')->eq(0)
             ->query();
 
@@ -2280,7 +2280,7 @@ class userModel extends model
         $parentPMGroup          = $this->loadModel('program')->getParentPM($programIDList);             // Get all parent program and subprogram relation.
         $programAdmins          = $this->loadModel('group')->getAdmins($programIDList, 'programs');     // Get programs's admins.
 
-        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('objectType')->eq('program')->andWhere('objectID')->in($programIDList)->query();
+        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('`objectType`')->eq('program')->andWhere('`objectID`')->in($programIDList)->query();
         $whiteListGroup  = array();
         while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
@@ -2339,7 +2339,7 @@ class userModel extends model
         while($team = $stmt->fetch()) $teamsGroup[$team->root][$team->account] = $team->account;
 
         /* Get white list group. */
-        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('objectType')->eq('project')->andWhere('objectID')->in($projectIDList)->query();
+        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('`objectType`')->eq('project')->andWhere('`objectID`')->in($projectIDList)->query();
         $whiteListGroup  = array();
         while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
@@ -2401,7 +2401,7 @@ class userModel extends model
         list($teamsGroup, $stakeholderGroup) = $this->getProductMembers($products);
 
         /* Get white list group. */
-        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('objectType')->eq('product')->andWhere('objectID')->in($productIDList)->query();
+        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('`objectType`')->eq('product')->andWhere('`objectID`')->in($productIDList)->query();
         $whiteListGroup  = array();
         while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
@@ -2465,7 +2465,7 @@ class userModel extends model
         $teamsGroup = array();
         while($team = $stmt->fetch()) $teamsGroup[$team->root][$team->account] = $team->account;
 
-        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('objectType')->eq('sprint')->andWhere('objectID')->in($sprintIDList)->query();
+        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('`objectType`')->eq('sprint')->andWhere('`objectID`')->in($sprintIDList)->query();
         $whiteListGroup  = array();
         while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
@@ -2855,7 +2855,7 @@ class userModel extends model
             if(!$stakeholders) $stakeholders = isset($productStakeholders[$product->id]) ? $productStakeholders[$product->id] : array();
         }
 
-        if(!$whiteList) $whiteList = $this->dao->select('account')->from(TABLE_ACL)->where('objectType')->eq('product')->andWhere('objectID')->eq($product->id)->fetchPairs();
+        if(!$whiteList) $whiteList = $this->dao->select('account')->from(TABLE_ACL)->where('`objectType`')->eq('product')->andWhere('`objectID`')->eq($product->id)->fetchPairs();
         if(!$admins)    $admins    = $this->dao->select('account')->from(TABLE_PROJECTADMIN)->where("FIND_IN_SET({$product->id}, products)")->orWhere('products')->eq('all')->fetchPairs();
 
         $users += $teams        ? $teams        : array();

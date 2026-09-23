@@ -327,7 +327,7 @@ class holidayModel extends model
             $realDuration = $this->getActualWorkingDays($project->begin, $project->end);
             $realDuration = count($realDuration);
 
-            $this->dao->update(TABLE_PROJECT)->set('planDuration')->eq($realDuration)->where('id')->eq($project->id)->exec();
+            $this->dao->update(TABLE_PROJECT)->set('`planDuration`')->eq($realDuration)->where('id')->eq($project->id)->exec();
         }
     }
 
@@ -347,7 +347,7 @@ class holidayModel extends model
             ->where('status')->ne('done')
             ->andWhere('type')->ne('program')
             ->andwhere('realBegan', true)->between($beginDate, $endDate)
-            ->orWhere('realEnd')->between($beginDate, $endDate)
+            ->orWhere('`realEnd`')->between($beginDate, $endDate)
             ->orWhere("(`realBegan` < '{$beginDate}' AND `realEnd` > '{$endDate}')")
             ->markRight(1)
             ->fetchAll();
@@ -357,7 +357,7 @@ class holidayModel extends model
             $realDuration = $this->getActualWorkingDays($project->realBegan, $project->realEnd);
             $realDuration = count($realDuration);
 
-            $this->dao->update(TABLE_PROJECT)->set('realDuration')->eq($realDuration)->where('id')->eq($project->id)->exec();
+            $this->dao->update(TABLE_PROJECT)->set('`realDuration`')->eq($realDuration)->where('id')->eq($project->id)->exec();
         }
     }
 
@@ -374,7 +374,7 @@ class holidayModel extends model
     {
         $updateTaskList = $this->dao->select('id, `estStarted`, deadline')
             ->from(TABLE_TASK)
-            ->where('estStarted')->between($beginDate, $endDate)
+            ->where('`estStarted`')->between($beginDate, $endDate)
             ->orWhere('deadline')->between($beginDate, $endDate)
             ->orWhere("(`estStarted` < '{$beginDate}' AND `deadline` > '{$endDate}')")
             ->andWhere('status') ->ne('done')
@@ -402,7 +402,7 @@ class holidayModel extends model
     {
         $updateTaskList = $this->dao->select('id, `realStarted`, `finishedDate`')
             ->from(TABLE_TASK)
-            ->where('realStarted')->between($beginDate, $endDate)
+            ->where('`realStarted`')->between($beginDate, $endDate)
             ->orWhere("date_format(`finishedDate`,'%Y-%m-%d')")->between($beginDate, $endDate)
             ->orWhere("(`realStarted` < '$beginDate' AND date_format(`finishedDate`,'%Y-%m-%d') > '$endDate')")
             ->andWhere('status')->ne('done')
@@ -413,7 +413,7 @@ class holidayModel extends model
             $realDuration = $this->getActualWorkingDays($task->realStarted, date('Y-m-d', $task->finishedDate ? strtotime($task->finishedDate) : time()));
             $realDuration = count($realDuration);
 
-            $this->dao->update(TABLE_TASK)->set('realDuration')->eq($realDuration)->where('id')->eq($task->id)->exec();
+            $this->dao->update(TABLE_TASK)->set('`realDuration`')->eq($realDuration)->where('id')->eq($task->id)->exec();
         }
     }
 

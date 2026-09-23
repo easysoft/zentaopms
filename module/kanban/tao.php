@@ -218,7 +218,7 @@ class kanbanTao extends kanbanModel
 
         if($oldAssignedToList != $assignedToList)
         {
-            $this->dao->update(TABLE_KANBANCARD)->set('assignedTo')->eq($assignedToList)->where('id')->eq($cardID)->exec();
+            $this->dao->update(TABLE_KANBANCARD)->set('`assignedTo`')->eq($assignedToList)->where('id')->eq($cardID)->exec();
         }
     }
 

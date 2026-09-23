@@ -48,7 +48,7 @@ class productTao extends productModel
     protected function fetchPairs(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array
     {
         $append = $this->formatAppendParam($append);
-        return $this->dao->select("t1.*, IF(INSTR(' closed', t1.status) < 2, 0, 1) AS isClosed")->from(TABLE_PRODUCT)->alias('t1')
+        return $this->dao->select("t1.*, IF(INSTR(' closed', t1.status) < 2, 0, 1) AS `isClosed`")->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.name')->ne('')
             ->beginIF($this->config->vision == 'rnd')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
@@ -66,7 +66,7 @@ class productTao extends productModel
             ->markRight(1)
             ->beginIF($append)->orWhere('(t1.id')->in($append)->markRight(1)->fi()
             ->filterTpl('skip')
-            ->orderBy("isClosed,t2.order_asc,t1.line_desc,t1.order_asc")
+            ->orderBy("`isClosed`,t2.order_asc,t1.line_desc,t1.order_asc")
             ->fetchPairs('id', 'name');
     }
 
@@ -265,7 +265,7 @@ class productTao extends productModel
             ->beginIF($type == 'unResolved')->orWhere('resolution')->eq('postponed')->fi()
             ->beginIF($type == 'closedBugs' || $type == 'fixedBugs')->andWhere('status')->eq('closed')->fi()
             ->beginIF($type == 'unResolved' || $type == 'activeBugs')->andWhere('status')->eq('active')->fi()
-            ->beginIF($type == 'thisWeekBugs')->andWhere('openedDate')->between($weekDate['begin'], $weekDate['end'])->fi()
+            ->beginIF($type == 'thisWeekBugs')->andWhere('`openedDate`')->between($weekDate['begin'], $weekDate['end'])->fi()
             ->beginIF($type != 'latestReleases')->groupBy('product')->fi()
             ->beginIF($type == 'latestReleases')->orderBy('id_desc')->fi();
 
@@ -648,7 +648,7 @@ class productTao extends productModel
      */
     protected function getExecutionList(array $projectIdList, array $productIdList): array
     {
-        return $this->dao->select('t1.product as productID,t2.*')
+        return $this->dao->select('t1.product as `productID`,t2.*')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
             ->where('t2.type')->in('stage,sprint,kanban')

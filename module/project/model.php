@@ -13,7 +13,7 @@ class projectModel extends model
      */
     public function getAclListByObjectType(string $objectType, string $account = ''): array
     {
-        return $this->dao->select('id, account, `objectType`, `objectID`')->from(TABLE_ACL)->where('objectType')->in($objectType)
+        return $this->dao->select('id, account, `objectType`, `objectID`')->from(TABLE_ACL)->where('`objectType`')->in($objectType)
             ->beginIF($account)->andWhere('account')->eq($account)->fi()
             ->fetchAll('id');
     }
@@ -88,7 +88,7 @@ class projectModel extends model
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($filterTpl == 'onlyTpl')->andWhere('isTpl')->eq('1')->fi()
+            ->beginIF($filterTpl == 'onlyTpl')->andWhere('`isTpl`')->eq('1')->fi()
             ->orderBy('order_asc,id_desc')
             ->fetchAll('id');
     }
@@ -460,7 +460,7 @@ class projectModel extends model
             ->fetchGroup('project', 'id');
 
         /* Get hours information. */
-        $totalHour = $this->dao->select("t1.project, t1.execution, ROUND(SUM(if(t1.status !='closed' && t1.status !='cancel', t1.`left`, 0)), 2) AS totalLeft, ROUND(SUM(t1.`consumed`), 1) AS totalConsumed")->from(TABLE_TASK)->alias('t1')
+        $totalHour = $this->dao->select("t1.project, t1.execution, ROUND(SUM(if(t1.status !='closed' && t1.status !='cancel', t1.`left`, 0)), 2) AS `totalLeft`, ROUND(SUM(t1.`consumed`), 1) AS `totalConsumed`")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t2.project')->in(array_keys($stageGroup))
             ->andWhere('t1.deleted')->eq(0)
@@ -499,7 +499,7 @@ class projectModel extends model
     public function getWaterfallPVEVAC(int $projectID): array
     {
         $executions = $this->dao->select('id,begin,end,`realEnd`,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
-        $stmt       = $this->dao->select('id,status,estimate,consumed,`left`,`closedReason`')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("isParent")->eq(0)->andWhere("deleted")->eq(0)->andWhere('status')->ne('cancel')->query();
+        $stmt       = $this->dao->select('id,status,estimate,consumed,`left`,`closedReason`')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("`isParent`")->eq(0)->andWhere("deleted")->eq(0)->andWhere('status')->ne('cancel')->query();
 
         $PV   = 0;
         $EV   = 0;
@@ -540,7 +540,7 @@ class projectModel extends model
      */
     public function getWorkhour(int $projectID): object
     {
-        $totalEstimate = $this->dao->select('ROUND(SUM(t1.estimate), 1) AS totalEstimate')->from(TABLE_TASK)->alias('t1')
+        $totalEstimate = $this->dao->select('ROUND(SUM(t1.estimate), 1) AS `totalEstimate`')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t2.project')->in($projectID)
             ->andWhere('t2.deleted')->eq(0)
@@ -548,7 +548,7 @@ class projectModel extends model
             ->andWhere('t1.parent')->lt(1)
             ->fetch('totalEstimate');
 
-        $totalConsumed = $this->dao->select('ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_TASK)->alias('t1')
+        $totalConsumed = $this->dao->select('ROUND(SUM(t1.consumed), 1) AS `totalConsumed`')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t2.project')->in($projectID)
             ->andWhere('t2.deleted')->eq(0)
@@ -556,7 +556,7 @@ class projectModel extends model
             ->andWhere('t1.parent')->lt(1)
             ->fetch('totalConsumed');
 
-        $totalLeft = $this->dao->select('ROUND(SUM(t1.`left`), 1) AS totalLeft')->from(TABLE_TASK)->alias('t1')
+        $totalLeft = $this->dao->select('ROUND(SUM(t1.`left`), 1) AS `totalLeft`')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t2.project')->in($projectID)
             ->andWhere('t2.deleted')->eq(0)
@@ -566,7 +566,7 @@ class projectModel extends model
             ->fetch('totalLeft');
 
         $workhour = new stdclass();
-        $workhour->totalHours = $this->dao->select('sum(t1.days * t1.hours) AS totalHours')->from(TABLE_TEAM)->alias('t1')
+        $workhour->totalHours = $this->dao->select('sum(t1.days * t1.hours) AS `totalHours`')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root=t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.account=t3.account')
             ->where('t2.id')->in($projectID)
@@ -594,7 +594,7 @@ class projectModel extends model
      */
     public function getProjectsConsumed(array $projectIdList, string $time = ''): array
     {
-        $totalConsumeds = $this->dao->select('t2.project,ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_EFFORT)->alias('t1')
+        $totalConsumeds = $this->dao->select('t2.project,ROUND(SUM(t1.consumed), 1) AS `totalConsumed`')->from(TABLE_EFFORT)->alias('t1')
             ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.`objectID`=t2.id and t1.`objectType` = 'task'")
             ->where('t2.project')->in($projectIdList)
             ->andWhere('t2.deleted')->eq(0)
@@ -685,13 +685,13 @@ class projectModel extends model
     public function getStatData($projectID)
     {
         $executions = $this->loadModel('execution')->getPairs($projectID);
-        $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
+        $storyCount = $this->dao->select('count(t2.story) as `storyCount`')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
             ->where('t2.project')->eq($projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->fetch('storyCount');
 
-        $bugCount = $this->dao->select('count(id) as bugCount')->from(TABLE_BUG)
+        $bugCount = $this->dao->select('count(id) as `bugCount`')->from(TABLE_BUG)
              ->where('project')->in($projectID)
              ->andWhere('deleted')->eq(0)
              ->fetch('bugCount');
@@ -739,7 +739,7 @@ class projectModel extends model
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$ignoreVision)->andWhere('vision')->eq($this->config->vision)->fi()
-            ->beginIF(strpos($params, 'noproduct') !== false)->andWhere('hasProduct')->eq(0)->fi()
+            ->beginIF(strpos($params, 'noproduct') !== false)->andWhere('`hasProduct`')->eq(0)->fi()
             ->beginIF(strpos($params, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(strpos($params, 'nosprint') !== false)->andWhere('multiple')->eq('0')->fi()
             ->beginIF(strpos($params, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
@@ -775,7 +775,7 @@ class projectModel extends model
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF($model)->andWhere('model')->in($model)->fi()
             ->beginIF(strpos($param, 'multiple') !== false)->andWhere('multiple')->eq(1)->fi()
-            ->beginIF(strpos($param, 'product') !== false)->andWhere('hasProduct')->eq(1)->fi()
+            ->beginIF(strpos($param, 'product') !== false)->andWhere('`hasProduct`')->eq(1)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin && !$isQueryAll)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy($orderBy)
@@ -913,7 +913,7 @@ class projectModel extends model
      */
     public function getBranchGroup(int $projectID, array $productIdList): array
     {
-        return $this->dao->select('t1.product as productID, t1.branch as branchID, t2.*')
+        return $this->dao->select('t1.product as `productID`, t1.branch as `branchID`, t2.*')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.product')->in($productIdList)
@@ -1249,7 +1249,7 @@ class projectModel extends model
      */
     public function getStoriesByProject(int $projectID = 0): array
     {
-        return $this->dao->select("t2.product, t2.branch, GROUP_CONCAT(t2.story) as storyIDList")->from(TABLE_STORY)->alias('t1')
+        return $this->dao->select("t2.product, t2.branch, GROUP_CONCAT(t2.story) as `storyIDList`")->from(TABLE_STORY)->alias('t1')
            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
            ->where('t1.deleted')->eq(0)
            ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
@@ -1442,13 +1442,13 @@ class projectModel extends model
             ->fetch('count');
         if(empty($executionsCount))return true;
 
-        $maxExecutionEnd = $this->dao->select('`end` as maxEnd')->from(TABLE_PROJECT)
+        $maxExecutionEnd = $this->dao->select('`end` as `maxEnd`')->from(TABLE_PROJECT)
             ->where('project')->eq($projectID)
             ->andWhere('deleted')->eq('0')
             ->orderBy('end_desc')
             ->fetch();
 
-        $minExecutionBegin = $this->dao->select('`begin` as minBegin')->from(TABLE_PROJECT)
+        $minExecutionBegin = $this->dao->select('`begin` as `minBegin`')->from(TABLE_PROJECT)
             ->where('project')->eq($projectID)
             ->andWhere('deleted')->eq('0')
             ->orderBy('begin_asc')
@@ -2138,7 +2138,7 @@ class projectModel extends model
 
             if(isset($_POST['stageBy']) and $_POST['stageBy'] == 'product')
             {
-                $this->dao->update(TABLE_PROJECT)->set('stageBy')->eq('product')->where('id')->eq($projectID)->orWhere('project')->eq($projectID)->exec();
+                $this->dao->update(TABLE_PROJECT)->set('`stageBy`')->eq('product')->where('id')->eq($projectID)->orWhere('project')->eq($projectID)->exec();
             }
 
             $project = $this->projectTao->fetchProjectInfo($projectID);
@@ -2285,7 +2285,7 @@ class projectModel extends model
         $this->user->updateUserView($productIdList, 'product', $members);
         if($projectID > 0 and isset($_POST['stageBy']) and $_POST['stageBy'] == 'product')
         {
-            $this->dao->update(TABLE_PROJECT)->set('stageBy')->eq('product')->where('id')->eq($projectID)->orWhere('project')->eq($projectID)->exec();
+            $this->dao->update(TABLE_PROJECT)->set('`stageBy`')->eq('product')->where('id')->eq($projectID)->orWhere('project')->eq($projectID)->exec();
         }
 
         return !dao::isError();
@@ -2326,7 +2326,7 @@ class projectModel extends model
         $project = $this->projectTao->fetchProjectInfo($projectID);
         if(empty($project)) return array();
 
-        return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as `userID`, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
+        return $this->dao->select("t1.*, t1.hours * t1.days AS `totalHours`, t2.id as `userID`, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$projectID)
             ->andWhere('t1.type')->eq($project->type)
@@ -2720,8 +2720,8 @@ class projectModel extends model
             if($id == $newID) continue;
             $this->dao->update(TABLE_PROJECT)
                 ->set('`order`')->eq($order)
-                ->set('lastEditedBy')->eq($this->app->user->account)
-                ->set('lastEditedDate')->eq(helper::now())
+                ->set('`lastEditedBy`')->eq($this->app->user->account)
+                ->set('`lastEditedDate`')->eq(helper::now())
                 ->where('id')->eq($newID)
                 ->exec();
         }
@@ -2740,7 +2740,7 @@ class projectModel extends model
      */
     public function getProgramMinBegin(int $objectID): string
     {
-        return $this->dao->select('`begin` as minBegin')->from(TABLE_PROGRAM)
+        return $this->dao->select('`begin` as `minBegin`')->from(TABLE_PROGRAM)
             ->where('id')->ne($objectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('path')->like("%,{$objectID},%")
@@ -2759,7 +2759,7 @@ class projectModel extends model
      */
     public function getProgramMaxEnd(int $objectID): string
     {
-        return $this->dao->select('`end` as maxEnd')->from(TABLE_PROGRAM)
+        return $this->dao->select('`end` as `maxEnd`')->from(TABLE_PROGRAM)
             ->where('id')->ne($objectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('path')->like("%,{$objectID},%")
@@ -2892,7 +2892,7 @@ class projectModel extends model
     public function recordFirstEnd(int $projectID): bool
     {
         $project = $this->dao->select('end')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
-        $this->dao->update(TABLE_PROJECT)->set('firstEnd')->eq(helper::isZeroDate($project->end) ? null : $project->end)->where('id')->eq($projectID)->exec();
+        $this->dao->update(TABLE_PROJECT)->set('`firstEnd`')->eq(helper::isZeroDate($project->end) ? null : $project->end)->where('id')->eq($projectID)->exec();
         return !dao::isError();
     }
 

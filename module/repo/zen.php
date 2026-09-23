@@ -234,7 +234,7 @@ class repoZen extends repo
     {
         if(empty($lastRevision->committed_date)) return;
         $lastCommitDate = date('Y-m-d H:i:s', strtotime($lastRevision->committed_date));
-        if(empty($repo->lastCommit) || $lastCommitDate > $repo->lastCommit) $this->dao->update(TABLE_REPO)->set('lastCommit')->eq($lastCommitDate)->where('id')->eq($repo->id)->exec();
+        if(empty($repo->lastCommit) || $lastCommitDate > $repo->lastCommit) $this->dao->update(TABLE_REPO)->set('`lastCommit`')->eq($lastCommitDate)->where('id')->eq($repo->id)->exec();
     }
 
     /**
@@ -700,7 +700,7 @@ class repoZen extends repo
     {
         $relationIds = $this->dao->select('distinct `AID` as `AID`')->from(TABLE_RELATION)
             ->where('extra')->eq($repoID)
-            ->andWhere('AType')->eq('design')
+            ->andWhere('`AType`')->eq('design')
             ->fetchAll();
         $error = '';
         if($relationIds)
@@ -730,7 +730,7 @@ class repoZen extends repo
                 ));
             }
         }
-        $pipeline = $this->dao->select('*')->from(TABLE_PIPELINE)->where('repoID')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
+        $pipeline = $this->dao->select('*')->from(TABLE_PIPELINE)->where('`repoID`')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
         if($pipeline) $error .= sprintf($this->lang->repo->error->linkedJob, html::a($this->createLink('pipeline', 'browse', 'space=0&repoID=' . $repoID . '&type=repo'), implode(', ', array_column($pipeline, 'id')), '_blank', '', false));
 
         $artifacts = $this->loadModel('artifact')->getByRepoID($repoID);

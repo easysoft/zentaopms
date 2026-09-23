@@ -9,4 +9,3 @@ $fields->field('comment')
     ->width('full')
     ->rows('5')
     ->control('editor');
-$fields->field('status')->control('hidden')->value('cancel');
