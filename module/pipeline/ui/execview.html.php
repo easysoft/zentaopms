@@ -34,11 +34,11 @@ div
         set::name('#' . $execution->id . ' ' . $pipeline->name),
         set::labels($lang->pipeline->flowApp->labels)
     ),
-    btn
+    $canCancel ? btn
     (
         setID('cancelExecBtn'),
         set::type('primary'),
         setClass('absolute right-2 top-1 z-10 hidden'),
         $lang->pipeline->cancelBtn
-    )
+    ) : null
 );

@@ -608,6 +608,24 @@ class pipelineModel extends model
     }
 
     /**
+     * 判断当前用户是否有取消流水线执行的权限。
+     * Judge the current user has the privilege to cancel pipeline execution.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasCancelPriv(): bool
+    {
+        /* 取消执行的请求不携带空间参数，服务端按用户自身的系统权限校验，这里与之一致。 */
+        $user            = $this->app->user;
+        $this->app->user = $this->session->user;
+        $hasPriv         = common::hasPriv('pipeline', 'cancel');
+        $this->app->user = $user;
+
+        return $hasPriv;
+    }
+
+    /**
      * 获取步骤组.
      * Get step groups.
      *
