@@ -2858,6 +2858,7 @@ class repoModel extends model
     {
         $userSpaces = $this->loadModel('space')->getPairs($this->app->user->account);
         if(empty($userSpaces)) return array();
+        if($space && !$this->app->user->admin && !isset($userSpaces[$space])) return array();
 
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
