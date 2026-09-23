@@ -312,14 +312,15 @@ class myTao extends myModel
             foreach($objects as $object)
             {
                 $data = new stdclass();
-                $data->id      = $object->id;
-                $data->title   = !empty($flow) && !empty($dataPairs[$flow->module][$object->id]) ? $dataPairs[$flow->module][$object->id] : zget($object, $titleFieldName, $object->id);
-                $data->type    = $objectType;
-                $data->time    = $object->{$openedDateField};
-                $data->status  = $objectType == 'charter' ? $object->reviewStatus : 'doing';
-                $data->app     = isset($flows[$objectType]->app) ? $flows[$objectType]->app : zget($this->lang->navGroup, $objectType, '');
-                $data->product = isset($object->product) ? $object->product : 0;
-                $data->project = isset($object->project) ? $object->project : 0;
+                $data->id       = $object->id;
+                $data->title    = !empty($flow) && !empty($dataPairs[$flow->module][$object->id]) ? $dataPairs[$flow->module][$object->id] : zget($object, $titleFieldName, $object->id);
+                $data->type     = $objectType;
+                $data->time     = $object->{$openedDateField};
+                $data->status   = $objectType == 'charter' ? $object->reviewStatus : 'doing';
+                $data->app      = isset($flows[$objectType]->app) ? $flows[$objectType]->app : zget($this->lang->navGroup, $objectType, '');
+                $data->product  = isset($object->product) ? $object->product : 0;
+                $data->project  = isset($object->project) ? $object->project : 0;
+                $data->openedBy = $this->getAuditObjectOpenedBy($object);
 
                 if(isset($object->type) && $object->type == 'project') $data->project = $object->id;
 
