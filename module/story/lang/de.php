@@ -61,6 +61,7 @@ $lang->story->caseCount          = 'Fälle';
 $lang->story->taskCountAB        = 'T';
 $lang->story->bugCountAB         = 'B';
 $lang->story->caseCountAB        = 'C';
+$lang->story->twinsStory         = "Branch&Module";
 $lang->story->linkStory          = "Link Story";
 $lang->story->unlinkStory        = "Verknüpfung aufheben story";
 $lang->story->linkStoriesAB      = "Link {$lang->SRCommon}";

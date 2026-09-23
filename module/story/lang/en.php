@@ -61,6 +61,7 @@ $lang->story->caseCount          = 'Test Cases';
 $lang->story->taskCountAB        = 'Tasks';
 $lang->story->bugCountAB         = 'Bugs';
 $lang->story->caseCountAB        = 'Test Cases';
+$lang->story->twinsStory         = "Branch&Module";
 $lang->story->linkStory          = "Link Story";
 $lang->story->unlinkStory        = "Are you sure you want to unlink the story?";
 $lang->story->linkStoriesAB      = "Link {$lang->SRCommon}";
