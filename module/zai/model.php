@@ -844,9 +844,9 @@ class zaiModel extends model
                     $retries = (int)$item->retries + 1;
                     $this->dao->update(TABLE_AI_VECTORQUEUE)
                         ->set('retries')->eq($retries)
-                        ->set('lastError')->eq($message)
-                        ->set('lastSyncTime')->eq($now)
-                        ->set('editedDate')->eq($now)
+                        ->set('`lastError`')->eq($message)
+                        ->set('`lastSyncTime`')->eq($now)
+                        ->set('`editedDate`')->eq($now)
                         ->where('id')->eq($itemID)
                         ->exec();
 

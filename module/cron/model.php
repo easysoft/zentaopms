@@ -83,7 +83,7 @@ class cronModel extends model
                 }
             }
         }
-        $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('`lastTime` IS NULL')->andWhere('status')->ne('stop')->exec();
+        $this->dao->update(TABLE_CRON)->set('`lastTime`')->eq(date(DT_DATETIME1))->where('`lastTime` IS NULL')->andWhere('status')->ne('stop')->exec();
         return $parsedCrons;
     }
 
@@ -278,7 +278,7 @@ class cronModel extends model
             ->andWhere('section')->eq('scheduler')
             ->andWhere('`key`')->eq('execId')
             ->exec();
-        $this->dao->delete()->from(TABLE_QUEUE)->where('createdDate')->le(date("Y-m-d H:i:s", strtotime("-1 week")))->exec();
+        $this->dao->delete()->from(TABLE_QUEUE)->where('`createdDate`')->le(date("Y-m-d H:i:s", strtotime("-1 week")))->exec();
 
         $this->logCron(date('G:i:s') . " restart\n\n");
     }

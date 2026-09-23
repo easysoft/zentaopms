@@ -125,7 +125,7 @@ class commonModel extends model
             ->orderBy('id_desc')
             ->fetchPairs();
 
-        $this->dao->update(TABLE_PROGRAM)->set('status')->eq('doing')->set('realBegan')->eq(helper::now())->where('id')->in($waitList)->exec();
+        $this->dao->update(TABLE_PROGRAM)->set('status')->eq('doing')->set('`realBegan`')->eq(helper::now())->where('id')->in($waitList)->exec();
 
         $this->loadModel('action');
         foreach($waitList as $programID)
@@ -153,7 +153,7 @@ class commonModel extends model
             $realBegan = helper::isZeroDate($project->realBegan) ? $this->dao->select('`realBegan`')->from(TABLE_PROJECT)->where('id')->eq($execution->id)->fetch('realBegan') : $project->realBegan;
             $this->dao->update(TABLE_PROJECT)
                  ->set('status')->eq('doing')
-                 ->set('realBegan')->eq($realBegan)
+                 ->set('`realBegan`')->eq($realBegan)
                  ->where('id')->eq($projectID)
                  ->exec();
 
@@ -185,7 +185,7 @@ class commonModel extends model
         {
             $this->dao->update(TABLE_EXECUTION)
                  ->set('status')->eq('doing')
-                 ->beginIf(helper::isZeroDate($parentExecution->realBegan))->set('realBegan')->eq($today)->fi()
+                 ->beginIf(helper::isZeroDate($parentExecution->realBegan))->set('`realBegan`')->eq($today)->fi()
                  ->where('id')->eq($execution->parent)
                  ->exec();
             $this->loadModel('action')->create('execution', $execution->parent, 'syncexecutionbychild');
@@ -215,7 +215,7 @@ class commonModel extends model
         $today = helper::today();
         if($execution->status == 'wait')
         {
-            $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->set('realBegan')->eq($today)->where('id')->eq($execution->id)->exec();
+            $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->set('`realBegan`')->eq($today)->where('id')->eq($execution->id)->exec();
             $this->loadModel('project')->recordFirstEnd($execution->id);
 
             $this->loadModel('action')->create('execution', $execution->id, 'syncexecution');
@@ -936,7 +936,7 @@ class commonModel extends model
                     $default = $field->options[$newStatus]['default'];
 
                     $common = new self();
-                    $common->dao->update($flow->table)->set('subStatus')->eq($default)->where('id')->eq($oldID)->exec();
+                    $common->dao->update($flow->table)->set('`subStatus`')->eq($default)->where('id')->eq($oldID)->exec();
 
                     $new->subStatus = $default;
                 }
@@ -1333,7 +1333,7 @@ eof;
          * The following pages can be allowed to open in non-iframe, so ignore these pages.
          */
         $module     = $this->app->getModuleName();
-        $whitelist  = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-viewdownload|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|integration-wopi|instance-terminal|conference-getconferencepermissions|instance-logs|';
+        $whitelist  = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-viewdownload|file-uploadimages|file-ajaxwopifiles|doc-downloadfile|doc-previewfile|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|integration-wopi|instance-terminal|conference-getconferencepermissions|instance-logs|';
         $iframeList = '|cron-index|zanode-create|';
 
         if(strpos($iframeList, "|{$module}-{$method}|") === false && (strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false)) return;
@@ -2279,7 +2279,7 @@ eof;
         if(common::isTutorialMode()) return array();
 
         return $this->dao->select('*')->from(TABLE_RELATION)
-            ->where('AType')->eq($AType)
+            ->where('`AType`')->eq($AType)
             ->andWhere('AID')->eq($AID)
             ->andwhere('BType')->eq($BType)
             ->beginIF($BID)->andwhere('BID')->eq($BID)->fi()

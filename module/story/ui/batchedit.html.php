@@ -53,6 +53,7 @@ $items['assignedTo']['defaultDitto'] = 'off';
 $items['source']['defaultDitto']     = 'off';
 $items['stage']['defaultDitto']      = 'off';
 $items['pri']['defaultDitto']        = 'off';
+$items['status']['disabled']         = true;
 if(!empty($fields['plan'])) $items['plan']['tip'] = $lang->story->planTip;
 
 if(!$branchProduct) unset($items['branch'], $customFields['branch']);
@@ -66,12 +67,8 @@ foreach($stories as $storyID => $story)
     $data[$storyID] = $story;
     foreach($fieldNameList as $fieldName)
     {
-        if($fieldName == 'storyIdList')$data[$storyID]->storyIdList = $story->id;
-        if($fieldName == 'status')
-        {
-            $data[$storyID]->rawStatus  = $story->status;
-            $data[$storyID]->$fieldName = $this->processStatus('story', $story);
-        }
+        if($fieldName == 'storyIdList') $data[$storyID]->storyIdList = $story->id;
+        if($fieldName == 'status')      $data[$storyID]->rawStatus   = $story->status;
     }
 }
 

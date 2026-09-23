@@ -62,7 +62,7 @@ formPanel
     formGroup
     (
         set::label($lang->doc->files),
-        fileSelector()
+        fileSelector(set::removeBtn(true))
     ),
     formGroup
     (

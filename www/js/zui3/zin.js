@@ -1125,7 +1125,7 @@
      * @param {string}   [selector]
      * @returns {void}
      */
-    function loadPage(options, selector)
+    async function loadPage(options, selector)
     {
         if(typeof options === 'string') options = {url: options};
         options = options || {};
@@ -1146,7 +1146,7 @@
 
         if(window.beforePageLoad)
         {
-            const result = window.beforePageLoad(options);
+            const result = await window.beforePageLoad(options);
             if(result === false) return;
             if(result) $.extend(options, result);
         }

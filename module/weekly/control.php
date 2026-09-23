@@ -82,7 +82,7 @@ class weekly extends control
 
         foreach($projects as $projectID => $project)
         {
-            $this->dao->delete()->from(TABLE_WEEKLYREPORT)->where('project')->eq($projectID)->andWhere('weekStart')->eq($weekStart)->exec();
+            $this->dao->delete()->from(TABLE_WEEKLYREPORT)->where('project')->eq($projectID)->andWhere('`weekStart`')->eq($weekStart)->exec();
             $this->weekly->save($projectID, $date);
         }
     }

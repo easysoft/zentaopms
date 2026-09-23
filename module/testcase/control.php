@@ -1065,7 +1065,7 @@ class testcase extends control
      public function batchConfirmLibcaseChange()
      {
          $caseIdList     = zget($_POST, 'caseIdList',  array());
-         $fromCaseIdList = $this->dao->select('id, fromCaseID')->from(TABLE_CASE)->where('id')->in($caseIdList)->andWhere('fromCaseID')->ne(0)->fetchPairs('id');
+         $fromCaseIdList = $this->dao->select('id, `fromCaseID`')->from(TABLE_CASE)->where('id')->in($caseIdList)->andWhere('`fromCaseID`')->ne(0)->fetchPairs('id');
          foreach($fromCaseIdList as $caseID => $libCaseID) $this->testcase->confirmLibcaseChange($caseID, $libCaseID);
          return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
      }
@@ -1081,7 +1081,7 @@ class testcase extends control
     public function ignoreLibcaseChange(int $caseID)
     {
         $case = $this->testcase->fetchBaseInfo($caseID);
-        $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($case->version)->where('id')->eq($caseID)->exec();
+        $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($case->version)->where('id')->eq($caseID)->exec();
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
 
@@ -1099,7 +1099,7 @@ class testcase extends control
          foreach($caseList as $case)
          {
              if($case->fromCaseVersion == $case->version) continue;
-             $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($case->version)->where('id')->eq($case->id)->exec();
+             $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($case->version)->where('id')->eq($case->id)->exec();
          }
          return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
      }
@@ -1120,7 +1120,7 @@ class testcase extends control
             $story = $this->loadModel('story')->fetchBaseInfo($case->story);
             if($story->version != $case->storyVersion)
             {
-                $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($story->version)->where('id')->eq($caseID)->exec();
+                $this->dao->update(TABLE_CASE)->set('`storyVersion`')->eq($story->version)->where('id')->eq($caseID)->exec();
                 $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $story->version);
             }
         }

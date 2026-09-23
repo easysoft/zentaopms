@@ -2,36 +2,36 @@ window.switchShow = function(event)
 {
     var result = $(event.target).val();
 
-    $('#priBox').addClass('hidden');
-    $('#estimateBox').addClass('hidden');
+    $('#priBox').closest('.form-row').addClass('hidden');
+    $('#estimateBox').closest('.form-row').addClass('hidden');
     if(result == 'reject')
     {
-        $('#rejectedReasonBox').removeClass('hidden');
-        $('#assignedToBox').addClass('hidden');
+        $('#rejectedReasonBox').closest('.form-row').removeClass('hidden');
+        $('#assignedToBox').closest('.form-row').addClass('hidden');
     }
     else if(result == 'revert')
     {
-        $('#rejectedReasonBox').addClass('hidden');
-        $('#duplicateStoryBox').addClass('hidden');
-        if(isLastOne) $('#assignedToBox').removeClass('hidden');
+        $('#rejectedReasonBox').closest('.form-row').addClass('hidden');
+        $('#duplicateStoryBox').closest('.form-row').addClass('hidden');
+        if(isLastOne) $('#assignedToBox').closest('.form-row').removeClass('hidden');
     }
     else if(result == 'clarify')
     {
-        $('#rejectedReasonBox').addClass('hidden');
-        $('#duplicateStoryBox').addClass('hidden');
-        $('#rejectedReasonBox').addClass('hidden');
-        if(isLastOne) $('#assignedToBox').removeClass('hidden');
+        $('#rejectedReasonBox').closest('.form-row').addClass('hidden');
+        $('#duplicateStoryBox').closest('.form-row').addClass('hidden');
+        $('#rejectedReasonBox').closest('.form-row').addClass('hidden');
+        if(isLastOne) $('#assignedToBox').closest('.form-row').removeClass('hidden');
     }
     else
     {
-        $('#rejectedReasonBox').addClass('hidden');
-        $('#duplicateStoryBox').addClass('hidden');
-        $('#rejectedReasonBox').addClass('hidden');
-        if(isLastOne) $('#assignedToBox').removeClass('hidden');
+        $('#rejectedReasonBox').closest('.form-row').addClass('hidden');
+        $('#duplicateStoryBox').closest('.form-row').addClass('hidden');
+        $('#rejectedReasonBox').closest('.form-row').addClass('hidden');
+        if(isLastOne) $('#assignedToBox').closest('.form-row').removeClass('hidden');
         if(result == 'pass')
         {
-            $('#priBox').removeClass('hidden');
-            $('#estimateBox').removeClass('hidden');
+            $('#priBox').closest('.form-row').removeClass('hidden');
+            $('#estimateBox').closest('.form-row').removeClass('hidden');
         }
     }
 }
@@ -39,7 +39,7 @@ window.switchShow = function(event)
 window.setStory = function(event)
 {
     var reason = $(event.target).val();
-    $('#duplicateStoryBox').toggleClass('hidden', reason != 'duplicate');
+    $('#duplicateStoryBox').closest('.form-row').toggleClass('hidden', reason != 'duplicate');
 }
 
 window.renderChildCell = function(result, info)

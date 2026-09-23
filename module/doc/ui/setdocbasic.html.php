@@ -129,7 +129,7 @@ formPanel(
     (
         setStyle('min-height', 'auto'),
         set::label($lang->doc->files),
-        fileSelector(set::defaultFiles($files))
+        fileSelector(set::defaultFiles($files), set::removeBtn(true))
     ) : null,
     formGroup
     (

@@ -224,6 +224,7 @@ $lang->block->availableBlocks['todo']        = 'Schedule';
 $lang->block->availableBlocks['task']        = 'Tasks';
 $lang->block->availableBlocks['bug']         = 'Bugs';
 $lang->block->availableBlocks['case']        = 'Cases';
+$lang->block->availableBlocks['epic']        = $lang->ERCommon;
 $lang->block->availableBlocks['story']       = 'Stories';
 $lang->block->availableBlocks['requirement'] = 'Features';
 $lang->block->availableBlocks['product']     = $lang->productCommon . 's';

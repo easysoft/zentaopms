@@ -27,7 +27,7 @@ class projectreleaseModel extends model
      */
     public function getList(int $projectID, string $type = 'all', string $orderBy = 't1.date_desc', ?object $pager = null): array
     {
-        $releases = $this->dao->select('t1.*, t2.name AS productName, t2.type AS productType')->from(TABLE_RELEASE)->alias('t1')
+        $releases = $this->dao->select('t1.*, t2.name AS `productName`, t2.type AS `productType`')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere("FIND_IN_SET($projectID, t1.project)")

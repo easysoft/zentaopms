@@ -1202,7 +1202,7 @@ class testcaseZen extends testcase
 
         if($from == 'testsuite')
         {
-            $suiteCaseVersion = $this->dao->select('caseVersion')->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->andWhere('`case`')->eq($case->id)->fetch('caseVersion');
+            $suiteCaseVersion = $this->dao->select('`caseVersion`')->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->andWhere('`case`')->eq($case->id)->fetch('caseVersion');
             $case->version    = $suiteCaseVersion ?: $case->version;
         }
 
@@ -1629,7 +1629,7 @@ class testcaseZen extends testcase
             $case->fromCaseVersion = $case->version;
             if(isset($modules[$case->id]))  $case->module = $modules[$case->id];
             if(isset($branches[$case->id])) $case->branch = $branches[$case->id];
-            unset($case->id);
+            unset($case->id, $case->lastRunResult, $case->lastRunner, $case->lastRunDate);
 
             foreach($case as $key => $value)
             {
@@ -1674,8 +1674,8 @@ class testcaseZen extends testcase
         $fromSteps      = $this->testcase->fetchStepsByList($caseIdList);
         $fromFiles      = $this->testcase->getRelatedFiles($caseIdList);
         $libCases       = $this->dao->select('*')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('product')->eq(0)->andWhere('deleted')->eq('0')->fetchGroup('fromCaseID', 'id');
-        $maxOrder       = $this->dao->select('max(`order`) as maxOrder')->from(TABLE_CASE)->where('deleted')->eq(0)->fetch('maxOrder');
-        $maxModuleOrder = $this->dao->select('max(`order`) as maxOrder')->from(TABLE_MODULE)->where('deleted')->eq(0)->fetch('maxOrder');
+        $maxOrder       = $this->dao->select('max(`order`) as `maxOrder`')->from(TABLE_CASE)->where('deleted')->eq(0)->fetch('maxOrder');
+        $maxModuleOrder = $this->dao->select('max(`order`) as `maxOrder`')->from(TABLE_MODULE)->where('deleted')->eq(0)->fetch('maxOrder');
         foreach($fromCases as $caseID => $case)
         {
             /* 初始化用例。 */
@@ -2046,10 +2046,7 @@ class testcaseZen extends testcase
         {
             $case->openedBy   = $this->app->user->account;
             $case->openedDate = helper::now();
-            unset($case->id);
-            unset($case->version);
-            unset($case->lastEditedBy);
-            unset($case->lastEditedDate);
+            unset($case->id, $case->version, $case->lastEditedBy, $case->lastEditedDate);
         }
         else
         {
@@ -2062,9 +2059,7 @@ class testcaseZen extends testcase
             $case->id             = $libCaseID;
         }
 
-        unset($case->scriptedDate);
-        unset($case->reviewedDate);
-        unset($case->lastRunDate);
+        unset($case->scriptedDate, $case->reviewedDate, $case->lastRunDate, $case->lastRunResult, $case->lastRunner);
 
         foreach($case as $key => $value)
         {

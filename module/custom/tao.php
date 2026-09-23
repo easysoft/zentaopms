@@ -32,8 +32,8 @@ class customTao extends customModel
             ->fetchPairs();
 
         $stakeholders = $this->dao->select('*')->from(TABLE_STAKEHOLDER)
-            ->where('objectType')->eq('program')
-            ->andWhere('objectID')->in(array_keys($projectGroup))
+            ->where('`objectType`')->eq('program')
+            ->andWhere('`objectID`')->in(array_keys($projectGroup))
             ->fetchGroup('objectID', 'user');
 
         return array($projectGroup, $programPM, $stakeholders);

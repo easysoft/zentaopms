@@ -367,6 +367,26 @@ class formdom
 
             if(empty($pickerConfig)) continue;
 
+            $pickerConfigData = json_decode(html_entity_decode($pickerConfig, ENT_QUOTES, 'UTF-8'), true);
+            if(is_array($pickerConfigData))
+            {
+                $name = isset($pickerConfigData['name']) ? $pickerConfigData['name'] : '';
+                if(empty($name)) continue;
+
+                $defaultValue = array_key_exists('defaultValue', $pickerConfigData) ? $pickerConfigData['defaultValue'] : '';
+                if(is_array($defaultValue))
+                {
+                    if(empty($defaultValue)) $data[$name] = array();
+
+                    $arrayName = substr($name, -2) == '[]' ? $name : $name . '[]';
+                    foreach($defaultValue as $value) $this->addValue($data, $arrayName, $value);
+                    continue;
+                }
+
+                $this->addValue($data, $name, $defaultValue);
+                continue;
+            }
+
             /* 3. 提取name（关键：用正则匹配name字段）*/
             $name = null;
             if(preg_match('/"name"\s*:\s*"([^"]+)"/i', $pickerConfig, $nameMatches))

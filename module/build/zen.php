@@ -305,7 +305,7 @@ class buildZen extends build
         $parentIdList = $this->dao->select('id')->from(TABLE_STORY)
             ->where('product')->eq($build->product)
             ->andWhere('type')->eq('story')
-            ->andWhere('isParent')->eq('1')
+            ->andWhere('`isParent`')->eq('1')
             ->fetchPairs();
 
         foreach(explode(',', $build->allStories) as $storyID)

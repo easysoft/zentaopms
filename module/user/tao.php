@@ -133,7 +133,7 @@ class userTao extends userModel
 
         return $this->dao->select('execution, COUNT(1) AS count')->from(TABLE_TASK)
             ->where('deleted')->eq('0')
-            ->andWhere('assignedTo')->eq($account)
+            ->andWhere('`assignedTo`')->eq($account)
             ->andWhere('execution')->in($executionIdList)
             ->groupBy('execution')
             ->fetchPairs();
