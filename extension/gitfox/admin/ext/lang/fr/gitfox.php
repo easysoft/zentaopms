@@ -34,5 +34,10 @@ if($config->vision == 'gitfox')
     $lang->admin->menuList->runner['bg']    = 'primary';
     $lang->admin->menuList->runner['order'] = 85;
 
+    $lang->admin->zentaoUsed = 'You are using Gitfox';
+    $lang->admin->zentaoInfo = 'Gitfox Information';
+
+    $lang->admin->officialAccount = 'Official Service Account';
+    $lang->admin->followUs        = 'Follow Us';
     $lang->admin->followUsContent = 'Stay updated on Gitfox news and access help and support at any time.';
 }
