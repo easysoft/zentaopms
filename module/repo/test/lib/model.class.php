@@ -3238,4 +3238,40 @@ SQL);
         }
     }
 
+    /**
+     * Test hasPriv after loading maintain space privs.
+     *
+     * @param  array  $repoList
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return string|array
+     */
+    public function loadMaintainSpacePrivsHasPrivTest(array $repoList, string $module, string $method): string|array
+    {
+        $this->instance->loadMaintainSpacePrivs($repoList);
+        if(dao::isError()) return dao::getError();
+
+        return (string)(int)common::hasPriv($module, $method);
+    }
+
+    /**
+     * Test space priv cache after loading maintain space privs.
+     *
+     * @param  array  $repoList
+     * @param  int    $spaceID
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return string|array
+     */
+    public function loadMaintainSpacePrivsCacheTest(array $repoList, int $spaceID, string $module, string $method): string|array
+    {
+        $this->instance->loadMaintainSpacePrivs($repoList);
+        if(dao::isError()) return dao::getError();
+
+        $privs = zget(repoModel::$maintainSpacePrivs, $spaceID, array());
+        return (string)(int)!empty($privs[$module][$method]);
+    }
+
 }

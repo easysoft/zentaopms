@@ -221,9 +221,14 @@ class spaceModel extends model
      */
     public function getPairs(string $account = '', bool $filterRepoCreate = false): array
     {
-        $userSpaces = $this->getSpacesByAccount($account);
+        if(!$account) $account = $this->app->user->account;
 
-        $spaces = $this->getByIdList(array_keys($userSpaces), false);
+        $userSpaces  = $this->getSpacesByAccount($account);
+        $spaceIdList = array_keys($userSpaces);
+
+        if(empty($spaceIdList) && !$this->app->user->admin) $spaceIdList = array(0);
+
+        $spaces = $this->getByIdList($spaceIdList, false);
 
         $spacesPairs = array();
         foreach($spaces as $space)

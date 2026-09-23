@@ -2300,13 +2300,6 @@ class repoModel extends model
             $privs = $this->loadModel('group')->getDevOpsSpacePrivs($spaceID);
             if($privs !== null) self::$maintainSpacePrivs[$spaceID] = $privs;
         }
-
-        /* render 管道：hasPriv 控制显隐，isClickable 控制置灰。不含这些 right 按钮会直接隐藏，
-         * 此处补回使按钮可见，置灰状态由 isClickable 接管，安全由下次请求 checkPriv 兜底。 */
-        $this->app->user->rights['rights']['repo']['edit']     = 1;
-        $this->app->user->rights['rights']['repo']['delete']   = 1;
-        $this->app->user->rights['rights']['codescan']['exec']  = 1;
-        $this->app->user->rights['rights']['codescan']['issue'] = 1;
     }
 
     /**
@@ -2858,6 +2851,7 @@ class repoModel extends model
     {
         $userSpaces = $this->loadModel('space')->getPairs($this->app->user->account);
         if(empty($userSpaces)) return array();
+        if($space && !$this->app->user->admin && !isset($userSpaces[$space])) return array();
 
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
