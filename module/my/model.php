@@ -1187,6 +1187,22 @@ class myModel extends model
     }
 
     /**
+     * 获取审批对象的提交人。
+     * Get opened by for audit objects.
+     *
+     * @param  object $object
+     * @access protected
+     * @return string
+     */
+    protected function getAuditObjectOpenedBy(object $object): string
+    {
+        if(isset($object->openedBy) && $object->openedBy !== '')  return $object->openedBy;
+        if(isset($object->createdBy) && $object->createdBy !== '') return $object->createdBy;
+        if(isset($object->account) && $object->account !== '')    return $object->account;
+        return '';
+    }
+
+    /**
      * 获取待评审的需求池需求。
      * Get reviewing demands.
      *
@@ -1230,6 +1246,7 @@ class myModel extends model
             $data->status  = $demand->status;
             $data->product = $demand->product;
             $data->project = 0;
+            $data->openedBy = $this->getAuditObjectOpenedBy($demand);
 
             $reviewList[$id] = $data;
         }
@@ -1298,6 +1315,7 @@ class myModel extends model
             $data->product   = $story->product;
             $data->project   = 0;
             $data->parent    = $story->parent;
+            $data->openedBy  = $this->getAuditObjectOpenedBy($story);
 
             $reviewList[$storyID] = $data;
         }
@@ -1358,6 +1376,7 @@ class myModel extends model
             $data->status  = $case->status;
             $data->product = isset($case->product) ? $case->product : 0;
             $data->project = isset($case->project) ? $case->project : 0;
+            $data->openedBy = $this->getAuditObjectOpenedBy($case);
             $reviewList[] = $data;
         }
 
@@ -1379,7 +1398,7 @@ class myModel extends model
         $server = $this->loadModel('gitfox')->getServer();
         if(!$server) return array();
 
-        $ppms = $this->dao->select("t1.`id`, t1.`title`, IF(t1.`flow`='1', 'pullreq', 'ppm') AS type, t1.`createdDate` AS time, 0 AS product, 0 AS project, t3.definition, t1.`reviewStatus`")->from(TABLE_PPM)->alias('t1')
+        $ppms = $this->dao->select("t1.`id`, t1.`title`, IF(t1.`flow`='1', 'pullreq', 'ppm') AS type, t1.`createdDate` AS time, 0 AS product, 0 AS project, t1.`createdBy` AS `openedBy`, t3.definition, t1.`reviewStatus`")->from(TABLE_PPM)->alias('t1')
             ->leftJoin(TABLE_PPMREVIEWERS)->alias('t2')->on('t1.id = t2.`requestID`')
             ->leftJoin(TABLE_REVIEWFLOW)->alias('t3')->on('t3.repo = t1.`repoID`')
             ->where('t1.status')->ne('closed')
@@ -1449,6 +1468,7 @@ class myModel extends model
             $data->status  = $review->status;
             $data->product = $review->product;
             $data->project = $review->project;
+            $data->openedBy = $this->getAuditObjectOpenedBy($review);
             $reviewList[] = $data;
         }
         return $reviewList;
@@ -1552,6 +1572,7 @@ class myModel extends model
             $data->status  = $feedback->status;
             $data->product = isset($feedback->product) ? $feedback->product : 0;
             $data->project = isset($feedback->project) ? $feedback->project : 0;
+            $data->openedBy = $this->getAuditObjectOpenedBy($feedback);
             $reviewList[] = $data;
         }
 
@@ -1715,14 +1736,11 @@ class myModel extends model
 
             $review->product    = isset($object->product) ? $object->product : 0;
             $review->project    = isset($object->project) ? $object->project : 0;
-            $review->openedBy   = '';
             $review->reviewer   = '';
             $review->opinion    = '';
             $review->reviewTime = '';
 
-            if(isset($object->openedBy) && $object->openedBy !== '')       $review->openedBy = $object->openedBy;
-            elseif(isset($object->createdBy) && $object->createdBy !== '') $review->openedBy = $object->createdBy;
-            elseif(isset($object->account) && $object->account !== '')     $review->openedBy = $object->account;
+            $review->openedBy = $this->getAuditObjectOpenedBy($object);
 
             $reviewAction = isset($reviewActions[$objectType][$action->objectID]) ? $reviewActions[$objectType][$action->objectID] : null;
             if(isset($action->action) && in_array($action->action, array('reviewed', 'approvalreview'))) $reviewAction = $action;
