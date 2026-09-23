@@ -53,9 +53,9 @@ class artifactModel extends model
         return $this->dao->select('*')->from(TABLE_ARTIFACT)
             ->where('deleted')->eq(0)
             ->beginIF($scope != 'all')->andWhere('scope')->eq($scope)->fi()
-            ->beginIF($this->app->tab != 'artifact' || $spaceID != 0)->andWhere('spaceID')->eq($spaceID)->fi()
-            ->beginIF($repoID && $scope != 'all')->andWhere('repoID')->eq($repoID)->fi()
-            ->beginIF(!$repoID && $scope != 'space' && !empty($repos))->andWhere('repoID')->in($repos)->fi()
+            ->beginIF($this->app->tab != 'artifact' || $spaceID != 0)->andWhere('`spaceID`')->eq($spaceID)->fi()
+            ->beginIF($repoID && $scope != 'all')->andWhere('`repoID`')->eq($repoID)->fi()
+            ->beginIF(!$repoID && $scope != 'space' && !empty($repos))->andWhere('`repoID`')->in($repos)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -76,8 +76,8 @@ class artifactModel extends model
         return $this->dao->select('id, name')->from(TABLE_ARTIFACT)
             ->where('deleted')->eq(0)
             ->beginIF($scope && $scope != 'all')->andWhere('scope')->eq($scope)->fi()
-            ->beginIF(!empty($spaceIdList))->andWhere('spaceID')->in($spaceIdList)->fi()
-            ->beginIF(!empty($repoIdList))->andWhere('repoID')->in($repoIdList)->fi()
+            ->beginIF(!empty($spaceIdList))->andWhere('`spaceID`')->in($spaceIdList)->fi()
+            ->beginIF(!empty($repoIdList))->andWhere('`repoID`')->in($repoIdList)->fi()
             ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->fetchPairs('id');
     }
@@ -301,7 +301,7 @@ class artifactModel extends model
     {
         $idList = array();
         foreach($assetIdList as $id) if(is_int($id)) $idList[] = $id;
-        return $this->dao->select('t1.*, t2.size, t3.name as groupName, t5.name as packageName, t4.version')->from(TABLE_ARTIFACTASSET)->alias('t1')
+        return $this->dao->select('t1.*, t2.size, t3.name as `groupName`, t5.name as `packageName`, t4.version')->from(TABLE_ARTIFACTASSET)->alias('t1')
             ->leftJoin(TABLE_ARTIFACTBLOBS)->alias('t2')->on('t1.id = t2.`assetID`')
             ->leftJoin(TABLE_ARTIFACTGROUPS)->alias('t3')->on('t1.`groupID` = t3.id')
             ->leftJoin(TABLE_ARTIFACTVERSIONS)->alias('t4')->on('t1.`versionID` = t4.id')
@@ -341,7 +341,7 @@ class artifactModel extends model
         return $this->dao->select('*')->from(TABLE_ARTIFACT)
             ->where('deleted')->eq(0)
             ->andWhere('scope')->eq('repo')
-            ->andWhere('repoID')->eq($repoID)
+            ->andWhere('`repoID`')->eq($repoID)
             ->fetchAll('id');
     }
 
@@ -361,8 +361,8 @@ class artifactModel extends model
         return $this->dao->select('*')->from(TABLE_ARTIFACT)
             ->where('deleted')->eq(0)
             ->andWhere('scope')->eq($scope)
-            ->beginIF(!empty($spaceIdList))->andWhere('spaceID')->in($spaceIdList)->fi()
-            ->beginIF(!empty($repoIdList) && in_array($scope, array('repo', 'all')))->andWhere('repoID')->in($repoIdList)->fi()
+            ->beginIF(!empty($spaceIdList))->andWhere('`spaceID`')->in($spaceIdList)->fi()
+            ->beginIF(!empty($repoIdList) && in_array($scope, array('repo', 'all')))->andWhere('`repoID`')->in($repoIdList)->fi()
             ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->fetchAll('id');
     }

@@ -286,7 +286,7 @@ class cron extends control
                 if($setting->value < $expirDate)
                 {
                     /* 心跳过期但名下仍有 doing 任务：可能正在执行长任务，保留名额，避免替换风暴。 */
-                    $doing = $this->dao->select('id')->from(TABLE_QUEUE)->where('status')->eq('doing')->andWhere('execId')->eq($setting->key)->fetch();
+                    $doing = $this->dao->select('id')->from(TABLE_QUEUE)->where('status')->eq('doing')->andWhere('`execId`')->eq($setting->key)->fetch();
                     if(!$doing)
                     {
                         $this->dao->delete()->from(TABLE_CONFIG)->where('id')->eq($setting->id)->exec();
@@ -398,7 +398,7 @@ class cron extends control
             $this->cron->updateTime('consumer', $execId);
 
             /* Consume. */
-            $task = $this->dao->select('*')->from(TABLE_QUEUE)->where('status')->eq('wait')->orderBy('createdDate')->fetch();
+            $task = $this->dao->select('*')->from(TABLE_QUEUE)->where('status')->eq('wait')->orderBy('`createdDate`')->fetch();
             if(!$task) break;
 
             $this->consumeTask($execId, $task);
@@ -421,11 +421,11 @@ class cron extends control
         if(!empty($task->command))
         {
             $affectedRows = $this->dao->update(TABLE_QUEUE)
-                ->set('status')->eq('doing')->set('execId')->eq($execId)
-                ->set('startedDate')->eq(date(DT_DATETIME1))
+                ->set('status')->eq('doing')->set('`execId`')->eq($execId)
+                ->set('`startedDate`')->eq(date(DT_DATETIME1))
                 ->where('id')->eq($task->id)
                 ->andWhere('status')->eq('wait')
-                ->andWhere('execId')->eq('0')
+                ->andWhere('`execId`')->eq('0')
                 ->exec();
             if($affectedRows != 1) return;
 
@@ -481,7 +481,7 @@ class cron extends control
         }
 
         $this->dao->update(TABLE_QUEUE)->set('status')->eq('done')->set('pending')->eq(null)->where('id')->eq($task->id)->exec();
-        $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('id')->eq($task->cron)->exec();
+        $this->dao->update(TABLE_CRON)->set('`lastTime`')->eq(date(DT_DATETIME1))->where('id')->eq($task->cron)->exec();
 
         $log = date('G:i:s') . " execute\ncronId: {$task->cron}\nexecId: $execId\ntaskId: {$task->id}\ncommand: {$task->command}\nreturn : $return\noutput : $output\n\n";
         $this->cron->logCron($log);

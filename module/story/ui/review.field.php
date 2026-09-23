@@ -37,8 +37,8 @@ foreach($pageFields as $field => $attr)
     if($field == 'closedReason') $fields->field($fieldName)->id('rejectedReasonBox');
     if($field == 'assignedTo')   $fields->field($fieldName)->hidden(!data('isLastOne'));
 
-    if(in_array($field, array('assignedTo', 'duplicateStory', 'pri', 'estimate')))             $fields->field($fieldName)->id($field . 'Box');
-    if(in_array($field, array('closedReason', 'duplicateStory', 'pri', 'estimate', 'status'))) $fields->field($fieldName)->hidden(true);
+    if(in_array($field, array('assignedTo', 'duplicateStory', 'pri', 'estimate'))) $fields->field($fieldName)->id($field . 'Box');
+    if(in_array($field, array('closedReason', 'duplicateStory', 'status')))        $fields->field($fieldName)->hidden(true);
 }
 
 $fields->field('checkAffection')->width('full')->hidden(strpos('or,lite', $config->vision) !== false);

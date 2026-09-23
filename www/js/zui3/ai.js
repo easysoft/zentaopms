@@ -953,7 +953,6 @@ $(() =>
     if(!zentaoConfig || zentaoConfig.currentModule !== 'index' || zentaoConfig.currentMethod !== 'index') return;
 
     const zaiConfig = window.zai || window.top.zai;
-    const isOpenVersion = /^\d/.test(config.version || $('#zuiCSS').attr('href').split('?v=').pop());
     if(zaiConfig)
     {
         registerZentaoAIPlugin(zaiLang);
@@ -964,7 +963,9 @@ $(() =>
             if(type === 'role' && info.role === 'user')
             {
                 if(userAvatarProps) return userAvatarProps;
-                const $avatar = $.apps.getLastApp().iframe?.contentWindow.$('#userMenu-toggle>.avatar');
+                let appWindow$ = $.apps.getLastApp().iframe?.contentWindow.$;
+                if(!appWindow$) appWindow$ = $('#apps>.app-container').first().find('iframe')[0].contentWindow.$;
+                const $avatar = appWindow$ ? appWindow$('#userMenu-toggle>.avatar') : null;
                 if($avatar?.length)
                 {
                     userAvatarProps =

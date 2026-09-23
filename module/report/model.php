@@ -317,7 +317,7 @@ class reportModel extends model
     {
         $stmt = $this->dao->select('id,`objectType`,action')->from(TABLE_ACTION)
             ->where('LEFT(date, 4)')->eq($year)
-            ->andWhere('objectType')->in(array_keys($this->config->report->annualData['contributionCount']))
+            ->andWhere('`objectType`')->in(array_keys($this->config->report->annualData['contributionCount']))
             ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
             ->query();
 
@@ -377,13 +377,13 @@ class reportModel extends model
         $filterActions = array();
         $stmt          = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('LEFT(date, 4)')->eq($year)
-            ->andWhere('objectType')->in(array_keys($this->config->report->annualData['contributions']))
+            ->andWhere('`objectType`')->in(array_keys($this->config->report->annualData['contributions']))
             ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
-            ->orderBy('objectType,objectID,id')
+            ->orderBy('`objectType`,`objectID`,id')
             ->query();
 
-        $tplData['project'] = $this->dao->select('id')->from(TABLE_PROJECT)->where('isTpl')->eq('1')->fetchPairs();
-        $tplData['task']    = $this->dao->select('id')->from(TABLE_TASK)->where('isTpl')->eq('1')->fetchPairs();
+        $tplData['project'] = $this->dao->select('id')->from(TABLE_PROJECT)->where('`isTpl`')->eq('1')->fetchPairs();
+        $tplData['task']    = $this->dao->select('id')->from(TABLE_TASK)->where('`isTpl`')->eq('1')->fetchPairs();
 
         while($action = $stmt->fetch())
         {

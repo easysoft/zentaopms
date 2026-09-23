@@ -1002,7 +1002,7 @@ class codescanModel extends model
 
         if(empty($result) || empty($result->data)) return array();
 
-        $bugList = $this->dao->select('`issueKey`,id')->from(TABLE_BUG)->where('issueKey')->in(array_column($result->data, 'id'))->fetchPairs();
+        $bugList = $this->dao->select('`issueKey`,id')->from(TABLE_BUG)->where('`issueKey`')->in(array_column($result->data, 'id'))->fetchPairs();
         foreach($result->data as $issue)
         {
             $issue->bugID     = isset($bugList[$issue->id]) ? $bugList[$issue->id] : 0;
@@ -1051,7 +1051,7 @@ class codescanModel extends model
 
         if($showBug)
         {
-            $bugID = $this->dao->select('`id`')->from(TABLE_BUG)->where('issueKey')->eq($issueID)->fetch('id');
+            $bugID = $this->dao->select('`id`')->from(TABLE_BUG)->where('`issueKey`')->eq($issueID)->fetch('id');
             if($bugID) $result->bugID = $bugID;
         }
         $result->tool               = zget($result->payload, 'tool', '');
@@ -1135,8 +1135,8 @@ class codescanModel extends model
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq(0)
             ->beginIF($status)->andWhere('status')->eq($status)->fi()
-            ->beginIF(is_array($issueList))->andWhere('issueKey')->in($issueList)->fi()
-            ->beginIF(!is_array($issueList))->andWhere('issueKey')->eq($issueList)->fi()
+            ->beginIF(is_array($issueList))->andWhere('`issueKey`')->in($issueList)->fi()
+            ->beginIF(!is_array($issueList))->andWhere('`issueKey`')->eq($issueList)->fi()
             ->fetchAll('id');
     }
 

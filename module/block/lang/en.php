@@ -225,6 +225,7 @@ $lang->block->availableBlocks['todo']        = 'To-dos';
 $lang->block->availableBlocks['task']        = 'Tasks';
 $lang->block->availableBlocks['bug']         = 'Bugs';
 $lang->block->availableBlocks['case']        = 'Cases';
+$lang->block->availableBlocks['epic']        = "{$lang->ERCommon}";
 $lang->block->availableBlocks['story']       = "Stories";
 $lang->block->availableBlocks['requirement'] = "{$lang->URCommon}";
 $lang->block->availableBlocks['product']     = $lang->productCommon . 'List';

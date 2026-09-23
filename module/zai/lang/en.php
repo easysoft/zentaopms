@@ -25,6 +25,7 @@ $lang->zai->cannotFindMemoryInZai    = 'Cannot find knowledge base with specifie
 $lang->zai->confirmResetSync         = 'Do you want to reset sync status? This will create a new knowledge base in ZAI.';
 $lang->zai->lastFailReason           = 'Failure Reason';
 $lang->zai->settingTips              = 'Please install <a class="btn btn-link text-primary px-1" style="text-decoration: none;" href="%s" target="_blank">ZAI service</a> to get the key.';
+$lang->zai->settingSavedSuccess      = 'ZAI configuration updated successfully. Please refresh the browser for the changes to take effect.';
 
 $lang->zai->zentaoVectorization       = 'Zentao Data Vectorization';
 $lang->zai->vectorized                = 'Data Vectorization';

@@ -23,6 +23,7 @@ class formBase extends wg
         'method?: "get"|"post"="post"', // 表单提交方式。
         'url?: string',                 // 表单提交地址。
         'enctype?: string',             // 表单提交类型。
+        'linkages?: array',             // 表单联动设置。
         'actions?: array',              // 表单操作按钮，如果不指定则使用默认行为的 “保存” 和 “返回” 按钮。
         'actionsClass?: string',        // 表单操作按钮栏类名。
         'target?: string="ajax"',       // 表单提交目标，如果是 `'ajax'` 提交则为 ajax，在禅道中除非特殊目的，都使用 ajax 进行提交。
@@ -117,7 +118,13 @@ class formBase extends wg
         }
         if($target === 'ajax')
         {
-            $props = array_merge($props, zui::create('ajaxForm', $this->prop('ajax')));
+            $ajaxOptions = $this->prop('ajax') ?? [];
+            $linkages = $this->prop('linkages') ?? [];
+            if(!empty($linkages))
+            {
+                $ajaxOptions['linkages'] = $linkages;
+            }
+            $props = array_merge($props, zui::create('ajaxForm', $ajaxOptions));
         }
         return $props;
     }

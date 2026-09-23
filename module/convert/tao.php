@@ -719,7 +719,7 @@ class convertTao extends convertModel
      */
     public function getJiraUser(): array
     {
-        return $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('juser')->fetchPairs('AID', 'BID');
+        return $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('`AType`')->eq('juser')->fetchPairs('AID', 'BID');
     }
 
     /**
@@ -736,7 +736,7 @@ class convertTao extends convertModel
 
         $localUsers       = $this->dao->dbh($this->dbh)->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs();
         $userConfig       = $this->session->jiraUser;
-        $jiraUserRelation = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)->where('AType')->eq('juser')->fetchPairs();
+        $jiraUserRelation = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)->where('`AType`')->eq('juser')->fetchPairs();
         foreach($dataList as $data)
         {
             $data = (object)$data;
@@ -818,7 +818,7 @@ class convertTao extends convertModel
         $projectRoleActor    = $this->getJiraProjectRoleActor($dataList);
         $archivedProject     = $this->session->jiraMethod == 'api' ? array() : $this->getJiraArchivedProject($dataList);
         $sprintGroup         = $this->getJiraSprint(array_keys($dataList));
-        $jiraProjectRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jproject')->fetchAll('AID');
+        $jiraProjectRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jproject')->fetchAll('AID');
         foreach($dataList as $id => $data)
         {
             $data = (object)$data;
@@ -878,11 +878,11 @@ class convertTao extends convertModel
         $jiraRelation = $this->session->jiraRelation;
         $relations    = $jiraRelation ? json_decode($jiraRelation, true) : array();
 
-        $projectRelation  = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)->where('AType')->eq('jproject')->andWhere('BType')->eq('zproject')->fetchPairs();
-        $productRelation  = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)->where('AType')->eq('jproject')->andWhere('BType')->eq('zproduct')->fetchPairs();
-        $projectKeys      = $this->dao->dbh($this->dbh)->select('extra,`AID`,`BID`')->from(JIRA_TMPRELATION)->where('AType')->eq('joldkey')->andWhere('BType')->eq('jnewkey')->fetchAll('extra');
-        $sprintRelation   = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)->where('AType')->eq('jsprint')->andWhere('BType')->eq('zexecution')->fetchPairs();
-        $defaultExecution = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)->where('AType')->eq('jproject')->andWhere('BType')->eq('zexecution')->fetchPairs();
+        $projectRelation  = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jproject')->andWhere('`BType`')->eq('zproject')->fetchPairs();
+        $productRelation  = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jproject')->andWhere('`BType`')->eq('zproduct')->fetchPairs();
+        $projectKeys      = $this->dao->dbh($this->dbh)->select('extra,`AID`,`BID`')->from(JIRA_TMPRELATION)->where('`AType`')->eq('joldkey')->andWhere('`BType`')->eq('jnewkey')->fetchAll('extra');
+        $sprintRelation   = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jsprint')->andWhere('`BType`')->eq('zexecution')->fetchPairs();
+        $defaultExecution = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jproject')->andWhere('`BType`')->eq('zexecution')->fetchPairs();
         $issueList        = $this->getIssueData();
         $jiraSprintList   = $this->getJiraSprintIssue();
         $jiraActions      = $this->getJiraWorkflowActions($this->session->jiraMethod == 'api' ? 'json' : $this->session->jiraMethod);
@@ -1029,8 +1029,8 @@ class convertTao extends convertModel
         $issueList = $this->getIssueData();
 
         $projectRelation = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jproject')
-            ->andWhere('BType')->eq('zproject')
+            ->where('`AType`')->eq('jproject')
+            ->andWhere('`BType`')->eq('zproject')
             ->fetchPairs();
 
         $projectProduct = $this->dao->dbh($this->dbh)->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_values($projectRelation))->fetchPairs();
@@ -1074,7 +1074,7 @@ class convertTao extends convertModel
             $versionGroup[$version->version][] = $data;
         }
 
-        $versionRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jversion')->fetchAll('AID');
+        $versionRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jversion')->fetchAll('AID');
         foreach($dataList as $data)
         {
             if(!empty($versionRelation[$data->id])) continue;
@@ -1146,7 +1146,7 @@ class convertTao extends convertModel
     protected function importJiraWorkLog(array $dataList): bool
     {
         $issueList       = $this->getIssueData();
-        $worklogRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jworklog')->fetchAll('AID');
+        $worklogRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jworklog')->fetchAll('AID');
         foreach($dataList as $data)
         {
             $data = (object)$data;
@@ -1189,7 +1189,7 @@ class convertTao extends convertModel
     {
         $issueList = $this->getIssueData();
 
-        $actionRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jaction')->fetchAll('AID');
+        $actionRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jaction')->fetchAll('AID');
 
         foreach($dataList as $data)
         {
@@ -1238,7 +1238,7 @@ class convertTao extends convertModel
         $issueList = $this->getIssueData();
 
         $changeGroup    = $changeGroups || $this->session->jiraMethod == 'api' ? $changeGroups : $this->getJiraData($this->session->jiraMethod, 'changegroup');
-        $changeRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jchangegroup')->fetchAll('AID');
+        $changeRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jchangegroup')->fetchAll('AID');
 
         $actionGroup     = array();
         $action          = new stdclass();
@@ -1309,11 +1309,11 @@ class convertTao extends convertModel
         $issueList = $this->getIssueData();
 
         $filePaths = $this->dao->dbh($this->dbh)->select('`AID`,extra')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jissueid')
-            ->andWhere('BType')->eq('jfilepath')
+            ->where('`AType`')->eq('jissueid')
+            ->andWhere('`BType`')->eq('jfilepath')
             ->fetchPairs();
 
-        $fileRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jfile')->fetchAll('AID');
+        $fileRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jfile')->fetchAll('AID');
         foreach($dataList as $fileAttachment)
         {
             $fileAttachment = (object)$fileAttachment;
@@ -1830,7 +1830,7 @@ class convertTao extends convertModel
                 foreach($data->fixVersions as $version)
                 {
                     $versionID = $version['id'];
-                    $zentaoVersionID = $this->dao->dbh($this->dbh)->select('`BID`')->from(JIRA_TMPRELATION)->where('AType')->eq('jversion')->andWhere('BType')->eq('zversion')->andWhere('AID')->eq($versionID)->fetch('BID');
+                    $zentaoVersionID = $this->dao->dbh($this->dbh)->select('`BID`')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jversion')->andWhere('`BType`')->eq('zversion')->andWhere('AID')->eq($versionID)->fetch('BID');
                     if($zentaoVersionID) $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set('stories')->eq("CONCAT(stories,',',{$storyID})")->where('id')->eq($zentaoVersionID)->exec();
                 }
             }
@@ -1986,7 +1986,7 @@ class convertTao extends convertModel
             foreach($data->fixVersions as $version)
             {
                 $versionID = $version['id'];
-                $zentaoVersionID = $this->dao->dbh($this->dbh)->select('`BID`')->from(JIRA_TMPRELATION)->where('AType')->eq('jversion')->andWhere('BType')->eq('zversion')->andWhere('AID')->eq($versionID)->fetch('BID');
+                $zentaoVersionID = $this->dao->dbh($this->dbh)->select('`BID`')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jversion')->andWhere('`BType`')->eq('zversion')->andWhere('AID')->eq($versionID)->fetch('BID');
                 if($zentaoVersionID) $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set('bugs')->eq("CONCAT(bugs,',',{$bugID})")->where('id')->eq($zentaoVersionID)->exec();
             }
         }
@@ -2227,7 +2227,7 @@ class convertTao extends convertModel
                     if($issueType == 'zbug')
                     {
                         $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set("`bugs` = IF(`bugs` IS NOT NULL, CONCAT(`bugs`, ',$objectID'), {$objectID})")->where('id')->eq($buildID)->exec();
-                        $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('resolvedBuild')->eq($buildID)->where('id')->eq($objectID)->exec();
+                        $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('`resolvedBuild`')->eq($buildID)->where('id')->eq($objectID)->exec();
                     }
                 }
                 if($issue->relation == 'IssueVersion' && $issueType == 'zbug')
@@ -2426,7 +2426,7 @@ class convertTao extends convertModel
 
         $issueTypeList = $this->getJiraData($this->session->jiraMethod == 'api' ? 'json' : $this->session->jiraMethod, 'issuetype');
         $customFields  = $this->getJiraCustomField($this->session->jiraMethod == 'api' ? 'json' : $this->session->jiraMethod);
-        $flowRelation  = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jissuetype')->andWhere('BType')->eq('zworkflow')->fetchAll('AID');
+        $flowRelation  = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jissuetype')->andWhere('`BType`')->eq('zworkflow')->fetchAll('AID');
         foreach($relations['zentaoObject'] as $jiraCode => $zentaoCode)
         {
             if($zentaoCode != 'add_custom') continue;
@@ -2539,7 +2539,7 @@ class convertTao extends convertModel
 
         $this->loadModel('workflowfield');
         $jiraFieldControl = $this->config->convert->jiraFieldControl;
-        $fieldRelation    = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jcustomfield')->fetchGroup('extra', 'AID');
+        $fieldRelation    = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jcustomfield')->fetchGroup('extra', 'AID');
 
         /* 创建内置字段。 */
         foreach($relations['zentaoObject'] as $jiraCode => $module) $this->createBuildinField($module, $jiraResolutions, $jiraPriList, true);
@@ -2733,7 +2733,7 @@ class convertTao extends convertModel
         $this->loadModel('workflowaction');
         $this->loadModel('workflowhook');
         $currentLang        = $this->app->getClientLang();
-        $flowActionRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jflowaction')->fetchGroup('extra', 'AID');
+        $flowActionRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jflowaction')->fetchGroup('extra', 'AID');
         foreach($relations as $stepKey => $actionList)
         {
             if(strpos($stepKey, 'zentaoAction') === false) continue;
@@ -2832,7 +2832,7 @@ class convertTao extends convertModel
             {
                 $this->workflowgroup->setExclusive($flow->id, $groupID);
 
-                $this->dao->dbh($this->dbh)->update(TABLE_WORKFLOWACTION)->set('extensionType')->eq('extend')->where('module')->eq($flow->module)->andWhere('`group`')->eq($groupID)->andWhere('action')->in($actionList)->exec();
+                $this->dao->dbh($this->dbh)->update(TABLE_WORKFLOWACTION)->set('`extensionType`')->eq('extend')->where('module')->eq($flow->module)->andWhere('`group`')->eq($groupID)->andWhere('action')->in($actionList)->exec();
 
                 /* 内置字段添加到布局。 */
                 $fields = array();
@@ -2855,9 +2855,9 @@ class convertTao extends convertModel
             }
         }
 
-        if(!empty($disabledModules)) $this->dao->update(TABLE_WORKFLOWGROUP)->set('disabledModules')->eq(implode(',', array_unique($disabledModules)))->where('id')->eq($groupID)->exec();
-        if($type == 'product') $this->dao->dbh($this->dbh)->update(TABLE_PRODUCT)->set('workflowGroup')->eq($groupID)->where('id')->eq($productRelations[$jiraProjectID])->exec();
-        if($type == 'project') $this->dao->dbh($this->dbh)->update(TABLE_PROJECT)->set('workflowGroup')->eq($groupID)->where('id')->eq($zentaoProjectID)->exec();
+        if(!empty($disabledModules)) $this->dao->update(TABLE_WORKFLOWGROUP)->set('`disabledModules`')->eq(implode(',', array_unique($disabledModules)))->where('id')->eq($groupID)->exec();
+        if($type == 'product') $this->dao->dbh($this->dbh)->update(TABLE_PRODUCT)->set('`workflowGroup`')->eq($groupID)->where('id')->eq($productRelations[$jiraProjectID])->exec();
+        if($type == 'project') $this->dao->dbh($this->dbh)->update(TABLE_PROJECT)->set('`workflowGroup`')->eq($groupID)->where('id')->eq($zentaoProjectID)->exec();
         $this->createTmpRelation('jproject', $jiraProjectID, 'zworkflowgroup', $groupID);
 
         return true;
@@ -2879,7 +2879,7 @@ class convertTao extends convertModel
 
         $this->loadModel('action');
         $this->loadModel('workflowgroup');
-        $groupRelations       = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)->where('AType')->eq('jproject')->andWhere('BType')->eq('zworkflowgroup')->fetchPairs();
+        $groupRelations       = $this->dao->dbh($this->dbh)->select('`AID`,`BID`')->from(JIRA_TMPRELATION)->where('`AType`')->eq('jproject')->andWhere('`BType`')->eq('zworkflowgroup')->fetchPairs();
         $projectList          = $this->getJiraData($this->session->jiraMethod == 'api' ? 'json' : $this->session->jiraMethod, 'project', 0, 1000, true);
         $projectIssueTypeList = $this->getIssueTypeList($relations);
         $projectFieldList     = $this->getJiraFieldGroupByProject($relations);
@@ -2964,7 +2964,7 @@ class convertTao extends convertModel
             $parentID = zget($issueList[$source], 'BID', '');
             $this->dao->dbh($this->dbh)->update(TABLE_STORY)
                 ->set('parent')->eq('0')
-                ->set('isParent')->eq('1')
+                ->set('`isParent`')->eq('1')
                 ->set('grade')->eq('1')
                 ->set('root')->eq($parentID)
                 ->set('path')->eq(",{$parentID},")
@@ -2983,7 +2983,7 @@ class convertTao extends convertModel
                 $childrenID = zget($issueList[$childID], 'BID', '');
                 $this->dao->dbh($this->dbh)->update(TABLE_STORY)
                     ->set('parent')->eq($parentID)
-                    ->set('isParent')->eq('0')
+                    ->set('`isParent`')->eq('0')
                     ->set('grade')->eq($grade)
                     ->set('root')->eq($parentID)
                     ->set('path')->eq(",{$parentID},{$childrenID},")
@@ -3014,7 +3014,7 @@ class convertTao extends convertModel
             $parentID = zget($issueList[$source], 'BID', '');
             $this->dao->dbh($this->dbh)->update(TABLE_TASK)
                 ->set('parent')->eq('0')
-                ->set('isParent')->eq('1')
+                ->set('`isParent`')->eq('1')
                 ->set('path')->eq(",{$parentID},")
                 ->where('id')->eq($parentID)
                 ->exec();
@@ -3063,11 +3063,11 @@ class convertTao extends convertModel
 
             if($sourceObjectType == 'zstory')
             {
-                $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('duplicateStory')->eq($destObjectID)->where('id')->eq($sourceObjectID)->exec();
+                $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('`duplicateStory`')->eq($destObjectID)->where('id')->eq($sourceObjectID)->exec();
             }
             else
             {
-                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('duplicateBug')->eq($destObjectID)->where('id')->eq($sourceObjectID)->exec();
+                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('`duplicateBug`')->eq($destObjectID)->where('id')->eq($sourceObjectID)->exec();
             }
         }
 
@@ -3104,19 +3104,19 @@ class convertTao extends convertModel
             }
             elseif($sourceObjectType == 'zstory' && $destObjectType == 'zbug')
             {
-                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('story')->eq($sourceObjectID)->set('storyVersion')->eq(1)->where('id')->eq($destObjectID)->exec();
+                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('story')->eq($sourceObjectID)->set('`storyVersion`')->eq(1)->where('id')->eq($destObjectID)->exec();
             }
             elseif($sourceObjectType == 'zbug' && $destObjectType == 'zstory')
             {
-                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('story')->eq($destObjectID)->set('storyVersion')->eq(1)->where('id')->eq($sourceObjectID)->exec();
+                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('story')->eq($destObjectID)->set('`storyVersion`')->eq(1)->where('id')->eq($sourceObjectID)->exec();
             }
             elseif($sourceObjectType == 'zstory' && $destObjectType == 'zstory')
             {
-                $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set("linkStories=concat(linkStories, ',{$destObjectID}')")->where('id')->eq($sourceObjectID)->exec();
+                $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set("`linkStories`=concat(`linkStories`, ',{$destObjectID}')")->where('id')->eq($sourceObjectID)->exec();
             }
             elseif($sourceObjectType == 'zbug' && $destObjectType == 'zbug')
             {
-                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set("relatedBug=concat(relatedBug, ',{$destObjectID}')")->where('id')->eq($sourceObjectID)->exec();
+                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set("`relatedBug`=concat(`relatedBug`, ',{$destObjectID}')")->where('id')->eq($sourceObjectID)->exec();
             }
         }
 
@@ -3141,7 +3141,7 @@ class convertTao extends convertModel
         }
 
         $fileGroup = array();
-        $fileList  = $this->dao->dbh($this->dbh)->select('*')->from(TABLE_FILE)->where('objectType')->in($issueTypeList)->fetchAll();
+        $fileList  = $this->dao->dbh($this->dbh)->select('*')->from(TABLE_FILE)->where('`objectType`')->in($issueTypeList)->fetchAll();
         foreach($fileList as $file)
         {
             $file = (object)$file;
@@ -3185,7 +3185,7 @@ class convertTao extends convertModel
                 if($content) $this->dao->update(TABLE_STORYSPEC)->set('`spec`')->eq($content)->where('`story`')->eq($objectID)->exec();
             }
 
-            $actions = $this->dao->select('id,comment')->from(TABLE_ACTION)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->fetchAll();
+            $actions = $this->dao->select('id,comment')->from(TABLE_ACTION)->where('`objectType`')->eq($objectType)->andWhere('`objectID`')->eq($objectID)->fetchAll();
             foreach($actions as $action)
             {
                 $action  = (object)$action;

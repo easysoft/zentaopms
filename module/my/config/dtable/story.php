@@ -294,6 +294,7 @@ $config->my->story->dtable->fieldList['notifyEmail']['group']    = 11;
 
 $config->my->story->dtable->fieldList['mailto']['name']     = 'mailto';
 $config->my->story->dtable->fieldList['mailto']['title']    = $lang->story->mailto;
+$config->my->story->dtable->fieldList['mailto']['type']     = 'category';
 $config->my->story->dtable->fieldList['mailto']['width']    = '100';
 $config->my->story->dtable->fieldList['mailto']['sortType'] = true;
 $config->my->story->dtable->fieldList['mailto']['group']    = 11;

@@ -311,6 +311,7 @@ $lang->block->availableBlocks->todo      = '我的日程';
 $lang->block->availableBlocks->task      = '我的任務';
 $lang->block->availableBlocks->bug       = '我的Bug';
 $lang->block->availableBlocks->case      = '我的用例';
+$lang->block->availableBlocks->epic      = "我的{$lang->ERCommon}";
 $lang->block->availableBlocks->story     = "我的{$lang->SRCommon}";
 $lang->block->availableBlocks->product   = $lang->productCommon . '列表';
 $lang->block->availableBlocks->execution = $lang->executionCommon . '列表';

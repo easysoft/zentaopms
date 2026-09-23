@@ -102,6 +102,7 @@ $buildAssignedTo = function() use($assignedToRequired)
             div(setClass('flex grow'),
                 picker
                 (
+                    setID('assignedTo'),
                     set::name('assignedTo'),
                     set::items(data('taskMembers')),
                     set::value(data('task.assignedTo')),
@@ -126,6 +127,7 @@ $buildAssignedTo = function() use($assignedToRequired)
         div(setClass('flex grow'),
             taskAssignedTo
             (
+                setID('assignedTo'),
                 setClass('w-full'),
                 set::name('assignedTo'),
                 set::items(data('taskMembers')),
@@ -213,6 +215,7 @@ $buildFiles = function()
 };
 
 $fields->field('files')
+    ->id('files')
     ->position('info')
     ->width('full')
     ->control($buildFiles);
@@ -322,7 +325,7 @@ $fields->field('estimate')
     ->position('basic')
     ->group($lang->task->legendEffort)
     ->required(strpos(",{$config->task->edit->requiredFields},", ",estimate,") !== false)
-    ->control('inputControl', array('suffix' => $lang->task->suffixHour, 'suffixWidth' => 20))
+    ->control('inputControl', array('id' => 'estimate', 'suffix' => $lang->task->suffixHour, 'suffixWidth' => 20))
     ->readonly($estimateReadonly)
     ->value(helper::formatHours(data('task.estimate')));
 
@@ -334,7 +337,7 @@ $fields->field('consumed')
 $fields->field('left')
     ->position('basic')
     ->group($lang->task->legendEffort)
-    ->control('inputControl', array('suffix' => $lang->task->suffixHour, 'suffixWidth' => 20))
+    ->control('inputControl', array('id' => 'left', 'suffix' => $lang->task->suffixHour, 'suffixWidth' => 20))
     ->readonly($leftReadonly)
     ->value(helper::formatHours(data('task.left')));
 

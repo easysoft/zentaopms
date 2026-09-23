@@ -101,6 +101,7 @@ if($canBatchAction) $config->my->story->dtable->fieldList['id']['type'] = 'check
 $stories = initTableData($stories, $config->my->story->dtable->fieldList, $this->story);
 $cols    = $this->loadModel('datatable')->getSetting('my', 'story');
 if($viewType == 'tiled') $cols['title']['nestedToggle'] = false;
+if(isset($cols['mailto'])) $cols['mailto']['map'] = $users;
 
 /* Convert reviewer accounts to realnames. */
 $processReviewer = function($story) use ($users, &$processReviewer)

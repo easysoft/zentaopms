@@ -224,6 +224,7 @@ $lang->block->availableBlocks['todo']        = '待办';
 $lang->block->availableBlocks['task']        = '任务';
 $lang->block->availableBlocks['bug']         = 'Bug';
 $lang->block->availableBlocks['case']        = '用例';
+$lang->block->availableBlocks['epic']        = "{$lang->ERCommon}";
 $lang->block->availableBlocks['story']       = "{$lang->SRCommon}";
 $lang->block->availableBlocks['requirement'] = "{$lang->URCommon}";
 $lang->block->availableBlocks['product']     = $lang->productCommon . '列表';

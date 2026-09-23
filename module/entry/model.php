@@ -79,8 +79,8 @@ class entryModel extends model
     public function getLogs(int $id, string $orderBy = 'date_desc', ?object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_LOG)
-            ->where('objectType')->eq('entry')
-            ->andWhere('objectID')->eq($id)
+            ->where('`objectType`')->eq('entry')
+            ->andWhere('`objectID`')->eq($id)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -147,7 +147,7 @@ class entryModel extends model
      */
     public function updateCalledTime(string $code, int $time): bool
     {
-        $this->dao->update(TABLE_ENTRY)->set('calledTime')->eq($time)->where('code')->eq($code)->exec();
+        $this->dao->update(TABLE_ENTRY)->set('`calledTime`')->eq($time)->where('code')->eq($code)->exec();
         return !dao::isError();
     }
 

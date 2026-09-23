@@ -680,6 +680,7 @@ class file extends control
         if(empty($file)) return print($this->lang->file->fileNotFound);
 
         if(!empty($this->lang->{$this->app->tab}->menu)) $this->lang->{$this->app->tab}->menu = array();
+        if(!$this->canViewDownload($file, $mode)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->file->accessDenied, 'locate' => helper::createLink('my', 'index')), 'closeModal' => true));
 
         $officeTypes = 'doc|docx|xls|xlsx|ppt|pptx';
         $isOffice    = stripos($officeTypes, $file->extension) !== false;
@@ -688,13 +689,39 @@ class file extends control
         switch($mode)
         {
             case 'preview':
-                if($isOffice && $officeOn) $this->locate(helper::createLink('file', 'preview', "fileID={$file->id}&mouse=left"));
+                if($isOffice && $officeOn)
+                {
+                    $previewModule = $file->objectType == 'doc' ? 'doc' : 'file';
+                    $previewMethod = $file->objectType == 'doc' ? 'previewFile' : 'preview';
+                    $this->locate(helper::createLink($previewModule, $previewMethod, "fileID={$file->id}&mouse=left"));
+                }
                 return $this->preview($file->id, 'left');
             case 'download':
                 return $this->download($file->id);
             default:
                 return $this->readFileContent($file);
         }
+    }
+
+    /**
+     * Check view download privilege.
+     *
+     * @param  object $file
+     * @param  string $mode
+     * @access private
+     * @return bool
+     */
+    private function canViewDownload(object $file, string $mode): bool
+    {
+        if($file->objectType == 'doc')
+        {
+            if(!common::hasPriv('doc', 'view')) return false;
+            return $this->file->checkPriv($file);
+        }
+
+        if($mode == 'download') return common::hasPriv('file', 'download') && $this->file->checkPriv($file);
+
+        return common::hasPriv('file', 'preview') && $this->file->checkPriv($file);
     }
 
     /**

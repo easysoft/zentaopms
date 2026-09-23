@@ -425,7 +425,7 @@ class upgrade extends control
             if(empty($hourPoint)) $this->setting->setItem('system.custom.hourPoint', 0);
 
             $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll('id');
-            $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->andWhere('objectType')->eq('project')->exec();
+            $this->dao->update(TABLE_ACTION)->set('`objectType`')->eq('execution')->where('`objectID`')->in(array_keys($sprints))->andWhere('`objectType`')->eq('project')->exec();
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->locate(inlink('afterExec', "fromVersion={$fromVersion}"));

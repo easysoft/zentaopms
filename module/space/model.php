@@ -221,9 +221,14 @@ class spaceModel extends model
      */
     public function getPairs(string $account = '', bool $filterRepoCreate = false): array
     {
-        $userSpaces = $this->getSpacesByAccount($account);
+        if(!$account) $account = $this->app->user->account;
 
-        $spaces = $this->getByIdList(array_keys($userSpaces), false);
+        $userSpaces  = $this->getSpacesByAccount($account);
+        $spaceIdList = array_keys($userSpaces);
+
+        if(empty($spaceIdList) && !$this->app->user->admin) $spaceIdList = array(0);
+
+        $spaces = $this->getByIdList($spaceIdList, false);
 
         $spacesPairs = array();
         foreach($spaces as $space)
@@ -411,7 +416,7 @@ class spaceModel extends model
     public function getReposBySpace(int $spaceID, $acl = ''): array
     {
         return $this->dao->select('*')->from(TABLE_REPO)
-            ->where('spaceID')->eq($spaceID)
+            ->where('`spaceID`')->eq($spaceID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->ne('importing')
             ->beginIF($acl)->andWhere('acl')->eq($acl)->fi()
@@ -429,7 +434,7 @@ class spaceModel extends model
     public function getArtifactLibsBySpace(int $spaceID): array
     {
         return $this->dao->select('*')->from(TABLE_ARTIFACT)
-            ->where('spaceID')->eq($spaceID)
+            ->where('`spaceID`')->eq($spaceID)
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
     }
@@ -445,7 +450,7 @@ class spaceModel extends model
     public function getPipelineBySpace(int $spaceID): array
     {
         return $this->dao->select('*')->from(TABLE_PIPELINE)
-            ->where('spaceID')->eq($spaceID)
+            ->where('`spaceID`')->eq($spaceID)
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
     }
@@ -817,7 +822,7 @@ class spaceModel extends model
             {
                 if($type == 'group')
                 {
-                    $group = $this->dao->select('id')->from(TABLE_GROUP)->where('devopsSpace')->eq($spaceID)->fetchPairs();
+                    $group = $this->dao->select('id')->from(TABLE_GROUP)->where('`devopsSpace`')->eq($spaceID)->fetchPairs();
                     $this->dao->delete()->from(TABLE_USERGROUP)
                         ->where('`account`')->in($deleteUsers)
                         ->andWhere('`group`')->in(array_keys($group))
@@ -920,7 +925,7 @@ class spaceModel extends model
         $repos = $this->dao->select('id,product,acl')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
             ->andWhere('status')->ne('importing')
-            ->andWhere('spaceID')->eq($spaceID)->fetchAll();
+            ->andWhere('`spaceID`')->eq($spaceID)->fetchAll();
         $productIdList = array();
         foreach($repos as $key => $repo)
         {

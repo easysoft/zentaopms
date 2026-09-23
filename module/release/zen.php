@@ -154,7 +154,7 @@ class releaseZen extends release
         $parentIdList = $this->dao->select('id')->from(TABLE_STORY)
             ->where('product')->eq($release->product)
             ->andWhere('type')->eq('story')
-            ->andWhere('isParent')->eq('1')
+            ->andWhere('`isParent`')->eq('1')
             ->andWhere('status')->notIN('draft,reviewing,changing')
             ->fetchPairs();
 

@@ -28,7 +28,7 @@ su('admin');
 
 $testcaseTest = new testcaseZenTest();
 
-$context = array('config' => array(), 'moduleList' => array(), 'caseList' => array(), 'sceneList' => array(), 'topScenes' => array());
+$context = array('config' => array(), 'moduleList' => array(), 'caseList' => array(), 'stepList' => array(), 'sceneList' => array(), 'sceneMaps' => array(), 'topScenes' => array());
 
 r(get_class($testcaseTest->createFreeMindXmlDocTest(1, '产品1', $context))) && p() && e('DOMDocument');
 r(get_class($testcaseTest->createFreeMindXmlDocTest(2, '', $context))) && p() && e('DOMDocument');

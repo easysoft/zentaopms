@@ -82,7 +82,7 @@ class ppmModel extends model
     {
         return $this->dao->select('id,title')
             ->from(TABLE_PPM)
-            ->where('repoID')->eq($repoID)
+            ->where('`repoID`')->eq($repoID)
             ->orderBy('id')
             ->fetchPairs('id', 'title');
     }
@@ -323,7 +323,7 @@ class ppmModel extends model
     {
         if(!$account) $account = $this->app->user->account;
         $this->dao->update(TABLE_PPMREVIEWERS)->data($formData)
-            ->where('requestID')->eq($ppmID)
+            ->where('`requestID`')->eq($ppmID)
             ->andWhere('account')->eq($account)
             ->exec();
         return !dao::isError();
@@ -518,10 +518,10 @@ class ppmModel extends model
         if(!isset($this->config->objectTables[$type])) return false;
 
         $this->dao->delete()->from(TABLE_RELATION)
-            ->where('AType')->eq($this->moduleName)
+            ->where('`AType`')->eq($this->moduleName)
             ->andWhere('AID')->eq($ppmID)
             ->andWhere('relation')->eq('interrated')
-            ->andWhere('BType')->eq($type)
+            ->andWhere('`BType`')->eq($type)
             ->andWhere('BID')->eq($objectID)
             ->exec();
 
@@ -597,11 +597,11 @@ class ppmModel extends model
     {
         if($sourceRepoID == $targetRepoID && $sourceBranch == $targetBranch) return array('result' => 'fail', 'message' => $this->lang->ppm->errorLang[1]);
         $dbOpenedID = $this->dao->select('id')->from(TABLE_PPM)
-            ->where('repoID')->eq($repoID)
-            ->andWhere('sourceRepoID')->eq($sourceRepoID)
-            ->andWhere('sourceBranch')->eq($sourceBranch)
-            ->andWhere('targetRepoID')->eq($targetRepoID)
-            ->andWhere('targetBranch')->eq($targetBranch)
+            ->where('`repoID`')->eq($repoID)
+            ->andWhere('`sourceRepoID`')->eq($sourceRepoID)
+            ->andWhere('`sourceBranch`')->eq($sourceBranch)
+            ->andWhere('`targetRepoID`')->eq($targetRepoID)
+            ->andWhere('`targetBranch`')->eq($targetBranch)
             ->andWhere('status')->eq('opened')
             ->fetch('id');
         if(!empty($dbOpenedID)) return array('result' => 'fail', 'message' => sprintf($this->lang->ppm->hasSameOpenedMR, $dbOpenedID));
@@ -851,7 +851,7 @@ class ppmModel extends model
      */
     public function getReviewers(int $ppmID): array
     {
-        return $this->dao->select('*')->from(TABLE_PPMREVIEWERS)->where('requestID')->eq($ppmID)->fetchAll('account', false);
+        return $this->dao->select('*')->from(TABLE_PPMREVIEWERS)->where('`requestID`')->eq($ppmID)->fetchAll('account', false);
     }
 
     /**
@@ -902,7 +902,7 @@ class ppmModel extends model
     {
         if(empty($ppmID) || empty($reviewer)) return false;
 
-        $this->dao->delete()->from(TABLE_PPMREVIEWERS)->where('requestID')->eq($ppmID)->andWhere('account')->eq($reviewer)->exec();
+        $this->dao->delete()->from(TABLE_PPMREVIEWERS)->where('`requestID`')->eq($ppmID)->andWhere('account')->eq($reviewer)->exec();
         if(dao::isError()) return false;
 
         $user = $this->dao->select('realname')->from(TABLE_USER)->where('account')->eq($reviewer)->fetch();
