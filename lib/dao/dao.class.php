@@ -340,7 +340,6 @@ class dao extends baseDAO
         if(!$fields) return $this;
 
         $module = $this->app->getModuleName();
-        $method = $this->app->getMethodName();
         if($module == 'story'   && $this->app->rawModule == 'requirement') $module = 'requirement';
         if($module == 'story'   && $this->app->rawModule == 'epic')        $module = 'epic';
         foreach($fields as $field)
