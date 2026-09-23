@@ -3099,6 +3099,8 @@ class userModel extends model
         if(!$user) return false;
 
         /* 获取指定用户的权限信息 */
+        if($this->config->edition == 'gitfox') $this->config->vision = 'gitfox';
+
         $userRights = $this->authorize($account);
         $rights     = $userRights['rights'];
         $isAdmin    = strpos($app->company->admins, ",{$account},") !== false;
