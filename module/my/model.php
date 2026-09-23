@@ -1715,9 +1715,14 @@ class myModel extends model
 
             $review->product    = isset($object->product) ? $object->product : 0;
             $review->project    = isset($object->project) ? $object->project : 0;
+            $review->openedBy   = '';
             $review->reviewer   = '';
             $review->opinion    = '';
             $review->reviewTime = '';
+
+            if(isset($object->openedBy) && $object->openedBy !== '')       $review->openedBy = $object->openedBy;
+            elseif(isset($object->createdBy) && $object->createdBy !== '') $review->openedBy = $object->createdBy;
+            elseif(isset($object->account) && $object->account !== '')     $review->openedBy = $object->account;
 
             $reviewAction = isset($reviewActions[$objectType][$action->objectID]) ? $reviewActions[$objectType][$action->objectID] : null;
             if(isset($action->action) && in_array($action->action, array('reviewed', 'approvalreview'))) $reviewAction = $action;
