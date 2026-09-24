@@ -152,13 +152,13 @@ class story extends control
      * @param  int    $planID
      * @param  int    $todoID
      * @param  string $extra for example feedbackID=0
-     * @param  string $storyType requirement|story
+     * @param  string $storyType story|requirement|epic
      * @access public
      * @return void
      */
     public function copy(int $productID = 0, string $branch = '', int $moduleID = 0, int $storyID = 0, int $objectID = 0, int $bugID = 0, int $planID = 0, int $todoID = 0, string $extra = '', string $storyType = 'story')
     {
-        echo $this->fetch('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=story");
+        echo $this->fetch('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=$storyType");
     }
 
     /**
