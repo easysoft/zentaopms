@@ -1251,12 +1251,15 @@ class myModel extends model
             $reviewList[$id] = $data;
         }
 
-        if($checkExists) return !empty($reviewList);
+        if($checkExists)
+        {
+            return !empty($reviewList);
+        }
 
-         $actions = $this->dao->select('`objectID`, `date`')->from(TABLE_ACTION)->where('`objectType`')->eq('demand')->andWhere('`objectID`')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
-         foreach($actions as $demandID => $date) $reviewList[$demandID]->time = $date;
+        $actions = $this->dao->select('`objectID`, `date`')->from(TABLE_ACTION)->where('`objectType`')->eq('demand')->andWhere('`objectID`')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
+        foreach($actions as $demandID => $date) $reviewList[$demandID]->time = $date;
 
-         return array_values($reviewList);
+        return array_values($reviewList);
     }
 
     /**

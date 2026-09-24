@@ -712,7 +712,7 @@ class blockZen extends block
                 ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
                 ->orderBy($block->params->orderBy)
                 ->beginIF($this->viewType != 'json')->limit((int)$block->params->count)->fi()
-                ->fetchAll();
+                ->fetchAll('id', false);
         }
         $this->view->cases = $cases;
     }

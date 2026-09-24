@@ -255,17 +255,17 @@ function updateAssignedTo()
     /* 串行多人任务取第一个人作为指派人. */
     if(mode == 'linear' && $('#teamTable tr.member-doing').length == 0 && $('#teamTable tr.member-wait').length >= 1) assignedTo = $('#teamTable tr.member-wait').first().find('[name^=team]').first().val();
 
-    let $assignedToPicker = $('#assignedTo').zui('picker');
-    $assignedToPicker.render({items: users});
-    $assignedToPicker.$.setValue(assignedTo);
-
-    if(mode == 'multi' && isTeamMember)
+    const disabled = !(mode == 'multi' && isTeamMember);
+    let $assignedToPicker = $('[name=assignedTo]').zui('picker');
+    if($assignedToPicker)
     {
-        $('#assignedTo').picker({disabled: false});
+        $assignedToPicker.render({items: users});
+        $assignedToPicker.$.setValue(assignedTo);
+        $assignedToPicker.render({disabled: disabled});
     }
     else
     {
-        $('#assignedTo').picker({disabled: true});
+        $('[name=assignedTo]').val(assignedTo).prop('disabled', disabled);
     }
 }
 
