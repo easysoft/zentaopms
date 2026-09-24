@@ -308,6 +308,7 @@ class myTao extends myModel
             $titleFieldName  = zget($objectNameFields, $objectType, '');
             $openedDateField = zget($this->config->my->openedDateField, $objectType, 'openedDate');
             if(empty($titleFieldName) && !empty($flow)) $openedDateField = 'createdDate';
+            if(!$flow->buildin) $openedDateField = 'createdDate';
 
             foreach($objects as $object)
             {
