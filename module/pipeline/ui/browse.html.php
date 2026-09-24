@@ -29,6 +29,8 @@ foreach($spaces as $id => $spaceName)
     $spaceItems[] = array('text' => $spaceName, 'url' => createLink('pipeline', 'browse', "space={$id}&repoID={$repoID}&type={$type}"));
 }
 
+/* 流水线应用会显示空间切换下拉菜单，从空间或代码库进入时不显示。 */
+$dropdown = null;
 if($app->tab == 'pipeline')
 {
     $config->pipeline->dtable->fieldList['space']['map'] = $spaces;
@@ -63,7 +65,7 @@ else
     /* zin: Define the set::module('pipeline') feature bar on main menu. */
     featureBar
     (
-        $app->tab != 'pipeline' && !empty($dropdown) ? null : to::before($dropdown),
+        $app->tab != 'pipeline' && empty($dropdown) ? null : to::before($dropdown),
         set::current($type),
         set::link($this->createLink('pipeline', 'browse', "spaceID={$spaceID}&repoID={$repoID}&type={key}")),
         div(searchToggle(set::module('pipeline'), set::open($type == 'bySearch')))
