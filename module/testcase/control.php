@@ -797,6 +797,7 @@ class testcase extends control
         $this->view->title      = $this->lang->testcase->review;
         $this->view->users      = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->testcaseID = $caseID;
+        $this->view->testcase   = $oldCase;
         $this->view->actions    = $this->loadModel('action')->getList('case', $caseID);
         $this->display();
     }
