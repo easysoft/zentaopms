@@ -284,9 +284,9 @@ class dao extends baseDAO
 
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
-        if($module == 'story' && $this->app->rawModule == 'requirement') $module = 'requirement';
-        if($module == 'story' && $this->app->rawModule == 'epic')        $module = 'epic';
-        if($module == 'project' && $method == 'createtemplate')          $method = 'create';
+        if($module == 'story'   && $this->app->rawModule == 'requirement') $module = 'requirement';
+        if($module == 'story'   && $this->app->rawModule == 'epic')        $module = 'epic';
+        if($module == 'project' && $method == 'createtemplate')            $method = 'create';
 
         $groupID = $this->getWorkflowGroupID($module, $this->sqlobj->data);
 
@@ -338,6 +338,10 @@ class dao extends baseDAO
     {
         global $lang;
         if(!$fields) return $this;
+
+        $module = $this->app->getModuleName();
+        if($module == 'story'   && $this->app->rawModule == 'requirement') $module = 'requirement';
+        if($module == 'story'   && $this->app->rawModule == 'epic')        $module = 'epic';
         foreach($fields as $field)
         {
             /* If the field don't have rule, don't check it. */
@@ -350,6 +354,13 @@ class dao extends baseDAO
                     if(empty($rule)) continue;
                     if($rule->type != 'system' || $rule->rule != 'notempty') continue;
                     if(!isset($_FILES[$field->field])) continue;
+
+                    /* 由于现在的附件控件会显示历史附件，所以历史上传过附件也不会触发必填校验了。 */
+                    if(!empty($this->sqlobj->data->id) && is_int($this->sqlobj->data->id))
+                    {
+                        $files = $this->dbh->query("SELECT 1 FROM " . TABLE_FILE . " WHERE `objectType` = '{$module}' AND `objectID` = {$this->sqlobj->data->id} AND extra = '{$field->field}'")->fetch();
+                        if(!empty($files)) continue;
+                    }
 
                     $files = !empty($_FILES[$field->field]) ? $_FILES[$field->field] : '';
                     if(empty($files['size'][0])) dao::$errors[$field->field][] = sprintf($lang->error->notempty, $field->name);

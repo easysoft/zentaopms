@@ -591,10 +591,12 @@ class mailModel extends model
         $action     = $this->mailTao->getActionForMail($actionID);
         $objectType = $action->objectType;
         $object     = $this->mailTao->getObjectForMail($objectType, $objectID);
-        $title      = $object ? $this->mailTao->getObjectTitle($object, $objectType) : '';
-        $subject    = $object ? $this->getSubject($objectType, $object, $title, $action->action) : '';
-        $domain     = zget($this->config->mail, 'domain', common::getSysURL());
-        $domain     = rtrim($domain, '/');
+        if(empty($object)) return;
+
+        $title   = $this->mailTao->getObjectTitle($object, $objectType);
+        $subject = $this->getSubject($objectType, $object, $title, $action->action);
+        $domain  = zget($this->config->mail, 'domain', common::getSysURL());
+        $domain  = rtrim($domain, '/');
 
         if(empty($title)) $action->appendLink = '';
         if($title and $action->appendLink) $action->appendLink = html::a($domain . helper::createLink($action->objectType, 'view', "id={$action->appendLink}"), "#{$action->appendLink} {$title}");
