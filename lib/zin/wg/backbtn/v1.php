@@ -101,6 +101,7 @@ class backBtn extends btn
             'weekly'         => 'weekly-browse',
             'milestone'      => 'weekly-browse',
             'nc'             => 'nc-browse',
+            'effort'         => 'search-index',
             'budget'         => 'budget-browse,action-trash',
             'roadmap'        => 'roadmap-browse,roadmap-view,charter-view',
             'art'            => 'art-browse,pi-browse'
