@@ -10,6 +10,14 @@ class devModel extends model
     public $defaultLang;
 
     /**
+     * Cache of descriptions loaded from language files.
+     *
+     * @var    array
+     * @access protected
+     */
+    protected static $langDescriptionCache = array();
+
+    /**
      * Get All tables.
      *
      * @access public
@@ -49,6 +57,8 @@ class devModel extends model
 
         $module      = substr($table, strpos($table, '_') + 1);
         $aliasModule = $subLang = '';
+        $fieldDescriptions = $this->getFieldDescriptions();
+        $columnComments    = $this->getColumnComments($table);
         $this->app->loadLang($module);
         try
         {
@@ -83,8 +93,25 @@ class devModel extends model
             if($subLang) $field['name'] = isset($this->lang->$aliasModule->$subLang->{$rawField->field}) ? $this->lang->$aliasModule->$subLang->{$rawField->field} : $field['name'];
 
             if(!is_string($field['name'])) $field['name'] = '';
-            $field['null']            = $rawField->null;
-            $fields[$rawField->field] = $this->setField($field, $rawField, $type, $firstPOS);
+            $field['null'] = $rawField->null;
+            $field         = $this->setField($field, $rawField, $type, $firstPOS);
+
+            $field['baseType']          = trim(preg_replace('/\s+(unsigned|zerofill)\b/i', '', $type));
+            $field['description']       = '';
+            $field['descriptionSource'] = 'none';
+            if(!empty($fieldDescriptions[$module][$rawField->field]))
+            {
+                $field['description']       = (string)$fieldDescriptions[$module][$rawField->field];
+                $field['descriptionSource'] = 'lang';
+            }
+            elseif(!empty($columnComments[$rawField->field]))
+            {
+                $field['description']       = (string)$columnComments[$rawField->field];
+                $field['descriptionSource'] = 'comment';
+            }
+            $field['optionList'] = $this->buildOptionList($rawField->field, $field, $module, $aliasModule);
+
+            $fields[$rawField->field] = $field;
         }
         return $fields;
     }
@@ -101,6 +128,9 @@ class devModel extends model
      */
     public function setField($field, $rawField, $type, $firstPOS)
     {
+        $field['key']     = isset($rawField->key) ? $rawField->key : '';
+        $field['default'] = isset($rawField->default) ? $rawField->default : '';
+
         if($type == 'enum' or $type == 'set')
         {
             $rangeBegin = $firstPOS + 2;                       // Remove the first quote.
@@ -128,6 +158,443 @@ class devModel extends model
         }
 
         return $field;
+    }
+
+    /**
+     * Build option list of enum or set field.
+     *
+     * @param  string $fieldName
+     * @param  array  $field
+     * @param  string $module
+     * @param  string $aliasModule
+     * @access public
+     * @return array
+     */
+    public function buildOptionList(string $fieldName, array $field, string $module, string $aliasModule = ''): array
+    {
+        if(empty($field['options']['enum'])) return array();
+
+        $list = array();
+        if(isset($this->lang->$module->{$fieldName . 'List'})) $list = (array)$this->lang->$module->{$fieldName . 'List'};
+        if(empty($list) and $aliasModule and isset($this->lang->$aliasModule->{$fieldName . 'List'})) $list = (array)$this->lang->$aliasModule->{$fieldName . 'List'};
+
+        $options = array();
+        foreach(explode(',', (string)$field['options']['enum']) as $value)
+        {
+            if($value === '') continue;
+            $options[] = array('value' => $value, 'label' => isset($list[$value]) && is_string($list[$value]) ? $list[$value] : $value);
+        }
+        return $options;
+    }
+
+    /**
+     * Get database tables for AI.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDbTables(): array
+    {
+        $groupKeys  = array_keys(array_merge((array)$this->lang->dev->groupList, (array)$this->lang->dev->endGroupList));
+        $groupOrder = array_flip($groupKeys);
+        $descs      = $this->getTableDescriptions();
+        $comments   = $this->getTableComments();
+
+        $tables = array();
+        foreach($this->getTables() as $group => $groupTables)
+        {
+            foreach($groupTables as $module => $table)
+            {
+                list($description) = $this->getTableDescription($module, $table, $descs, $comments);
+
+                $tables[] = array(
+                    'name'              => $table,
+                    'title'             => (string)zget($this->lang->dev->tableList, $module, $module),
+                    'description'       => $description,
+                    'group'             => $group,
+                );
+            }
+        }
+
+        usort($tables, function($tableA, $tableB) use($groupOrder)
+        {
+            $orderA = isset($groupOrder[$tableA['group']]) ? $groupOrder[$tableA['group']] : count($groupOrder);
+            $orderB = isset($groupOrder[$tableB['group']]) ? $groupOrder[$tableB['group']] : count($groupOrder);
+            if($orderA != $orderB) return $orderA <=> $orderB;
+
+            return strcmp((string)$tableA['name'], (string)$tableB['name']);
+        });
+
+        return $tables;
+    }
+
+    /**
+     * Get one database table for AI.
+     *
+     * @param  string $tableName
+     * @access public
+     * @return array
+     */
+    public function getDbTable(string $tableName): array
+    {
+        $group  = '';
+        $module = '';
+        foreach($this->getTables() as $groupKey => $groupTables)
+        {
+            foreach($groupTables as $moduleKey => $table)
+            {
+                if($table != $tableName) continue;
+
+                $group  = $groupKey;
+                $module = $moduleKey;
+                break 2;
+            }
+        }
+        if(empty($module)) return array();
+
+        list($description) = $this->getTableDescription($module, $tableName);
+
+        $references     = $this->getTableReferences($module);
+        $discriminators = $this->getDiscriminatorOptions($module);
+
+        $columns    = array();
+        $primaryKey = array();
+        foreach($this->getFields($tableName) as $fieldName => $field)
+        {
+            $column = array(
+                'name'              => $fieldName,
+                'title'             => $field['name'],
+                'type'              => zget($field, 'baseType', $field['type']),
+                'length'            => isset($field['options']['max']) ? (int)$field['options']['max'] : null,
+                'nullable'          => strtoupper((string)$field['null']) == 'YES',
+                'key'               => zget($field, 'key', ''),
+                'default'           => zget($field, 'default', null),
+                'description'       => $field['description'],
+            );
+            if(!empty($field['optionList']))           $column['options']    = array_values($field['optionList']);
+            elseif(isset($discriminators[$fieldName])) $column['options']    = $discriminators[$fieldName];
+            if(isset($references[$fieldName]))         $column['references'] = $references[$fieldName];
+            if(zget($field, 'key', '') == 'PRI')       $primaryKey[]         = $fieldName;
+
+            $columns[] = $column;
+        }
+
+        $table = array(
+            'name'              => $tableName,
+            'title'             => (string)zget($this->lang->dev->tableList, $module, $module),
+            'description'       => $description,
+            'group'             => $group,
+            'primaryKey'        => implode(',', $primaryKey),
+            'columns'           => $columns,
+        );
+
+        $referencedBy = $this->getReferencedBy($module);
+        if(!empty($referencedBy)) $table['referencedBy'] = $referencedBy;
+
+        return $table;
+    }
+
+    /**
+     * Get description and source of one table.
+     *
+     * @param  string $module
+     * @param  string $table
+     * @param  array  $descs
+     * @param  array  $comments
+     * @access public
+     * @return array
+     */
+    public function getTableDescription(string $module, string $table, array $descs = array(), array $comments = array()): array
+    {
+        if(empty($descs))    $descs    = $this->getTableDescriptions();
+        if(empty($comments)) $comments = $this->getTableComments();
+
+        if(!empty($descs[$module]))    return array((string)$descs[$module], 'lang');
+        if(!empty($comments[$table]))  return array((string)$comments[$table], 'comment');
+
+        return array('', 'none');
+    }
+
+    /**
+     * Get table descriptions of current language with fallback.
+     *
+     * @param  string $lang
+     * @access public
+     * @return array
+     */
+    public function getTableDescriptions(string $lang = ''): array
+    {
+        return $this->getLangDescriptions('tableDesc', $lang);
+    }
+
+    /**
+     * Get field descriptions of current language with fallback.
+     *
+     * @param  string $lang
+     * @access public
+     * @return array
+     */
+    public function getFieldDescriptions(string $lang = ''): array
+    {
+        return $this->getLangDescriptions('fieldDesc', $lang);
+    }
+
+    /**
+     * Get descriptions of given language key, the fallback order is current language, en, zh-cn.
+     *
+     * @param  string $key
+     * @param  string $lang
+     * @access public
+     * @return array
+     */
+    public function getLangDescriptions(string $key, string $lang = ''): array
+    {
+        $langs = array();
+        if(!empty($lang)) $langs[] = $lang;
+        $langs[] = $this->app->getClientLang();
+        $langs[] = 'en';
+        $langs[] = 'zh-cn';
+        $langs = array_values(array_unique(array_filter($langs)));
+
+        $descriptions = array();
+        foreach(array_reverse($langs) as $langCode)
+        {
+            $values = $this->loadLangDescriptions($langCode, $key);
+            if(!empty($values)) $descriptions = array_replace_recursive($descriptions, $values);
+        }
+        return $descriptions;
+    }
+
+    /**
+     * Load descriptions from one language file without polluting global lang.
+     *
+     * @param  string $langCode
+     * @param  string $key
+     * @access public
+     * @return array
+     */
+    public function loadLangDescriptions(string $langCode, string $key): array
+    {
+        global $lang;
+        if(!is_object($lang)) return array();
+
+        $cacheKey = $langCode . '.' . $key;
+        if(isset(self::$langDescriptionCache[$cacheKey])) return self::$langDescriptionCache[$cacheKey];
+
+        $langFile = $this->getDevLangFile($langCode);
+        if(empty($langFile)) return array();
+
+        $savedDev  = isset($lang->dev) ? $lang->dev : null;
+        $lang->dev = new stdclass();
+        try
+        {
+            include $langFile;
+            $descriptions = isset($lang->dev->$key) ? (array)$lang->dev->$key : array();
+        }
+        finally
+        {
+            $lang->dev = $savedDev;
+        }
+
+        self::$langDescriptionCache[$cacheKey] = $descriptions;
+        return $descriptions;
+    }
+
+    /**
+     * Get dev module language file, follow the extension priority of framework.
+     *
+     * @param  string $langCode
+     * @access public
+     * @return string
+     */
+    public function getDevLangFile(string $langCode): string
+    {
+        $path          = 'dev' . DS . 'lang' . DS . $langCode . '.php';
+        $extensionRoot = $this->app->getExtensionRoot();
+
+        $extensionPaths = array('saas', 'custom');
+        if($this->config->vision != 'rnd') $extensionPaths[] = $this->config->vision;
+        if($this->config->edition != 'open') $extensionPaths[] = $this->config->edition;
+        $extensionPaths[] = 'xuan';
+
+        foreach($extensionPaths as $extensionPath)
+        {
+            $langFile = $extensionRoot . $extensionPath . DS . $path;
+            if(file_exists($langFile)) return $langFile;
+        }
+
+        $langFile = $this->app->getModuleRoot() . $path;
+        return file_exists($langFile) ? $langFile : '';
+    }
+
+    /**
+     * Get relation config of one module.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getTableRelationConfig(string $module): array
+    {
+        if(!isset($this->config->dev->relations[$module])) return array();
+        return (array)$this->config->dev->relations[$module];
+    }
+
+    /**
+     * Get column references of one module.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getTableReferences(string $module): array
+    {
+        $prefix     = $this->config->db->prefix;
+        $references = array();
+        foreach($this->getTableRelationConfig($module) as $field => $relation)
+        {
+            if(zget($relation, 'type') == 'polymorphic')
+            {
+                $targets = array();
+                foreach((array)zget($relation, 'targets', array()) as $target)
+                {
+                    if(empty($target['toTable'])) continue;
+
+                    $targets[] = array(
+                        'when'     => (string)zget($target, 'when', ''),
+                        'toTable'  => $prefix . $target['toTable'],
+                        'toColumn' => (string)zget($target, 'toColumn', 'id'),
+                    );
+                }
+                if(!empty($targets)) $references[$field] = array('type' => 'polymorphic', 'discriminator' => $relation['discriminator'], 'targets' => $targets);
+                continue;
+            }
+
+            if(empty($relation['toTable'])) continue;
+
+            $references[$field] = array('toTable' => $prefix . $relation['toTable'], 'toColumn' => (string)zget($relation, 'toColumn', 'id'));
+        }
+        return $references;
+    }
+
+    /**
+     * Get tables that reference one module, derived from relation config.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getReferencedBy(string $module): array
+    {
+        $prefix       = $this->config->db->prefix;
+        $referencedBy = array();
+        foreach((array)$this->config->dev->relations as $fromModule => $fields)
+        {
+            foreach((array)$fields as $field => $relation)
+            {
+                if(zget($relation, 'type') == 'polymorphic') continue;
+                if(zget($relation, 'toTable') != $module) continue;
+
+                $referencedBy[] = array(
+                    'table'    => $prefix . $fromModule,
+                    'column'   => $field,
+                    'toColumn' => (string)zget($relation, 'toColumn', 'id'),
+                );
+            }
+        }
+        return $referencedBy;
+    }
+
+    /**
+     * Get options of polymorphic discriminator columns.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getDiscriminatorOptions(string $module): array
+    {
+        $options = array();
+        foreach($this->getTableRelationConfig($module) as $relation)
+        {
+            if(zget($relation, 'type') != 'polymorphic' or empty($relation['discriminator']) or empty($relation['targets'])) continue;
+
+            $values = array();
+            foreach((array)$relation['targets'] as $target)
+            {
+                if(isset($target['when']) and $target['when'] !== '') $values[] = (string)$target['when'];
+            }
+            $values = array_values(array_unique($values));
+            if(empty($values)) continue;
+
+            $options[$relation['discriminator']] = array();
+            foreach($values as $value) $options[$relation['discriminator']][] = array('value' => $value, 'label' => $value);
+        }
+        return $options;
+    }
+
+    /**
+     * Get comments of all tables.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTableComments(): array
+    {
+        $comments = array();
+        try
+        {
+            $comments = $this->dao->select('table_name as `table`, table_comment as `comment`')
+                ->from('information_schema.tables')
+                ->where('table_schema')->eq($this->getSchema())
+                ->fetchPairs('table', 'comment');
+        }
+        catch(PDOException $e)
+        {
+            return array();
+        }
+
+        return array_filter((array)$comments);
+    }
+
+    /**
+     * Get comments of columns of one table.
+     *
+     * @param  string $table
+     * @access public
+     * @return array
+     */
+    public function getColumnComments(string $table): array
+    {
+        if(empty($table)) return array();
+
+        $comments = array();
+        try
+        {
+            $comments = $this->dao->select('column_name as `column`, column_comment as `comment`')
+                ->from('information_schema.columns')
+                ->where('table_schema')->eq($this->getSchema())
+                ->andWhere('table_name')->eq($table)
+                ->fetchPairs('column', 'comment');
+        }
+        catch(PDOException $e)
+        {
+            return array();
+        }
+
+        return array_filter((array)$comments);
+    }
+
+    /**
+     * Get schema name of current database.
+     *
+     * @access public
+     * @return string
+     */
+    public function getSchema(): string
+    {
+        if(in_array($this->config->db->driver, $this->config->pgsqlDriverList)) return isset($this->config->db->schema) ? $this->config->db->schema : 'public';
+        return $this->config->db->name;
     }
 
     /**
