@@ -20,9 +20,6 @@ cid=16019
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('lang')->gen(0);
-zenData('config')->gen(0);
-
 global $app, $lang, $config;
 $lang->productCommon = $config->productCommonList[$app->clientLang][PRODUCT_KEY];
 $lang->dev           = new stdClass();

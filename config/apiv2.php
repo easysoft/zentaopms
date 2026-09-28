@@ -465,6 +465,9 @@ $routes['/db/tables'] = array(
 $routes['/db/tables/:tableName'] = array(
     'get' => array('redirect' => '/dev/dbTable?tableName=:tableName', 'response' => '*')
 );
+$routes['/db/query'] = array(
+    'post' => array('redirect' => '/dev/dbQuery', 'response' => '*')
+);
 
 /* 加载扩展模块的路由配置。Load the route configuration of the extension module. */
 foreach(glob(__DIR__ . DS . 'ext' . DS . 'apiv2' . DS . '*.php') as $file)
