@@ -13,10 +13,11 @@ class myTask extends task
      * @param  int    $todoID
      * @param  string $extra
      * @param  int    $bugID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function create(int $executionID = 0, int $storyID = 0, int $moduleID = 0, int $taskID = 0, int $todoID = 0, string $extra = '', int $bugID = 0)
+    public function create(int $executionID = 0, int $storyID = 0, int $moduleID = 0, int $taskID = 0, int $todoID = 0, string $extra = '', int $bugID = 0, string $type = '')
     {
         $executions = $this->execution->getPairs();
         if(empty($executions)) $this->sendError($this->lang->task->kanbanDenied, helper::createLink('execution', 'create'));
@@ -61,6 +62,6 @@ class myTask extends task
 
             $extra = "laneID=$laneID,columnID=$columnID";
         }
-        return parent::create($executionID, $storyID, $moduleID, $taskID, $todoID, $extra, $bugID);
+        return parent::create($executionID, $storyID, $moduleID, $taskID, $todoID, $extra, $bugID, $type);
     }
 }
