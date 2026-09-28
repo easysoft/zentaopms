@@ -167,6 +167,7 @@ class my extends control
         /* Append id for second sort, get todos and tasks. */
         $sort = common::appendOrder($orderBy);
         if($browseType == 'before') $status = 'undone';
+        if($browseType == 'all')    $status = 'noclosed';
         $todos = $this->loadModel('todo')->getList($browseType, $account, $status, 0, $pager, $sort);
         $tasks = $this->loadModel('task')->getUserSuspendedTasks($account);
 
