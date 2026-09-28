@@ -459,6 +459,7 @@ class todoTao extends todoModel
             ->beginIF($end   && $type != 'future')->andWhere('date')->le($end)->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
+            ->beginIF($status == 'noclosed')->andWhere('status')->notin('closed')->fi()
             ->beginIF($type == 'cycle')->andWhere('cycle')->eq('1')->fi()
             ->beginIF($type != 'cycle')->andWhere('cycle')->eq('0')->fi()
             ->beginIF($type == 'assignedtoother')->andWhere('`assignedTo`')->notin(array($account, ''))->fi()
