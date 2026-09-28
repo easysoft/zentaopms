@@ -138,6 +138,13 @@ class releaseZen extends release
         if(strpos($releaseQuery, $allBranch) !== false) $releaseQuery = str_replace($allBranch, '1', $releaseQuery);
         $releaseQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $releaseQuery);
 
+        /* 集成发布自身不包含构建，构建保存在它包含的子发布中，按包含构建检索时子发布也要参与匹配。*/
+        if(strpos($releaseQuery, 't1.`build`') !== false)
+        {
+            $childQuery   = str_replace('t1.', 't2.', $releaseQuery);
+            $releaseQuery = "(({$releaseQuery}) OR EXISTS (SELECT 1 FROM " . TABLE_RELEASE . " AS t2 WHERE t2.`deleted` = '0' AND FIND_IN_SET(t2.`id`, t1.`releases`) AND ({$childQuery})))";
+        }
+
         return $releaseQuery;
     }
 
