@@ -1086,6 +1086,42 @@ CREATE TABLE `zt_ai_assistant` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+CREATE TABLE `zt_ai_chat` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `type` varchar(50)  NOT NULL DEFAULT '' COMMENT '对话类型 chat(用户普通聊天)、task(任务处理)、agent(禅道智能体)、miniprogram(通用智能体)',
+  `title` varchar(100) NOT NULL DEFAULT '' COMMENT '对话标题',
+  `task` int unsigned NOT NULL DEFAULT '0' COMMENT '当类型为 task 时，对应的 AI 任务 ID',
+  `llm` varchar(255) NOT NULL DEFAULT '' COMMENT '实际使用的大模型 ID, 对应 ZAI 中的模型 ID',
+  `agents` text COMMENT '实际使用的智能体列表及相关数据(JSON 数组)',
+  `klibs` text COMMENT '实际挂载的知识库列表及过滤配置(JSON 数组)',
+  `objects` text COMMENT '对话中涉及的禅道对象数据列表(JSON 数组)',
+  `prompt` text COMMENT '初始系统提示词',
+  `tools` text COMMENT '该对话中提供的工具名称和参数(JSON 数组)',
+  `externalID` varchar(255) NOT NULL DEFAULT '' COMMENT '外部对话 ID, 目前为 ZAI 中的对话 ID(GUID 格式)',
+  `token` int unsigned NOT NULL DEFAULT '0' COMMENT '对话消耗的 token 数量',
+  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建人',
+  `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
+  `updateDate` datetime DEFAULT NULL COMMENT '更新时间',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+CREATE TABLE `zt_ai_chat_message` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `chat` int unsigned NOT NULL DEFAULT '0' COMMENT '对话 ID',
+  `externalID` varchar(255) NOT NULL DEFAULT '' COMMENT '外部对话 ID, 目前为 ZAI 中的对话 ID(GUID 格式)',
+  `role` varchar(50)  NOT NULL DEFAULT '' COMMENT '消息角色: user(用户)、assistant(助手)、system(系统)',
+  `content` text COMMENT '消息内容',
+  `reasonContent` text COMMENT '思考内容，当角色为 assistant 时记录 AI 的思考过程',
+  `tools` text COMMENT '消息中使用的工具名称和定义(JSON 数组)',
+  `refs` text COMMENT '消息中引用的数据列表(JSON 数组)',
+  `toolCalls` text COMMENT '当角色为 assistant 时，工具调用列表(JSON 数组)',
+  `toolCallID` varchar(255) NOT NULL DEFAULT '' COMMENT '当角色为 system 时，工具调用 ID（GUID 格式），用于向 AI 返回工具调用结果',
+  `token` int unsigned NOT NULL DEFAULT '0' COMMENT '对话消耗的 token 数量',
+  `gid` varchar(50) NOT NULL DEFAULT '' COMMENT '全局 ID',
+  `bgid` varchar(50) NOT NULL DEFAULT '' COMMENT '批次 ID',
+  `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
 CREATE TABLE `zt_ai_knowledgeitem` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '知识库内容条目在禅道中的 ID',
   `lib` int unsigned NOT NULL DEFAULT '0' COMMENT '知识库内容条目所属知识库，对应 zt_ai_knowledgelib.id',
@@ -1193,6 +1229,47 @@ CREATE TABLE `zt_ai_model` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+CREATE TABLE `zt_ai_procedure` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '工序名称',
+  `module` varchar(30) NOT NULL DEFAULT '' COMMENT '显示位置：story/requirement/epic/task/bug/feedback/ticket',
+  `desc` text COMMENT '描述',
+  `status` varchar(20) NOT NULL DEFAULT 'draft' COMMENT '状态：draft(待发布)/active(已发布)',
+  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建人',
+  `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
+  `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '编辑人',
+  `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
+  `publishedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '发布人',
+  `unpublishedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '下架人',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除（进入回收站）',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB COMMENT='AI工序定义表';
+CREATE TABLE `zt_ai_procedurerun` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `procedure` int unsigned NOT NULL DEFAULT '0' COMMENT '工序定义ID，对应 zt_ai_procedure.id',
+  `procedureName` varchar(255) NOT NULL DEFAULT '' COMMENT '工序名称快照',
+  `objectType` varchar(30) NOT NULL DEFAULT '' COMMENT '对象类型：story/requirement/epic/task/bug/feedback/ticket',
+  `objectID` int unsigned NOT NULL DEFAULT '0' COMMENT '对象ID',
+  `objectData` text COMMENT '要处理的对象数据JSON',
+  `status` varchar(20) NOT NULL DEFAULT 'doing' COMMENT '运行状态：doing(进行中)/done(已完成)',
+  `currentStep` int unsigned NOT NULL DEFAULT '0' COMMENT '当前步骤ID',
+  `stepsData` text COMMENT '步骤运行数据JSON, {steps: {id: int, name: string, formData: string, result: string, sessionID: string, finishDate: string, status: wait|done}[]}',
+  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '开始人',
+  `createdDate` datetime DEFAULT NULL COMMENT '开始时间',
+  `editedDate` datetime DEFAULT NULL COMMENT '更新时间，工作台按此倒序排列',
+  `finishedDate` datetime DEFAULT NULL COMMENT '完成时间',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB COMMENT='AI工序运行实例表';
+CREATE TABLE `zt_ai_procedurestep` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `procedure` int unsigned NOT NULL DEFAULT '0' COMMENT '所属工序，对应 zt_ai_procedure.id',
+  `agent` int unsigned NOT NULL DEFAULT '0' COMMENT '禅道智能体，对应 zt_ai_agent.id',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '步骤名称，默认取智能体名称',
+  `inputs` text COMMENT '输入内容配置JSON；首步骤为空',
+  `order` smallint unsigned NOT NULL DEFAULT '0' COMMENT '步骤顺序，从1开始',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB COMMENT='AI工序步骤设计表';
 CREATE TABLE `zt_ai_skill` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT 'Skill名称',
@@ -1207,6 +1284,59 @@ CREATE TABLE `zt_ai_skill` (
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '最后修改人ID',
   `editedDate` datetime DEFAULT NULL COMMENT '最后修改时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+CREATE TABLE `zt_ai_task` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `teammate` int unsigned NOT NULL DEFAULT '0' COMMENT '执行此任务的数字员工 ID',
+  `type` varchar(50)  NOT NULL DEFAULT '' COMMENT '任务类型',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '任务名称',
+  `desc` varchar(1000) NOT NULL DEFAULT '' COMMENT '任务描述',
+  `status` varchar(20)  NOT NULL DEFAULT '' COMMENT '任务状态',
+  `objectType` varchar(30) NOT NULL DEFAULT '' COMMENT '任务相关对象类型',
+  `objectID` int unsigned NOT NULL DEFAULT '0' COMMENT '任务相关对象 ID',
+  `agents` varchar(255) NOT NULL DEFAULT '' COMMENT '实际使用的智能体 ID, 多个用逗号分隔',
+  `agentsData` text COMMENT '禅道智能体填写的表单数据',
+  `klibs` varchar(255) NOT NULL DEFAULT '' COMMENT '实际挂载的知识库ID, 多个用逗号分隔',
+  `chatID` int unsigned NOT NULL DEFAULT '0' COMMENT '对话 ID。任务未被队列处理时为 0, 重新处理时会创建新对话并更新此 ID',
+  `result` mediumtext COMMENT '任务处理结果，包括要操作的禅道对象、要创建的文档等数据，对此次任务的 AI 总结, 使用 JSON 存储',
+  `userPrompt` text COMMENT '验收不通过时，用户补充的提示词',
+  `consumed` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '总计耗时',
+  `token` int unsigned NOT NULL DEFAULT '0' COMMENT '总计消耗 token',
+  `noticeTime` varchar(10) NOT NULL DEFAULT '' COMMENT '任务通知时间',
+  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建人',
+  `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
+  `assignedTo` varchar(30) NOT NULL DEFAULT '' COMMENT '负责人',
+  `assignedDate` datetime DEFAULT NULL COMMENT '指派时间',
+  `verifiedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '验收者',
+  `verifiedDate` datetime DEFAULT NULL COMMENT '验收时间',
+  `activatedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '激活者',
+  `activatedDate` datetime DEFAULT NULL COMMENT '激活时间',
+  `cancelledBy` varchar(30) NOT NULL DEFAULT '' COMMENT '取消者',
+  `cancelledDate` datetime DEFAULT NULL COMMENT '取消时间',
+  `closedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '关闭者',
+  `closedDate` datetime DEFAULT NULL COMMENT '关闭时间',
+  `executedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '执行者，通过定时任务执行的任务为 system，手动执行为当前用户',
+  `executedDate` datetime DEFAULT NULL COMMENT '任务开始执行时间',
+  `finishedDate` datetime DEFAULT NULL COMMENT '完成时间',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+CREATE TABLE `zt_ai_teammate` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `name` varchar(10) NOT NULL DEFAULT 'rnd' COMMENT '员工名称',
+  `desc` varchar(1000) NOT NULL DEFAULT '' COMMENT '员工描述',
+  `llm` varchar(255) NOT NULL DEFAULT '' COMMENT '执行 AI 任务时默认使用的模型 ID, 对应 ZAI 中的模型 ID',
+  `role` varchar(10) NOT NULL DEFAULT '' COMMENT '员工职位, 与 zt_user.role 来源相同',
+  `avatar` text COMMENT '员工头像, 对应 ZAI 中的头像文件路径',
+  `agents` varchar(255) NOT NULL DEFAULT '' COMMENT '挂载的智能体ID, 多个用逗号分隔',
+  `klibs` varchar(255) NOT NULL DEFAULT '' COMMENT '挂载的知识库ID, 多个用逗号分隔',
+  `disabled` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否禁用',
+  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建者',
+  `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
+  `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '编辑者',
+  `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE TABLE `zt_ai_timerlog` (

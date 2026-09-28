@@ -15,7 +15,6 @@ $cols = $longBlock ? $config->block->case->dtable->fieldList : $config->block->c
 
 foreach($cases as $case)
 {
-    $case->lastRunDate = formatTime($case->lastRunDate, DT_DATE1);
     if(isset($case->script)) unset($case->script);
 }
 

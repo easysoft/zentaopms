@@ -68,15 +68,15 @@ function hasPriv(string $module, string $method, ?object $object = null, string 
     return \common::hasPriv($module, $method, $object, $vars);
 }
 
-function isFieldRequired(?string $name, ?string $requiredFields = null): bool
+function isFieldRequired(?string $name, ?string $requiredFields = null, ?string $moduleName = null, ?string $methodName = null): bool
 {
     if(empty($name)) return false;
 
     if(is_null($requiredFields))
     {
         global $config, $app;
-        $moduleName = $app->moduleName;
-        $methodName = $app->methodName;
+        $moduleName = $moduleName ? $moduleName : $app->moduleName;
+        $methodName = $methodName ? $methodName : $app->methodName;
         if($moduleName == 'story' && $app->rawModule == 'requirement') $moduleName = 'requirement';
         if($moduleName == 'story' && $app->rawModule == 'epic')        $moduleName = 'epic';
         if(!isset($config->$moduleName->$methodName->requiredFields)) return false;
