@@ -2,6 +2,9 @@
 $lang->dev->common       = 'Custom Develpment';
 $lang->dev->api          = 'API Document';
 $lang->dev->db           = 'Data Dictionary';
+$lang->dev->dbTables     = 'Database Tables API';
+$lang->dev->dbTable      = 'Database Table API';
+$lang->dev->tableNotFound = 'Table %s not found.';
 $lang->dev->editor       = 'Editor';
 $lang->dev->dbList       = 'Database';
 $lang->dev->moduleList   = 'Module List';
@@ -182,6 +185,232 @@ $lang->dev->tableList['dataview']              = 'Dataset';
 $lang->dev->tableList['dimension']             = 'Dimension';
 $lang->dev->tableList['metric']                = 'Metric';
 $lang->dev->tableList['pivot']                 = 'Pivot Table';
+
+/* 表描述，供数据库结构接口使用。Table descriptions for the database schema API. */
+$lang->dev->tableDesc = array();
+$lang->dev->tableDesc['bug']          = 'Bug table, records product defects with product, project, execution, severity, priority and resolution.';
+$lang->dev->tableDesc['build']        = 'Build table, records builds of a project or execution and the stories and bugs they contain.';
+$lang->dev->tableDesc['case']         = 'Test case table, records product, module, precondition, steps, type and review status of test cases.';
+$lang->dev->tableDesc['doc']          = 'Document table, records documents in doc libs with product, project, execution, lib and module.';
+$lang->dev->tableDesc['file']         = 'File table, records uploaded files, related to objects by objectType and objectID.';
+$lang->dev->tableDesc['product']      = 'Product table, records product basic info, access control and counts of stories and bugs.';
+$lang->dev->tableDesc['project']      = 'Project table. Projects, programs and executions (sprints, stages) are all stored in this table and distinguished by type.';
+$lang->dev->tableDesc['projectstory'] = 'Project story relation table, one record means a project links a story.';
+$lang->dev->tableDesc['release']      = 'Release table, records product releases and the stories and bugs they contain.';
+$lang->dev->tableDesc['story']        = 'Story table, records product stories with product, module, plan, source, status, stage and review info.';
+$lang->dev->tableDesc['task']         = 'Task table, records tasks of executions with status, hours, assigned user and parent task.';
+$lang->dev->tableDesc['testtask']     = 'Test task table, records test scope, owner, begin and end date, and the related test report.';
+$lang->dev->tableDesc['user']         = 'User table, records account, department, contact, view permission and login info.';
+
+/* 字段描述，供数据库结构接口使用。Field descriptions for the database schema API. */
+$lang->dev->fieldDesc = array();
+
+/* 任务。Task. */
+$lang->dev->fieldDesc['task']['project']      = 'Project ID, references zt_project.id. Projects, programs and executions share the zt_project table.';
+$lang->dev->fieldDesc['task']['execution']    = 'Execution (sprint or stage) ID, references zt_project.id, distinguished by type.';
+$lang->dev->fieldDesc['task']['parent']       = 'Parent task ID, references zt_task.id. 0 means it is not a child task.';
+$lang->dev->fieldDesc['task']['module']       = 'Module ID, references zt_module.id.';
+$lang->dev->fieldDesc['task']['design']       = 'Design ID, references zt_design.id.';
+$lang->dev->fieldDesc['task']['story']        = 'Story ID, references zt_story.id.';
+$lang->dev->fieldDesc['task']['storyVersion'] = 'Version of the linked story, used together with story to locate a story version.';
+$lang->dev->fieldDesc['task']['fromBug']      = 'Source bug ID, references zt_bug.id, set when the task is created from a bug.';
+$lang->dev->fieldDesc['task']['fromIssue']    = 'Source issue ID, references zt_issue.id, set when the task is created from an issue.';
+$lang->dev->fieldDesc['task']['feedback']     = 'Source feedback ID, references zt_feedback.id.';
+$lang->dev->fieldDesc['task']['isParent']     = 'Whether the task is a parent task, 1 means it has child tasks.';
+$lang->dev->fieldDesc['task']['isTpl']        = 'Whether the task is a task template.';
+$lang->dev->fieldDesc['task']['path']         = 'Hierarchy path of parent and child tasks, comma separated ancestor task IDs.';
+$lang->dev->fieldDesc['task']['status']       = 'Task status: wait, doing, done, pause, cancel, closed.';
+$lang->dev->fieldDesc['task']['type']         = 'Task type: design, devel, request, test, study, discuss, ui, affair, misc.';
+$lang->dev->fieldDesc['task']['mode']         = 'Task mode, used to tell multi-user tasks from normal tasks.';
+$lang->dev->fieldDesc['task']['pri']          = 'Priority, the smaller the number the higher the priority.';
+$lang->dev->fieldDesc['task']['estimate']     = 'Estimated hours.';
+$lang->dev->fieldDesc['task']['consumed']     = 'Consumed hours.';
+$lang->dev->fieldDesc['task']['left']         = 'Left hours.';
+$lang->dev->fieldDesc['task']['deadline']     = 'Deadline.';
+$lang->dev->fieldDesc['task']['openedBy']     = 'Creator account, references zt_user.account.';
+$lang->dev->fieldDesc['task']['assignedTo']   = 'Current assignee account, references zt_user.account, comma separated for multi-user tasks.';
+$lang->dev->fieldDesc['task']['finishedBy']   = 'Account who finished the task, references zt_user.account.';
+$lang->dev->fieldDesc['task']['canceledBy']   = 'Account who canceled the task, references zt_user.account.';
+$lang->dev->fieldDesc['task']['closedBy']     = 'Account who closed the task, references zt_user.account.';
+$lang->dev->fieldDesc['task']['closedReason'] = 'Reason why the task was closed.';
+$lang->dev->fieldDesc['task']['lastEditedBy'] = 'Account who last edited the task, references zt_user.account.';
+$lang->dev->fieldDesc['task']['deleted']      = 'Soft delete flag, 0 not deleted, 1 deleted.';
+
+/* Bug。 */
+$lang->dev->fieldDesc['bug']['project']       = 'Project ID, references zt_project.id.';
+$lang->dev->fieldDesc['bug']['product']       = 'Product ID, references zt_product.id.';
+$lang->dev->fieldDesc['bug']['module']        = 'Module ID, references zt_module.id.';
+$lang->dev->fieldDesc['bug']['execution']     = 'Execution ID, references zt_project.id.';
+$lang->dev->fieldDesc['bug']['plan']          = 'Product plan ID, references zt_productplan.id.';
+$lang->dev->fieldDesc['bug']['branch']        = 'Branch or platform ID, references zt_branch.id.';
+$lang->dev->fieldDesc['bug']['story']         = 'Story ID, references zt_story.id.';
+$lang->dev->fieldDesc['bug']['task']          = 'Source task ID, references zt_task.id.';
+$lang->dev->fieldDesc['bug']['toTask']        = 'Task created from this bug, references zt_task.id.';
+$lang->dev->fieldDesc['bug']['toStory']       = 'Story created from this bug, references zt_story.id.';
+$lang->dev->fieldDesc['bug']['case']          = 'Test case ID, references zt_case.id.';
+$lang->dev->fieldDesc['bug']['duplicateBug']  = 'Duplicated bug ID, references zt_bug.id.';
+$lang->dev->fieldDesc['bug']['feedback']      = 'Source feedback ID, references zt_feedback.id.';
+$lang->dev->fieldDesc['bug']['testtask']      = 'Source test task ID, references zt_testtask.id.';
+$lang->dev->fieldDesc['bug']['status']        = 'Bug status: active, resolved, closed.';
+$lang->dev->fieldDesc['bug']['severity']      = 'Severity from 1 to 4, the smaller the number the more severe.';
+$lang->dev->fieldDesc['bug']['pri']           = 'Priority, the smaller the number the higher the priority.';
+$lang->dev->fieldDesc['bug']['type']          = 'Bug type, such as codeerror, config, install, security, performance, standard, automation, designdefect.';
+$lang->dev->fieldDesc['bug']['resolution']    = 'Resolution, such as fixed, willnotfix, duplicate, bydesign, notrepro, postponed.';
+$lang->dev->fieldDesc['bug']['openedBuild']   = 'Affected build IDs, references zt_build.id, comma separated for multiple builds.';
+$lang->dev->fieldDesc['bug']['resolvedBuild'] = 'Resolved build ID, references zt_build.id.';
+$lang->dev->fieldDesc['bug']['openedBy']      = 'Creator account, references zt_user.account.';
+$lang->dev->fieldDesc['bug']['assignedTo']    = 'Current assignee account, references zt_user.account.';
+$lang->dev->fieldDesc['bug']['resolvedBy']    = 'Account who resolved the bug, references zt_user.account.';
+$lang->dev->fieldDesc['bug']['closedBy']      = 'Account who closed the bug, references zt_user.account.';
+$lang->dev->fieldDesc['bug']['lastEditedBy']  = 'Account who last edited the bug, references zt_user.account.';
+$lang->dev->fieldDesc['bug']['deleted']       = 'Soft delete flag, 0 not deleted, 1 deleted.';
+
+/* 需求。Story. */
+$lang->dev->fieldDesc['story']['product']        = 'Product ID, references zt_product.id.';
+$lang->dev->fieldDesc['story']['branch']         = 'Branch or platform ID, references zt_branch.id.';
+$lang->dev->fieldDesc['story']['module']         = 'Module ID, references zt_module.id.';
+$lang->dev->fieldDesc['story']['plan']           = 'Product plan ID, references zt_productplan.id.';
+$lang->dev->fieldDesc['story']['parent']         = 'Parent story ID, references zt_story.id. 0 means it is not a child story.';
+$lang->dev->fieldDesc['story']['path']           = 'Hierarchy path of parent and child stories, comma separated ancestor story IDs.';
+$lang->dev->fieldDesc['story']['fromBug']        = 'Source bug ID, references zt_bug.id.';
+$lang->dev->fieldDesc['story']['fromStory']      = 'Source story ID, references zt_story.id.';
+$lang->dev->fieldDesc['story']['duplicateStory'] = 'Duplicated story ID, references zt_story.id.';
+$lang->dev->fieldDesc['story']['feedback']       = 'Source feedback ID, references zt_feedback.id.';
+$lang->dev->fieldDesc['story']['source']         = 'Story source, such as customer, po, market, service.';
+$lang->dev->fieldDesc['story']['status']         = 'Story status: draft, reviewing, active, closed, changing.';
+$lang->dev->fieldDesc['story']['stage']          = 'Story stage: wait, planned, projected, developing, testing, verified, released, closed.';
+$lang->dev->fieldDesc['story']['type']           = 'Story type: story, epic, requirement.';
+$lang->dev->fieldDesc['story']['category']       = 'Story category: feature, interface, performance, safe, experience, improve, other.';
+$lang->dev->fieldDesc['story']['pri']            = 'Priority, the smaller the number the higher the priority.';
+$lang->dev->fieldDesc['story']['estimate']       = 'Estimated hours.';
+$lang->dev->fieldDesc['story']['openedBy']       = 'Creator account, references zt_user.account.';
+$lang->dev->fieldDesc['story']['assignedTo']     = 'Current assignee account, references zt_user.account.';
+$lang->dev->fieldDesc['story']['changedBy']      = 'Account who last changed the story, references zt_user.account.';
+$lang->dev->fieldDesc['story']['closedBy']       = 'Account who closed the story, references zt_user.account.';
+$lang->dev->fieldDesc['story']['retractedBy']    = 'Account who retracted the story, references zt_user.account.';
+$lang->dev->fieldDesc['story']['submitedBy']     = 'Account who submitted the story for review, references zt_user.account.';
+$lang->dev->fieldDesc['story']['lastEditedBy']   = 'Account who last edited the story, references zt_user.account.';
+$lang->dev->fieldDesc['story']['deleted']        = 'Soft delete flag, 0 not deleted, 1 deleted.';
+
+/* 项目与项目集。Project and program. */
+$lang->dev->fieldDesc['project']['parent']       = 'Parent project or program ID, references zt_project.id. 0 means top level.';
+$lang->dev->fieldDesc['project']['path']         = 'Hierarchy path of projects, comma separated ancestor project IDs.';
+$lang->dev->fieldDesc['project']['type']         = 'Object type: project, program, sprint, stage, kanban.';
+$lang->dev->fieldDesc['project']['model']        = 'Project management model: scrum, waterfall, kanban and so on.';
+$lang->dev->fieldDesc['project']['status']       = 'Status: wait, doing, suspended, closed.';
+$lang->dev->fieldDesc['project']['acl']          = 'Access control: open, private, custom.';
+$lang->dev->fieldDesc['project']['openedBy']     = 'Creator account, references zt_user.account.';
+$lang->dev->fieldDesc['project']['closedBy']     = 'Account who closed the project, references zt_user.account.';
+$lang->dev->fieldDesc['project']['canceledBy']   = 'Account who canceled the project, references zt_user.account.';
+$lang->dev->fieldDesc['project']['lastEditedBy'] = 'Account who last edited the project, references zt_user.account.';
+$lang->dev->fieldDesc['project']['deleted']      = 'Soft delete flag, 0 not deleted, 1 deleted.';
+
+/* 产品。Product. */
+$lang->dev->fieldDesc['product']['program']   = 'Program ID, references zt_project.id.';
+$lang->dev->fieldDesc['product']['line']      = 'Product line ID, references zt_module.id.';
+$lang->dev->fieldDesc['product']['type']      = 'Product type: normal, branch, platform.';
+$lang->dev->fieldDesc['product']['status']    = 'Status: normal, closed.';
+$lang->dev->fieldDesc['product']['acl']       = 'Access control: open, private, custom.';
+$lang->dev->fieldDesc['product']['PO']        = 'Product owner account, references zt_user.account.';
+$lang->dev->fieldDesc['product']['QD']        = 'Test owner account, references zt_user.account.';
+$lang->dev->fieldDesc['product']['RD']        = 'Release owner account, references zt_user.account.';
+$lang->dev->fieldDesc['product']['createdBy'] = 'Creator account, references zt_user.account.';
+$lang->dev->fieldDesc['product']['deleted']   = 'Soft delete flag, 0 not deleted, 1 deleted.';
+
+/* 版本。Build. */
+$lang->dev->fieldDesc['build']['project']   = 'Project ID, references zt_project.id.';
+$lang->dev->fieldDesc['build']['product']   = 'Product ID, references zt_product.id.';
+$lang->dev->fieldDesc['build']['branch']    = 'Branch or platform ID, references zt_branch.id.';
+$lang->dev->fieldDesc['build']['execution'] = 'Execution ID, references zt_project.id.';
+$lang->dev->fieldDesc['build']['builder']   = 'Builder account, references zt_user.account.';
+$lang->dev->fieldDesc['build']['createdBy'] = 'Creator account, references zt_user.account.';
+$lang->dev->fieldDesc['build']['date']      = 'Build date.';
+$lang->dev->fieldDesc['build']['deleted']   = 'Soft delete flag, 0 not deleted, 1 deleted.';
+
+/* 发布。Release. */
+$lang->dev->fieldDesc['release']['project']   = 'Project ID, references zt_project.id.';
+$lang->dev->fieldDesc['release']['product']   = 'Product ID, references zt_product.id.';
+$lang->dev->fieldDesc['release']['branch']    = 'Branch or platform ID, references zt_branch.id.';
+$lang->dev->fieldDesc['release']['build']     = 'Build ID, references zt_build.id.';
+$lang->dev->fieldDesc['release']['marker']    = 'Release marker, such as trunk.';
+$lang->dev->fieldDesc['release']['status']    = 'Status: normal, terminate, wait.';
+$lang->dev->fieldDesc['release']['createdBy'] = 'Creator account, references zt_user.account.';
+$lang->dev->fieldDesc['release']['deleted']   = 'Soft delete flag, 0 not deleted, 1 deleted.';
+
+/* 测试用例。Test case. */
+$lang->dev->fieldDesc['case']['project']       = 'Project ID, references zt_project.id.';
+$lang->dev->fieldDesc['case']['product']       = 'Product ID, references zt_product.id.';
+$lang->dev->fieldDesc['case']['execution']     = 'Execution ID, references zt_project.id.';
+$lang->dev->fieldDesc['case']['branch']        = 'Branch or platform ID, references zt_branch.id.';
+$lang->dev->fieldDesc['case']['lib']           = 'Case lib ID, references zt_testsuite.id.';
+$lang->dev->fieldDesc['case']['module']        = 'Module ID, references zt_module.id.';
+$lang->dev->fieldDesc['case']['story']         = 'Story ID, references zt_story.id.';
+$lang->dev->fieldDesc['case']['storyVersion']  = 'Version of the linked story.';
+$lang->dev->fieldDesc['case']['fromBug']       = 'Source bug ID, references zt_bug.id.';
+$lang->dev->fieldDesc['case']['fromCaseID']    = 'Source case ID, references zt_case.id.';
+$lang->dev->fieldDesc['case']['type']          = 'Case type: feature, performance, config, install, security, interface, unit, other.';
+$lang->dev->fieldDesc['case']['stage']         = 'Applicable stage, such as unittest, feature, intergrate, system, smoke, bvt.';
+$lang->dev->fieldDesc['case']['status']        = 'Status: normal, blocked, investigate, wait, reviewing, pass, fail.';
+$lang->dev->fieldDesc['case']['pri']           = 'Priority, the smaller the number the higher the priority.';
+$lang->dev->fieldDesc['case']['openedBy']      = 'Creator account, references zt_user.account.';
+$lang->dev->fieldDesc['case']['scriptedBy']    = 'Account who wrote the automation script, references zt_user.account.';
+$lang->dev->fieldDesc['case']['lastRunner']    = 'Account who last ran the case, references zt_user.account.';
+$lang->dev->fieldDesc['case']['lastRunResult'] = 'Last run result: pass, fail, blocked.';
+$lang->dev->fieldDesc['case']['lastEditedBy']  = 'Account who last edited the case, references zt_user.account.';
+$lang->dev->fieldDesc['case']['deleted']       = 'Soft delete flag, 0 not deleted, 1 deleted.';
+
+/* 测试单。Test task. */
+$lang->dev->fieldDesc['testtask']['project']    = 'Project ID, references zt_project.id.';
+$lang->dev->fieldDesc['testtask']['product']    = 'Product ID, references zt_product.id.';
+$lang->dev->fieldDesc['testtask']['execution']  = 'Execution ID, references zt_project.id.';
+$lang->dev->fieldDesc['testtask']['build']      = 'Build ID under test, references zt_build.id.';
+$lang->dev->fieldDesc['testtask']['testreport'] = 'Related test report ID, references zt_testreport.id.';
+$lang->dev->fieldDesc['testtask']['owner']      = 'Owner account, references zt_user.account.';
+$lang->dev->fieldDesc['testtask']['type']       = 'Test task type, such as integrated, unit.';
+$lang->dev->fieldDesc['testtask']['status']     = 'Status: wait, doing, done, blocked.';
+$lang->dev->fieldDesc['testtask']['createdBy']  = 'Creator account, references zt_user.account.';
+$lang->dev->fieldDesc['testtask']['deleted']    = 'Soft delete flag, 0 not deleted, 1 deleted.';
+
+/* 文档。Doc. */
+$lang->dev->fieldDesc['doc']['project']    = 'Project ID, references zt_project.id.';
+$lang->dev->fieldDesc['doc']['product']    = 'Product ID, references zt_product.id.';
+$lang->dev->fieldDesc['doc']['execution']  = 'Execution ID, references zt_project.id.';
+$lang->dev->fieldDesc['doc']['lib']        = 'Doc lib ID, references zt_doclib.id.';
+$lang->dev->fieldDesc['doc']['module']     = 'Catalog ID, references zt_module.id.';
+$lang->dev->fieldDesc['doc']['parent']     = 'Parent document ID, references zt_doc.id. 0 means top level.';
+$lang->dev->fieldDesc['doc']['type']       = 'Document type, such as text, markdown.';
+$lang->dev->fieldDesc['doc']['status']     = 'Status: normal, draft.';
+$lang->dev->fieldDesc['doc']['addedBy']    = 'Creator account, references zt_user.account.';
+$lang->dev->fieldDesc['doc']['editedBy']   = 'Account who last edited the document, references zt_user.account.';
+$lang->dev->fieldDesc['doc']['assignedTo'] = 'Assignee account, references zt_user.account.';
+$lang->dev->fieldDesc['doc']['deleted']    = 'Soft delete flag, 0 not deleted, 1 deleted.';
+
+/* 用户。User. */
+$lang->dev->fieldDesc['user']['account']  = 'User account, unique in the system, other tables reference a user by account.';
+$lang->dev->fieldDesc['user']['password'] = 'Encrypted login password, not reversible.';
+$lang->dev->fieldDesc['user']['realname'] = 'Real name of the user.';
+$lang->dev->fieldDesc['user']['role']     = 'User role, such as dev, qa, pm, po.';
+$lang->dev->fieldDesc['user']['dept']     = 'Department ID, references zt_dept.id.';
+$lang->dev->fieldDesc['user']['company']  = 'Company ID, references zt_company.id.';
+$lang->dev->fieldDesc['user']['visions']  = 'Accessible visions, comma separated, such as rnd, lite.';
+$lang->dev->fieldDesc['user']['locked']   = 'Whether the user is locked, 1 means locked.';
+$lang->dev->fieldDesc['user']['deleted']  = 'Soft delete flag, 0 not deleted, 1 deleted.';
+
+/* 项目需求关联表。Project story relation. */
+$lang->dev->fieldDesc['projectstory']['project'] = 'Project ID, references zt_project.id.';
+$lang->dev->fieldDesc['projectstory']['product'] = 'Product ID, references zt_product.id.';
+$lang->dev->fieldDesc['projectstory']['branch']  = 'Branch or platform ID, references zt_branch.id.';
+$lang->dev->fieldDesc['projectstory']['story']   = 'Story ID, references zt_story.id.';
+$lang->dev->fieldDesc['projectstory']['version'] = 'Version of the story.';
+
+/* 附件。File. */
+$lang->dev->fieldDesc['file']['objectType'] = 'Type of the related object, value is a module key such as bug, task, story.';
+$lang->dev->fieldDesc['file']['objectID']   = 'ID of the related object, the target table is decided by objectType.';
+$lang->dev->fieldDesc['file']['pathname']   = 'Storage path and file name of the file.';
+$lang->dev->fieldDesc['file']['gid']        = 'File group, files uploaded in one request share the same gid.';
+$lang->dev->fieldDesc['file']['addedBy']    = 'Uploader account, references zt_user.account.';
+$lang->dev->fieldDesc['file']['extra']      = 'Extra info of the file, such as image size.';
+$lang->dev->fieldDesc['file']['deleted']    = 'Soft delete flag, 0 not deleted, 1 deleted.';
 
 $lang->dev->groupList['my']        = 'Dashboard';
 $lang->dev->groupList['program']   = 'Program';

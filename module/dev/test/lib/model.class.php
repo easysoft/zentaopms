@@ -845,4 +845,117 @@ class devModelTest extends baseTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test getDbTables method, return tables keyed by module.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getDbTablesTest($module = '')
+    {
+        $result = $this->instance->getDbTables();
+        if(dao::isError()) return dao::getError();
+
+        $tables = array();
+        foreach($result as $table) $tables[$table['name']] = $table;
+        if(empty($module)) return $tables;
+
+        return isset($tables[$module]) ? $tables[$module] : array();
+    }
+
+    /**
+     * Test getDbTable method.
+     *
+     * @param  string $tableName
+     * @access public
+     * @return array
+     */
+    public function getDbTableTest($tableName)
+    {
+        $result = $this->instance->getDbTable($tableName);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getDbTable method and return one column value by path.
+     *
+     * @param  string $tableName
+     * @param  string $fieldName
+     * @param  string $path
+     * @access public
+     * @return string
+     */
+    public function getDbTableColumnTest($tableName, $fieldName, $path = '')
+    {
+        $table = $this->instance->getDbTable($tableName);
+        if(empty($table) or empty($table['columns'])) return '';
+
+        foreach($table['columns'] as $column)
+        {
+            if($column['name'] != $fieldName) continue;
+            if(empty($path)) return $column;
+
+            $value = $column;
+            foreach(explode('.', $path) as $key)
+            {
+                if(!is_array($value) or !isset($value[$key])) return '';
+                $value = $value[$key];
+            }
+            return is_array($value) ? json_encode($value) : (string)$value;
+        }
+
+        return '';
+    }
+
+    /**
+     * Test getTableDescriptions method.
+     *
+     * @param  string $lang
+     * @access public
+     * @return array
+     */
+    public function getTableDescriptionsTest($lang = '')
+    {
+        return $this->instance->getTableDescriptions($lang);
+    }
+
+    /**
+     * Test getFieldDescriptions method.
+     *
+     * @param  string $lang
+     * @access public
+     * @return array
+     */
+    public function getFieldDescriptionsTest($lang = '')
+    {
+        return $this->instance->getFieldDescriptions($lang);
+    }
+
+    /**
+     * Test getTableReferences method.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getTableReferencesTest($module)
+    {
+        return $this->instance->getTableReferences($module);
+    }
+
+    /**
+     * Test getReferencedBy method.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getReferencedByTest($module)
+    {
+        return $this->instance->getReferencedBy($module);
+    }
 }

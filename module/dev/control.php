@@ -75,6 +75,41 @@ class dev extends control
     }
 
     /**
+     * Get database table list, API for AI.
+     *
+     * @access public
+     * @return void
+     */
+    public function dbTables()
+    {
+        $tables = $this->dev->getDbTables();
+
+        return $this->send(array('status' => 'success', 'total' => count($tables), 'tables' => $tables));
+    }
+
+    /**
+     * Get one database table, API for AI.
+     *
+     * @param  string $tableName
+     * @access public
+     * @return void
+     */
+    public function dbTable(string $tableName = '')
+    {
+        $table = $this->dev->getDbTable($tableName);
+        if(empty($table))
+        {
+            $message = zget($this->lang->dev, 'tableNotFound', '');
+            if(empty($message)) $message = 'Table %s not found.';
+            helper::setStatus(404);
+
+            return $this->sendError(sprintf($message, $tableName));
+        }
+
+        return $this->send(array('status' => 'success', 'table' => $table));
+    }
+
+    /**
      * Editor.
      *
      * @access public
