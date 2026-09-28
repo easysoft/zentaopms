@@ -16440,6 +16440,7 @@ CREATE TABLE IF NOT EXISTS `ops_scan_issues` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `issueKey` varchar(255) NOT NULL DEFAULT '' COMMENT '问题唯一标识（SHA1）',
   `ppmID` int unsigned NOT NULL DEFAULT 0 COMMENT '合并请求ID',
+  `pipelineExecutionID` int unsigned NOT NULL DEFAULT 0 COMMENT '流水线执行ID',
   `ruleID` int unsigned NOT NULL DEFAULT 0 COMMENT '关联规则ID',
   `title` varchar(500) NOT NULL DEFAULT '' COMMENT '问题描述信息',
   `content` text DEFAULT NULL COMMENT '问题详细内容',
@@ -16930,4 +16931,5 @@ INSERT INTO `ops_plugin_group` (`name`, `desc`, `deleted`) VALUES
 ('test', '测试', 0),
 ('deploy', '部署', 0),
 ('artifact', '制品', 0),
-('scm', '代码版本管理', 0);
+('scm', '代码版本管理', 0),
+('scan', '扫描', 0);
