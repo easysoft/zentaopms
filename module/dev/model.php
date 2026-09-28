@@ -97,6 +97,8 @@ class devModel extends model
             $field         = $this->setField($field, $rawField, $type, $firstPOS);
 
             $field['baseType']          = trim(preg_replace('/\s+(unsigned|zerofill)\b/i', '', $type));
+            $field['rawType']           = $rawField->type;
+            $field['extra']             = isset($rawField->extra) ? $rawField->extra : '';
             $field['description']       = '';
             $field['descriptionSource'] = 'none';
             if(!empty($fieldDescriptions[$module][$rawField->field]))
@@ -129,7 +131,7 @@ class devModel extends model
     public function setField($field, $rawField, $type, $firstPOS)
     {
         $field['key']     = isset($rawField->key) ? $rawField->key : '';
-        $field['default'] = isset($rawField->default) ? $rawField->default : '';
+        $field['default'] = property_exists($rawField, 'default') ? $rawField->default : '';
 
         if($type == 'enum' or $type == 'set')
         {
@@ -170,7 +172,7 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function buildOptionList(string $fieldName, array $field, string $module, string $aliasModule = ''): array
+    protected function buildOptionList(string $fieldName, array $field, string $module, string $aliasModule = ''): array
     {
         if(empty($field['options']['enum'])) return array();
 
@@ -237,20 +239,11 @@ class devModel extends model
      */
     public function getDbTable(string $tableName): array
     {
-        $group  = '';
-        $module = '';
-        foreach($this->getTables() as $groupKey => $groupTables)
-        {
-            foreach($groupTables as $moduleKey => $table)
-            {
-                if($table != $tableName) continue;
+        $tableInfo = $this->getDbTableInfo($tableName);
+        if(empty($tableInfo)) return array();
 
-                $group  = $groupKey;
-                $module = $moduleKey;
-                break 2;
-            }
-        }
-        if(empty($module)) return array();
+        $group  = $tableInfo['group'];
+        $module = $tableInfo['module'];
 
         list($description) = $this->getTableDescription($module, $tableName);
 
@@ -295,6 +288,497 @@ class devModel extends model
     }
 
     /**
+     * Get module and group of one table.
+     *
+     * @param  string $tableName
+     * @access public
+     * @return array
+     */
+    protected function getDbTableInfo(string $tableName): array
+    {
+        if(empty($tableName)) return array();
+
+        foreach($this->getTables() as $group => $groupTables)
+        {
+            $module = array_search($tableName, $groupTables, true);
+            if($module === false) continue;
+
+            return array('module' => $module, 'group' => $group);
+        }
+
+        return array();
+    }
+
+    /**
+     * Get indexes of one table.
+     *
+     * @param  string $table
+     * @access public
+     * @return array
+     */
+    protected function getTableIndexes(string $table): array
+    {
+        if(empty($table)) return array();
+
+        $indexes = array();
+        try
+        {
+            $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
+            $rows = $this->dao->query('SHOW INDEX FROM `' . str_replace('`', '``', $table) . '`')->fetchAll();
+            $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+        }
+        catch(PDOException $e)
+        {
+            $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+            return array();
+        }
+
+        foreach($rows as $row)
+        {
+            $keyName = $row->key_name;
+            if(!isset($indexes[$keyName])) $indexes[$keyName] = array('unique' => empty($row->non_unique), 'type' => $row->index_type, 'columns' => array());
+
+            $indexes[$keyName]['columns'][(int)$row->seq_in_index] = array('name' => $row->column_name, 'subPart' => zget($row, 'sub_part', null));
+        }
+
+        foreach($indexes as $keyName => $index) ksort($indexes[$keyName]['columns']);
+        return $indexes;
+    }
+
+    /**
+     * Get column defaults of one table, null default is kept as null.
+     *
+     * @param  string $table
+     * @access public
+     * @return array
+     */
+    protected function getColumnDefaults(string $table): array
+    {
+        if(empty($table)) return array();
+
+        $this->dbh->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_NATURAL);
+        try
+        {
+            $defaults = $this->dao->select('column_name as `column`, column_default as `default`')
+                ->from('information_schema.columns')
+                ->where('table_schema')->eq($this->getSchema())
+                ->andWhere('table_name')->eq($table)
+                ->fetchPairs('column', 'default');
+        }
+        catch(PDOException $e)
+        {
+            $defaults = array();
+        }
+        $this->dbh->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
+
+        return (array)$defaults;
+    }
+
+    /**
+     * Get SQL statement of one table, title and description are written as comments.
+     *
+     * @param  string $tableName
+     * @access public
+     * @return string
+     */
+    public function getDbTableSQL(string $tableName): string
+    {
+        $tableInfo = $this->getDbTableInfo($tableName);
+        if(empty($tableInfo)) return '';
+
+        $module = $tableInfo['module'];
+        $references = $this->getTableReferences($module);
+        $defaults   = $this->getColumnDefaults($tableName);
+
+        $definitions = array();
+        $comments    = array();
+        foreach($this->getFields($tableName) as $fieldName => $field)
+        {
+            $definition = '`' . $fieldName . '` ' . zget($field, 'rawType', $field['type']);
+            $definition .= strtoupper((string)$field['null']) == 'YES' ? ' NULL' : ' NOT NULL';
+
+            $default = array_key_exists($fieldName, $defaults) ? $defaults[$fieldName] : zget($field, 'default', null);
+            if($default !== null) $definition .= ' DEFAULT ' . $this->formatSqlDefault((string)$default, zget($field, 'baseType', ''));
+            if(!empty($field['extra'])) $definition .= ' ' . strtoupper($field['extra']);
+
+            $definitions[] = $definition;
+            $comments[]    = $this->buildFieldComment($fieldName, $field, zget($references, $fieldName, array()));
+        }
+
+        $indexLines = array();
+        foreach($this->getTableIndexes($tableName) as $keyName => $index)
+        {
+            $columns = array();
+            foreach($index['columns'] as $column)
+            {
+                $columns[] = '`' . $column['name'] . '`' . (empty($column['subPart']) ? '' : '(' . $column['subPart'] . ')');
+            }
+            $columns = implode(', ', $columns);
+
+            if($keyName == 'PRIMARY')                    $indexLines[] = 'PRIMARY KEY (' . $columns . ')';
+            elseif($index['type'] == 'FULLTEXT')         $indexLines[] = 'FULLTEXT KEY `' . $keyName . '` (' . $columns . ')';
+            elseif($index['type'] == 'SPATIAL')          $indexLines[] = 'SPATIAL KEY `' . $keyName . '` (' . $columns . ')';
+            elseif($index['unique'])                     $indexLines[] = 'UNIQUE KEY `' . $keyName . '` (' . $columns . ')';
+            else                                         $indexLines[] = 'KEY `' . $keyName . '` (' . $columns . ')';
+        }
+
+        $lines   = array();
+        $lines[] = 'CREATE TABLE `' . $tableName . '` (';
+
+        $lineCount = count($definitions);
+        foreach($definitions as $index => $definition)
+        {
+            $isLast  = $index == $lineCount - 1;
+            $comment = !empty($comments[$index]) ? ' -- ' . $comments[$index] : '';
+            $lines[] = '  ' . $definition . (($isLast && empty($indexLines)) ? '' : ',') . $comment;
+        }
+        foreach($indexLines as $index => $indexLine)
+        {
+            $isLast  = $index == count($indexLines) - 1;
+            $lines[] = '  ' . $indexLine . ($isLast ? '' : ',');
+        }
+        $lines[] = ');';
+
+        return implode("\n", $lines) . "\n";
+    }
+
+    /**
+     * Build comment of one field for SQL statement.
+     *
+     * @param  string $fieldName
+     * @param  array  $field
+     * @param  array  $reference
+     * @access public
+     * @return string
+     */
+    protected function buildFieldComment(string $fieldName, array $field, array $reference = array()): string
+    {
+        $comment = !empty($field['name']) ? $field['name'] : $fieldName;
+        if(!empty($field['description']) and $field['description'] != $comment) $comment .= ' | ' . $field['description'];
+
+        if(!empty($field['optionList']))
+        {
+            $options = array();
+            foreach($field['optionList'] as $option) $options[] = $option['value'] . '=' . $option['label'];
+            $comment .= ' | 取值：' . implode('、', $options);
+        }
+
+        if(!empty($reference))
+        {
+            if(zget($reference, 'type') == 'polymorphic')
+            {
+                $targets = array();
+                foreach((array)zget($reference, 'targets', array()) as $target) $targets[] = $target['when'] . '=' . $target['toTable'] . '.' . $target['toColumn'];
+                $comment .= ' | 关联：' . $reference['discriminator'] . ' 指定（' . implode('、', $targets) . '）';
+            }
+            else
+            {
+                $comment .= ' | 关联：' . zget($reference, 'toTable', '') . '.' . zget($reference, 'toColumn', '');
+            }
+        }
+
+        return trim(str_replace(array("\r", "\n"), ' ', $comment));
+    }
+
+    /**
+     * Format default value of one field for SQL statement.
+     *
+     * @param  string $default
+     * @param  string $baseType
+     * @access public
+     * @return string
+     */
+    protected function formatSqlDefault(string $default, string $baseType = ''): string
+    {
+        $numericTypes = array('int', 'tinyint', 'smallint', 'mediumint', 'bigint', 'float', 'double', 'decimal', 'numeric', 'bit');
+        if(in_array($baseType, $numericTypes)) return $default;
+        if(strtoupper($default) == 'CURRENT_TIMESTAMP' or strtoupper($default) == 'CURRENT_TIMESTAMP()') return strtoupper($default);
+        if(strtoupper($default) == 'NULL') return 'NULL';
+
+        return "'" . str_replace(array('\\', "'"), array('\\\\', "\\'"), $default) . "'";
+    }
+
+    /**
+     * Query data with one read only select statement.
+     *
+     * @param  string $sql
+     * @param  array  $options page|limit|count
+     * @access public
+     * @return array
+     */
+    public function querySQL(string $sql, array $options = array()): array
+    {
+        $sql   = trim($sql);
+        $valid = $this->validateQuerySQL($sql);
+        if($valid !== true) return array('result' => 'fail', 'message' => $valid);
+
+        $page  = max(1, (int)zget($options, 'page', 1));
+        $limit = (int)zget($options, 'limit', 0);
+        $count = (bool)zget($options, 'count', true);
+        if($limit <= 0) $limit = $this->config->dev->sqlQuery->defaultLimit;
+        if($limit > $this->config->dev->sqlQuery->maxLimit) $limit = $this->config->dev->sqlQuery->maxLimit;
+
+        $sql      = $this->stripTrailingComment($sql);
+        $hasLimit = (bool)preg_match('/\blimit\b/i', $sql);
+        $pagedSql = $hasLimit ? $sql : $sql . ' LIMIT ' . (($page - 1) * $limit) . ', ' . $limit;
+
+        $dbh       = $this->dbh;
+        $startTime = microtime(true);
+        $columns   = array();
+        $rows      = array();
+        $total     = null;
+
+        try
+        {
+            $this->startQuerySession($dbh);
+
+            $stmt        = $dbh->query($pagedSql);
+            $columnCount = $stmt->columnCount();
+            $usedNames   = array();
+            for($index = 0; $index < $columnCount; $index++)
+            {
+                $meta = $stmt->getColumnMeta($index);
+                $name = !empty($meta['name']) ? $meta['name'] : 'column_' . ($index + 1);
+                $key  = $name;
+                $seq  = 2;
+                while(isset($usedNames[$key])) $key = $name . '_' . $seq++;
+
+                $usedNames[$key] = true;
+                $columns[] = array(
+                    'name'   => $key,
+                    'type'   => !empty($meta['native_type']) ? strtolower($meta['native_type']) : '',
+                    'masked' => $this->isSensitiveField($key),
+                );
+            }
+
+            while($row = $stmt->fetch(PDO::FETCH_NUM))
+            {
+                if(count($rows) >= $limit) break;
+
+                $data = array();
+                foreach($row as $index => $value) $data[$columns[$index]['name']] = $value;
+                $rows[] = $data;
+            }
+
+            foreach($rows as $index => $row)
+            {
+                foreach($columns as $column)
+                {
+                    if($column['masked']) $rows[$index][$column['name']] = '******';
+                }
+            }
+
+            if($count)
+            {
+                try
+                {
+                    $countSql = 'SELECT COUNT(*) AS count FROM (' . $sql . ') AS zt_count';
+                    $total    = (int)$dbh->query($countSql)->fetchColumn();
+                }
+                catch(Throwable $e)
+                {
+                    $total = null;
+                }
+            }
+        }
+        catch(Throwable $e)
+        {
+            $this->finishQuerySession($dbh);
+            $message = preg_replace("/\r|\n|\t/", ' ', $e->getMessage());
+            $this->writeQueryLog($sql, $pagedSql, 0, null, microtime(true) - $startTime, (string)$message);
+
+            return array('result' => 'fail', 'message' => sprintf($this->lang->dev->sqlExecuteError, strip_tags((string)$message)));
+        }
+
+        $this->finishQuerySession($dbh);
+        $elapsed = round(microtime(true) - $startTime, 4);
+        $this->writeQueryLog($sql, $pagedSql, count($rows), $total, $elapsed);
+
+        return array(
+            'result'  => 'success',
+            'sql'     => $pagedSql,
+            'columns' => $columns,
+            'rows'    => $rows,
+            'total'   => $total,
+            'page'    => $page,
+            'limit'   => $limit,
+            'elapsed' => $elapsed,
+        );
+    }
+
+    /**
+     * Validate a query sql, return true or error message.
+     *
+     * @param  string $sql
+     * @access public
+     * @return bool|string
+     */
+    protected function validateQuerySQL(string $sql)
+    {
+        if(empty($sql)) return $this->lang->dev->sqlEmpty;
+        if(strlen($sql) > $this->config->dev->sqlQuery->maxSqlLength) return sprintf($this->lang->dev->sqlTooLong, $this->config->dev->sqlQuery->maxSqlLength);
+        if(preg_match('/^\s*with\b/i', $sql)) return $this->lang->dev->sqlCteNotSupported;
+
+        $this->app->loadClass('sqlparser', true);
+        try
+        {
+            $parser = new sqlparser($sql);
+        }
+        catch(Throwable $e)
+        {
+            return $this->lang->dev->sqlParseError;
+        }
+
+        if(empty($parser->statements)) return $this->lang->dev->sqlParseError;
+        if(count($parser->statements) > 1) return $this->lang->dev->sqlMultiStatement;
+
+        $statement = $parser->statements[0];
+        if(strpos(get_class($statement), 'SelectStatement') === false) return $this->lang->dev->sqlOnlySelect;
+
+        foreach($this->config->dev->sqlQuery->forbiddenKeywords as $keyword)
+        {
+            if(stripos($sql, $keyword) !== false) return sprintf($this->lang->dev->sqlForbidden, $keyword);
+        }
+
+        foreach($this->getQueryTables($sql) as $table)
+        {
+            $schema = '';
+            if(strpos($table, '.') !== false) list($schema, $table) = explode('.', $table, 2);
+            if(!empty($schema) and $schema != $this->config->db->name) return sprintf($this->lang->dev->sqlTableNotAllowed, $schema . '.' . $table);
+            if(empty($table)) continue;
+            if(empty($this->getDbTableInfo($table))) return sprintf($this->lang->dev->sqlTableNotAllowed, $table);
+        }
+
+        return true;
+    }
+
+    /**
+     * Strip trailing comments of one sql, so that the limit can be appended safely.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    protected function stripTrailingComment(string $sql): string
+    {
+        $sql = rtrim($sql, "; \t\n\r\0\x0B");
+        $sql = preg_replace('/(--|#)[^\n]*$/', '', $sql);
+        $sql = preg_replace('#/\*(?:[^*]|\*(?!/))*\*/\s*$#', '', $sql);
+
+        return rtrim((string)$sql, "; \t\n\r\0\x0B");
+    }
+
+    /**
+     * Get tables used in a query sql.
+     *
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
+    protected function getQueryTables(string $sql): array
+    {
+        $tables = array();
+        if(preg_match_all('/\b(?:from|join)\s+`?([a-zA-Z0-9_$]+(?:\.[a-zA-Z0-9_$]+)?)`?/i', $sql, $matches))
+        {
+            foreach($matches[1] as $table) $tables[] = $table;
+        }
+        return array_values(array_unique($tables));
+    }
+
+    /**
+     * Whether a field should be masked.
+     *
+     * @param  string $field
+     * @access public
+     * @return bool
+     */
+    protected function isSensitiveField(string $field): bool
+    {
+        $field = strtolower($field);
+        foreach(explode(',', (string)$this->config->dev->sqlQuery->sensitiveFields) as $sensitive)
+        {
+            $sensitive = strtolower(trim($sensitive));
+            if($sensitive === '') continue;
+            if(strpos($field, $sensitive) !== false) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Start a read only query session.
+     *
+     * @param  object $dbh
+     * @access public
+     * @return void
+     */
+    protected function startQuerySession($dbh)
+    {
+        if($this->config->db->driver != 'mysql') return;
+
+        try
+        {
+            $dbh->exec('SET SESSION max_execution_time = ' . (int)$this->config->dev->sqlQuery->maxExecutionTime);
+        }
+        catch(Throwable $e)
+        {
+            /* MariaDB uses max_statement_time, ignore when the variable is not supported. */
+        }
+        $dbh->exec('START TRANSACTION READ ONLY');
+    }
+
+    /**
+     * Finish a read only query session.
+     *
+     * @param  object $dbh
+     * @access public
+     * @return void
+     */
+    protected function finishQuerySession($dbh)
+    {
+        if($this->config->db->driver != 'mysql') return;
+
+        try
+        {
+            $dbh->exec('ROLLBACK');
+        }
+        catch(Throwable $e)
+        {
+        }
+    }
+
+    /**
+     * Write query log.
+     *
+     * @param  string $sql
+     * @param  string $executedSql
+     * @param  int    $rows
+     * @param  int|null $total
+     * @param  float  $elapsed
+     * @param  string $error
+     * @access public
+     * @return void
+     */
+    protected function writeQueryLog(string $sql, string $executedSql, int $rows, $total, float $elapsed, string $error = '')
+    {
+        $logFile = $this->app->getTmpRoot() . 'log' . DS . 'sqlquery.' . date('Ymd') . '.log.php';
+        $account = isset($this->app->user->account) ? $this->app->user->account : '';
+        $ip      = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+        $line    = sprintf(
+            "[%s] account=%s ip=%s rows=%d total=%s elapsed=%.4f error=%s sql=%s\n",
+            date('H:i:s'),
+            $account,
+            $ip,
+            $rows,
+            $total === null ? 'null' : $total,
+            $elapsed,
+            $error,
+            str_replace(array("\r", "\n"), ' ', $sql)
+        );
+
+        @file_put_contents($logFile, $line, FILE_APPEND | LOCK_EX);
+    }
+
+    /**
      * Get description and source of one table.
      *
      * @param  string $module
@@ -304,7 +788,7 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function getTableDescription(string $module, string $table, array $descs = array(), array $comments = array()): array
+    protected function getTableDescription(string $module, string $table, array $descs = array(), array $comments = array()): array
     {
         if(empty($descs))    $descs    = $this->getTableDescriptions();
         if(empty($comments)) $comments = $this->getTableComments();
@@ -322,7 +806,7 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function getTableDescriptions(string $lang = ''): array
+    protected function getTableDescriptions(string $lang = ''): array
     {
         return $this->getLangDescriptions('tableDesc', $lang);
     }
@@ -334,7 +818,7 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function getFieldDescriptions(string $lang = ''): array
+    protected function getFieldDescriptions(string $lang = ''): array
     {
         return $this->getLangDescriptions('fieldDesc', $lang);
     }
@@ -347,7 +831,7 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function getLangDescriptions(string $key, string $lang = ''): array
+    protected function getLangDescriptions(string $key, string $lang = ''): array
     {
         $langs = array();
         if(!empty($lang)) $langs[] = $lang;
@@ -373,7 +857,7 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function loadLangDescriptions(string $langCode, string $key): array
+    protected function loadLangDescriptions(string $langCode, string $key): array
     {
         global $lang;
         if(!is_object($lang)) return array();
@@ -407,7 +891,7 @@ class devModel extends model
      * @access public
      * @return string
      */
-    public function getDevLangFile(string $langCode): string
+    protected function getDevLangFile(string $langCode): string
     {
         $path          = 'dev' . DS . 'lang' . DS . $langCode . '.php';
         $extensionRoot = $this->app->getExtensionRoot();
@@ -434,7 +918,7 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function getTableRelationConfig(string $module): array
+    protected function getTableRelationConfig(string $module): array
     {
         if(!isset($this->config->dev->relations[$module])) return array();
         return (array)$this->config->dev->relations[$module];
@@ -447,7 +931,7 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function getTableReferences(string $module): array
+    protected function getTableReferences(string $module): array
     {
         $prefix     = $this->config->db->prefix;
         $references = array();
@@ -484,7 +968,7 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function getReferencedBy(string $module): array
+    protected function getReferencedBy(string $module): array
     {
         $prefix       = $this->config->db->prefix;
         $referencedBy = array();
@@ -512,7 +996,7 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function getDiscriminatorOptions(string $module): array
+    protected function getDiscriminatorOptions(string $module): array
     {
         $options = array();
         foreach($this->getTableRelationConfig($module) as $relation)
@@ -539,7 +1023,7 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function getTableComments(): array
+    protected function getTableComments(): array
     {
         $comments = array();
         try
@@ -564,7 +1048,7 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function getColumnComments(string $table): array
+    protected function getColumnComments(string $table): array
     {
         if(empty($table)) return array();
 
@@ -591,7 +1075,7 @@ class devModel extends model
      * @access public
      * @return string
      */
-    public function getSchema(): string
+    protected function getSchema(): string
     {
         if(in_array($this->config->db->driver, $this->config->pgsqlDriverList)) return isset($this->config->db->schema) ? $this->config->db->schema : 'public';
         return $this->config->db->name;

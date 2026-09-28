@@ -912,6 +912,31 @@ class devModelTest extends baseTest
     }
 
     /**
+     * Test getDbTableSQL method.
+     *
+     * @param  string $tableName
+     * @access public
+     * @return string
+     */
+    public function getDbTableSQLTest($tableName)
+    {
+        return $this->instance->getDbTableSQL($tableName);
+    }
+
+    /**
+     * Test querySQL method.
+     *
+     * @param  string $sql
+     * @param  array  $options
+     * @access public
+     * @return array
+     */
+    public function querySQLTest($sql, $options = array())
+    {
+        return $this->instance->querySQL($sql, $options);
+    }
+
+    /**
      * Test getTableDescriptions method.
      *
      * @param  string $lang
@@ -920,7 +945,7 @@ class devModelTest extends baseTest
      */
     public function getTableDescriptionsTest($lang = '')
     {
-        return $this->instance->getTableDescriptions($lang);
+        return $this->invokeArgs('getTableDescriptions', array($lang));
     }
 
     /**
@@ -932,30 +957,6 @@ class devModelTest extends baseTest
      */
     public function getFieldDescriptionsTest($lang = '')
     {
-        return $this->instance->getFieldDescriptions($lang);
-    }
-
-    /**
-     * Test getTableReferences method.
-     *
-     * @param  string $module
-     * @access public
-     * @return array
-     */
-    public function getTableReferencesTest($module)
-    {
-        return $this->instance->getTableReferences($module);
-    }
-
-    /**
-     * Test getReferencedBy method.
-     *
-     * @param  string $module
-     * @access public
-     * @return array
-     */
-    public function getReferencedByTest($module)
-    {
-        return $this->instance->getReferencedBy($module);
+        return $this->invokeArgs('getFieldDescriptions', array($lang));
     }
 }

@@ -443,3 +443,15 @@ $config->dev->relations['file']['objectID'] = array(
     ),
 );
 $config->dev->relations['file']['addedBy'] = array('toTable' => 'user', 'toColumn' => 'account');
+
+/* 数据库查询接口设置。Settings of the database query API. */
+$config->dev->sqlQuery = new stdclass();
+$config->dev->sqlQuery->defaultLimit      = 100;      // 默认返回行数。Default row count.
+$config->dev->sqlQuery->maxLimit          = 1000;     // 单次最大返回行数。Max row count of one request.
+$config->dev->sqlQuery->maxExecutionTime  = 3000;     // 最长执行时间，单位毫秒。Max execution time in milliseconds.
+$config->dev->sqlQuery->maxSqlLength      = 10000;    // SQL 最大长度。Max length of the sql.
+$config->dev->sqlQuery->sensitiveFields   = 'password,resetToken,token,secret,privateKey,apiKey,accessToken';
+$config->dev->sqlQuery->forbiddenKeywords = array(
+    'into outfile', 'into dumpfile', 'load_file(', 'benchmark(', 'sleep(', 'get_lock(', 'for update', 'lock in share mode',
+    'information_schema', 'performance_schema', 'mysql.', 'sys.', '/*!',
+);
