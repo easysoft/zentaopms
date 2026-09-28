@@ -97,6 +97,7 @@ UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasour
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'ticketRepeat'       LIMIT 1) WHERE `module` = 'ticket'   AND `field` = 'repeatTicket';
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'feedbackRepeat'     LIMIT 1) WHERE `module` = 'feedback' AND `field` = 'repeatFeedback';
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'taskDeliverable'    LIMIT 1) WHERE `module` = 'task'     AND `field` = 'deliverable';
+UPDATE `zt_workflowfield` SET control = 'multi-select' WHERE `control` = 'multi-selec';
 
 DROP VIEW IF EXISTS `view_datasource_taskDocs`;
 DROP VIEW IF EXISTS `view_datasource_caseScene`;
