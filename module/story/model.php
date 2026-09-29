@@ -410,7 +410,7 @@ class storyModel extends model
      * Get stories pairs of a execution.
      *
      * @param  int              $executionID
-     * @param  int              $productID
+     * @param  int|array        $productID
      * @param  string|int       $branch       0|all|integer
      * @param  array|string|int $moduleIdList
      * @param  string           $type         full|short
@@ -420,7 +420,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionStoryPairs(int $executionID = 0, int $productID = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string $type = 'full', string $status = 'all', string $storyType = '', bool $hasParent = true): array
+    public function getExecutionStoryPairs(int $executionID = 0, int|array $productID = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string $type = 'full', string $status = 'all', string $storyType = '', bool $hasParent = true): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStoryPairs();
 
@@ -432,7 +432,7 @@ class storyModel extends model
             ->beginIF($storyType)->andWhere('t2.type')->in($storyType)->fi()
             ->beginIF(!$hasParent)->andWhere('t2.`isParent`')->eq('0')->fi()
             ->andWhere('t2.deleted')->eq('0')
-            ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
+            ->beginIF($productID)->andWhere('t2.product')->in($productID)->fi()
             ->beginIF($branch !== 'all')->andWhere('t2.branch')->in("0,$branch")->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
             ->beginIF($status == 'unclosed')->andWhere('t2.status')->ne('closed')->fi()

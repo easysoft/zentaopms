@@ -14,10 +14,10 @@ class bugTao extends bugModel
     {
         return $this->dao->select('t1.*, t2.name AS `executionName`, t3.title AS `storyTitle`, t3.status AS `storyStatus`, t3.version AS `latestStoryVersion`, t4.name AS `taskName`, t5.title AS `planName`')
             ->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
-            ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
-            ->leftJoin(TABLE_TASK)->alias('t4')->on('t1.task = t4.id')
-            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t5')->on('t1.plan = t5.id')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id and t2.deleted = 0')
+            ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id and t3.deleted = 0')
+            ->leftJoin(TABLE_TASK)->alias('t4')->on('t1.task = t4.id and t4.deleted = 0')
+            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t5')->on('t1.plan = t5.id and t5.deleted = 0')
             ->where('t1.id')->eq((int)$bugID)
             ->fetch();
     }

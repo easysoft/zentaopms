@@ -748,8 +748,17 @@ class testcase extends control
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
-        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch, array(), 'all', 'id_desc', 0, '', 'story', false);
-        $cases   = $this->testcaseZen->processStepsAndExpectsForBatchEdit($cases);
+        if($this->app->tab != 'qa' && $this->app->tab != 'product' && $this->app->tab != 'my')
+        {
+            $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            $stories   = $this->loadModel('story')->getExecutionStoryPairs($projectID, $productID, $branch === 'all' ? 0 : $branch, array(), 'full', 'unclosed', 'story', false);
+        }
+        else
+        {
+            $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch, array(), 'active,reviewing', 'id_desc', 50, '', 'story', false);
+        }
+
+        $cases = $this->testcaseZen->processStepsAndExpectsForBatchEdit($cases);
 
         /* 展示变量. */
         /* Show the variables. */

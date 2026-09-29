@@ -149,8 +149,9 @@ window.loadStoriesForBatch = function(productID, moduleID, num, $currentRow = nu
 {
     let branchID = $currentRow.find('.form-batch-control[data-name="branch"]').length ? $currentRow.find('.form-batch-control[data-name="branch"] .pick-value').val() : 0;
     if(!branchID) branchID = 0;
+    if(typeof(projectID) == 'undefined') projectID = 0;
 
-    const storyLink  = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=active&limit=0&type=&hasParent=0&objectID=0&number=' + num);
+    const storyLink = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=active&limit=0&type=&hasParent=0&objectID=' + projectID + '&number=' + num);
     $.getJSON(storyLink, function(stories)
     {
         let $row = $currentRow;
