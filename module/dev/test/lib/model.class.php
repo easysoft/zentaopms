@@ -959,4 +959,472 @@ class devModelTest extends baseTest
     {
         return $this->invokeArgs('getFieldDescriptions', array($lang));
     }
+
+    /**
+     * Test get one column definition line of the table sql.
+     *
+     * @param  string $tableName
+     * @param  string $fieldName
+     * @access public
+     * @return string
+     */
+    public function getDbTableSQLColumnTest(string $tableName, string $fieldName): string
+    {
+        $sql = $this->instance->getDbTableSQL($tableName);
+        if(empty($sql)) return '';
+
+        foreach(explode("\n", $sql) as $line)
+        {
+            $line = trim($line);
+            if(strpos($line, '`' . $fieldName . '`') !== 0) continue;
+            return $line;
+        }
+
+        return '';
+    }
+
+    /**
+     * Test buildOptionList method.
+     *
+     * @param  string $fieldName
+     * @param  array  $field
+     * @param  string $module
+     * @param  string $aliasModule
+     * @access public
+     * @return array
+     */
+    public function buildOptionListTest(string $fieldName, array $field, string $module, string $aliasModule = ''): array
+    {
+        return $this->invokeArgs('buildOptionList', array($fieldName, $field, $module, $aliasModule));
+    }
+
+    /**
+     * Test getDbTableInfo method.
+     *
+     * @param  string $tableName
+     * @access public
+     * @return array
+     */
+    public function getDbTableInfoTest(string $tableName): array
+    {
+        return $this->invokeArgs('getDbTableInfo', array($tableName));
+    }
+
+    /**
+     * Test getTableIndexes method.
+     *
+     * @param  string $table
+     * @access public
+     * @return array
+     */
+    public function getTableIndexesTest(string $table): array
+    {
+        return $this->invokeArgs('getTableIndexes', array($table));
+    }
+
+    /**
+     * Test getTableIndexes method and return one index value by path.
+     *
+     * @param  string $table
+     * @param  string $keyName
+     * @param  string $path
+     * @access public
+     * @return string
+     */
+    public function getTableIndexTest(string $table, string $keyName, string $path = ''): string
+    {
+        $indexes = $this->invokeArgs('getTableIndexes', array($table));
+        if(!isset($indexes[$keyName])) return 'missing';
+
+        if(empty($path)) return json_encode($indexes[$keyName]);
+
+        $value = $indexes[$keyName];
+        foreach(explode('.', $path) as $key)
+        {
+            if(!is_array($value) or !array_key_exists($key, $value)) return 'missing';
+            $value = $value[$key];
+        }
+
+        return is_array($value) ? json_encode($value) : (string)$value;
+    }
+
+    /**
+     * Test getColumnDefaults method.
+     *
+     * @param  string $table
+     * @access public
+     * @return array
+     */
+    public function getColumnDefaultsTest(string $table): array
+    {
+        return $this->invokeArgs('getColumnDefaults', array($table));
+    }
+
+    /**
+     * Test getColumnDefaults method and return one column default.
+     *
+     * @param  string $table
+     * @param  string $column
+     * @access public
+     * @return string
+     */
+    public function getColumnDefaultTest(string $table, string $column): string
+    {
+        $defaults = $this->invokeArgs('getColumnDefaults', array($table));
+        if(!array_key_exists($column, $defaults)) return 'missing';
+        if($defaults[$column] === null) return 'null';
+
+        return (string)$defaults[$column];
+    }
+
+    /**
+     * Test buildFieldComment method.
+     *
+     * @param  string $fieldName
+     * @param  array  $field
+     * @param  array  $reference
+     * @access public
+     * @return string
+     */
+    public function buildFieldCommentTest(string $fieldName, array $field, array $reference = array()): string
+    {
+        return $this->invokeArgs('buildFieldComment', array($fieldName, $field, $reference));
+    }
+
+    /**
+     * Test formatSqlDefault method.
+     *
+     * @param  string $default
+     * @param  string $baseType
+     * @access public
+     * @return string
+     */
+    public function formatSqlDefaultTest(string $default, string $baseType = ''): string
+    {
+        return $this->invokeArgs('formatSqlDefault', array($default, $baseType));
+    }
+
+    /**
+     * Test validateQuerySQL method and tell whether the sql is valid.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public function validateQuerySQLTest(string $sql): string
+    {
+        $result = $this->invokeArgs('validateQuerySQL', array($sql));
+        if($result === true) return 'valid';
+        return $result === $this->instance->lang->dev->sqlEmpty ? 'empty' : 'invalid';
+    }
+
+    /**
+     * Test stripTrailingComment method.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public function stripTrailingCommentTest(string $sql): string
+    {
+        return $this->invokeArgs('stripTrailingComment', array($sql));
+    }
+
+    /**
+     * Test getQueryTables method.
+     *
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
+    public function getQueryTablesTest(string $sql): array
+    {
+        return $this->invokeArgs('getQueryTables', array($sql));
+    }
+
+    /**
+     * Test isSensitiveField method.
+     *
+     * @param  string $field
+     * @access public
+     * @return string
+     */
+    public function isSensitiveFieldTest(string $field): string
+    {
+        return $this->invokeArgs('isSensitiveField', array($field)) ? '1' : '0';
+    }
+
+    /**
+     * Test startQuerySession method and tell whether the session is in transaction.
+     *
+     * @access public
+     * @return string
+     */
+    public function startQuerySessionTest(): string
+    {
+        $this->invokeArgs('startQuerySession', array($this->instance->dbh));
+        return $this->instance->dbh->inTransaction() ? 'inTransaction' : 'noTransaction';
+    }
+
+    /**
+     * Test finishQuerySession method and tell whether the session is in transaction.
+     *
+     * @access public
+     * @return string
+     */
+    public function finishQuerySessionTest(): string
+    {
+        $this->invokeArgs('finishQuerySession', array($this->instance->dbh));
+        return $this->instance->dbh->inTransaction() ? 'inTransaction' : 'noTransaction';
+    }
+
+    /**
+     * Execute one write sql to check the read only session.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public function execReadOnlyQuerySessionTest(string $sql): string
+    {
+        try
+        {
+            $this->instance->dbh->exec($sql);
+            return 'success';
+        }
+        catch(Throwable $e)
+        {
+            return 'fail';
+        }
+    }
+
+    /**
+     * Test writeQueryLog method and return the written log line.
+     *
+     * @param  string $sql
+     * @param  string $executedSql
+     * @param  int    $rows
+     * @param  mixed  $total
+     * @param  float  $elapsed
+     * @param  string $error
+     * @access public
+     * @return string
+     */
+    public function writeQueryLogTest(string $sql, string $executedSql, int $rows, $total, float $elapsed, string $error = ''): string
+    {
+        $this->invokeArgs('writeQueryLog', array($sql, $executedSql, $rows, $total, $elapsed, $error));
+
+        $logFile = $this->instance->app->getTmpRoot() . 'log' . DS . 'sqlquery.' . date('Ymd') . '.log.php';
+        if(!file_exists($logFile)) return 'missing';
+
+        $lines = file($logFile);
+        return trim((string)end($lines));
+    }
+
+    /**
+     * Test getTableDescription method.
+     *
+     * @param  string $module
+     * @param  string $table
+     * @param  array  $descs
+     * @param  array  $comments
+     * @access public
+     * @return array
+     */
+    public function getTableDescriptionTest(string $module, string $table, array $descs = array(), array $comments = array()): array
+    {
+        return $this->invokeArgs('getTableDescription', array($module, $table, $descs, $comments));
+    }
+
+    /**
+     * Test getLangDescriptions method.
+     *
+     * @param  string $key
+     * @param  string $lang
+     * @access public
+     * @return array
+     */
+    public function getLangDescriptionsTest(string $key, string $lang = ''): array
+    {
+        return $this->invokeArgs('getLangDescriptions', array($key, $lang));
+    }
+
+    /**
+     * Test loadLangDescriptions method.
+     *
+     * @param  string $langCode
+     * @param  string $key
+     * @access public
+     * @return array
+     */
+    public function loadLangDescriptionsTest(string $langCode, string $key): array
+    {
+        return $this->invokeArgs('loadLangDescriptions', array($langCode, $key));
+    }
+
+    /**
+     * Test getDevLangFile method.
+     *
+     * @param  string $langCode
+     * @access public
+     * @return string
+     */
+    public function getDevLangFileTest(string $langCode): string
+    {
+        return $this->invokeArgs('getDevLangFile', array($langCode));
+    }
+
+    /**
+     * Test getTableRelationConfig method.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getTableRelationConfigTest(string $module): array
+    {
+        return $this->invokeArgs('getTableRelationConfig', array($module));
+    }
+
+    /**
+     * Test getTableReferences method.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getTableReferencesTest(string $module): array
+    {
+        return $this->invokeArgs('getTableReferences', array($module));
+    }
+
+    /**
+     * Test getTableReferences method and return one reference value by path.
+     *
+     * @param  string $module
+     * @param  string $field
+     * @param  string $path
+     * @access public
+     * @return string
+     */
+    public function getTableReferenceTest(string $module, string $field, string $path = ''): string
+    {
+        $references = $this->invokeArgs('getTableReferences', array($module));
+        if(!isset($references[$field])) return 'missing';
+
+        if(empty($path)) return json_encode($references[$field]);
+
+        $value = $references[$field];
+        foreach(explode('.', $path) as $key)
+        {
+            if(!is_array($value) or !array_key_exists($key, $value)) return 'missing';
+            $value = $value[$key];
+        }
+
+        return is_array($value) ? json_encode($value) : (string)$value;
+    }
+
+    /**
+     * Test getReferencedBy method.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getReferencedByTest(string $module): array
+    {
+        return $this->invokeArgs('getReferencedBy', array($module));
+    }
+
+    /**
+     * Test getReferencedBy method and check one entry field value.
+     *
+     * @param  string $module
+     * @param  string $fromModule
+     * @param  string $field
+     * @access public
+     * @return string
+     */
+    public function getReferencedByFieldTest(string $module, string $fromModule, string $field): string
+    {
+        $prefix       = $this->instance->config->db->prefix;
+        $referencedBy = $this->invokeArgs('getReferencedBy', array($module));
+        foreach($referencedBy as $entry)
+        {
+            if($entry['table'] != $prefix . $fromModule) continue;
+            return isset($entry[$field]) ? (string)$entry[$field] : 'missing';
+        }
+
+        return 'missing';
+    }
+
+    /**
+     * Test getDiscriminatorOptions method.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getDiscriminatorOptionsTest(string $module): array
+    {
+        return $this->invokeArgs('getDiscriminatorOptions', array($module));
+    }
+
+    /**
+     * Test getTableComments method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTableCommentsTest(): array
+    {
+        return $this->invokeArgs('getTableComments');
+    }
+
+    /**
+     * Test getColumnComments method.
+     *
+     * @param  string $table
+     * @access public
+     * @return array
+     */
+    public function getColumnCommentsTest(string $table): array
+    {
+        return $this->invokeArgs('getColumnComments', array($table));
+    }
+
+    /**
+     * Test getSchema method.
+     *
+     * @access public
+     * @return string
+     */
+    public function getSchemaTest(): string
+    {
+        return $this->invokeArgs('getSchema');
+    }
+
+    /**
+     * Test getSchema method with a temporary database driver and schema.
+     *
+     * @param  string $driver
+     * @param  string $schema
+     * @access public
+     * @return string
+     */
+    public function getSchemaWithDriverTest(string $driver, string $schema = ''): string
+    {
+        $originalDriver = $this->instance->config->db->driver;
+        $originalSchema = isset($this->instance->config->db->schema) ? $this->instance->config->db->schema : null;
+
+        $this->instance->config->db->driver = $driver;
+        if($schema !== '') $this->instance->config->db->schema = $schema;
+        $result = $this->invokeArgs('getSchema');
+
+        $this->instance->config->db->driver = $originalDriver;
+        if($originalSchema === null) unset($this->instance->config->db->schema);
+        else $this->instance->config->db->schema = $originalSchema;
+
+        return (string)$result;
+    }
 }

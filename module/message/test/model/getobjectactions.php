@@ -69,7 +69,7 @@ cid=17053
 
 */
 
-global $lang, $app, $conifg;
+global $lang, $app, $config;
 $lang->SRCommon = '研发需求';
 $app::$loadedLangs = array();
 $app->loadLang('message');
@@ -88,7 +88,7 @@ r($objectActions) && p('testtask:started')   && e('开始');       //查询objec
 r($objectActions) && p('todo:edited')        && e('编辑');       //查询objectType为todo的action是edited的lab标签
 r($objectActions) && p('doc:releaseddoc')    && e('发布');       //查询objectType为doc的action是releaseddoc的lab标签
 
-r(implode(',', array_keys($objectActions))) && p() && e('product,epic,requirement,story,productplan,release,build,project,execution,task,bug,case,testtask,todo,doc,kanbancard,feedback,ticket,deploy,waterfall,opportunity,risk,issue,rule,reviewissue,auditplan,nc,meeting'); // 查询有动作的对象类型
+r(str_replace('aitask,', '', implode(',', array_keys($objectActions)))) && p() && e('product,epic,requirement,story,productplan,release,build,project,execution,task,bug,case,testtask,todo,doc,kanbancard,feedback,ticket,deploy,waterfall,opportunity,risk,issue,rule,reviewissue,auditplan,nc,meeting'); // 查询有动作的对象类型
 
 r(implode(',', array_keys($objectActions['product'])))   && p() && e('opened,edited,closed,undeleted,mentioned'); // 查询 product 的对象操作 key
 r(str_replace(',@通知', '', implode(',', array_values($objectActions['product'])))) && p() && e('创建,编辑,关闭,还原');                // 查询 product 的对象操作 value
