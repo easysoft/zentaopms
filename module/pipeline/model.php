@@ -54,6 +54,17 @@ class pipelineModel extends model
      */
     public function getList(int $spaceID = 0, int $repoID = 0, $type = '', string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
+        $privCondition = '';
+        if(!$this->app->user->admin)
+        {
+            $spaceIdList = array_keys($this->loadModel('space')->getPairs());
+            $repoIdList  = array_keys($this->loadModel('repo')->getRepoPairs());
+
+            $spaceIds = empty($spaceIdList) ? '0' : implode(',', $spaceIdList);
+            $repoIds  = empty($repoIdList) ? '0' : implode(',', $repoIdList);
+            $privCondition = "((t1.`repoID` = 0 AND t1.`spaceID` IN ({$spaceIds})) OR (t1.`repoID` != 0 AND t1.`repoID` IN ({$repoIds})))";
+        }
+
         $pipelines = $this->dao->select('t1.*, t2.`spaceID` AS space, t2.name AS `repoName`, t3.variables as variables, t4.name AS `providerName`')->from(TABLE_PIPELINE)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.`repoID`=t2.id')
             ->leftJoin(TABLE_PIPELINECONTENT)->alias('t3')->on('t1.id=t3.`pipelineID`')
@@ -66,6 +77,7 @@ class pipelineModel extends model
             ->beginIF($spaceID)->andWhere('t1.`spaceID`')->eq($spaceID)->fi()
             ->beginIF($type == 'repo')->andWhere('t1.`repoID`')->ne(0)->fi()
             ->beginIF($type == 'space')->andWhere('t1.`repoID`')->eq(0)->fi()
+            ->beginIF(!empty($privCondition))->andWhere($privCondition)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
