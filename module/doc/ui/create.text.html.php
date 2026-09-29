@@ -99,7 +99,7 @@ $basicInfoModal = modal
     (
         setStyle('min-height', 'auto'),
         set::label($lang->doc->files),
-        fileSelector(set::removeBtn(true))
+        fileSelector(set::removeBtn(hasPriv('doc', 'deleteFile')))
     ),
     formGroup
     (

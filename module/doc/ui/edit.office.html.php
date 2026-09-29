@@ -62,7 +62,7 @@ formPanel
     formGroup
     (
         set::label($lang->doc->files),
-        fileSelector(set::removeBtn(true))
+        fileSelector(set::removeBtn(hasPriv('doc', 'deleteFile')))
     ),
     formGroup
     (
