@@ -56,6 +56,12 @@ $config->block->reviewbyme->dtable->fieldList['type']['type']  = 'category';
 $config->block->reviewbyme->dtable->fieldList['type']['map']   = $lang->ppm->requestTypeList;
 $config->block->reviewbyme->dtable->fieldList['type']['width'] = '100';
 
+/* 区块列表数据固定按提交时间倒序展示，隐藏列头上的排序图标。 */
+foreach(array_keys($config->block->reviewbyme->dtable->fieldList) as $field)
+{
+    $config->block->reviewbyme->dtable->fieldList[$field]['sortType'] = false;
+}
+
 $config->block->reviewbyme->dtable->short = new stdclass();
 $config->block->reviewbyme->dtable->short->fieldList['id']     = $config->block->reviewbyme->dtable->fieldList['id'];
 $config->block->reviewbyme->dtable->short->fieldList['title']  = $config->block->reviewbyme->dtable->fieldList['title'];
