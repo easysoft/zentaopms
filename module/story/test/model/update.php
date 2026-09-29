@@ -20,6 +20,7 @@ cid=18593
 - 测试编辑时在 spec 中提到的用户发送 mention 通知
  - 属性notifyCount @1
  - 属性mentionUser @user1
+- 编辑需求时标题为空则报错 @yes
 - 测试编辑时 spec 无 mention 不发送通知 @0
 
 */
@@ -52,6 +53,9 @@ $result2 = $story->updateTest(2, $params2);
 r($result1) && p('title,pri,sourceNote,estimate') && e('编辑后的名称1,1,来源备注1,1.00'); // 编辑需求，判断返回的信息
 r($result2) && p('title,pri,sourceNote,estimate') && e('编辑后的名称2,2,来源备注2,2.00'); // 编辑需求，判断返回的信息
 
+$noTitleResult = $story->updateTest(1, array('title' => '', 'oldDocs' => array(), 'docVersions' => array(), 'docs' => null, 'linkStories' => '', 'comment' => ''));
+r(is_array($noTitleResult) && !empty($noTitleResult['title']) ? 'yes' : 'no') && p() && e('yes'); // 编辑需求时标题为空则报错
+
 zenData('notify')->gen(0);
 
 $types = array();
@@ -59,6 +63,9 @@ $types['story']         = array('mentioned');
 $types['requirement']   = array('mentioned');
 $tester->config->message->setting = array('message' => array('setting' => $types));
 
+$lang->SRCommon = '研发需求';
+$lang->URCommon = '用户需求';
+$lang->ERCommon = '业务需求';
 $app::$loadedLangs = array();
 $app->loadLang('action');
 $app->loadLang('message');

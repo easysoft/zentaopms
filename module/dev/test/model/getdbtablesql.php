@@ -36,7 +36,8 @@ $sql = $dev->getDbTableSQLTest('zt_task');
 
 r(strpos($sql, "CREATE TABLE `zt_task` (") === 0 ? 'yes' : 'fail') && p() && e('yes');             // 步骤1：SQL 以 CREATE TABLE 开头
 r(strpos($sql, '任务表，记录执行下的任务') === false ? 'yes' : 'fail') && p() && e('yes'); // 步骤2：表描述不写进 SQL
-r(strpos($sql, '`id` int unsigned NOT NULL AUTO_INCREMENT,') !== false ? 'yes' : 'fail') && p() && e('yes'); // 步骤3：自增主键不输出 DEFAULT
+$idLine = $dev->getDbTableSQLColumnTest('zt_task', 'id');
+r(strpos($idLine, 'AUTO_INCREMENT') !== false && strpos($idLine, 'DEFAULT') === false ? 'yes' : 'fail') && p() && e('yes'); // 步骤3：自增主键不输出 DEFAULT
 r(strpos($sql, '-- 所属项目 | 所属项目，对应 zt_project.id') !== false ? 'yes' : 'fail') && p() && e('yes'); // 步骤4：字段标题和描述写成注释
 r(strpos($sql, '关联：zt_project.id') !== false ? 'yes' : 'fail') && p() && e('yes');            // 步骤5：关联关系写入字段注释
 r(strpos($sql, 'PRIMARY KEY (`id`)') !== false ? 'yes' : 'fail') && p() && e('yes');             // 步骤6：主键定义
