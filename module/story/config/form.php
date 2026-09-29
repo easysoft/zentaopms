@@ -178,7 +178,7 @@ $config->story->form->submitReview['status']       = array('type' => 'string',  
 
 $config->story->form->batchSubmitReview = array();
 $config->story->form->batchSubmitReview['id']       = array('type' => 'int',    'required' => true,  'default' => '', 'base' => true);
-$config->story->form->batchSubmitReview['reviewer'] = array('type' => 'array',  'required' => false, 'default' => '', 'filter' => 'join');
+$config->story->form->batchSubmitReview['reviewer'] = array('type' => 'array',  'required' => false, 'default' => array());
 $config->story->form->batchSubmitReview['status']   = array('type' => 'string', 'required' => false, 'default' => 'active');
 
 $config->story->form->batchToTask['module']     = array('type' => 'int',    'required' => false, 'default' => 0);
