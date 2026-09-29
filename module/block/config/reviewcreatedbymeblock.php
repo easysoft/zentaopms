@@ -56,6 +56,8 @@ $config->block->reviewcreatedbyme->dtable->fieldList['type']['type']  = 'categor
 $config->block->reviewcreatedbyme->dtable->fieldList['type']['map']   = $lang->ppm->requestTypeList;
 $config->block->reviewcreatedbyme->dtable->fieldList['type']['width'] = '100';
 
+foreach(array_keys($config->block->reviewcreatedbyme->dtable->fieldList) as $field) $config->block->reviewcreatedbyme->dtable->fieldList[$field]['sortType'] = false;
+
 $config->block->reviewcreatedbyme->dtable->short = new stdclass();
 $config->block->reviewcreatedbyme->dtable->short->fieldList['id']     = $config->block->reviewcreatedbyme->dtable->fieldList['id'];
 $config->block->reviewcreatedbyme->dtable->short->fieldList['title']  = $config->block->reviewcreatedbyme->dtable->fieldList['title'];
