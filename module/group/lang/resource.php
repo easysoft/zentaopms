@@ -2261,11 +2261,17 @@ $lang->cron->methodOrder[30] = 'delete';
 $lang->cron->methodOrder[35] = 'openProcess';
 
 $lang->resource->dev = new stdclass();
-$lang->resource->dev->api = 'api';
-$lang->resource->dev->db  = 'db';
+$lang->resource->dev->api      = 'api';
+$lang->resource->dev->db       = 'db';
+$lang->resource->dev->dbtables = 'dbTables';
+$lang->resource->dev->dbtable  = 'dbTable';
+$lang->resource->dev->dbquery  = 'dbQuery';
 
 $lang->dev->methodOrder[5]  = 'api';
 $lang->dev->methodOrder[10] = 'db';
+$lang->dev->methodOrder[15] = 'dbtables';
+$lang->dev->methodOrder[20] = 'dbtable';
+$lang->dev->methodOrder[25] = 'dbquery';
 
 $lang->resource->editor = new stdclass();
 $lang->resource->editor->index   = 'index';

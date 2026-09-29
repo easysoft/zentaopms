@@ -156,6 +156,7 @@ $config->xFrameOptions = 'SAMEORIGIN';
 $config->features = new stdclass();
 $config->features->apiGetModel    = false;
 $config->features->apiSQL         = false;
+$config->features->apiSqlQuery    = false;
 $config->features->cronSystemCall = false;
 $config->features->checkClient    = true;
 

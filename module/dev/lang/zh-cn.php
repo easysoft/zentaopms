@@ -2,6 +2,21 @@
 $lang->dev->common       = '二次开发';
 $lang->dev->api          = '接口文档';
 $lang->dev->db           = '数据字典';
+$lang->dev->dbTables     = '数据库表清单接口';
+$lang->dev->dbTable      = '数据库表详情接口';
+$lang->dev->dbQuery      = '数据库查询接口';
+$lang->dev->tableNotFound = '数据表 %s 不存在。';
+
+$lang->dev->sqlEmpty           = '请传入 sql 参数。';
+$lang->dev->sqlTooLong         = 'SQL 长度超过限制（%s 字符）。';
+$lang->dev->sqlCteNotSupported = '暂不支持 WITH（CTE）查询，请改写为子查询。';
+$lang->dev->sqlParseError      = 'SQL 语法解析失败，请检查语句。';
+$lang->dev->sqlMultiStatement  = '不支持执行多条 SQL 语句。';
+$lang->dev->sqlOnlySelect      = '仅支持单条 SELECT 查询。';
+$lang->dev->sqlForbidden       = 'SQL 中包含禁止使用的关键字：%s。';
+$lang->dev->sqlTableNotAllowed = '不允许访问数据表：%s。';
+$lang->dev->sqlExecuteError    = 'SQL 执行失败：%s';
+$lang->dev->sqlQueryDisabled   = '数据库查询接口未开启。';
 $lang->dev->editor       = '编辑器';
 $lang->dev->dbList       = '数据库';
 $lang->dev->moduleList   = '模块列表';
@@ -182,6 +197,232 @@ $lang->dev->tableList['dataview']              = '数据表';
 $lang->dev->tableList['dimension']             = '维度';
 $lang->dev->tableList['metric']                = '度量项';
 $lang->dev->tableList['pivot']                 = '透视表';
+
+/* 表描述，供数据库结构接口使用。Table descriptions for the database schema API. */
+$lang->dev->tableDesc = array();
+$lang->dev->tableDesc['bug']          = 'Bug 表，记录产品的缺陷，包含所属产品、项目、执行、严重程度、优先级和解决方案等信息。';
+$lang->dev->tableDesc['build']        = '版本表，记录项目或执行下构建的版本，以及版本关联的需求和 Bug。';
+$lang->dev->tableDesc['case']         = '测试用例表，记录用例的所属产品、模块、前置条件、步骤、类型和评审状态等信息。';
+$lang->dev->tableDesc['doc']          = '文档表，记录文档库中的文档，包含所属产品、项目、执行、文档库和目录等信息。';
+$lang->dev->tableDesc['file']         = '附件表，记录上传的附件，通过 objectType 和 objectID 关联到具体对象。';
+$lang->dev->tableDesc['product']      = '产品表，记录产品的基本信息、访问控制，以及需求、Bug 等对象的统计数量。';
+$lang->dev->tableDesc['project']      = '项目表，项目、项目集和执行（迭代、阶段）都存储在这张表中，通过 type 区分。';
+$lang->dev->tableDesc['projectstory'] = '项目需求关联表，一条记录表示项目关联了一个需求。';
+$lang->dev->tableDesc['release']      = '发布表，记录产品的发布版本，以及发布关联的需求和 Bug。';
+$lang->dev->tableDesc['story']        = '需求表，记录产品需求，包含所属产品、模块、计划、来源、状态、阶段和评审信息。';
+$lang->dev->tableDesc['task']         = '任务表，记录执行下的任务及其状态、工时、指派人、父子任务等信息。';
+$lang->dev->tableDesc['testtask']     = '测试单表，记录测试任务的范围、负责人、起止时间和关联的测试报告。';
+$lang->dev->tableDesc['user']         = '用户表，记录用户的账号、组织、联系方式、权限视图和登录信息。';
+
+/* 字段描述，供数据库结构接口使用。Field descriptions for the database schema API. */
+$lang->dev->fieldDesc = array();
+
+/* 任务。Task. */
+$lang->dev->fieldDesc['task']['project']      = '所属项目，对应 zt_project.id；项目、项目集和执行共用 zt_project 表。';
+$lang->dev->fieldDesc['task']['execution']    = '所属执行（迭代或阶段），对应 zt_project.id，通过 type 区分。';
+$lang->dev->fieldDesc['task']['parent']       = '父任务，对应 zt_task.id；0 表示不是子任务。';
+$lang->dev->fieldDesc['task']['module']       = '所属模块，对应 zt_module.id。';
+$lang->dev->fieldDesc['task']['design']       = '关联的设计，对应 zt_design.id。';
+$lang->dev->fieldDesc['task']['story']        = '关联需求，对应 zt_story.id。';
+$lang->dev->fieldDesc['task']['storyVersion'] = '关联需求的版本号，与 story 一起确定需求的具体版本。';
+$lang->dev->fieldDesc['task']['fromBug']      = '来源 Bug，对应 zt_bug.id；由 Bug 转任务时写入。';
+$lang->dev->fieldDesc['task']['fromIssue']    = '来源问题，对应 zt_issue.id；由问题转任务时写入。';
+$lang->dev->fieldDesc['task']['feedback']     = '来源反馈，对应 zt_feedback.id。';
+$lang->dev->fieldDesc['task']['isParent']     = '是否为父任务，1 表示有子任务。';
+$lang->dev->fieldDesc['task']['isTpl']        = '是否为任务模板。';
+$lang->dev->fieldDesc['task']['path']         = '父子任务层级路径，用逗号分隔的祖先任务 ID。';
+$lang->dev->fieldDesc['task']['status']       = '任务状态：wait 未开始、doing 进行中、done 已完成、pause 已暂停、cancel 已取消、closed 已关闭。';
+$lang->dev->fieldDesc['task']['type']         = '任务类型：design 设计、devel 开发、request 需求、test 测试、study 研究、discuss 讨论、ui 界面、affair 事务、misc 其他。';
+$lang->dev->fieldDesc['task']['mode']         = '任务模式，用于区分多人任务等特殊任务。';
+$lang->dev->fieldDesc['task']['pri']          = '优先级，数字越小优先级越高。';
+$lang->dev->fieldDesc['task']['estimate']     = '预计工时，单位小时。';
+$lang->dev->fieldDesc['task']['consumed']     = '已消耗工时，单位小时。';
+$lang->dev->fieldDesc['task']['left']         = '剩余工时，单位小时。';
+$lang->dev->fieldDesc['task']['deadline']     = '截止日期。';
+$lang->dev->fieldDesc['task']['openedBy']     = '创建人，对应 zt_user.account。';
+$lang->dev->fieldDesc['task']['assignedTo']   = '当前指派人，对应 zt_user.account；多人任务用逗号分隔。';
+$lang->dev->fieldDesc['task']['finishedBy']   = '完成任务的人，对应 zt_user.account。';
+$lang->dev->fieldDesc['task']['canceledBy']   = '取消任务的人，对应 zt_user.account。';
+$lang->dev->fieldDesc['task']['closedBy']     = '关闭任务的人，对应 zt_user.account。';
+$lang->dev->fieldDesc['task']['closedReason'] = '任务关闭原因。';
+$lang->dev->fieldDesc['task']['lastEditedBy'] = '最后修改人，对应 zt_user.account。';
+$lang->dev->fieldDesc['task']['deleted']      = '软删除标记，0 未删除、1 已删除。';
+
+/* Bug。 */
+$lang->dev->fieldDesc['bug']['project']      = '所属项目，对应 zt_project.id。';
+$lang->dev->fieldDesc['bug']['product']      = '所属产品，对应 zt_product.id。';
+$lang->dev->fieldDesc['bug']['module']       = '所属模块，对应 zt_module.id。';
+$lang->dev->fieldDesc['bug']['execution']    = '所属执行，对应 zt_project.id。';
+$lang->dev->fieldDesc['bug']['plan']         = '所属产品计划，对应 zt_productplan.id。';
+$lang->dev->fieldDesc['bug']['branch']       = '所属分支或平台，对应 zt_branch.id。';
+$lang->dev->fieldDesc['bug']['story']        = '关联需求，对应 zt_story.id。';
+$lang->dev->fieldDesc['bug']['task']         = '来源任务，对应 zt_task.id。';
+$lang->dev->fieldDesc['bug']['toTask']       = '转成的任务，对应 zt_task.id。';
+$lang->dev->fieldDesc['bug']['toStory']      = '转成的需求，对应 zt_story.id。';
+$lang->dev->fieldDesc['bug']['case']         = '关联用例，对应 zt_case.id。';
+$lang->dev->fieldDesc['bug']['duplicateBug'] = '重复 Bug，对应 zt_bug.id。';
+$lang->dev->fieldDesc['bug']['feedback']     = '来源反馈，对应 zt_feedback.id。';
+$lang->dev->fieldDesc['bug']['testtask']     = '来源测试单，对应 zt_testtask.id。';
+$lang->dev->fieldDesc['bug']['status']       = 'Bug 状态：active 激活、resolved 已解决、closed 已关闭。';
+$lang->dev->fieldDesc['bug']['severity']     = '严重程度，1 到 4，数字越小越严重。';
+$lang->dev->fieldDesc['bug']['pri']          = '优先级，数字越小优先级越高。';
+$lang->dev->fieldDesc['bug']['type']         = 'Bug 类型，如 codeerror 代码错误、config 配置相关、install 安装部署、security 安全相关、performance 性能问题、standard 标准规范、automation 自动化测试、designdefect 设计缺陷等。';
+$lang->dev->fieldDesc['bug']['resolution']   = '解决方案，如 fixed 已修复、willnotfix 不予解决、duplicate 重复 Bug、bydesign 设计如此、notrepro 无法重现、postponed 延期处理。';
+$lang->dev->fieldDesc['bug']['openedBuild']  = '影响版本，对应 zt_build.id，多个版本用逗号分隔。';
+$lang->dev->fieldDesc['bug']['resolvedBuild'] = '解决版本，对应 zt_build.id。';
+$lang->dev->fieldDesc['bug']['openedBy']     = '创建人，对应 zt_user.account。';
+$lang->dev->fieldDesc['bug']['assignedTo']   = '当前指派人，对应 zt_user.account。';
+$lang->dev->fieldDesc['bug']['resolvedBy']   = '解决人，对应 zt_user.account。';
+$lang->dev->fieldDesc['bug']['closedBy']     = '关闭人，对应 zt_user.account。';
+$lang->dev->fieldDesc['bug']['lastEditedBy'] = '最后修改人，对应 zt_user.account。';
+$lang->dev->fieldDesc['bug']['deleted']      = '软删除标记，0 未删除、1 已删除。';
+
+/* 需求。Story. */
+$lang->dev->fieldDesc['story']['product']        = '所属产品，对应 zt_product.id。';
+$lang->dev->fieldDesc['story']['branch']         = '所属分支或平台，对应 zt_branch.id。';
+$lang->dev->fieldDesc['story']['module']         = '所属模块，对应 zt_module.id。';
+$lang->dev->fieldDesc['story']['plan']           = '所属产品计划，对应 zt_productplan.id。';
+$lang->dev->fieldDesc['story']['parent']         = '父需求，对应 zt_story.id；0 表示不是子需求。';
+$lang->dev->fieldDesc['story']['path']           = '父子需求层级路径，用逗号分隔的祖先需求 ID。';
+$lang->dev->fieldDesc['story']['fromBug']        = '来源 Bug，对应 zt_bug.id。';
+$lang->dev->fieldDesc['story']['fromStory']      = '来源需求，对应 zt_story.id。';
+$lang->dev->fieldDesc['story']['duplicateStory'] = '重复需求，对应 zt_story.id。';
+$lang->dev->fieldDesc['story']['feedback']       = '来源反馈，对应 zt_feedback.id。';
+$lang->dev->fieldDesc['story']['source']         = '需求来源，如 customer 客户、po 产品经理、market 市场、service 客服等。';
+$lang->dev->fieldDesc['story']['status']         = '需求状态：draft 草稿、reviewing 评审中、active 激活、closed 已关闭、changing 变更中。';
+$lang->dev->fieldDesc['story']['stage']          = '需求阶段：wait 未开始、planned 已计划、projected 已立项、developing 研发中、testing 测试中、verified 已验收、released 已发布、closed 已关闭。';
+$lang->dev->fieldDesc['story']['type']           = '需求类型：story 需求、epic 业务需求、requirement 用户需求。';
+$lang->dev->fieldDesc['story']['category']       = '需求类别：feature 功能、interface 接口、performance 性能、safe 安全、experience 体验、improve 改进、other 其他。';
+$lang->dev->fieldDesc['story']['pri']            = '优先级，数字越小优先级越高。';
+$lang->dev->fieldDesc['story']['estimate']       = '预计工时，单位小时。';
+$lang->dev->fieldDesc['story']['openedBy']       = '创建人，对应 zt_user.account。';
+$lang->dev->fieldDesc['story']['assignedTo']     = '当前指派人，对应 zt_user.account。';
+$lang->dev->fieldDesc['story']['changedBy']      = '最近变更人，对应 zt_user.account。';
+$lang->dev->fieldDesc['story']['closedBy']       = '关闭人，对应 zt_user.account。';
+$lang->dev->fieldDesc['story']['retractedBy']    = '撤回人，对应 zt_user.account。';
+$lang->dev->fieldDesc['story']['submitedBy']     = '提交评审人，对应 zt_user.account。';
+$lang->dev->fieldDesc['story']['lastEditedBy']   = '最后修改人，对应 zt_user.account。';
+$lang->dev->fieldDesc['story']['deleted']        = '软删除标记，0 未删除、1 已删除。';
+
+/* 项目与项目集。Project and program. */
+$lang->dev->fieldDesc['project']['parent']       = '父级项目或项目集，对应 zt_project.id；0 表示顶级。';
+$lang->dev->fieldDesc['project']['path']         = '项目层级路径，用逗号分隔的祖先项目 ID。';
+$lang->dev->fieldDesc['project']['type']         = '对象类型：project 项目、program 项目集、sprint 迭代、stage 阶段、kanban 看板。';
+$lang->dev->fieldDesc['project']['model']        = '项目管理模型：scrum 敏捷、waterfall 瀑布、kanban 看板等。';
+$lang->dev->fieldDesc['project']['status']       = '状态：wait 未开始、doing 进行中、suspended 已挂起、closed 已关闭。';
+$lang->dev->fieldDesc['project']['acl']          = '访问控制：open 公开、private 私有、custom 自定义。';
+$lang->dev->fieldDesc['project']['openedBy']     = '创建人，对应 zt_user.account。';
+$lang->dev->fieldDesc['project']['closedBy']     = '关闭人，对应 zt_user.account。';
+$lang->dev->fieldDesc['project']['canceledBy']   = '取消人，对应 zt_user.account。';
+$lang->dev->fieldDesc['project']['lastEditedBy'] = '最后修改人，对应 zt_user.account。';
+$lang->dev->fieldDesc['project']['deleted']      = '软删除标记，0 未删除、1 已删除。';
+
+/* 产品。Product. */
+$lang->dev->fieldDesc['product']['program']   = '所属项目集，对应 zt_project.id。';
+$lang->dev->fieldDesc['product']['line']      = '所属产品线，对应 zt_module.id。';
+$lang->dev->fieldDesc['product']['type']      = '产品类型：normal 正常、branch 多分支、platform 多平台。';
+$lang->dev->fieldDesc['product']['status']    = '状态：normal 正常、closed 已关闭。';
+$lang->dev->fieldDesc['product']['acl']       = '访问控制：open 公开、private 私有、custom 自定义。';
+$lang->dev->fieldDesc['product']['PO']        = '产品负责人，对应 zt_user.account。';
+$lang->dev->fieldDesc['product']['QD']        = '测试负责人，对应 zt_user.account。';
+$lang->dev->fieldDesc['product']['RD']        = '发布负责人，对应 zt_user.account。';
+$lang->dev->fieldDesc['product']['createdBy'] = '创建人，对应 zt_user.account。';
+$lang->dev->fieldDesc['product']['deleted']   = '软删除标记，0 未删除、1 已删除。';
+
+/* 版本。Build. */
+$lang->dev->fieldDesc['build']['project']   = '所属项目，对应 zt_project.id。';
+$lang->dev->fieldDesc['build']['product']   = '所属产品，对应 zt_product.id。';
+$lang->dev->fieldDesc['build']['branch']    = '所属分支或平台，对应 zt_branch.id。';
+$lang->dev->fieldDesc['build']['execution'] = '所属执行，对应 zt_project.id。';
+$lang->dev->fieldDesc['build']['builder']   = '构建人，对应 zt_user.account。';
+$lang->dev->fieldDesc['build']['createdBy'] = '创建人，对应 zt_user.account。';
+$lang->dev->fieldDesc['build']['date']      = '构建日期。';
+$lang->dev->fieldDesc['build']['deleted']   = '软删除标记，0 未删除、1 已删除。';
+
+/* 发布。Release. */
+$lang->dev->fieldDesc['release']['project']   = '所属项目，对应 zt_project.id。';
+$lang->dev->fieldDesc['release']['product']   = '所属产品，对应 zt_product.id。';
+$lang->dev->fieldDesc['release']['branch']    = '所属分支或平台，对应 zt_branch.id。';
+$lang->dev->fieldDesc['release']['build']     = '关联版本，对应 zt_build.id。';
+$lang->dev->fieldDesc['release']['marker']    = '发布里程碑，如 trunk 主干等。';
+$lang->dev->fieldDesc['release']['status']    = '状态：normal 正常、terminate 已停止、wait 未开始。';
+$lang->dev->fieldDesc['release']['createdBy'] = '创建人，对应 zt_user.account。';
+$lang->dev->fieldDesc['release']['deleted']   = '软删除标记，0 未删除、1 已删除。';
+
+/* 测试用例。Test case. */
+$lang->dev->fieldDesc['case']['project']       = '所属项目，对应 zt_project.id。';
+$lang->dev->fieldDesc['case']['product']       = '所属产品，对应 zt_product.id。';
+$lang->dev->fieldDesc['case']['execution']     = '所属执行，对应 zt_project.id。';
+$lang->dev->fieldDesc['case']['branch']        = '所属分支或平台，对应 zt_branch.id。';
+$lang->dev->fieldDesc['case']['lib']           = '所属用例库，对应 zt_testsuite.id。';
+$lang->dev->fieldDesc['case']['module']        = '所属模块，对应 zt_module.id。';
+$lang->dev->fieldDesc['case']['story']         = '关联需求，对应 zt_story.id。';
+$lang->dev->fieldDesc['case']['storyVersion']  = '关联需求的版本号。';
+$lang->dev->fieldDesc['case']['fromBug']       = '来源 Bug，对应 zt_bug.id。';
+$lang->dev->fieldDesc['case']['fromCaseID']    = '来源用例，对应 zt_case.id。';
+$lang->dev->fieldDesc['case']['type']          = '用例类型：feature 功能测试、performance 性能测试、config 配置相关、install 安装部署、security 安全相关、interface 接口测试、unit 单元测试、other 其他。';
+$lang->dev->fieldDesc['case']['stage']         = '适用阶段，如 unittest 单元测试阶段、feature 功能测试阶段、intergrate 集成测试阶段、system 系统测试阶段、smoke 冒烟测试阶段、bvt 版本验证阶段。';
+$lang->dev->fieldDesc['case']['status']        = '状态：normal 正常、blocked 被阻塞、investigate 研究中、wait 待评审、reviewing 评审中、pass 已通过、fail 失败。';
+$lang->dev->fieldDesc['case']['pri']           = '优先级，数字越小优先级越高。';
+$lang->dev->fieldDesc['case']['openedBy']      = '创建人，对应 zt_user.account。';
+$lang->dev->fieldDesc['case']['scriptedBy']    = '脚本创建人，对应 zt_user.account。';
+$lang->dev->fieldDesc['case']['lastRunner']    = '最近执行人，对应 zt_user.account。';
+$lang->dev->fieldDesc['case']['lastRunResult'] = '最近执行结果：pass 通过、fail 失败、blocked 阻塞。';
+$lang->dev->fieldDesc['case']['lastEditedBy']  = '最后修改人，对应 zt_user.account。';
+$lang->dev->fieldDesc['case']['deleted']       = '软删除标记，0 未删除、1 已删除。';
+
+/* 测试单。Test task. */
+$lang->dev->fieldDesc['testtask']['project']    = '所属项目，对应 zt_project.id。';
+$lang->dev->fieldDesc['testtask']['product']    = '所属产品，对应 zt_product.id。';
+$lang->dev->fieldDesc['testtask']['execution']  = '所属执行，对应 zt_project.id。';
+$lang->dev->fieldDesc['testtask']['build']      = '被测版本，对应 zt_build.id。';
+$lang->dev->fieldDesc['testtask']['testreport'] = '关联测试报告，对应 zt_testreport.id。';
+$lang->dev->fieldDesc['testtask']['owner']      = '负责人，对应 zt_user.account。';
+$lang->dev->fieldDesc['testtask']['type']       = '测试单类型，如 integrated 集成测试、unit 单元测试。';
+$lang->dev->fieldDesc['testtask']['status']     = '状态：wait 未开始、doing 进行中、done 已完成、blocked 被阻塞。';
+$lang->dev->fieldDesc['testtask']['createdBy']  = '创建人，对应 zt_user.account。';
+$lang->dev->fieldDesc['testtask']['deleted']    = '软删除标记，0 未删除、1 已删除。';
+
+/* 文档。Doc. */
+$lang->dev->fieldDesc['doc']['project']    = '所属项目，对应 zt_project.id。';
+$lang->dev->fieldDesc['doc']['product']    = '所属产品，对应 zt_product.id。';
+$lang->dev->fieldDesc['doc']['execution']  = '所属执行，对应 zt_project.id。';
+$lang->dev->fieldDesc['doc']['lib']        = '所属文档库，对应 zt_doclib.id。';
+$lang->dev->fieldDesc['doc']['module']     = '所属目录，对应 zt_module.id。';
+$lang->dev->fieldDesc['doc']['parent']     = '父文档，对应 zt_doc.id；0 表示顶级文档。';
+$lang->dev->fieldDesc['doc']['type']       = '文档类型，如 text 富文本、markdown 等。';
+$lang->dev->fieldDesc['doc']['status']     = '状态：normal 正常、draft 草稿。';
+$lang->dev->fieldDesc['doc']['addedBy']    = '创建人，对应 zt_user.account。';
+$lang->dev->fieldDesc['doc']['editedBy']   = '最后编辑人，对应 zt_user.account。';
+$lang->dev->fieldDesc['doc']['assignedTo'] = '指派给，对应 zt_user.account。';
+$lang->dev->fieldDesc['doc']['deleted']    = '软删除标记，0 未删除、1 已删除。';
+
+/* 用户。User. */
+$lang->dev->fieldDesc['user']['account']  = '用户账号，全局唯一，其他表通过 account 关联用户。';
+$lang->dev->fieldDesc['user']['password'] = '加密后的登录密码，不可逆。';
+$lang->dev->fieldDesc['user']['realname'] = '用户真实姓名。';
+$lang->dev->fieldDesc['user']['role']     = '用户角色，如 dev 研发、qa 测试、pm 项目经理、po 产品经理等。';
+$lang->dev->fieldDesc['user']['dept']     = '所属部门，对应 zt_dept.id。';
+$lang->dev->fieldDesc['user']['company']  = '所属公司，对应 zt_company.id。';
+$lang->dev->fieldDesc['user']['visions']  = '可访问的视图，多个用逗号分隔，如 rnd 研发、lite 运营。';
+$lang->dev->fieldDesc['user']['locked']   = '是否被锁定，1 表示锁定。';
+$lang->dev->fieldDesc['user']['deleted']  = '软删除标记，0 未删除、1 已删除。';
+
+/* 项目需求关联表。Project story relation. */
+$lang->dev->fieldDesc['projectstory']['project'] = '项目，对应 zt_project.id。';
+$lang->dev->fieldDesc['projectstory']['product'] = '产品，对应 zt_product.id。';
+$lang->dev->fieldDesc['projectstory']['branch']  = '分支或平台，对应 zt_branch.id。';
+$lang->dev->fieldDesc['projectstory']['story']   = '需求，对应 zt_story.id。';
+$lang->dev->fieldDesc['projectstory']['version'] = '需求的版本号。';
+
+/* 附件。File. */
+$lang->dev->fieldDesc['file']['objectType'] = '关联对象的类型，取值是模块键，如 bug、task、story。';
+$lang->dev->fieldDesc['file']['objectID']   = '关联对象的 ID，具体指向哪张表由 objectType 决定。';
+$lang->dev->fieldDesc['file']['pathname']   = '附件的存储路径和文件名。';
+$lang->dev->fieldDesc['file']['gid']        = '附件分组，同一分组内的附件属于同一次上传。';
+$lang->dev->fieldDesc['file']['addedBy']    = '上传人，对应 zt_user.account。';
+$lang->dev->fieldDesc['file']['extra']      = '附件的扩展信息，如图片尺寸等。';
+$lang->dev->fieldDesc['file']['deleted']    = '软删除标记，0 未删除、1 已删除。';
 
 $lang->dev->groupList['my']        = '我的地盘';
 $lang->dev->groupList['program']   = '项目集';
