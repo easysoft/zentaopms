@@ -90,7 +90,7 @@ tabs
             on::click('#monacoTabs .menu-item a')->call('changeDiffType', jsRaw('this')),
         )
     ),
-    tabPane
+    $config->edition == 'gitfox' ? null : tabPane
     (
         set::key('object'),
         set::title($lang->ppm->linkedObject . ' (' . $objectPager->recTotal . ')'),
