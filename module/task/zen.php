@@ -1851,7 +1851,9 @@ class taskZen extends task
             return $response;
         }
 
-        $response['load'] = $from != 'edittask';
+        $load = $from != 'edittask';
+        if(!empty($_SESSION['ignoredChildTaskID'])) $load = array('alert' => array('title' => $this->lang->task->deliverableTips->closeTitle, 'message' => sprintf($this->lang->task->deliverableTips->closeMessage, $_SESSION['ignoredChildTaskID']), 'actions' => array('text' => $this->lang->IKnow, 'btnType' => 'primary')), 'locate' => array('load' => true));
+        $response['load'] = $load;
         return $response;
     }
 
@@ -1961,7 +1963,9 @@ class taskZen extends task
         $message = $message ?: $this->lang->saveSuccess;
         if($this->viewType == 'json' || (helper::isApiRequest())) return array('result' => 'success');
         if(isInModal()) return $this->responseModal($task, $from, $message);
-        return array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true);
+
+        $load = !empty($_SESSION['ignoredChildTaskID']) ? array('alert' => array('title' => $this->lang->task->deliverableTips->closeTitle, 'message' => sprintf($this->lang->task->deliverableTips->closeMessage, $_SESSION['ignoredChildTaskID']), 'actions' => array('text' => $this->lang->IKnow, 'btnType' => 'primary')), 'locate' => array('load' => true)) : true;
+        return array('result' => 'success', 'message' => $message, 'load' => $load, 'closeModal' => true);
     }
 
     /**
