@@ -63,7 +63,7 @@ $config->pipeline->dtable->fieldList['desc']['show']   = true;
 
 if($app->tab == 'pipeline')
 {
-    $config->pipeline->dtable->fieldList['space']['title']    = $lang->pipeline->repo;
+    $config->pipeline->dtable->fieldList['space']['title']    = $lang->pipeline->space;
     $config->pipeline->dtable->fieldList['space']['name']     = 'spaceID';
     $config->pipeline->dtable->fieldList['space']['sortType'] = false;
     $config->pipeline->dtable->fieldList['space']['width']    = '120';
