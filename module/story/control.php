@@ -1769,7 +1769,7 @@ class story extends control
 
         if($objectID)
         {
-            $stories = $this->story->getExecutionStoryPairs($objectID, $productID, $branch, $modules, $type, 'all', 'story', $hasParent);
+            $stories = $this->story->getExecutionStoryPairs($objectID, $productID, $branch, $modules, $type, 'unclosed', 'story', $hasParent);
         }
         else
         {
@@ -1897,7 +1897,7 @@ class story extends control
         if($this->app->tab != 'qa' && $this->app->tab != 'product' && $this->app->tab != 'my')
         {
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
-            if($projectID) $stories = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules, 'full', 'all', 'story', false);
+            if($projectID) $stories = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules, 'full', 'unclosed', 'story', false);
         }
         if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, 'active,reviewing', 'id_desc', 0, '', 'story', false);
 
