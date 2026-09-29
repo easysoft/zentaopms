@@ -207,6 +207,15 @@ class bugZen extends bug
      */
     protected function getBrowseBugs(int $productID, string $branch, string $browseType, array $executions, int $moduleID, int $queryID, string $orderBy, object $pager): array
     {
+        if(empty($executions))
+        {
+            $projects   = $this->loadModel('product')->getProjectPairsByProduct($productID, (string)$branch);
+            $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('vision')->eq($this->config->vision)
+                ->andWhere('type')->in('stage,sprint,kanban')
+                ->andWhere('project')->in(array_keys($projects))->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+                ->fetchPairs();
+        }
         $bugs = $this->bug->getList($browseType, (array)$productID, $this->projectID, $executions, $branch, $moduleID, $queryID, $orderBy, $pager);
 
         /* 把查询条件保存到 session。*/
@@ -761,6 +770,7 @@ class bugZen extends bug
             if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
             if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
 
+            if(!isset($executions[$bug->execution])) $bug->execution = 0;
             if($this->config->edition != 'open') $bug->relatedObject = zget($bugRelatedObjectList, $bug->id, 0);
         }
 
