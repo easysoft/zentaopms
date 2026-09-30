@@ -1371,12 +1371,26 @@ class docModel extends model
             ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.review = t2.id')
             ->where('t1.doc')->eq($docID)
             ->fetchAll();
+        $historyList = $this->dao->select('t1.`docVersion`, t1.`isBaseline`')
+            ->from(TABLE_REVIEW)->alias('t1')
+            ->leftJoin(TABLE_PROJECTDELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->where('t2.doc')->eq($docID)
+            ->andWhere('t1.type')->eq('deliverable')
+            ->andWhere('t1.deleted')->eq('0')
+            ->fetchAll();
 
         foreach($versionList as $version)
         {
             if(empty($version->docVersion)) continue;
             if(!isset($markers[$version->docVersion])) $markers[$version->docVersion] = array();
             if(!empty($version->submittedBy)) $markers[$version->docVersion]['deliverable'] = true;
+            if($version->isBaseline) $markers[$version->docVersion]['baseline'] = true;
+        }
+        foreach($historyList as $version)
+        {
+            if(empty($version->docVersion)) continue;
+            if(!isset($markers[$version->docVersion])) $markers[$version->docVersion] = array();
+            $markers[$version->docVersion]['deliverable'] = true;
             if($version->isBaseline) $markers[$version->docVersion]['baseline'] = true;
         }
 
@@ -1395,7 +1409,7 @@ class docModel extends model
     {
         if(!in_array($this->config->edition, array('max', 'ipd')) || !$docID || !$version) return array();
 
-        $deliverables = $this->dao->select('t1.id, t1.project, t1.review, t1.version AS `deliverableVersion`, t2.name AS `deliverableType`, t3.version AS `reviewVersion`, t3.`isBaseline`')
+        $currentDeliverables = $this->dao->select('t1.id, t1.project, t3.id AS `relationReview`, t1.version AS `deliverableVersion`, t2.name AS `deliverableType`, t3.version AS `reviewVersion`, t3.`isBaseline`')
             ->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
             ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
             ->leftJoin(TABLE_REVIEW)->alias('t3')->on('t1.review = t3.id')
@@ -1404,6 +1418,20 @@ class docModel extends model
             ->andWhere('(t1.`submittedBy`')->ne('')->orWhere('t3.`isBaseline`')->eq(1)->markRight()
             ->andWhere('t2.deleted')->eq(0)
             ->fetchAll('id');
+        $historyDeliverables = $this->dao->select('t1.id, t1.project, t3.id AS `relationReview`, t1.version AS `deliverableVersion`, t2.name AS `deliverableType`, t3.version AS `reviewVersion`, t3.`isBaseline`')
+            ->from(TABLE_REVIEW)->alias('t3')
+            ->leftJoin(TABLE_PROJECTDELIVERABLE)->alias('t1')->on('t3.deliverable = t1.id')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->where('t1.doc')->eq($docID)
+            ->andWhere('t3.`docVersion`')->eq($version)
+            ->andWhere('t3.type')->eq('deliverable')
+            ->andWhere('t3.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq(0)
+            ->orderBy('t3.id_asc')
+            ->fetchAll('id');
+
+        $deliverables = $currentDeliverables ? $currentDeliverables : array();
+        foreach($historyDeliverables as $id => $deliverable) $deliverables[$id] = $deliverable;
         if(!$deliverables) return array();
 
         $projectIdList = array_unique(array_column($deliverables, 'project'));
@@ -1420,7 +1448,7 @@ class docModel extends model
         {
             $relation = new stdclass();
             $relation->deliverableID      = $deliverable->id;
-            $relation->reviewID           = $deliverable->review;
+            $relation->reviewID           = $deliverable->relationReview;
             $relation->deliverableType    = $deliverable->deliverableType;
             $relation->deliverableVersion = $deliverable->reviewVersion ?: $deliverable->deliverableVersion;
             $relation->baselineID         = 0;
@@ -1432,7 +1460,7 @@ class docModel extends model
             {
                 if($baseline->project != $deliverable->project) continue;
                 $categoryVersion = json_decode($baseline->categoryVersion, true);
-                if(!isset($categoryVersion[$deliverable->id]) || $categoryVersion[$deliverable->id] != $deliverable->review) continue;
+                if(!isset($categoryVersion[$deliverable->id]) || $categoryVersion[$deliverable->id] != $deliverable->relationReview) continue;
 
                 $baselineRelation = clone $relation;
                 $baselineRelation->baselineID      = $baseline->id;
