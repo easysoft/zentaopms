@@ -272,7 +272,7 @@ class mail extends control
      */
     public function batchDelete()
     {
-        $idList = implode('|', $this->post->mailIdList);
+        $idList = $this->post->mailIdList;
         if(empty($idList)) return $this->send(array('result' => 'fail', 'load' => true));
 
         /* Get deleted ID list from query string. */
