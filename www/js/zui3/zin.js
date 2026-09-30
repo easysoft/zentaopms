@@ -2107,6 +2107,14 @@
         });
     }
 
+    /* Register view command to open object view page. */
+    zui.registerGlobalCommand('view', (context, params) =>
+    {
+        const viewObject = window.top.handleGlobalSearch;
+        if(!viewObject || !Array.isArray(params) || params.length < 2) return;
+        return viewObject(params[0], String(params[1]));
+    });
+
     $(() =>
     {
         if($.apps.theme) changeAppTheme($.apps.theme);
