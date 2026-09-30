@@ -125,6 +125,7 @@ formBatchPanel
         set::multiple(true),
         set::width('240px'),
         set::value($config->vision),
+        set::hidden($config->edition == 'gitfox'),
         set::ditto(true),
         set::required(true)
     ) : '',
