@@ -51,6 +51,7 @@ class editor extends wg
         .tippy-content zen-editor-menu-item .label {all: unset;}
         .tiptap.ProseMirror {padding-top: 0.5rem;}
         .tiptap.ProseMirror p {margin: 0;}
+        .tiptap.ProseMirror pre {margin: 0.5rem 0;}
     CSS;
 
     public static function getPageCSS(): ?string

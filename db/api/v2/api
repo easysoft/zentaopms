@@ -1,4 +1,4 @@
-a:242:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:10;s:6:"module";i:368;s:5:"title";s:11:"获取Token";s:4:"path";s:12:"/users/login";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:11:"获取Token";s:7:"version";i:1;s:6:"params";s:400:"{
+a:243:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:10;s:6:"module";i:368;s:5:"title";s:11:"获取Token";s:4:"path";s:12:"/users/login";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:11:"获取Token";s:7:"version";i:1;s:6:"params";s:400:"{
     "header": [],
     "params": [
         {
@@ -46899,7 +46899,7 @@ a:242:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:10;s
         "required": false,
         "desc": "失败时返回的错误说明；错误响应为 {\"status\":\"fail\",\"message\":\"错误说明\"}。"
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-09-29 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-09-29 00:00:00";s:7:"deleted";i:0;}i:240;O:8:"stdClass":24:{s:2:"id";i:241;s:7:"product";s:0:"";s:3:"lib";i:10;s:6:"module";i:395;s:5:"title";s:37:"在多个 AI 知识库内向量搜索";s:4:"path";s:21:"/ai/knowledges/search";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:204:"使用关键词在一个或多个已发布且未删除的知识库中进行向量搜索，返回当前用户有权限的匹配片段，支持按知识类型、来源对象类型和最小匹配度筛选。";s:7:"version";i:1;s:6:"params";s:1879:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-09-29 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-09-29 00:00:00";s:7:"deleted";i:0;}i:240;O:8:"stdClass":24:{s:2:"id";i:241;s:7:"product";s:0:"";s:3:"lib";i:10;s:6:"module";i:395;s:5:"title";s:37:"在多个 AI 知识库内向量搜索";s:4:"path";s:31:"/ai/knowledges/embeddingssearch";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:204:"使用关键词在一个或多个已发布且未删除的知识库中进行向量搜索，返回当前用户有权限的匹配片段，支持按知识类型、来源对象类型和最小匹配度筛选。";s:7:"version";i:1;s:6:"params";s:1879:"{
     "header": [
         {
             "field": "Token",
@@ -47177,4 +47177,213 @@ a:242:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:10;s
         "required": false,
         "desc": "失败时返回的错误说明；错误响应为 {\"status\":\"fail\",\"message\":\"错误说明\"}。"
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-09-29 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-09-29 00:00:00";s:7:"deleted";i:0;}}
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-09-29 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-09-29 00:00:00";s:7:"deleted";i:0;}i:242;O:8:"stdClass":24:{s:2:"id";i:243;s:7:"product";s:0:"";s:3:"lib";i:10;s:6:"module";i:395;s:5:"title";s:28:"按关键词搜索 AI 知识";s:4:"path";s:21:"/ai/knowledges/search";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:207:"在一个或多个已发布且未删除的知识库中按关键词匹配标题或已保存正文，返回当前用户有权限的完整知识，支持任一或全部关键词匹配、类型筛选及分页。";s:7:"version";i:1;s:6:"params";s:2789:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "API 访问凭证。"
+        }
+    ],
+    "params": [
+        {
+            "field": "keywords",
+            "paramsType": "array",
+            "required": true,
+            "desc": "非空字符串数组；每项去除首尾空白后长度须为 1～200 个 Unicode 字符，空项返回 400，去重后最多 20 项；每项作为完整字面文本在标题或已保存正文中进行包含匹配，不分词，不拼接标题和正文，单个词不能跨字段边界，%、_ 和反斜杠均为普通字符，英文大小写遵循数据库排序规则。",
+            "example": [
+                "用户登录",
+                "密码"
+            ]
+        },
+        {
+            "field": "libIDs",
+            "paramsType": "array",
+            "required": true,
+            "desc": "一个或多个知识库 ID 组成的非空 JSON 正整数数组，重复 ID 去重；先检查全部库，任一库未发布、已删除、不存在或不可访问则整次请求失败；无向量索引的库也可以搜索标题或已保存正文。",
+            "example": [
+                12,
+                18
+            ]
+        },
+        {
+            "field": "matchMode",
+            "paramsType": "string",
+            "required": false,
+            "desc": "匹配方式：any 表示任一关键词在标题或正文中出现；all 表示同一条知识的每个关键词都在标题或正文之一出现，可分布于两个字段，不能跨知识条目；默认 any，空字符串和 null 无效。",
+            "example": "all"
+        },
+        {
+            "field": "type",
+            "paramsType": "string",
+            "required": false,
+            "desc": "知识类型：text 自定义文本、file 文件、object 禅道对象；省略时不限。",
+            "example": "object"
+        },
+        {
+            "field": "objectType",
+            "paramsType": "string",
+            "required": false,
+            "desc": "禅道对象类型，使用现有编码，例如 plan、bug、story、doc；省略时不限。单独指定时隐含 type=object，与 type=text 或 file 同时指定返回 HTTP 400。",
+            "example": "story"
+        },
+        {
+            "field": "pageID",
+            "paramsType": "int",
+            "required": false,
+            "desc": "页码，正整数，默认 1。",
+            "example": 1
+        },
+        {
+            "field": "recPerPage",
+            "paramsType": "int",
+            "required": false,
+            "desc": "每页记录数，整数 1～100，默认 20。",
+            "example": 20
+        }
+    ],
+    "paramsType": "json",
+    "query": []
+}";s:13:"paramsExample";s:224:"{
+    "keywords": [
+        "用户登录",
+        "密码"
+    ],
+    "libIDs": [
+        12,
+        18
+    ],
+    "matchMode": "all",
+    "type": "object",
+    "objectType": "bug",
+    "pageID": 1,
+    "recPerPage": 20
+}";s:15:"responseExample";s:408:"{
+    "status": "success",
+    "data": [
+        {
+            "id": 502,
+            "libID": 12,
+            "title": "用户登录",
+            "type": "object",
+            "objectType": "bug",
+            "content": "密码校验",
+            "contentType": "markdown"
+        }
+    ],
+    "pager": {
+        "pageID": 1,
+        "recPerPage": 20,
+        "recTotal": 1,
+        "pageTotal": 1
+    }
+}";s:8:"response";s:3756:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态：success 成功；fail 失败。"
+    },
+    {
+        "field": "data",
+        "paramsType": "array",
+        "required": false,
+        "desc": "成功时返回当前用户可见且标题或正文匹配的知识数组，每条知识仅出现一次，按知识 ID 降序；无结果时为 []。",
+        "level": 1,
+        "children": [
+            {
+                "field": "id",
+                "paramsType": "int",
+                "required": true,
+                "desc": "本地知识 ID，可用于获取知识详情。",
+                "level": 2
+            },
+            {
+                "field": "libID",
+                "paramsType": "int",
+                "required": true,
+                "desc": "所属知识库 ID。",
+                "level": 2
+            },
+            {
+                "field": "title",
+                "paramsType": "string",
+                "required": true,
+                "desc": "知识标题，与已保存正文一起参与关键词匹配。",
+                "level": 2
+            },
+            {
+                "field": "type",
+                "paramsType": "string",
+                "required": true,
+                "desc": "知识类型：text、file 或 object。",
+                "level": 2
+            },
+            {
+                "field": "objectType",
+                "paramsType": "string",
+                "required": true,
+                "desc": "来源禅道对象类型；非对象知识为空字符串。",
+                "level": 2
+            },
+            {
+                "field": "content",
+                "paramsType": "string",
+                "required": true,
+                "desc": "已保存的完整知识正文；正文为空或 null 时仍可因标题匹配而命中，响应正文为空字符串，不触发抽取或同步。",
+                "level": 2
+            },
+            {
+                "field": "contentType",
+                "paramsType": "string",
+                "required": true,
+                "desc": "已保存正文格式，例如 markdown 或 text。",
+                "level": 2
+            }
+        ]
+    },
+    {
+        "field": "pager",
+        "paramsType": "object",
+        "required": false,
+        "desc": "成功时返回的分页信息；先执行关键词、类型、知识库与来源对象权限过滤，再计算总数及分页。",
+        "level": 1,
+        "children": [
+            {
+                "field": "pageID",
+                "paramsType": "int",
+                "required": true,
+                "desc": "当前页码。",
+                "level": 2
+            },
+            {
+                "field": "recPerPage",
+                "paramsType": "int",
+                "required": true,
+                "desc": "每页记录数。",
+                "level": 2
+            },
+            {
+                "field": "recTotal",
+                "paramsType": "int",
+                "required": true,
+                "desc": "符合筛选条件且有权限的总记录数。",
+                "level": 2
+            },
+            {
+                "field": "pageTotal",
+                "paramsType": "int",
+                "required": true,
+                "desc": "总页数；无记录时为 0。",
+                "level": 2
+            }
+        ]
+    },
+    {
+        "field": "message",
+        "paramsType": "string",
+        "required": false,
+        "desc": "失败时返回的错误说明；400 参数无效，403 无权限，404 库不存在、已删除或未发布，405 HTTP 方法不支持；本接口不调用向量服务，不产生向量服务 502 错误。"
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-09-30 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-09-30 00:00:00";s:7:"deleted";i:0;}}
