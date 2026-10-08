@@ -79,6 +79,7 @@ class deliverable extends wg
         $isTemplate       = $this->prop('isTemplate') ? $this->prop('isTemplate') : false;
         $onlyShow         = $this->prop('onlyShow') ? $this->prop('onlyShow') : false;
         $closeProject     = $this->prop('closeProject') ? $this->prop('closeProject') : false;
+        $closeTask        = $this->prop('closeTask') ? $this->prop('closeTask') : false;
         $extraCategory    = $this->prop('extraCategory') ? $this->prop('extraCategory') : array_column($this->prop('items'), 'category');
         $categories       = $this->prop('categories');
         $projectID        = $this->prop('projectID');
@@ -94,6 +95,7 @@ class deliverable extends wg
         jsVar('isTemplate', $isTemplate);
         jsVar('onlyShow', $onlyShow);
         jsVar('closeProject', $closeProject);
+        jsVar('closeTask', $closeTask);
 
         if(!$this->hasProp('maxFileSize'))
         {
