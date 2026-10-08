@@ -1419,6 +1419,5 @@ class baseControl
     public function locate(string $url)
     {
         helper::header('location', $url);
-        helper::end();
     }
 }

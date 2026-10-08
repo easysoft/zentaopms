@@ -1345,7 +1345,6 @@ eof;
         $redirectUrl  = helper::createLink('index', 'index');
         $redirectUrl .= strpos($redirectUrl, '?') === false ? "?open=$url" : "&open=$url";
         helper::header('location', $redirectUrl);
-        helper::end();
     }
 
     /**
@@ -1857,11 +1856,7 @@ eof;
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
-        if($isFreepasswd)
-        {
-            header("Location: {$this->config->webRoot}");
-            helper::end();
-        }
+        if($isFreepasswd) header("Location: {$this->config->webRoot}");
 
         $this->session->set('ENTRY_CODE', $this->get->code);
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . helper::getRemoteIp()));
