@@ -170,7 +170,7 @@ $config->project->browseTable->cols['name']['width']        = 408;
 $config->project->browseTable->cols['name']['sortType']     = true;
 $config->project->browseTable->cols['name']['link']         = helper::createLink('project', 'index', 'projectID={id}');
 
-$config->project->browseTable->cols['PM']['name']     = 'PM';
+$config->project->browseTable->cols['PM']['name']     = 'PMName';
 $config->project->browseTable->cols['PM']['title']    = $lang->project->PM;
 $config->project->browseTable->cols['PM']['minWidth'] = 104;
 $config->project->browseTable->cols['PM']['type']     = 'avatarBtn';

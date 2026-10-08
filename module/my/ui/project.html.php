@@ -49,7 +49,6 @@ foreach($projects as $project)
     {
         $project->PMAccount = $project->PM;
         $project->PMAvatar  = \zget($usersAvatar, $project->PM, '');
-        $project->PM        = \zget($users, $project->PM);
     }
 
     if($project->budget)
