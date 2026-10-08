@@ -462,7 +462,8 @@ $routes['/:type/modules/:moduleID'] = array(
 $knowledgeRoutes = array(
     '/ai/knowledgelibs'                  => '/ai/ajaxGetKnowledgeLibList',
     '/ai/knowledgelibs/:libID/knowledges'  => '/ai/ajaxGetKnowledgeItemList',
-    '/ai/knowledges/search'              => '/ai/ajaxSearchKnowledgeChunks',
+    '/ai/knowledges/search'              => '/ai/ajaxSearchKnowledgesByKeyword',
+    '/ai/knowledges/embeddingssearch'    => '/ai/ajaxSearchKnowledgeChunks',
     '/ai/knowledges/:knowledgeID'        => '/ai/ajaxGetKnowledgeItem'
 );
 foreach($knowledgeRoutes as $knowledgePath => $knowledgeRedirect)
