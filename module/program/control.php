@@ -453,7 +453,13 @@ class program extends control
      */
     public function project(int $programID = 0, string $browseType = 'doing', string $orderBy = 'order_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
-        $programID = $this->program->checkAccess($programID, $this->program->getPairs());
+        $programPairs = $this->program->getPairs();
+
+        /* API 请求必须使用有效的项目集编号，避免 checkAccess() 静默回退到默认项目集。*/
+        /* API requests must use a valid program ID to avoid checkAccess() silently falling back to the default program. */
+        if(helper::isApiRequest() && !isset($programPairs[$programID])) return $this->send(array('status' => 'fail', 'message' => 'Program does not exist.'));
+
+        $programID = $this->program->checkAccess($programID, $programPairs);
         helper::setcookie("lastProgram", (string)$programID);
         common::setMenuVars('program', $programID);
 
