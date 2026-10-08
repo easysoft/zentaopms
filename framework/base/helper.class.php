@@ -1004,7 +1004,6 @@ class baseHelper
     {
         helper::setStatus(301);
         helper::header('location', $locate);
-        helper::end();
     }
 
     /**
@@ -1085,7 +1084,6 @@ class baseHelper
             if(isset($config->framework->autoRepairTable) and $config->framework->autoRepairTable)
             {
                 helper::header('location', $config->webRoot . 'checktable.php');
-                helper::end();
             }
             return $lang->repairTable;
         }
@@ -1179,9 +1177,10 @@ class baseHelper
     {
         global $app;
 
+        $key = trim(strtolower($key));
+
         if(isset($app->worker))
         {
-            $key = trim(strtolower($key));
             $app->worker->response->setHeader($key, $value);
 
             if($key == 'location')
@@ -1193,6 +1192,7 @@ class baseHelper
         else
         {
             header($key . ': ' . $value, $replace, $response_code);
+            if($key == 'location') helper::end();
         }
     }
 
