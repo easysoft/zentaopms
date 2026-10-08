@@ -608,6 +608,7 @@ class mailModel extends model
         list($toList, $ccList) = $addressees;
 
         if($objectType == 'review') $this->app->loadLang('baseline');
+        if($objectType == 'case' && $action->action == 'assigned') $toList = $action->extra;
 
         $users       = $this->loadModel('user')->getPairs('noletter|noclosed|noempty');
         $subject     = $this->loadModel('message')->buildNoticeTextByAccount('', $object, $action->action, $action->id, $objectType, $subject, 'other', $users, true);
