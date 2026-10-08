@@ -148,6 +148,9 @@ class cron extends control
 
         while(true)
         {
+            /* 每轮重置SQL执行记录，防止常驻进程内存占用增长。Reset SQL profiles each round to prevent memory usage growth in the daemon. */
+            dbh::resetProfiles();
+
             /* Only one scheduler and max 4 consumers. */
             $roles = $this->applyExecRoles($execId);
             if(empty($roles))
@@ -192,6 +195,9 @@ class cron extends control
 
         while(true)
         {
+            /* 每轮重置SQL执行记录，防止常驻进程内存占用增长。Reset SQL profiles each round to prevent memory usage growth in the daemon. */
+            dbh::resetProfiles();
+
             if(empty($this->config->global->cron))
             {
                 sleep(60);
@@ -223,6 +229,9 @@ class cron extends control
         $execId = mt_rand();
         while(true)
         {
+            /* 每轮重置SQL执行记录，防止常驻进程内存占用增长。Reset SQL profiles each round to prevent memory usage growth in the daemon. */
+            dbh::resetProfiles();
+
             if(empty($this->config->global->cron))
             {
                 sleep(60);
@@ -395,6 +404,9 @@ class cron extends control
     {
         while(true)
         {
+            /* 每个任务和空队列轮询边界重置SQL执行记录，防止长队列连续消费时内存占用增长。Reset SQL profiles at each task and empty-queue-polling boundary to prevent memory usage growth during long queue draining. */
+            dbh::resetProfiles();
+
             $this->cron->updateTime('consumer', $execId);
 
             /* Consume. */
