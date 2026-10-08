@@ -344,6 +344,32 @@ class dbh
     }
 
     /**
+     * 重置SQL执行记录，清空flags、queries、durations和traces数组，防止常驻进程内存占用增长。
+     * Reset the SQL profiling records, clear the flags, queries, durations and traces arrays to prevent
+     * memory usage growth in long-running processes.
+     *
+     * 常驻进程（如定时任务的scheduler和consumer）应在每轮调度、每个任务及空队列轮询的边界调用本方法，
+     * 否则记录会随进程运行时长无限累积，导致内存占用不断增长。四个数组整体重置，保证索引一致。
+     * Long-running processes (such as cron scheduler and consumer) should call this method at the boundary
+     * of each round, each task and each empty queue polling; otherwise the records accumulate with the process
+     * uptime and the memory usage keeps growing. All four arrays are reset together to keep the indexes consistent.
+     *
+     * 注：常驻进程调用本方法后，SQL记录只保留最近一个窗口；debug开启时，进程退出时落盘的诊断日志也只包含该窗口。
+     * Note: after a long-running process calls this method, only the latest window of SQL records is kept; when
+     * debug is on, the diagnostic log written at process shutdown only contains that window.
+     *
+     * @access public
+     * @return void
+     */
+    public static function resetProfiles()
+    {
+        self::$flags     = [];
+        self::$queries   = [];
+        self::$durations = [];
+        self::$traces    = [];
+    }
+
+    /**
      * Prepare a PDO statement.
      *
      * @param  string $sql
