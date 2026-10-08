@@ -14,6 +14,14 @@ class bugZen extends bug
     {
         if($bug->execution && !$this->loadModel('execution')->checkPriv($bug->execution))
         {
+            /* API 请求直接返回失败 JSON，避免界面提示和响应内容拼接成多段 JSON。*/
+            /* For API requests, return a failure JSON directly to avoid concatenated JSON from the UI notice and the response. */
+            if($this->app->apiVersion)
+            {
+                $this->send(array('result' => 'fail', 'message' => $this->lang->bug->notice->executionAccessDenied));
+                return false;
+            }
+
             if(isInModal() || !$this->server->http_referer)
             {
                 echo js::alert($this->lang->bug->notice->executionAccessDenied);
