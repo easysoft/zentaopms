@@ -175,7 +175,7 @@ $config->docHocuspocus->websocket = 'ws://127.0.0.1:1234';
 
 /* Upload settings. */
 $config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul><li><img><a><b><font><hr><pre><div><table><td><th><tr><tbody><embed><style><s>';
-$config->accountRule = '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_\.]{1,}[a-zA-Z0-9_]{1}$|';
+$config->accountRule = '|^[a-zA-Z0-9_\-]{1}[a-zA-Z0-9_\.\-]{0,}[a-zA-Z0-9_\-]{1}$|';
 $config->checkVersion = true;              // Auto check for new version or not.
 
 /* Set the wide window size and timeout(ms). */
