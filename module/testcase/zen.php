@@ -3128,11 +3128,13 @@ class testcaseZen extends testcase
         $stepChanged = false;
         if($this->post->steps)
         {
-            $steps = array();
+            $postStepTypes = is_array($this->post->stepType) ? $this->post->stepType : array();
+            $postExpects   = is_array($this->post->expects) ? $this->post->expects : array();
+            $steps         = array();
             foreach($this->post->steps as $key => $desc)
             {
-                if(!$desc) continue;
-                $steps[] = array('desc' => trim($desc), 'type' => trim(zget($this->post->stepType, $key, 'step')), 'expect' => trim(zget($this->post->expects, $key, '')));
+                if(!is_scalar($desc) || trim((string)$desc) === '') continue;
+                $steps[] = array('desc' => trim((string)$desc), 'type' => trim((string)zget($postStepTypes, $key, 'step')), 'expect' => trim((string)zget($postExpects, $key, '')));
             }
 
             /* 如果步骤数量发生变化，步骤变更。*/

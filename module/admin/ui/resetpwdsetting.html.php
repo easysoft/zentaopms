@@ -42,7 +42,7 @@ if(common::hasPriv('admin', 'resetPWDSetting'))
         setClass('menu-item'),
         a
         (
-            setClass('active'),
+            setClass('selected'),
             set::href(createLink('admin', 'resetPWDSetting')),
             $lang->admin->resetPWDSetting
         )

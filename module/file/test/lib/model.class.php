@@ -1346,6 +1346,23 @@ class fileModelTest extends baseTest
     }
 
     /**
+     * Test unlinkFileIfUnreferenced method.
+     *
+     * @param  object $file
+     * @access public
+     * @return string
+     */
+    public function unlinkFileIfUnreferencedTest(object $file): string
+    {
+        set_error_handler(static function() { return true; });
+        $this->instance->unlinkFileIfUnreferenced($file);
+        restore_error_handler();
+        if(dao::isError()) return implode(',', dao::getError());
+
+        return file_exists($file->realPath) ? 'exists' : 'unlinked';
+    }
+
+    /**
      * Test saveFile method.
      *
      * @param  array  $file

@@ -20,7 +20,7 @@ if(common::hasPriv('admin', 'safe'))
         setClass('menu-item'),
         a
         (
-            setClass('active'),
+            setClass('selected'),
             set::href(createLink('admin', 'safe')),
             $lang->admin->safe->set
         )

@@ -42,7 +42,7 @@ if($this->config->edition == 'open')
         setClass('menu-item'),
         a
         (
-            setClass('active'),
+            setClass('selected'),
             set::href(createLink('stage', 'browse')),
             $lang->stage->browseAB
         )

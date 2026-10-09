@@ -13,7 +13,7 @@ namespace zin;
 $menuItems = array();
 foreach($lang->system->platform->navs as $method => $menu)
 {
-    $active = $app->rawMethod == strtolower($method) ? 'active' : '';
+    $active = $app->rawMethod == strtolower($method) ? 'selected' : '';
     if(!common::hasPriv('system', $method)) continue;
 
     $menuItems[] = li
