@@ -1694,6 +1694,7 @@ class kanbanModel extends model
             $cardData['left']        = $object->left;
             $cardData['estStarted']  = $object->estStarted;
             $cardData['mode']        = $object->mode;
+            $cardData['delay']       = zget($object, 'delay', 0);
             $cardData['canAssignTo'] = common::hasPriv('task', 'assignTo') && common::hasDBPriv($object, 'task', 'assignto');
             if($object->mode == 'multi') $cardData['teamMembers'] = $object->teamMembers;
         }

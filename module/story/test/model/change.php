@@ -92,6 +92,9 @@ $types['requirement'] = array('mentioned');
 $tester->config->message->setting = array('message' => array('setting' => $types));
 
 global $app;
+$lang->SRCommon = '研发需求';
+$lang->URCommon = '用户需求';
+$lang->ERCommon = '业务需求';
 $app::$loadedLangs = array();
 $app->loadLang('action');
 $app->loadLang('message');

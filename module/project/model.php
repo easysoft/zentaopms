@@ -1356,7 +1356,7 @@ class projectModel extends model
             else
             {
                 $programID        = $project->parent ? current(array_filter(explode(',', zget($program, 'path', '')))) : 0;
-                $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($productName)->andWhere('program')->eq($programID)->fetch('name');
+                $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($productName)->andWhere('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('shadow')->eq(0)->fetch('name');
                 if(!empty($existProductName))
                 {
                     dao::$errors['name'] = sprintf($this->lang->error->repeat, $this->lang->product->name, $existProductName);
@@ -2872,10 +2872,11 @@ class projectModel extends model
 
         if($project->PM)
         {
-            $user              = zget($PMList, $project->PM, '');
-            $project->PM       = zget($user, 'realname', $project->PM);
+            $user              = zget($PMList, $project->PM, array());
+            $realname          = zget($user, 'realname', '');
+            $project->PMName   = !empty($realname) ? $realname : $project->PM;
             $project->PMAvatar = zget($user, 'avatar', '');
-            $project->PMUserID = zget($user, 'id', 0);
+            $project->PMUserID = (int)zget($user, 'id', 0);
         }
 
         return $project;

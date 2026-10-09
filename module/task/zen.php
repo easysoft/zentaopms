@@ -399,7 +399,7 @@ class taskZen extends task
         $projectModel = $this->dao->findById($task->project)->from(TABLE_PROJECT)->fetch('model');
         $memberType   = $projectModel == 'research' ? 'project'      : 'execution';
         $objectID     = $projectModel == 'research' ? $task->project : $executionID;
-        $members      = $this->loadModel('user')->getTeamMemberPairs($objectID, $memberType, 'nodeleted');
+        $members      = $this->loadModel('user')->getTeamMemberPairs($objectID, $memberType, 'nodeleted', $task->assignedTo);
 
         /* Compute next assignedTo. */
         if(!empty($task->team))
@@ -408,9 +408,7 @@ class taskZen extends task
             $members = $this->task->getMemberPairs($task);
         }
 
-        if(!isset($members[$task->assignedTo])) $members[$task->assignedTo] = $task->assignedTo;
         if(isset($members['closed']) || $task->status == 'closed') $members['closed'] = 'Closed';
-
         if($this->view->execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$this->view->execution->id}") : '';
         if(!$this->view->execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$this->view->execution->project}") : '';
 
@@ -1064,9 +1062,13 @@ class taskZen extends task
      */
     protected function commonAction(int $taskID, string $vision = ''): void
     {
-        $this->view->task      = $this->task->getByID($taskID, true, $vision);
+        $task         = $this->task->getByID($taskID, true, $vision);
+        $memberAppend = '';
+        if(empty($this->view->task->team) && $this->app->rawMethod == 'activate') $memberAppend = $task->finishedBy;
+
+        $this->view->task      = $task;
         $this->view->execution = $this->execution->getByID($this->view->task->execution);
-        $this->view->members   = $this->loadModel('user')->getTeamMemberPairs($this->view->execution->id, 'execution','nodeleted');
+        $this->view->members   = $this->loadModel('user')->getTeamMemberPairs($this->view->execution->id, 'execution','nodeleted', $memberAppend);
         $this->view->actions   = $this->loadModel('action')->getList('task', $taskID);
 
         /* Set menu. */
@@ -1849,7 +1851,9 @@ class taskZen extends task
             return $response;
         }
 
-        $response['load'] = $from != 'edittask';
+        $load = $from != 'edittask';
+        if(!empty($_SESSION['ignoredChildTaskID'])) $load = array('alert' => array('title' => $this->lang->task->deliverableTips->closeTitle, 'message' => sprintf($this->lang->task->deliverableTips->closeMessage, $_SESSION['ignoredChildTaskID']), 'actions' => array('text' => $this->lang->IKnow, 'btnType' => 'primary')), 'locate' => array('load' => true));
+        $response['load'] = $load;
         return $response;
     }
 
@@ -1959,7 +1963,9 @@ class taskZen extends task
         $message = $message ?: $this->lang->saveSuccess;
         if($this->viewType == 'json' || (helper::isApiRequest())) return array('result' => 'success');
         if(isInModal()) return $this->responseModal($task, $from, $message);
-        return array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true);
+
+        $load = !empty($_SESSION['ignoredChildTaskID']) ? array('alert' => array('title' => $this->lang->task->deliverableTips->closeTitle, 'message' => sprintf($this->lang->task->deliverableTips->closeMessage, $_SESSION['ignoredChildTaskID']), 'actions' => array('text' => $this->lang->IKnow, 'btnType' => 'primary')), 'locate' => array('load' => true)) : true;
+        return array('result' => 'success', 'message' => $message, 'load' => $load, 'closeModal' => true);
     }
 
     /**

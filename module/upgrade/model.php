@@ -12155,6 +12155,7 @@ class upgradeModel extends model
         $deliverableStage->required = '0';
         $deliverableStage->stage    = 'project';
 
+        $this->loadModel('workflowgroup');
         $workflows = $this->dao->select('id,`projectModel`')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('`projectModel`')->ne('kanban')->fetchAll('id');
         foreach($workflows as $workflow)
         {
@@ -12171,7 +12172,8 @@ class upgradeModel extends model
             {
                 if(empty($name)) continue;
                 $deliverable->category = $key; // 标记交付物的类型。
-                $this->addDeliverable($name . $this->lang->upgrade->list, $deliverable, $deliverableStage);
+                $deliverableID = $this->addDeliverable($name . $this->lang->upgrade->list, $deliverable, $deliverableStage);
+                $this->workflowgroup->createApprovalFlow($groupID, $deliverableID);
             }
         }
         return true;
@@ -12189,7 +12191,12 @@ class upgradeModel extends model
     {
         foreach($modules as $key => $name)
         {
+            $deliverableIDs = $this->dao->select('id')->from(TABLE_DELIVERABLE)->where('category')->eq($key)->andWhere('builtin')->eq('0')->fetchPairs('id');
             $this->dao->update(TABLE_DELIVERABLE)->set('deleted')->eq('1')->where('category')->eq($key)->andWhere('builtin')->eq('0')->exec();
+
+            $approvals = $this->dao->select('id')->from(TABLE_APPROVALFLOWOBJECT)->where('`objectType`')->eq('deliverable')->andWhere('`objectID`')->in($deliverableIDs)->fetchPairs('id');
+            $this->dao->delete()->from(TABLE_APPROVALFLOWOBJECT)->where('id')->in($approvals)->exec();
+            $this->dao->delete()->from(TABLE_REVIEWCL)->where('object')->in($approvals)->exec();
         }
         return true;
     }

@@ -15,7 +15,7 @@ cid=18486
  - 属性product @1
  - 属性story @6
 - 如果传入Bug，检查Bug是否已经关闭了。 @closed
-- 测试创建时在 spec 中 @用户发送 mention 通知
+- 测试创建时在 spec 中提到的用户发送 mention 通知
  - 属性notifyCount @1
  - 属性mentionUser @user1
  - 属性status @wait
@@ -99,6 +99,9 @@ $types['requirement'] = array('mentioned');
 $tester->config->message->setting = array('message' => array('setting' => $types));
 
 global $app;
+$lang->SRCommon = '研发需求';
+$lang->URCommon = '用户需求';
+$lang->ERCommon = '业务需求';
 $app::$loadedLangs = array();
 $app->loadLang('action');
 $app->loadLang('message');

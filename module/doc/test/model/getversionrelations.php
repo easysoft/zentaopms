@@ -21,6 +21,8 @@ cid=0
 - 评审版本为空时返回基线ID @11
 - 评审版本为空时返回基线标题 @Baseline-B
 - 已删除交付物和不匹配的基线不返回 @0
+- 历史评审记录的交付物版本关系可以返回 @1
+- 历史评审版本返回当时的交付物版本 @8,16,D8,H1
 
 */
 
@@ -28,32 +30,33 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $review = zenData('review');
-$review->id->range('11-15');
-$review->version->range('R1,R2,R3,R4,R5');
-$review->isBaseline->range('0,1,0,0,0');
-$review->gen(5);
+$review->id->range('11-16');
+$review->version->range('R1,R2,R3,R4,R5,H1');
+$review->isBaseline->range('0,1,0,0,0,0');
+$review->gen(6);
 
 $projectDeliverable = zenData('projectdeliverable');
-$projectDeliverable->id->range('1-7');
-$projectDeliverable->project->range('101,101,101,102,101,101,101');
-$projectDeliverable->deliverable->range('1-7');
-$projectDeliverable->name->range('PD1,PD2,PD3,PD4,PD5,PD6,PD7');
-$projectDeliverable->doc->range('10,10,10,10,10,11,10');
-$projectDeliverable->docVersion->range('1,1,1,1,2,1,1');
-$projectDeliverable->review->range('11,12,13,14,11,11,15');
-$projectDeliverable->version->range('PD1,PD2,PD3,PD4,PD5,PD6,PD7');
+$projectDeliverable->id->range('1-8');
+$projectDeliverable->project->range('101,101,101,102,101,101,101,101');
+$projectDeliverable->deliverable->range('1-8');
+$projectDeliverable->name->range('PD1,PD2,PD3,PD4,PD5,PD6,PD7,PD8');
+$projectDeliverable->doc->range('10,10,10,10,10,11,10,12');
+$projectDeliverable->docVersion->range('1,1,1,1,2,1,1,2');
+$projectDeliverable->review->range('11,12,13,14,11,11,15,13');
+$projectDeliverable->version->range('PD1,PD2,PD3,PD4,PD5,PD6,PD7,PD8');
 $projectDeliverable->submittedBy->range('admin');
-$projectDeliverable->gen(7);
+$projectDeliverable->gen(8);
 
 global $tester;
 $tester->dao->update(TABLE_REVIEW)->set('version')->eq('')->where('id')->eq(12)->exec();
+$tester->dao->update(TABLE_REVIEW)->set('deliverable')->eq(8)->set('`docVersion`')->eq(1)->set('type')->eq('deliverable')->where('id')->eq(16)->exec();
 $tester->dao->update(TABLE_PROJECTDELIVERABLE)->set('submittedBy')->eq('')->where('id')->in('2,3')->exec();
 
 $deliverable = zenData('deliverable');
-$deliverable->id->range('1-7');
-$deliverable->name->range('D1,D2,D3,D4,D5,D6,D7');
-$deliverable->deleted->range('0,0,0,0,0,0,1');
-$deliverable->gen(7);
+$deliverable->id->range('1-8');
+$deliverable->name->range('D1,D2,D3,D4,D5,D6,D7,D8');
+$deliverable->deleted->range('0,0,0,0,0,0,1,0');
+$deliverable->gen(8);
 
 $object = zenData('object');
 $object->id->range('10-15');
@@ -96,3 +99,7 @@ r($grouped[2][0]) && p('deliverableVersion') && e('PD2'); // 评审版本为空�
 r($grouped[2][0]) && p('baselineID') && e('11'); // 评审版本为空时返回基线ID
 r($grouped[2][0]) && p('baseline') && e('Baseline-B'); // 评审版本为空时返回基线标题
 r(isset($grouped[3]) || isset($grouped[7])) && p() && e('0'); // 已删除交付物和不匹配的基线不返回
+
+$historyRelations = $doc->getVersionRelationsTest(12, 1);
+r(count($historyRelations)) && p() && e('1'); // 历史评审记录的交付物版本关系可以返回
+r($historyRelations) && p('0:deliverableID,reviewID,deliverableType,deliverableVersion') && e('8,16,D8,H1'); // 历史评审版本返回当时的交付物版本

@@ -2438,11 +2438,8 @@ class baseRouter
         if(empty($url)) return false;
 
         $url .= (str_contains($url, '?') ? '&' : '?') . $this->config->sessionVar . '=' . session_id() . '&account=' . $_SESSION['user']->account;
-        if($extension == '302')
-        {
-            helper::header('location', $url);
-            helper::end();
-        }
+
+        if($extension == '302') helper::header('location', $url);
 
         if($extension == 'api')
         {
@@ -3247,7 +3244,6 @@ class baseRouter
             {
                 /* Try to repair table. */
                 helper::header('location', "{$this->config->webRoot}checktable.php");
-                helper::end();
             }
             static::triggerError($message, __FILE__, __LINE__, true);
         }

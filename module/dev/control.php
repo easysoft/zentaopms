@@ -75,6 +75,82 @@ class dev extends control
     }
 
     /**
+     * Get database table list, API for AI.
+     *
+     * @access public
+     * @return void
+     */
+    public function dbTables()
+    {
+        $tables = $this->dev->getDbTables();
+
+        return $this->send(array('status' => 'success', 'total' => count($tables), 'tables' => $tables));
+    }
+
+    /**
+     * Get one database table, API for AI.
+     *
+     * @param  string $tableName
+     * @param  string $type      meta|sql
+     * @access public
+     * @return void
+     */
+    public function dbTable(string $tableName = '', string $type = 'meta')
+    {
+        $table = $this->dev->getDbTable($tableName);
+        if(empty($table))
+        {
+            $message = zget($this->lang->dev, 'tableNotFound', '');
+            if(empty($message)) $message = 'Table %s not found.';
+            helper::setStatus(404);
+
+            return $this->sendError(sprintf($message, $tableName));
+        }
+
+        if($type == 'sql')
+        {
+            return $this->send(array(
+                'status'      => 'success',
+                'name'        => $tableName,
+                'title'       => zget($table, 'title', ''),
+                'description' => zget($table, 'description', ''),
+                'group'       => zget($table, 'group', ''),
+                'dialect'     => 'mysql',
+                'sql'         => $this->dev->getDbTableSQL($tableName),
+            ));
+        }
+
+        return $this->send(array('status' => 'success', 'table' => $table));
+    }
+
+    /**
+     * Query data with one read only sql, API for AI.
+     *
+     * @access public
+     * @return void
+     */
+    public function dbQuery()
+    {
+        if(empty($this->config->features->apiSqlQuery)) return $this->sendError($this->lang->dev->sqlQueryDisabled);
+
+        $count = isset($_POST['count']) ? filter_var($_POST['count'], FILTER_VALIDATE_BOOLEAN) : true;
+
+        $result = $this->dev->querySQL((string)$this->post->sql, array(
+            'page'  => (int)$this->post->page,
+            'limit' => (int)$this->post->limit,
+            'count' => (bool)$count,
+        ));
+        if($result['result'] == 'fail')
+        {
+            helper::setStatus(400);
+            return $this->sendError($result['message']);
+        }
+
+        unset($result['result']);
+        return $this->send(array_merge(array('status' => 'success'), $result));
+    }
+
+    /**
      * Editor.
      *
      * @access public

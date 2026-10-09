@@ -52,15 +52,17 @@ if($config->vision == 'rnd')
     $config->project->dtable->fieldList['hasProduct']['group']    = 2;
 }
 
-$config->project->dtable->fieldList['PM']['title']       = $lang->project->PM;
-$config->project->dtable->fieldList['PM']['name']        = 'PM';
-$config->project->dtable->fieldList['PM']['type']        = 'avatarBtn';
-$config->project->dtable->fieldList['PM']['sortType']    = true;
-$config->project->dtable->fieldList['PM']['link']        = array('module' => 'user', 'method' => 'profile', 'params' => 'userID={PMUserID}');
-$config->project->dtable->fieldList['PM']['data-toggle'] = 'modal';
-$config->project->dtable->fieldList['PM']['data-size']   = 'sm';
-$config->project->dtable->fieldList['PM']['group']       = 3;
-$config->project->dtable->fieldList['PM']['show']        = true;
+$config->project->dtable->fieldList['PM']['title']         = $lang->project->PM;
+$config->project->dtable->fieldList['PM']['name']          = 'PM';
+$config->project->dtable->fieldList['PM']['type']          = 'avatarBtn';
+$config->project->dtable->fieldList['PM']['avatarKey']     = 'PMAvatar';
+$config->project->dtable->fieldList['PM']['avatarNameKey'] = 'PMName';
+$config->project->dtable->fieldList['PM']['sortType']      = true;
+$config->project->dtable->fieldList['PM']['link']          = array('module' => 'user', 'method' => 'profile', 'params' => 'userID={PMUserID}');
+$config->project->dtable->fieldList['PM']['data-toggle']   = 'modal';
+$config->project->dtable->fieldList['PM']['data-size']     = 'sm';
+$config->project->dtable->fieldList['PM']['group']         = 3;
+$config->project->dtable->fieldList['PM']['show']          = true;
 if($isEn) $config->project->dtable->fieldList['PM']['width'] = '150';
 
 $config->project->dtable->fieldList['storyPoints']['title']    = $lang->project->storyPoints;

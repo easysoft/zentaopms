@@ -1385,4 +1385,18 @@ class myModelTest extends baseTest
         }
     }
 
+    /**
+     * Test get audit object opened by method.
+     *
+     * @param  object $object
+     * @access public
+     * @return string
+     */
+    public function getAuditObjectOpenedByTest(object $object): string
+    {
+        $result = $this->invokeArgs('getAuditObjectOpenedBy', array($object));
+        if(dao::isError()) return json_encode(dao::getError());
+        return (string)$result;
+    }
+
 }

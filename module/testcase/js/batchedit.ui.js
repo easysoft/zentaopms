@@ -31,11 +31,12 @@ window.handleRenderRow = function($row, index, row)
 
     $row.find('.form-batch-control[data-name="story"] .picker-box').on('inited', function(e, info)
     {
-        const storyLink = $.createLink('story', 'ajaxGetProductStories', 'productID=' + row.product + '&branch=' + row.branch + '&moduleID=' + row.module + '&storyID=' + row.story + '&onlyOption=false&status=active&limit=0&type=&hasParent=0');
+        if(typeof(projectID) == 'undefined') projectID = 0;
+        const storyLink = $.createLink('story', 'ajaxGetProductStories', 'productID=' + row.product + '&branch=' + row.branch + '&moduleID=' + row.module + '&storyID=' + row.story + '&onlyOption=false&status=active&limit=0&type=&hasParent=0&objectID=' + projectID);
         $.getJSON(storyLink, function(stories)
         {
             let $story = info[0];
-            $story.render({items: stories});
+            $story.render({items: stories, limitValueInList: false});
             $story.$.setValue(row.story);
         });
     });
