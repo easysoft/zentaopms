@@ -100,30 +100,70 @@ window.onRenderCell = function(result, {col, row})
     return result;
 }
 
+window.formatExecHour = function(hours)
+{
+    const value = Math.round((Number(hours) || 0) * 100) / 100;
+    return parseFloat(value.toFixed(2)).toString();
+};
+
 window.footerSummary = function(element, checkedIdList)
 {
     const rows = element.layout.rows;
+    if(checkedIdList.length > 0)
+    {
+        const checkedSet = {};
+        checkedIdList.forEach(function(id){ checkedSet[id] = true; });
+
+        const rowMap = {};
+        rows.forEach(function(row){ rowMap[row.id] = row; });
+
+        const hasCheckedAncestor = function(data)
+        {
+            let parentID = data.parent;
+            const visited = {};
+            while(parentID)
+            {
+                if(visited[parentID]) break;
+                visited[parentID] = true;
+                if(checkedSet[parentID]) return true;
+
+                const parentRow = rowMap[parentID];
+                parentID = parentRow && parentRow.data ? parentRow.data.parent : '';
+            }
+            return false;
+        };
+
+        var totalCount = 0;
+        var estimate   = 0;
+        var consumed   = 0;
+        var left       = 0;
+        rows.forEach(function(row)
+        {
+            if(String(row.id).indexOf('pid') !== 0) return;
+            if(!checkedSet[row.id]) return;
+            if(hasCheckedAncestor(row.data)) return;
+
+            totalCount ++;
+            estimate += Number(row.data.estimate) || 0;
+            consumed += Number(row.data.consumed) || 0;
+            left     += Number(row.data.left) || 0;
+        });
+
+        return {html: checkedExecSummary.replace('%total%', totalCount).replace('%estimate%', formatExecHour(estimate)).replace('%consumed%', formatExecHour(consumed)).replace('%left%', formatExecHour(left))};
+    }
+
     var totalCount = 0;
     var waitCount  = 0;
     var doingCount = 0;
     rows.forEach(function(data)
     {
         if(data.id.indexOf('tid') > -1) return;
-        if(checkedIdList.length > 0 && checkedIdList.indexOf(data.id) > -1)
-        {
-            if(data.data.status == 'wait')  waitCount ++;
-            if(data.data.status == 'doing') doingCount ++;
-            totalCount ++;
-        }
-        else if(checkedIdList.length == 0)
-        {
-            if(data.data.status == 'wait')  waitCount ++;
-            if(data.data.status == 'doing') doingCount ++;
-            totalCount ++;
-        }
+        if(data.data.status == 'wait')  waitCount ++;
+        if(data.data.status == 'doing') doingCount ++;
+        totalCount ++;
     });
 
-    return {html: (checkedIdList.length > 0 ? checkedExecSummary : pageExecSummary).replace('%total%', totalCount).replace('%wait%', waitCount).replace('%doing%', doingCount)};
+    return {html: pageExecSummary.replace('%total%', totalCount).replace('%wait%', waitCount).replace('%doing%', doingCount)};
 };
 
 window.confirmCreateStage = function(projectID, productID, executionID, hasChild)
