@@ -123,7 +123,7 @@ $menuItems[] = li
     setClass('menu-item'),
     a
     (
-        setClass('active'),
+        setClass('selected'),
         set::href(createLink('stage', 'settype')),
         $lang->stage->setType
     )
