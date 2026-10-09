@@ -29,6 +29,9 @@ $config->group->subset->notifysetting = new stdclass();
 $config->group->subset->notifysetting->order = 1230;
 $config->group->subset->notifysetting->nav = 'admin';
 
+$config->group->subset->search = new stdclass();
+$config->group->subset->search->order = 1570;
+
 $config->group->subset->file = new stdclass();
 $config->group->subset->file->order = 1590;
 
@@ -488,6 +491,15 @@ $config->group->package->systemSetting->privs['cache-flush'] = array('edition' =
 $config->group->package->systemSetting->privs['admin-tableEngine'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 45, 'depend' => array(0 => 'admin-index'), 'recommend' => array());
 $config->group->package->systemSetting->privs['custom-timezone'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 45, 'depend' => array(0 => 'admin-index'), 'recommend' => array());
 $config->group->package->systemSetting->privs['search-buildIndex'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 35, 'depend' => array(0 => 'admin-index'), 'recommend' => array());
+
+$config->group->package->search = new stdclass();
+$config->group->package->search->order  = 5;
+$config->group->package->search->subset = 'search';
+$config->group->package->search->privs  = array();
+$config->group->package->search->privs['search-buildForm']   = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 0, 'depend' => array(), 'recommend' => array());
+$config->group->package->search->privs['search-buildQuery']  = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 1, 'depend' => array('search-buildForm'), 'recommend' => array());
+$config->group->package->search->privs['search-saveQuery']   = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 2, 'depend' => array('search-buildForm'), 'recommend' => array('search-deleteQuery'));
+$config->group->package->search->privs['search-deleteQuery'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 3, 'depend' => array('search-buildForm'), 'recommend' => array('search-saveQuery'));
 
 $config->group->package->managePriv = new stdclass();
 $config->group->package->managePriv->order  = 20;
