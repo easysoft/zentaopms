@@ -636,6 +636,22 @@ class fileModel extends model
     }
 
     /**
+     * 删除文件记录对应的物理文件。
+     * Delete the physical file of a file record.
+     *
+     * @param  object $file
+     * @access public
+     * @return void
+     */
+    public function unlinkFileIfUnreferenced(object $file): void
+    {
+        if(empty($file->pathname)) return;
+
+        $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
+        if(empty($fileRecord)) $this->unlinkFile($file);
+    }
+
+    /**
      * Replace a file.
      *
      * @access public
@@ -1259,7 +1275,8 @@ class fileModel extends model
                 $this->dao->delete()->from(TABLE_FILE)->where('id')->in($deleteFiles)->exec();
                 foreach($deleteFiles as $fileID)
                 {
-                    $this->unlinkFile($oldObject->files[$fileID]);
+                    if(!isset($oldObject->files[$fileID])) continue;
+                    $this->unlinkFileIfUnreferenced($oldObject->files[$fileID]);
                     $oldFiles = empty($oldFiles) ? '' : trim(str_replace(",$fileID,", ',', ",$oldFiles,"), ',');
                 }
             }
@@ -1548,7 +1565,7 @@ class fileModel extends model
                 foreach($newObject->deleteFiles as $fileID)
                 {
                     if(!isset($oldObject->{$filesName}[$fileID])) continue;
-                    $this->unlinkFile($oldObject->{$filesName}[$fileID]);
+                    $this->unlinkFileIfUnreferenced($oldObject->{$filesName}[$fileID]);
                     $deleteFiles[] = isset($oldObject->{$filesName}[$fileID]) ? $oldObject->{$filesName}[$fileID]->title : '';
                 }
             }
