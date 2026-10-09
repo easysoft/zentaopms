@@ -13,9 +13,15 @@ $config->space->dtable->fieldList['name']['type']     = 'shortTitle';
 $config->space->dtable->fieldList['name']['flex']     = 4;
 $config->space->dtable->fieldList['name']['hint']     = true;
 $config->space->dtable->fieldList['name']['sortType'] = false;
+
 $isGitfox = $config->vision == 'gitfox' || $config->edition == 'gitfox';
-$config->space->dtable->fieldList['name']['link']     = helper::createLink('repo', 'maintain', 'inSpace=1&space={id}') . ($isGitfox ? '#app=space' : '');
-$config->space->dtable->fieldList['name']['group']    = 1;
+$config->space->dtable->fieldList['name']['link']  = helper::createLink('repo', 'maintain', 'inSpace=1&space={id}') . ($isGitfox ? '#app=space' : '');
+$config->space->dtable->fieldList['name']['group'] = 1;
+
+$config->space->dtable->fieldList['desc']['title'] = $lang->space->desc;
+$config->space->dtable->fieldList['desc']['name']  = 'desc';
+$config->space->dtable->fieldList['desc']['type']  = 'desc';
+$config->space->dtable->fieldList['desc']['group'] = 3;
 
 $config->space->dtable->fieldList['manager']['title']     = $lang->space->manager;
 $config->space->dtable->fieldList['manager']['name']      = 'manager';
@@ -24,11 +30,6 @@ $config->space->dtable->fieldList['manager']['hint']      = true;
 $config->space->dtable->fieldList['manager']['delimiter'] = ',';
 $config->space->dtable->fieldList['manager']['width']     = 350;
 $config->space->dtable->fieldList['manager']['group']     = 2;
-
-$config->space->dtable->fieldList['desc']['title'] = $lang->space->desc;
-$config->space->dtable->fieldList['desc']['name']  = 'desc';
-$config->space->dtable->fieldList['desc']['type']  = 'desc';
-$config->space->dtable->fieldList['desc']['group'] = 3;
 
 $config->space->dtable->fieldList['createdDate']['title']      = $lang->space->createdDate;
 $config->space->dtable->fieldList['createdDate']['name']       = 'createdDate';
