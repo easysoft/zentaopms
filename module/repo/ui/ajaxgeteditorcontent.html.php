@@ -20,7 +20,7 @@ $canLinkStory    = !$isGitfox && common::hasPriv('repo', 'linkStory');
 $canLinkBug      = !$isGitfox && common::hasPriv('repo', 'linkBug');
 $canLinkTask     = !$isGitfox && common::hasPriv('repo', 'linkTask');
 $canUnlinkObject = common::hasPriv('repo', 'unlink');
-$canAddBug       = common::hasPriv('repo', 'addBug');
+$canAddBug       = false;
 $showRelation    = $showLinkObject && !$isGitfox;
 
 jsVar('unlinkTitle', $this->lang->repo->unlink);

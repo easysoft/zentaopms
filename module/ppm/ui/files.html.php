@@ -14,7 +14,7 @@ $domBox = div
     zui::diffHub
     (
         set::diffUrl($this->createLink('repo', 'ajaxGetDiffs', "repoID={$repoID}&fromVersion={$fromRevision}&toVersion={$toRevision}")),
-        set::enableAnnotations(true),
+        set::enableAnnotations($config->edition != 'gitfox'),
         set::product(0),
         set::module(''),
         set::repoID($repoID),
