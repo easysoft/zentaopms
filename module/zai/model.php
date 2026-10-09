@@ -1061,9 +1061,10 @@ class zaiModel extends model
      * @param int    $limit
      * @param float  $minSimilarity
      * @param bool   $filterByPriv
+     * @param bool   $strict
      * @return array
      */
-    public function searchKnowledges(string $query, string $collection, array $filter, int $limit = 20, float $minSimilarity = 0.5, bool $filterByPriv = true): array
+    public function searchKnowledges(string $query, string $collection, array $filter, int $limit = 20, float $minSimilarity = 0.5, bool $filterByPriv = true, bool $strict = false): array
     {
         $postData = array();
         $postData['query']          = $query;
@@ -1073,9 +1074,7 @@ class zaiModel extends model
 
         $result = $this->callAdminAPI('/v8/memories/' . $collection . '/embeddings-search-contents', 'POST', null, $postData);
 
-        if($result['result'] != 'success') return array();
-
-        $knowledges = empty($result['data']) ? array() : $result['data'];
+        $knowledges = $this->getKnowledgeSearchResult($result, 'content', $strict);
         if($filterByPriv) $knowledges = $this->filterKnowledgesByPriv($knowledges, 'content');
         return $knowledges;
     }
@@ -1091,9 +1090,10 @@ class zaiModel extends model
      * @param int    $limit
      * @param float  $minSimilarity
      * @param bool   $filterByPriv
+     * @param bool   $strict
      * @return array
      */
-    public function searchKnowledgeChunks(string $query, string $collection, array $filter = array(), int $limit = 20, float $minSimilarity = 0.5, bool $filterByPriv = true): array
+    public function searchKnowledgeChunks(string $query, string $collection, array $filter = array(), int $limit = 20, float $minSimilarity = 0.5, bool $filterByPriv = true, bool $strict = false): array
     {
         $postData = array();
         $postData['query']          = $query;
@@ -1103,10 +1103,75 @@ class zaiModel extends model
 
         $result = $this->callAdminAPI('/v8/memories/' . $collection . '/embeddings-search-chunks', 'POST', null, $postData);
 
-        if($result['result'] != 'success') return array();
-        $chunks = empty($result['data']) ? array() : $result['data'];
+        $chunks = $this->getKnowledgeSearchResult($result, 'chunk', $strict);
         if($filterByPriv) $chunks = $this->filterKnowledgesByPriv($chunks, 'chunk');
         return $chunks;
+    }
+
+    /**
+     * 校验知识搜索响应，严格模式下不将服务异常作为空结果返回。
+     * Validate search responses without exposing upstream error details.
+     *
+     * @param mixed  $result
+     * @param string $type
+     * @param bool   $strict
+     * @access protected
+     * @return array
+     */
+    protected function getKnowledgeSearchResult(mixed $result, string $type, bool $strict): array
+    {
+        if(!is_array($result) || ($result['result'] ?? '') !== 'success' || !isset($result['data']) || !is_array($result['data']))
+        {
+            if($strict) throw new RuntimeException('Knowledge search failed.');
+            return array();
+        }
+
+        $knowledges = $result['data'];
+        if(!$strict) return $knowledges;
+        if(!array_is_list($knowledges)) throw new RuntimeException('Knowledge search failed.');
+
+        $idName      = $type === 'chunk' ? 'chunk_id' : 'id';
+        $keyName     = $type === 'chunk' ? 'content_key' : 'key';
+        $contentName = $type === 'chunk' ? 'chunk_content' : 'content';
+        $attrsName   = $type === 'chunk' ? 'content_attrs' : 'attrs';
+        foreach($knowledges as $knowledge)
+        {
+            if(!is_array($knowledge)
+                || !isset($knowledge[$idName]) || (!is_string($knowledge[$idName]) && !is_int($knowledge[$idName])) || (string)$knowledge[$idName] === ''
+                || !isset($knowledge[$keyName]) || !is_string($knowledge[$keyName]) || $knowledge[$keyName] === ''
+                || !isset($knowledge[$contentName]) || !is_string($knowledge[$contentName])
+                || !isset($knowledge[$attrsName]) || !is_array($knowledge[$attrsName])
+                || !isset($knowledge['similarity']) || !is_numeric($knowledge['similarity']) || !is_finite((float)$knowledge['similarity']))
+            {
+                throw new RuntimeException('Knowledge search failed.');
+            }
+
+            $attrs = $knowledge[$attrsName];
+            foreach(array('objectType', 'docType', 'knowledgeType') as $field)
+            {
+                if(isset($attrs[$field]) && !is_string($attrs[$field])) throw new RuntimeException('Knowledge search failed.');
+            }
+            foreach(array('objectID', 'knowledgeID', 'knowledgeLib') as $field)
+            {
+                if(!isset($attrs[$field])) continue;
+                if((!is_int($attrs[$field]) && !is_string($attrs[$field])) || filter_var($attrs[$field], FILTER_VALIDATE_INT, array('options' => array('min_range' => 0))) === false)
+                {
+                    throw new RuntimeException('Knowledge search failed.');
+                }
+            }
+            foreach(array('product', 'project') as $field)
+            {
+                if(isset($attrs[$field]) && !is_scalar($attrs[$field])) throw new RuntimeException('Knowledge search failed.');
+            }
+
+            /* The legacy permission filter uses the second key segment as a fallback object ID. */
+            $keyParts = explode('-', $knowledge[$keyName]);
+            if(count($keyParts) >= 2 && empty($attrs['objectID']) && filter_var($keyParts[1], FILTER_VALIDATE_INT, array('options' => array('min_range' => 0))) === false)
+            {
+                throw new RuntimeException('Knowledge search failed.');
+            }
+        }
+        return $knowledges;
     }
 
     /**
@@ -1119,9 +1184,10 @@ class zaiModel extends model
      * @param array  $filters
      * @param int    $limit
      * @param float  $minSimilarity
+     * @param bool   $strict
      * @return array
      */
-    public function searchKnowledgesInCollections(string $query, array $filters, string $type = 'content', int $limit = 20, float $minSimilarity = 0.5): array
+    public function searchKnowledgesInCollections(string $query, array $filters, string $type = 'content', int $limit = 20, float $minSimilarity = 0.5, bool $strict = false): array
     {
         $knowledges = array();
         foreach($filters as $collection => $setting)
@@ -1130,7 +1196,7 @@ class zaiModel extends model
             if(empty($key)) continue;
 
             /* 不进行权限过滤，按匹配度排序后会统一过滤，减少循环次数。 */
-            $searchKnowledges = $type === 'chunk' ? $this->searchKnowledgeChunks($query, $key, $setting, $limit + 10, $minSimilarity, false) : $this->searchKnowledges($query, $key, $setting, $limit + 10, $minSimilarity, false); // 比预设的数目多搜索 10 个，避免因过滤导致无法匹配到。
+            $searchKnowledges = $type === 'chunk' ? $this->searchKnowledgeChunks($query, $key, $setting, $limit + 10, $minSimilarity, false, $strict) : $this->searchKnowledges($query, $key, $setting, $limit + 10, $minSimilarity, false, $strict); // 比预设的数目多搜索 10 个，避免因过滤导致无法匹配到。
             if($searchKnowledges) $knowledges = array_merge($knowledges, $searchKnowledges);
         }
 
@@ -1151,9 +1217,11 @@ class zaiModel extends model
     {
         if($this->app->user->admin) return true;
 
-        if(isset(static::$objectViews[$objectType][$objectID])) return static::$objectViews[$objectType][$objectID];
+        /* Documents and API documents have independent ID sequences and privileges. */
+        $cacheType = $objectType === 'doc' && isset($attrs['docType']) && $attrs['docType'] === 'api' ? 'api' : $objectType;
+        if(isset(static::$objectViews[$cacheType][$objectID])) return static::$objectViews[$cacheType][$objectID];
 
-        if(!isset(static::$objectViews[$objectType])) static::$objectViews[$objectType] = array();
+        if(!isset(static::$objectViews[$cacheType])) static::$objectViews[$cacheType] = array();
 
         if($attrs === null) $attrs = array();
         $canView = false;
@@ -1214,14 +1282,14 @@ class zaiModel extends model
         {
             $api = isset($attrs['docType']) && $attrs['docType'] === 'api';
             $doc = $this->loadModel($api ? 'api' : 'doc')->getByID($objectID);
-            $canView = $this->loadModel('doc')->checkPrivDoc($doc);
+            $canView = $doc ? $this->loadModel('doc')->checkPrivDoc($doc) : false;
         }
         elseif($objectType === 'case')
         {
             $case = $this->loadModel('testcase')->getById($objectID);
             if(!$case)
             {
-                static::$objectViews[$objectType][$objectID] = false;
+                static::$objectViews[$cacheType][$objectID] = false;
                 return false;
             }
             $project = isset($case->project) ? $case->project : 0;
@@ -1231,7 +1299,7 @@ class zaiModel extends model
 
             if($canView)
             {
-                static::$objectViews[$objectType][$objectID] = true;
+                static::$objectViews[$cacheType][$objectID] = true;
                 return true;
             }
 
@@ -1249,7 +1317,7 @@ class zaiModel extends model
             }
         }
 
-        static::$objectViews[$objectType][$objectID] = $canView;
+        static::$objectViews[$cacheType][$objectID] = $canView;
         return $canView;
     }
 

@@ -458,6 +458,32 @@ $routes['/:type/modules/:moduleID'] = array(
     'delete' => array('redirect' => '/tree/delete?moduleID=:moduleID')
 );
 
+/* AI 知识库接口，由商业扩展提供业务实现。AI knowledge APIs provided by the business extension. */
+$knowledgeRoutes = array(
+    '/ai/knowledgelibs'                  => '/ai/ajaxGetKnowledgeLibList',
+    '/ai/knowledgelibs/:libID/knowledges'  => '/ai/ajaxGetKnowledgeItemList',
+    '/ai/knowledges/search'              => '/ai/ajaxSearchKnowledgesByKeyword',
+    '/ai/knowledges/embeddingssearch'    => '/ai/ajaxSearchKnowledgeChunks',
+    '/ai/knowledges/:knowledgeID'        => '/ai/ajaxGetKnowledgeItem'
+);
+foreach($knowledgeRoutes as $knowledgePath => $knowledgeRedirect)
+{
+    /* Dispatch unsupported methods to the same entry, where they return 405. */
+    $routes[$knowledgePath] = array_fill_keys(array('get', 'post', 'put', 'delete', 'patch', 'head'), array('redirect' => $knowledgeRedirect));
+}
+unset($knowledgeRoutes, $knowledgePath, $knowledgeRedirect);
+
+/* 数据库结构接口，供 AI 渐进式获取表结构。Database schema APIs for AI. */
+$routes['/db/tables'] = array(
+    'get' => array('redirect' => '/dev/dbTables', 'response' => '*')
+);
+$routes['/db/tables/:tableName'] = array(
+    'get' => array('redirect' => '/dev/dbTable?tableName=:tableName', 'response' => '*')
+);
+$routes['/db/query'] = array(
+    'post' => array('redirect' => '/dev/dbQuery', 'response' => '*')
+);
+
 /* 加载扩展模块的路由配置。Load the route configuration of the extension module. */
 foreach(glob(__DIR__ . DS . 'ext' . DS . 'apiv2' . DS . '*.php') as $file)
 {

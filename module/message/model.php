@@ -492,6 +492,8 @@ class messageModel extends model
             }
             if(!empty($toAndCcList)) list($toList, $ccList) = $toAndCcList;
         }
+
+        if($objectType == 'case' && $action->action == 'assigned') $toList = $action->extra;
         if(empty($toList) && $objectType == 'todo') $toList = $object->account;
 
         return array('to' => trim($toList, ','), 'cc' => $ccList);

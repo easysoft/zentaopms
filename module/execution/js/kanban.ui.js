@@ -203,12 +203,18 @@ window.getItem = function(info)
             info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.title};
         }
 
+        let delayLabel = '';
+        if(info.item.delay > 0)
+        {
+            delayLabel = "<span class='label danger-pale ml-1 flex-none nowrap'>" + taskLang.delayWarning.replace('%s', info.item.delay) + "</span>";
+        }
+
         const content = `
         <div class='flex items-center'>
           <span class='pri-${info.item.pri}'>${info.item.pri}</span>
           <span class='text-sm ml-2 mr-1'>${taskLang.estimateAB}</span>
           <span class='text-sm'>${info.item.estimate}h</span>
-          <div class='flex-1 flex justify-end'>${avatar}</div>
+          <div class='flex-1 flex justify-end items-center'>${delayLabel}${avatar}</div>
         </div>
         `;
         info.item.content = {html: content};

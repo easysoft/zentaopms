@@ -1272,7 +1272,15 @@ class testcaseZen extends testcase
 
         /* 设置需求键对。 */
         /* Set story pairs. */
-        $storyPairs  = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch, array(), 'active,reviewing', 'id_desc', 50, '', 'story', false);
+        if($this->app->tab != 'qa' && $this->app->tab != 'product' && $this->app->tab != 'my')
+        {
+            $projectID  = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            $storyPairs = $this->loadModel('story')->getExecutionStoryPairs($projectID, $productID, $branch === 'all' ? 0 : $branch, array(), 'full', 'unclosed', 'story', false);
+        }
+        else
+        {
+            $storyPairs = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch, array(), 'active,reviewing', 'id_desc', 50, '', 'story', false);
+        }
         $story       = $storyID ? $this->story->fetchByID($storyID) : '';
         $storyPairs += $storyID ? array($storyID => $story->id . ':' . $story->title) : array();
         if($storyID && empty($moduleID)) $moduleID = $story->module;

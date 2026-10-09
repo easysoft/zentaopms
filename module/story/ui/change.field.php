@@ -60,7 +60,7 @@ $fields->field('title')
 
 $storyType = data('story.type') ? data('story.type') : 'story';
 
-$fields->field('lastEditedDate')->width('1/3')->control('hidden')->value(data('story.lastEditedDate'));
+$fields->field('lastEditedDate')->width('1/3')->control('hidden')->value(data('story.lastEditedDate'))->skipCustomUI();
 $fields->field('spec')->required(strpos(",{$config->{$storyType}->change->requiredFields},", ",spec,") !== false)->width('full')->control(array('control' => 'editor', 'value' => data('fields.spec.default')));
 
 $pageFields = data('fields') ? data('fields') : $config->story->form->change;
