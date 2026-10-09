@@ -27,6 +27,7 @@ $lang->artifact->type          = '类型';
 $lang->artifact->size          = '大小';
 $lang->artifact->version       = '版本';
 $lang->artifact->arch          = '系统/架构';
+$lang->artifact->multiArch     = '多架构';
 $lang->artifact->creator       = '创建者';
 $lang->artifact->createdDate   = '创建时间';
 $lang->artifact->editor        = '最后更新';

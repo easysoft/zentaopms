@@ -210,7 +210,12 @@ class artifactModel extends model
             $asset->size          = empty($asset->size)     ? 0 : $this->parseArtifactSize((string)$asset->size);
             $asset->artifactLibID = $artifactLibID;
             $asset->package       = $asset->format == 'container' ? $asset->metadata->image : zget($asset, 'package');
-            $asset->sysArch       = empty($asset->os) || empty($asset->arch) ? '' : $asset->os . '/' . $asset->arch;
+
+            $arches = array();
+            if(!empty($asset->images)) foreach($asset->images as $image) $arches[] = $image->os . '/' . $image->arch;
+
+            $asset->sysArchFull = implode(', ', $arches);
+            $asset->sysArch     = count($arches) > 1 ? $this->lang->artifact->multiArch : $asset->sysArchFull;
         }
         return $assetList->data;
     }
