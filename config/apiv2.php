@@ -222,7 +222,6 @@ $routes['/projects/:projectID/deliverables'] = array(
 );
 $routes['/deliverables/:deliverableID']      = array(
     'get'    => array('redirect' => '/projects/viewDeliverable?deliverableID=:deliverableID', 'response' => 'deliverable,review,actions(array),doc,relatedObjects(array)'),
-    'put'    => array('redirect' => '/project/editDeliverable?deliverableID=:deliverableID', 'response' => '*'),
     'delete' => array('redirect' => '/project/deleteDeliverable?deliverableID=:deliverableID', 'response' => '*')
 );
 
