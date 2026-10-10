@@ -448,6 +448,7 @@ $config->ajaxDependencies['project.ajaxgetpairsbyexecution']                  = 
 $config->ajaxDependencies['project.ajaxgetprojectforminfo']                   = ['program.create', 'program.edit', 'project.batchedit', 'project.create', 'project.edit'];
 $config->ajaxDependencies['project.ajaxgetremovemembertips']                  = 'project.team';
 $config->ajaxDependencies['project.ajaxgetstorybytype']                       = 'project.edit';
+$config->ajaxDependencies['project.ajaxgetsourceobjects']                     = 'project.createdeliverable';
 $config->ajaxDependencies['projectrelease.ajaxloadbuilds']                    = 'projectrelease.create';
 $config->ajaxDependencies['release.ajaxloadsystemblock']                      = ['release.create', 'release.edit'];
 $config->ajaxDependencies['repo.ajaxgetbranchcommits']                        = 'repo.createtag';
