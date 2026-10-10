@@ -8,7 +8,7 @@ $lang->navIcons['repo']     = "<i class='icon icon-code'></i>";
 $lang->navIcons['ppm']      = "<i class='icon icon-review'></i>";
 $lang->navIcons['codescan'] = "<i class='icon icon-test'></i>";
 $lang->navIcons['issue']    = "<i class='icon icon-issue'></i>";
-$lang->navIcons['pipeline'] = "<i class='icon icon-waterfall'></i>";
+$lang->navIcons['pipeline'] = "<i class='icon icon-pipeline'></i>";
 $lang->navIcons['artifact'] = "<i class='icon icon-package'></i>";
 $lang->navIcons['admin']    = "<i class='icon icon-backend'></i>";
 
@@ -19,7 +19,7 @@ $lang->navIconNames['repo']     = 'code';
 $lang->navIconNames['ppm']      = 'review';
 $lang->navIconNames['codescan'] = 'test';
 $lang->navIconNames['issue']    = 'issue';
-$lang->navIconNames['pipeline'] = 'waterfall';
+$lang->navIconNames['pipeline'] = 'pipeline';
 $lang->navIconNames['artifact'] = 'package';
 $lang->navIconNames['admin']    = 'backend';
 
