@@ -68,7 +68,11 @@ class pageBase extends wg
         $jsConfig->maxUploadSize = ini_get('upload_max_filesize');
 
         $headImports = array();
-        $headImports[] = h::favicon($webRoot . 'favicon.ico');
+        $faviconUrl  = $webRoot . 'favicon.ico';
+        if($config->edition == 'gitfox' && !empty($config->gitfox->logoImg)) $faviconUrl = $webRoot . 'theme/default/images/main/' . $config->gitfox->logoImg;
+        $faviconType = str_ends_with($faviconUrl, '.svg') ? 'image/svg+xml' : 'image/x-icon';
+        $headImports[] = h::link(set(array('rel' => 'icon', 'href' => $faviconUrl, 'type' => $faviconType)));
+        $headImports[] = h::link(set(array('rel' => 'shortcut icon', 'href' => $faviconUrl, 'type' => $faviconType)));
         $headImports[] = h::jsVar('window.config', $jsConfig, setID('configJS'));
         if($zui)
         {

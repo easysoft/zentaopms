@@ -14,11 +14,12 @@ $domBox = div
     zui::diffHub
     (
         set::diffUrl($this->createLink('repo', 'ajaxGetDiffs', "repoID={$repoID}&fromVersion={$fromRevision}&toVersion={$toRevision}")),
-        set::enableAnnotations(true),
+        set::enableAnnotations($config->edition != 'gitfox'),
         set::product(0),
         set::module(''),
         set::repoID($repoID),
         set::ppmID($ppm->id),
+        set::hight('calc(100vh - 286px)'),
         set::labels($lang->ppm->diffHub->labels)
     )
 );

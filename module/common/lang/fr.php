@@ -37,6 +37,8 @@ $lang->proName        = 'Pro';
 $lang->bizName        = 'Biz';
 $lang->maxName        = 'Max';
 $lang->liteName       = 'Lite';
+$lang->devopsName     = 'DevOps';
+$lang->gitfoxName     = 'GitFox';
 $lang->devopsPrefix   = 'DevOps ';
 $lang->logoImg        = 'zt-logo-en.png';
 $lang->welcome        = "%s ALM";
@@ -558,7 +560,7 @@ $lang->exportTypeList['selected'] = 'Données sélectionnées';
 $lang->visionList = array();
 $lang->visionList['rnd']    = 'Full Feature Interface';
 $lang->visionList['lite']   = 'Operation Management Interface';
-//$lang->visionList['devops'] = 'DevOps Interface';
+$lang->visionList['gitfox'] = 'GitFox Interface';
 
 $lang->createObjects['todo']        = 'Todo';
 $lang->createObjects['effort']      = 'Effort';

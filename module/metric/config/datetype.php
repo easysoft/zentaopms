@@ -105,3 +105,12 @@ $config->metric->dateType['count_of_daily_review_story_in_user'] = 'day';
 $config->metric->dateType['count_of_daily_finished_task_in_user'] = 'day';
 $config->metric->dateType['count_of_daily_fixed_bug_in_user'] = 'day';
 $config->metric->dateType['count_of_daily_review_feedback_in_user'] = 'day';
+
+/* GitFox独立版的度量项。The metrics of the GitFox edition. */
+if($config->edition == 'gitfox' || $config->vision == 'gitfox')
+{
+    $config->metric->dateType['count_of_daily_gitfox_commits']         = 'day';
+    $config->metric->dateType['count_of_daily_gitfox_created_reviews'] = 'day';
+    $config->metric->dateType['count_of_daily_gitfox_merged_reviews']  = 'day';
+    $config->metric->dateType['count_of_daily_gitfox_resolved_issues'] = 'day';
+}

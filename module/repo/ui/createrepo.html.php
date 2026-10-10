@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-if($this->app->tab != 'devops')
+if(!in_array($this->app->tab, array('devops', 'repo')))
 {
     dropmenu
     (
@@ -43,12 +43,12 @@ formPanel
     ),
     formRow
     (
-        $this->app->tab != 'devops' ? setClass('hidden') : null,
+        $this->app->tab != 'devops' && $config->edition != 'gitfox' ? setClass('hidden') : null,
         formGroup
         (
             set::width('1/2'),
             set::name("product[]"),
-            set::label($lang->story->product),
+            set::label($lang->repo->product),
             set::required(true),
             set::control(array("control" => "picker","multiple" => true)),
             set::items($products),

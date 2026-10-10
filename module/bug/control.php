@@ -349,6 +349,13 @@ class bug extends control
         $oldBug = $this->bug->getByID($bugID);
         if(!$oldBug) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
 
+        if($this->config->edition == 'gitfox')
+        {
+            $hiddenEditFields = $this->config->bug->edit->gitfoxHiddenFields;
+            $requiredFields   = array_diff(explode(',', $this->config->bug->edit->requiredFields), $hiddenEditFields);
+            $this->config->bug->edit->requiredFields = implode(',', $requiredFields);
+        }
+
         if(!empty($_POST))
         {
             $formData = form::data($this->config->bug->form->edit, $bugID);

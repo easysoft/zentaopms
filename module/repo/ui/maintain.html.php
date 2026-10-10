@@ -31,9 +31,9 @@ foreach($repoList as $repo)
 
 }
 
-$config->repo->dtable->fieldList['name']['link']                   = $this->createLink('repo', 'browse', "repoID={id}&branchID=&objectID={$objectID}");
-$config->repo->dtable->fieldList['actions']['list']['edit']['url'] = $this->createLink('repo', 'edit', "repoID={id}&objectID={$objectID}&spaceID={$spaceID}");
-$config->repo->dtable->fieldList['space']['map']                   = $spaces;
+$config->repo->dtable->fieldList['name']['link']                             = $this->createLink('repo', 'browse', "repoID={id}&branchID=&objectID={$objectID}");
+$config->repo->dtable->fieldList['actions']['list']['edit']['url']['params'] = "repoID={id}&objectID={$objectID}&spaceID={$spaceID}";
+$config->repo->dtable->fieldList['space']['map']                             = $spaces;
 if($inSpace) unset($config->repo->dtable->fieldList['space']);
 
 if(empty($config->repo->maintain->showRepoPath))

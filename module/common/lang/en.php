@@ -37,6 +37,8 @@ $lang->proName        = 'Pro';
 $lang->bizName        = 'Biz';
 $lang->maxName        = 'Max';
 $lang->liteName       = 'Lite';
+$lang->devopsName     = 'DevOps';
+$lang->gitfoxName     = 'GitFox';
 $lang->devopsPrefix   = 'ZenTao DevOps Platform';
 $lang->logoImg        = 'zt-logo-en.png';
 $lang->welcome        = "%s Project Management System";
@@ -560,7 +562,7 @@ $lang->exportTypeList['selected'] = 'Selected Data';
 $lang->visionList = array();
 $lang->visionList['rnd']    = 'Full Feature Interface';
 $lang->visionList['lite']   = 'Operations Interface';
-//$lang->visionList['devops'] = 'DevOps Interface';
+$lang->visionList['gitfox'] = 'GitFox Interface';
 
 $lang->createObjects['todo']        = 'To-Do';
 $lang->createObjects['effort']      = 'Effort';

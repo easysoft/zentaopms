@@ -4857,3 +4857,63 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按执行统计的执行关闭时已完成开发任务数表示执行关闭时任务状态为已完成的开发任务个数求和。该度量项反映了执行关闭时开发人员完成的开发任务个数，可以评估执行中开发人员的实际工作量和开发效率。',
     'definition' => "执行关闭时执行中满足以下条件的开发任务个数求和，条件是：任务类型为开发，状态为已完成或已关闭且关闭原因为已完成，过滤已删除的任务，过滤已删除的执行，过滤已删除的项目。"
 );
+
+/* GitFox独立版的度量项。The metrics of the GitFox edition. */
+if($config->edition == 'gitfox' || $config->vision == 'gitfox')
+{
+    $config->bi->builtin->metrics[] = array
+    (
+        'name'       => '按系统统计的每日代码提交次数',
+        'alias'      => '代码提交次数',
+        'code'       => 'count_of_daily_gitfox_commits',
+        'purpose'    => 'scale',
+        'scope'      => 'system',
+        'object'     => 'commit',
+        'unit'       => 'count',
+        'dateType'   => 'day',
+        'desc'       => '按系统统计的每日代码提交次数是指每日所有代码库的代码提交总量，基础数据通过 GitFox 统计接口获取，用于评估团队每日的开发活跃度。',
+        'definition' => "所有代码库的代码提交次数求和\n提交时间为某日\n基础数据来源于GitFox代码提交统计接口"
+    );
+
+    $config->bi->builtin->metrics[] = array
+    (
+        'name'       => '按系统统计的每日发起的代码评审数',
+        'alias'      => '发起的代码评审数',
+        'code'       => 'count_of_daily_gitfox_created_reviews',
+        'purpose'    => 'scale',
+        'scope'      => 'system',
+        'object'     => 'review',
+        'unit'       => 'count',
+        'dateType'   => 'day',
+        'desc'       => '按系统统计的每日发起的代码评审数是指每日所有用户发起的代码评审总量，用于评估团队每日的代码评审情况。',
+        'definition' => "所有代码评审个数求和\n评审创建时间为某日\n过滤已删除的代码评审"
+    );
+
+    $config->bi->builtin->metrics[] = array
+    (
+        'name'       => '按系统统计的每日合并的代码评审数',
+        'alias'      => '合并的代码评审数',
+        'code'       => 'count_of_daily_gitfox_merged_reviews',
+        'purpose'    => 'scale',
+        'scope'      => 'system',
+        'object'     => 'review',
+        'unit'       => 'count',
+        'dateType'   => 'day',
+        'desc'       => '按系统统计的每日合并的代码评审数是指每日所有用户合并的代码评审总量，用于评估团队每日的代码合入情况。',
+        'definition' => "所有代码评审个数求和\n评审状态为已合并\n合并时间为某日"
+    );
+
+    $config->bi->builtin->metrics[] = array
+    (
+        'name'       => '按系统统计的每日解决的问题数',
+        'alias'      => '解决的问题数',
+        'code'       => 'count_of_daily_gitfox_resolved_issues',
+        'purpose'    => 'scale',
+        'scope'      => 'system',
+        'object'     => 'issue',
+        'unit'       => 'count',
+        'dateType'   => 'day',
+        'desc'       => '按系统统计的每日解决的问题数是指每日解决的问题总量，不包含未确认和已忽略的问题，用于评估团队每日的问题处理情况。',
+        'definition' => "所有代码问题个数求和\n解决时间为某日\n过滤未确认和已忽略的问题\n过滤已删除的问题"
+    );
+}

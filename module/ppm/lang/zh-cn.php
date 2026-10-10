@@ -57,6 +57,9 @@ $lang->ppm->decision          = '评审结果';
 $lang->ppm->opinion           = '评审意见';
 $lang->ppm->merge             = '合并' . $lang->ppm->common;
 $lang->ppm->assignedTo        = '指派给';
+$lang->ppm->space             = '空间';
+$lang->ppm->allSpace          = '所有空间';
+$lang->ppm->allRepo           = '全部代码库';
 
 $lang->ppm->opinionPlaceholder = '请输入评审意见';
 

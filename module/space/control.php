@@ -239,7 +239,7 @@ class space extends control
             $items['id']       = $spaceID;
             $items['keys']     = $spaceName;
             $items['text']     = $spaceName;
-            $items['data-app'] = 'devops';
+            $items['data-app'] = $this->app->tab;
 
             $spaceGroup[] = $items;
         }

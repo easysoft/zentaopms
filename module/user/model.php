@@ -258,10 +258,11 @@ class userModel extends model
      * @param  int          $maxCount
      * @param  string|array $accounts
      * @param  bool         $followShowOutside
+     * @param  bool         $filterVision 是否按当前vision过滤用户，无会话上下文的接口调用（如GitFox成员权限接口）需传false
      * @access public
      * @return array
      */
-    public function getPairs(string $params = '', string|array $usersToAppended = '', int $maxCount = 0, string|array $accounts = '', bool $followShowOutside = true)
+    public function getPairs(string $params = '', string|array $usersToAppended = '', int $maxCount = 0, string|array $accounts = '', bool $followShowOutside = true, bool $filterVision = true)
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getUserPairs();
 
@@ -287,10 +288,10 @@ class userModel extends model
         $users = $this->dao->select($fields)->from(TABLE_USER)
             ->where('1=1')
             ->beginIF(strpos($params, 'nodeleted') !== false || empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
+            ->beginIF(strpos($params, 'nofeedback') !== false)->andWhere('visions')->ne('lite')->fi()
             ->beginIF(!$showAll)->andWhere('type')->eq($type)->fi()
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
-            ->beginIF(strpos($params, 'nofeedback') !== false)->andWhere('visions')->ne('lite')->fi()
-            ->beginIF($this->config->vision && !in_array($this->app->rawModule, array('kanban', 'feedback')))->andWhere("FIND_IN_SET('{$this->config->vision}', visions)")->fi()
+            ->beginIF($filterVision && $this->config->vision && !in_array($this->app->rawModule, array('kanban', 'feedback')))->andWhere("FIND_IN_SET('{$this->config->vision}', visions)")->fi()
             ->orderBy($orderBy)
             ->beginIF($maxCount)->limit($maxCount)->fi()
             ->fetchAll($keyField);
@@ -3098,6 +3099,8 @@ class userModel extends model
         if(!$user) return false;
 
         /* 获取指定用户的权限信息 */
+        if($this->config->edition == 'gitfox') $this->config->vision = 'gitfox';
+
         $userRights = $this->authorize($account);
         $rights     = $userRights['rights'];
         $isAdmin    = strpos($app->company->admins, ",{$account},") !== false;

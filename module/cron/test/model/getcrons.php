@@ -13,6 +13,10 @@ cid=15882
  - 第12条的remark属性 @创建周期性任务
  - 第12条的command属性 @moduleName=ci&methodName=initQueue
 - 获取正常列表某个定时任务的信息第1条的remark属性 @监控定时任务
+- 独立版没有筛选条件时候，获取所有定时任务 @5
+- 独立版有筛选条件时候，获取定时任务 @5
+- 独立版显示配置的备份定时任务 @1
+- 独立版不显示未配置的周期性待办定时任务 @0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -29,3 +33,17 @@ r(count($list))       && p()                    && e('21');                     
 r(count($noStopList)) && p()                    && e('18');                                                // 有筛选条件时候，获取定时任务
 r($list)              && p('12:remark,command') && e('创建周期性任务,moduleName=ci&methodName=initQueue'); // 获取某个定时任务的信息
 r($noStopList)        && p('1:remark')          && e('监控定时任务');                                      // 获取正常列表某个定时任务的信息
+
+/* 独立版只显示配置的定时任务。 */
+global $config;
+$originalEdition  = $config->edition;
+$config->edition  = 'gitfox';
+$gitfoxList       = $cron->getCronsTest();
+$gitfoxNoStopList = $cron->getCronsTest('nostop');
+$gitfoxCommands   = array_column($gitfoxList, 'command');
+$config->edition  = $originalEdition;
+
+r(count($gitfoxList))                                                 && p() && e('5'); // 独立版没有筛选条件时候，获取所有定时任务
+r(count($gitfoxNoStopList))                                           && p() && e('5'); // 独立版有筛选条件时候，获取定时任务
+r(in_array('moduleName=backup&methodName=backup', $gitfoxCommands))   && p() && e('1'); // 独立版显示配置的备份定时任务
+r(in_array('moduleName=todo&methodName=createCycle', $gitfoxCommands)) && p() && e('0'); // 独立版不显示未配置的周期性待办定时任务

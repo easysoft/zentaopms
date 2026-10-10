@@ -37,6 +37,8 @@ $lang->proName        = '专业版';
 $lang->bizName        = '企业版';
 $lang->maxName        = '旗舰版';
 $lang->liteName       = '迅捷版';
+$lang->devopsName     = 'DevOps';
+$lang->gitfoxName     = 'GitFox';
 $lang->devopsPrefix   = '禅道DevOps平台';
 $lang->logoImg        = 'zt-logo.png';
 $lang->welcome        = "%s项目管理系统";
@@ -559,7 +561,7 @@ $lang->exportTypeList['selected'] = '选中记录';
 $lang->visionList = array();
 $lang->visionList['rnd']    = '研发综合界面';
 $lang->visionList['lite']   = '运营管理界面';
-//$lang->visionList['devops'] = 'DevOps界面';
+$lang->visionList['gitfox'] = 'GitFox界面';
 
 $lang->createObjects['todo']        = '待办';
 $lang->createObjects['effort']      = '日志';

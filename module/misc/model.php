@@ -94,7 +94,7 @@ class miscModel extends model
     public function getMetriclibRemind(): string
     {
         if(!$this->app->user->admin) return '';
-        if($this->config->edition == 'open') return '';
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return '';
         if($this->config->vision != 'rnd') return '';
 
         $remind = '';

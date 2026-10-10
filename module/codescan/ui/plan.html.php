@@ -13,8 +13,24 @@ namespace zin;
 if($repoID) dropmenu(set::objectID($repoID), set::tab('repo'));
 jsVar('scanLang', $lang->codescan);
 
+/* 代码库筛选下拉。The repo filter dropdown. */
+$repoItems = array();
+if($config->vision == 'gitfox' && $app->tab == 'codescan')
+{
+    $repoItems[] = array('text' => $lang->codescan->allRepo, 'data-app' => 'codescan', 'url' => createLink('codescan', 'plan', "repoID=0&status={$status}"));
+    foreach($repoList as $repoId => $repoName)
+    {
+        $repoItems[] = array('text' => $repoName, 'data-app' => 'codescan', 'url' => createLink('codescan', 'plan', "repoID={$repoId}&status={$status}"));
+    }
+}
+
 featureBar
 (
+    $config->vision == 'gitfox' && $app->tab == 'codescan' ? to::before(dropdown
+    (
+        to('trigger', btn(zget($repoList, $repoID, $lang->codescan->allRepo), setID('repoDropdown'), setClass('ghost text-ellipsis text-left'))),
+        set::items($repoItems)
+    )) : null,
     set::current($status),
     set::linkParams("repoID={$repoID}&status={key}"),
     //set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
@@ -26,6 +42,7 @@ hasPriv('codescan', 'createplan') ? toolbar
         'text'        => $lang->codescan->createPlan,
         'url'         => inLink('createplan', "repoID={$repoID}"),
         'class'       => 'primary',
+        'data-app'    => $app->tab,
         'icon'        => 'plus'
     )))
 ) : null;

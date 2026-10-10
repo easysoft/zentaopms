@@ -221,9 +221,14 @@ class spaceModel extends model
      */
     public function getPairs(string $account = '', bool $filterRepoCreate = false): array
     {
-        $userSpaces = $this->getSpacesByAccount($account);
+        if(!$account) $account = $this->app->user->account;
 
-        $spaces = $this->getByIdList(array_keys($userSpaces), false);
+        $userSpaces  = $this->getSpacesByAccount($account);
+        $spaceIdList = array_keys($userSpaces);
+
+        if(empty($spaceIdList) && !$this->app->user->admin) $spaceIdList = array(0);
+
+        $spaces = $this->getByIdList($spaceIdList, false);
 
         $spacesPairs = array();
         foreach($spaces as $space)
@@ -511,6 +516,14 @@ class spaceModel extends model
             $userSpaces = $this->getPairs($this->app->user->account);
             if(!isset($userSpaces[$spaceID])) return $this->app->control->locate(helper::createLink('user', 'deny', "module={$this->app->rawModule}&method={$this->app->rawMethod}"));
             $this->session->set('devopsSpace', $spaceID);
+
+            $isGitfox = $this->config->vision == 'gitfox' || $this->config->edition == 'gitfox';
+            if($isGitfox && $this->app->tab == 'space' && isset($this->lang->space->menu))
+            {
+                $this->app->tab = 'space';
+                common::setMenuVars('space', $spaceID);
+            }
+
             unset($this->lang->devops->homeMenu->space);
             unset($this->lang->devops->homeMenu->configure);
             unset($this->lang->devops->homeMenu->codescan);
@@ -561,6 +574,21 @@ class spaceModel extends model
     }
 
     /**
+     * 获取空间权限对应的导航分组。
+     * Get nav groups of the modules that belong to a space.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getSpaceNavGroups(): array
+    {
+        /* GitFox独立版的代码库、代码扫描、代码评审、流水线和制品库都是一级导航，navGroup 不再是 devops。 */
+        if($this->config->vision == 'gitfox') return array('devops', 'repo', 'codescan', 'ppm', 'pipeline', 'artifact');
+
+        return array('devops');
+    }
+
+    /**
      * 获取空间所有权限。
      * Get space privs.
      *
@@ -569,15 +597,17 @@ class spaceModel extends model
      */
     public function getPrivs(): object
     {
+        $spaceNavGroups = $this->getSpaceNavGroups();
+
         $privs = new stdclass();
         foreach($this->lang->resource as $module => $methods)
         {
             if(empty($methods)) continue;
             if($module == 'space') continue;
 
-            /* Only include modules that belong to the devops nav group. */
+            /* Only include modules that belong to the devops space. */
             $navGroup = zget($this->lang->navGroup, $module, '');
-            if($navGroup != 'devops') continue;
+            if(!in_array($navGroup, $spaceNavGroups)) continue;
 
             foreach($methods as $method => $label)
             {
@@ -598,6 +628,8 @@ class spaceModel extends model
      */
     public function getDevOpsAllPrivs(): array
     {
+        $spaceNavGroups = $this->getSpaceNavGroups();
+
         $privs = array();
         foreach($this->lang->resource as $module => $methods)
         {
@@ -605,7 +637,7 @@ class spaceModel extends model
             if($module == 'space') continue;
 
             $navGroup = zget($this->lang->navGroup, $module, '');
-            if($navGroup != 'devops') continue;
+            if(!in_array($navGroup, $spaceNavGroups)) continue;
 
             foreach($methods as $method => $label)
             {

@@ -498,6 +498,7 @@ define('TABLE_SPACE',            '`ops_space`');
 define('TABLE_DEVOPSSPACEUSER',  '`ops_spaceuser`');
 define('TABLE_PPM',              '`ops_ppm`');
 define('TABLE_PPMREVIEWERS',     '`ops_request_reviewers`');
+define('TABLE_SCANISSUE',        '`ops_scan_issues`');
 define('TABLE_REPO',             '`ops_repo`');
 define('TABLE_DEVOPSREPOUSER',   '`ops_repouser`');
 define('TABLE_REPOHISTORY',      '`ops_repohistory`');

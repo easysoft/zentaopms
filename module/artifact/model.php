@@ -31,6 +31,17 @@ class artifactModel extends model
             if(empty($space->members) || !isset($space->members[$this->app->user->account])) return array();
         }
 
+        $privCondition = '';
+        if(!$this->app->user->admin)
+        {
+            $spaceIdList = array_keys($this->loadModel('space')->getPairs());
+            $repoIdList  = array_keys($this->loadModel('repo')->getRepoPairs());
+
+            $spaceIds = empty($spaceIdList) ? '0' : implode(',', $spaceIdList);
+            $repoIds  = empty($repoIdList) ? '0' : implode(',', $repoIdList);
+            $privCondition = "((`repoID` = 0 AND `spaceID` IN ({$spaceIds})) OR (`repoID` != 0 AND `repoID` IN ({$repoIds})))";
+        }
+
         $repos = array();
         if(!$repoID && !$this->app->user->admin)
         {
@@ -53,9 +64,10 @@ class artifactModel extends model
         return $this->dao->select('*')->from(TABLE_ARTIFACT)
             ->where('deleted')->eq(0)
             ->beginIF($scope != 'all')->andWhere('scope')->eq($scope)->fi()
-            ->andWhere('`spaceID`')->eq($spaceID)
+            ->beginIF($this->app->tab != 'artifact' || $spaceID != 0)->andWhere('`spaceID`')->eq($spaceID)->fi()
             ->beginIF($repoID && $scope != 'all')->andWhere('`repoID`')->eq($repoID)->fi()
             ->beginIF(!$repoID && $scope != 'space' && !empty($repos))->andWhere('`repoID`')->in($repos)->fi()
+            ->beginIF(!empty($privCondition))->andWhere($privCondition)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -121,7 +133,7 @@ class artifactModel extends model
      * @access public
      * @return bool|array|object
      */
-    public function uploadArtifact(int $artifactLibID, array $file, string $path = ''): bool|array|object
+    public function uploadArtifact(int $artifactLibID, array $file, string $path = '', string $overwrite = ''): bool|array|object
     {
         $artifactLib = $this->fetchByID($artifactLibID);
         if(empty($artifactLib)) return false;
@@ -131,6 +143,7 @@ class artifactModel extends model
         $param['name']       = basename($file['name']);
         $param['group']      = ltrim($path, '/');
         $param['file']       = curl_file_create($file['tmp_name']);
+        if($overwrite) $param['overwrite'] = $overwrite;
 
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         $result  = json_decode(common::http(sprintf($apiRoot->url, "/artifacts/upload/{$artifactLib->type}"), $param, array(), $apiRoot->header, 'data', 'POST', 3000));

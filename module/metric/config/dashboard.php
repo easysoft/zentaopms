@@ -75,3 +75,12 @@ $config->metric->dashboard['count_of_task_in_execution']                  = '按
 $config->metric->dashboard['count_of_unfinished_task_in_execution']       = '按执行统计的未完成任务数';
 $config->metric->dashboard['count_of_daily_finished_task_in_execution']   = '按执行统计的日完成任务数';
 $config->metric->dashboard['count_of_finished_story_in_execution']        = '按执行统计的已完成研发需求数';
+
+/* GitFox独立版的仪表盘度量项。The dashboard metrics of the GitFox edition. */
+if($config->edition == 'gitfox' || $config->vision == 'gitfox')
+{
+    $config->metric->dashboard['count_of_daily_gitfox_commits']         = '按系统统计的每日代码提交次数';
+    $config->metric->dashboard['count_of_daily_gitfox_created_reviews'] = '按系统统计的每日发起的代码评审数';
+    $config->metric->dashboard['count_of_daily_gitfox_merged_reviews']  = '按系统统计的每日合并的代码评审数';
+    $config->metric->dashboard['count_of_daily_gitfox_resolved_issues'] = '按系统统计的每日解决的问题数';
+}

@@ -19,6 +19,7 @@ jsVar('copySuccess', $lang->upgrade->copySuccess);
 jsVar('copyFail', $lang->upgrade->copyFail);
 jsVar('nextLink', 'javascript:checkGitFoxServer();');
 jsVar('adminRegisterLink', inLink('installGitFox', "inPage={$inPage}&skipInstall=1&fromVersion={$fromVersion}"));
+jsVar('upgradeLink', inLink('upgradeGitFox', "inPage={$inPage}&skipUpgrade=0&fromVersion={$fromVersion}"));
 
 div
 (

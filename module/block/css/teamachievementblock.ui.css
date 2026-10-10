@@ -6,3 +6,8 @@
 .teamachievement-block .item-row .item-story .item-icon {background: url(static/svg/block-story.svg) center no-repeat;}
 .teamachievement-block .item-row .item-case .item-icon {background: url(static/svg/block-case.svg) center no-repeat;}
 .teamachievement-block .item-row .item-workload .item-icon {background: url(static/svg/block-workload.svg) center no-repeat;}
+
+/* GitFox独立版的团队成就区块图标。The icons of the team achievement block in the GitFox edition. */
+.teamachievement-block .item-row .item-commit .item-icon {background: url(static/svg/block-task.svg) center no-repeat;}
+.teamachievement-block .item-row .item-review .item-icon {background: url(static/svg/block-story.svg) center no-repeat;}
+.teamachievement-block .item-row .item-issue .item-icon {background: url(static/svg/block-bug.svg) center no-repeat;}

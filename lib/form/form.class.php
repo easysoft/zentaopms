@@ -121,7 +121,7 @@ class form extends fixer
     public function appendExtendFormConfig(array $configObject, string $moduleName = '', string $methodName = '', int $objectID = 0, int $flowGroupID = 0): array
     {
         global $app, $config;
-        if($config->edition == 'open' ||  !empty($app->installing)) return $configObject;
+        if(in_array($config->edition, array('open', 'gitfox')) ||  !empty($app->installing)) return $configObject;
 
         $moduleName = $moduleName ? $moduleName : $app->rawModule;
         $methodName = $methodName ? $methodName : $app->rawMethod;

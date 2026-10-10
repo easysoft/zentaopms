@@ -55,10 +55,10 @@ if($config->db->driver == 'mysql')
     $lang->admin->menuList->system['tabMenu']['menuOrder']['database']['10'] = 'charset';
 }
 $lang->admin->menuList->system['tabMenu']['database']['dbview']      = array('link' => "{$lang->admin->dbView}|admin|dbview|");
-if($config->edition != 'open' && $config->vision == 'rnd') $lang->admin->menuList->system['tabMenu']['database']['metriclib'] = array('link' => "{$lang->metriclib->common}|admin|metriclib|");
+if(!in_array($config->edition, array('open', 'gitfox')) && $config->vision == 'rnd') $lang->admin->menuList->system['tabMenu']['database']['metriclib'] = array('link' => "{$lang->metriclib->common}|admin|metriclib|");
 
 $lang->admin->menuList->system['tabMenu']['menuOrder']['database']['15'] = 'dbview';
-if($config->edition != 'open' && $config->vision == 'rnd') $lang->admin->menuList->system['tabMenu']['menuOrder']['database']['20'] = 'metriclib';
+if(!in_array($config->edition, array('open', 'gitfox')) && $config->vision == 'rnd') $lang->admin->menuList->system['tabMenu']['menuOrder']['database']['20'] = 'metriclib';
 
 $lang->admin->menuList->system['menuOrder']['5']  = 'mode';
 if(in_array($config->db->driver, $config->mysqlDriverList)) $lang->admin->menuList->system['menuOrder']['10'] = 'backup';

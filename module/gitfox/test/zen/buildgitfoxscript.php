@@ -27,6 +27,8 @@ cid=0
 - 步骤 18：Windows 安装脚本替换安装目录 @1
 - 步骤 19：Windows 系统名大小写不敏感 @bat
 - 步骤 20：其他类 Unix 系统安装脚本扩展名为 sh @sh
+- 步骤 21：Linux 安装脚本安装后启动 GitFox @1
+- 步骤 22：Windows 安装脚本安装后启动 GitFox @1
 
 */
 
@@ -57,3 +59,5 @@ r($gitfoxZenTest->buildGitFoxScriptContentTest('install', 'if not exist "%INSTAL
 r($gitfoxZenTest->buildGitFoxScriptInstallDirTest('install', 'WINNT', 'AMD64')) && p() && e('1'); // 步骤 18
 r($gitfoxZenTest->buildGitFoxScriptExtensionTest('install', 'Windows', 'AMD64')) && p() && e('bat'); // 步骤 19
 r($gitfoxZenTest->buildGitFoxScriptExtensionTest('install', 'FreeBSD', 'x86_64')) && p() && e('sh'); // 步骤 20
+r($gitfoxZenTest->buildGitFoxScriptContentTest('install', 'gitfox" install && GITFOX_LANG', 'Linux', 'x86_64')) && p() && e('1'); // 步骤 21：Linux 安装脚本安装后启动 GitFox
+r($gitfoxZenTest->buildGitFoxScriptContentTest('install', 'gitfox.exe" install && "%INSTALL_DIR%\gitfox.exe" start', 'WINNT', 'AMD64')) && p() && e('1'); // 步骤 22：Windows 安装脚本安装后启动 GitFox

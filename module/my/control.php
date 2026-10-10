@@ -89,7 +89,7 @@ class my extends control
      */
     public function work(string $mode = 'task', string $browseType = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        if($this->config->edition != 'open')
+        if(!in_array($this->config->edition, array('open', 'gitfox')))
         {
             $this->my->appendWorkFlowMenu();
             $flows = $this->my->getFlowPairs();

@@ -195,7 +195,7 @@ $config->my->task->dtable->fieldList['progress']['type']     = 'progress';
 $config->my->task->dtable->fieldList['progress']['group']    = 'deadline';
 $config->my->task->dtable->fieldList['progress']['sortType'] = false;
 
-if($config->edition != 'open')
+if($config->edition != 'open' && $config->edition != 'gitfox')
 {
     $config->my->task->dtable->fieldList['relatedObject']['name']        = 'relatedObject';
     $config->my->task->dtable->fieldList['relatedObject']['title']       = $lang->custom->relateObject;

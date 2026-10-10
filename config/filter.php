@@ -327,22 +327,23 @@ $filter->file->download->cookie[$config->sessionVar] = 'code';
 
 $filter->mail->ztcloud->cookie['ztCloudLicense'] = 'equal::yes';
 
-$filter->product->browse->cookie['preBranch']         = 'reg::word';
-$filter->product->browse->cookie['preProductID']      = 'int';
-$filter->product->browse->cookie['productStoryOrder'] = 'reg::orderBy';
-$filter->product->browse->cookie['storyModule']       = 'int';
-$filter->product->browse->cookie['storyBranch']       = 'int';
-$filter->product->browse->cookie['treeBranch']        = 'reg::word';
-$filter->product->browse->cookie['storyViewType']     = 'code';
-$filter->product->all->cookie['showProductBatchEdit'] = 'int';
-$filter->product->default->cookie['lastProduct']      = 'int';
-$filter->product->default->cookie['preProductID']     = 'int';
-$filter->product->index->cookie['preBranch']          = 'reg::word';
-$filter->product->export->cookie['checkedItem']       = 'reg::checked';
-$filter->product->project->cookie['involved']         = 'code';
-$filter->product->project->cookie['preBranch']        = 'reg::word';
-$filter->product->roadmap->cookie['preBranch']        = 'reg::word';
-$filter->product->dynamic->cookie['preBranch']        = 'reg::word';
+$filter->product->browse->cookie['preBranch']            = 'reg::word';
+$filter->product->browse->cookie['preProductID']         = 'int';
+$filter->product->browse->cookie['productStoryOrder']    = 'reg::orderBy';
+$filter->product->browse->cookie['storyModule']          = 'int';
+$filter->product->browse->cookie['storyBranch']          = 'int';
+$filter->product->browse->cookie['treeBranch']           = 'reg::word';
+$filter->product->browse->cookie['storyViewType']        = 'code';
+$filter->product->browse->cookie['gitfoxProductKeyword'] = 'reg::any';
+$filter->product->all->cookie['showProductBatchEdit']    = 'int';
+$filter->product->default->cookie['lastProduct']         = 'int';
+$filter->product->default->cookie['preProductID']        = 'int';
+$filter->product->index->cookie['preBranch']             = 'reg::word';
+$filter->product->export->cookie['checkedItem']          = 'reg::checked';
+$filter->product->project->cookie['involved']            = 'code';
+$filter->product->project->cookie['preBranch']           = 'reg::word';
+$filter->product->roadmap->cookie['preBranch']           = 'reg::word';
+$filter->product->dynamic->cookie['preBranch']           = 'reg::word';
 
 $filter->branch->default->cookie['preBranch'] = 'reg::word';
 

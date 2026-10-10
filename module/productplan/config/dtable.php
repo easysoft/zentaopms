@@ -434,7 +434,7 @@ $config->productplan->viewBug->dtable->fieldList['activatedCount']['title']    =
 $config->productplan->viewBug->dtable->fieldList['activatedCount']['type']     = 'count';
 $config->productplan->viewBug->dtable->fieldList['activatedCount']['sortType'] = true;
 
-if($config->edition != 'open')
+if(!in_array($config->edition, array('open', 'gitfox')))
 {
     $app->loadLang('custom');
     $config->productplan->viewBug->dtable->fieldList['relatedObject']['name']        = 'relatedObject';

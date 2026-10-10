@@ -604,3 +604,6 @@ $lang->upgrade->fromVersions['ipd5_3']         = 'Ipd5.3';
 $lang->upgrade->fromVersions['ipd5_4']         = 'Ipd5.4';
 $lang->upgrade->fromVersions['ipd5_5']         = 'Ipd5.5';
 $lang->upgrade->fromVersions['ipd5_6']         = 'Ipd5.6';
+
+/* Devops. */
+$lang->upgrade->fromVersions['gitfox4_3'] = 'GitFox4.3';
