@@ -2470,7 +2470,7 @@ class execution extends control
         $originObjectID = $objectID;
 
         $isAPIRequest = helper::isApiRequest();
-        if($isAPIRequest)
+        if($isAPIRequest and $this->app->action != 'get')
         {
             $apiData = $this->executionZen->prepareLinkStoryApiData($originObjectID, $this->app->rawModule);
             if($apiData['status'] == 'fail') return $this->send($apiData);
