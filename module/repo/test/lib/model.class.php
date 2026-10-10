@@ -2905,6 +2905,51 @@ SQL);
     }
 
     /**
+     * Test getProductRepos method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getProductReposTest()
+    {
+        $result = $this->instance->getProductRepos();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test the repo count of one product returned by getProductRepos.
+     *
+     * @param  int $productID
+     * @access public
+     * @return int|array
+     */
+    public function getProductReposProductCountTest(int $productID)
+    {
+        $repos = $this->getProductReposTest();
+        if(!is_array($repos)) return $repos;
+
+        return isset($repos[$productID]) ? count($repos[$productID]) : 0;
+    }
+
+    /**
+     * Test the repo name of one product returned by getProductRepos.
+     *
+     * @param  int $productID
+     * @param  int $repoID
+     * @access public
+     * @return string|array
+     */
+    public function getProductReposProductRepoNameTest(int $productID, int $repoID)
+    {
+        $repos = $this->getProductReposTest();
+        if(!is_array($repos)) return $repos;
+
+        return isset($repos[$productID][$repoID]) ? $repos[$productID][$repoID]->name : 'none';
+    }
+
+    /**
      * Test getBugProductsAndExecutions method.
      *
      * @param  array $bugs

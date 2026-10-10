@@ -639,7 +639,7 @@ class gitfoxModel extends model
      */
     public function apiGetGroups(int $gitfoxID, string $orderBy = 'id_desc', bool $minRole = false, string $keyword = ''): array
     {
-        $apiRoot = $this->getApiRoot($gitfoxID, $minRole);
+        $apiRoot = $this->getApiRoot();
         $url     = sprintf($apiRoot->url, "/spaces");
 
         if($keyword) $url .= '&query=' . urlencode($keyword);
@@ -700,7 +700,7 @@ class gitfoxModel extends model
      */
     public function apiGetSinglePipeline(int $gitfoxID, int $projectID, string $pipelineID, int $executionID): object|array|null
     {
-        $apiRoot = $this->getApiRoot($gitfoxID, false);
+        $apiRoot = $this->getApiRoot();
         $url = sprintf($apiRoot->url, "/repos/{$projectID}/pipelines/{$pipelineID}/executions/{$executionID}");
         return json_decode(common::http($url, null, array(), $apiRoot->header));
     }
@@ -739,7 +739,7 @@ class gitfoxModel extends model
      */
     public function apiGetPipeline(int|string $gitfoxID, int|string $projectID, $branch = ''): object|array|null
     {
-        $apiRoot = $this->getApiRoot((int)$gitfoxID, false);
+        $apiRoot = $this->getApiRoot();
 
         $url = sprintf($apiRoot->url, "/repos/{$projectID}/pipelines");
         $pipelines = json_decode(common::http($url, null, array(), $apiRoot->header));
@@ -769,7 +769,7 @@ class gitfoxModel extends model
     {
         if(empty($pipeline->name) || empty($pipeline->number)) return '';
 
-        $apiRoot = $this->getApiRoot($gitfoxID, false);
+        $apiRoot = $this->getApiRoot();
         $log     = '';
         $jobInfo = $this->apiGetSinglePipeline($gitfoxID, $projectID, $pipeline->name, $pipeline->number);
         if(!$jobInfo) return $log;

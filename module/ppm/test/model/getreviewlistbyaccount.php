@@ -62,6 +62,8 @@ su('admin');
 
 global $tester;
 $tester->app->loadClass('pager', true);
+$tester->app->rawModule = 'ppm';
+$tester->app->rawMethod = 'browse';
 
 $ppmModel = new ppmModelTest();
 

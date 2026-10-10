@@ -1058,6 +1058,29 @@ class spaceModelTest extends baseTest
     }
 
     /**
+     * 测试获取空间导航分组。
+     * Test getSpaceNavGroups method.
+     *
+     * @param  string $vision
+     * @access public
+     * @return string|array
+     */
+    public function getSpaceNavGroupsTest(string $vision = '')
+    {
+        global $config;
+
+        $oldVision = $config->vision;
+        $config->vision = $vision;
+
+        $groups = $this->invokeArgs('getSpaceNavGroups');
+
+        $config->vision = $oldVision;
+
+        if(dao::isError()) return dao::getError();
+        return implode(',', $groups);
+    }
+
+    /**
      * Test if devops all privs contains a module.
      *
      * @param  string $module
