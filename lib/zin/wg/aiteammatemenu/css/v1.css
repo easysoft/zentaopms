@@ -1,4 +1,4 @@
-.ai-teammate-menu .menu-item > a > span {
+.ai-teammate-menu .item-title > div {
   display: flex;
   align-items: center;
   gap: 4px;
