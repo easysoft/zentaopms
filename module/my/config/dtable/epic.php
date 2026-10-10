@@ -253,6 +253,7 @@ $config->my->epic->dtable->fieldList['notifyEmail']['group']    = 11;
 
 $config->my->epic->dtable->fieldList['mailto']['name']     = 'mailto';
 $config->my->epic->dtable->fieldList['mailto']['title']    = $lang->story->mailto;
+$config->my->epic->dtable->fieldList['mailto']['type']     = 'category';
 $config->my->epic->dtable->fieldList['mailto']['width']    = '100';
 $config->my->epic->dtable->fieldList['mailto']['sortType'] = true;
 $config->my->epic->dtable->fieldList['mailto']['group']    = 11;

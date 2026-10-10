@@ -1016,7 +1016,7 @@ class baseRouter
         if(empty($account) && isset($_COOKIE['za']))    $account = $_COOKIE['za'];
 
         $devopsSpace = '';
-        if($this->config->installed && validater::checkAccount($account) && !$this->upgrading)
+        if(!empty($this->config->installed) && validater::checkAccount($account) && !$this->upgrading)
         {
             $devopsSpace = $this->dao->select("value")->from(TABLE_CONFIG)->where('owner')->eq($account)->andWhere('`key`')->eq('devopsSpace')->limit(1)->fetch('value');
         }

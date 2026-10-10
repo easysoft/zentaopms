@@ -650,7 +650,7 @@ class control extends baseControl
                 $field->control  = $this->flow->buildFormControl($field);
                 $field->items    = $field->options ? array_filter($field->options) : null;
                 $field->value    = isset($object->{$field->field}) ? zget($object, $field->field, '') : '';
-                $field->width    = $field->width != 'auto' ? $field->width : 'full';
+                $field->width    = $field->width != 'auto' ? "$field->width/12" : 'full';
 
                 if(!$field->value && isset($field->defaultValue)) $field->value = $field->defaultValue;
             }

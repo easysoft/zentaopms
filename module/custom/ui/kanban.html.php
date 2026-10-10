@@ -18,7 +18,7 @@ $menuItems  = array(
         a
         (
             set::href(createLink('custom', 'kanban', 'type=closedSetting')),
-            $type == 'closedSetting' ? setClass('active') : null,
+            $type == 'closedSetting' ? setClass('selected') : null,
             $lang->custom->closeSetting
         )
     ),
@@ -28,7 +28,7 @@ $menuItems  = array(
         a
         (
             set::href(createLink('custom', 'kanban', 'type=expireReminder')),
-            $type == 'expireReminder' ? setClass('active') : null,
+            $type == 'expireReminder' ? setClass('selected') : null,
             $lang->custom->kanbanExpireReminder
         )
     )

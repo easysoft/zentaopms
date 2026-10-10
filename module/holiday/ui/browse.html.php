@@ -44,7 +44,7 @@ sidebar
                 setClass('menu-item'),
                 a
                 (
-                    setClass('active'),
+                    setClass('selected'),
                     set::href(createLink('holiday', 'browse')),
                     $lang->custom->setHoliday
                 )

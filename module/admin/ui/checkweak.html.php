@@ -30,7 +30,7 @@ if(common::hasPriv('admin', 'checkWeak'))
         setClass('menu-item'),
         a
         (
-            setClass('active'),
+            setClass('selected'),
             set::href(createLink('admin', 'checkWeak')),
             $lang->admin->safe->checkWeak
         )

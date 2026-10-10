@@ -166,11 +166,12 @@ class testcaseTao extends testcaseModel
         {
             /* 跳过步骤描述为空的步骤。 */
             /* If step desc is empty, skip it. */
-            if(empty($stepDesc)) continue;
+            if(!is_scalar($stepDesc) || trim((string)$stepDesc) === '') continue;
 
-            /* 计算步骤类型和层级。 */
-            /* Set step type and step grade. */
-            $stepType = $stepTypes[$stepKey];
+            /* 计算步骤类型和层级。未提交或非法的步骤类型按普通步骤处理。*/
+            /* Set step type and step grade. Treat omitted or invalid step types as ordinary steps. */
+            $stepType = zget($stepTypes, $stepKey, 'step');
+            if(!in_array($stepType, array('step', 'group', 'item'), true)) $stepType = 'step';
             $grade    = substr_count((string)$stepKey, '.');
 
             /* 如果当前步骤层级为0，父ID和祖父ID清0。 */
@@ -415,7 +416,7 @@ class testcaseTao extends testcaseModel
         $requiredFields = $this->config->testcase->edit->requiredFields;
         if(!empty($case->lib)) $requiredFields = str_replace(array('story', 'scene'), '', $requiredFields);
 
-        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles,uid,stepChanged,comment,steps,expects,stepType,linkBug,renameFiles,addedFiles,files')
+        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles,uid,stepChanged,comment,steps,expects,stepType,linkBug,renameFiles,addedFiles,files,clearSteps')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->checkFlow()
@@ -503,7 +504,7 @@ class testcaseTao extends testcaseModel
         $testsuiteCases = $this->dao->select('id')->from(TABLE_SUITECASE)->where('case')->eq($case->id)->andWhere('suite')->ne(0)->fetchPairs();
         if(!empty($testsuiteCases)) $this->dao->update(TABLE_SUITECASE)->set('`caseVersion`')->eq($case->version)->where('id')->in($testsuiteCases)->exec();
 
-        if($case->steps)
+        if($case->steps || !empty($case->clearSteps))
         {
             $this->insertSteps($oldCase->id, $case->steps, $case->expects, (array)$case->stepType, $case->version);
         }
