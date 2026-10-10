@@ -108,8 +108,7 @@ class fileZen extends file
      */
     protected function unlinkRealFile(object $file): void
     {
-        $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
-        if(empty($fileRecord)) $this->file->unlinkFile($file);
+        $this->file->unlinkFileIfUnreferenced($file);
     }
 
     /**

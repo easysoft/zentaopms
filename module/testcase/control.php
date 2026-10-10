@@ -629,9 +629,14 @@ class testcase extends control
 
         if(!empty($_POST))
         {
+            /* 显式提交空步骤表示清空，$case添加一个额外标记，避免与真实步骤内容冲突。v1 由 entry 自行处理。*/
+            /* Empty steps explicitly submitted means clearing; pass a flag to the model to avoid conflicts with real step content. v1 entries handle it themselves. */
+            $clearSteps = $this->app->apiVersion != 'v1' && isset($_POST['steps']) && is_array($_POST['steps']) && !array_filter($_POST['steps'], function($step){ return trim((string)$step) !== ''; });
+
             $formData = form::data($this->config->testcase->form->edit, $caseID);
             $case     = $this->testcaseZen->prepareEditExtras($formData, $oldCase);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($clearSteps && is_object($case)) $case->clearSteps = true;
 
             $changes = array();
             if($comment != 'true')
