@@ -25,6 +25,12 @@ cid=0
 - 执行ppmModel模块的getListTest方法，参数是'all', 'all', 'id_desc', array(), 6101, 0, null, 2  @0
 - 执行ppmModel模块的getListTest方法，参数是'all', 'all', 'id_desc', array(), 6102, 0, null, 0  @2
 - 执行ppmModel模块的getListTest方法，参数是'all', 'all', 'id_desc', array(), 0, 0, null, 0  @4
+- 执行ppmModel模块的getListTest方法，参数是'all', 'all', 'id_desc', array(), 0, 0, null, 0, array(6101)  @2
+- 执行ppmModel模块的getListTest方法，参数是'all', 'all', 'id_desc', array(), 0, 0, null, 0, array(6102)  @2
+- 执行ppmModel模块的getListTest方法，参数是'all', 'all', 'id_desc', array(), 0, 0, null, 0, array(6101, 6102)  @4
+- 执行ppmModel模块的getListTest方法，参数是'all', 'all', 'id_desc', array(), 0, 0, null, 0, array()  @0
+- 执行ppmModel模块的getListTest方法，参数是'all', 'all', 'id_desc', array(), 0, 0, null, 0, array(6102, 6103)  @2
+- 执行ppmModel模块的getListTest方法，参数是'status', 'opened', 'id_desc', array(), 0, 0, null, 0, array(6101)  @2
 
 */
 
@@ -75,5 +81,12 @@ r(count($ppmModel->getListTest('all', 'all', 'id_desc', array(), 6101, 0, null, 
 r(count($ppmModel->getListTest('all', 'all', 'id_desc', array(), 6101, 0, null, 2))) && p() && e('0');
 r(count($ppmModel->getListTest('all', 'all', 'id_desc', array(), 6102, 0, null, 0))) && p() && e('2');
 r(count($ppmModel->getListTest('all', 'all', 'id_desc', array(), 0, 0, null, 0))) && p() && e('4');
+/* 独立版代码评审列表按用户可访问的代码库过滤：null 表示不限制，空数组表示无可见代码库。 */
+r(count($ppmModel->getListTest('all', 'all', 'id_desc', array(), 0, 0, null, 0, array(6101)))) && p() && e('2');
+r(count($ppmModel->getListTest('all', 'all', 'id_desc', array(), 0, 0, null, 0, array(6102)))) && p() && e('2');
+r(count($ppmModel->getListTest('all', 'all', 'id_desc', array(), 0, 0, null, 0, array(6101, 6102)))) && p() && e('4');
+r(count($ppmModel->getListTest('all', 'all', 'id_desc', array(), 0, 0, null, 0, array()))) && p() && e('0');
+r(count($ppmModel->getListTest('all', 'all', 'id_desc', array(), 0, 0, null, 0, array(6102, 6103)))) && p() && e('2');
+r(count($ppmModel->getListTest('status', 'opened', 'id_desc', array(), 0, 0, null, 0, array(6101)))) && p() && e('2');
 su('user1');
 r(count($ppmModel->getListTest('all', 'all', 'id_desc', array(6102 => 6102)))) && p() && e('2');

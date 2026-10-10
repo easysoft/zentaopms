@@ -33,10 +33,11 @@ class ppmModel extends model
      * @param  int    $objectID
      * @param  object $pager
      * @param  int    $spaceID
+     * @param  array  $repoIDList 限定代码库ID列表，null 表示不限制。
      * @access public
      * @return array
      */
-    public function getList(string $mode = 'all', string $param = 'all', string $orderBy = 'id_desc', array $filterProjects = array(), int $repoID = 0, int $objectID = 0, ?object $pager = null, int $spaceID = 0): array
+    public function getList(string $mode = 'all', string $param = 'all', string $orderBy = 'id_desc', array $filterProjects = array(), int $repoID = 0, int $objectID = 0, ?object $pager = null, int $spaceID = 0, ?array $repoIDList = null): array
     {
         $filterProjectSql = '';
         if(!$this->app->user->admin && !empty($filterProjects))
@@ -63,6 +64,7 @@ class ppmModel extends model
             ->beginIF($mode == 'creator' && $param != 'all')->andWhere('t1.`createdBy`')->eq($param)->fi()
             ->beginIF($filterProjectSql)->andWhere($filterProjectSql)->fi()
             ->beginIF($repoID)->andWhere('t1.`repoID`')->eq($repoID)->fi()
+            ->beginIF(!is_null($repoIDList))->andWhere('t1.`repoID`')->in($repoIDList)->fi()
             ->beginIF($objectID)->andWhere('t1.`executionID`')->in($objectID)->fi()
             ->beginIF(!empty($repoPairs))->andWhere('t1.`repoID`')->in(array_keys($repoPairs))->fi()
             ->beginIF($spaceID)->andWhere('t2.`spaceID`')->eq($spaceID)->fi()
