@@ -1136,4 +1136,29 @@ class biModelTest extends baseTest
     {
         return $this->invokeArgs('isAllowedFilterOperator', [$operator]);
     }
+
+    /**
+     * Test isSafeFilterValue method.
+     *
+     * @param  string $value
+     * @param  string $operator
+     * @access public
+     * @return bool
+     */
+    public function isSafeFilterValueTest(string $value, string $operator = ''): bool
+    {
+        return $this->invokeArgs('isSafeFilterValue', [$value, $operator]);
+    }
+
+    /**
+     * Test isScalarLiteral method.
+     *
+     * @param  string $value
+     * @access public
+     * @return bool
+     */
+    public function isScalarLiteralTest(string $value): bool
+    {
+        return $this->invokeArgs('isScalarLiteral', [$value]);
+    }
 }

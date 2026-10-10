@@ -2416,10 +2416,10 @@ class biModel extends model
      * Filter operator whitelist.
      *
      * @param  string $operator
-     * @access private
+     * @access public
      * @return bool
      */
-    private static function isAllowedFilterOperator(string $operator): bool
+    public static function isAllowedFilterOperator(string $operator): bool
     {
         $allowed = array('IN', 'NOT IN', 'LIKE', 'NOT LIKE', 'BETWEEN', '=', '!=', '<>', '>', '<', '>=', '<=', 'IS NULL', 'IS NOT NULL');
         return in_array(strtoupper(trim($operator)), $allowed);
@@ -2430,11 +2430,64 @@ class biModel extends model
      * Validate the filter field identifier.
      *
      * @param  string $field
-     * @access private
+     * @access public
      * @return bool
      */
-    private static function isSafeFilterField(string $field): bool
+    public static function isSafeFilterField(string $field): bool
     {
         return preg_match('/^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)?$/', $field) === 1;
+    }
+
+    /**
+     * 过滤值字面量校验。
+     * Validate the filter value, only sql literals are allowed.
+     *
+     * @param  string $value
+     * @param  string $operator
+     * @access public
+     * @return bool
+     */
+    public static function isSafeFilterValue(string $value, string $operator = ''): bool
+    {
+        $operator = strtoupper(trim($operator));
+        $value    = trim($value);
+
+        if($operator == 'IS NULL' or $operator == 'IS NOT NULL') return $value === '';
+        if($value === '') return false;
+
+        if($operator == 'IN' or $operator == 'NOT IN')
+        {
+            if(!preg_match('/^\((.*)\)$/s', $value, $matches)) return false;
+
+            $items = array_filter(array_map('trim', explode(',', $matches[1])), 'strlen');
+            foreach($items as $item) if(!self::isScalarLiteral($item)) return false;
+
+            return true;
+        }
+
+        if($operator == 'BETWEEN')
+        {
+            if(!preg_match('/^(.+?)\s+and\s+(.+)$/is', $value, $matches)) return false;
+            return self::isScalarLiteral(trim($matches[1])) and self::isScalarLiteral(trim($matches[2]));
+        }
+
+        return self::isScalarLiteral($value);
+    }
+
+    /**
+     * 是否为标量字面量（数字或引号包裹的字符串）。
+     * Whether the value is a scalar literal.
+     *
+     * @param  string $value
+     * @access public
+     * @return bool
+     */
+    public static function isScalarLiteral(string $value): bool
+    {
+        if(preg_match('/^[+-]?\d+(\.\d+)?$/', $value) === 1) return true;
+        if(preg_match("/^'(?:[^'\\\\]|\\\\.|'')*'$/s", $value) === 1) return true;
+        if(preg_match('/^"(?:[^"\\\\]|\\\\.|"")*"$/s', $value) === 1) return true;
+
+        return false;
     }
 }

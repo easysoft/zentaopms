@@ -4,6 +4,13 @@ $lang->chart->query    = '查询';
 $lang->chart->toDesign = '进入设计';
 
 $lang->chart->accessDenied  = '您无权访问该图表';
+
+$lang->chart->errorIllegalSql = array();
+$lang->chart->errorIllegalSql['field']    = '图表的字段名不合法，请求已被拒绝。';
+$lang->chart->errorIllegalSql['operator'] = '图表的过滤操作符不合法，请求已被拒绝。';
+$lang->chart->errorIllegalSql['value']    = '图表的过滤值不合法，只允许数字或引号包裹的字符串，请求已被拒绝。';
+$lang->chart->errorIllegalSql['agg']      = '图表的聚合函数不合法，请求已被拒绝。';
+$lang->chart->errorIllegalSql['date']     = '图表的日期分组不合法，请求已被拒绝。';
 $lang->chart->acl = '访问控制';
 $lang->chart->aclList['open']    = '公开（有图表视图权限与所在维度的访问权限即可访问）';
 $lang->chart->aclList['private'] = '私有（仅创建者和白名单用户可访问）';

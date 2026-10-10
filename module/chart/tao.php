@@ -18,6 +18,8 @@ class chartTao extends chartModel
      */
     protected function getRows(string $defaultSql, array $filters, string $date, string $group, string $metric, string $agg, string $driver = 'mysql'): array
     {
+        $this->checkChartSqlParams($date, $group, $metric, $agg, $filters);
+
         $groupSql = $groupBySql = "tt.`$group`";
         if(!empty($date))
         {
