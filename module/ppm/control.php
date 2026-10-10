@@ -77,10 +77,13 @@ class ppm extends control
             $execution = $this->loadModel('execution')->getByID($objectID);
             if($execution && $execution->type === 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
 
-            $features = $this->execution->getExecutionFeatures($execution);
-            if(!$features['devops']) return $this->locate($this->createLink('execution', 'task', "objectID=$objectID"));
+            if($execution)
+            {
+                $features = $this->execution->getExecutionFeatures($execution);
+                if(!$features['devops']) return $this->locate($this->createLink('execution', 'task', "objectID=$objectID"));
 
-            $this->loadModel('execution')->setMenu($objectID);
+                $this->loadModel('execution')->setMenu($objectID);
+            }
             $this->view->executionID = $objectID;
         }
         elseif($this->app->tab == 'project')
