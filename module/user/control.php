@@ -523,6 +523,8 @@ class user extends control
         if(!empty($_POST))
         {
             $users = form::batchData($this->config->user->form->batchCreate)->get();
+            if(empty($users)) return $this->sendError($this->lang->user->errorEmptyAccount, true);
+
             foreach($users as $user)
             {
                 $user->password = $user->passwordfield;
