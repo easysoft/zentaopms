@@ -18,13 +18,13 @@ if(!empty($lang->custom->{$module}->fields) && $module != 'reviewcl')
         $currentModule = 'custom';
         $method        = $key;
         $params        = $key == 'required' ? "module=$module" : '';
-        $active        = $app->rawMethod == strtolower($key) ? 'active' : '';
+        $active        = $app->rawMethod == strtolower($key) ? 'selected' : '';
         $tab           = '';
         if(!in_array($key, $config->custom->notSetMethods))
         {
             $params = "module=$module&field=$key";
             $method = 'set';
-            $active = (isset($field) and $field == $key) ? 'active' : $active;
+            $active = (isset($field) and $field == $key) ? 'selected' : $active;
         }
 
         if($module == 'approvalflow')
@@ -42,13 +42,13 @@ if(!empty($lang->custom->{$module}->fields) && $module != 'reviewcl')
                 $currentModule = 'holiday';
                 $method        = 'browse';
                 $params        = '';
-                $active        = isset($type) ? '' : 'active';
+                $active        = isset($type) ? '' : 'selected';
             }
             else
             {
                 $method = 'hours';
                 $params = "type={$key}";
-                $active = (isset($type) and $type == $key) ? 'active' : '';
+                $active = (isset($type) and $type == $key) ? 'selected' : '';
             }
         }
 

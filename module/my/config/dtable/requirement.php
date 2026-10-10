@@ -253,6 +253,7 @@ $config->my->requirement->dtable->fieldList['notifyEmail']['group']    = 11;
 
 $config->my->requirement->dtable->fieldList['mailto']['name']     = 'mailto';
 $config->my->requirement->dtable->fieldList['mailto']['title']    = $lang->story->mailto;
+$config->my->requirement->dtable->fieldList['mailto']['type']     = 'category';
 $config->my->requirement->dtable->fieldList['mailto']['width']    = '100';
 $config->my->requirement->dtable->fieldList['mailto']['sortType'] = true;
 $config->my->requirement->dtable->fieldList['mailto']['group']    = 11;

@@ -45,7 +45,6 @@ jsVar('taskDateLimit', empty($project) ? '' : $project->taskDateLimit);
 
 $items = array();
 
-$items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'hidden', 'hidden' => true);
 $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '64px');
 $items[] = array('name' => 'name', 'control' => 'colorInput', 'label' => $lang->task->name, 'width' => '240px');
 $items[] = array('name' => 'module', 'label' => $lang->task->module, 'control' => 'picker', 'items' => $modules, 'width' => '200px', 'ditto' => true, 'defaultDitto' => 'off');
@@ -79,7 +78,15 @@ formBatchPanel
     on::change('[data-name="estimate"],[data-name="consumed"]', 'computeForParent'),
     on::click('[data-name=story] [data-type=ditto]', 'setStoryRelated'),
     set::formID('taskBatchEditForm' . $executionID),
-    set::items($items)
+    set::items($items),
+    /* 隐藏的 id 列写成子节点，避免与序号列重名而被工作流扩展字段的去重逻辑丢弃。 */
+    formBatchItem
+    (
+        set::name('id'),
+        set::label($lang->idAB),
+        set::control('hidden'),
+        set::hidden(true)
+    )
 );
 /* ====== Render page ====== */
 render();

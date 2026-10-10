@@ -36,7 +36,7 @@ $searchForm = div
 $menuItems = array();
 foreach(array('byUpdatedTime', 'byAddedTime', 'byDownloads') as $listType)
 {
-    $active = (strtolower($listType) == $type) ? 'active' : '';
+    $active = (strtolower($listType) == $type) ? 'selected' : '';
     $menuItems[] = li
     (
         setClass('menu-item'),

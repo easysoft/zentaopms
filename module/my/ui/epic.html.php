@@ -103,6 +103,7 @@ if($canBatchAction) $config->my->epic->dtable->fieldList['id']['type'] = 'checkI
 $stories = initTableData($stories, $config->my->epic->dtable->fieldList, $this->story);
 $cols    = $this->loadModel('datatable')->getSetting('my', 'epic');
 if($viewType == 'tiled') $cols['title']['nestedToggle'] = false;
+if(isset($cols['mailto'])) $cols['mailto']['map'] = $users;
 
 /* Convert reviewer accounts to realnames. */
 $processReviewer = function($story) use ($users, &$processReviewer)

@@ -18,9 +18,9 @@ $config->testcase->form->create['title']          = array('required' => true,  '
 $config->testcase->form->create['color']          = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->create['pri']            = array('required' => false, 'type' => 'int',    'default' => 3);
 $config->testcase->form->create['precondition']   = array('required' => false, 'type' => 'string', 'default' => '');
-$config->testcase->form->create['steps']          = array('required' => false, 'type' => 'array',  'default' => array(''));
-$config->testcase->form->create['expects']        = array('required' => false, 'type' => 'array',  'default' => array(''));
-$config->testcase->form->create['stepType']       = array('required' => false, 'type' => 'array',  'default' => array(''));
+$config->testcase->form->create['steps']          = array('required' => false, 'type' => 'array',  'default' => array());
+$config->testcase->form->create['expects']        = array('required' => false, 'type' => 'array',  'default' => array());
+$config->testcase->form->create['stepType']       = array('required' => false, 'type' => 'array',  'default' => array());
 $config->testcase->form->create['keywords']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->create['status']         = array('required' => false, 'type' => 'string', 'default' => 'normal');
 $config->testcase->form->create['version']        = array('required' => false, 'type' => 'int',    'default' => 1);
@@ -61,9 +61,9 @@ $config->testcase->form->edit['title']        = array('required' => true,  'type
 $config->testcase->form->edit['color']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->edit['scene']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->edit['precondition'] = array('required' => false, 'type' => 'string', 'default' => '');
-$config->testcase->form->edit['steps']        = array('required' => false, 'type' => 'array',  'default' => array(''));
-$config->testcase->form->edit['expects']      = array('required' => false, 'type' => 'array',  'default' => array(''));
-$config->testcase->form->edit['stepType']     = array('required' => false, 'type' => 'array',  'default' => array(''));
+$config->testcase->form->edit['steps']        = array('required' => false, 'type' => 'array',  'default' => array());
+$config->testcase->form->edit['expects']      = array('required' => false, 'type' => 'array',  'default' => array());
+$config->testcase->form->edit['stepType']     = array('required' => false, 'type' => 'array',  'default' => array());
 $config->testcase->form->edit['version']      = array('required' => false, 'type' => 'int',    'default' => 1);
 $config->testcase->form->edit['auto']         = array('required' => false, 'type' => 'string', 'default' => 'no');
 $config->testcase->form->edit['script']       = array('required' => false, 'type' => 'string', 'default' => '');

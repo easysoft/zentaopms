@@ -4470,6 +4470,7 @@ class storyModel extends model
             ->where('t1.project')->eq($executionID)
             ->andWhere('t2.category')->eq('SRS')
             ->fetch('id');
+        if(empty($projectDeliverableID)) return;
 
         $this->dao->update(TABLE_PROJECTDELIVERABLE)
             ->set('`submittedBy`')->eq($this->app->user->account)
