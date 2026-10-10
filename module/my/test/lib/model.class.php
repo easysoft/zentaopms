@@ -505,6 +505,23 @@ class myModelTest extends baseTest
     }
 
     /**
+     * 测试获取欢迎总览区块中评审相关的统计数据。
+     * Test get my review statistics.
+     *
+     * @param  string $field
+     * @access public
+     * @return string|array
+     */
+    public function getMyReviewStatisticsFieldTest(string $field = '')
+    {
+        $result = $this->instance->getMyReviewStatistics();
+        if(dao::isError()) return dao::getError();
+        if(empty($field)) return implode(',', $result);
+
+        return isset($result[$field]) ? (string)$result[$field] : 'none';
+    }
+
+    /**
      * 测试获取审批中的用例。
      * Test get reviewing cases.
      *

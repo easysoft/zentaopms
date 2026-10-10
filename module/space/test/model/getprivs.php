@@ -52,7 +52,7 @@ r($spaceTester->getPrivsTest()) && p('artifact:create') && e('create');         
 
 /* GitFox独立版的导航模块各自成组，空间权限配置页需要能列出这些模块。 */
 $config->vision = 'gitfox';
-include dirname(__FILE__, 5) . '/extension/gitfox/common/ext/lang/gitfoxmenu.php';
+include dirname(__FILE__, 5) . '/extension/gitfox/common/ext/lang/zh-cn/gitfoxcommon.php';
 
 r($spaceTester->getPrivsTest()) && p('repo:browse') && e('browseAction');       // 独立版空间权限列表包含repo浏览权限
 r($spaceTester->getPrivsTest()) && p('codescan:exec') && e('exec');             // 独立版空间权限列表包含codescan执行权限
