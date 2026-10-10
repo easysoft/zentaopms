@@ -61,15 +61,43 @@ class gitfoxModel extends model
      * @access public
      * @return object
      */
-    public function getServer(): object
+    public function getServer(string $account = ''): object
     {
         $server = $this->dao->select('*')->from(TABLE_ENTRY)->where('code')->eq('gitfox')->fetch();
+
+        if(empty($account)) $account = empty($this->app->user->account) ? '' : $this->app->user->account;
 
         $gitfox = new stdclass;
         $gitfox->url   = $this->config->devops->gitfoxURL;
         if($this->config->devops->gitfoxPort) $gitfox->url .= ':' . $this->config->devops->gitfoxPort;
-        $gitfox->token = empty($server->key) ? '' : md5('zentao' . $this->app->user->account . $server->key);
+        $gitfox->token = empty($server->key) ? '' : md5('zentao' . $account . $server->key);
         return $gitfox;
+    }
+
+    /**
+     * 获取系统账号。
+     * Get the system account used by requests without user context.
+     *
+     * @access public
+     * @return string
+     */
+    public function getSystemAccount(): string
+    {
+        $server = $this->dao->select('*')->from(TABLE_ENTRY)->where('code')->eq('gitfox')->fetch();
+        if(!empty($server->account)) return $server->account;
+
+        $account = empty($this->app->user->account) ? '' : $this->app->user->account;
+        if($account && $account != 'guest') return $account;
+
+        /* 定时任务等场景没有用户上下文，直接查第一个公司的管理员账号，避免依赖 setCompany 的会话缓存。 */
+        $company = $this->loadModel('company')->getFirst();
+        if(!empty($company->admins))
+        {
+            $adminList = array_filter(explode(',', trim($company->admins, ',')));
+            if($adminList) return trim(current($adminList));
+        }
+
+        return 'admin';
     }
 
     /**
@@ -80,14 +108,15 @@ class gitfoxModel extends model
      * @access public
      * @return string|object
      */
-    public function getApiRoot(): string|object
+    public function getApiRoot(string $account = ''): string|object
     {
-        $gitfox = $this->getServer();
+        $gitfox = $this->getServer($account);
 
+        if(empty($account)) $account = empty($this->app->user->account) ? '' : $this->app->user->account;
         $apiRoot = new stdclass;
         $apiRoot->url    = rtrim($gitfox->url, '/') . '/api/v2%s';
         $apiLanguage     = common::checkNotCN() ? 'en-US' : 'zh-CN';
-        $apiRoot->header = array('Authorization: ' . $gitfox->token, 'App: zentao', 'Operator: ' . $this->app->user->account, 'Accept-Language: ' . $apiLanguage);
+        $apiRoot->header = array('Authorization: ' . $gitfox->token, 'App: zentao', 'Operator: ' . $account, 'Accept-Language: ' . $apiLanguage);
 
         return $apiRoot;
     }
@@ -102,7 +131,7 @@ class gitfoxModel extends model
      * @access public
      * @return object|array|bool
      */
-    public function request($url, $method = 'GET', $data = array(), $parseResponse = true): object|array|bool
+    public function request($url, $method = 'GET', $data = array(), $parseResponse = true, string $account = ''): object|array|bool
     {
         $originURL = $url;
         if($method == 'GET')
@@ -125,7 +154,7 @@ class gitfoxModel extends model
         $options = array();
         if(in_array($method, array('DELETE', 'PUT', 'PATCH'))) $options = array(CURLOPT_CUSTOMREQUEST => $method);
 
-        $apiRoot = $this->getApiRoot();
+        $apiRoot = $this->getApiRoot($account);
         if(!$apiRoot) return false;
 
         $url    = sprintf($apiRoot->url, $url);
@@ -146,6 +175,22 @@ class gitfoxModel extends model
             $result = $this->request($originURL, $method, $data);
         }
         return $result;
+    }
+
+    /**
+     * 以系统账号发送http请求，供定时任务等没有用户上下文的场景使用。
+     * Send http request as the system account, used by requests without user context.
+     *
+     * @param  string $url
+     * @param  string $method
+     * @param  array  $data
+     * @param  bool   $parseResponse
+     * @access public
+     * @return object|array|bool
+     */
+    public function requestSystem($url, $method = 'GET', $data = array(), $parseResponse = true): object|array|bool
+    {
+        return $this->request($url, $method, $data, $parseResponse, $this->getSystemAccount());
     }
 
     /**
@@ -658,6 +703,29 @@ class gitfoxModel extends model
         $apiRoot = $this->getApiRoot($gitfoxID, false);
         $url = sprintf($apiRoot->url, "/repos/{$projectID}/pipelines/{$pipelineID}/executions/{$executionID}");
         return json_decode(common::http($url, null, array(), $apiRoot->header));
+    }
+
+    /**
+     * 取消流水线执行。
+     * Cancel pipeline execution.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return bool
+     */
+    public function apiCancelPipeline(int $executionID): bool
+    {
+        $apiRoot  = $this->getApiRoot();
+        $url      = sprintf($apiRoot->url, "/pipeline/executions/{$executionID}/cancel");
+        $response = json_decode(common::http($url, '{}', array(CURLOPT_POST => true), $apiRoot->header, 'json', 'POST'));
+        if(empty($response))
+        {
+            dao::$errors['apiMessage'] = $this->lang->error->httpServerError;
+            return false;
+        }
+
+        $response = $this->getResponse($response);
+        return $response !== false;
     }
 
     /**

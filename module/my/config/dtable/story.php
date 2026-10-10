@@ -204,7 +204,7 @@ $config->my->story->dtable->fieldList['caseCount']['link']        = array('modul
 $config->my->story->dtable->fieldList['caseCount']['data-toggle'] = 'modal';
 $config->my->story->dtable->fieldList['caseCount']['group']       = 7;
 
-if($config->edition != 'open')
+if(!in_array($config->edition, array('open', 'gitfox')))
 {
     $config->my->story->dtable->fieldList['relatedObject']['name']            = 'relatedObject';
     $config->my->story->dtable->fieldList['relatedObject']['title']           = $lang->custom->relateObject;

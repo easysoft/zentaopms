@@ -158,6 +158,8 @@ JOIN `zt_case` AS t2 ON t1.`fromCaseID` = t2.`id`
 SET t1.`lib` = t2.`lib`
 WHERE t1.`fromCaseID` > 0 AND t1.`fromCaseID` != t1.`id` AND t1.`lib` != t2.`lib` AND t2.`product` = 0 AND t2.`lib` > 0;
 
+ALTER TABLE `ops_scan_issues` ADD COLUMN `pipelineExecutionID` int unsigned NOT NULL DEFAULT 0 COMMENT '流水线执行ID' AFTER `ppmID`;
+
 CREATE TABLE IF NOT EXISTS `zt_ai_teammate` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `name` varchar(10) NOT NULL DEFAULT 'rnd' COMMENT '员工名称',

@@ -43,6 +43,13 @@ class heading extends wg
                 {
                     $currentModule = 'space';
                     $currentMethod = 'browse';
+
+                    /* 没有空间列表权限时，如果用户有代码库列表权限，则跳转到代码库列表。 */
+                    if(!common::hasPriv('space', 'browse') && common::hasPriv('repo', 'maintain'))
+                    {
+                        $currentModule = 'repo';
+                        $currentMethod = 'maintain';
+                    }
                 }
             }
         }
@@ -123,7 +130,7 @@ class heading extends wg
     protected function build()
     {
         global $app, $config;
-        if($config->edition != 'open' && $app->isServing()) $app->control->loadModel('common')->mergeFlowMenuLang();
+        if(!in_array($config->edition, array('open', 'gitfox')) && $app->isServing()) $app->control->loadModel('common')->mergeFlowMenuLang();
 
         return div
         (

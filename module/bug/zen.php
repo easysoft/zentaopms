@@ -717,6 +717,15 @@ class bugZen extends bug
 
         if($oldBug->resolvedBy == $bug->resolvedBy && !$this->post->resolvedDate) unset($bug->resolvedDate);
 
+        if($this->config->edition == 'gitfox')
+        {
+            $hiddenFields = $this->config->bug->edit->gitfoxHiddenFields;
+            foreach($hiddenFields as $field)
+            {
+                if(property_exists($oldBug, $field)) $bug->$field = $oldBug->$field;
+            }
+        }
+
         $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->edit['id'], $bug->uid);
 
         return $bug;

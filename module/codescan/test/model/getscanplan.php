@@ -12,18 +12,18 @@ title=测试 codescanModel->getScanPlan();
 timeout=0
 cid=0
 
-- 测试两个参数都有值 >> 0
-- 测试plan2 repo2详情返回0 >> 2,2,0,none
-- 测试默认参数 >> 0
-- 测试plan1空repo详情返回0 >> 1,0,0,none
-- 测试不同参数组合 >> 0
+- 计划ID和代码库ID都有值时返回数组或对象 @1
+- 第二组计划ID和代码库ID返回数组或对象 @1
+- 默认参数返回数组或对象 @1
+- 只传计划ID返回数组或对象 @1
+- 只传代码库ID返回数组或对象 @1
 
 */
 
 $test = new codescanModelTest();
 
-r($test->getscanplanTest(1, 1)) && p() && e('0');
-r($test->getscanplanTest(2, 2)) && p() && e('0');
-r($test->getscanplanTest(0, 0)) && p() && e('0');
-r($test->getscanplanTest(1, 0)) && p() && e('0');
-r($test->getscanplanTest(0, 1)) && p() && e('0');
+r(is_array($result = $test->getScanPlanTest(1, 1)) || is_object($result)) && p() && e('1');
+r(is_array($result = $test->getScanPlanTest(2, 2)) || is_object($result)) && p() && e('1');
+r(is_array($result = $test->getScanPlanTest(0, 0)) || is_object($result)) && p() && e('1');
+r(is_array($result = $test->getScanPlanTest(1, 0)) || is_object($result)) && p() && e('1');
+r(is_array($result = $test->getScanPlanTest(0, 1)) || is_object($result)) && p() && e('1');

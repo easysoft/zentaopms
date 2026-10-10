@@ -38,18 +38,21 @@ $config->my->audit->dtable->fieldList['type']['sortType'] = true;
 $config->my->audit->dtable->fieldList['type']['width']    = 100;
 $config->my->audit->dtable->fieldList['type']['show']     = true;
 
-$config->my->audit->dtable->fieldList['project']['name']     = 'project';
-$config->my->audit->dtable->fieldList['project']['title']    = $lang->my->auditField->project;
-$config->my->audit->dtable->fieldList['project']['type']     = 'text';
-$config->my->audit->dtable->fieldList['project']['sortType'] = true;
-$config->my->audit->dtable->fieldList['project']['width']    = 160;
-$config->my->audit->dtable->fieldList['project']['show']     = true;
+if($config->edition != 'gitfox')
+{
+    $config->my->audit->dtable->fieldList['project']['name']     = 'project';
+    $config->my->audit->dtable->fieldList['project']['title']    = $lang->my->auditField->project;
+    $config->my->audit->dtable->fieldList['project']['type']     = 'text';
+    $config->my->audit->dtable->fieldList['project']['sortType'] = true;
+    $config->my->audit->dtable->fieldList['project']['width']    = 160;
+    $config->my->audit->dtable->fieldList['project']['show']     = true;
 
-$config->my->audit->dtable->fieldList['product']['name']     = 'product';
-$config->my->audit->dtable->fieldList['product']['title']    = $lang->my->auditField->product;
-$config->my->audit->dtable->fieldList['product']['type']     = 'text';
-$config->my->audit->dtable->fieldList['product']['sortType'] = true;
-$config->my->audit->dtable->fieldList['product']['show']     = true;
+    $config->my->audit->dtable->fieldList['product']['name']     = 'product';
+    $config->my->audit->dtable->fieldList['product']['title']    = $lang->my->auditField->product;
+    $config->my->audit->dtable->fieldList['product']['type']     = 'text';
+    $config->my->audit->dtable->fieldList['product']['sortType'] = true;
+    $config->my->audit->dtable->fieldList['product']['show']     = true;
+}
 
 $config->my->audit->dtable->fieldList['reviewer']['name']     = 'reviewer';
 $config->my->audit->dtable->fieldList['reviewer']['title']    = $lang->my->auditField->reviewer;

@@ -1576,6 +1576,7 @@ $lang->resource->pipeline->edit      = 'edit';
 $lang->resource->pipeline->arrange   = 'arrange';
 $lang->resource->pipeline->delete    = 'delete';
 $lang->resource->pipeline->exec      = 'exec';
+$lang->resource->pipeline->cancel    = 'cancel';
 $lang->resource->pipeline->execView  = 'execViewAction';
 
 $lang->pipeline->methodOrder[5]  = 'browse';

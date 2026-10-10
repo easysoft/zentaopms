@@ -449,6 +449,10 @@ class repo extends control
         set_time_limit(0);
         if($this->get->repoPath) $entry = $this->get->repoPath;
         if($repoID == 0) $repoID = $this->session->repoID;
+
+        /* 链接中的版本是编码过的，取出后需要转码。 */
+        $urlRevision = $revision;
+        if($revision != 'HEAD') $revision = urldecode(helper::safe64Decode($revision));
         if($revision != 'HEAD')
         {
             helper::setCookie("repoBranch", $revision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
@@ -457,7 +461,7 @@ class repo extends control
 
         $this->commonAction($repoID, $objectID);
         $this->repoZen->setBackSession('view', true);
-        $this->session->set('storyList', inlink('view',  "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"), 'product');
+        $this->session->set('storyList', inlink('view',  "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$urlRevision&showBug=$showBug&encoding=$encoding"), 'product');
 
         return print($this->fetch('repo', 'monaco', "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"));
     }
@@ -639,25 +643,29 @@ class repo extends control
         $logs  = $this->repo->getCommits($repo, $entry, $branchID, 'dir', $pager, '', '', $query);
         if(count($logs) == 0 && $pageID != 1) $this->locate(inLink('log', "repoID=$repoID&branchID=$branchID&objectID=$objectID&entry=$entry&source=$source&browseType=$browseType&param=$param&recTotal=0&recPerPage=$recPerPage&pageID=1"));
 
-        $revisionIds = array_column($logs, 'revision');
-        $modelCommits = new stdClass();
-        $modelCommits->stories = $this->loadModel('story')->getLinkedCommits($repoID, $revisionIds);
-        $modelCommits->designs = $this->loadModel('design')->getLinkedCommits($repoID, $revisionIds);
-        $modelCommits->tasks   = $this->loadModel('task')->getLinkedCommits($repoID, $revisionIds);
-        $modelCommits->bugs    = $this->loadModel('bug')->getLinkedCommits($repoID, $revisionIds);
-        /* Set tips and buttons for different relations. */
-        foreach($logs as $logItem)
+        $isGitfox = $this->config->edition == 'gitfox';
+        if(!$isGitfox)
         {
-            $logItem->relationFieldTips = '';
-            foreach(array('designs' => 'design', 'stories' => 'story', 'tasks' => 'task' , 'bugs' => 'bug') as $fieldType => $moduleName)
+            $revisionIds = array_column($logs, 'revision');
+            $modelCommits = new stdClass();
+            $modelCommits->stories = $this->loadModel('story')->getLinkedCommits($repoID, $revisionIds);
+            $modelCommits->designs = $this->loadModel('design')->getLinkedCommits($repoID, $revisionIds);
+            $modelCommits->tasks   = $this->loadModel('task')->getLinkedCommits($repoID, $revisionIds);
+            $modelCommits->bugs    = $this->loadModel('bug')->getLinkedCommits($repoID, $revisionIds);
+            /* Set tips and buttons for different relations. */
+            foreach($logs as $logItem)
             {
-                if(!empty($modelCommits->{$fieldType}[$logItem->revision]))
+                $logItem->relationFieldTips = '';
+                foreach(array('designs' => 'design', 'stories' => 'story', 'tasks' => 'task' , 'bugs' => 'bug') as $fieldType => $moduleName)
                 {
-                    $fieldCommits = $modelCommits->{$fieldType}[$logItem->revision];
-                    $logItem->relationFieldTips .= ' ' . $this->lang->repo->{$moduleName};
-                    foreach($fieldCommits as $item) $item->url = !empty($item->id) ? $this->createLink($moduleName, 'view', "{$moduleName}ID=" . $item->id) : '';
-                    $logItem->relationFieldTips .= ' #'.implode(' #', array_column($fieldCommits, 'id'));
-                    $logItem->relationField[$fieldType] = $fieldCommits;
+                    if(!empty($modelCommits->{$fieldType}[$logItem->revision]))
+                    {
+                        $fieldCommits = $modelCommits->{$fieldType}[$logItem->revision];
+                        $logItem->relationFieldTips .= ' ' . $this->lang->repo->{$moduleName};
+                        foreach($fieldCommits as $item) $item->url = !empty($item->id) ? $this->createLink($moduleName, 'view', "{$moduleName}ID=" . $item->id) : '';
+                        $logItem->relationFieldTips .= ' #'.implode(' #', array_column($fieldCommits, 'id'));
+                        $logItem->relationField[$fieldType] = $fieldCommits;
+                    }
                 }
             }
         }
@@ -813,16 +821,26 @@ class repo extends control
         if($this->server->request_method == 'POST') return $this->repoZen->locateDiffPage($repoID, $objectID, $arrange, $isBranchOrTag, $file);
 
         $diffs    = array();
+        $diffText = '';
         $encoding = empty($encoding) ? 'utf-8' : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
-        if($oldRevision !== '')
+
+        if($this->repo->isSvn($repo))
+        {
+            if($oldRevision !== '')
+            {
+                $this->scm->setEngine($repo);
+                $diffs = $this->scm->diff($entry, $oldRevision, $newRevision, 'yes', $isBranchOrTag ? 'isBranchOrTag' : '');
+            }
+
+            if($encoding != 'utf-8') $diffs = $this->repoZen->encodingDiff($diffs, $encoding);
+            if($arrange == 'appose') $diffs = $this->repo->getApposeDiff($diffs);
+        }
+        elseif($oldRevision !== '')
         {
             $this->scm->setEngine($repo);
-            $diffs = $this->scm->diff($entry, $oldRevision, $newRevision, 'yes', $isBranchOrTag ? 'isBranchOrTag': '');
+            $diffText = $this->scm->diff($entry, $oldRevision, $newRevision, 'no', $isBranchOrTag ? 'isBranchOrTag': '');
         }
-
-        if($encoding != 'utf-8') $diffs = $this->repoZen->encodingDiff($diffs, $encoding);
-        if($arrange == 'appose') $diffs = $this->repo->getApposeDiff($diffs);
 
         $this->view->entry         = urldecode($entry);
         $this->view->encoding      = str_replace('-', '_', $encoding);
@@ -833,6 +851,7 @@ class repo extends control
         $this->view->objectID      = $objectID;
         $this->view->repo          = $repo;
         $this->view->diffs         = $diffs;
+        $this->view->diffText      = $diffText;
         $this->view->newRevision   = $newRevision;
         $this->view->oldRevision   = $oldRevision;
         $this->view->isBranchOrTag = $isBranchOrTag;
@@ -2387,7 +2406,7 @@ class repo extends control
             $changeFile = $this->repo->encodePath("{$file}#{$begin},{$end}");
             if(empty($v1))
             {
-                $link = $this->repo->createLink('view', "repoID=$repoID&objectID=0&entry={$changeFile}&revision=$v2&showBug=1", '', true) . "#L{$begin}";
+                $link = $this->repo->createLink('view', "repoID=$repoID&objectID=0&entry={$changeFile}&revision=" . helper::safe64Encode($v2) . "&showBug=1", '', true) . "#L{$begin}";
             }
             else
             {
@@ -2611,12 +2630,12 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function review(int $repoID, string $browseType = '', int $objectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function review(int $repoID = 0, string $browseType = '', int $objectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save the original $repoID to this variable to check if $repoID is 0. */
         $isAllRepo = !$repoID;
 
-        if($repoID == 0) $repoID = $this->repo->saveState($repoID);
+        if($repoID) $repoID = $this->repo->saveState($repoID);
         $this->commonAction($repoID, (int)$objectID);
 
         $firstOpen  = empty($browseType);
@@ -2628,7 +2647,7 @@ class repo extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $bugs = $this->repo->getBugsByRepo($objectID && $isAllRepo ? 0 : $repoID, $browseType, $objectID, array(), $orderBy, $pager);
+        $bugs = $this->repo->getBugsByRepo($repoID, $browseType, $objectID, array(), $orderBy, $pager);
         if($firstOpen && empty($bugs)) return $this->locate(inLink('review', "repoID={$repoID}&browseType=all"));
 
         $repo = $this->repo->getById($repoID);
@@ -2638,7 +2657,7 @@ class repo extends control
             $revisions[] = $bug->v2;
             if(!empty($bug->v1)) $revisions[] = $bug->v1;
         }
-        $this->view->historys = $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repoID)->fetchPairs('revision', 'commit');
+        $this->view->historys = $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->beginIF($repoID)->andWhere('repo')->eq($repoID)->fi()->fetchPairs('revision', 'commit');
 
         if($this->app->tab == 'execution') $this->view->executionID = $objectID;
 

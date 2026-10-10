@@ -308,7 +308,7 @@ $config->program->browse->dtable->fieldList['progress']['type']     = 'progress'
 $config->program->browse->dtable->fieldList['progress']['show']     = true;
 $config->program->browse->dtable->fieldList['progress']['group']    = 5;
 
-if($config->edition != 'open')
+if($config->vision == 'rnd' && $config->edition != 'open')
 {
     $config->program->browse->dtable->fieldList['workflowGroup']['name']  = 'workflowGroup';
     $config->program->browse->dtable->fieldList['workflowGroup']['title'] = $lang->project->workflowGroup;

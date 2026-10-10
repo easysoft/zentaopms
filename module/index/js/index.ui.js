@@ -516,6 +516,9 @@ function getAppCode(urlOrModuleName, defaultCode)
     if(moduleMethodLower === 'index-index') return 'my';
     if(moduleMethodLower === 'search-buildindex') return 'admin';
 
+    /* GitFox 分支类型页在后台不带 repoID，在代码库设置中带 repoID。 */
+    if(vision === 'gitfox' && moduleName === 'repobranchtype' && !Number(link.params.repoID || link.params.$1)) return 'admin';
+
     if(moduleName === 'tutorial' && methodName === 'wizard')
     {
         moduleName = link.vars[0][1];

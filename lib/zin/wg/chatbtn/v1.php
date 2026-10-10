@@ -108,6 +108,10 @@ class chatBtn extends wg
 
     protected function build()
     {
+        global $config;
+
+        if($config->vision == 'gitfox') return null;
+
         return div
         (
             set::id('chat-btn-container'),

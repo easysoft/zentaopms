@@ -77,15 +77,16 @@ class userModelTest extends baseTest
      * @param  int    $maxCount
      * @param  array       $accounts
      * @param  string|null $showOutside
+     * @param  bool        $filterVision
      * @access public
      * @return void
      */
-    public function getPairsTest($params = '', $usersToAppended = '', $maxCount = 0, $accounts = array(), $showOutside = null)
+    public function getPairsTest($params = '', $usersToAppended = '', $maxCount = 0, $accounts = array(), $showOutside = null, $filterVision = true)
     {
         global $config;
         if($showOutside !== null) $config->user->showOutside = $showOutside;
 
-        $objects = $this->instance->getPairs($params, $usersToAppended, $maxCount, $accounts);
+        $objects = $this->instance->getPairs($params, $usersToAppended, $maxCount, $accounts, true, $filterVision);
         if(dao::isError())
         {
             $error = dao::getError();

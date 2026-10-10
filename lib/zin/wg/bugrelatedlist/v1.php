@@ -8,7 +8,8 @@ class bugRelatedList extends relatedList
 {
     protected static array $defineProps = array
     (
-        'bug' => '?object', // 当前Bug。
+        'bug'       => '?object', // 当前Bug。
+        'gitfox'    => '?bool'    // 是否GitFox独立版。
     );
 
     protected function created()
@@ -29,6 +30,7 @@ class bugRelatedList extends relatedList
         $linkedCommits = $this->prop('linkedCommits', data('linkCommits'));
 
         $data = array();
+        $isGitFox = $this->prop('gitfox', $config->edition == 'gitfox');
 
         /* Related bugs. */
         if($config->edition == 'open')
@@ -109,6 +111,11 @@ class bugRelatedList extends relatedList
             'props' => $canViewTask ? array('data-toggle' => 'modal', 'data-size' => 'lg') : array()
         );
 
+        /* 人工审查问题只保留 DevOps 相关内容。Keep only DevOps related items for repo issue. */
+        if($isGitFox)
+        {
+            unset($data['relatedBug'], $data['toCase'], $data['toStory'], $data['toTask']);
+        }
 
         /* Linked MR. */
         $linkMRList  = isset($bug->linkMRTitles) ? $bug->linkMRTitles :array();

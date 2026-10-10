@@ -33,6 +33,9 @@ class cronModel extends model
      */
     public function getCrons(string $params = ''): array
     {
+        /* 根据版本显示相关的定时任务。 */
+        $showCommands = zget($this->config->cron->showCommands, $this->config->edition, array());
+
         return $this->dao->select('*')->from(TABLE_CRON)
             ->where('1=1')
             ->beginIF(strpos($params, 'nostop') !== false)->andWhere('status')->ne('stop')->fi()
@@ -40,6 +43,7 @@ class cronModel extends model
             ->andWhere('command')->ne('moduleName=measurement&methodName=initCrontabQueue')
             ->andWhere('command')->ne('moduleName=measurement&methodName=execCrontabQueue')
             ->fi()
+            ->beginIF(!empty($showCommands))->andWhere('command')->in($showCommands)->fi()
             ->fetchAll('id', false);
     }
 

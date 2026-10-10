@@ -422,6 +422,13 @@ class blockZen extends block
         if(!$usageDays) $usageDays = "0 {$this->lang->day}";
         if(strpos($this->app->getClientLang(), 'zh') !== false) $usageDays = str_replace(' ', '', $usageDays);
 
+        /* GitFox独立版本不存在任务相关功能，欢迎总览区域展示代码评审相关的统计数据。 */
+        if($this->config->edition == 'gitfox' || $this->config->vision == 'gitfox')
+        {
+            $this->printGitfoxWelcomeBlock($usageDays, $welcomeType);
+            return;
+        }
+
         $yesterday = strtotime("-1 day");
         $year  = date('Y', $yesterday);
         $month = date('m', $yesterday);
@@ -540,6 +547,88 @@ class blockZen extends block
         $this->view->assignToMe     = $assignToMe;
         $this->view->reviewByMe     = $reviewByMe;
         $this->view->welcomeSummary = $welcomeSummary;
+    }
+
+    /**
+     * 打印 GitFox 版本的欢迎总览区块。
+     * Print the welcome block of the GitFox version.
+     *
+     * @param  string    $usageDays
+     * @param  string    $welcomeType
+     * @access protected
+     * @return void
+     */
+    protected function printGitfoxWelcomeBlock(string $usageDays, string $welcomeType): void
+    {
+        $statistics = $this->loadModel('my')->getMyReviewStatistics();
+        $reviewList = $this->my->getReviewingList('ppm');
+
+        $reviewByMe = array();
+        $reviewByMe['reviewByMe']      = array('number' => count($reviewList),            'href' => common::hasPriv('my', 'audit')    ? helper::createLink('my', 'audit', 'browseType=ppm') : '');
+        $reviewByMe['myCreatedReview'] = array('number' => $statistics['createdReviews'], 'href' => common::hasPriv('ppm', 'browse')  ? helper::createLink('ppm', 'browse') : '');
+        $reviewByMe['myIssue']         = array('number' => $statistics['pendingIssues'],  'href' => common::hasPriv('repo', 'review') ? helper::createLink('repo', 'review', 'repoID=0&browseType=all') . '#app=issue' : '');
+
+        $this->view->todaySummary   = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())];
+        $this->view->welcomeType    = $welcomeType;
+        $this->view->usageDays      = $usageDays;
+        $this->view->finishTask     = 0;
+        $this->view->fixBug         = 0;
+        $this->view->honorary       = '';
+        $this->view->assignToMe     = array();
+        $this->view->reviewByMe     = $reviewByMe;
+        $this->view->welcomeSummary = sprintf($this->lang->block->summary->welcome, $usageDays, '');
+    }
+
+    /**
+     * 打印待我评审区块。
+     * Print the review by me block.
+     *
+     * @param  object    $block
+     * @param  array     $params
+     * @access protected
+     * @return void
+     */
+    protected function printReviewByMeBlock(object $block, array $params = array()): void
+    {
+        $this->loadModel('ppm');
+
+        $browseType = isset($params['browseType']) ? $params['browseType'] : 'all';
+        if(!isset($this->lang->block->reviewbyme->featureBar[$browseType])) $browseType = 'all';
+
+        $count = isset($block->params->count) ? (int)$block->params->count : 20;
+        if($count <= 0) $count = 20;
+
+        $this->app->loadClass('pager', true);
+        $pager = pager::init(0, $count, 1);
+
+        $this->view->browseType = $browseType;
+        $this->view->reviews    = $this->ppm->getReviewListByAccount($browseType, $this->app->user->account, 'createdDate_desc', $pager);
+    }
+
+    /**
+     * 打印我创建的评审区块。
+     * Print the review created by me block.
+     *
+     * @param  object    $block
+     * @param  array     $params
+     * @access protected
+     * @return void
+     */
+    protected function printReviewCreatedByMeBlock(object $block, array $params = array()): void
+    {
+        $this->loadModel('ppm');
+
+        $browseType = isset($params['browseType']) ? $params['browseType'] : 'all';
+        if(!isset($this->lang->block->reviewcreatedbyme->featureBar[$browseType])) $browseType = 'all';
+
+        $count = isset($block->params->count) ? (int)$block->params->count : 20;
+        if($count <= 0) $count = 20;
+
+        $this->app->loadClass('pager', true);
+        $pager = pager::init(0, $count, 1);
+
+        $this->view->browseType = $browseType;
+        $this->view->reviews    = $this->ppm->getReviewListByCreator($browseType, $this->app->user->account, 'createdDate_desc', $pager);
     }
 
     /**
@@ -2930,6 +3019,10 @@ class blockZen extends block
         }
 
         $this->loadModel('metric');
+
+        /* GitFox独立版不存在任务、需求、Bug等功能，展示GitFox相关的度量数据。The GitFox edition displays the metrics of GitFox. */
+        if($this->config->edition == 'gitfox' || $this->config->vision == 'gitfox') return $this->printGitfoxTeamAchievementBlock($years, $months);
+
         $finishedTaskGroup = $this->metric->getResultByCodeWithArray('count_of_daily_finished_task', array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 完成任务数。
         $createdStoryGroup = $this->metric->getResultByCodeWithArray('count_of_daily_created_story', array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 创建需求数。
         $closedBugGroup    = $this->metric->getResultByCodeWithArray('count_of_daily_closed_bug',    array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 关闭Bug数。
@@ -3011,6 +3104,45 @@ class blockZen extends block
         $this->view->yesterdayCases   = $yesterdayCases;
         $this->view->consumedHours    = $consumedHours;
         $this->view->yesterdayHours   = $yesterdayHours;
+    }
+
+    /**
+     * 打印GitFox独立版的团队成就区块数据。
+     * Print the team achievement block data of the GitFox edition.
+     *
+     * @param  array  $years
+     * @param  array  $months
+     * @access protected
+     * @return void
+     */
+    protected function printGitfoxTeamAchievementBlock(array $years, array $months)
+    {
+        $metrics = array
+        (
+            'commits'        => 'count_of_daily_gitfox_commits',
+            'createdReviews' => 'count_of_daily_gitfox_created_reviews',
+            'mergedReviews'  => 'count_of_daily_gitfox_merged_reviews',
+            'resolvedIssues' => 'count_of_daily_gitfox_resolved_issues'
+        );
+
+        foreach($metrics as $name => $code)
+        {
+            $group     = $this->metric->getResultByCodeWithArray($code, array('year' => join(',', $years), 'month' => join(',', $months)), 'cron');
+            $today     = 0;
+            $yesterday = 0;
+            if($group)
+            {
+                foreach($group as $data)
+                {
+                    $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
+                    if($currentDay == date('Y-m-d'))                      $today     = $data['value'];
+                    if($currentDay == date('Y-m-d', strtotime("-1 day"))) $yesterday = $data['value'];
+                }
+            }
+
+            $this->view->$name = $today;
+            $this->view->{'yesterday' . ucfirst($name)} = $yesterday;
+        }
     }
 
     /**

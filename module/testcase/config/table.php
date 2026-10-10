@@ -132,7 +132,7 @@ $config->testcase->dtable->fieldList['stepNumber']['type']     = 'number';
 $config->testcase->dtable->fieldList['stepNumber']['group']    = 5;
 $config->testcase->dtable->fieldList['stepNumber']['sortType'] = false;
 
-if($config->edition != 'open')
+if($config->edition != 'open' && $config->edition != 'gitfox')
 {
     $app->loadLang('custom');
     $config->testcase->dtable->fieldList['relatedObject']['name']        = 'relatedObject';

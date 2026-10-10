@@ -5,6 +5,7 @@ $lang->pipeline->createBtn     = 'Create Pipeline';
 $lang->pipeline->importBtn     = 'Import Pipeline';
 $lang->pipeline->importAction  = 'Import Pipeline';
 $lang->pipeline->cancelBtn     = 'Cancel';
+$lang->pipeline->cancel        = 'Cancel Pipeline';
 $lang->pipeline->pipelineName  = 'Pipeline Name';
 $lang->pipeline->noProvider    = 'No available server';
 $lang->pipeline->importFailed  = 'Import failed';
@@ -17,6 +18,8 @@ $lang->pipeline->dirChange     = 'Directory Changed';
 $lang->pipeline->buildTag      = 'Build Tag';
 $lang->pipeline->execSuccess   = 'Pipeline execution started';
 $lang->pipeline->execFail      = 'Pipeline execution failed';
+$lang->pipeline->cancelSuccess = 'Pipeline execution canceled';
+$lang->pipeline->cancelFail    = 'Failed to cancel pipeline execution';
 $lang->pipeline->trigger       = 'Trigger';
 $lang->pipeline->autoRun       = 'Is it triggered';
 $lang->pipeline->addTrigger    = 'Add Trigger';
@@ -26,10 +29,12 @@ $lang->pipeline->execution     = 'Execution History';
 $lang->pipeline->log           = 'Execution Log';
 $lang->pipeline->arrange       = 'Arrange Pipeline';
 $lang->pipeline->execView      = 'Execution Details';
+$lang->pipeline->allSpace      = 'All Spaces';
 
 $lang->pipeline->confirmDelete      = 'Do you want to delete this pipeline?';
 $lang->pipeline->confirmExec        = 'Are you sure you want to execute this Jenkins pipeline?';
 $lang->pipeline->confirmExecPending = 'There is a job pending execution. Are you sure you want to continue?';
+$lang->pipeline->confirmCancelExec  = 'Do you want to cancel this pipeline execution?';
 
 $lang->pipeline->browseAction    = 'Pipeline List';
 $lang->pipeline->executionAction = 'Pipeline Execution History';
@@ -175,6 +180,7 @@ $lang->pipeline->execStatusList['created']     = 'Created';
 $lang->pipeline->execStatusList['create_fail'] = 'Create Failed';
 $lang->pipeline->execStatusList['timeout']     = 'Timeout';
 $lang->pipeline->execStatusList['canceled']    = 'Canceled';
+$lang->pipeline->execStatusList['killed']      = 'Canceled';
 
 $lang->pipeline->triggerTypeList = array();
 $lang->pipeline->triggerTypeList['manual']                 = 'Manual trigger';
@@ -297,6 +303,8 @@ $lang->pipeline->flowApp->labels['execution-status-error']    = 'Error';
 $lang->pipeline->flowApp->labels['execution-status-skipped']  = 'Skipped';
 $lang->pipeline->flowApp->labels['execution-status-blocked']  = 'Blocked';
 $lang->pipeline->flowApp->labels['execution-status-declined'] = 'Declined';
+$lang->pipeline->flowApp->labels['execution-status-killed']   = 'Canceled';
+$lang->pipeline->flowApp->labels['execution-status-canceled'] = 'Canceled';
 $lang->pipeline->flowApp->labels['view-error']                = 'View Error';
 
 $lang->pipeline->flowApp->labels['event-branch_created']         = 'Create Branch';

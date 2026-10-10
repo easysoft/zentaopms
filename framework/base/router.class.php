@@ -992,7 +992,7 @@ class baseRouter
         }
 
         [$defaultVision] = explode(',', trim((string) $this->config->visions, ','));
-        if($defaultVision != 'lite' && $defaultVision != 'or' && $defaultVision != 'devops') $defaultVision = 'rnd';
+        if($defaultVision != 'lite' && $defaultVision != 'or' && $defaultVision != 'gitfox') $defaultVision = 'rnd';
         if($vision and !str_contains((string) $this->config->visions, ",{$vision},")) $vision = $defaultVision;
 
         $vision = $vision ?: $defaultVision;
