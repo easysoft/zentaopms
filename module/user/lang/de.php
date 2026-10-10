@@ -253,6 +253,7 @@ $lang->user->error->mail           = 'ID %s，bitte geben Sie eine gültige Emai
 $lang->user->error->reserved       = 'ID %s，Konto ist reserviert.';
 $lang->user->error->weakPassword   = 'ID %s，the password strength is less than the system setting.';
 $lang->user->error->dangerPassword = "ID %s，Passwords cannot be used with [%s] these commonly used if-passwords.";
+$lang->user->errorEmptyAccount     = "Benutzername darf nicht leer sein, bitte vor dem Speichern eingeben.";
 
 $lang->user->error->url              = "Invalid address. Please contact your ZenTao Admin.";
 $lang->user->error->verify           = "Wrong account or password.";

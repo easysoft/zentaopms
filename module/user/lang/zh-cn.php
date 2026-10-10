@@ -253,6 +253,7 @@ $lang->user->error->mail           = '地址不正确';
 $lang->user->error->reserved       = '用户名已被系统预留';
 $lang->user->error->weakPassword   = '密码强度小于系统设定。';
 $lang->user->error->dangerPassword = "密码不能使用【%s】这些常用弱口令。";
+$lang->user->errorEmptyAccount     = "用户名不能为空，请输入后再保存";
 
 $lang->user->error->url              = "网址不正确，请联系管理员";
 $lang->user->error->verify           = "用户名或密码错误";
