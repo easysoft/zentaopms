@@ -63,6 +63,18 @@ class baseEntry
     public $requestBody;
 
     /**
+     * 敏感字段关键字列表。filterFields() 不输出任何命中该列表的字段。
+     * Sensitive field keywords. Fields matching them will not be output by filterFields().
+     *
+     * 按「字段名包含关键字、不区分大小写」匹配，用于兜底防止口令、令牌等凭据列被
+     * 客户端拼接进字段白名单后导出（例如 /v1/users?fileds=password）。子类可覆盖。
+     *
+     * @var array|string
+     * @access public
+     */
+    public $sensitiveFields = array('password', 'passwd', 'pwd', 'token', 'secret', 'privatekey', 'apikey', 'authkey', 'sessionkey', 'credential');
+
+    /**
      * 构造方法。
      * The construct function.
      *
@@ -531,11 +543,36 @@ class baseEntry
         {
             $field = trim((string) $field);
             if(empty($field)) continue;
+            if($this->isSensitiveField($field)) continue;
             if(!isset($object->$field)) continue;
             $filtered->$field = $object->$field;
         }
 
         return $filtered;
+    }
+
+    /**
+     * 判断字段是否为敏感字段。
+     * Check whether the field is a sensitive field.
+     *
+     * @param  string $field
+     * @access public
+     * @return bool
+     */
+    public function isSensitiveField(string $field): bool
+    {
+        $field = strtolower(trim($field));
+        if($field === '') return false;
+
+        $sensitiveFields = is_string($this->sensitiveFields) ? explode(',', $this->sensitiveFields) : (array)$this->sensitiveFields;
+        foreach($sensitiveFields as $sensitive)
+        {
+            $sensitive = strtolower(trim((string)$sensitive));
+            if($sensitive === '') continue;
+            if(strpos($field, $sensitive) !== false) return true;
+        }
+
+        return false;
     }
 
     /**
