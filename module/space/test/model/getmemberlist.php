@@ -12,6 +12,9 @@ cid=0
 - 获取空间1中的admin成员属性account @admin
 - 获取空间2的成员数量 @1
 - 验证空间1中admin的角色属性role @manager
+- 排除代码库成员后空间数量 @2
+- 排除代码库成员后空间1的成员数量 @2
+- 排除代码库成员后空间2的成员数量 @1
 
 */
 
@@ -68,3 +71,6 @@ r($spaceTester->getMemberListBySpaceCountTest(1))   && p() && e('3');        // 
 r($spaceTester->getMemberListByAccountTest(1, 'admin')) && p('account') && e('admin');   // 获取空间1中的admin成员
 r($spaceTester->getMemberListBySpaceCountTest(2))   && p() && e('1');        // 获取空间2的成员数量
 r($spaceTester->getMemberListByAccountTest(1, 'admin')) && p('role') && e('manager');    // 验证空间1中admin的角色
+r($spaceTester->getMemberListCountTest(false))           && p() && e('2');   // 排除代码库成员后空间数量
+r($spaceTester->getMemberListBySpaceCountTest(1, false)) && p() && e('2');   // 排除代码库成员后空间1的成员数量
+r($spaceTester->getMemberListBySpaceCountTest(2, false)) && p() && e('1');   // 排除代码库成员后空间2的成员数量

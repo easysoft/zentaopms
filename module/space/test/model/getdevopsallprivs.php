@@ -35,7 +35,7 @@ r($spaceTester->hasDevOpsModulePrivTest('space')) && p() && e('0');            /
 
 /* GitFox独立版的导航模块各自成组，空间权限清单需要按独立版的一级导航范围收集。 */
 $config->vision = 'gitfox';
-include dirname(__FILE__, 5) . '/extension/gitfox/common/ext/lang/gitfoxmenu.php';
+include dirname(__FILE__, 5) . '/extension/gitfox/common/ext/lang/zh-cn/gitfoxcommon.php';
 
 r($spaceTester->getDevOpsAllPrivsTest()) && p('repo:edit') && e('1');          // 独立版空间权限包含repo编辑权限
 r($spaceTester->getDevOpsAllPrivsTest()) && p('repo:delete') && e('1');        // 独立版空间权限包含repo删除权限

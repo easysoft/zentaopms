@@ -522,7 +522,11 @@ class testcaseModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
             ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
-            ->beginIF(strlen(trim($search)))->andWhere('title')->like('%' . $search . '%')->fi()
+            ->beginIF(strlen(trim($search)))
+            ->andWhere('title', true)->like('%' . $search . '%')
+            ->orWhere('id')->like('%' . $search . '%')
+            ->markRight(1)
+            ->fi()
             ->orderBy('id_desc')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchPairs();

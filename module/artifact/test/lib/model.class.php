@@ -371,4 +371,28 @@ class artifactModelTest extends baseTest
         }
     }
 
+    /**
+     * Test uploadArtifact method and return the field of the first uploaded record.
+     * 测试 uploadArtifact 方法并返回第一条上传记录的字段值。
+     *
+     * @param  int    $artifactLibID
+     * @param  array  $file
+     * @param  string $path
+     * @param  string $overwrite
+     * @param  string $field
+     * @access public
+     * @return string
+     */
+    public function uploadArtifactFieldTest(int $artifactLibID, array $file, string $path = '', string $overwrite = '', string $field = ''): string
+    {
+        $result = $this->uploadArtifactTest($artifactLibID, $file, $path, $overwrite);
+        if(!is_array($result) || empty($result)) return '0';
+
+        $record = reset($result);
+        if(isset($record->$field)) return (string)$record->$field;
+        if(isset($record->Object) && isset($record->Object->$field)) return (string)$record->Object->$field;
+
+        return '0';
+    }
+
 }

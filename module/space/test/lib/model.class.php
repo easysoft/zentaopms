@@ -317,12 +317,13 @@ class spaceModelTest extends baseTest
     /**
      * Test getMemberList method.
      *
+     * @param  bool $includeRepoUsers
      * @access public
      * @return array
      */
-    public function getMemberListTest(): array
+    public function getMemberListTest(bool $includeRepoUsers = true): array
     {
-        $members = $this->instance->getMemberList();
+        $members = $this->instance->getMemberList($includeRepoUsers);
 
         if(dao::isError()) return dao::getError();
         return $members;
@@ -331,12 +332,13 @@ class spaceModelTest extends baseTest
     /**
      * Test getMemberList method count.
      *
+     * @param  bool $includeRepoUsers
      * @access public
      * @return int|array
      */
-    public function getMemberListCountTest(): int|array
+    public function getMemberListCountTest(bool $includeRepoUsers = true): int|array
     {
-        $members = $this->instance->getMemberList();
+        $members = $this->instance->getMemberList($includeRepoUsers);
 
         if(dao::isError()) return dao::getError();
         return count($members);
@@ -345,13 +347,14 @@ class spaceModelTest extends baseTest
     /**
      * Test getMemberList method by space ID.
      *
-     * @param  int $spaceID
+     * @param  int  $spaceID
+     * @param  bool $includeRepoUsers
      * @access public
      * @return array
      */
-    public function getMemberListBySpaceTest(int $spaceID): array
+    public function getMemberListBySpaceTest(int $spaceID, bool $includeRepoUsers = true): array
     {
-        $members = $this->instance->getMemberList();
+        $members = $this->instance->getMemberList($includeRepoUsers);
 
         if(dao::isError()) return dao::getError();
         return zget($members, $spaceID, array());
@@ -360,13 +363,14 @@ class spaceModelTest extends baseTest
     /**
      * Test getMemberList method count by space ID.
      *
-     * @param  int $spaceID
+     * @param  int  $spaceID
+     * @param  bool $includeRepoUsers
      * @access public
      * @return int|array
      */
-    public function getMemberListBySpaceCountTest(int $spaceID): int|array
+    public function getMemberListBySpaceCountTest(int $spaceID, bool $includeRepoUsers = true): int|array
     {
-        $members = $this->instance->getMemberList();
+        $members = $this->instance->getMemberList($includeRepoUsers);
 
         if(dao::isError()) return dao::getError();
         return count(zget($members, $spaceID, array()));
@@ -377,12 +381,13 @@ class spaceModelTest extends baseTest
      *
      * @param  int    $spaceID
      * @param  string $account
+     * @param  bool   $includeRepoUsers
      * @access public
      * @return object|bool|array
      */
-    public function getMemberListByAccountTest(int $spaceID, string $account): object|bool|array
+    public function getMemberListByAccountTest(int $spaceID, string $account, bool $includeRepoUsers = true): object|bool|array
     {
-        $members = $this->instance->getMemberList();
+        $members = $this->instance->getMemberList($includeRepoUsers);
 
         if(dao::isError()) return dao::getError();
         return zget(zget($members, $spaceID, array()), $account, false);
@@ -1055,6 +1060,29 @@ class spaceModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
         return $privs;
+    }
+
+    /**
+     * 测试获取空间导航分组。
+     * Test getSpaceNavGroups method.
+     *
+     * @param  string $vision
+     * @access public
+     * @return string|array
+     */
+    public function getSpaceNavGroupsTest(string $vision = '')
+    {
+        global $config;
+
+        $oldVision = $config->vision;
+        $config->vision = $vision;
+
+        $groups = $this->invokeArgs('getSpaceNavGroups');
+
+        $config->vision = $oldVision;
+
+        if(dao::isError()) return dao::getError();
+        return implode(',', $groups);
     }
 
     /**

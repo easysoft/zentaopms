@@ -4,7 +4,7 @@ $routes = array();
 $routes['/workflowgroups'] = array('redirect' => '/workflowgroups/project', 'response' => 'groups(array),pager');
 
 $routes['/workflows'] = array(
-    'get'  => array('redirect' => '/workflows/browseFlow', 'response' => 'flows(array),pager'), 'search' => array('enabled' => true, 'searchModule' => 'workflow', 'querySessionKey' => 'workflowQuery'),
+    'get'  => array('redirect' => '/workflows/browseFlow', 'response' => 'flows(array),pager', 'search' => array('enabled' => true, 'searchModule' => 'workflow', 'querySessionKey' => 'workflow')),
     'post' => array('redirect' => '/workflows/create?type=flow', 'data' => 'type=flow')
 );
 $routes['/workflows/:module/tables'] = array(
@@ -104,9 +104,15 @@ $routes['/projects/:projectID/stories']     = array(
     'get' => array('redirect' => '/projectstories/story?projectID=:projectID', 'response' => 'stories(array),pager', 'search' => array('enabled' => true, 'searchModule' => 'projectstory', 'querySessionKey' => 'projectstory')),
     'post' => array('redirect' => '/story/create?productID=0&branch=0&objectID=:projectID', 'data' => 'project=:projectID')
 );
-$routes['/projects/:projectID/stories/link']     = array('post' => array('redirect' => '/execution/linkStory?objectID=:projectID', 'rawModule' => 'projectstory', 'response' => '*'));
+$routes['/projects/:projectID/stories/link']     = array(
+    'get'  => array('redirect' => '/execution/linkStory?objectID=:projectID', 'rawModule' => 'projectstory', 'response' => 'allStories(array)|stories,pager,storyType'),
+    'post' => array('redirect' => '/execution/linkStory?objectID=:projectID', 'rawModule' => 'projectstory', 'response' => '*')
+);
 $routes['/executions/:executionID/stories']      = array('redirect' => '/executions/story?executionID=:executionID', 'search' => array('enabled' => true, 'searchModule' => 'executionStory', 'querySessionKey' => 'executionStory'));
-$routes['/executions/:executionID/stories/link'] = array('post' => array('redirect' => '/execution/linkStory?objectID=:executionID', 'rawModule' => 'execution', 'response' => '*'));
+$routes['/executions/:executionID/stories/link'] = array(
+    'get'  => array('redirect' => '/execution/linkStory?objectID=:executionID', 'rawModule' => 'execution', 'response' => 'allStories(array)|stories,pager,storyType'),
+    'post' => array('redirect' => '/execution/linkStory?objectID=:executionID', 'rawModule' => 'execution', 'response' => '*')
+);
 $routes['/stories/:storyID']                     = array('response' => 'story,actions(array)');
 $routes['/storygrades']                          = array('redirect' => '/story/ajaxGetGradeList', 'response' => 'grades(array)');
 
@@ -206,14 +212,34 @@ $routes['/projects/:projectID/issues']     = array('redirect' => '/issues?object
 $routes['/executions/:executionID/issues'] = array('redirect' => '/issues?objectID=:executionID&from=execution', 'search' => array('enabled' => true));
 $routes['/issues/:issueID']                = array('response' => 'issue,actions(array)');
 
-$routes['/projects/:projectID/baselines'] = array('redirect' => '/cm/browse?projectID=:projectID', 'response' => 'baselines(array),pager');
-$routes['/baselines/:baselineID']         = array('redirect' => '/cm/view?baselineID=:baselineID', 'response' => 'baseline,actions(array),deliverables(array)');
+$routes['/projects/:projectID/baselines'] = array(
+    'get'  => array('redirect' => '/cm/browse?projectID=:projectID', 'response' => 'baselines(array),pager'),
+    'post' => array('redirect' => '/cm/create?projectID=:projectID', 'response' => '*')
+);
+$routes['/baselines/:baselineID']         = array(
+    'get'    => array('redirect' => '/cm/view?baselineID=:baselineID', 'response' => 'baseline,actions(array),deliverables(array)'),
+    'put'    => array('redirect' => '/cm/edit?baselineID=:baselineID', 'response' => '*'),
+    'delete' => array('redirect' => '/cm/delete?baselineID=:baselineID', 'response' => '*')
+);
 
-$routes['/projects/:projectID/deliverables'] = array('redirect' => '/projects/deliverable?projectID=:projectID', 'response' => 'deliverables(array),pager');
-$routes['/deliverables/:deliverableID']      = array('redirect' => '/projects/viewDeliverable?deliverableID=:deliverableID', 'response' => 'deliverable,review,actions(array),doc,relatedObjects(array)');
+$routes['/projects/:projectID/deliverables'] = array(
+    'get'  => array('redirect' => '/projects/deliverable?projectID=:projectID', 'response' => 'deliverables(array),pager'),
+    'post' => array('redirect' => '/project/createDeliverable?projectID=:projectID', 'response' => '*')
+);
+$routes['/deliverables/:deliverableID']      = array(
+    'get'    => array('redirect' => '/projects/viewDeliverable?deliverableID=:deliverableID', 'response' => 'deliverable,review,actions(array),doc,relatedObjects(array)'),
+    'delete' => array('redirect' => '/project/deleteDeliverable?deliverableID=:deliverableID', 'response' => '*')
+);
 
-$routes['/projects/:projectID/changes'] = array('redirect' => '/projectchanges/browse?projectID=:projectID', 'response' => 'projectchanges(array),pager');
-$routes['/changes/:changeID']           = array('redirect' => '/projectchanges/view?projectchangeID=:changeID', 'response' => 'projectchange,actions(array),deliverables(array)');
+$routes['/projects/:projectID/changes'] = array(
+    'get'  => array('redirect' => '/projectchanges/browse?projectID=:projectID', 'response' => 'projectchanges(array),pager'),
+    'post' => array('redirect' => '/projectchanges/create?projectID=:projectID', 'response' => '*')
+);
+$routes['/changes/:changeID']           = array(
+    'get'    => array('redirect' => '/projectchanges/view?projectchangeID=:changeID', 'response' => 'projectchange,actions(array),deliverables(array)'),
+    'put'    => array('redirect' => '/projectchanges/edit?projectchangeID=:changeID', 'response' => '*'),
+    'delete' => array('redirect' => '/projectchanges/delete?projectchangeID=:changeID', 'response' => '*')
+);
 
 $routes['/projects/:projectID/processes'] = array(
     'get'  => array('redirect' => '/pssp/browse?projectID=:projectID', 'response' => 'processList(array)'),
@@ -224,8 +250,15 @@ $routes['/executions/:executionID/processes'] = array(
     'post' => array('redirect' => '/pssp/update?projectID=:executionID', 'response' => '*')
 );
 
-$routes['/weeklies']           = array('post' => array('response' => '*'));
-$routes['/weeklies/:reportID'] = array('put' => array('response' => '*'));
+$routes['/weeklies']           = array(
+    'get'  => array('response' => 'reports(array),pager'),
+    'post' => array('response' => '*')
+);
+$routes['/weeklies/:reportID'] = array(
+    'get'    => array('response' => 'report'),
+    'put'    => array('response' => '*'),
+    'delete' => array('response' => '*')
+);
 
 $routes['/risks']                         = array('get' => array('response' => 'risks(array),pager', 'search' => array('enabled' => true)), 'post' => array('response' => '*'));
 $routes['/projects/:projectID/risks']     = array(
@@ -265,9 +298,16 @@ $routes['/auditplans/:auditplanID']              = array(
     'delete' => array('response' => '*')
 );
 $routes['/auditplans/:auditplanID/check']        = array('post' => array('method' => 'check', 'response' => '*'));
-$routes['/projects/:projectID/ncs']              = array('post' => array('redirect' => '/nc/create?projectID=:projectID', 'response' => '*'));
-$routes['/executions/:executionID/ncs']          = array('post' => array('redirect' => '/nc/create?projectID=:executionID&from=execution', 'data' => 'execution=:executionID', 'response' => '*'));
+$routes['/projects/:projectID/ncs']              = array(
+    'get'  => array('redirect' => '/nc/browse?objectID=:projectID&from=project', 'response' => 'ncs(array),pager'),
+    'post' => array('redirect' => '/nc/create?projectID=:projectID', 'response' => '*')
+);
+$routes['/executions/:executionID/ncs']          = array(
+    'get'  => array('redirect' => '/nc/browse?objectID=:executionID&from=execution', 'response' => 'ncs(array),pager'),
+    'post' => array('redirect' => '/nc/create?projectID=:executionID&from=execution', 'data' => 'execution=:executionID', 'response' => '*')
+);
 $routes['/ncs/:ncID']                            = array(
+    'get'    => array('redirect' => '/nc/view?ncID=:ncID', 'response' => 'nc,actions(array)'),
     'put'    => array('redirect' => '/nc/:ncID', 'response' => '*'),
     'delete' => array('redirect' => '/nc/:ncID', 'response' => '*')
 );
@@ -290,10 +330,10 @@ $routes['/systems']                     = array('response' => 'appList(array)|sy
 $routes['/products/:productID/systems'] = array('redirect' => '/systems?productID=:productID');
 $routes['/systems/:systemID']           = array('response' => 'system,actions(array)');
 
-$routes['/custom/relations/:objectType/:objectID']                                                   = array('get' => array('redirect' => '/custom/showRelationGraph?objectID=:objectID&objectType=:objectType', 'response' => 'relations,graphData,usersAvatar,objectID,objectType'));
-$routes['/custom/relations/:objectType/:objectID/candidates/:relatedObjectType']                     = array('get' => array('redirect' => '/custom/relateObject?objectID=:objectID&objectType=:objectType&relatedObjectType=:relatedObjectType', 'response' => 'objects(array),cols,relationPairs,objectTypes,canSearch,users,objectID,objectType,relatedObjectType,browseType,orderBy,pager'));
-$routes['/custom/relations/:objectType/:objectID/:relatedObjectType']                                = array('post' => array('redirect' => '/custom/relateObject?objectID=:objectID&objectType=:objectType&relatedObjectType=:relatedObjectType', 'response' => '*'));
-$routes['/custom/relations/:objectType/:objectID/:relatedObjectType/:relatedObjectID/:relationName'] = array('delete' => array('redirect' => '/custom/removeObjects?objectID=:objectID&objectType=:objectType&relationName=:relationName&relatedObjectID=:relatedObjectID&relatedObjectType=:relatedObjectType', 'response' => '*'));
+$routes['/relations/:objectType/:objectID']                                                   = array('get' => array('redirect' => '/custom/showRelationGraph?objectID=:objectID&objectType=:objectType', 'response' => 'relations,graphData,usersAvatar,objectID,objectType'));
+$routes['/relations/:objectType/:objectID/candidates/:relatedObjectType']                     = array('get' => array('redirect' => '/custom/relateObject?objectID=:objectID&objectType=:objectType&relatedObjectType=:relatedObjectType', 'response' => 'objects(array),cols,relationPairs,objectTypes,canSearch,users,objectID,objectType,relatedObjectType,browseType,orderBy,pager'));
+$routes['/relations/:objectType/:objectID/:relatedObjectType']                                = array('post' => array('redirect' => '/custom/relateObject?objectID=:objectID&objectType=:objectType&relatedObjectType=:relatedObjectType', 'response' => '*'));
+$routes['/relations/:objectType/:objectID/:relatedObjectType/:relatedObjectID/:relationName'] = array('delete' => array('redirect' => '/custom/removeObjects?objectID=:objectID&objectType=:objectType&relationName=:relationName&relatedObjectID=:relatedObjectID&relatedObjectType=:relatedObjectType', 'response' => '*'));
 
 $routes['/todos/my']      = array('redirect' => '/my/todo', 'response' => 'todos(array),pager');
 $routes['/todos/:todoID'] = array('response' => 'todo');
@@ -460,11 +500,11 @@ $routes['/:type/modules/:moduleID'] = array(
 
 /* AI 知识库接口，由商业扩展提供业务实现。AI knowledge APIs provided by the business extension. */
 $knowledgeRoutes = array(
-    '/ai/knowledgelibs'                  => '/ai/ajaxGetKnowledgeLibList',
-    '/ai/knowledgelibs/:libID/knowledges'  => '/ai/ajaxGetKnowledgeItemList',
-    '/ai/knowledges/search'              => '/ai/ajaxSearchKnowledgesByKeyword',
-    '/ai/knowledges/embeddingssearch'    => '/ai/ajaxSearchKnowledgeChunks',
-    '/ai/knowledges/:knowledgeID'        => '/ai/ajaxGetKnowledgeItem'
+    '/ai/knowledgelibs'                   => '/ai/ajaxGetKnowledgeLibList',
+    '/ai/knowledgelibs/:libID/knowledges' => '/ai/ajaxGetKnowledgeItemList',
+    '/ai/knowledges/search'               => '/ai/ajaxSearchKnowledgesByKeyword',
+    '/ai/knowledges/embeddingssearch'     => '/ai/ajaxSearchKnowledgeChunks',
+    '/ai/knowledges/:knowledgeID'         => '/ai/ajaxGetKnowledgeItem'
 );
 foreach($knowledgeRoutes as $knowledgePath => $knowledgeRedirect)
 {

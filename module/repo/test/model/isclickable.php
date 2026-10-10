@@ -59,7 +59,7 @@ r($repoTest->isClickableTest($repo5, 'scanIssue'))       && p() && e('1');
 
 /* GitFox独立版下repo/codescan的navGroup不再是devops，空间权限清单仍需包含它们，否则代码库列表的行内按钮会全部置灰。 */
 $config->vision = 'gitfox';
-include dirname(__FILE__, 5) . '/extension/gitfox/common/ext/lang/gitfoxmenu.php';
+include dirname(__FILE__, 5) . '/extension/gitfox/common/ext/lang/zh-cn/gitfoxcommon.php';
 
 $spaceModel = $app->loadTarget('space', '', 'model');
 repoModel::$maintainSpacePrivs = array(1 => $spaceModel->getDevOpsAllPrivs());

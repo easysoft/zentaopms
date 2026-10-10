@@ -67,9 +67,9 @@ class ppmModelTest extends ppmBaseTest
         return $model->moduleName;
     }
 
-    public function getListTest(string $mode = 'all', string $param = 'all', string $orderBy = 'id_desc', array $filterProjects = array(), int $repoID = 0, int $objectID = 0, ?object $pager = null, int $spaceID = 0)
+    public function getListTest(string $mode = 'all', string $param = 'all', string $orderBy = 'id_desc', array $filterProjects = array(), int $repoID = 0, int $objectID = 0, ?object $pager = null, int $spaceID = 0, ?array $repoIDList = null)
     {
-        return $this->invokeMethod('getList', array($mode, $param, $orderBy, $filterProjects, $repoID, $objectID, $pager, $spaceID));
+        return $this->invokeMethod('getList', array($mode, $param, $orderBy, $filterProjects, $repoID, $objectID, $pager, $spaceID, $repoIDList));
     }
 
     public function getReviewListByAccountTest(string $browseType = 'all', string $account = '', string $orderBy = 'createdDate_desc', ?object $pager = null)

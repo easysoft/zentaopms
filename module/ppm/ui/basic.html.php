@@ -75,7 +75,6 @@ foreach($pipelines as $pipeline)
 $checkAI     = true;
 $checkScan   = $scanSevereIssue <= $config->ppm->scanSevereIssue && $scanOrdinaryIssue <= $config->ppm->scanOrdinaryIssue && $scanPassRate >= $config->ppm->scanPassRate;
 $hasConflict = !empty($checkResult->conflictFiles); // 是否有代码冲突
-$checkResult->conflictFiles[] = '/app/public/test/sae2sd2/test2.php';
 
 $conflictFiles = array();
 if($hasConflict)

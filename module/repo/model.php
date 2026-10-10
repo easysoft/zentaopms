@@ -3604,10 +3604,18 @@ class repoModel extends model
             {
                 $path = parse_url($provider->url);
                 if(empty($path)) return false;
-                $params->provider->host     = $path['scheme'] . '://' . $path['host'];
+                $params->provider->host = $path['scheme'] . '://' . $path['host'];
+                if(isset($path['port'])) $params->provider->host .= ':' . $path['port'];
                 $params->provider->password = $formData->password;
                 $params->provider->username = $formData->account;
-                $params->provider->slug     = $formData->slug ? $path['path'] . '/' . ltrim($formData->slug, '/') : $path['path'];
+                if(isset($path['path']))
+                {
+                    $params->provider->slug = $formData->slug ? $path['path'] . '/' . ltrim($formData->slug, '/') : $path['path'];
+                }
+                else
+                {
+                    $params->provider->slug = $formData->slug;
+                }
             }
         }
         else
