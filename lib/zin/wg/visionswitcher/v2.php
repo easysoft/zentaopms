@@ -112,7 +112,7 @@ class visionSwitcher extends wg
             if(hasPriv('execution', 'task')) $spaces[] = ['key' => 'execution', 'icon' => 'run', 'text' => $lang->workspaceList['execution'], 'fetcher' => createLink('execution', 'ajaxGetDropMenu', 'objectID=0')];
         }
 
-        return array
+        return $currentVision == 'gitfox' ? null : array
         (
             dropdown
             (

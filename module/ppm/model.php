@@ -32,17 +32,18 @@ class ppmModel extends model
      * @param  int    $repoID
      * @param  int    $objectID
      * @param  object $pager
+     * @param  int    $spaceID
      * @access public
      * @return array
      */
-    public function getList(string $mode = 'all', string $param = 'all', string $orderBy = 'id_desc', array $filterProjects = array(), int $repoID = 0, int $objectID = 0, ?object $pager = null): array
+    public function getList(string $mode = 'all', string $param = 'all', string $orderBy = 'id_desc', array $filterProjects = array(), int $repoID = 0, int $objectID = 0, ?object $pager = null, int $spaceID = 0): array
     {
         $filterProjectSql = '';
         if(!$this->app->user->admin && !empty($filterProjects))
         {
             foreach($filterProjects as $repoID)
             {
-                $filterProjectSql .= "(sourceRepoID = '{$repoID}') OR ";
+                $filterProjectSql .= "(t1.`sourceRepoID` = '{$repoID}') OR ";
             }
 
             if($filterProjectSql) $filterProjectSql = '(' . substr($filterProjectSql, 0, -3) . ')'; // Remove last or.
@@ -55,14 +56,16 @@ class ppmModel extends model
             if(!empty($executionIdList)) $objectID = array_merge(array_keys($executionIdList), array($objectID));
         }
 
-        return $this->dao->select('*')->from(TABLE_PPM)
+        return $this->dao->select('t1.*, t2.`spaceID`')->from(TABLE_PPM)->alias('t1')
+            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repoID = t2.id')
             ->where('1=1')
-            ->beginIF($mode == 'status' && $param != 'all')->andWhere('status')->eq($param)->fi()
-            ->beginIF($mode == 'creator' && $param != 'all')->andWhere('`createdBy`')->eq($param)->fi()
+            ->beginIF($mode == 'status' && $param != 'all')->andWhere('t1.`status`')->eq($param)->fi()
+            ->beginIF($mode == 'creator' && $param != 'all')->andWhere('t1.`createdBy`')->eq($param)->fi()
             ->beginIF($filterProjectSql)->andWhere($filterProjectSql)->fi()
-            ->beginIF($repoID)->andWhere('`repoID`')->eq($repoID)->fi()
-            ->beginIF($objectID)->andWhere('`executionID`')->in($objectID)->fi()
-            ->beginIF(!empty($repoPairs))->andWhere('`repoID`')->in(array_keys($repoPairs))->fi()
+            ->beginIF($repoID)->andWhere('t1.`repoID`')->eq($repoID)->fi()
+            ->beginIF($objectID)->andWhere('t1.`executionID`')->in($objectID)->fi()
+            ->beginIF(!empty($repoPairs))->andWhere('t1.`repoID`')->in(array_keys($repoPairs))->fi()
+            ->beginIF($spaceID)->andWhere('t2.`spaceID`')->eq($spaceID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -970,6 +973,82 @@ class ppmModel extends model
             $reviewResults[$ppmID]['reviewers'] = zget($reviewerInfo, 'reviewers', array());
         }
         return $reviewResults;
+    }
+
+    /**
+     * 获取指派给指定用户的评审请求。
+     * Get the review requests assigned to the given user.
+     *
+     * @param  string    $browseType
+     * @param  string    $account
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access public
+     * @return array
+     */
+    public function getReviewListByAccount(string $browseType = 'all', string $account = '', string $orderBy = 'createdDate_desc', ?object $pager = null): array
+    {
+        if(!$account) $account = $this->app->user->account;
+
+        $reviews = $this->dao->select('t1.*, t2.`decision`')->from(TABLE_PPM)->alias('t1')
+            ->leftJoin(TABLE_PPMREVIEWERS)->alias('t2')->on("t1.`id` = t2.`requestID` AND t2.`account` = '{$account}'")
+            ->where('t1.`deleted`')->eq('0')
+            /* 待我评审：评审人表中为待评审，或者当前节点评审人包含我且审批未通过。 */
+            ->beginIF($browseType == 'pending')
+            ->andWhere('t1.`status`')->ne('closed')
+            ->andWhere('t1.`reviewStatus`')->ne('pass')
+            ->andWhere('((t2.`id`')->gt(0)->andWhere('t2.`decision`')->eq('pending')->markRight(1)
+            ->orWhere("FIND_IN_SET('{$account}', t1.`reviewers`)")->markRight(1)
+            ->fi()
+            /* 我已评审：评审人表中已不是待评审。 */
+            ->beginIF($browseType == 'reviewed')
+            ->andWhere('t2.`id`')->gt(0)
+            ->andWhere('t2.`decision`')->ne('pending')
+            ->andWhere('t2.`decision`')->ne('')
+            ->fi()
+            /* 全部：与我相关的评审请求，包含只在当前节点评审人中的请求。 */
+            ->beginIF($browseType == 'all')
+            ->andWhere('(t2.`id`')->gt(0)->orWhere("FIND_IN_SET('{$account}', t1.`reviewers`)")->markRight(1)
+            ->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
+        if(empty($reviews)) return array();
+
+        foreach($reviews as $review) $review->type = !empty($review->flow) ? 'pr' : 'mr';
+        return $reviews;
+    }
+
+    /**
+     * 获取指定用户发起的评审请求。
+     * Get the review requests created by the given user.
+     *
+     * @param  string    $browseType
+     * @param  string    $account
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access public
+     * @return array
+     */
+    public function getReviewListByCreator(string $browseType = 'all', string $account = '', string $orderBy = 'createdDate_desc', ?object $pager = null): array
+    {
+        if(!$account) $account = $this->app->user->account;
+        if(!in_array($browseType, array('all', 'opened', 'merged', 'closed'))) $browseType = 'all';
+
+        $reviews = $this->dao->select('t1.*')->from(TABLE_PPM)->alias('t1')
+            ->where('t1.`deleted`')->eq('0')
+            ->andWhere('t1.`createdBy`')->eq($account)
+            /* 我创建的评审：全部展示，或者按照评审请求的状态筛选。 */
+            ->beginIF($browseType != 'all')->andWhere('t1.`status`')->eq($browseType)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
+        if(empty($reviews)) return array();
+
+        foreach($reviews as $review) $review->type = !empty($review->flow) ? 'pr' : 'mr';
+        return $reviews;
     }
 
     /**

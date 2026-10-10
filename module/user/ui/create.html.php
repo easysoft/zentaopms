@@ -118,7 +118,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::className('flex items-center ' . (count($visions) > 1 ? '' : 'hide')),
+            set::className('flex items-center ' . (count($visions) > 1 && $config->edition != 'gitfox' ? '' : 'hidden')),
             set::label($lang->user->visions),
             set::required(true),
             checkList

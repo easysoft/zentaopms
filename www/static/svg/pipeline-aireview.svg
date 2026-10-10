@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 原版扫描结构 -->
+  <circle cx="11" cy="11" r="7"/>
+  <path d="m16 16 4 4"/>
+  <path d="M8 9l-2 2 2 2"/>
+  <path d="M14 9l2 2-2 2"/>
+
+  <!-- AI 标识：右上小胶囊标签 -->
+  <rect x="15.5" y="3" width="6" height="3" rx="1.5" fill="currentColor" stroke="none"/>
+  <text x="18.5" y="5.2" font-size="2" font-family="Arial, sans-serif" font-weight="700" text-anchor="middle" fill="#fff" stroke="none">AI</text>
+</svg>

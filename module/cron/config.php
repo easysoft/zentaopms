@@ -9,6 +9,15 @@ $config->cron->maxRunDays  = 8;
 $config->cron->maxRunTime  = 65;
 $config->cron->maxConsumer = 4;
 
+$config->cron->showCommands = array();
+$config->cron->showCommands['gitfox'] = array();
+$config->cron->showCommands['gitfox'][] = 'moduleName=metric&methodName=updateDashboardMetricLib';
+$config->cron->showCommands['gitfox'][] = 'moduleName=mail&methodName=asyncSend';
+$config->cron->showCommands['gitfox'][] = 'moduleName=webhook&methodName=asyncSend';
+$config->cron->showCommands['gitfox'][] = 'moduleName=admin&methodName=deleteLog';
+$config->cron->showCommands['gitfox'][] = 'moduleName=errorlog&methodName=deleteLog';
+$config->cron->showCommands['gitfox'][] = 'moduleName=backup&methodName=backup';
+
 global $lang;
 $config->cron->dtable = new stdclass();
 $config->cron->dtable->fieldList = array();

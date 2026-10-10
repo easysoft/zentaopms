@@ -72,6 +72,8 @@ class repoModel extends model
      */
     public function setMenu(array $repos, int $repoID = 0, int $spaceID = 0)
     {
+        $isGitfox = $this->config->vision == 'gitfox' || $this->config->edition == 'gitfox';
+
         if(empty($repoID)) $repoID = $this->session->repoID ? $this->session->repoID : key($repos);
         if(!isset($repos[$repoID])) $repoID = key($repos);
 
@@ -85,30 +87,36 @@ class repoModel extends model
         }
         $this->loadModel('space')->setMenu($spaceID);
 
-        if(!in_array($this->app->methodName, $this->config->repo->notSetMenuVars)) common::setMenuVars($this->config->vision == 'devops' ? 'repo' : 'devops', $repoID);
+        if(!in_array($this->app->methodName, $this->config->repo->notSetMenuVars))
+        {
+            common::setMenuVars($isGitfox ? 'repo' : 'devops', $repoID);
+            if($isGitfox && $this->app->tab == 'space') $this->app->tab = 'repo';
+        }
         $this->session->set('repoID', $repoID);
         $repo = $this->fetchByID($repoID);
         $this->session->set('devopsSpace', empty($repo) ? 0 : $repo->spaceID);
 
+        $repoMenu = $isGitfox ? $this->lang->repo->menu : $this->lang->devops->menu;
+
         /* 镜像代码库屏蔽"扫描(repoCodeScan)"、"代码问题(review)"与"设置(settings)"三个一级菜单。 */
         if($repo && !empty($repo->mirror))
         {
-            unset($this->lang->devops->menu->repoCodeScan);
-            unset($this->lang->devops->menu->review);
-            unset($this->lang->devops->menu->settings);
+            unset($repoMenu->repoCodeScan);
+            unset($repoMenu->review);
+            unset($repoMenu->settings);
         }
 
         /* SVN 代码库屏蔽分支、标签、代码评审、制品库、设置 5 个一级菜单。SVN 无原生分支/MR/制品库等概念。 */
         if($repo && $this->isSvn($repo))
         {
-            unset($this->lang->devops->menu->branch);
-            unset($this->lang->devops->menu->tag);
-            unset($this->lang->devops->menu->ppm);
-            unset($this->lang->devops->menu->artifact);
-            unset($this->lang->devops->menu->settings);
+            unset($repoMenu->branch);
+            unset($repoMenu->tag);
+            unset($repoMenu->ppm);
+            unset($repoMenu->artifact);
+            unset($repoMenu->settings);
         }
 
-        if(in_array($this->app->methodName, array('setarchive', 'browsewebhooks', 'createwebhook', 'editwebhook', 'logwebhook'))) $this->lang->devops->menu->settings['subModule'] .= ',repo';
+        if(in_array($this->app->methodName, array('setarchive', 'browsewebhooks', 'createwebhook', 'editwebhook', 'logwebhook'))) $repoMenu->settings['subModule'] .= ',repo';
     }
 
     /**
@@ -793,7 +801,8 @@ class repoModel extends model
             ->andWhere('id')->in($idList)->fetchAll('id', false);
         foreach($repos as $repo)
         {
-            if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
+            /* ops_repo 表没有 encrypt、password 列，取值前先判断，避免未定义属性告警。 */
+            if(!empty($repo->encrypt) && $repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
         }
 
         return $repos;
@@ -1700,7 +1709,7 @@ class repoModel extends model
             foreach($actionFiles as $file)
             {
                 $path = $this->encodePath($file);
-                $viewURL = $this->createLink('view', "repoID={$log->repo->id}&objectID=0&entry={$path}&revision={$log->revision}");
+                $viewURL = $this->createLink('view', "repoID={$log->repo->id}&objectID=0&entry={$path}&revision=" . helper::safe64Encode($log->revision));
                 $diffURL = $this->createLink('diff', "repoID={$log->repo->id}&objectID=0&entry={$path}&oldRevision={$log->revision}&revision={$log->revision}");
 
                 $catLink  = trim(html::a($viewURL, 'view', 'modal', "data-toggle='modal' data-size='lg'"));
@@ -2291,13 +2300,6 @@ class repoModel extends model
             $privs = $this->loadModel('group')->getDevOpsSpacePrivs($spaceID);
             if($privs !== null) self::$maintainSpacePrivs[$spaceID] = $privs;
         }
-
-        /* render 管道：hasPriv 控制显隐，isClickable 控制置灰。不含这些 right 按钮会直接隐藏，
-         * 此处补回使按钮可见，置灰状态由 isClickable 接管，安全由下次请求 checkPriv 兜底。 */
-        $this->app->user->rights['rights']['repo']['edit']     = 1;
-        $this->app->user->rights['rights']['repo']['delete']   = 1;
-        $this->app->user->rights['rights']['codescan']['exec']  = 1;
-        $this->app->user->rights['rights']['codescan']['issue'] = 1;
     }
 
     /**
@@ -2849,6 +2851,7 @@ class repoModel extends model
     {
         $userSpaces = $this->loadModel('space')->getPairs($this->app->user->account);
         if(empty($userSpaces)) return array();
+        if($space && !$this->app->user->admin && !isset($userSpaces[$space])) return array();
 
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
@@ -4030,5 +4033,35 @@ class repoModel extends model
 
         $converted = $pinyin->permalink($string);
         return $converted;
+    }
+
+    /**
+     * 获取所有产品的仓库。
+     * Get all product repositories.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProductRepos(): array
+    {
+        $productRepos = array();
+
+        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchAll('id');
+        if(empty($repos)) return $productRepos;
+
+        foreach($repos as $repoID => $repo)
+        {
+            if(isset($repo->product))
+            {
+                $repoProducts = array_filter(explode(',', $repo->product));
+                foreach($repoProducts as $productID)
+                {
+                    if(!isset($productRepos[$productID])) $productRepos[$productID] = array();
+                    if(isset($productRepos[$productID][$repoID])) continue;
+                    $productRepos[$productID][$repoID] = $repo;
+                }
+            }
+        }
+        return $productRepos;
     }
 }

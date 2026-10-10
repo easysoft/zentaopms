@@ -857,7 +857,7 @@ class codescan extends control
         if($status != 'all') $params['latestTaskStatus'] = $status;
 
         $planList = $this->codescan->getScanPlans($repoID, (array)$params);
-        $repoList = $this->repo->getPairs();
+        $repoList = $this->repo->getRepoPairs();
 
         $pager->recTotal = empty($planList->pager) ? 0 : (int)zget($planList->pager, 'total', 0);
         $planList = zget($planList, 'data', array());
@@ -1004,7 +1004,7 @@ class codescan extends control
         }
 
         $pager = $this->codescanZen->setPager($recPerPage, $pageID);
-        $this->view->repoList = $this->repo->getPairs();
+        $this->view->repoList = $this->repo->getRepoPairs();
         $this->view->planList = array_column($this->codescanZen->getListByQuery('plan'), 'name', 'id');
 
         $queryID   = $type == 'bySearch' ? $queryID : 0;
@@ -1204,6 +1204,23 @@ class codescan extends control
     }
 
     /**
+     * 获取扫描计划的分级下拉数据。
+     * Get scan plan picker items for step schema.
+     *
+     * 返回 空间 > 代码库 > 扫描计划 三级结构，repoID 为 0 时查询全部代码库的计划。
+     * Returns the space > repo > scan plan tree, all repos' plans are fetched when repoID is 0.
+     *
+     * @param  int    $spaceID 空间ID，0 为不限
+     * @param  int    $repoID  代码库ID，0 为不限
+     * @access public
+     * @return void
+     */
+    public function ajaxGetScanPlans(int $spaceID = 0, int $repoID = 0)
+    {
+        echo json_encode($this->codescan->buildScanPlanSchemaItems($spaceID, $repoID));
+    }
+
+    /**
      * 规则列表。
      * Issues list.
      *
@@ -1300,6 +1317,7 @@ class codescan extends control
         $this->view->title         = $this->lang->codescan->issue;
         $this->view->type          = 'issue';
         $this->view->issues        = zget($issueList, 'data', array());
+        $this->view->repoList      = $repoList;
         $this->view->pager         = $pager;
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $type;

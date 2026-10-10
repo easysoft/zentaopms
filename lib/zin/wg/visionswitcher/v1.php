@@ -124,7 +124,7 @@ class visionSwitcher extends wg
                 (
                     'selected'     => $currentSpace == $space->id,
                     'trailingIcon' => $currentSpace == $space->id ? 'check' : '',
-                    'url'          => "javascript:selectVision('devops', '$space->id')",
+                    'url'          => "javascript:selectVision('gitfox', '$space->id')",
                     'data-type'    => 'ajax',
                     'text'         => $space->name,
                 );
@@ -135,12 +135,12 @@ class visionSwitcher extends wg
             $items[] = array
             (
                 'selected'     => $currentVision == $vision,
-                'trailingIcon' => $currentVision == $vision && $vision != 'devops' ? 'check' : '',
-                'url'          => $vision == 'devops' ? null : "javascript:selectVision('$vision')",
+                'trailingIcon' => $currentVision == $vision && $vision != 'gitfox' ? 'check' : '',
+                'url'          => $vision == 'gitfox' ? null : "javascript:selectVision('$vision')",
                 'icon'         => $this->getVisionIcon($vision),
                 'data-type'    => 'ajax',
                 'text'         => isset($lang->visionList[$vision]) ? $lang->visionList[$vision] : $vision,
-                'items'        => $vision == 'devops' && !empty($devopsItems) ? $devopsItems : null,
+                'items'        => $vision == 'gitfox' && !empty($devopsItems) ? $devopsItems : null,
             );
         }
 

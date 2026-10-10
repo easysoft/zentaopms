@@ -1288,7 +1288,7 @@ class myModel extends model
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll('id');
 
-        if($this->config->edition != 'open')
+        if(!in_array($this->config->edition, array('open', 'gitfox')))
         {
             $reviewAction = $this->loadModel('workflowaction')->getByModuleAndAction($type, 'review');
             if($reviewAction)
@@ -1350,7 +1350,7 @@ class myModel extends model
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll('id');
 
-        if($this->config->edition != 'open')
+        if(!in_array($this->config->edition, array('open', 'gitfox')))
         {
             $reviewAction = $this->loadModel('workflowaction')->getByModuleAndAction('testcase', 'review');
 
@@ -1426,6 +1426,36 @@ class myModel extends model
             if(empty($ppm->status)) $ppm->status = 'pending';
         }
         return $ppms;
+    }
+
+    /**
+     * 获取欢迎总览区块中评审相关的统计数据。
+     * Get the review statistics for the welcome block.
+     *
+     * @access public
+     * @return array
+     */
+    public function getMyReviewStatistics(): array
+    {
+        $account = $this->app->user->account;
+
+        /* 我发起的评审：当前用户发起且未关闭的代码评审数量。 */
+        $createdReviews = $this->dao->select('COUNT(1) AS count')->from(TABLE_PPM)
+            ->where('createdBy')->eq($account)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('status')->ne('closed')
+            ->fetch('count');
+
+        /* 待我解决的问题：当前用户发起的代码评审中处于激活状态的问题数量。 */
+        $pendingIssues = $this->dao->select('COUNT(1) AS count')->from(TABLE_SCANISSUE)->alias('t1')
+            ->leftJoin(TABLE_PPM)->alias('t2')->on('t1.`ppmID` = t2.`id`')
+            ->where('t2.`createdBy`')->eq($account)
+            ->andWhere('t2.`deleted`')->eq('0')
+            ->andWhere('t1.`deleted`')->eq('0')
+            ->andWhere('t1.`status`')->in('wait,todo,solving')
+            ->fetch('count');
+
+        return array('createdReviews' => (int)$createdReviews, 'pendingIssues' => (int)$pendingIssues);
     }
 
     /**
@@ -1553,7 +1583,7 @@ class myModel extends model
      */
     public function getReviewingFeedbacks(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
-        if($this->config->edition == 'open') return array();
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return array();
 
         $this->session->set('feedbackProduct', 'all');
         $feedbacks = $this->loadModel('feedback')->getList('review', $orderBy);

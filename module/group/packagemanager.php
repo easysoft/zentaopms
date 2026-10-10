@@ -3011,11 +3011,12 @@ $config->group->package->browsePipeline->privs['pipeline-browse']    = array('ed
 $config->group->package->browsePipeline->privs['pipeline-execution'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-exec', 'pipeline-execView'));
 $config->group->package->browsePipeline->privs['pipeline-execView']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('pipeline-execution'), 'recommend' => array('pipeline-execution', 'pipeline-exec'));
 
-$config->group->package->execPipeline = new stdclass();
-$config->group->package->execPipeline->order  = 10;
-$config->group->package->execPipeline->subset = 'pipeline';
-$config->group->package->execPipeline->privs  = array();
-$config->group->package->execPipeline->privs['pipeline-exec'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-execution', 'pipeline-logs', 'pipeline-view'));
+$config->group->package->pipelineActions = new stdclass();
+$config->group->package->pipelineActions->order  = 10;
+$config->group->package->pipelineActions->subset = 'pipeline';
+$config->group->package->pipelineActions->privs  = array();
+$config->group->package->pipelineActions->privs['pipeline-exec']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-execution', 'pipeline-logs', 'pipeline-view'));
+$config->group->package->pipelineActions->privs['pipeline-cancel'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('pipeline-execution'), 'recommend' => array('pipeline-exec'));
 
 $config->group->package->managePipeline = new stdclass();
 $config->group->package->managePipeline->order  = 15;

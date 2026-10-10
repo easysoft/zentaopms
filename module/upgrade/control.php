@@ -179,8 +179,18 @@ class upgrade extends control
         if($command) return $this->displayCommand($command);
 
         $upgradeVersions = $this->upgradeZen->getUpgradeVersions(str_replace('.', '_', $this->config->installedVersion));
+        if($this->upgrade->isError())
+        {
+            $this->view->errors = $this->upgrade->getError();
+            return $this->display('upgrade', 'sqlfail');
+        }
         $versionsKey     = array_keys($upgradeVersions);
         $toVersion       = reset($versionsKey);
+        if(empty($toVersion))
+        {
+            $this->view->errors = array($this->lang->upgrade->noUpgradeVersion);
+            return $this->display('upgrade', 'sqlfail');
+        }
         $upgradeChanges  = $this->upgradeZen->getUpgradeChanges($fromVersion, $toVersion);
 
         /* 把需要执行的变更记录到数据库，便于后续调用。*/

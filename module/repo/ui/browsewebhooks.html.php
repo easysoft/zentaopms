@@ -15,7 +15,7 @@ featureBar();
 $createWebhookItem = array('text' => $lang->repo->createWebhook, 'url' => createLink('repo', 'createWebhook', "repoID={$repo->id}"));
 toolBar
 (
-    hasPriv('repo', 'createWebhook') ? item(set($createWebhookItem + array('icon' => 'plus', 'class' => 'btn primary')), set('data-app', 'devops')) : null
+    hasPriv('repo', 'createWebhook') ? item(set($createWebhookItem + array('icon' => 'plus', 'class' => 'btn primary')), set('data-app', $app->tab)) : null
 );
 
 $webhookList = initTableData($webhooks, $config->repo->dtable->webhook->fieldList);

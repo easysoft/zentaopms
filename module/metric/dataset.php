@@ -1490,4 +1490,51 @@ class dataset
     {
         return $this->dao->select($fieldList)->from(TABLE_ENV)->where('deleted')->eq(0);
     }
+
+    /**
+     * 获取发起的代码评审。
+     * Get created code reviews.
+     *
+     * @param  string $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getGitfoxCreatedReviews($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_PPM)->alias('t1')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.createdDate')->notNULL();
+    }
+
+    /**
+     * 获取已合并的代码评审。
+     * Get merged code reviews.
+     *
+     * @param  string $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getGitfoxMergedReviews($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_PPM)->alias('t1')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.status')->eq('merged')
+            ->andWhere('t1.mergedDate')->notNULL();
+    }
+
+    /**
+     * 获取已解决的代码问题，不包含待确认和已忽略的问题。
+     * Get resolved code issues, unconfirmed and ignored issues are excluded.
+     *
+     * @param  string $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getGitfoxResolvedIssues($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_SCANISSUE)->alias('t1')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.status')->notIn('wait,ignore')
+            ->andWhere('t1.resolvedDate')->notNULL();
+    }
 }

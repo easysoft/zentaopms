@@ -58,7 +58,7 @@ class datatableModel extends model
         }
 
         /* 加载工作流字段配置。 */
-        if($this->config->edition != 'open') $fieldList += $this->appendWorkflowFields($module, $method);
+        if(!in_array($this->config->edition, array('open', 'gitfox'))) $fieldList += $this->appendWorkflowFields($module, $method);
 
         return $fieldList;
     }
@@ -200,7 +200,7 @@ class datatableModel extends model
             $this->config->$module->datatable->fieldList[$field]['title'] = $title;
         }
 
-        if($this->config->edition != 'open')
+        if(!in_array($this->config->edition, array('open', 'gitfox')))
         {
             $fields = $this->loadModel('workflowfield')->getList($module);
             foreach($fields as $field)

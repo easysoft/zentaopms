@@ -29,7 +29,9 @@ window.initCmd = function(event)
         labelsStr = '--labels=' + labelsStr;
     }
 
-    const packageURL = `${runnerConfig.packageURL}${plat}_${arch}.tar.gz?t=${new Date().getTime()}`;
+    /* The windows package has an .exe suffix, the other platforms have none. */
+    const packageSuffix = plat === 'windows' ? '.exe' : '';
+    const packageURL = `${runnerConfig.packageURL}runner-plugin-installer-${plat}-${arch}${packageSuffix}?t=${new Date().getTime()}`;
     let cmd = runnerConfig.cmdList[plat];
     cmd = cmd.replace('%PACKAGE_URL%', packageURL)
         .replace('%GITFOX_URL%', token.url)

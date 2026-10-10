@@ -16,6 +16,10 @@ cid=18085
 - 执行repoTest模块的isClickableTest方法，参数是$repoMirror, 'scanIssue'  @0
 - 执行repoTest模块的isClickableTest方法，参数是$repo5, 'scanExec'  @1
 - 执行repoTest模块的isClickableTest方法，参数是$repo5, 'scanIssue'  @1
+- 执行repoTest模块的isClickableTest方法，参数是$repoInSpace, 'edit'  @1
+- 执行repoTest模块的isClickableTest方法，参数是$repoInSpace, 'delete'  @1
+- 执行repoTest模块的isClickableTest方法，参数是$repoInSpace, 'scanExec'  @1
+- 执行repoTest模块的isClickableTest方法，参数是$repoInSpace, 'scanIssue'  @1
 
 */
 
@@ -52,3 +56,19 @@ r($repoTest->isClickableTest($repoMirror, 'scanExec'))   && p() && e('0');
 r($repoTest->isClickableTest($repoMirror, 'scanIssue'))  && p() && e('0');
 r($repoTest->isClickableTest($repo5, 'scanExec'))        && p() && e('1');
 r($repoTest->isClickableTest($repo5, 'scanIssue'))       && p() && e('1');
+
+/* GitFox独立版下repo/codescan的navGroup不再是devops，空间权限清单仍需包含它们，否则代码库列表的行内按钮会全部置灰。 */
+$config->vision = 'gitfox';
+include dirname(__FILE__, 5) . '/extension/gitfox/common/ext/lang/gitfoxmenu.php';
+
+$spaceModel = $app->loadTarget('space', '', 'model');
+repoModel::$maintainSpacePrivs = array(1 => $spaceModel->getDevOpsAllPrivs());
+
+$repoInSpace = new stdclass();
+$repoInSpace->spaceID = 1;
+$repoInSpace->mirror  = 0;
+
+r($repoTest->isClickableTest($repoInSpace, 'edit'))      && p() && e('1');
+r($repoTest->isClickableTest($repoInSpace, 'delete'))    && p() && e('1');
+r($repoTest->isClickableTest($repoInSpace, 'scanExec'))  && p() && e('1');
+r($repoTest->isClickableTest($repoInSpace, 'scanIssue')) && p() && e('1');

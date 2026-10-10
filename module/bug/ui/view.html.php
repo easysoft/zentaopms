@@ -35,7 +35,8 @@ $canModify = $app->tab == 'project' && !empty($project) ? common::canModify('pro
 if($canModify && $app->tab == 'execution' && !empty($execution)) $canModify = common::canModify('execution', $execution);
 
 $isInModal    = isInModal();
-$canCreateBug = $canModify && $this->app->tab != 'devops' && hasPriv('bug', 'create');
+$isGitFox     = $this->config->edition == 'gitfox';
+$canCreateBug = $canModify && $this->app->tab != 'devops' && !$isGitFox && hasPriv('bug', 'create');
 $canViewRepo  = hasPriv('repo', 'revision');
 $canViewMR    = hasPriv('ppm', 'view');
 $canViewBug   = hasPriv('bug', 'view');
@@ -132,24 +133,28 @@ $tabs = array();
 $tabs[] = setting()
     ->group('basic')
     ->title($lang->bug->legendBasicInfo)
-    ->control('bugBasicInfo')
+    ->control(array('control' => 'bugBasicInfo', 'gitfox' => $isGitFox))
     ->statusText($this->processStatus('bug', $bug));
 
-/* 一生信息。Legend life items. */
-$tabs[] = setting()
-    ->group('basic')
-    ->title($lang->bug->legendLife)
-    ->control('bugLifeInfo');
+if(!$isGitFox)
+{
+    /* 一生信息。Legend life items. */
+    $tabs[] = setting()
+        ->group('basic')
+        ->title($lang->bug->legendLife)
+        ->control('bugLifeInfo');
 
-$tabs[] = setting()
-    ->group('related')
-    ->title(!empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask)
-    ->control('bugRelatedInfo');
+    /* 项目/研发需求/任务信息。Legend project/story/task items. */
+    $tabs[] = setting()
+        ->group('related')
+        ->title(!empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask)
+        ->control('bugRelatedInfo');
+}
 
 $tabs['bugRelatedList'] = setting()
     ->group('related')
     ->title($lang->bug->legendMisc)
-    ->control('bugRelatedList');
+    ->control(array('control' => 'bugRelatedList', 'gitfox' => $isGitFox));
 
 detail
 (

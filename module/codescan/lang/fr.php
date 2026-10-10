@@ -39,6 +39,7 @@ $lang->codescan->deleteTrigger   = 'Delete Trigger';
 $lang->codescan->addCondition    = 'Add Condition';
 $lang->codescan->issue           = 'AI/Scan Issue List';
 $lang->codescan->issueView       = 'AI/Scan Issue Detail';
+$lang->codescan->allRepo         = 'All Repos';
 $lang->codescan->createBug       = 'Create Bug';
 $lang->codescan->ignoreIssue     = 'Ignore';
 $lang->codescan->confirmIssue    = 'Confirm';

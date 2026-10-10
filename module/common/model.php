@@ -624,7 +624,8 @@ class commonModel extends model
         global $lang, $app, $config;
 
         $app->loadLang('my');
-        if($config->edition != 'open' && $app->isServing()) $app->control->loadModel('common')->mergePrimaryFlows();
+        $commonModel = $app->control->loadModel('common');
+        if(!in_array($config->edition, array('open', 'gitfox')) && $app->isServing()) $commonModel->mergePrimaryFlows();
 
         /* Ensure user has latest rights set. */
         $app->user->rights = $app->control->loadModel('user')->authorize($app->user->account);
@@ -1945,7 +1946,7 @@ eof;
 
         $commonModel = new commonModel();
 
-        if($config->edition != 'open')
+        if(!in_array($config->edition, array('open', 'gitfox')))
         {
             $workflow = $commonModel->loadModel('workflow')->getByModule($module);
             if($workflow && $workflow->buildin == '0') return true;
@@ -2697,7 +2698,7 @@ eof;
         if(empty($actionData['isClickable']) && isset($this->$moduleName) && method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) return false;
 
         global $config;
-        if($config->edition != 'open')
+        if(!in_array($config->edition, array('open', 'gitfox')))
         {
             $flowAction     = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $action);
             $isActionEnable = $flowAction && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions);
@@ -3301,7 +3302,8 @@ eof;
 
         if(!$tab) return;
         if($tab == 'admin' and $app->control and method_exists($app->control, 'loadModel')) $app->control->loadModel('admin')->setMenu();
-        if($config->edition != 'open' && $app->isServing()) $app->control->loadModel('common')->mergeFlowMenuLang();
+        $commonModel = $app->control->loadModel('common');
+        if(!in_array($config->edition, array('open', 'gitfox')) && $app->isServing()) $commonModel->mergeFlowMenuLang();
         $icon = zget($lang->navIcons, $tab, '');
 
         if(!in_array($tab, array('program', 'product', 'project')))

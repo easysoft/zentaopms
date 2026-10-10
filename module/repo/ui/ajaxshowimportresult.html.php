@@ -29,7 +29,7 @@ div
                 set::title($lang->repo->tips),
                 set::headingActions(array
                 (
-                    array('url' => createLink('repo', 'maintain'), 'icon' => 'close', 'class' => 'ghost', 'data-app' => 'devops')
+                    array('url' => createLink('repo', 'maintain'), 'icon' => 'close', 'class' => 'ghost', 'data-app' => $app->tab)
                 )),
                 div
                 (

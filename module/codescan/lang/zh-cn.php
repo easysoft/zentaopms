@@ -39,6 +39,7 @@ $lang->codescan->deleteTrigger   = '删除触发器';
 $lang->codescan->addCondition    = '添加条件';
 $lang->codescan->issue           = 'AI/扫描问题列表';
 $lang->codescan->issueView       = 'AI/扫描问题详情';
+$lang->codescan->allRepo         = '全部代码库';
 $lang->codescan->createBug       = '转Bug';
 $lang->codescan->ignoreIssue     = '忽略扫描问题';
 $lang->codescan->confirmIssue    = '确认扫描问题';

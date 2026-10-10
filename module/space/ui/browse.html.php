@@ -15,7 +15,8 @@ jsVar('spaceRepoMap', $this->session->spaceRepoMap ? json_decode($this->session-
 $canCreate  = hasPriv('space', 'create');
 $createLink = $this->createLink('space', 'create');
 $createItem = array('text' => $lang->space->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus');
-$isJumpRepo = !empty($config->spaceLink) && $config->spaceLink == 'repo-browse';
+$isGitfox   = $config->vision == 'gitfox' || $config->edition == 'gitfox';
+$isJumpRepo = !$isGitfox && !empty($config->spaceLink) && $config->spaceLink == 'repo-browse';
 
 featureBar
 (

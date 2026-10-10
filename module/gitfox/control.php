@@ -74,7 +74,10 @@ class gitfox extends control
      */
     public function installGitFox(string $inPage = 'devops', int $skipInstall = 0, string $fromVersion = '')
     {
-        $nextLink = $this->app->cookie->lang == 'zh-cn' ? helper::createLink('admin', 'register') : helper::createLink('index');
+        /* GitFox独立版安装完成后直接进入首页，不展示"加入禅道社区"页面。 */
+        /* After installation, the GitFox edition goes to the index page directly instead of the ZenTao community page. */
+        $nextLink = helper::createLink('index');
+        if($this->config->edition != 'gitfox' && $this->app->cookie->lang == 'zh-cn') $nextLink = helper::createLink('admin', 'register');
 
         if($inPage == 'install')
         {
@@ -95,6 +98,12 @@ class gitfox extends control
         {
             return $this->locate($nextLink);
         }
+
+        /* 已经安装GitFox时不展示安装页面：需要升级时跳升级页面，版本正常时直接进入下一步。 */
+        /* Do not show the install page when GitFox has been installed: jump to the upgrade page if an upgrade is needed. */
+        $health = $this->gitfox->checkHealth();
+        if($health == 'upgrade') return $this->locate($this->createLink('gitfox', 'upgradeGitFox', "inPage={$inPage}&skipUpgrade=0&fromVersion={$fromVersion}"));
+        if($health) return $this->locate($nextLink);
 
         $script = $this->gitfoxZen->buildGitFoxScript('install');
 
@@ -139,9 +148,15 @@ class gitfox extends control
             return $this->locate($nextLink);
         }
 
+        /* GitFox服务不存在时跳安装页面，版本正常时无需展示升级页面。 */
+        /* Jump to the install page when GitFox is not installed, and skip the upgrade page when the version is fine. */
+        $health  = $this->gitfox->getHealth();
+        $status  = $this->gitfox->checkHealth($health);
+        if(!$status)              return $this->locate($this->createLink('gitfox', 'installGitFox', "inPage={$inPage}&skipInstall=0&fromVersion={$fromVersion}"));
+        if($status != 'upgrade')  return $this->locate($nextLink);
+
         $script = $this->gitfoxZen->buildGitFoxScript('upgrade');
 
-        $health         = $this->gitfox->getHealth();
         $currentVersion = $health ? zget($health, 'version', '') : '';
 
         $this->view->title           = $this->lang->gitfox->upgradeGitFox;
