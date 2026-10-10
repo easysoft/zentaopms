@@ -150,6 +150,14 @@ foreach($reviewList as $review)
     $review->product = zget($products, $review->product, '');
 }
 
+if($rawMethod == 'contribute')
+{
+    $pendingReviewList = array();
+    foreach($this->my->getReviewingList('all') as $pendingReview) $pendingReviewList[$pendingReview->type . '-' . $pendingReview->id] = true;
+
+    foreach($reviewList as $review) $review->pendingReview = isset($pendingReviewList[$review->typeKey . '-' . $review->id]) ? 1 : 0;
+}
+
 $reviewList = initTableData($reviewList, $config->my->{$tableMethod}->dtable->fieldList, $this->my);
 $cols       = $this->loadModel('datatable')->getSetting('my', $tableMethod);
 $sortLink   = $app->rawMethod == 'audit' ? createLink('my', 'audit', "browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}") : createLink('my', $app->rawMethod, "mode={$mode}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
