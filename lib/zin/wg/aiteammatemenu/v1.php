@@ -28,7 +28,6 @@ class aiTeammateMenu extends wg
 
         list($btnName, $btnClass, $placement, $module, $method, $objectVarName, $isFormPage) =
             $this->prop(array('btnName', 'btnClass', 'placement', 'module', 'method', 'objectVarName', 'isFormPage'));
-        $itemClass = 'btn ghost size-sm font-medium text-left flex items-center gap-2';
 
         if(empty($btnName))
         {
@@ -39,7 +38,7 @@ class aiTeammateMenu extends wg
 
         $objectID = $this->prop('objectID');
 
-        $menuItems = array_map(function($teammate) use ($module, $method, $objectVarName, $isFormPage, $objectID, $itemClass)
+        $menuItems = array_map(function($teammate) use ($module, $method, $objectVarName, $isFormPage, $objectID)
         {
             $avatar = html::avatar(array(
                 'avatar'  => $teammate->avatar,
@@ -49,27 +48,26 @@ class aiTeammateMenu extends wg
 
             $itemProps = array
             (
-                set::text(html($avatar . $name)),
-                set('class', $itemClass),
-                set('data-teammate-id', $teammate->id),
-                set('data-module', $module),
-                set('data-method', $method),
+                'text'             => array('html' => $avatar . $name),
+                'data-teammate-id' => $teammate->id,
+                'data-module'      => $module,
+                'data-method'      => $method,
             );
 
             if($isFormPage)
             {
-                $itemProps[] = set('data-on', 'click');
-                $itemProps[] = set('data-call', 'executeWithFormContextForTeammate(event)');
+                $itemProps['data-on'] = 'click';
+                $itemProps['data-call'] = 'executeWithFormContextForTeammate(event)';
             }
             else
             {
-                $itemProps[] = set('url', helper::createLink('aiteammate', 'assignagent',
-                    "teammateID={$teammate->id}&objectType={$objectVarName}&objectID={$objectID}&pageInfo={$module},{$method}"));
-                $itemProps[] = set('data-toggle', 'modal');
-                $itemProps[] = set('data-size', 'sm');
+                $itemProps['url'] = helper::createLink('aiteammate', 'assignagent',
+                    "teammateID={$teammate->id}&objectType={$objectVarName}&objectID={$objectID}&pageInfo={$module},{$method}");
+                $itemProps['data-toggle'] = 'modal';
+                $itemProps['data-size'] = 'sm';
             }
 
-            return item(...$itemProps);
+            return $itemProps;
         }, array_values($items));
 
         return dropdown
@@ -82,14 +80,8 @@ class aiTeammateMenu extends wg
                 $btnName,
             ),
             set::placement($placement),
-            to::menu
-            (
-                menu
-                (
-                    setClass('dropdown-menu ai-teammate-menu'),
-                    ...$menuItems
-                )
-            )
+            set::items($menuItems),
+            set::menuClass('ai-teammate-menu')
         );
     }
 }

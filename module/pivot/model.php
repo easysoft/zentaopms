@@ -783,29 +783,29 @@ class pivotModel extends model
         $isQueryFilter = (isset($currentFilter['from']) && $currentFilter['from'] == 'query');
 
         $filterFormat = $isQueryFilter ? array_values($filters) : array();
+        $queryVars    = array();
         foreach($filters as $filter)
         {
             $field = $filter['field'];
 
             if($isQueryFilter)
             {
-                $queryDefault = '';
-                if(isset($filter['default']))
-                {
-                    $queryDefault = $filter['default'];
-                    if($filter['type'] == 'date' || $filter['type'] == 'datetime') $queryDefault = $this->processDateVar($filter['default']);
-                    if($filter['type'] == 'datetime') $queryDefault .= ':00.000000000';
-                    if($filter['type'] == 'multipleselect' && is_array($filter['default'])) $queryDefault = implode("','", $filter['default']);
-                }
+                if($field === '') continue;
 
-                $queryDefault = $this->dbh->quote($queryDefault);
-                if(strpos($sql, $filter['field'] . 'Condition') === false)
+                $queryDefault = isset($filter['default']) ? $filter['default'] : '';
+                if($filter['type'] == 'date' || $filter['type'] == 'datetime') $queryDefault = $this->processDateVar($queryDefault);
+                if($filter['type'] == 'datetime' && is_scalar($queryDefault))  $queryDefault .= ':00.000000000';
+
+                $queryDefault = $this->bi->quoteFilterValue($queryDefault);
+                if(strpos($sql, $field . 'Condition') === false)
                 {
-                    $sql = str_replace('$' . $filter['field'], $queryDefault, $sql);
+                    if(strpos($sql, '$' . $field) !== false && !$this->bi->isSafeFilterField((string)$field)) $this->bi->denyIllegalFilter('field');
+                    $queryVars['$' . $field] = $queryDefault;
                 }
                 else
                 {
-                    $sql = str_replace('$' . $filter['field'] . 'Condition', "{$filter['relatedField']}={$queryDefault}", $sql);
+                    if(!$this->bi->isSafeFilterField((string)$field) || !$this->bi->isSafeFilterField((string)$filter['relatedField'])) $this->bi->denyIllegalFilter('field');
+                    $queryVars['$' . $field . 'Condition'] = "{$filter['relatedField']}={$queryDefault}";
                 }
             }
             else
@@ -850,6 +850,8 @@ class pivotModel extends model
                 }
             }
         }
+
+        $sql = $this->bi->replaceSqlVars($sql, $queryVars);
 
         return array($sql, $filterFormat);
     }
@@ -903,6 +905,8 @@ class pivotModel extends model
                 $wheres = array();
                 foreach($filters as $field => $filter)
                 {
+                    $this->bi->checkFilter((string)$field, isset($filter['operator']) ? (string)$filter['operator'] : '', isset($filter['value']) ? (string)$filter['value'] : '');
+
                     $fieldSQL = $this->getFilterFieldSQL($filter, $field, $driver);
                     if($filter['operator'] == 'LIKE' && $filter['value'] == "'%%'")
                     {
@@ -2103,7 +2107,11 @@ class pivotModel extends model
         if(!empty($filters) && !isset($filters[0]['from']))
         {
             $wheres = array();
-            foreach($filters as $field => $filter) $wheres[] = "tt.`{$field}` {$filter['operator']} {$filter['value']}";
+            foreach($filters as $field => $filter)
+            {
+                $this->bi->checkFilter((string)$field, isset($filter['operator']) ? (string)$filter['operator'] : '', isset($filter['value']) ? (string)$filter['value'] : '');
+                $wheres[] = "tt.`{$field}` {$filter['operator']} {$filter['value']}";
+            }
 
             $whereStr    = implode(' and ', $wheres);
             $connectSQL .= " where {$whereStr}";
@@ -2124,17 +2132,16 @@ class pivotModel extends model
     private function initVarFilter(array $filters = array(), string $sql = ''): string
     {
         if(empty($filters)) return $sql;
+
+        $vars = array();
         foreach($filters as $filter)
         {
-            if(empty($filter['from'])) continue;
-            $default = isset($filter['default']) ? $filter['default'] : '';
-            if(is_array($default))
-            {
-                $default = array_filter($default, function($val){return !empty($val);});
-                $default = implode("', '", $default);
-            }
-            $sql  = str_replace('$' . $filter['field'], "'{$default}'", $sql);
+            if(empty($filter['from']) || empty($filter['field'])) continue;
+
+            $vars['$' . $filter['field']] = $this->bi->quoteFilterValue(isset($filter['default']) ? $filter['default'] : '');
         }
+
+        $sql = $this->bi->replaceSqlVars($sql, $vars);
 
         if(preg_match_all("/[\$]+[a-zA-Z0-9]+/", $sql, $out))
         {

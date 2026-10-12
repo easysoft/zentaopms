@@ -1,11 +1,11 @@
 window.artifactUploadFile = null;
 window.artifactExists = false;
 
-/* 前端检测到文件上传后即触发重名校验：显示覆盖/重命名处理区。 */
 window.artifactOnFileAdd = function(info)
 {
     window.artifactUploadFile = info && info.file ? info.file : info;
-    window.showArtifactExistsBlock(window.artifactUploadFile);
+    window.artifactExists = false;
+    $('#artifactExistsBlock').addClass('hidden');
 };
 
 window.artifactField = function(name)

@@ -77,10 +77,13 @@ class ppm extends control
             $execution = $this->loadModel('execution')->getByID($objectID);
             if($execution && $execution->type === 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
 
-            $features = $this->execution->getExecutionFeatures($execution);
-            if(!$features['devops']) return $this->locate($this->createLink('execution', 'task', "objectID=$objectID"));
+            if($execution)
+            {
+                $features = $this->execution->getExecutionFeatures($execution);
+                if(!$features['devops']) return $this->locate($this->createLink('execution', 'task', "objectID=$objectID"));
 
-            $this->loadModel('execution')->setMenu($objectID);
+                $this->loadModel('execution')->setMenu($objectID);
+            }
             $this->view->executionID = $objectID;
         }
         elseif($this->app->tab == 'project')
@@ -97,9 +100,8 @@ class ppm extends control
         $repoList = $this->repo->getListByPriv('all', '', false);
         if(empty($repoList)) $this->locate($this->repo->createLink('createRepo'));
 
-        /* GitFox独立版代码评审一级导航下，repoID为0表示全部代码库，列表不做代码库限制。 */
-        $browseAllRepos = $this->config->vision == 'gitfox' && $this->app->tab == 'ppm';
-
+        $accessibleRepos = $this->repo->getRepoPairs();
+        $browseAllRepos  = $this->config->vision == 'gitfox' && $this->app->tab == 'ppm';
         if(!$browseAllRepos)
         {
             if(!$repoID) $repoID = key($repoList);
@@ -111,6 +113,8 @@ class ppm extends control
         else
         {
             if($repoID && !isset($repoList[$repoID])) return $this->locate($this->createLink('repo', 'browse', "repoID=$repoID&objectID=$objectID"));
+
+            if($repoID && !isset($accessibleRepos[$repoID])) $repoID = 0;
 
             $contextRepoID = $this->repo->saveState($repoID, $objectID);
             $repo = zget($repoList, $contextRepoID, reset($repoList));
@@ -127,13 +131,14 @@ class ppm extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $ppmList       = $this->ppm->getList($mode, $param, $orderBy, array(), $repoID, 0, $pager, $spaceID);
+        $repoIDList    = $this->app->user->admin ? null : array_keys($accessibleRepos);
+        $ppmList       = $this->ppm->getList($mode, $param, $orderBy, array(), $repoID, 0, $pager, $spaceID, $repoIDList);
         $canEdit       = common::hasPriv($this->app->rawModule, 'edit');
         $reviewResults = $this->ppm->getReviewResults(array_keys($ppmList), $repoID);
         $spaces = $this->config->vision == 'gitfox' ? $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account) : array();
 
         $spaceRepos = array();
-        foreach($this->repo->getRepoPairs() as $listRepoID => $listRepoName)
+        foreach($accessibleRepos as $listRepoID => $listRepoName)
         {
             if(!isset($repoList[$listRepoID])) continue;
             if(!empty($repoList[$listRepoID]->mirror)) continue;

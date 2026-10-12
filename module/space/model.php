@@ -164,10 +164,11 @@ class spaceModel extends model
      * 获取所有空间成员列表。
      * Get all space members list.
      *
+     * @param  bool $includeRepoUsers
      * @access public
      * @return array
      */
-    public function getMemberList(): array
+    public function getMemberList(bool $includeRepoUsers = true): array
     {
         $managers   = $this->dao->select('*')->from(TABLE_DEVOPSSPACEUSER)->fetchAll();
         $memberList = array();
@@ -195,6 +196,8 @@ class spaceModel extends model
                 $memberList[$groupMember->space][$user->account] = $user;
             }
         }
+        if(!$includeRepoUsers) return $memberList;
+
         $repoMembers  = $this->getRepoUsersBySpace();
         if(!empty($repoMembers))
         {
@@ -230,15 +233,17 @@ class spaceModel extends model
 
         $spaces = $this->getByIdList($spaceIdList, false);
 
+        $isAdmin      = !empty($this->app->user->admin);
+        $spaceMembers = $filterRepoCreate && !$isAdmin ? $this->getMemberList(false) : array();
+
         $spacesPairs = array();
         foreach($spaces as $space)
         {
             if($filterRepoCreate)
             {
-                /* 创建/导入代码库的可选空间：私有空间必须持有 repo.create 空间权限（管理员/空间管理员/被授权组），
-                 * 仅仓库成员（devopsrepouser）不再放行；auth=reset 的公开空间沿用原判定。浏览/列表语境不受影响。 */
-                $needRepoCreatePriv = ($space->acl == 'private') || ($space->auth == 'reset');
-                if($needRepoCreatePriv)
+                if($space->acl == 'private' && !$isAdmin && !isset($spaceMembers[$space->id][$account])) continue;
+
+                if($space->auth == 'reset')
                 {
                     $privs = $this->loadModel('group')->getDevOpsSpacePrivs((int)$space->id);
                     if($privs === null || empty($privs['repo']['create'])) continue;

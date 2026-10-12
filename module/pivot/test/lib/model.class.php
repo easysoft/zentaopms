@@ -275,10 +275,18 @@ class pivotModelTest extends baseTest
      */
     public function appendWhereFilterToSqlTest($sql, $filters, $driver)
     {
-        $result = $this->instance->appendWhereFilterToSql($sql, $filters, $driver);
-        if(dao::isError()) return dao::getError();
+        try
+        {
+            $result = $this->instance->appendWhereFilterToSql($sql, $filters, $driver);
+            if(dao::isError()) return dao::getError();
 
-        return $result;
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**
@@ -774,15 +782,23 @@ class pivotModelTest extends baseTest
      */
     public function initVarFilterTest(array $filters = array(), string $sql = ''): string
     {
-        // 使用反射访问私有方法
-        $reflection = new ReflectionClass($this->instance);
-        $method = $reflection->getMethod('initVarFilter');
-        $method->setAccessible(true);
+        try
+        {
+            // 使用反射访问私有方法
+            $reflection = new ReflectionClass($this->instance);
+            $method = $reflection->getMethod('initVarFilter');
+            $method->setAccessible(true);
 
-        $result = $method->invoke($this->instance, $filters, $sql);
-        if(dao::isError()) return dao::getError();
+            $result = $method->invoke($this->instance, $filters, $sql);
+            if(dao::isError()) return dao::getError();
 
-        return $result;
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**
@@ -1420,10 +1436,18 @@ class pivotModelTest extends baseTest
      */
     public function getConnectSQLTest(array $filters): string
     {
-        $result = $this->instance->getConnectSQL($filters);
-        if(dao::isError()) return dao::getError();
+        try
+        {
+            $result = $this->instance->getConnectSQL($filters);
+            if(dao::isError()) return dao::getError();
 
-        return $result;
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**

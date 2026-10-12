@@ -14,6 +14,8 @@ cid=17410
 - 步骤4：空过滤器时保持原SQL不变 @SELECT * FROM zt_bug WHERE status = $status AND type = $type
 - 步骤5：多过滤器组合及变量清理 @SELECT * FROM zt_bug WHERE status = 'active' AND product = '1' AND priority = ''
 - 步骤6：from字段为空时跳过该过滤器但清理变量 @SELECT * FROM zt_bug WHERE status = ''
+- 步骤7：注入载荷被转义为字面量 @SELECT * FROM zt_bug WHERE status = 'active\' or sleep(3)-- '
+- 步骤8：嵌套变量不会逃逸出字面量 @1
 
 */
 
@@ -34,3 +36,15 @@ r($pivotTest->initVarFilterTest(array(array('field' => 'types', 'from' => 'bug',
 r($pivotTest->initVarFilterTest(array(), 'SELECT * FROM zt_bug WHERE status = $status AND type = $type')) && p() && e('SELECT * FROM zt_bug WHERE status = $status AND type = $type'); // 步骤4：空过滤器时保持原SQL不变
 r($pivotTest->initVarFilterTest(array(array('field' => 'status', 'from' => 'bug', 'default' => 'active'), array('field' => 'product', 'from' => 'product', 'default' => '1')), 'SELECT * FROM zt_bug WHERE status = $status AND product = $product AND priority = $priority')) && p() && e("SELECT * FROM zt_bug WHERE status = 'active' AND product = '1' AND priority = ''"); // 步骤5：多过滤器组合及变量清理
 r($pivotTest->initVarFilterTest(array(array('field' => 'status', 'from' => '', 'default' => 'active')), 'SELECT * FROM zt_bug WHERE status = $status')) && p() && e("SELECT * FROM zt_bug WHERE status = ''"); // 步骤6：from字段为空时跳过该过滤器但清理变量
+
+/* 步骤7：注入载荷被 quote 转义，不能闭合引号。The injection payload is quoted. */
+r($pivotTest->initVarFilterTest(array(array('field' => 'status', 'from' => 'bug', 'default' => "active' or sleep(3)-- ")), 'SELECT * FROM zt_bug WHERE status = $status')) && p() && e("SELECT * FROM zt_bug WHERE status = 'active\\' or sleep(3)-- '"); // 步骤7：注入载荷被转义为字面量
+
+/* 步骤8：值中携带的嵌套变量不会在替换结果中再次拼进SQL。A nested variable inside the replaced text is not replaced again. */
+$nestedSQL     = "select t2.status from zt_product t2 where (case when \$productStatus='' then 1=1 else t2.status=\$productStatus end) and (case when \$product='0' then 1=1 else t2.id=\$product end)";
+$nestedFilters = array(
+    array('field' => 'productStatus', 'from' => 'query', 'default' => 'x$productx'),
+    array('field' => 'product',       'from' => 'query', 'default' => ' or sleep(3) or ')
+);
+$nestedResult = $pivotTest->initVarFilterTest($nestedFilters, $nestedSQL);
+r(strpos($nestedResult, "'x' or sleep(3) or 'x'") === false) && p('') && e('1'); // 步骤8：嵌套变量不会逃逸出字面量

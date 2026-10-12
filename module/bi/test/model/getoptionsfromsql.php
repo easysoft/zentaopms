@@ -13,6 +13,7 @@ cid=15177
 - 执行biTest模块的getOptionsFromSqlTest方法，参数是'SELECT id, account FROM zt_user WHERE deleted = "0"', 'mysql', 'nonexistent', 'account'  @0
 - 执行biTest模块的getOptionsFromSqlTest方法，参数是'SELECT id, account FROM zt_user WHERE deleted = "0"', 'mysql', 'id', 'nonexistent'  @0
 - 执行biTest模块的getOptionsFromSqlTest方法，参数是'SELECT count 属性10 @total
+- INTO OUTFILE 写文件被拒绝 @SQL 语句包含危险语法（写文件/读文件），请求已被拒绝。
 
 */
 
@@ -30,3 +31,4 @@ r($biTest->getOptionsFromSqlTest('SELECT id, realname FROM zt_user WHERE deleted
 r(count($biTest->getOptionsFromSqlTest('SELECT id, account FROM zt_user WHERE deleted = "0"', 'mysql', 'nonexistent', 'account'))) && p() && e(0);
 r(count($biTest->getOptionsFromSqlTest('SELECT id, account FROM zt_user WHERE deleted = "0"', 'mysql', 'id', 'nonexistent'))) && p() && e(0);
 r($biTest->getOptionsFromSqlTest('SELECT count(*) as cnt, "total" as label FROM zt_user', 'mysql', 'cnt', 'label')) && p('10') && e('total');
+r($biTest->getOptionsFromSqlTest("SELECT 'x' INTO OUTFILE '/tmp/zentao_vuln010.php'", 'mysql', 'x', 'x')) && p() && e($lang->bi->errorIllegalSql); // INTO OUTFILE 写文件被拒绝

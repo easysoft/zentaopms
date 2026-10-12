@@ -12,6 +12,7 @@ cid=15176
 - 步骤3：不存在的对象类型 @0
 - 步骤4：不存在的字段时使用id字段属性1 @1
 - 步骤5：空参数测试 @0
+- 步骤6：路径穿越的对象名不加载任何文件 @1
 
 */
 
@@ -46,3 +47,4 @@ r($biTest->getObjectOptionsTest('product', 'name')) && p('1') && e('正常产品
 r($biTest->getObjectOptionsTest('nonexistent', 'id')) && p() && e(0); // 步骤3：不存在的对象类型
 r($biTest->getObjectOptionsTest('user', 'nonexistent')) && p('1') && e('1'); // 步骤4：不存在的字段时使用id字段
 r($biTest->getObjectOptionsTest('', '')) && p() && e(0); // 步骤5：空参数测试
+r($biTest->getObjectOptionsTest('../../../../../tmp/vuln014_marker', 'demo') === array()) && p() && e('1'); // 步骤6：路径穿越的对象名不加载任何文件

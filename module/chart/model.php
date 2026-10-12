@@ -590,6 +590,12 @@ class chartModel extends model
      */
     public function genWaterpolo(array $settings, string $sql, array $filters, string $driver = 'mysql')
     {
+        /* 水球图的计算函数与统计字段必须来自白名单。The calc and goal of the waterpolo chart must be whitelisted. */
+        $calc = isset($settings['calc']) ? (string)$settings['calc'] : '';
+        $goal = isset($settings['goal']) ? (string)$settings['goal'] : '';
+        if(!in_array($calc, array_keys($this->lang->chart->aggList))) $this->denyIllegalChartSql('agg');
+        if(!$this->bi->isSafeFilterField($goal))                      $this->denyIllegalChartSql('field');
+
         $operate = "{$settings['calc']}({$settings['goal']})";
         $sql = "select $operate count from ($sql) tt ";
 
@@ -601,6 +607,11 @@ class chartModel extends model
         foreach($settings['conditions'] as $condition)
         {
             $condition = (array)$condition;
+
+            if(!$this->bi->isSafeFilterField((string)$condition['field'])) $this->denyIllegalChartSql('field');
+            if(!isset($this->config->chart->conditionList[$condition['condition']])) $this->denyIllegalChartSql('operator');
+            if(!$this->isSafeWaterpoloConditionValue((string)$condition['value'])) $this->denyIllegalChartSql('value');
+
             $where = "{$condition['field']} {$this->config->chart->conditionList[$condition['condition']]} '{$condition['value']}'";
             $moleculeWheres[]    = $where;
         }
@@ -610,6 +621,7 @@ class chartModel extends model
             $wheres = array();
             foreach($filters as $field => $filter)
             {
+                $this->checkChartFilter((string)$field, (string)$filter['operator'], (string)$filter['value']);
                 $wheres[] = "$field {$filter['operator']} {$filter['value']}";
             }
             $moleculeWheres    = array_merge($moleculeWheres, $wheres);
@@ -726,6 +738,7 @@ class chartModel extends model
             $field = $filter['field'];
             $type  = $filter['type'];
             if($type != 'condition' && !isset($filter['default'])) continue;
+            if($type == 'condition' && !$this->bi->isSafeFilterField((string)$field)) $this->denyIllegalChartSql('field');
 
             if($type != 'condition') $default = $filter['default'];
             switch($type)
@@ -759,6 +772,8 @@ class chartModel extends model
                     $operator = $filter['operator'];
                     $value    = $filter['value'];
 
+                    if(!$this->bi->isAllowedFilterOperator((string)$operator)) $this->denyIllegalChartSql('operator');
+
                     if(in_array($operator, array('IN', 'NOT IN')))
                     {
                         $valueArr = array_filter(array_map('trim', explode(',', (string)$value)), 'strlen');
@@ -769,12 +784,142 @@ class chartModel extends model
                     {
                         $value = '';
                     }
+                    elseif(!$this->bi->isSafeFilterValue((string)$value, (string)$operator))
+                    {
+                        $this->denyIllegalChartSql('value');
+                    }
                     $filterFormat[$field] = array('operator' => $operator, 'value' => $value);
                     break;
             }
         }
 
         return $filterFormat;
+    }
+
+    /**
+     * 校验水球图条件的值：外层会补单引号，因此值内不允许出现引号、反斜线与换行。
+     * Check the value of waterpolo condition, which is wrapped in quotes when used in sql.
+     *
+     * @param  string $value
+     * @access public
+     * @return bool
+     */
+    public function isSafeWaterpoloConditionValue(string $value): bool
+    {
+        return preg_match("/^[^'\\\\\r\n]*$/", $value) === 1;
+    }
+
+    /**
+     * 校验客户端提交的 SQL，返回 true 或拒绝原因。
+     * Validate the sql submitted by the client, return true or the deny reason.
+     *
+     * @param  string $sql
+     * @access public
+     * @return bool|string
+     */
+    public function checkClientSql(string $sql)
+    {
+        $this->app->loadConfig('dev');
+        $this->app->loadLang('dev');
+
+        if(trim($sql) === '') return $this->lang->dev->sqlEmpty;
+        if(strlen($sql) > $this->config->dev->sqlQuery->maxSqlLength) return sprintf($this->lang->dev->sqlTooLong, $this->config->dev->sqlQuery->maxSqlLength);
+
+        $this->app->loadClass('sqlparser', true);
+        try
+        {
+            $parser = new sqlparser($sql);
+        }
+        catch(Throwable $e)
+        {
+            return $this->lang->dev->sqlParseError;
+        }
+
+        if(empty($parser->statements))  return $this->lang->dev->sqlParseError;
+        if(count($parser->statements) > 1) return $this->lang->dev->sqlMultiStatement;
+
+        $statement = $parser->statements[0];
+        if(strpos(get_class($statement), 'SelectStatement') === false) return $this->lang->dev->sqlOnlySelect;
+
+        /* 取值与字符串字面量无关，先剥离字面量再校验关键字，避免正常取值被误判。 */
+        /* The keyword check is run on the sql without string literal content to avoid judging normal values. */
+        $strippedSql = $this->bi->stripSqlLiterals($sql);
+        foreach($this->config->dev->sqlQuery->forbiddenKeywords as $keyword)
+        {
+            if(stripos($strippedSql, $keyword) !== false) return sprintf($this->lang->dev->sqlForbidden, $keyword);
+        }
+
+        /* 禁止查询口令等凭据字段，以及用通配符查询用户表。 */
+        /* Deny querying the credential fields and denying the wildcard select of the user table. */
+        if(preg_match('/\b(password|passwd|resetToken|resetExpired|authKey|secretKey)\b/i', $strippedSql)) return $this->lang->chart->sqlSensitiveField;
+
+        $prefix = $this->config->db->prefix;
+        if(preg_match('/\bselect\s+\*/i', $strippedSql) && preg_match('/\b' . preg_quote($prefix, '/') . 'user\b/i', $strippedSql)) return $this->lang->chart->sqlWildcardUser;
+        if(preg_match('/\b' . preg_quote($prefix, '/') . '(session|priv|grouppriv|im_userdevice)\b/i', $strippedSql)) return $this->lang->chart->sqlSensitiveField;
+
+        return true;
+    }
+
+    /**
+     * 校验一条过滤器（字段名、操作符、值），非法时拒绝请求。
+     * Check one filter, deny the request when it is illegal.
+     *
+     * @param  string $field
+     * @param  string $operator
+     * @param  string $value
+     * @access public
+     * @return void
+     */
+    public function checkChartFilter(string $field, string $operator, string $value): void
+    {
+        if(!$this->bi->isSafeFilterField($field))            $this->denyIllegalChartSql('field');
+        if(!$this->bi->isAllowedFilterOperator($operator))   $this->denyIllegalChartSql('operator');
+        if(!$this->bi->isSafeFilterValue($value, $operator)) $this->denyIllegalChartSql('value');
+    }
+
+    /**
+     * 校验图表查询用到的日期分组、字段名、聚合函数与过滤器，非法时拒绝请求。
+     * Check the date group, fields, aggregate function and filters of the chart query.
+     *
+     * @param  string $date
+     * @param  string $group
+     * @param  string $metric
+     * @param  string $agg
+     * @param  array  $filters
+     * @access public
+     * @return void
+     */
+    public function checkChartSqlParams(string $date, string $group, string $metric, string $agg, array $filters = array()): void
+    {
+        $allowedDates = isset($this->config->chart->dateConvert) ? array_values($this->config->chart->dateConvert) : array('YEAR', 'MONTH', 'YEARWEEK', 'DATE');
+        $allowedAggs  = isset($this->lang->chart->aggList) ? array_keys($this->lang->chart->aggList) : array('count', 'distinct', 'avg', 'sum', 'max', 'min');
+
+        if(!empty($date) and !in_array($date, $allowedDates)) $this->denyIllegalChartSql('date');
+        if(!$this->bi->isSafeFilterField($group) or !$this->bi->isSafeFilterField($metric)) $this->denyIllegalChartSql('field');
+        if(!in_array($agg, $allowedAggs)) $this->denyIllegalChartSql('agg');
+
+        foreach($filters as $field => $filter)
+        {
+            $operator = isset($filter['operator']) ? (string)$filter['operator'] : '';
+            $value    = isset($filter['value'])    ? (string)$filter['value']    : '';
+            $this->checkChartFilter((string)$field, $operator, $value);
+        }
+    }
+
+    /**
+     * 图表 SQL 参数不合法时拒绝请求。
+     * Deny the request when the sql params of chart are illegal.
+     *
+     * @param  string $type field|operator|value|agg|date
+     * @access public
+     * @return void
+     */
+    public function denyIllegalChartSql(string $type = 'value')
+    {
+        $message = zget($this->lang->chart->errorIllegalSql, $type, $this->lang->chart->errorIllegalSql['value']);
+        if(!empty($this->app->control)) return $this->app->control->sendError($message);
+
+        helper::end($message);
     }
 
     /**

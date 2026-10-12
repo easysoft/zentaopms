@@ -2,6 +2,8 @@ window.onRenderCell = function(result, {row, col})
 {
     if(result && col.name == 'actions' && typeof result[0].props != 'undefined')
     {
+        if(typeof row.data.pendingReview != 'undefined' && !row.data.pendingReview) return [];
+
         if(row.data.module == 'review')
         {
             result[0].props.items[0]['disabled']    = projectPriv ? false: true;
