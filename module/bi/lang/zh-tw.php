@@ -6,3 +6,4 @@ $lang->bi->errorIllegalFilter = array();
 $lang->bi->errorIllegalFilter['field']    = '過濾條件的字段名不合法，請求已被拒絕。';
 $lang->bi->errorIllegalFilter['operator'] = '過濾條件的操作符不合法，請求已被拒絕。';
 $lang->bi->errorIllegalFilter['value']    = '過濾條件的值不合法，只允許數字或引號包裹的字符串，請求已被拒絕。';
+$lang->bi->errorIllegalSql                = 'SQL 語句包含危險語法（寫文件/讀文件），請求已被拒絕。';

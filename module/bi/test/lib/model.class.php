@@ -413,9 +413,17 @@ class biModelTest extends baseTest
      */
     public function getOptionsFromSqlTest($sql, $driver, $keyField, $valueField)
     {
-        $result = $this->instance->getOptionsFromSql($sql, $driver, $keyField, $valueField);
-        if(dao::isError()) return dao::getError();
-        return $result;
+        try
+        {
+            $result = $this->instance->getOptionsFromSql($sql, $driver, $keyField, $valueField);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**
@@ -1200,6 +1208,79 @@ class biModelTest extends baseTest
     public function getTableSchemaFileTest(string $object): string
     {
         return $this->instance->getTableSchemaFile($object);
+    }
+
+    /**
+     * Test stripSqlLiterals method.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public function stripSqlLiteralsTest(string $sql): string
+    {
+        return $this->invokeArgs('stripSqlLiterals', [$sql]);
+    }
+
+    /**
+     * Test isDangerousSql method.
+     *
+     * @param  string $sql
+     * @access public
+     * @return bool
+     */
+    public function isDangerousSqlTest(string $sql): bool
+    {
+        return $this->invokeArgs('isDangerousSql', [$sql]);
+    }
+
+    /**
+     * Test checkExecutableSql method. 1 passed, 0 denied.
+     *
+     * @param  string $sql
+     * @access public
+     * @return mixed
+     */
+    public function checkExecutableSqlTest(string $sql)
+    {
+        try
+        {
+            ob_start();
+            $this->instance->checkExecutableSql($sql);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            return 1;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+    /**
+     * Test denyIllegalSql method, returns the denied message.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function denyIllegalSqlTest()
+    {
+        try
+        {
+            ob_start();
+            $this->instance->denyIllegalSql();
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            return 1;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**

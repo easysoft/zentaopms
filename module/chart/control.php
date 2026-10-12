@@ -89,6 +89,10 @@ class chart extends control
 
         if($verifyResult !== true) return $this->send($verifyResult);
 
+        /* 校验客户端提交的 SQL（单条 SELECT、禁关键字、禁敏感字段）。Validate the client sql. */
+        $sqlCheck = $this->chart->checkClientSql((string)$sql);
+        if($sqlCheck !== true) return $this->send(array('result' => 'fail', 'message' => $sqlCheck));
+
         $fieldPairs = array();
         foreach($fieldList as $field => $fieldName)
         {
@@ -207,6 +211,10 @@ class chart extends control
         $fields = $post->fieldSettings;
         $langs  = !empty($post->langs) ? $post->langs : array();
         if(is_string($langs)) $langs = json_decode($langs, true);
+
+        /* 校验客户端提交的 SQL（单条 SELECT、禁关键字、禁敏感字段）。Validate the client sql. */
+        $sqlCheck = $this->chart->checkClientSql($sql);
+        if($sqlCheck !== true) return $this->send(array('result' => 'fail', 'message' => $sqlCheck));
 
         switch($type)
         {

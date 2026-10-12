@@ -373,6 +373,8 @@ class biModel extends model
      */
     public function queryWithDriver($driver, $sql, $fetchAll = true)
     {
+        $this->checkExecutableSql($sql);
+
         $dbh = $this->app->loadDriver($driver);
 
         /* 过滤掉模板数据。 */
@@ -514,6 +516,34 @@ class biModel extends model
     }
 
     /**
+     * 去掉SQL中字符串字面量的内容，便于做关键字校验，避免正常取值被误判。
+     * Strip the content of the string literals in the sql, so that the keyword check can not be triggered by normal values.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public static function stripSqlLiterals(string $sql): string
+    {
+        $sql = preg_replace("/'(?:[^'\\\\]|\\\\.|'')*'/s", "''", $sql);
+        return preg_replace('/"(?:[^"\\\\]|\\\\.|"")*"/s', '""', $sql);
+    }
+
+    /**
+     * 判断SQL是否包含写文件、读文件或导入数据等危险语法。
+     * Check whether the sql contains dangerous syntax such as writing, reading files or loading data.
+     *
+     * @param  string $sql
+     * @access public
+     * @return bool
+     */
+    public static function isDangerousSql(string $sql): bool
+    {
+        $sql = self::stripSqlLiterals($sql);
+        return preg_match('/\binto\s+(outfile|dumpfile)\b|\bload_file\s*\(|\bload\s+data\s+infile\b/i', $sql) === 1;
+    }
+
+    /**
      * 获取 dataview/table 目录下的表结构定义文件，对象名非法或文件越出目录时返回空字符串。
      * Get the schema file under dataview/table, return '' when the object name is illegal or the file is outside the directory.
      *
@@ -610,6 +640,8 @@ class biModel extends model
      */
     public function getOptionsFromSql(string $sql, $driver, string $keyField, string $valueField): array
     {
+        $this->checkExecutableSql($sql);
+
         $options = array();
         $dbh     = $this->app->loadDriver($driver);
         $cols    = $dbh->query($sql)->fetchAll();
@@ -1743,6 +1775,8 @@ class biModel extends model
      */
     public function querySQL($sql, $limitSql, $driver = 'mysql')
     {
+        $this->checkExecutableSql($sql);
+
         $dbh = $this->app->loadDriver($driver);
 
         try
@@ -2502,6 +2536,36 @@ class biModel extends model
 
         $messages = !empty($this->lang->bi->errorIllegalFilter) ? $this->lang->bi->errorIllegalFilter : array();
         $message  = isset($messages[$type]) ? $messages[$type] : zget($messages, 'value', 'Illegal filter, the request has been denied.');
+        if(!empty($this->app->control)) return $this->app->control->sendError($message);
+
+        helper::end($message);
+    }
+
+    /**
+     * 待执行的SQL包含危险语法时拒绝请求。
+     * Deny the request when the sql to be executed contains dangerous syntax.
+     *
+     * @param  string $sql
+     * @access public
+     * @return void
+     */
+    public function checkExecutableSql(string $sql): void
+    {
+        if(self::isDangerousSql($sql)) $this->denyIllegalSql();
+    }
+
+    /**
+     * SQL 包含危险语法时拒绝请求。
+     * Deny the request when the sql is illegal.
+     *
+     * @access public
+     * @return void
+     */
+    public function denyIllegalSql()
+    {
+        if(empty($this->lang->bi->errorIllegalSql)) $this->app->loadLang('bi');
+
+        $message = !empty($this->lang->bi->errorIllegalSql) ? $this->lang->bi->errorIllegalSql : 'The sql is illegal, the request has been denied.';
         if(!empty($this->app->control)) return $this->app->control->sendError($message);
 
         helper::end($message);

@@ -582,4 +582,24 @@ class chartModelTest extends baseTest
         }
     }
 
+    /**
+     * Test checkClientSql method, returns true or the deny reason.
+     *
+     * @param  string $sql
+     * @access public
+     * @return mixed
+     */
+    public function checkClientSqlTest(string $sql)
+    {
+        try
+        {
+            return $this->instance->checkClientSql($sql);
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
+    }
+
 }

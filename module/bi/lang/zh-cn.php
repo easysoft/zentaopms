@@ -6,6 +6,7 @@ $lang->bi->errorIllegalFilter = array();
 $lang->bi->errorIllegalFilter['field']    = '过滤条件的字段名不合法，请求已被拒绝。';
 $lang->bi->errorIllegalFilter['operator'] = '过滤条件的操作符不合法，请求已被拒绝。';
 $lang->bi->errorIllegalFilter['value']    = '过滤条件的值不合法，只允许数字或引号包裹的字符串，请求已被拒绝。';
+$lang->bi->errorIllegalSql                = 'SQL 语句包含危险语法（写文件/读文件），请求已被拒绝。';
 
 $lang->bi->acl = '访问控制';
 

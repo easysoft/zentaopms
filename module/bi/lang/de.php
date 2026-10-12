@@ -6,6 +6,7 @@ $lang->bi->errorIllegalFilter = array();
 $lang->bi->errorIllegalFilter['field']    = 'The filter field is invalid, the request has been denied.';
 $lang->bi->errorIllegalFilter['operator'] = 'The filter operator is invalid, the request has been denied.';
 $lang->bi->errorIllegalFilter['value']    = 'The filter value is invalid, only a number or a quoted string is allowed.';
+$lang->bi->errorIllegalSql                = 'The sql contains dangerous syntax, the request has been denied.';
 
 $lang->bi->acl = 'Access Control';
 

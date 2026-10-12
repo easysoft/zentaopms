@@ -590,6 +590,12 @@ class chartModel extends model
      */
     public function genWaterpolo(array $settings, string $sql, array $filters, string $driver = 'mysql')
     {
+        /* 水球图的计算函数与统计字段必须来自白名单。The calc and goal of the waterpolo chart must be whitelisted. */
+        $calc = isset($settings['calc']) ? (string)$settings['calc'] : '';
+        $goal = isset($settings['goal']) ? (string)$settings['goal'] : '';
+        if(!in_array($calc, array_keys($this->lang->chart->aggList))) $this->denyIllegalChartSql('agg');
+        if(!$this->bi->isSafeFilterField($goal))                      $this->denyIllegalChartSql('field');
+
         $operate = "{$settings['calc']}({$settings['goal']})";
         $sql = "select $operate count from ($sql) tt ";
 
@@ -801,6 +807,57 @@ class chartModel extends model
     public function isSafeWaterpoloConditionValue(string $value): bool
     {
         return preg_match("/^[^'\\\\\r\n]*$/", $value) === 1;
+    }
+
+    /**
+     * 校验客户端提交的 SQL，返回 true 或拒绝原因。
+     * Validate the sql submitted by the client, return true or the deny reason.
+     *
+     * @param  string $sql
+     * @access public
+     * @return bool|string
+     */
+    public function checkClientSql(string $sql)
+    {
+        $this->app->loadConfig('dev');
+        $this->app->loadLang('dev');
+
+        if(trim($sql) === '') return $this->lang->dev->sqlEmpty;
+        if(strlen($sql) > $this->config->dev->sqlQuery->maxSqlLength) return sprintf($this->lang->dev->sqlTooLong, $this->config->dev->sqlQuery->maxSqlLength);
+
+        $this->app->loadClass('sqlparser', true);
+        try
+        {
+            $parser = new sqlparser($sql);
+        }
+        catch(Throwable $e)
+        {
+            return $this->lang->dev->sqlParseError;
+        }
+
+        if(empty($parser->statements))  return $this->lang->dev->sqlParseError;
+        if(count($parser->statements) > 1) return $this->lang->dev->sqlMultiStatement;
+
+        $statement = $parser->statements[0];
+        if(strpos(get_class($statement), 'SelectStatement') === false) return $this->lang->dev->sqlOnlySelect;
+
+        /* 取值与字符串字面量无关，先剥离字面量再校验关键字，避免正常取值被误判。 */
+        /* The keyword check is run on the sql without string literal content to avoid judging normal values. */
+        $strippedSql = $this->bi->stripSqlLiterals($sql);
+        foreach($this->config->dev->sqlQuery->forbiddenKeywords as $keyword)
+        {
+            if(stripos($strippedSql, $keyword) !== false) return sprintf($this->lang->dev->sqlForbidden, $keyword);
+        }
+
+        /* 禁止查询口令等凭据字段，以及用通配符查询用户表。 */
+        /* Deny querying the credential fields and denying the wildcard select of the user table. */
+        if(preg_match('/\b(password|passwd|resetToken|resetExpired|authKey|secretKey)\b/i', $strippedSql)) return $this->lang->chart->sqlSensitiveField;
+
+        $prefix = $this->config->db->prefix;
+        if(preg_match('/\bselect\s+\*/i', $strippedSql) && preg_match('/\b' . preg_quote($prefix, '/') . 'user\b/i', $strippedSql)) return $this->lang->chart->sqlWildcardUser;
+        if(preg_match('/\b' . preg_quote($prefix, '/') . '(session|priv|grouppriv|im_userdevice)\b/i', $strippedSql)) return $this->lang->chart->sqlSensitiveField;
+
+        return true;
     }
 
     /**
