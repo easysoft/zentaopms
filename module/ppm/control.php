@@ -137,11 +137,11 @@ class ppm extends control
         $reviewResults = $this->ppm->getReviewResults(array_keys($ppmList), $repoID);
         $spaces = $this->config->vision == 'gitfox' ? $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account) : array();
 
+        /* 镜像代码库也加入筛选下拉框，选中后在页面上展示镜像提示。 */
         $spaceRepos = array();
         foreach($accessibleRepos as $listRepoID => $listRepoName)
         {
             if(!isset($repoList[$listRepoID])) continue;
-            if(!empty($repoList[$listRepoID]->mirror)) continue;
             if($spaceID && (int)$repoList[$listRepoID]->spaceID !== (int)$spaceID) continue;
             $spaceRepos[$listRepoID] = $listRepoName;
         }
