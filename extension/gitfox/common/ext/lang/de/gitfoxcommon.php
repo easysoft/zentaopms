@@ -30,4 +30,6 @@ $lang->devops->artifact     = 'Artifacts';
 $lang->devops->welcome      = "%s R&D Platform";
 $lang->devops->website      = "https://www.gitfox.net";
 
+$lang->visionList['gitfox'] = 'GitFox Interface';
+
 include dirname(dirname(__FILE__)) . DS . 'gitfoxmenu.php';
