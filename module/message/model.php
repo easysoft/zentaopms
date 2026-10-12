@@ -305,7 +305,7 @@ class messageModel extends model
         {
             $assignedTo = zget($object, 'assignedTo', '');
             if($assignedTo != $account && $role == 'to') $role = 'other';
-            if($assignedTo == $account && $role != 'to') $role = 'to';
+            if($assignedTo == $account && $role == 'other') $role = 'to';
 
             $assignedTo = zget($users, $assignedTo);
         }
@@ -341,7 +341,7 @@ class messageModel extends model
         {
             $assignedTo = zget($object, 'assignedTo', '');
             if($assignedTo != $account && $role == 'to') $role = 'other';
-            if($assignedTo == $account && $role != 'to') $role = 'to';
+            if($assignedTo == $account && $role == 'other') $role = 'to';
 
             $assignedTo = zget($users, $assignedTo);
         }
