@@ -355,7 +355,8 @@ class formPanel extends panel
 
         $buildinItems = $buildinItems ? array_column($buildinItems, null, 'name') : array();
 
-        $items = array();
+        $product = data('product');
+        $items   = array();
         foreach($fields as $field)
         {
             if(!empty($buildinItems[$field->field]))
@@ -364,6 +365,9 @@ class formPanel extends panel
             }
             else
             {
+                /* 普通产品没有平台/分支，不追加分支字段。*/
+                if($field->field == 'branch' && !empty($product) && $product->type == 'normal') continue;
+
                 $value = isset($field->defaultValue) && $field->defaultValue != '' ? $field->defaultValue : $field->default;
                 $value = isset($data->{$field->field}) ? $data->{$field->field} : $value;
                 $items[$field->field] = !empty($buildinItems) ? array
