@@ -169,7 +169,7 @@ function updateAssignedTo()
             assignedTo = assignedToItems.includes(index) ? assignedToItems[index].value : '';
         }
 
-        $assignedToPicker.render({items: assignedToItems, disabled: true});
+        $assignedToPicker.render({items: assignedToItems, disabled: true, required: false});
     }
     else
     {

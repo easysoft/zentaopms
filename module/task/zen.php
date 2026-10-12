@@ -800,6 +800,9 @@ class taskZen extends task
      */
     protected function buildTaskForActivate(int $taskID): object|bool
     {
+        $taskMode = $this->task->getByID($taskID)->mode;
+        if(in_array($taskMode, array('multi', 'linear'))) $this->config->task->activate->requiredFields = str_replace(',assignedTo,', ',', ",{$this->config->task->activate->requiredFields},");
+
         $task = form::data($this->config->task->form->activate, $taskID)->add('id', $taskID)->get();
         if($task->left && $task->left < 0)
         {
