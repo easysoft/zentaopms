@@ -13,13 +13,15 @@ cid=15592
 - 执行ci模块的setMenuTest方法，参数是2, 'gitlab' 第code条的link属性 @代码|repo|browse|repoID=%s
 - 执行ci模块的setMenuTest方法，参数是0, 'ci' 第code条的link属性 @代码|repo|browse|repoID=1
 - 执行ci模块的setMenuTest方法，参数是1 第code条的link属性 @代码|repo|browse|repoID=1
+- 步骤7：独立版非镜像库，codescan/issue/settings 三菜单仍在 @codescan:1|issue:1|settings:1
+- 步骤8：独立版镜像库，codescan/issue/settings 三菜单被 unset @codescan:0|issue:0|settings:0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $dbh, $app;
+global $dbh, $app, $tester;
 $dataRoot = $app->getAppRoot() . 'test' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR;
 foreach(array('ops_repo.sql', 'ops_repouser.sql') as $schema)
 {
@@ -57,5 +59,10 @@ r($ci->setMenuTest(5)) && p('mr') && e('~~');
 r($ci->setMenuTest(2, 'gitlab')) && p('code:link') && e('代码|repo|browse|repoID=%s');
 r($ci->setMenuTest(0, 'ci')) && p('code:link') && e('代码|repo|browse|repoID=1');
 r($ci->setMenuTest(1)) && p('code:link') && e('代码|repo|browse|repoID=1');
+$tester->dao->update(TABLE_REPO)->set('scmType')->eq('git')->where('id')->eq(3)->exec();
+$tester->dao->update(TABLE_REPO)->set('mirror')->eq(0)->where('id')->eq(3)->exec();
+r($ci->setMenuGitfoxMirrorCheckTest(3)) && p() && e('codescan:1|issue:1|settings:1'); // 步骤7：独立版非镜像库，三菜单仍在
+$tester->dao->update(TABLE_REPO)->set('mirror')->eq(1)->where('id')->eq(3)->exec();
+r($ci->setMenuGitfoxMirrorCheckTest(3)) && p() && e('codescan:0|issue:0|settings:0'); // 步骤8：独立版镜像库，三菜单被 unset
 
 common::$httpClient = null;

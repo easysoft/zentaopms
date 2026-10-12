@@ -173,6 +173,46 @@ class repoModelTest extends baseTest
     }
 
     /**
+     * Test setMenu method's mirror branch with gitfox(独立版) menu keys.
+     * Returns "codescan:{0|1}|issue:{0|1}|settings:{0|1}" where 1 = menu still present, 0 = unset.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return string
+     */
+    public function setMenuGitfoxMirrorCheckTest(int $repoID)
+    {
+        global $app, $lang;
+
+        $oldVision = $app->config->vision;
+        $oldTab    = $app->tab;
+        $oldMenu   = isset($lang->repo) && isset($lang->repo->menu) ? $lang->repo->menu : null;
+
+        $app->config->vision = 'gitfox';
+        if(!isset($lang->repo)) $lang->repo = new stdclass();
+        $lang->repo->menu = new stdclass();
+        $lang->repo->menu->codescan = array('link' => 'codescan');
+        $lang->repo->menu->issue    = array('link' => 'issue');
+        $lang->repo->menu->settings = array('link' => 'settings');
+
+        $repos = $this->instance->dao->select('id')->from(TABLE_REPO)->fetchPairs('id');
+        ob_start();
+        $this->instance->setMenu($repos, $repoID);
+        ob_end_clean();
+
+        $codescan = isset($lang->repo->menu->codescan) ? 1 : 0;
+        $issue    = isset($lang->repo->menu->issue)    ? 1 : 0;
+        $settings = isset($lang->repo->menu->settings) ? 1 : 0;
+
+        $app->config->vision = $oldVision;
+        $app->tab            = $oldTab;
+        if($oldMenu === null) unset($lang->repo->menu);
+        else                  $lang->repo->menu = $oldMenu;
+
+        return "codescan:{$codescan}|issue:{$issue}|settings:{$settings}";
+    }
+
+    /**
      * Test getListByCondition method.
      *
      * @param  string      $repoQuery

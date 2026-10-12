@@ -39,6 +39,8 @@ cid=18104
 - 步骤5：无权限用户访问 → repoID 归 0 @0
 - 步骤6：非镜像库 mirror=0，两菜单仍在 @repoCodeScan:1|review:1
 - 步骤7：镜像库 id=2 mirror=1，两菜单被 unset @repoCodeScan:0|review:0
+- 步骤8：独立版非镜像库 mirror=0，三菜单仍在 @codescan:1|issue:1|settings:1
+- 步骤9：独立版镜像库 id=2 mirror=1，三菜单被 unset @codescan:0|issue:0|settings:0
 
 */
 
@@ -73,3 +75,7 @@ su('admin');
 r($repo->setMenuMirrorCheckTest(2))  && p() && e('repoCodeScan:1|review:1'); // 步骤6：非镜像库 mirror=0，两菜单仍在
 $tester->dao->update(TABLE_REPO)->set('mirror')->eq(1)->where('id')->eq(2)->exec();
 r($repo->setMenuMirrorCheckTest(2))  && p() && e('repoCodeScan:0|review:0'); // 步骤7：镜像库 id=2 mirror=1，两菜单被 unset
+$tester->dao->update(TABLE_REPO)->set('mirror')->eq(0)->where('id')->eq(2)->exec();
+r($repo->setMenuGitfoxMirrorCheckTest(2)) && p() && e('codescan:1|issue:1|settings:1'); // 步骤8：独立版非镜像库 mirror=0，三菜单仍在
+$tester->dao->update(TABLE_REPO)->set('mirror')->eq(1)->where('id')->eq(2)->exec();
+r($repo->setMenuGitfoxMirrorCheckTest(2)) && p() && e('codescan:0|issue:0|settings:0'); // 步骤9：独立版镜像库 mirror=1，三菜单被 unset
