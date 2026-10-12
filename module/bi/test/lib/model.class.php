@@ -133,14 +133,22 @@ class biModelTest extends baseTest
     {
         if(empty($sql)) return 0;
 
-        // 尝试实际调用（如果测试环境允许）
-        $result = $this->instance->getColumns($sql, $driver, $returnOrigin);
-        if(dao::isError()) return dao::getError();
+        try
+        {
+            // 尝试实际调用（如果测试环境允许）
+            $result = $this->instance->getColumns($sql, $driver, $returnOrigin);
+            if(dao::isError()) return dao::getError();
 
-        // 处理无效驱动的情况
-        if($result === false) return 0;
+            // 处理无效驱动的情况
+            if($result === false) return 0;
 
-        return $result;
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**
@@ -336,9 +344,17 @@ class biModelTest extends baseTest
      */
     public function explainSQLTest($sql, $driver = 'mysql')
     {
-        $result = $this->instance->explainSQL($sql, $driver);
-        if(dao::isError()) return dao::getError();
-        return $result;
+        try
+        {
+            $result = $this->instance->explainSQL($sql, $driver);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**
@@ -891,9 +907,17 @@ class biModelTest extends baseTest
      */
     public function queryTest($sqlOrStateObj, $driver = 'mysql', $useFilter = true)
     {
-        $result = $this->instance->query($sqlOrStateObj, $driver, $useFilter);
-        if(dao::isError()) return dao::getError();
-        return $result;
+        try
+        {
+            $result = $this->instance->query($sqlOrStateObj, $driver, $useFilter);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**

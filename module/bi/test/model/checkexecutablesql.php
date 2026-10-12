@@ -13,6 +13,7 @@ cid=0
 - INTO OUTFILE 被拒绝 @1
 - LOAD_FILE 被拒绝 @1
 - 字面量中的关键字通过校验 @1
+- 注释分隔的 INTO OUTFILE 被拒绝 @1
 
 */
 
@@ -22,3 +23,4 @@ r($testObj->checkExecutableSqlTest('select id, account from zt_user') === 1)    
 r($testObj->checkExecutableSqlTest("select 'x' into outfile '/tmp/x.php'") === 0)                 && p() && e(0); // INTO OUTFILE 被拒绝
 r($testObj->checkExecutableSqlTest("select load_file('/etc/passwd')") === 0)                      && p() && e(0); // LOAD_FILE 被拒绝
 r($testObj->checkExecutableSqlTest("select id from zt_user where account = 'load_file('") === 1)  && p() && e(1); // 字面量中的关键字通过校验
+r($testObj->checkExecutableSqlTest("select 'x' into/**/outfile '/tmp/x.php'") === 0)              && p() && e(0); // 注释分隔的 INTO OUTFILE 被拒绝

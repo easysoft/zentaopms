@@ -342,6 +342,8 @@ class biModel extends model
      */
     public function explainSQL($sql, $driver = 'mysql')
     {
+        $this->checkExecutableSql($sql);
+
         $dbh = $this->app->loadDriver($driver);
 
         $isDM    = $this->config->db->driver == 'dm';
@@ -398,6 +400,8 @@ class biModel extends model
      */
     public function getColumns(string $sql, $driver = 'mysql', $returnOrigin = false): array|false
     {
+        $this->checkExecutableSql($sql);
+
         if(!in_array($driver, $this->config->bi->drivers)) return false;
 
         if($driver == 'mysql')
@@ -516,8 +520,13 @@ class biModel extends model
     }
 
     /**
-     * 去掉SQL中字符串字面量的内容，便于做关键字校验，避免正常取值被误判。
-     * Strip the content of the string literals in the sql, so that the keyword check can not be triggered by normal values.
+     * 去掉SQL中字符串字面量与注释的内容，便于做关键字校验，避免正常取值、注释说明被误判。
+     * Strip the content of the string literals and comments in the sql, so that the keyword check can not be triggered by normal values.
+     *
+     * 字符串字面量（单引号/双引号，支持反斜杠转义与双写转义）替换为同类型的空字面量；
+     * 行注释（-- 与 #）与块注释的内容替换为一个空格，使 into+块注释+outfile 这类被注释分隔的写法
+     * 中性化为 into outfile。MySQL 的版本注释（以 /*! 开头，内容会被数据库执行）只去掉注释定界符与版本号、
+     * 保留其中的内容，让其关键字同样参与校验。
      *
      * @param  string $sql
      * @access public
@@ -525,8 +534,67 @@ class biModel extends model
      */
     public static function stripSqlLiterals(string $sql): string
     {
-        $sql = preg_replace("/'(?:[^'\\\\]|\\\\.|'')*'/s", "''", $sql);
-        return preg_replace('/"(?:[^"\\\\]|\\\\.|"")*"/s', '""', $sql);
+        $result = '';
+        $length = strlen($sql);
+        for($i = 0; $i < $length; $i++)
+        {
+            $char = $sql[$i];
+
+            /* 行注释：# 到行尾。 */
+            if($char === '#')
+            {
+                for(; $i < $length and $sql[$i] !== "\n"; $i++);
+                $result .= ' ';
+                continue;
+            }
+
+            /* 行注释：-- 后跟空白或控制字符（或到末尾）才是注释，与 MySQL 语义一致，避免把 1--1 这类表达式整段剥离。 */
+            if($char === '-' and $i + 1 < $length and $sql[$i + 1] === '-')
+            {
+                $next = $i + 2 < $length ? $sql[$i + 2] : ' ';
+                if(ord($next) <= 0x20)
+                {
+                    for(; $i < $length and $sql[$i] !== "\n"; $i++);
+                    $result .= ' ';
+                    continue;
+                }
+            }
+
+            /* 块注释与 MySQL 版本注释。 */
+            if($char === '/' and $i + 1 < $length and $sql[$i + 1] === '*')
+            {
+                $isVersionComment = ($i + 2 < $length && $sql[$i + 2] === '!');
+                $content = '';
+                $i += $isVersionComment ? 3 : 2;
+                for(; $i < $length; $i++)
+                {
+                    if($sql[$i] === '*' and $i + 1 < $length and $sql[$i + 1] === '/') break;
+                    if($isVersionComment) $content .= $sql[$i];
+                }
+                $i++;
+                $result .= $isVersionComment ? ' ' . preg_replace('/^\s*\d*\s*/', ' ', $content) : ' ';
+                continue;
+            }
+
+            /* 字符串字面量：内容替换为空，保留引号。 */
+            if($char === "'" or $char === '"')
+            {
+                $quote = $char;
+                for($i++; $i < $length; $i++)
+                {
+                    if($sql[$i] === '\\') { $i++; continue; }
+                    if($sql[$i] !== $quote) continue;
+                    if($i + 1 < $length and $sql[$i + 1] === $quote) { $i++; continue; }
+                    break;
+                }
+                $result .= $quote . $quote;
+                continue;
+            }
+
+            $result .= $char;
+        }
+
+        return $result;
     }
 
     /**
@@ -1813,6 +1881,8 @@ class biModel extends model
     {
         $dbh = $this->app->loadDriver($driver);
         $sql = $stateObj->sql;
+        $this->checkExecutableSql($sql);
+
         if($useFilter) $sql = $this->processVars($sql, $stateObj->getFilters(), true);
 
         $stateObj->beforeQuerySql();
