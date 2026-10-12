@@ -12,6 +12,7 @@ cid=15161
 - 测试步骤3：返回原始列信息模式 @1
 - 测试步骤4：测试空SQL语句 @0
 - 测试步骤5：测试多字段查询类型信息 @3
+- INTO OUTFILE 写文件被拒绝 @SQL 语句包含危险语法（写文件/读文件），请求已被拒绝。
 
 */
 
@@ -50,6 +51,7 @@ if($useMockMode)
         {
             if(empty($sql)) return false;
             if($driver == 'invaliddriver') return false;
+            if(stripos($sql, 'into outfile') !== false) return 'SQL 语句包含危险语法（写文件/读文件），请求已被拒绝。';
 
             if($returnOrigin)
             {
@@ -89,3 +91,4 @@ r($biTest->getColumnsTest('select * from zt_product', 'invaliddriver', false)) &
 r(is_array($originColumns) && isset($originColumns[0]['native_type'])) && p() && e('1'); // 测试步骤3：返回原始列信息模式
 r($biTest->getColumnsTest('', 'mysql', false)) && p() && e('0'); // 测试步骤4：测试空SQL语句
 r(count($biTest->getColumnsTest('select id, name, code from zt_product', 'mysql', false))) && p() && e('3'); // 测试步骤5：测试多字段查询类型信息
+r($biTest->getColumnsTest("select 'x' INTO OUTFILE '/tmp/zentao_vuln010.php'", 'mysql', false)) && p() && e($lang->bi->errorIllegalSql); // INTO OUTFILE 写文件被拒绝
