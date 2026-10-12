@@ -501,6 +501,41 @@ class biModel extends model
     }
 
     /**
+     * 校验字段来源对象名，只允许字母、数字与下划线，防止路径穿越。
+     * Validate the object name of the field source, only letters, digits and underscore are allowed.
+     *
+     * @param  string $object
+     * @access public
+     * @return bool
+     */
+    public static function isSafeTableObject(string $object): bool
+    {
+        return preg_match('/^[A-Za-z0-9_]+$/', $object) === 1;
+    }
+
+    /**
+     * 获取 dataview/table 目录下的表结构定义文件，对象名非法或文件越出目录时返回空字符串。
+     * Get the schema file under dataview/table, return '' when the object name is illegal or the file is outside the directory.
+     *
+     * @param  string $object
+     * @access public
+     * @return string
+     */
+    public function getTableSchemaFile(string $object): string
+    {
+        if(!self::isSafeTableObject($object)) return '';
+
+        $root = realpath($this->app->getModuleRoot() . 'dataview' . DS . 'table');
+        if($root === false) return '';
+
+        $path = realpath($root . DS . $object . '.php');
+        if($path === false) return '';
+        if(strncmp($path, $root . DS, strlen($root) + 1) !== 0) return '';
+
+        return is_file($path) ? $path : '';
+    }
+
+    /**
      * Get object options.
      *
      * @param  string $object
@@ -511,8 +546,8 @@ class biModel extends model
     public function getDataviewOptions($object, $field)
     {
         $options = array();
-        $path    = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
-        if(is_file($path))
+        $path    = $this->getTableSchemaFile((string)$object);
+        if($path)
         {
             include $path;
             $fieldConfig = zget($schema->fields, $field, array());
@@ -536,8 +571,8 @@ class biModel extends model
         $useTable = $object;
         $useField = $field;
 
-        $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
-        if(is_file($path))
+        $path = $this->getTableSchemaFile((string)$object);
+        if($path)
         {
             include $path;
             $fieldObject = isset($schema->fields[$field]['object']) ? $schema->fields[$field]['object'] : '';

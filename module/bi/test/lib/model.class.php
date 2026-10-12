@@ -1179,6 +1179,30 @@ class biModelTest extends baseTest
     }
 
     /**
+     * Test isSafeTableObject method.
+     *
+     * @param  string $object
+     * @access public
+     * @return bool
+     */
+    public function isSafeTableObjectTest(string $object): bool
+    {
+        return $this->invokeArgs('isSafeTableObject', [$object]);
+    }
+
+    /**
+     * Test getTableSchemaFile method, returns the schema file path or ''.
+     *
+     * @param  string $object
+     * @access public
+     * @return string
+     */
+    public function getTableSchemaFileTest(string $object): string
+    {
+        return $this->instance->getTableSchemaFile($object);
+    }
+
+    /**
      * Test checkFilter method. 1 passed, 0 denied.
      *
      * @param  string $field

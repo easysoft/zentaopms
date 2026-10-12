@@ -19,6 +19,8 @@ cid=15957
 - 步骤4：加载不存在的表配置文件 @0
 - 步骤5：使用空字符串作为表名 @0
 - 步骤6：验证返回的schema对象主表名属性primaryTable @bug
+- 步骤7：路径穿越的表名不加载任何文件 @0
+- 步骤8：带扩展名的表名不加载任何文件 @0
 
 */
 
@@ -39,3 +41,5 @@ r($dataviewTest->includeTableTest('task')) && p('primaryTable;tables:task') && e
 r($dataviewTest->includeTableTest('nonexistent_table')) && p() && e('0'); // 步骤4：加载不存在的表配置文件
 r($dataviewTest->includeTableTest('')) && p() && e('0'); // 步骤5：使用空字符串作为表名
 r($dataviewTest->includeTableTest('bug')) && p('primaryTable') && e('bug'); // 步骤6：验证返回的schema对象主表名
+r($dataviewTest->includeTableTest('../../../../../tmp/vuln014_marker')) && p() && e('0'); // 步骤7：路径穿越的表名不加载任何文件
+r($dataviewTest->includeTableTest('bug.php')) && p() && e('0'); // 步骤8：带扩展名的表名不加载任何文件
