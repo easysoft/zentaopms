@@ -608,7 +608,7 @@ class biModel extends model
     public static function isDangerousSql(string $sql): bool
     {
         $sql = self::stripSqlLiterals($sql);
-        return preg_match('/\binto\s+(outfile|dumpfile)\b|\bload_file\s*\(|\bload\s+data\s+infile\b/i', $sql) === 1;
+        return preg_match('/\binto\s+(outfile|dumpfile)\b|\bload_file\s*\(|\bload\s+data\b|\bload\s+xml\b/i', $sql) === 1;
     }
 
     /**
