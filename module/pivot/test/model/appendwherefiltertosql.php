@@ -12,6 +12,9 @@ cid=17356
 - 执行pivotTest模块的appendWhereFilterToSqlTest方法，参数是$sql, $filters, $driver  @SELECT * FROM zt_user
 - 执行pivotTest模块的appendWhereFilterToSqlTest方法，参数是$sql, $filters, $driver  @select * from ( SELECT * FROM zt_user ) tt where  cast(tt.`account` as varchar)  = 'admin'
 - 执行pivotTest模块的appendWhereFilterToSqlTest方法，参数是$sql, $filters, $driver  @select * from ( SELECT * FROM zt_user ) tt where tt.`account` = 'admin' and tt.`role` != 'guest'
+- 字段名非法的过滤器被拒绝 @过滤条件的字段名不合法，请求已被拒绝。
+- 操作符非白名单的过滤器被拒绝 @过滤条件的操作符不合法，请求已被拒绝。
+- 过滤值注入载荷被拒绝 @过滤条件的值不合法，只允许数字或引号包裹的字符串，请求已被拒绝。
 
 */
 
@@ -74,3 +77,15 @@ $filters = array(
 );
 $driver = 'mysql';
 r($pivotTest->appendWhereFilterToSqlTest($sql, $filters, $driver)) && p() && e("select * from ( SELECT * FROM zt_user ) tt where tt.`account` = 'admin' and tt.`role` != 'guest'");
+
+// 测试步骤6：字段名非法的过滤器被拒绝
+$filters = array('account`' => array('type' => 'input', 'operator' => '=', 'value' => "'admin'"));
+r($pivotTest->appendWhereFilterToSqlTest($sql, $filters, $driver)) && p() && e($lang->bi->errorIllegalFilter['field']);
+
+// 测试步骤7：操作符非白名单的过滤器被拒绝
+$filters = array('account' => array('type' => 'input', 'operator' => '= 1 or 1=1', 'value' => "'admin'"));
+r($pivotTest->appendWhereFilterToSqlTest($sql, $filters, $driver)) && p() && e($lang->bi->errorIllegalFilter['operator']);
+
+// 测试步骤8：过滤值注入载荷被拒绝
+$filters = array('account' => array('type' => 'input', 'operator' => '=', 'value' => "'admin' or sleep(3)-- "));
+r($pivotTest->appendWhereFilterToSqlTest($sql, $filters, $driver)) && p() && e($lang->bi->errorIllegalFilter['value']);

@@ -17,6 +17,8 @@ cid=17377
 - 步骤7：数值型条件组合测试 @ where tt.`count` >= 50 and tt.`level` < 10
 - 步骤8：小写操作符测试 @ where tt.`status` like '%test%'
 - 步骤9：空字符串值过滤测试 @ where tt.`title` != ''
+- 步骤10：字段名非法的过滤器被拒绝 @过滤条件的字段名不合法，请求已被拒绝。
+- 步骤11：过滤值注入载荷被拒绝 @过滤条件的值不合法，只允许数字或引号包裹的字符串，请求已被拒绝。
 
 */
 
@@ -36,3 +38,5 @@ r($pivotTest->getConnectSQLTest(array('description' => array('field' => 'descrip
 r($pivotTest->getConnectSQLTest(array('count' => array('field' => 'count', 'operator' => '>=', 'value' => '50'), 'level' => array('field' => 'level', 'operator' => '<', 'value' => '10')))) && p() && e(" where tt.`count` >= 50 and tt.`level` < 10");    // 步骤7：数值型条件组合测试
 r($pivotTest->getConnectSQLTest(array('status' => array('field' => 'status', 'operator' => 'like', 'value' => "'%test%'")))) && p() && e(" where tt.`status` like '%test%'");    // 步骤8：小写操作符测试
 r($pivotTest->getConnectSQLTest(array('title' => array('field' => 'title', 'operator' => '!=', 'value' => "''")))) && p() && e(" where tt.`title` != ''");    // 步骤9：空字符串值过滤测试
+r($pivotTest->getConnectSQLTest(array('title`' => array('field' => 'title', 'operator' => '=', 'value' => "'a'")))) && p() && e($lang->bi->errorIllegalFilter['field']);    // 步骤10：字段名非法的过滤器被拒绝
+r($pivotTest->getConnectSQLTest(array('title' => array('field' => 'title', 'operator' => '=', 'value' => "'a' or sleep(3)-- ")))) && p() && e($lang->bi->errorIllegalFilter['value']);    // 步骤11：过滤值注入载荷被拒绝

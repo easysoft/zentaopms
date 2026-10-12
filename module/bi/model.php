@@ -625,7 +625,7 @@ class biModel extends model
             $wheres = array();
             foreach($filters as $field => $filter)
             {
-                if(!self::isSafeFilterField((string)$field) || !self::isAllowedFilterOperator((string)$filter['operator'])) continue;
+                $this->checkFilter((string)$field, isset($filter['operator']) ? (string)$filter['operator'] : '', isset($filter['value']) ? (string)$filter['value'] : '');
                 $wheres[] = "$field {$filter['operator']} {$filter['value']}";
             }
             $moleculeWheres    = array_merge($moleculeWheres, $wheres);
@@ -701,7 +701,7 @@ class biModel extends model
                 $wheres = array();
                 foreach($filters as $field => $filter)
                 {
-                    if(!self::isSafeFilterField((string)$field) || !self::isAllowedFilterOperator((string)$filter['operator'])) continue;
+                    $this->checkFilter((string)$field, isset($filter['operator']) ? (string)$filter['operator'] : '', isset($filter['value']) ? (string)$filter['value'] : '');
                     $wheres[] = "`$field` {$filter['operator']} {$filter['value']}";
                 }
 
@@ -1347,25 +1347,36 @@ class biModel extends model
      */
     public function parseSqlVars(string $sql, array $filters): string
     {
+        $vars = array();
         if($filters)
         {
             foreach($filters as $filter)
             {
                 if(!isset($filter['default']) || !isset($filter['from']) || $filter['from'] !== 'query') continue;
-                $default = $filter['default'];
-                if($filter['type'] == 'multipleselect' && is_array($default)) $default = implode("','", $default);
 
-                if(strpos($sql, $filter['field'] . 'Condition') === false)
+                $field = isset($filter['field']) ? (string)$filter['field'] : '';
+                if($field === '') continue;
+
+                $literal = $this->quoteFilterValue($filter['default']);
+
+                if(strpos($sql, $field . 'Condition') !== false)
                 {
-                    $sql = str_replace('$' . $filter['field'], "'{$default}'", $sql);
+                    $relatedField = isset($filter['relatedField']) ? (string)$filter['relatedField'] : '';
+                    if(!self::isSafeFilterField($field) || !self::isSafeFilterField($relatedField)) $this->denyIllegalFilter('field');
+
+                    $vars['$' . $field . 'Condition'] = "{$relatedField}={$literal}";
                 }
-                else
+                elseif(strpos($sql, '$' . $field) !== false)
                 {
-                    $relatedField = $filter['relatedField'];
-                    $sql = str_replace('$' . $filter['field'] . 'Condition', "{$relatedField}='{$default}'", $sql);
+                    /* 变量不在SQL中时不做替换，保持原有的空操作行为。If the variable is not in the sql, keep the old no-op behavior. */
+                    if(!self::isSafeFilterField($field)) $this->denyIllegalFilter('field');
+
+                    $vars['$' . $field] = $literal;
                 }
             }
         }
+
+        $sql = $this->replaceSqlVars($sql, $vars);
 
         $matchRule = "[\$]+[a-zA-Z0-9]+_[0-9]";
         if(strpos($sql, 'Condition') !== false && strpos($sql, 'Variale_') !== false) $matchRule .= "+Condition";
@@ -2423,6 +2434,170 @@ class biModel extends model
     {
         $allowed = array('IN', 'NOT IN', 'LIKE', 'NOT LIKE', 'BETWEEN', '=', '!=', '<>', '>', '<', '>=', '<=', 'IS NULL', 'IS NOT NULL');
         return in_array(strtoupper(trim($operator)), $allowed);
+    }
+
+    /**
+     * 校验一条过滤器（字段名、操作符、值），非法时拒绝请求。
+     * Check one filter(field, operator and value), deny the request when it is illegal.
+     *
+     * @param  string $field
+     * @param  string $operator
+     * @param  string $value
+     * @access public
+     * @return void
+     */
+    public function checkFilter(string $field, string $operator, string $value): void
+    {
+        if(!self::isSafeFilterField($field))            $this->denyIllegalFilter('field');
+        if(!self::isAllowedFilterOperator($operator))   $this->denyIllegalFilter('operator');
+        if(!self::isSafeFilterValue($value, $operator)) $this->denyIllegalFilter('value');
+    }
+
+    /**
+     * 过滤器不合法时拒绝请求。
+     * Deny the request when the filter is illegal.
+     *
+     * @param  string $type field|operator|value
+     * @access public
+     * @return void
+     */
+    public function denyIllegalFilter(string $type = 'value')
+    {
+        if(empty($this->lang->bi->errorIllegalFilter)) $this->app->loadLang('bi');
+
+        $messages = !empty($this->lang->bi->errorIllegalFilter) ? $this->lang->bi->errorIllegalFilter : array();
+        $message  = isset($messages[$type]) ? $messages[$type] : zget($messages, 'value', 'Illegal filter, the request has been denied.');
+        if(!empty($this->app->control)) return $this->app->control->sendError($message);
+
+        helper::end($message);
+    }
+
+    /**
+     * 过滤值转SQL字面量，数组按元素转字面量后以逗号连接，非标量值拒绝请求。
+     * Convert the filter value to sql literals, an array is converted item by item and joined by comma.
+     * The request is denied when the value is not scalar.
+     *
+     * @param  mixed $value
+     * @access public
+     * @return string
+     */
+    public function quoteFilterValue($value): string
+    {
+        if(is_array($value))
+        {
+            $literals = array();
+            foreach($value as $item)
+            {
+                if(!is_scalar($item)) $this->denyIllegalFilter('value');
+                $literals[] = $this->dbh->quote((string)$item);
+            }
+
+            return implode(', ', $literals);
+        }
+
+        if(!is_scalar($value)) $this->denyIllegalFilter('value');
+
+        return $this->dbh->quote((string)$value);
+    }
+
+    /**
+     * 替换SQL中的变量。只扫描传入的SQL，且不替换字符串、反引号标识符及注释中的同名文本，
+     * 替换结果不会被再次扫描，避免嵌套变量逃逸出字面量。
+     *
+     * Replace the variables in the sql. Only the given sql is scanned and the same text inside
+     * string literals, quoted identifiers or comments is kept unchanged, so the replaced content
+     * will never be scanned again.
+     *
+     * @param  string $sql
+     * @param  array  $vars  array($varName => $sqlLiteral)
+     * @access public
+     * @return string
+     */
+    public function replaceSqlVars(string $sql, array $vars): string
+    {
+        if(empty($vars)) return $sql;
+
+        $varNames     = array_keys($vars);
+        $length       = strlen($sql);
+        $result       = '';
+        $quote        = '';
+        $lineComment  = false;
+        $blockComment = false;
+
+        for($offset = 0; $offset < $length; $offset ++)
+        {
+            $char = $sql[$offset];
+            $next = isset($sql[$offset + 1]) ? $sql[$offset + 1] : '';
+
+            if($blockComment)
+            {
+                $result .= $char;
+                if($char === '*' && $next === '/') { $result .= '/'; $offset ++; $blockComment = false; }
+                continue;
+            }
+
+            if($lineComment)
+            {
+                $result .= $char;
+                if($char === "\n") $lineComment = false;
+                continue;
+            }
+
+            if($quote === '')
+            {
+                if($char === '-' && $next === '-') { $result .= '--'; $offset ++; $lineComment = true; continue; }
+                if($char === '#')                   { $result .= $char; $lineComment  = true; continue; }
+                if($char === '/' && $next === '*')  { $result .= '/*'; $offset ++; $blockComment = true; continue; }
+            }
+
+            if($quote !== '' && $quote !== '`' && $char === '\\' && $next !== '')
+            {
+                $result .= $char . $next;
+                $offset ++;
+                continue;
+            }
+
+            if($quote !== '')
+            {
+                if($char === $quote)
+                {
+                    /* 双写引号表示转义。A doubled quote is an escaped quote. */
+                    if($next === $quote) { $result .= $char . $next; $offset ++; continue; }
+                    $quote = '';
+                }
+
+                $result .= $char;
+                continue;
+            }
+
+            if($char === "'" || $char === '"' || $char === '`')
+            {
+                $quote  = $char;
+                $result .= $char;
+                continue;
+            }
+
+            if($char === '$')
+            {
+                $matched = '';
+                foreach($varNames as $varName)
+                {
+                    if(strlen($varName) <= strlen($matched)) continue;
+                    if(substr($sql, $offset, strlen($varName)) === $varName) $matched = $varName;
+                }
+
+                if($matched !== '')
+                {
+                    $result .= $vars[$matched];
+                    $offset += strlen($matched) - 1;
+                    continue;
+                }
+            }
+
+            $result .= $char;
+        }
+
+        return $result;
     }
 
     /**

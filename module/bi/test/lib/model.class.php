@@ -189,7 +189,15 @@ class biModelTest extends baseTest
      */
     public function processVarsTest($sql, $filters, $emptyValue)
     {
-        return $this->instance->processVars($sql, $filters, $emptyValue);
+        try
+        {
+            return $this->instance->processVars($sql, $filters, $emptyValue);
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**
@@ -724,9 +732,17 @@ class biModelTest extends baseTest
      */
     public function parseSqlVarsTest($sql, $filters)
     {
-        $result = $this->instance->parseSqlVars($sql, $filters);
-        if(dao::isError()) return dao::getError();
-        return $result;
+        try
+        {
+            $result = $this->instance->parseSqlVars($sql, $filters);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**
@@ -1160,5 +1176,98 @@ class biModelTest extends baseTest
     public function isScalarLiteralTest(string $value): bool
     {
         return $this->invokeArgs('isScalarLiteral', [$value]);
+    }
+
+    /**
+     * Test checkFilter method. 1 passed, 0 denied.
+     *
+     * @param  string $field
+     * @param  string $operator
+     * @param  string $value
+     * @access public
+     * @return mixed
+     */
+    public function checkFilterTest(string $field, string $operator, string $value)
+    {
+        try
+        {
+            ob_start();
+            $this->instance->checkFilter($field, $operator, $value);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            return 1;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+    /**
+     * Test denyIllegalFilter method, returns the denied message.
+     *
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function denyIllegalFilterTest(string $type = 'value')
+    {
+        try
+        {
+            ob_start();
+            $this->instance->denyIllegalFilter($type);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            return 1;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
+    }
+
+    /**
+     * Test quoteFilterValue method, returns the sql literal.
+     *
+     * @param  mixed $value
+     * @access public
+     * @return string
+     */
+    public function quoteFilterValueTest($value)
+    {
+        try
+        {
+            return $this->instance->quoteFilterValue($value);
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
+    }
+
+    /**
+     * Test replaceSqlVars method, returns the sql replaced.
+     *
+     * @param  string $sql
+     * @param  array  $vars
+     * @access public
+     * @return string
+     */
+    public function replaceSqlVarsTest(string $sql, array $vars)
+    {
+        try
+        {
+            return $this->instance->replaceSqlVars($sql, $vars);
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 }

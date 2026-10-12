@@ -2,6 +2,11 @@
 $lang->bi->binNotExists        = 'The DuckDB binary does not exist.';
 $lang->bi->tmpPermissionDenied = 'The DuckDB tmp directory has no permissions, you need to change the permissions for the directory "%s". The <br /> command is: <br />chmod 777 -R %s.';
 
+$lang->bi->errorIllegalFilter = array();
+$lang->bi->errorIllegalFilter['field']    = 'The filter field is invalid, the request has been denied.';
+$lang->bi->errorIllegalFilter['operator'] = 'The filter operator is invalid, the request has been denied.';
+$lang->bi->errorIllegalFilter['value']    = 'The filter value is invalid, only a number or a quoted string is allowed.';
+
 $lang->bi->acl = 'Access Control';
 
 $lang->bi->driver = 'Driver';

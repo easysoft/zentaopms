@@ -2,6 +2,11 @@
 $lang->bi->binNotExists        = 'DuckDB 二进制文件不存在。';
 $lang->bi->tmpPermissionDenied = 'DuckDB tmp 目录没有权限, 需要修改目录 "%s" 的权限。<br />命令为：<br />chmod 755 -R %s。';
 
+$lang->bi->errorIllegalFilter = array();
+$lang->bi->errorIllegalFilter['field']    = '过滤条件的字段名不合法，请求已被拒绝。';
+$lang->bi->errorIllegalFilter['operator'] = '过滤条件的操作符不合法，请求已被拒绝。';
+$lang->bi->errorIllegalFilter['value']    = '过滤条件的值不合法，只允许数字或引号包裹的字符串，请求已被拒绝。';
+
 $lang->bi->acl = '访问控制';
 
 $lang->bi->driver = '数据库类型';
