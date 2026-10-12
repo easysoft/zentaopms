@@ -137,21 +137,22 @@ class messageModel extends model
             }
         }
 
+        /* 自定义工作流动作的 Webhook 和系统通知由 flow 的 sendNotice 发送，避免与这里重复。 */
+        $isBuiltinMethod = true;
+        if(!in_array($this->config->edition, array('open', 'gitfox')))
+        {
+            $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($objectType, $objectID);
+            $method  = $this->loadModel('workflowaction')->getByModuleAndAction($objectType, $this->app->rawMethod, $groupID);
+            if($method && !$method->buildin) $isBuiltinMethod = false;
+        }
+
         if(isset($messageSetting['webhook']))
         {
             $actions = $messageSetting['webhook']['setting'];
-            if(isset($actions[$settingObjectType]) && in_array($actionType, $actions[$settingObjectType])) $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID, $actor);
+            if($isBuiltinMethod && isset($actions[$settingObjectType]) && in_array($actionType, $actions[$settingObjectType])) $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID, $actor);
         }
         if(isset($messageSetting['message']))
         {
-            $isBuiltinMethod = true;
-            if(!in_array($this->config->edition, array('open', 'gitfox')))
-            {
-                $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($objectType, $objectID);
-                $method  = $this->loadModel('workflowaction')->getByModuleAndAction($objectType, $this->app->rawMethod, $groupID);
-                if($method && !$method->buildin) $isBuiltinMethod = false;
-            }
-
             $actions = $messageSetting['message']['setting'];
             if($isBuiltinMethod && isset($actions[$settingObjectType]) && in_array($actionType, $actions[$settingObjectType])) $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
         }
@@ -304,7 +305,7 @@ class messageModel extends model
         {
             $assignedTo = zget($object, 'assignedTo', '');
             if($assignedTo != $account && $role == 'to') $role = 'other';
-            if($assignedTo == $account && $role != 'to') $role = 'to';
+            if($assignedTo == $account && $role == 'other') $role = 'to';
 
             $assignedTo = zget($users, $assignedTo);
         }
@@ -340,7 +341,7 @@ class messageModel extends model
         {
             $assignedTo = zget($object, 'assignedTo', '');
             if($assignedTo != $account && $role == 'to') $role = 'other';
-            if($assignedTo == $account && $role != 'to') $role = 'to';
+            if($assignedTo == $account && $role == 'other') $role = 'to';
 
             $assignedTo = zget($users, $assignedTo);
         }

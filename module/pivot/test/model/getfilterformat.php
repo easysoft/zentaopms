@@ -16,6 +16,9 @@ cid=17387
 - 测试过滤类型为datetime,开始时间和结束时间都存在的情况, 判断生成的过滤条件是否正确 @1
 - 测试过滤类型为datetime,开始时间不存在但结束时间存在的情况, 判断生成的过滤条件是否正确 @1
 - 测试过滤类型为datetime,开始时间存在但结束时间不存在的情况, 判断生成的过滤条件是否正确 @1
+- 测试query过滤器的注入载荷被转义 @1
+- 测试嵌套变量不会在替换结果中被再次替换 @1
+- 测试query过滤器字段名不合法被拒绝 @1
 
 */
 
@@ -74,3 +77,34 @@ list($sqlM, $filtersM) = $pivot->getFilterFormatTest($sqlList[1], $maliciousFilt
 
 r(strpos($filtersM['name5']['value'], "x'") === false && strpos($filtersM['name5']['value'], "x\\'") !== false && substr($filtersM['name5']['value'], -1) === ')') && p('') && e('1'); // 注入payload不能逃逸select过滤值
 r(strpos($filtersM['name6']['value'], "x'") === false && strpos($filtersM['name6']['value'], "x\\'") !== false && substr($filtersM['name6']['value'], -1) === "'") && p('') && e('1'); // 注入payload不能逃逸input过滤值
+
+/* query 过滤器：注入载荷被 quote 转义，不能闭合引号。The injection payload of the query filter is quoted. */
+$querySQL     = "select * from zt_user where account = \$username";
+$queryFilters = array(array('type' => 'select', 'from' => 'query', 'field' => 'username', 'default' => "admin' or sleep(3)-- "));
+list($querySqlResult) = $pivot->getFilterFormatTest($querySQL, $queryFilters);
+r($querySqlResult === "select * from zt_user where account = 'admin\\' or sleep(3)-- '") && p('') && e('1'); // 测试query过滤器的注入载荷被转义
+
+/* 嵌套变量：值中携带的另一个过滤器变量不会在替换结果中被再次替换，避免原样拼进SQL。
+   A nested variable inside the replaced text is not replaced again. */
+$nestedSQL = "select * from zt_product t2 where (case when \$productStatus='' then 1=1 else t2.status=\$productStatus end) and (case when \$product='0' then 1=1 else t2.id=\$product end)";
+$nestedFilters = array(
+    array('type' => 'select', 'from' => 'query', 'field' => 'productStatus', 'default' => 'x$productx'),
+    array('type' => 'select', 'from' => 'query', 'field' => 'product',       'default' => ' or sleep(3) or ')
+);
+list($nestedSqlResult) = $pivot->getFilterFormatTest($nestedSQL, $nestedFilters);
+$biModel        = $tester->loadModel('bi');
+$nestedFinalSql = $biModel->processVars($nestedSqlResult, $nestedFilters);
+r(strpos($nestedFinalSql, "'x' or sleep(3) or 'x'") === false && strpos($nestedFinalSql, "'x\$productx'") !== false) && p('') && e('1'); // 测试嵌套变量不会在替换结果中被再次替换
+
+/* query 过滤器字段名不合法时拒绝请求。Deny the request when the field of the query filter is illegal. */
+$illegalFieldFilters = array(array('type' => 'select', 'from' => 'query', 'field' => 'bad-field', 'default' => '1'));
+$illegalFieldResult  = '';
+try
+{
+    $pivot->getFilterFormatTest("select * from zt_user where \$bad-field = 1", $illegalFieldFilters);
+}
+catch(Throwable $e)
+{
+    if($e instanceof EndResponseException) $illegalFieldResult = $e->getContent();
+}
+r(strpos($illegalFieldResult, '请求已被拒绝') !== false) && p('') && e('1'); // 测试query过滤器字段名不合法被拒绝

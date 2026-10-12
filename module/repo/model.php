@@ -98,11 +98,18 @@ class repoModel extends model
 
         $repoMenu = $isGitfox ? $this->lang->repo->menu : $this->lang->devops->menu;
 
-        /* 镜像代码库屏蔽"扫描(repoCodeScan)"、"代码问题(review)"与"设置(settings)"三个一级菜单。 */
         if($repo && !empty($repo->mirror))
         {
-            unset($repoMenu->repoCodeScan);
-            unset($repoMenu->review);
+            if($isGitfox)
+            {
+                unset($repoMenu->codescan);
+                unset($repoMenu->issue);
+            }
+            else
+            {
+                unset($repoMenu->repoCodeScan);
+                unset($repoMenu->review);
+            }
             unset($repoMenu->settings);
         }
 

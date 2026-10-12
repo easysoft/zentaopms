@@ -436,7 +436,7 @@ class webhookModel extends model
 
         if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed')))
         {
-            $text  = $this->loadModel('aitask')->getNotificationText($object, $objectID, $actionType, 'markdown', '', $viewLink, $host);
+            $text  = $this->loadModel('aitask')->getNotificationText($object, $action->objectID, $actionType, 'markdown', '', $viewLink, $host);
             $title = $text;
         }
         else

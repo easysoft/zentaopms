@@ -133,14 +133,22 @@ class biModelTest extends baseTest
     {
         if(empty($sql)) return 0;
 
-        // 尝试实际调用（如果测试环境允许）
-        $result = $this->instance->getColumns($sql, $driver, $returnOrigin);
-        if(dao::isError()) return dao::getError();
+        try
+        {
+            // 尝试实际调用（如果测试环境允许）
+            $result = $this->instance->getColumns($sql, $driver, $returnOrigin);
+            if(dao::isError()) return dao::getError();
 
-        // 处理无效驱动的情况
-        if($result === false) return 0;
+            // 处理无效驱动的情况
+            if($result === false) return 0;
 
-        return $result;
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**
@@ -189,7 +197,15 @@ class biModelTest extends baseTest
      */
     public function processVarsTest($sql, $filters, $emptyValue)
     {
-        return $this->instance->processVars($sql, $filters, $emptyValue);
+        try
+        {
+            return $this->instance->processVars($sql, $filters, $emptyValue);
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**
@@ -328,9 +344,17 @@ class biModelTest extends baseTest
      */
     public function explainSQLTest($sql, $driver = 'mysql')
     {
-        $result = $this->instance->explainSQL($sql, $driver);
-        if(dao::isError()) return dao::getError();
-        return $result;
+        try
+        {
+            $result = $this->instance->explainSQL($sql, $driver);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**
@@ -405,9 +429,17 @@ class biModelTest extends baseTest
      */
     public function getOptionsFromSqlTest($sql, $driver, $keyField, $valueField)
     {
-        $result = $this->instance->getOptionsFromSql($sql, $driver, $keyField, $valueField);
-        if(dao::isError()) return dao::getError();
-        return $result;
+        try
+        {
+            $result = $this->instance->getOptionsFromSql($sql, $driver, $keyField, $valueField);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**
@@ -724,9 +756,17 @@ class biModelTest extends baseTest
      */
     public function parseSqlVarsTest($sql, $filters)
     {
-        $result = $this->instance->parseSqlVars($sql, $filters);
-        if(dao::isError()) return dao::getError();
-        return $result;
+        try
+        {
+            $result = $this->instance->parseSqlVars($sql, $filters);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**
@@ -867,9 +907,17 @@ class biModelTest extends baseTest
      */
     public function queryTest($sqlOrStateObj, $driver = 'mysql', $useFilter = true)
     {
-        $result = $this->instance->query($sqlOrStateObj, $driver, $useFilter);
-        if(dao::isError()) return dao::getError();
-        return $result;
+        try
+        {
+            $result = $this->instance->query($sqlOrStateObj, $driver, $useFilter);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**
@@ -1135,5 +1183,220 @@ class biModelTest extends baseTest
     public function isAllowedFilterOperatorTest(string $operator): bool
     {
         return $this->invokeArgs('isAllowedFilterOperator', [$operator]);
+    }
+
+    /**
+     * Test isSafeFilterValue method.
+     *
+     * @param  string $value
+     * @param  string $operator
+     * @access public
+     * @return bool
+     */
+    public function isSafeFilterValueTest(string $value, string $operator = ''): bool
+    {
+        return $this->invokeArgs('isSafeFilterValue', [$value, $operator]);
+    }
+
+    /**
+     * Test isScalarLiteral method.
+     *
+     * @param  string $value
+     * @access public
+     * @return bool
+     */
+    public function isScalarLiteralTest(string $value): bool
+    {
+        return $this->invokeArgs('isScalarLiteral', [$value]);
+    }
+
+    /**
+     * Test isSafeTableObject method.
+     *
+     * @param  string $object
+     * @access public
+     * @return bool
+     */
+    public function isSafeTableObjectTest(string $object): bool
+    {
+        return $this->invokeArgs('isSafeTableObject', [$object]);
+    }
+
+    /**
+     * Test getTableSchemaFile method, returns the schema file path or ''.
+     *
+     * @param  string $object
+     * @access public
+     * @return string
+     */
+    public function getTableSchemaFileTest(string $object): string
+    {
+        return $this->instance->getTableSchemaFile($object);
+    }
+
+    /**
+     * Test stripSqlLiterals method.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public function stripSqlLiteralsTest(string $sql): string
+    {
+        return $this->invokeArgs('stripSqlLiterals', [$sql]);
+    }
+
+    /**
+     * Test isDangerousSql method.
+     *
+     * @param  string $sql
+     * @access public
+     * @return bool
+     */
+    public function isDangerousSqlTest(string $sql): bool
+    {
+        return $this->invokeArgs('isDangerousSql', [$sql]);
+    }
+
+    /**
+     * Test checkExecutableSql method. 1 passed, 0 denied.
+     *
+     * @param  string $sql
+     * @access public
+     * @return mixed
+     */
+    public function checkExecutableSqlTest(string $sql)
+    {
+        try
+        {
+            ob_start();
+            $this->instance->checkExecutableSql($sql);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            return 1;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+    /**
+     * Test denyIllegalSql method, returns the denied message.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function denyIllegalSqlTest()
+    {
+        try
+        {
+            ob_start();
+            $this->instance->denyIllegalSql();
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            return 1;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
+    }
+
+    /**
+     * Test checkFilter method. 1 passed, 0 denied.
+     *
+     * @param  string $field
+     * @param  string $operator
+     * @param  string $value
+     * @access public
+     * @return mixed
+     */
+    public function checkFilterTest(string $field, string $operator, string $value)
+    {
+        try
+        {
+            ob_start();
+            $this->instance->checkFilter($field, $operator, $value);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            return 1;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+    /**
+     * Test denyIllegalFilter method, returns the denied message.
+     *
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function denyIllegalFilterTest(string $type = 'value')
+    {
+        try
+        {
+            ob_start();
+            $this->instance->denyIllegalFilter($type);
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            return 1;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
+    }
+
+    /**
+     * Test quoteFilterValue method, returns the sql literal.
+     *
+     * @param  mixed $value
+     * @access public
+     * @return string
+     */
+    public function quoteFilterValueTest($value)
+    {
+        try
+        {
+            return $this->instance->quoteFilterValue($value);
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
+    }
+
+    /**
+     * Test replaceSqlVars method, returns the sql replaced.
+     *
+     * @param  string $sql
+     * @param  array  $vars
+     * @access public
+     * @return string
+     */
+    public function replaceSqlVarsTest(string $sql, array $vars)
+    {
+        try
+        {
+            return $this->instance->replaceSqlVars($sql, $vars);
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 }

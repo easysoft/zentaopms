@@ -385,6 +385,99 @@ class chartModelTest extends baseTest
         }
     }
 
+    /**
+     * Test checkChartFilter method. 1 passed, 0 denied.
+     *
+     * @param  string $field
+     * @param  string $operator
+     * @param  string $value
+     * @access public
+     * @return mixed
+     */
+    public function checkChartFilterTest(string $field, string $operator, string $value)
+    {
+        try
+        {
+            ob_start();
+            $this->invokeArgs('checkChartFilter', array($field, $operator, $value));
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            return 1;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+    /**
+     * Test checkChartSqlParams method. 1 passed, 0 denied.
+     *
+     * @param  string $date
+     * @param  string $group
+     * @param  string $metric
+     * @param  string $agg
+     * @param  array  $filters
+     * @access public
+     * @return mixed
+     */
+    public function checkChartSqlParamsTest(string $date, string $group, string $metric, string $agg, array $filters = array())
+    {
+        try
+        {
+            ob_start();
+            $this->invokeArgs('checkChartSqlParams', array($date, $group, $metric, $agg, $filters));
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            return 1;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+    /**
+     * Test denyIllegalChartSql method, returns the denied message.
+     *
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function denyIllegalChartSqlTest(string $type = 'value')
+    {
+        try
+        {
+            ob_start();
+            $this->invokeArgs('denyIllegalChartSql', array($type));
+            $echoed = ob_get_clean();
+            if($echoed !== '') return 'echo_yes';
+            return 1;
+        }
+        catch(Throwable $e)
+        {
+            if(ob_get_level()) ob_end_clean();
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
+    }
+
+    /**
+     * Test isSafeWaterpoloConditionValue method.
+     *
+     * @param  string $value
+     * @access public
+     * @return bool
+     */
+    public function isSafeWaterpoloConditionValueTest(string $value): bool
+    {
+        return $this->invokeArgs('isSafeWaterpoloConditionValue', array($value));
+    }
+
 
     /**
      * Test getFirstGroup method.
@@ -485,6 +578,26 @@ class chartModelTest extends baseTest
         {
             if(ob_get_level()) ob_end_clean();
             if($e instanceof EndResponseException) return 0;
+            return 'error:' . get_class($e);
+        }
+    }
+
+    /**
+     * Test checkClientSql method, returns true or the deny reason.
+     *
+     * @param  string $sql
+     * @access public
+     * @return mixed
+     */
+    public function checkClientSqlTest(string $sql)
+    {
+        try
+        {
+            return $this->instance->checkClientSql($sql);
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
             return 'error:' . get_class($e);
         }
     }

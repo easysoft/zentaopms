@@ -4,6 +4,15 @@ $lang->chart->query     = 'Query';
 $lang->chart->toDesign  = 'To Design';
 
 $lang->chart->accessDenied  = 'You do not have access to this chart';
+
+$lang->chart->errorIllegalSql = array();
+$lang->chart->errorIllegalSql['field']    = 'The chart field is invalid, the request has been denied.';
+$lang->chart->errorIllegalSql['operator'] = 'The chart filter operator is invalid, the request has been denied.';
+$lang->chart->errorIllegalSql['value']    = 'The chart filter value is invalid, only a number or a quoted string is allowed.';
+$lang->chart->errorIllegalSql['agg']      = 'The chart aggregate function is invalid, the request has been denied.';
+$lang->chart->errorIllegalSql['date']     = 'The chart date group is invalid, the request has been denied.';
+$lang->chart->sqlSensitiveField           = 'Querying sensitive fields such as the password is not allowed, the request has been denied.';
+$lang->chart->sqlWildcardUser             = 'Using select * to query the user table is not allowed, the request has been denied.';
 $lang->chart->acl = 'Access Control';
 $lang->chart->aclList['open']    = 'Public (with chart view permissions and dimension permissions can access it)';
 $lang->chart->aclList['private'] = 'Private (Only creators and whitelisted users with dimension permissions can access it)';

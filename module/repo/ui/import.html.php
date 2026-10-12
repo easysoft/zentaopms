@@ -67,7 +67,6 @@ $fields->field('members')->width('1/2')
 $fields->autoLoad('origin', 'provider,organize,repo,account,password,repoPath,mirror');
 $fields->autoLoad('providerID', 'organize,repo,account,password,repoPath');
 $fields->autoLoad('organize', 'repo');
-$fields->autoLoad('acl', 'members');
 
 formGridPanel
 (

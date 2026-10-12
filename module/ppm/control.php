@@ -77,10 +77,13 @@ class ppm extends control
             $execution = $this->loadModel('execution')->getByID($objectID);
             if($execution && $execution->type === 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
 
-            $features = $this->execution->getExecutionFeatures($execution);
-            if(!$features['devops']) return $this->locate($this->createLink('execution', 'task', "objectID=$objectID"));
+            if($execution)
+            {
+                $features = $this->execution->getExecutionFeatures($execution);
+                if(!$features['devops']) return $this->locate($this->createLink('execution', 'task', "objectID=$objectID"));
 
-            $this->loadModel('execution')->setMenu($objectID);
+                $this->loadModel('execution')->setMenu($objectID);
+            }
             $this->view->executionID = $objectID;
         }
         elseif($this->app->tab == 'project')
@@ -134,11 +137,11 @@ class ppm extends control
         $reviewResults = $this->ppm->getReviewResults(array_keys($ppmList), $repoID);
         $spaces = $this->config->vision == 'gitfox' ? $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account) : array();
 
+        /* 镜像代码库也加入筛选下拉框，选中后在页面上展示镜像提示。 */
         $spaceRepos = array();
         foreach($accessibleRepos as $listRepoID => $listRepoName)
         {
             if(!isset($repoList[$listRepoID])) continue;
-            if(!empty($repoList[$listRepoID]->mirror)) continue;
             if($spaceID && (int)$repoList[$listRepoID]->spaceID !== (int)$spaceID) continue;
             $spaceRepos[$listRepoID] = $listRepoName;
         }
