@@ -1590,8 +1590,8 @@ class screenModel extends model
             case 'option':
                 if($field)
                 {
-                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
-                    if(is_file($path))
+                    $path = $this->bi->getTableSchemaFile((string)$object);
+                    if($path)
                     {
                         include $path;
                         $options = $schema->fields[$field]['options'];
@@ -1604,8 +1604,8 @@ class screenModel extends model
                     $useField = $field;
                     $useTable = $object;
 
-                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
-                    if(is_file($path))
+                    $path = $this->bi->getTableSchemaFile((string)$object);
+                    if($path)
                     {
                         include $path;
                         if(isset($schema->fields[$field]['object']))
