@@ -13,6 +13,10 @@ if($config->vision == 'gitfox')
     unset($lang->admin->menuList->convert);
     unset($lang->admin->menuList->adminregister);
 
+    /* GitFox独立版不展示重建索引菜单。*/
+    unset($lang->admin->menuList->system['subMenu']['buildindex']);
+    unset($lang->admin->menuList->system['menuOrder']['50']);
+
     $lang->admin->menuList->branchType['name']  = $lang->devops->branchType;
     $lang->admin->menuList->branchType['desc']  = '维护代码库分支类型及命名规则。';
     $lang->admin->menuList->branchType['link']  = 'repobranchtype|browse|';
