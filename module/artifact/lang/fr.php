@@ -27,6 +27,7 @@ $lang->artifact->type          = 'Type';
 $lang->artifact->size          = 'Size';
 $lang->artifact->version       = 'Version';
 $lang->artifact->arch          = 'System/Arch';
+$lang->artifact->multiArch     = 'Multi-arch';
 $lang->artifact->creator       = 'Creator';
 $lang->artifact->createdDate   = 'Created Date';
 $lang->artifact->editor        = 'Last Editor';
