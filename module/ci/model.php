@@ -52,8 +52,16 @@ class ciModel extends model
 
             if($repo && !empty($repo->mirror))
             {
-                unset($repoMenu->repoCodeScan);
-                unset($repoMenu->review);
+                if($isGitfox)
+                {
+                    unset($repoMenu->codescan);
+                    unset($repoMenu->issue);
+                }
+                else
+                {
+                    unset($repoMenu->repoCodeScan);
+                    unset($repoMenu->review);
+                }
                 unset($repoMenu->settings);
             }
         }
