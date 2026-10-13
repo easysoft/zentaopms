@@ -18,7 +18,7 @@ cid=17053
 - 查询objectType为product的action是opened的lab标签第product条的opened属性 @创建
 - 查询objectType为story的action是frombug的lab标签第story条的frombug属性 @转研发需求
 - 查询objectType为productplan的action是edited的lab标签第productplan条的edited属性 @编辑
-- 查询objectType为project的action是delayed的lab标签第project条的delayed属性 @延期
+- 查询objectType为execution的action是delayed的lab标签第execution条的delayed属性 @延期
 - 查询objectType为task的action是assigned的lab标签第task条的assigned属性 @指派
 - 查询objectType为bug的action是closed的lab标签第bug条的closed属性 @关闭
 - 查询objectType为case的action是opended的lab标签第case条的opened属性 @创建
@@ -39,9 +39,9 @@ cid=17053
 
 - 查询 productplan 的对象操作 value @创建,编辑
 
-- 查询 project 的对象操作 key @opened,edited,started,delayed,suspended,closed,activated,undeleted,mentioned
+- 查询 project 的对象操作 key @opened,edited,started,suspended,closed,activated,undeleted,mentioned
 
-- 查询 project 的对象操作 value @创建,编辑,开始,延期,挂起,关闭,激活,还原
+- 查询 project 的对象操作 value @创建,编辑,开始,挂起,关闭,激活,还原
 
 - 查询 task 的对象操作 key @opened,edited,commented,assigned,confirmed,started,finished,paused,canceled,restarted,closed,activated,mentioned
 
@@ -51,9 +51,9 @@ cid=17053
 
 - 查询 bug 的对象操作 value @创建,编辑,备注,指派,确认研发需求,确认,解决,关闭,激活
 
-- 查询 case 的对象操作 key @opened,edited,commented,reviewed,confirmed,mentioned
+- 查询 case 的对象操作 key @opened,edited,commented,assigned,reviewed,confirmed,mentioned
 
-- 查询 case 的对象操作 value @创建,编辑,备注,审批,确认研发需求
+- 查询 case 的对象操作 value @创建,编辑,备注,指派,审批,确认研发需求
 
 - 查询 testtask 的对象操作 key @opened,edited,started,blocked,closed,activated,mentioned
 
@@ -80,7 +80,7 @@ $objectActions = $message->getObjectActionsTest();
 r($objectActions) && p('product:opened')     && e('创建');       //查询objectType为product的action是opened的lab标签
 r($objectActions) && p('story:frombug')      && e('转研发需求'); //查询objectType为story的action是frombug的lab标签
 r($objectActions) && p('productplan:edited') && e('编辑');       //查询objectType为productplan的action是edited的lab标签
-r($objectActions) && p('project:delayed')    && e('延期');       //查询objectType为project的action是delayed的lab标签
+r($objectActions) && p('execution:delayed')  && e('延期');       //查询objectType为execution的action是delayed的lab标签
 r($objectActions) && p('task:assigned')      && e('指派');       //查询objectType为task的action是assigned的lab标签
 r($objectActions) && p('bug:closed')         && e('关闭');       //查询objectType为bug的action是closed的lab标签
 r($objectActions) && p('case:opened')        && e('创建');       //查询objectType为case的action是opended的lab标签
@@ -99,8 +99,8 @@ r(str_replace(',@通知', '', implode(',', array_values($objectActions['story'])
 r(implode(',', array_keys($objectActions['productplan'])))   && p() && e('opened,edited,mentioned'); // 查询 productplan 的对象操作 key
 r(str_replace(',@通知', '', implode(',', array_values($objectActions['productplan'])))) && p() && e('创建,编辑');         // 查询 productplan 的对象操作 value
 
-r(implode(',', array_keys($objectActions['project'])))   && p() && e('opened,edited,started,delayed,suspended,closed,activated,undeleted,mentioned'); // 查询 project 的对象操作 key
-r(str_replace(',@通知', '', implode(',', array_values($objectActions['project'])))) && p() && e('创建,编辑,开始,延期,挂起,关闭,激活,还原');                              // 查询 project 的对象操作 value
+r(implode(',', array_keys($objectActions['project'])))   && p() && e('opened,edited,started,suspended,closed,activated,undeleted,mentioned'); // 查询 project 的对象操作 key
+r(str_replace(',@通知', '', implode(',', array_values($objectActions['project'])))) && p() && e('创建,编辑,开始,挂起,关闭,激活,还原');                              // 查询 project 的对象操作 value
 
 r(implode(',', array_keys($objectActions['task'])))   && p() && e('opened,edited,commented,assigned,confirmed,started,finished,paused,canceled,restarted,closed,activated,mentioned'); // 查询 task 的对象操作 key
 r(str_replace(',@通知', '', implode(',', array_values($objectActions['task'])))) && p() && e('创建,编辑,备注,指派,确认研发需求,开始,完成,暂停,取消,继续,关闭,激活');                                // 查询 task 的对象操作 value
@@ -108,8 +108,8 @@ r(str_replace(',@通知', '', implode(',', array_values($objectActions['task']))
 r(implode(',', array_keys($objectActions['bug'])))   && p() && e('opened,edited,commented,assigned,confirmed,bugconfirmed,resolved,closed,activated,mentioned'); // 查询 bug 的对象操作 key
 r(str_replace(',@通知', '', implode(',', array_values($objectActions['bug'])))) && p() && e('创建,编辑,备注,指派,确认研发需求,确认,解决,关闭,激活');                              // 查询 bug 的对象操作 value
 
-r(implode(',', array_keys($objectActions['case'])))   && p() && e('opened,edited,commented,reviewed,confirmed,mentioned'); // 查询 case 的对象操作 key
-r(str_replace(',@通知', '', implode(',', array_values($objectActions['case'])))) && p() && e('创建,编辑,备注,审批,确认研发需求');                  // 查询 case 的对象操作 value
+r(implode(',', array_keys($objectActions['case'])))   && p() && e('opened,edited,commented,assigned,reviewed,confirmed,mentioned'); // 查询 case 的对象操作 key
+r(str_replace(',@通知', '', implode(',', array_values($objectActions['case'])))) && p() && e('创建,编辑,备注,指派,审批,确认研发需求');                  // 查询 case 的对象操作 value
 
 r(implode(',', array_keys($objectActions['testtask'])))   && p() && e('opened,edited,started,blocked,closed,activated,mentioned'); // 查询 testtask 的对象操作 key
 r(str_replace(',@通知', '', implode(',', array_values($objectActions['testtask'])))) && p() && e('创建,编辑,开始,阻塞,关闭,激活');                      // 查询 testtask 的对象操作 value

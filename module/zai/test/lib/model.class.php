@@ -1216,4 +1216,50 @@ class zaiModelTest extends baseTest
         }
     }
 
+    /**
+     * 测试知识搜索结果校验并返回结果条数。
+     * Test getKnowledgeSearchResult method and return the count of the validated knowledges.
+     *
+     * @param  mixed  $result
+     * @param  string $type
+     * @param  bool   $strict
+     * @access public
+     * @return mixed
+     */
+    public function getKnowledgeSearchResultCountTest($result, string $type, bool $strict)
+    {
+        try
+        {
+            $knowledges = $this->invokeArgs('getKnowledgeSearchResult', array($result, $type, $strict));
+            return count($knowledges);
+        }
+        catch(Throwable $e)
+        {
+            return 'exception:' . get_class($e);
+        }
+    }
+
+    /**
+     * 测试知识搜索结果校验是否抛出运行时异常。
+     * Test whether getKnowledgeSearchResult throws a runtime exception.
+     *
+     * @param  mixed  $result
+     * @param  string $type
+     * @param  bool   $strict
+     * @access public
+     * @return int
+     */
+    public function getKnowledgeSearchResultErrorTest($result, string $type, bool $strict): int
+    {
+        try
+        {
+            $this->invokeArgs('getKnowledgeSearchResult', array($result, $type, $strict));
+            return 0;
+        }
+        catch(Throwable $e)
+        {
+            return $e instanceof RuntimeException ? 1 : 0;
+        }
+    }
+
 }
