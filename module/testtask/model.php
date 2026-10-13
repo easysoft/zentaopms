@@ -1461,13 +1461,22 @@ class testtaskModel extends model
             if($stepResult->result == 'fail') break;
         }
 
+        /* 更新测试用例的执行结果。*/
+        /* Update the execution results of the test case. */
+        $now  = helper::now();
+        $case = form::data()->get();
+        $case->lastRunner    = $this->app->user->account;
+        $case->lastRunDate   = $now;
+        $case->lastRunResult = $caseResult;
+        $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->checkFlow()->exec();
+        if(dao::isError()) return false;
+
         /* 把用例步骤执行结果转换为数组类型以便于和历史数据保持一致。*/
         /* Convert the execution results of the test case steps to array type for consistency with historical data. */
         foreach($stepResults as $key => $stepResult) $stepResults[$key] = (array)$stepResult;
 
         /* 保存测试用例的执行结果。*/
         /* Save the execution results of the test case. */
-        $now    = helper::now();
         $result = new stdclass();
         $result->run         = $runID;
         $result->case        = $caseID;
@@ -1484,15 +1493,6 @@ class testtaskModel extends model
         /* Associated the uploaded files to the test case steps of the execution results. */
         $resultID = $this->dao->lastInsertID();
         foreach($stepResults as $stepID => $stepResult) $this->loadModel('file')->saveUpload('stepResult', $resultID, $stepID, "files{$stepID}", "labels{$stepID}");
-
-        /* 更新测试用例的执行结果。*/
-        /* Update the execution results of the test case. */
-        $case = form::data()->get();
-        $case->lastRunner    = $this->app->user->account;
-        $case->lastRunDate   = $now;
-        $case->lastRunResult = $caseResult;
-        $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
-        if(dao::isError()) return false;
 
         if($runID)
         {

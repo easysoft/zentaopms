@@ -284,9 +284,10 @@ class dao extends baseDAO
 
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
-        if($module == 'story'   && $this->app->rawModule == 'requirement') $module = 'requirement';
-        if($module == 'story'   && $this->app->rawModule == 'epic')        $module = 'epic';
-        if($module == 'project' && $method == 'createtemplate')            $method = 'create';
+        if($module == 'story'    && $this->app->rawModule == 'requirement') $module = 'requirement';
+        if($module == 'story'    && $this->app->rawModule == 'epic')        $module = 'epic';
+        if($module == 'testtask' && $method == 'runcase')                   $module = 'testcase';
+        if($module == 'project'  && $method == 'createtemplate')            $method = 'create';
 
         $groupID = $this->getWorkflowGroupID($module, $this->sqlobj->data);
 

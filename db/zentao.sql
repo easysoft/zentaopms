@@ -15331,7 +15331,7 @@ CREATE TABLE `zt_ai_useragent` (
   `type` varchar(30) NOT NULL DEFAULT '' COMMENT '类型：'' | executor',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`);
+CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`(225));
 
 INSERT INTO `zt_ai_miniprogramfield` (`appID`, `name`, `type`, `placeholder`, `options`, `required`) VALUES
 (1, '教育背景', 'textarea', '学历/专业', NULL, '0'),
@@ -16279,7 +16279,7 @@ CREATE TABLE IF NOT EXISTS `ops_public_keys` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='SSH公钥表';
 CREATE UNIQUE INDEX `uk_fingerprint` ON `ops_public_keys` (`fingerprint`);
-CREATE UNIQUE INDEX `uk_identifier_account` ON `ops_public_keys` (`identifier`, `account`);
+CREATE UNIQUE INDEX `uk_identifier_account` ON `ops_public_keys` (`identifier`(225), `account`);
 
 -- DROP TABLE IF EXISTS `ops_repo`;
 CREATE TABLE IF NOT EXISTS `ops_repo` (
@@ -16849,7 +16849,7 @@ CREATE TABLE IF NOT EXISTS `ops_tokens` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='令牌表';
-CREATE UNIQUE INDEX `uk_identifier_account` ON `ops_tokens` (`identifier`, `account`);
+CREATE UNIQUE INDEX `uk_identifier_account` ON `ops_tokens` (`identifier`(225), `account`);
 
 -- DROP TABLE IF EXISTS `ops_triggers`;
 CREATE TABLE IF NOT EXISTS `ops_triggers` (

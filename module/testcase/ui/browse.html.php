@@ -82,7 +82,7 @@ if($canBatchChangeModule)
 if($canBatchChangeBranch)
 {
     $branchItems = array();
-    foreach($branchTagOption as $branchTagID => $branchName) $branchItems[] = array('text' => $branchName, 'hint' => $module, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeBranch', "branchID=$branchTagID"));
+    foreach($branchTagOption as $branchTagID => $branchName) $branchItems[] = array('text' => $branchName, 'hint' => $branchName, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeBranch', "branchID=$branchTagID"));
 }
 
 if($canBatchChangeScene)

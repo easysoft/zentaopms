@@ -45,6 +45,9 @@ class installModel extends model
         $licenseCN = file_get_contents($this->app->getBasePath() . 'LICENSE.CN');
         $licenseEN = file_get_contents($this->app->getBasePath() . 'LICENSE.EN');
 
+        $gitfoxLicense = file_get_contents($this->app->getBasePath() . 'GITFOX_LICENSE');
+        if($this->config->edition == 'gitfox') return $gitfoxLicense;
+
         if($clientLang == 'zh-cn' || $clientLang == 'zh-tw') return $licenseCN . $licenseEN;
         return $licenseEN . $licenseCN;
     }

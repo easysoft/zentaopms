@@ -1019,6 +1019,47 @@ class spaceModelTest extends baseTest
     }
 
     /**
+     * Test setMenu method of the gitfox standalone version.
+     * 返回 "defined:{0|1}|group:{0|1}|overview:{0|1}|member:{0|1}"，1 表示菜单保留，0 表示菜单隐藏。
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return string
+     */
+    public function setMenuGitfoxPrivMenuTest(int $spaceID): string
+    {
+        global $app, $lang;
+
+        $oldVision  = $app->config->vision;
+        $oldEdition = $app->config->edition;
+        $oldTab     = $app->tab;
+        $oldMenu    = isset($lang->space->menu) ? $lang->space->menu : null;
+
+        $app->config->vision  = 'gitfox';
+        $app->config->edition = 'gitfox';
+        $app->tab             = 'space';
+
+        include dirname(__FILE__, 5) . '/extension/gitfox/common/ext/lang/zh-cn/gitfoxcommon.php';
+
+        $defined = isset($lang->space->menu->settings['subMenu']->group) ? 1 : 0;
+
+        $this->instance->setMenu($spaceID);
+
+        $subMenu  = isset($lang->space->menu->settings['subMenu']) ? $lang->space->menu->settings['subMenu'] : new stdclass();
+        $group    = isset($subMenu->group)    ? 1 : 0;
+        $overview = isset($subMenu->overview) ? 1 : 0;
+        $member   = isset($subMenu->member)   ? 1 : 0;
+
+        $app->config->vision  = $oldVision;
+        $app->config->edition = $oldEdition;
+        $app->tab             = $oldTab;
+        if($oldMenu === null) unset($lang->space->menu);
+        else                  $lang->space->menu = $oldMenu;
+
+        return "defined:{$defined}|group:{$group}|overview:{$overview}|member:{$member}";
+    }
+
+    /**
      * Test getPrivs method.
      *
      * @access public

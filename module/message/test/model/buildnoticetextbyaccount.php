@@ -36,7 +36,7 @@ cid=17066
 - 测试task被commented的通知内容 @用户1 在任务《任务一》下添加了新的备注。
 - 测试task被closed的通知内容 @用户1 关闭了任务《任务一》。
 - 测试指派给user2且接收人为to角色的通知内容 @用户1 将任务《任务一》指派给了用户2。
-- 测试指派给自己且接收人为cc角色的通知内容 @用户1 将任务《任务一》指派给了您，请及时处理。
+- 测试指派给自己且接收人为cc角色的通知内容 @用户1 将任务《任务一》指派给了用户1，您已被抄送。
 - 测试指派给user2且接收人为cc角色的通知内容 @用户1 将任务《任务一》指派给了用户2，您已被抄送。
 - 测试user1账号的通知内容 @user1 创建了新的任务《任务一》。
 - 测试未收录账号的通知内容 @user1 创建了新的任务《任务一》。
@@ -62,7 +62,7 @@ r($message->buildNoticeTextByAccountTest('user1', new stdclass(), 'closed', 1, '
 $object->assignedTo = 'user2';
 r($message->buildNoticeTextByAccountTest('user1', $object, 'assigned', 1, 'task', $objectTitle, 'to', $users)) && p() && e('用户1 将任务《任务一》指派给了用户2。');              // 测试指派给user2且接收人为to角色的通知内容
 $object->assignedTo = 'user1';
-r($message->buildNoticeTextByAccountTest('user1', $object, 'assigned', 1, 'task', $objectTitle, 'cc', $users)) && p() && e('用户1 将任务《任务一》指派给了您，请及时处理。');      // 测试指派给自己且接收人为cc角色的通知内容
+r($message->buildNoticeTextByAccountTest('user1', $object, 'assigned', 1, 'task', $objectTitle, 'cc', $users)) && p() && e('用户1 将任务《任务一》指派给了用户1，您已被抄送。'); // 测试指派给自己且接收人为cc角色的通知内容
 $object->assignedTo = 'user2';
 r($message->buildNoticeTextByAccountTest('user1', $object, 'assigned', 1, 'task', $objectTitle, 'cc', $users)) && p() && e('用户1 将任务《任务一》指派给了用户2，您已被抄送。');    // 测试指派给user2且接收人为cc角色的通知内容
 

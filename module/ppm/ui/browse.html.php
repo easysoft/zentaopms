@@ -53,19 +53,29 @@ featureBar
 );
 
 $linkParams   = in_array($app->tab, array('devops', 'repo')) ? "repoID={$repo->id}" : '';
-$canCreate    = hasPriv($app->rawModule, 'create') && !($repoID && !empty($repo->mirror));
+$isMirrorRepo = (bool)($repoID && !empty($repo->mirror));
+$canCreate    = hasPriv($app->rawModule, 'create') && !$isMirrorRepo;
 $createBtnUrl = createLink($app->rawModule, 'create', $linkParams);
 
-if($canCreate) toolBar
+$mirrorRepoAlert = $isMirrorRepo ? div
 (
-    item(set(array
+    setClass('alert with-icon mr-3 text-warning flex items-center mb-0'),
+    setStyle(array('--alert-bg' => 'var(--color-warning-50)', 'gap' => '.25rem')),
+    h::span(setClass('icon icon-exclamation-sign')),
+    h::span($lang->ppm->mirrorRepoTip)
+) : null;
+
+if($canCreate || $mirrorRepoAlert) toolBar
+(
+    $mirrorRepoAlert,
+    $canCreate ? item(set(array
     (
         'text'     => $lang->ppm->create,
         'icon'     => 'plus',
         'class'    => 'btn primary',
         'data-app' => $app->tab,
         'url'      => $createBtnUrl
-    )))
+    ))) : null
 );
 
 dtable

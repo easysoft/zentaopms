@@ -73,6 +73,8 @@ CREATE TABLE IF NOT EXISTS `zt_reviewdeliverable` (
 CREATE UNIQUE INDEX `uk_review_projectdeliverable` ON `zt_reviewdeliverable` (`review`, `projectdeliverable`);
 CREATE INDEX `idx_projectdeliverable` ON `zt_reviewdeliverable` (`projectdeliverable`);
 
+ALTER TABLE `zt_workflowdatasource` MODIFY COLUMN `view` varchar(50) NOT NULL DEFAULT '' COMMENT '视图';
+
 INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `createdBy`, `createdDate`, `datasource`, `view`, `keyField`, `valueField`) VALUES
 ('lang', '任务模式', 'taskMode',            '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'taskMode',      '', '', ''),
 ('lang', '需求类型', 'storyCategory',       '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'storyCategory', '', '', ''),
@@ -178,11 +180,11 @@ CREATE TABLE IF NOT EXISTS `zt_ai_teammate` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-INSERT INTO `zt_ai_teammate` (`id`, `name`, `desc`, `llm`, `role`, `avatar`, `agents`, `klibs`, `disabled`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES
-(1, '向前', '专注于项目全周期管理与资源协调，擅长将复杂业务目标高效转化为可执行的项目计划与交付成果。', '', 'pm', '/static/zentaoaipro/ai-teammate-pm.jpg', 'zt_project_proposal,zt_project_finalreport', '', 0, 'system', '2025-12-29 08:42:37', '', NULL, 0),
-(2, '李娟', '专注于测试用例设计与自动化脚本开发，擅长将业务场景高效转化为可执行的测试方案与质量保障体系。', '', 'qa', '/static/zentaoaipro/ai-teammate-qa.jpg', 'zt_story_to_testcase,zt_bug_polishing,zt_automatic_test', '', 0, 'system', '2025-12-29 08:42:37', '', NULL, 0),
-(3, '阿道', '专注于后端架构设计与系统性能优化，擅长将业务需求高效转化为稳定可靠的代码实现。', '', 'td', '/static/zentaoaipro/ai-teammate-td.jpg', 'zt_task_polishing,zt_story_to_task,zt_create_doc', '', 0, 'system', '2025-12-29 08:42:37', '', NULL, 0),
-(4, '阿禅', '专注于产品全流程体验设计与用户需求挖掘，擅长将抽象业务逻辑高效转化为可落地的产品方案。', '', 'po', '/static/zentaoaipro/ai-teammate-po.jpg', 'zt_story_polishing,zt_story_prototype,zt_release_newsletter,zt_bug_to_story,zt_split_productplan', '', 0, 'system', '2025-12-29 08:42:37', '', NULL, 0);
+INSERT INTO `zt_ai_teammate` (`name`, `desc`, `llm`, `role`, `avatar`, `agents`, `klibs`, `disabled`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES
+('向前', '专注于项目全周期管理与资源协调，擅长将复杂业务目标高效转化为可执行的项目计划与交付成果。', '', 'pm', '/static/zentaoaipro/ai-teammate-pm.jpg', 'zt_project_proposal,zt_project_finalreport', '', 0, 'system', '2025-12-29 08:42:37', '', NULL, 0),
+('李娟', '专注于测试用例设计与自动化脚本开发，擅长将业务场景高效转化为可执行的测试方案与质量保障体系。', '', 'qa', '/static/zentaoaipro/ai-teammate-qa.jpg', 'zt_story_to_testcase,zt_bug_polishing,zt_automatic_test', '', 0, 'system', '2025-12-29 08:42:37', '', NULL, 0),
+('阿道', '专注于后端架构设计与系统性能优化，擅长将业务需求高效转化为稳定可靠的代码实现。', '', 'td', '/static/zentaoaipro/ai-teammate-td.jpg', 'zt_task_polishing,zt_story_to_task,zt_create_doc', '', 0, 'system', '2025-12-29 08:42:37', '', NULL, 0),
+('阿禅', '专注于产品全流程体验设计与用户需求挖掘，擅长将抽象业务逻辑高效转化为可落地的产品方案。', '', 'po', '/static/zentaoaipro/ai-teammate-po.jpg', 'zt_story_polishing,zt_story_prototype,zt_release_newsletter,zt_bug_to_story,zt_split_productplan', '', 0, 'system', '2025-12-29 08:42:37', '', NULL, 0);
 
 CREATE TABLE IF NOT EXISTS `zt_ai_task` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
