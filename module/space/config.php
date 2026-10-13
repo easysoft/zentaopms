@@ -32,7 +32,6 @@ $config->space->actionList['delete']['ajaxSubmit']   = true;
 $config->space->actionList['delete']['data-confirm'] = array('message' => $lang->space->notice->confirmDeleteSpace, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->space->actionList['delete']['url']          = array('module' => 'space', 'method' => 'delete', 'params' => 'id={id}');
 
-/* GitFox 独立版本暂未完成权限重定义功能，隐藏空间概览页操作栏的权限按钮。 */
 $isGitfox = $config->vision == 'gitfox' || $config->edition == 'gitfox';
 
 $config->space->actions = new stdclass();
