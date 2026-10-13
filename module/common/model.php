@@ -710,8 +710,11 @@ class commonModel extends model
             $moduleLinkList = $currentModule . 'LinkList';
             if(!$display and isset($lang->my->$moduleLinkList) and $config->vision != 'or') list($display, $currentMethod) = commonTao::setPreferenceMenu($display, $currentModule, $currentMethod);
 
-            /* 4. 不可以个性化设置的导航，如果没有落地页的权限，则查看是否有对应app下其他方法的权限. */
-            if(!$display and isset($lang->$currentModule->menu) and !in_array($currentModule, array('program', 'product', 'project', 'execution', 'demandpool'))) list($display, $currentMethod) = commonTao::setOtherMenu($display, $currentModule, $currentMethod);
+            /* 4. 不可以个性化设置的导航，如果没有落地页的权限，则查看是否有对应app下其他方法的权限。 */
+            /* 落地页所属应用与当前导航不一致时跳过，交由第5步按导航自己的菜单判断，避免被其他应用的权限带出。 */
+            $landingNavGroup = isset($lang->navGroup->$currentModule) ? $lang->navGroup->$currentModule : '';
+            $otherAppMenu    = isset($lang->$group->menu) && $landingNavGroup && $landingNavGroup != $group;
+            if(!$display && !$otherAppMenu && isset($lang->$currentModule->menu) && !in_array($currentModule, array('program', 'product', 'project', 'execution', 'demandpool'))) list($display, $currentMethod) = commonTao::setOtherMenu($display, $currentModule, $currentMethod);
 
             /* 5. 如果以上权限都没有，则最后查看是否有该应用下任意一个顶部一级导航的权限。 */
             if(!$display and isset($lang->$group->menu)) list($display, $currentModule, $currentMethod) = commonTao::setMenuByGroup($group, $display, $currentModule, $currentMethod);
@@ -1250,7 +1253,8 @@ eof;
                     if(commonModel::hasPriv($module, $method)) return true;
                 }
 
-                if($this->app->tab == 'devops')
+                $isGitfox = $this->config->vision == 'gitfox' || $this->config->edition == 'gitfox';
+                if($this->app->tab == 'devops' || $isGitfox)
                 {
                     static::$userPrivs = array();
                     $this->resetDevOpsPriv(); // 项目有继承和重新定义两种权限，在此处需要重置权限。
