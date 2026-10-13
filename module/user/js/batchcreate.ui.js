@@ -17,6 +17,36 @@ window.renderRowData = function($row, index, row)
 };
 
 /**
+ * 批量添加用户前校验用户名。
+ *
+ * @param  event  event
+ * @access public
+ * @return bool
+ */
+window.checkBatchUserAccount = function(event)
+{
+    const $form = $(event.target);
+
+    $form.find('input[name^="account["]').removeClass('has-error');
+    $form.find('td[data-name="account"] .ajax-form-tip').remove();
+
+    const errors = {};
+
+    $form.find('.form-batch-table tbody tr').each(function()
+    {
+        const $account = $(this).find('input[name^="account["]');
+        const realname = $(this).find('input[name^="realname["]').val().trim();
+
+        if(realname !== '' && $account.val().trim() === '') errors[$account.attr('name')] = accountRequiredTip;
+    });
+
+    if(!Object.keys(errors).length) return;
+
+    showValidateMessage(errors);
+    return false;
+};
+
+/**
  * 根据用户类型切换控件的显示和隐藏。
  * Toggle the display of controls according to the user type.
  *
