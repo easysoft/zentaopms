@@ -316,10 +316,29 @@ class transferModel extends model
         /* If empty items put system datas. */
         if(empty($items))
         {
-            if(strpos($this->moduleConfig->sysLangFields, $field) !== false && !empty($this->moduleLang->{$field.'List'}))
+            if(strpos($this->moduleConfig->sysLangFields, $field) !== false)
             {
-                if($field == 'pri' && isset($this->moduleLang->priList[0])) unset($this->moduleLang->priList[0]);
-                $items = $this->moduleLang->{$field.'List'};
+                //if($field == 'pri' && isset($this->moduleLang->priList[0])) unset($this->moduleLang->priList[0]);
+                //$items = $this->moduleLang->{$field.'List'};
+
+                $listName = $field . 'List';
+
+                /* 业务需求、用户需求的来源等列表与研发需求相互独立，不能用 story 语言项。*/
+                /* Epic and requirement keep their own lists, such as source, separate from story. */
+                if(in_array($model, array('requirement', 'epic')))
+                {
+                    $this->app->loadLang($model);
+                    if(!empty($this->lang->{$model}->{$listName}))
+                    {
+                        $items = $this->lang->{$model}->{$listName};
+                        if($field == 'pri' && isset($items[0])) unset($items[0]);
+                    }
+                }
+                if(empty($items) && !empty($this->moduleLang->{$listName}))
+                {
+                    if($field == 'pri' && isset($this->moduleLang->priList[0])) unset($this->moduleLang->priList[0]);
+                    $items = $this->moduleLang->{$listName};
+                }
             }
             if(strpos($this->moduleConfig->sysDataFields, $field) !== false && !empty($this->transferConfig->sysDataList[$field])) $items = $this->transferConfig->sysDataList[$field];
         }
@@ -334,9 +353,17 @@ class transferModel extends model
         }
         elseif(!empty($lang))
         {
-            /* 如果配置了语言字段,返回语言数据。*/
-            /* If config the language field, return language data. */
-            $items = isset($this->moduleLang->$lang) ? $this->moduleLang->$lang : '';
+            $items = '';
+
+            /* 如果配置了语言字段,返回语言数据。业务需求、用户需求优先使用自身语言项。*/
+            /* If config the language field, return language data. Epic and requirement prefer their own lang. */
+            if(in_array($model, array('requirement', 'epic')))
+            {
+                $this->app->loadLang($model);
+                if(isset($this->lang->{$model}->$lang)) $items = $this->lang->{$model}->$lang;
+            }
+
+            if(empty($items) && isset($this->moduleLang->$lang)) $items = $this->moduleLang->$lang;
         }
 
         if(is_array($items) && $withKey)
