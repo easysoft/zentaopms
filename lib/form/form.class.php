@@ -314,6 +314,7 @@ class form extends fixer
         if($app->rawModule == 'feedback'    && $app->rawMethod == 'touserstory') $module = 'requirement';
         if($app->rawModule == 'feedback'    && $app->rawMethod == 'toepic')      $module = 'epic';
 
+        if($app->rawModule == 'testtask' && strtolower($app->rawMethod) == 'runcase') $module = 'testcase';
         if($app->rawModule == 'projectrelease') $module = 'release';
 
         if($method == 'batchcreate') $method = 'create';
