@@ -18,10 +18,11 @@ $config->block->task->dtable->fieldList['name']['type']  = 'title';
 $config->block->task->dtable->fieldList['name']['fixed'] = 'left';
 $config->block->task->dtable->fieldList['name']['sort']  = true;
 
-$config->block->task->dtable->fieldList['pri']['name']  = 'pri';
-$config->block->task->dtable->fieldList['pri']['title'] = $lang->priAB;
-$config->block->task->dtable->fieldList['pri']['type']  = 'pri';
-$config->block->task->dtable->fieldList['pri']['sort']  = true;
+$config->block->task->dtable->fieldList['pri']['name']    = 'pri';
+$config->block->task->dtable->fieldList['pri']['title']   = $lang->priAB;
+$config->block->task->dtable->fieldList['pri']['type']    = 'pri';
+$config->block->task->dtable->fieldList['pri']['priList'] = $lang->task->priList;
+$config->block->task->dtable->fieldList['pri']['sort']    = true;
 
 $config->block->task->dtable->fieldList['status']['name']      = 'status';
 $config->block->task->dtable->fieldList['status']['title']     = $lang->statusAB;
