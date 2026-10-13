@@ -94,14 +94,14 @@ class webhookTao extends webhookModel
      *
      * @param  object $data
      * @param  object $action
-     * @param  object $object
+     * @param  string $title
      * @param  array  $users
      * @access public
      * @return string
      */
-    protected function getActionText(object $data, object $action, object $object, array $users): string
+    protected function getActionText(object $data, object $action, string $title, array $users): string
     {
-        $text = zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
+        $text = zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$title}]";
 
         $httpReg = '/\(http(s)?:\/\/[^\)]+\)/';
         if(isset($data->markdown->text))
