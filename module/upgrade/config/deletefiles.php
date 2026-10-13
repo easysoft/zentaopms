@@ -2700,3 +2700,4 @@ $config->delete['22_6'][] = 'extension/max/bug/ext/model/excel.php';
 $config->delete['22_6'][] = 'extension/ipd/bug/ext/model/excel.php';
 $config->delete['22_7'][] = 'extension/max/bug/ext/ui/create.max.html.hook.php';
 $config->delete['22_7'][] = 'extension/ipd/bug/ext/ui/create.max.html.hook.php';
+$config->delete['22_7'][] = 'www/js/zui3/zin.compatible.js';

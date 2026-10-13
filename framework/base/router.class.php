@@ -3571,6 +3571,16 @@ class baseRouter
             /* module/method 在路由解析之前可能为空，插入 NULL 会因表的 NOT NULL 约束失败（关联记录写不进去，前端就按 requestID 查不到日志），统一转成字符串。module/method may be empty before the router resolves the request; inserting NULL would break the NOT NULL constraint so the request record is lost and the log cannot be fetched by requestID, cast them to string. */
             $stmt->execute(array((string)$this->requestID, $md5, (string)$this->moduleName, (string)$this->rawMethod, (string)$account, substr((string)$this->getURI(), 0, 255), helper::now()));
             $this->savedErrorLogRecords[$recordKey] = true;
+
+            /**
+             * 错误日志是直接走 PDO 写库的，不会像 DAO 的写方法那样刷新表缓存时间；这里按 DAO 的约定补一次。
+             * 否则开启 DAO 缓存（后台 → 系统设置 → 缓存）的站点会一直读到写入前的旧快照，表现为「分页计数是新的、列表还是旧的」。
+             * setTableCache() 会按 SQL 里出现的表逐个刷新，所以这里一次把两张表都刷了（多刷只是让这两张表的缓存多失效一次，不会误刷别人的表）。
+             * The error log rows are written with raw PDO, which never refreshes the DAO table cache time; refresh it here,
+             * otherwise sites with the DAO cache enabled keep reading the list as it was before the new logs were saved.
+             * setTableCache() refreshes every table found in the given SQL, so one call covers both tables.
+             */
+            if(!empty($this->dao)) $this->dao->setTableCache('SELECT 1 FROM ' . TABLE_ERRORLOGREQ . ', ' . TABLE_ERRORLOG);
         }
         catch(Throwable $e)
         {
