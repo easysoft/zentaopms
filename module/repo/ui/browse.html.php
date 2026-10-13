@@ -219,8 +219,6 @@ $downloadWg = div
     )
 );
 
-
-
 $mirrorStatus = zget($repo, 'status', 'active');
 
 toolbar
