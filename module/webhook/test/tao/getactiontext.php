@@ -7,11 +7,11 @@ title=测试 webhookTao::getActionText();
 timeout=0
 cid=19709
 
-- 执行webhookTest模块的getActionTextTest方法，参数是$data1, $action, $object, $users  @这是一个测试文本
-- 执行webhookTest模块的getActionTextTest方法，参数是$data2, $action, $object, $users  @这是markdown内容
-- 执行webhookTest模块的getActionTextTest方法，参数是$data3, $action, $object, $users  @这是文本内容
-- 执行webhookTest模块的getActionTextTest方法，参数是$data4, $action, $object, $users  @卡片元素内容
-- 执行webhookTest模块的getActionTextTest方法，参数是$data5, $action, $object, $users  @内容文本
+- 执行webhookTest模块的getActionTextTest方法，参数是$data1, $action, $users  @这是一个测试文本后面的内容
+- 执行webhookTest模块的getActionTextTest方法，参数是$data2, $action, $users  @这是markdown内容其他内容
+- 执行webhookTest模块的getActionTextTest方法，参数是$data3, $action, $users  @这是文本内容额外内容
+- 执行webhookTest模块的getActionTextTest方法，参数是$data4, $action, $users  @卡片元素内容其他
+- 执行webhookTest模块的getActionTextTest方法，参数是$data5, $action, $users  @内容文本结束
 
 */
 
@@ -41,21 +41,21 @@ $data1 = new stdclass();
 $data1->markdown = new stdclass();
 $data1->markdown->text = '这是一个测试文本(http://example.com)后面的内容';
 $data1->user = 'admin';
-r($webhookTest->getActionTextTest($data1, $action, $object, $users)) && p() && e('这是一个测试文本');
+r($webhookTest->getActionTextTest($data1, $action, $users)) && p() && e('这是一个测试文本后面的内容');
 
 // 测试步骤2：markdown.content格式数据的文本提取
 $data2 = new stdclass();
 $data2->markdown = new stdclass();
 $data2->markdown->content = '这是markdown内容(http://test.com)其他内容';
 $data2->user = 'admin';
-r($webhookTest->getActionTextTest($data2, $action, $object, $users)) && p() && e('这是markdown内容');
+r($webhookTest->getActionTextTest($data2, $action, $users)) && p() && e('这是markdown内容其他内容');
 
 // 测试步骤3：text.content格式数据的文本提取
 $data3 = new stdclass();
 $data3->text = new stdclass();
 $data3->text->content = '这是文本内容(http://zentao.net)额外内容';
 $data3->user = 'admin';
-r($webhookTest->getActionTextTest($data3, $action, $object, $users)) && p() && e('这是文本内容');
+r($webhookTest->getActionTextTest($data3, $action, $users)) && p() && e('这是文本内容额外内容');
 
 // 测试步骤4：card.elements格式数据的文本提取
 $data4 = new stdclass();
@@ -64,11 +64,11 @@ $data4->card->elements = array();
 $data4->card->elements[0] = new stdclass();
 $data4->card->elements[0]->content = '卡片元素内容(http://example.org)其他';
 $data4->user = 'admin';
-r($webhookTest->getActionTextTest($data4, $action, $object, $users)) && p() && e('卡片元素内容');
+r($webhookTest->getActionTextTest($data4, $action, $users)) && p() && e('卡片元素内容其他');
 
 // 测试步骤5：content格式数据的文本提取
 $data5 = new stdclass();
 $data5->content = new stdclass();
 $data5->content->text = '内容文本(http://test.org)结束';
 $data5->user = 'admin';
-r($webhookTest->getActionTextTest($data5, $action, $object, $users)) && p() && e('内容文本');
+r($webhookTest->getActionTextTest($data5, $action, $users)) && p() && e('内容文本结束');

@@ -638,18 +638,17 @@ class webhookTaoTest extends baseTest
      *
      * @param  object $data
      * @param  object $action
-     * @param  object $object
      * @param  array  $users
      * @access public
      * @return string
      */
-    public function getActionTextTest($data, $action, $object, $users)
+    public function getActionTextTest($data, $action, $users)
     {
         $reflection = new ReflectionClass($this->instance);
         $method = $reflection->getMethod('getActionText');
         $method->setAccessible(true);
 
-        $result = $method->invoke($this->instance, $data, $action, $object, $users);
+        $result = $method->invoke($this->instance, $data, $action, '', $users);
         if(dao::isError()) return dao::getError();
 
         return $result;

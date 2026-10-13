@@ -330,8 +330,8 @@ $routes['/systems']                     = array('response' => 'appList(array)|sy
 $routes['/products/:productID/systems'] = array('redirect' => '/systems?productID=:productID');
 $routes['/systems/:systemID']           = array('response' => 'system,actions(array)');
 
-$routes['/relations/:objectType/:objectID']                                                   = array('get' => array('redirect' => '/custom/showRelationGraph?objectID=:objectID&objectType=:objectType', 'response' => 'relations,graphData,usersAvatar,objectID,objectType'));
-$routes['/relations/:objectType/:objectID/candidates/:relatedObjectType']                     = array('get' => array('redirect' => '/custom/relateObject?objectID=:objectID&objectType=:objectType&relatedObjectType=:relatedObjectType', 'response' => 'objects(array),cols,relationPairs,objectTypes,canSearch,users,objectID,objectType,relatedObjectType,browseType,orderBy,pager'));
+$routes['/relations/:objectType/:objectID']                                                   = array('get' => array('redirect' => '/custom/showRelationGraph?objectID=:objectID&objectType=:objectType', 'response' => 'relations(array)'));
+$routes['/relations/:objectType/:objectID/candidates/:relatedObjectType']                     = array('get' => array('redirect' => '/custom/relateObject?objectID=:objectID&objectType=:objectType&relatedObjectType=:relatedObjectType', 'response' => 'objects(array),relationPairs,pager'));
 $routes['/relations/:objectType/:objectID/:relatedObjectType']                                = array('post' => array('redirect' => '/custom/relateObject?objectID=:objectID&objectType=:objectType&relatedObjectType=:relatedObjectType', 'response' => '*'));
 $routes['/relations/:objectType/:objectID/:relatedObjectType/:relatedObjectID/:relationName'] = array('delete' => array('redirect' => '/custom/removeObjects?objectID=:objectID&objectType=:objectType&relationName=:relationName&relatedObjectID=:relatedObjectID&relatedObjectType=:relatedObjectType', 'response' => '*'));
 
