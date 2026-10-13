@@ -11,9 +11,9 @@ cid=19322
 - 步骤2：选项已有值时不读取系统语言项属性1 @自定义优先级
 - 步骤3：任务优先级读取语言项属性1 @1
 - 步骤4：任务类型读取语言项属性devel @开发
-- 步骤5：选项文本拼接键值属性devel @开发(#devel)
+- 步骤5：选项文本拼接键值 @1
 - 步骤6：模块方法获取项目并覆盖系统数据属性11 @项目11
-- 步骤7：项目选项拼接键值属性11 @项目11(#11)
+- 步骤7：项目选项拼接键值 @1
 - 步骤8：语言项数据源返回关闭原因属性done @已完成
 - 步骤9：语言项不存在时返回空 @0
 - 步骤10：业务需求优先级使用自身语言项属性1 @需求高
@@ -38,11 +38,13 @@ r($transfer->initItemsTest('task', 'pri', $customPri)) && p('1') && e('自定义
 
 r($transfer->initItemsTest('task', 'pri')) && p('1') && e('1'); // 步骤3：任务优先级读取语言项
 r($transfer->initItemsTest('task', 'type')) && p('devel') && e('开发'); // 步骤4：任务类型读取语言项
-r($transfer->initItemsTest('task', 'type', array(), true)) && p('devel') && e('开发(#devel)'); // 步骤5：选项文本拼接键值
+$typeWithKey = $transfer->initItemsTest('task', 'type', array(), true);
+r($typeWithKey['devel'] == '开发(#devel)' ? '1' : '0') && p() && e('1'); // 步骤5：选项文本拼接键值
 
 $transfer->instance->transferConfig->sysDataList['project'] = array(11 => '系统项目');
 r($transfer->initItemsTest('task', 'project')) && p('11') && e('项目11'); // 步骤6：模块方法获取项目并覆盖系统数据
-r($transfer->initItemsTest('task', 'project', array(), true)) && p('11') && e('项目11(#11)'); // 步骤7：项目选项拼接键值
+$projectWithKey = $transfer->initItemsTest('task', 'project', array(), true);
+r(isset($projectWithKey[11]) && $projectWithKey[11] == '项目11(#11)' ? '1' : '0') && p() && e('1'); // 步骤7：项目选项拼接键值
 
 r($transfer->initItemsTest('story', 'closedReason')) && p('done') && e('已完成'); // 步骤8：语言项数据源返回关闭原因
 
