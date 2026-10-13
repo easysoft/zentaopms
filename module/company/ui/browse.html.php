@@ -24,7 +24,7 @@ $batchCreateItem = array('text' => $lang->user->batchCreate, 'url' => createLink
 
 toolbar
 (
-    btn
+    $config->vision == 'gitfox' || $config->edition == 'gitfox' ? null : btn
     (
         set::icon('cog-outline'),
         setClass('btn ghost'),
