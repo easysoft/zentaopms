@@ -24,7 +24,7 @@ cid=17065
 - 测试task被closed的消息标题 @任务已关闭
 - 测试bug被resolved的消息标题 @Bug已解决
 - 测试指派给user2且接收人为to角色的消息标题 @用户2被指派处理任务
-- 测试指派给自己且接收人为cc角色的消息标题 @您被指派处理任务
+- 测试指派给自己且接收人为cc角色的消息标题 @用户1被指派处理任务
 - 测试指派给user2且接收人为cc角色的消息标题 @用户2被指派处理任务
 - 测试指派给自己且接收人为to角色的消息标题 @您被指派处理任务
 - 测试指派给未收录用户的消息标题 @user9被指派处理任务
@@ -49,7 +49,7 @@ r($message->buildNoticeTitleTest('bug', 'resolved', 'user1', new stdclass(), 'to
 
 r($message->buildNoticeTitleTest('task', 'assigned', 'user1', $object, 'to', $users))         && p() && e('用户2被指派处理任务');           // 测试指派给user2且接收人为to角色的消息标题
 $object->assignedTo = 'user1';
-r($message->buildNoticeTitleTest('task', 'assigned', 'user1', $object, 'cc', $users))         && p() && e('您被指派处理任务');           // 测试指派给自己且接收人为cc角色的消息标题
+r($message->buildNoticeTitleTest('task', 'assigned', 'user1', $object, 'cc', $users))         && p() && e('用户1被指派处理任务');           // 测试指派给自己且接收人为cc角色的消息标题
 $object->assignedTo = 'user2';
 r($message->buildNoticeTitleTest('task', 'assigned', 'user1', $object, 'cc', $users))         && p() && e('用户2被指派处理任务');           // 测试指派给user2且接收人为cc角色的消息标题
 $object->assignedTo = 'user1';
