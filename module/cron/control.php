@@ -342,7 +342,7 @@ class cron extends control
         }
 
         /* 一次性查询已有 wait/doing 任务的 cron，避免循环内逐条查询。 */
-        $pendingCrons = $this->dao->select('`cron`,`startedDate`')->from(TABLE_QUEUE)->where('status')->in(array('wait', 'doing'))->orderBy('startedDate')->fetchPairs('cron', 'startedDate');
+        $pendingCrons = $this->dao->select('`cron`,`startedDate`')->from(TABLE_QUEUE)->where('status')->in(array('wait', 'doing'))->orderBy('`startedDate`')->fetchPairs('cron', 'startedDate');
 
         $parsedCrons = $this->cron->parseCron($crons);
         $now         = date(DT_DATETIME1);
