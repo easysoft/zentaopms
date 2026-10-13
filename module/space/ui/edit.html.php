@@ -10,7 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$width = common::checkNotCN() ? '3/4' : '1/2';
+$width    = common::checkNotCN() ? '3/4' : '1/2';
+$isGitfox = $config->vision == 'gitfox' || $config->edition == 'gitfox';
 formPanel
 (
     set::id('editForm'),
@@ -59,7 +60,7 @@ formPanel
         set::items($lang->space->aclNoticeList),
         set::value($space->acl)
     ),
-    formGroup
+    $isGitfox ? null : formGroup
     (
         set::name('auth'),
         set::label($lang->space->auth),
