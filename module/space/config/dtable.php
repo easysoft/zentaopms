@@ -43,7 +43,7 @@ $config->space->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->space->dtable->fieldList['actions']['type']     = 'actions';
 $config->space->dtable->fieldList['actions']['sortType'] = false;
 $config->space->dtable->fieldList['actions']['fixed']    = 'right';
-$config->space->dtable->fieldList['actions']['menu']     = array('members', 'group', 'edit');
+$config->space->dtable->fieldList['actions']['menu']     = $isGitfox ? array('members', 'edit') : array('members', 'group', 'edit');
 $config->space->dtable->fieldList['actions']['list']     = $config->space->actionList;
 $config->space->dtable->fieldList['actions']['width']    = 100;
 
