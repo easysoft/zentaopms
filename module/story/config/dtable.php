@@ -1,5 +1,6 @@
 <?php
 global $lang, $app;
+$app->loadLang('story');
 $isEn = $app->getClientLang() == 'en';
 $config->story->dtable = new stdclass();
 
