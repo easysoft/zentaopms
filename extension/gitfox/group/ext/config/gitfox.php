@@ -316,8 +316,6 @@ $config->group->package->codeScanMaintain->subset = 'codeScan';
 $config->group->package->codeScanMaintain->privs  = array();
 $config->group->package->codeScanMaintain->privs['codescan-createPlan'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 5, 'depend' => array(0 => 'codescan-plan'), 'recommend' => array(0 => 'codescan-editPlan', 1 => 'codescan-deletePlan', 2 => 'codescan-task', 3 => 'codescan-exec'));
 $config->group->package->codeScanMaintain->privs['codescan-editPlan'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 10, 'depend' => array(0 => 'codescan-plan'), 'recommend' => array(0 => 'codescan-createPlan', 1 => 'codescan-deletePlan', 2 => 'codescan-task', 3 => 'codescan-exec'));
-$config->group->package->codeScanMaintain->privs['codescan-createTrigger'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 15, 'depend' => array(0 => 'codescan-plan'), 'recommend' => array(0 => 'codescan-editTrigger', 1 => 'codescan-deleteTrigger'));
-$config->group->package->codeScanMaintain->privs['codescan-editTrigger'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 20, 'depend' => array(0 => 'codescan-plan'), 'recommend' => array(0 => 'codescan-createTrigger', 1 => 'codescan-deleteTrigger'));
 $config->group->package->codeScanMaintain->privs['codescan-createsolution'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 25, 'depend' => array(0 => 'codescan-solution'), 'recommend' => array(0 => 'codescan-editsolution', 1 => 'codescan-deletesolution'));
 $config->group->package->codeScanMaintain->privs['codescan-editsolution'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 30, 'depend' => array(0 => 'codescan-solution'), 'recommend' => array(0 => 'codescan-createsolution', 1 => 'codescan-deletesolution', 2 => 'codescan-changesolutionstate'));
 $config->group->package->codeScanMaintain->privs['codescan-changesolutionstate'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 35, 'depend' => array(0 => 'codescan-solution'), 'recommend' => array(0 => 'codescan-createsolution', 1 => 'codescan-editsolution', 2 => 'codescan-deletesolution'));
@@ -333,7 +331,6 @@ $config->group->package->codeScanDelete->order  = 20;
 $config->group->package->codeScanDelete->subset = 'codeScan';
 $config->group->package->codeScanDelete->privs  = array();
 $config->group->package->codeScanDelete->privs['codescan-deletePlan'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 5, 'depend' => array(0 => 'codescan-plan'), 'recommend' => array(0 => 'codescan-createPlan', 1 => 'codescan-editPlan', 2 => 'codescan-task', 3 => 'codescan-exec'));
-$config->group->package->codeScanDelete->privs['codescan-deleteTrigger'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 10, 'depend' => array(0 => 'codescan-plan'), 'recommend' => array(0 => 'codescan-createTrigger', 1 => 'codescan-editTrigger'));
 $config->group->package->codeScanDelete->privs['codescan-deletesolution'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 20, 'depend' => array(0 => 'codescan-solution'), 'recommend' => array(0 => 'codescan-createsolution', 1 => 'codescan-editsolution'));
 $config->group->package->codeScanDelete->privs['codescan-unlinkSolution'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 25, 'depend' => array(0 => 'codescan-plan'), 'recommend' => array(0 => 'codescan-createPlan', 1 => 'codescan-editPlan', 2 => 'codescan-deletePlan', 3 => 'codescan-task'));
 $config->group->package->codeScanDelete->privs['codescan-unlinkset'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 30, 'depend' => array(0 => 'codescan-solution'), 'recommend' => array(0 => 'codescan-linkset'));
@@ -350,22 +347,14 @@ $config->group->package->browseCodeIssue->privs['codescan-issue'] = array('editi
 $config->group->package->browseCodeIssue->privs['codescan-issueView'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 15, 'depend' => array(0 => 'codescan-issue'), 'recommend' => array());
 $config->group->package->browseCodeIssue->privs['repo-addComment'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 20, 'depend' => array(0 => 'repo-diff'), 'recommend' => array(0 => 'repo-addBug', 1 => 'repo-editBug', 2 => 'repo-editComment', 3 => 'repo-review'));
 
-$config->group->package->reviewCodeIssue = new stdclass();
-$config->group->package->reviewCodeIssue->order  = 2605;
-$config->group->package->reviewCodeIssue->subset = 'codereview';
-$config->group->package->reviewCodeIssue->privs  = array();
-$config->group->package->reviewCodeIssue->privs['repo-addBug'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 5, 'depend' => array(0 => 'repo-diff'), 'recommend' => array(0 => 'repo-addComment', 1 => 'repo-editBug', 2 => 'repo-editComment', 3 => 'repo-review'));
-$config->group->package->reviewCodeIssue->privs['repo-editBug'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 15, 'depend' => array(0 => 'repo-diff'), 'recommend' => array(0 => 'repo-addBug', 1 => 'repo-addComment', 2 => 'repo-editComment', 3 => 'repo-review'));
-$config->group->package->reviewCodeIssue->privs['repo-editComment'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 20, 'depend' => array(0 => 'repo-diff'), 'recommend' => array(0 => 'repo-addBug', 1 => 'repo-addComment', 2 => 'repo-editBug', 3 => 'repo-review'));
-$config->group->package->reviewCodeIssue->privs['repo-deleteComment'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 25, 'depend' => array(0 => 'repo-diff'), 'recommend' => array(0 => 'repo-addBug', 1 => 'repo-addComment', 2 => 'repo-editBug', 3 => 'repo-editComment', 4 => 'repo-review'));
-
-$config->group->package->processScanIssues = new stdclass();
-$config->group->package->processScanIssues->order  = 2610;
-$config->group->package->processScanIssues->subset = 'codereview';
-$config->group->package->processScanIssues->privs  = array();
-$config->group->package->processScanIssues->privs['codescan-ignoreIssue'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 5, 'depend' => array(0 => 'codescan-issue'), 'recommend' => array(0 => 'codescan-issueView', 1 => 'codescan-confirmIssue', 2 => 'codescan-activeIssue'));
-$config->group->package->processScanIssues->privs['codescan-confirmIssue'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 10, 'depend' => array(0 => 'codescan-issue'), 'recommend' => array(0 => 'codescan-issueView', 1 => 'codescan-ignoreIssue', 2 => 'codescan-activeIssue'));
-$config->group->package->processScanIssues->privs['codescan-activeIssue'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 15, 'depend' => array(0 => 'codescan-issue'), 'recommend' => array(0 => 'codescan-issueView', 1 => 'codescan-ignoreIssue', 2 => 'codescan-confirmIssue'));
+//$config->group->package->reviewCodeIssue = new stdclass();
+//$config->group->package->reviewCodeIssue->order  = 2605;
+//$config->group->package->reviewCodeIssue->subset = 'codereview';
+//$config->group->package->reviewCodeIssue->privs  = array();
+//$config->group->package->reviewCodeIssue->privs['repo-addBug'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 5, 'depend' => array(0 => 'repo-diff'), 'recommend' => array(0 => 'repo-addComment', 1 => 'repo-editBug', 2 => 'repo-editComment', 3 => 'repo-review'));
+//$config->group->package->reviewCodeIssue->privs['repo-editBug'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 15, 'depend' => array(0 => 'repo-diff'), 'recommend' => array(0 => 'repo-addBug', 1 => 'repo-addComment', 2 => 'repo-editComment', 3 => 'repo-review'));
+//$config->group->package->reviewCodeIssue->privs['repo-editComment'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 20, 'depend' => array(0 => 'repo-diff'), 'recommend' => array(0 => 'repo-addBug', 1 => 'repo-addComment', 2 => 'repo-editBug', 3 => 'repo-review'));
+//$config->group->package->reviewCodeIssue->privs['repo-deleteComment'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 25, 'depend' => array(0 => 'repo-diff'), 'recommend' => array(0 => 'repo-addBug', 1 => 'repo-addComment', 2 => 'repo-editBug', 3 => 'repo-editComment', 4 => 'repo-review'));
 
 $config->group->package->browsePipeline = new stdclass();
 $config->group->package->browsePipeline->order  = 5;
