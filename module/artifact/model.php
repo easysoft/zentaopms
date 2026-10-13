@@ -140,7 +140,8 @@ class artifactModel extends model
 
         $param = array();
         $param['artifactID'] = $artifactLibID;
-        $param['name']       = basename($file['name']);
+        $name                = str_replace('\\', '/', $file['name']);
+        $param['name']       = substr($name, strrpos('/' . $name, '/'));
         $param['group']      = ltrim($path, '/');
         $param['file']       = curl_file_create($file['tmp_name']);
         if($overwrite) $param['overwrite'] = $overwrite;

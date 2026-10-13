@@ -45,9 +45,9 @@ cid=15210
 
 - 测试第3条sql filter 2 emptyValue false @SELECT t1.name, t1.`PM`, t1.begin, t1.`realBegan`, t3.realname FROM zt_project AS t1 LEFT JOIN zt_team AS t2 ON t1.id = t2.root AND t2.type = 'execution' LEFT JOIN zt_user AS t3 ON t2.account = t3.account WHERE t1.name LIKE '%zentaopms%' AND t1.`realBegan` > '2022-01-01' order by t1.id
 
-- 测试注入载荷被转义为字面量 @SELECT * FROM zt_user WHERE status = 'active\' or sleep(3)-- '
-- 测试字面量内的同名变量不被替换 @SELECT * FROM zt_user WHERE status = 'x$statusx'
-- 测试过滤值非标量时拒绝请求 @过滤条件的值不合法，只允许数字或引号包裹的字符串，请求已被拒绝。
+- 测试注入载荷被转义为字面量 @1
+- 测试字面量内的同名变量不被替换 @1
+- 测试过滤值非标量时拒绝请求 @1
 
 */
 
@@ -113,12 +113,12 @@ r($bi->processVarsTest($sqls[2], $filters[2], $emptyValue[1])) && p() && e("SELE
 /* 注入载荷在 processVars 中被转义为字面量，无法闭合引号。The injection payload is escaped as a literal in processVars. */
 $injectionSQL     = "SELECT * FROM zt_user WHERE status = \$status";
 $injectionFilters = array(array('field' => 'status', 'from' => 'query', 'type' => 'select', 'default' => "active' or sleep(3)-- "));
-r($bi->processVarsTest($injectionSQL, $injectionFilters, false)) && p() && e("SELECT * FROM zt_user WHERE status = 'active\\' or sleep(3)-- '"); // 测试注入载荷被转义为字面量
+r($bi->processVarsTest($injectionSQL, $injectionFilters, false) === "SELECT * FROM zt_user WHERE status = 'active\\' or sleep(3)-- '") && p() && e(1); // 测试注入载荷被转义为字面量
 
 /* 字符串字面量内的同名变量不再被替换，避免替换结果被再次扫描。The same variable name inside a string literal is kept unchanged. */
 $literalSQL = "SELECT * FROM zt_user WHERE status = 'x\$statusx'";
-r($bi->processVarsTest($literalSQL, $injectionFilters, false)) && p() && e("SELECT * FROM zt_user WHERE status = 'x\$statusx'"); // 测试字面量内的同名变量不被替换
+r($bi->processVarsTest($literalSQL, $injectionFilters, false) === "SELECT * FROM zt_user WHERE status = 'x\$statusx'") && p() && e(1); // 测试字面量内的同名变量不被替换
 
 /* 非标量过滤值直接拒绝请求。The request is denied when the filter value is not scalar. */
 $nonScalarFilters = array(array('field' => 'status', 'from' => 'query', 'type' => 'select', 'default' => new stdClass()));
-r($bi->processVarsTest($injectionSQL, $nonScalarFilters, false)) && p() && e($lang->bi->errorIllegalFilter['value']); // 测试过滤值非标量时拒绝请求
+r($bi->processVarsTest($injectionSQL, $nonScalarFilters, false) === $lang->bi->errorIllegalFilter['value']) && p() && e(1); // 测试过滤值非标量时拒绝请求
