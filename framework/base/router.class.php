@@ -3327,9 +3327,23 @@ class baseRouter
     public function triggerError(string $message, string $file, int $line, bool $exit = false)
     {
         $function = null;
+
+        /* 保留原始消息用于错误日志，下面的 $message 会被转成 gbk 用于页面显示。Keep the raw message for the error log, the $message below is converted to gbk for display. */
+        $rawMessage = $message;
+
         /* 设置错误信息(Set the error info) */
         $message = htmlSpecialString($message);
         if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
+
+        /**
+         * 框架级的错误不会产生 PHP 错误：debug 关闭时下面直接 die；$exit 为 true 时抛出的 EndResponseException 会被 www/index.php 吞掉。
+         * 这两种情况都在这里显式落库，前端才能按 requestID 拉到错误日志。debug 打开且 $exit 为 false 时，下面的
+         * trigger_error(E_USER_WARNING) 会由错误处理句柄落库，无需重复记录。
+         * Framework errors never become PHP errors: the code dies when debug is off, and the $exit branch throws an
+         * EndResponseException which is swallowed by www/index.php. Save them here so the frontend can fetch the log by
+         * requestID. When debug is on and $exit is false, trigger_error() below is recorded by the error handler.
+         */
+        if(!$this->config->debug or $exit) $this->saveErrorLog(E_USER_ERROR, $rawMessage, $file, $line, (new Exception())->getTraceAsString());
 
         /* Only show error when debug is open. */
         if(!$this->config->debug) die;
@@ -3554,7 +3568,8 @@ class baseRouter
 
             $sql  = $this->dbh->formatSQL('INSERT INTO ' . TABLE_ERRORLOGREQ . ' (`requestID`, `md5`, `module`, `method`, `account`, `url`, `createdDate`) VALUES (?, ?, ?, ?, ?, ?, ?)');
             $stmt = $this->dbh->prepare($sql);
-            $stmt->execute(array($this->requestID, $md5, $this->moduleName, $this->rawMethod, $account, substr((string)$this->getURI(), 0, 255), helper::now()));
+            /* module/method 在路由解析之前可能为空，插入 NULL 会因表的 NOT NULL 约束失败（关联记录写不进去，前端就按 requestID 查不到日志），统一转成字符串。module/method may be empty before the router resolves the request; inserting NULL would break the NOT NULL constraint so the request record is lost and the log cannot be fetched by requestID, cast them to string. */
+            $stmt->execute(array((string)$this->requestID, $md5, (string)$this->moduleName, (string)$this->rawMethod, (string)$account, substr((string)$this->getURI(), 0, 255), helper::now()));
             $this->savedErrorLogRecords[$recordKey] = true;
         }
         catch(Throwable $e)
