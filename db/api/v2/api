@@ -71325,7 +71325,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "required": true,
         "desc": "状态(success 成功 | fail 失败)"
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:316;O:8:"stdClass":24:{s:2:"id";i:317;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:403;s:5:"title";s:21:"查询可关联对象";s:4:"path";s:62:"/relations/:objectType/:objectID/candidates/:relatedObjectType";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:717:"查询指定对象可关联的候选对象。objectType 取值范围：demand(需求池需求，IPD) | epic(业务需求，旗舰版) | requirement(用户需求) | story(研发需求) | task(任务) | bug(Bug) | testcase(用例) | doc(文档) | design(设计) | repocommit(代码提交，devops) | feedback(反馈) | ticket(工单) | issue(问题，旗舰版) | risk(风险，旗舰版) | projectdeliverable(交付物，旗舰版) | workflow_xxx(工作流对象，如 workflow_contract)。可关联范围随版本和功能开关变化，实际以候选接口返回的 objectTypes 为准。返回的 objectTypes 是当前环境允许关联的对象类型及名称；relationPairs 是可用关系 key 与显示名称。";s:7:"version";i:1;s:6:"params";s:1064:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:316;O:8:"stdClass":24:{s:2:"id";i:317;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:403;s:5:"title";s:21:"查询可关联对象";s:4:"path";s:62:"/relations/:objectType/:objectID/candidates/:relatedObjectType";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:654:"查询指定对象可关联的候选对象。objectType 取值范围：demand(需求池需求，IPD) | epic(业务需求，旗舰版) | requirement(用户需求) | story(研发需求) | task(任务) | bug(Bug) | testcase(用例) | doc(文档) | design(设计) | repocommit(代码提交，devops) | feedback(反馈) | ticket(工单) | issue(问题，旗舰版) | risk(风险，旗舰版) | projectdeliverable(交付物，旗舰版) | workflow_xxx(工作流对象，如 workflow_contract)。可关联范围随版本和功能开关变化。objects 为候选对象列表，仅包含对象编号和标题；relationPairs 是可用关系 key 与显示名称。";s:7:"version";i:1;s:6:"params";s:1064:"{
     "header": [
         {
             "field": "Token",
@@ -71366,185 +71366,12 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "desc": "\u9875\u7801\u3002"
         }
     ]
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:5949:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:342:"{
     "status": "success",
     "objects": [
         {
-            "id": 3,
-            "project": 2,
-            "parent": 0,
-            "isParent": 0,
-            "isTpl": 0,
-            "path": ",3,",
-            "execution": 3,
-            "module": 0,
-            "design": 0,
-            "story": 0,
-            "storyVersion": 1,
-            "designVersion": 1,
-            "fromBug": 0,
-            "feedback": 1,
-            "fromIssue": 0,
-            "fromDeliverable": 0,
-            "name": "从反馈创建的任务",
-            "type": "devel",
-            "mode": "",
-            "pri": 3,
-            "estimate": "0.00",
-            "consumed": "0.00",
-            "left": "0.00",
-            "deadline": "2026-01-10",
-            "status": "wait",
-            "subStatus": "",
-            "color": "",
-            "keywords": "",
-            "version": 1,
-            "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:43",
-            "assignedTo": "admin",
-            "assignedDate": "2026-10-10 10:28:43",
-            "estStarted": "2026-01-01",
-            "realStarted": "",
-            "finishedBy": "",
-            "finishedDate": "",
-            "canceledBy": "",
-            "canceledDate": "",
-            "closedBy": "",
-            "closedDate": "",
-            "planDuration": 0,
-            "realDuration": 0,
-            "closedReason": "",
-            "lastEditedBy": "",
-            "lastEditedDate": "",
-            "activatedDate": "",
-            "order": 0,
-            "repo": 0,
-            "mr": 0,
-            "entry": "",
-            "lines": "",
-            "v1": "",
-            "v2": "",
-            "vision": "rnd",
-            "deleted": 0,
-            "relation": 1
-        },
-        {
-            "id": 2,
-            "project": 2,
-            "parent": 0,
-            "isParent": 0,
-            "isTpl": 0,
-            "path": ",2,",
-            "execution": 3,
-            "module": 0,
-            "design": 0,
-            "story": 0,
-            "storyVersion": 1,
-            "designVersion": 1,
-            "fromBug": 0,
-            "feedback": 0,
-            "fromIssue": 0,
-            "fromDeliverable": 0,
-            "name": "无执行项目任务",
-            "type": "devel",
-            "mode": "",
-            "pri": 1,
-            "estimate": "1.00",
-            "consumed": "0.00",
-            "left": "1.00",
-            "deadline": "2026-01-10",
-            "status": "wait",
-            "subStatus": "",
-            "color": "",
-            "keywords": "",
-            "version": 1,
-            "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:34",
-            "assignedTo": "admin",
-            "assignedDate": "2026-10-10 10:28:34",
-            "estStarted": "2026-01-01",
-            "realStarted": "",
-            "finishedBy": "",
-            "finishedDate": "",
-            "canceledBy": "",
-            "canceledDate": "",
-            "closedBy": "",
-            "closedDate": "",
-            "planDuration": 0,
-            "realDuration": 0,
-            "closedReason": "",
-            "lastEditedBy": "",
-            "lastEditedDate": "",
-            "activatedDate": "",
-            "order": 0,
-            "repo": 0,
-            "mr": 0,
-            "entry": "",
-            "lines": "",
-            "v1": "",
-            "v2": "",
-            "vision": "rnd",
-            "deleted": 0,
-            "relation": 1
-        },
-        {
-            "id": 1,
-            "project": 2,
-            "parent": 0,
-            "isParent": 0,
-            "isTpl": 0,
-            "path": ",1,",
-            "execution": 3,
-            "module": 1,
-            "design": 0,
-            "story": 1,
-            "storyVersion": 2,
-            "designVersion": 1,
-            "fromBug": 0,
-            "feedback": 0,
-            "fromIssue": 0,
-            "fromDeliverable": 0,
-            "name": "开发电容光敏监测模块",
-            "type": "devel",
-            "mode": "",
-            "pri": 1,
-            "estimate": "1.00",
-            "consumed": "2.00",
-            "left": "1.00",
-            "deadline": "2025-12-30",
-            "status": "doing",
-            "subStatus": "",
-            "color": "",
-            "keywords": "",
-            "version": 2,
-            "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:34",
-            "assignedTo": "admin",
-            "assignedDate": "2026-10-10 10:28:36",
-            "estStarted": "2025-12-25",
-            "realStarted": "2025-12-25 09:00:00",
-            "finishedBy": "",
-            "finishedDate": "",
-            "canceledBy": "",
-            "canceledDate": "",
-            "closedBy": "",
-            "closedDate": "",
-            "planDuration": 4,
-            "realDuration": 4,
-            "closedReason": "",
-            "lastEditedBy": "admin",
-            "lastEditedDate": "2026-10-10 10:28:36",
-            "activatedDate": "2026-10-10 10:28:36",
-            "order": 0,
-            "repo": 0,
-            "mr": 0,
-            "entry": "",
-            "lines": "",
-            "v1": "",
-            "v2": "",
-            "vision": "rnd",
-            "deleted": 0,
-            "relation": 1
+            "id": 6,
+            "title": "任务标题"
         }
     ],
     "relationPairs": {
@@ -71553,30 +71380,12 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "3": "重复",
         "4": "引用"
     },
-    "objectTypes": {
-        "demand": "需求池需求",
-        "epic": "业务需求",
-        "requirement": "用户需求",
-        "story": "研发需求",
-        "task": "任务",
-        "bug": "Bug",
-        "testcase": "用例",
-        "doc": "文档",
-        "design": "设计",
-        "repocommit": "提交",
-        "feedback": "反馈",
-        "ticket": "工单",
-        "issue": "问题",
-        "risk": "风险",
-        "projectdeliverable": "交付物",
-        "workflow_contract": "合同"
-    },
     "pager": {
-        "recTotal": 3,
+        "pageID": 1,
         "recPerPage": 20,
-        "pageID": 1
+        "recTotal": 100
     }
-}";s:8:"response";s:16480:"[
+}";s:8:"response";s:2488:"[
     {
         "field": "status",
         "paramsType": "string",
@@ -71587,7 +71396,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "field": "objects",
         "paramsType": "array",
         "required": false,
-        "desc": "自定义",
+        "desc": "候选对象列表",
         "level": 1,
         "children": [
             {
@@ -71598,395 +71407,10 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
                 "level": 2
             },
             {
-                "field": "project",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "parent",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "isParent",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "isTpl",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "path",
+                "field": "title",
                 "paramsType": "string",
                 "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "execution",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "module",
-                "paramsType": "int",
-                "required": false,
-                "desc": "模块",
-                "level": 2
-            },
-            {
-                "field": "design",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "story",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "storyVersion",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "designVersion",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "fromBug",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "feedback",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "fromIssue",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "fromDeliverable",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "name",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "type",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "mode",
-                "paramsType": "string",
-                "required": false,
-                "desc": "模式",
-                "level": 2
-            },
-            {
-                "field": "pri",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "estimate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "consumed",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "left",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "deadline",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "status",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "subStatus",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "color",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "keywords",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "version",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "openedBy",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "openedDate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "assignedTo",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "assignedDate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "estStarted",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "realStarted",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "finishedBy",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "finishedDate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "canceledBy",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "canceledDate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "closedBy",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "closedDate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "planDuration",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "realDuration",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "closedReason",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "lastEditedBy",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "lastEditedDate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "activatedDate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "order",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "repo",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "mr",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "entry",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "lines",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "v1",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "v2",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "vision",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "deleted",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "relation",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
+                "desc": "标题",
                 "level": 2
             }
         ]
@@ -71995,7 +71419,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "field": "relationPairs",
         "paramsType": "object",
         "required": false,
-        "desc": "自定义",
+        "desc": "可选关系 key 与显示名称",
         "level": 1,
         "children": [
             {
@@ -72029,127 +71453,6 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         ]
     },
     {
-        "field": "objectTypes",
-        "paramsType": "object",
-        "required": false,
-        "desc": "自定义",
-        "level": 1,
-        "children": [
-            {
-                "field": "demand",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "epic",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "requirement",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "story",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "task",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "bug",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "testcase",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "doc",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "design",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "repocommit",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "feedback",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "ticket",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "issue",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "risk",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "projectdeliverable",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "workflow_contract",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            }
-        ]
-    },
-    {
         "field": "pager",
         "paramsType": "object",
         "required": false,
@@ -72157,10 +71460,10 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "level": 1,
         "children": [
             {
-                "field": "recTotal",
+                "field": "pageID",
                 "paramsType": "int",
                 "required": false,
-                "desc": "总记录数",
+                "desc": "当前页码",
                 "level": 2
             },
             {
@@ -72171,10 +71474,10 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
                 "level": 2
             },
             {
-                "field": "pageID",
+                "field": "recTotal",
                 "paramsType": "int",
                 "required": false,
-                "desc": "当前页码",
+                "desc": "总记录数",
                 "level": 2
             }
         ]
@@ -72211,7 +71514,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "required": true,
         "desc": "状态(success 成功 | fail 失败)"
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:318;O:8:"stdClass":24:{s:2:"id";i:319;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:403;s:5:"title";s:18:"查询关联对象";s:4:"path";s:32:"/relations/:objectType/:objectID";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:710:"查询指定对象已关联的对象。objectType 取值范围：demand(需求池需求，IPD) | epic(业务需求，旗舰版) | requirement(用户需求) | story(研发需求) | task(任务) | bug(Bug) | testcase(用例) | doc(文档) | design(设计) | repocommit(代码提交，devops) | feedback(反馈) | ticket(工单) | issue(问题，旗舰版) | risk(风险，旗舰版) | projectdeliverable(交付物，旗舰版) | workflow_xxx(工作流对象，如 workflow_contract)。可关联范围随版本和功能开关变化，实际以候选接口返回的 objectTypes 为准。relations 保留分组结构，items 是扁平列表；解除关联时使用关联对象的类型、ID 和关系显示名称。";s:7:"version";i:1;s:6:"params";s:240:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:318;O:8:"stdClass":24:{s:2:"id";i:319;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:403;s:5:"title";s:18:"查询关联对象";s:4:"path";s:32:"/relations/:objectType/:objectID";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:758:"查询指定对象已关联的对象。objectType 取值范围：demand(需求池需求，IPD) | epic(业务需求，旗舰版) | requirement(用户需求) | story(研发需求) | task(任务) | bug(Bug) | testcase(用例) | doc(文档) | design(设计) | repocommit(代码提交，devops) | feedback(反馈) | ticket(工单) | issue(问题，旗舰版) | risk(风险，旗舰版) | projectdeliverable(交付物，旗舰版) | workflow_xxx(工作流对象，如 workflow_contract)。可关联范围随版本和功能开关变化，实际以候选接口返回的 objectTypes 为准。relations 为扁平列表，每项包含关系名称、关系类型、对象类型、编号和标题；解除关联时使用关联对象的类型、ID 和关系显示名称。";s:7:"version";i:1;s:6:"params";s:240:"{
     "header": [
         {
             "field": "Token",
@@ -72223,33 +71526,18 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
     "params": [],
     "paramsType": "json",
     "query": []
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:794:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:237:"{
     "status": "success",
-    "relations": {
-        "custom_相关": {
-            "task": {
-                "1": {
-                    "title": "开发电容光敏监测模块",
-                    "url": "\/index.php?m=task&f=view&t=json&objectID=1",
-                    "status": "doing",
-                    "assignedTo": "admin",
-                    "tab": "admin"
-                }
-            }
-        },
-        "default_产生了": {
-            "task": {
-                "1": {
-                    "title": "开发电容光敏监测模块",
-                    "url": "\/index.php?m=task&f=view&t=json&objectID=1",
-                    "status": "doing",
-                    "assignedTo": "admin",
-                    "tab": "admin"
-                }
-            }
+    "relations": [
+        {
+            "relation": "相关",
+            "relationType": "default",
+            "objectType": "task",
+            "id": 6,
+            "title": "任务标题"
         }
-    }
-}";s:8:"response";s:741:"[
+    ]
+}";s:8:"response";s:1450:"[
     {
         "field": "status",
         "paramsType": "string",
@@ -72258,23 +71546,44 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
     },
     {
         "field": "relations",
-        "paramsType": "object",
+        "paramsType": "array",
         "required": false,
-        "desc": "自定义",
+        "desc": "关联对象列表",
         "level": 1,
         "children": [
             {
-                "field": "custom_相关",
-                "paramsType": "array",
+                "field": "relation",
+                "paramsType": "string",
                 "required": false,
-                "desc": "",
+                "desc": "关系名称",
                 "level": 2
             },
             {
-                "field": "default_产生了",
-                "paramsType": "array",
+                "field": "relationType",
+                "paramsType": "string",
                 "required": false,
-                "desc": "",
+                "desc": "关系类型(default 系统内置关系 | custom 自定义关系)",
+                "level": 2
+            },
+            {
+                "field": "objectType",
+                "paramsType": "string",
+                "required": false,
+                "desc": "关联对象类型",
+                "level": 2
+            },
+            {
+                "field": "id",
+                "paramsType": "int",
+                "required": false,
+                "desc": "关联对象编号",
+                "level": 2
+            },
+            {
+                "field": "title",
+                "paramsType": "string",
+                "required": false,
+                "desc": "关联对象标题",
                 "level": 2
             }
         ]
