@@ -25,23 +25,25 @@ window.renderRowData = function($row, index, row)
  */
 window.checkBatchUserAccount = function(event)
 {
+    const $form = $(event.target);
+
+    $form.find('input[name^="account["]').removeClass('has-error');
+    $form.find('td[data-name="account"] .ajax-form-tip').remove();
+
     const errors = {};
 
-    $(event.target).closest('form').find('.form-batch-table tbody tr').each(function()
+    $form.find('.form-batch-table tbody tr').each(function()
     {
-        const $row     = $(this);
-        const $account = $row.find('input[name^="account["]');
-        const account  = ($account.val() || '').trim();
-        const realname = ($row.find('input[name^="realname["]').val() || '').trim();
+        const $account = $(this).find('input[name^="account["]');
+        const realname = $(this).find('input[name^="realname["]').val().trim();
 
-        if(realname !== '' && account === '') errors[$account.attr('name')] = accountRequiredTip;
+        if(realname !== '' && $account.val().trim() === '') errors[$account.attr('name')] = accountRequiredTip;
     });
 
-    if(Object.keys(errors).length)
-    {
-        showValidateMessage(errors);
-        return false;
-    }
+    if(!Object.keys(errors).length) return;
+
+    showValidateMessage(errors);
+    return false;
 };
 
 /**
