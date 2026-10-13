@@ -76,12 +76,15 @@ class errorlog extends control
      * 根据请求ID获取错误日志。
      * Get error log by request id.
      *
-     * @param  string $requestID
+     * @param  string $requestID 已经过safe64编码的请求ID，the encoded request id.
      * @access public
      * @return void
      */
     public function ajaxGetLog(string $requestID = '')
     {
+        /* requestID 形如 UUID，其中的 '-' 与 PATH_INFO 模式的参数分隔符冲突，会被框架截断，因此链接里传的是safe64编码后的值。The requestID looks like a UUID and its '-' conflicts with the param separator of PATH_INFO mode, so the value in the link is safe64 encoded. */
+        $requestID = helper::safe64Decode($requestID);
+
         if(empty($requestID)) return $this->send(array('result' => 'fail', 'message' => $this->lang->errorlog->notFound));
 
         $logs = $this->errorlog->getByRequestID($requestID);
