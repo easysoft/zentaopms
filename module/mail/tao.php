@@ -242,6 +242,12 @@ class mailTao extends mailModel
         $objectModel = $this->loadModel($objectType);
         if(!$objectModel) return false;
 
+        if($objectType == 'aitask')
+        {
+            $toList = !empty($object->assignedTo) ? $object->assignedTo : ($object->createdBy ?? '');
+            return array('to' => trim($toList, ','), 'cc' => '');
+        }
+
         if(method_exists($objectModel, 'getToAndCcList'))
         {
             if($objectType == 'rule') return $objectModel->getToAndCcList($object, $action);

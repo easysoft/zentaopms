@@ -12,7 +12,7 @@ cid=15211
 - 步骤3：无效SQL查询 @1
 - 步骤4：使用mysql驱动 @1
 - 步骤5：不使用过滤器 @1
-- 步骤6：INTO OUTFILE 写文件被拒绝 @SQL 语句包含危险语法（写文件/读文件），请求已被拒绝。
+- 步骤6：INTO OUTFILE 写文件被拒绝 @1
 
 */
 
@@ -82,4 +82,4 @@ $noFilterStateObj = new MockStateObj($countSql);
 r(is_object($biTest->queryTest($noFilterStateObj, 'mysql', false)) && !$noFilterStateObj->isError()) && p() && e('1'); // 步骤5：不使用过滤器
 
 $deniedStateObj = new MockStateObj("SELECT 'x' INTO OUTFILE '/tmp/zentao_vuln010.php'");
-r($biTest->queryTest($deniedStateObj)) && p() && e($lang->bi->errorIllegalSql); // 步骤6：INTO OUTFILE 写文件被拒绝
+r($biTest->queryTest($deniedStateObj) === $lang->bi->errorIllegalSql) && p() && e(1); // 步骤6：INTO OUTFILE 写文件被拒绝

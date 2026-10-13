@@ -143,6 +143,88 @@ class commonModelTest extends baseTest
     }
 
     /**
+     * 获取一级导航中指定分组的菜单项，用于验证导航显隐。
+     * Get the main nav item of the given group.
+     *
+     * @param  string $moduleName
+     * @param  string $group
+     * @access public
+     * @return string
+     */
+    public function getMainNavItemTest(string $moduleName, string $group): string
+    {
+        global $lang;
+
+        /* 模拟GitFox界面的问题导航，落地页复用代码库的评审页面。*/
+        $hasRepoLang   = isset($lang->repo);
+        $hasIssueLang  = isset($lang->issue);
+        $hasIssueNav   = isset($lang->mainNav->issue);
+        $issueNav      = $hasIssueNav ? $lang->mainNav->issue : '';
+        $hasRepoNav    = isset($lang->mainNav->repo);
+        $repoNav       = $hasRepoNav ? $lang->mainNav->repo : '';
+        $hasIssueOrder = isset($lang->mainNav->menuOrder[36]);
+        $issueOrder    = $hasIssueOrder ? $lang->mainNav->menuOrder[36] : '';
+        $hasRepoOrder  = isset($lang->mainNav->menuOrder[37]);
+        $repoOrder     = $hasRepoOrder ? $lang->mainNav->menuOrder[37] : '';
+        $hasIssueMenu  = isset($lang->issue->menu);
+        $issueMenu     = $hasIssueMenu ? $lang->issue->menu : null;
+        $hasRepoMenu   = isset($lang->repo->menu);
+        $repoMenu      = $hasRepoMenu ? $lang->repo->menu : null;
+        $repoNavGroup  = isset($lang->navGroup->repo) ? $lang->navGroup->repo : null;
+
+        if(!$hasRepoLang)  $lang->repo  = new stdclass();
+        if(!$hasIssueLang) $lang->issue = new stdclass();
+
+        $lang->mainNav->issue         = "问题|repo|review|";
+        $lang->mainNav->repo          = "代码库|repo|maintain|";
+        $lang->mainNav->menuOrder[36] = 'issue';
+        $lang->mainNav->menuOrder[37] = 'repo';
+        $lang->navGroup->repo         = 'repo';
+        $lang->repo->menu             = new stdclass();
+        $lang->repo->menu->code       = array('link' => "代码|repo|browse|repoID=%s");
+        $lang->repo->menu->commit     = array('link' => "提交|repo|log|repoID=%s");
+        $lang->issue->menu            = new stdclass();
+        $lang->issue->menu->review    = array('link' => "评审问题|repo|review|repoID=%s");
+        $lang->issue->menu->codescan  = array('link' => "扫描问题|codescan|issue|repoID=%s");
+
+        $result = '0';
+        try
+        {
+            $items = $this->invokeArgs('getMainNavList', [$moduleName]);
+            if(dao::isError()) return 'dao-error';
+
+            foreach($items as $item)
+            {
+                if(!is_object($item) or $item->group != $group) continue;
+                $result = $item->moduleName . '-' . $item->methodName;
+                break;
+            }
+        }
+        finally
+        {
+            /* 还原语言项，避免影响其他用例。*/
+            if($hasIssueNav) $lang->mainNav->issue = $issueNav;
+            else             unset($lang->mainNav->issue);
+            if($hasRepoNav) $lang->mainNav->repo = $repoNav;
+            else            unset($lang->mainNav->repo);
+            if($hasIssueOrder) $lang->mainNav->menuOrder[36] = $issueOrder;
+            else               unset($lang->mainNav->menuOrder[36]);
+            if($hasRepoOrder) $lang->mainNav->menuOrder[37] = $repoOrder;
+            else              unset($lang->mainNav->menuOrder[37]);
+            if($hasIssueMenu) $lang->issue->menu = $issueMenu;
+            else              unset($lang->issue->menu);
+            if(!$hasIssueLang) unset($lang->issue);
+            if($hasRepoMenu) $lang->repo->menu = $repoMenu;
+            else             unset($lang->repo->menu);
+            if(is_null($repoNavGroup)) unset($lang->navGroup->repo);
+            else                       $lang->navGroup->repo = $repoNavGroup;
+            if(!$hasRepoLang) unset($lang->repo);
+        }
+
+        return $result;
+    }
+
+    /**
      * Test isOpenMethod method.
      *
      * @param  string $module

@@ -7,30 +7,35 @@ title=测试 projectModel::formatDataForList();
 timeout=0
 cid=17812
 
-- 执行projectTest模块的formatDataForListTest方法，参数是$project1, $PMList1 
+- 执行projectTest模块的formatDataForListTest方法，参数是$project1, $PMList1
  - 属性budget @¥ 5万
  - 属性estimate @120h
- - 属性consume @80h
- - 属性surplus @40h
- - 属性PM @项目经理1
- - 属性PMAvatar @avatar1.jpg
+- 属性consume @80h
+- 属性surplus @40h
+- 属性PM @pm1
+- 属性PMName @项目经理1
+- 属性PMAvatar @avatar1.jpg
 - 执行projectTest模块的formatDataForListTest方法，参数是$project2, array 属性budget @待定
-- 执行projectTest模块的formatDataForListTest方法，参数是$project3, $PMList3 
- - 属性budget @¥ 15万
- - 属性PM @项目经理2
-- 执行projectTest模块的formatDataForListTest方法，参数是$project4, $PMList4 
- - 属性budget @$ 2亿
- - 属性PM @项目经理3
- - 属性PMUserID @8
-- 执行projectTest模块的formatDataForListTest方法，参数是$project5, $PMList5 
- - 属性budget @€ 8万
- - 属性PM @项目经理4
- - 属性PMAvatar @avatar4.jpg
+- 执行projectTest模块的formatDataForListTest方法，参数是$project3, $PMList3
+- 属性budget @¥ 15万
+- 属性PM @pm2
+- 属性PMName @项目经理2
+- 执行projectTest模块的formatDataForListTest方法，参数是$project4, $PMList4
+- 属性budget @$ 2亿
+- 属性PM @pm3
+- 属性PMName @项目经理3
+- 属性PMUserID @8
+- 执行projectTest模块的formatDataForListTest方法，参数是$project5, $PMList5
+- 属性budget @€ 8万
+- 属性PM @pm4
+- 属性PMName @项目经理4
+- 属性PMAvatar @avatar4.jpg
  - 属性PMUserID @9
-- 执行projectTest模块的formatDataForListTest方法，参数是$project6, $PMList6 
- - 属性budget @¥ 3万
- - 属性end @2030-12-31
- - 属性PM @项目经理5
+- 执行projectTest模块的formatDataForListTest方法，参数是$project6, $PMList6
+- 属性budget @¥ 3万
+- 属性end @2030-12-31
+- 属性PM @pm5
+- 属性PMName @项目经理5
 - 执行projectTest模块的formatDataForListTest方法，参数是$project7, array 属性budget @¥ 2.5万
 
 */
@@ -66,7 +71,7 @@ $project1->end = '2024-12-31';
 $project1->PM = 'pm1';
 $project1->status = 'doing';
 $PMList1 = array('pm1' => (object)array('id' => 6, 'realname' => '项目经理1', 'avatar' => 'avatar1.jpg'));
-r($projectTest->formatDataForListTest($project1, $PMList1)) && p('budget,estimate,consume,surplus,PM,PMAvatar') && e('¥ 5万,120h,80h,40h,项目经理1,avatar1.jpg');
+r($projectTest->formatDataForListTest($project1, $PMList1)) && p('budget,estimate,consume,surplus,PM,PMName,PMAvatar') && e('¥ 5万,120h,80h,40h,pm1,项目经理1,avatar1.jpg');
 
 // 测试步骤2：预算为0的项目格式化
 $project2 = new stdClass();
@@ -93,7 +98,7 @@ $project3->end = '2025-03-31';
 $project3->PM = 'pm2';
 $project3->status = 'doing';
 $PMList3 = array('pm2' => (object)array('id' => 7, 'realname' => '项目经理2', 'avatar' => 'avatar2.jpg'));
-r($projectTest->formatDataForListTest($project3, $PMList3)) && p('budget,PM') && e('¥ 15万,项目经理2');
+r($projectTest->formatDataForListTest($project3, $PMList3)) && p('budget,PM,PMName') && e('¥ 15万,pm2,项目经理2');
 
 // 测试步骤4：大额预算项目格式化(亿元)
 $project4 = new stdClass();
@@ -107,7 +112,7 @@ $project4->end = '2025-12-31';
 $project4->PM = 'pm3';
 $project4->status = 'doing';
 $PMList4 = array('pm3' => (object)array('id' => 8, 'realname' => '项目经理3', 'avatar' => 'avatar3.jpg'));
-r($projectTest->formatDataForListTest($project4, $PMList4)) && p('budget,PM,PMUserID') && e('$ 2亿,项目经理3,8');
+r($projectTest->formatDataForListTest($project4, $PMList4)) && p('budget,PM,PMName,PMUserID') && e('$ 2亿,pm3,项目经理3,8');
 
 // 测试步骤5：带项目经理信息的项目格式化
 $project5 = new stdClass();
@@ -121,7 +126,7 @@ $project5->end = '2024-10-31';
 $project5->PM = 'pm4';
 $project5->status = 'doing';
 $PMList5 = array('pm4' => (object)array('id' => 9, 'realname' => '项目经理4', 'avatar' => 'avatar4.jpg'));
-r($projectTest->formatDataForListTest($project5, $PMList5)) && p('budget,PM,PMAvatar,PMUserID') && e('€ 8万,项目经理4,avatar4.jpg,9');
+r($projectTest->formatDataForListTest($project5, $PMList5)) && p('budget,PM,PMName,PMAvatar,PMUserID') && e('€ 8万,pm4,项目经理4,avatar4.jpg,9');
 
 // 测试步骤6：长期项目结束时间格式化
 $project6 = new stdClass();
@@ -135,7 +140,7 @@ $project6->end = '2030-12-31';
 $project6->PM = 'pm5';
 $project6->status = 'doing';
 $PMList6 = array('pm5' => (object)array('id' => 10, 'realname' => '项目经理5', 'avatar' => 'avatar5.jpg'));
-r($projectTest->formatDataForListTest($project6, $PMList6)) && p('budget,end,PM') && e('¥ 3万,2030-12-31,项目经理5');
+r($projectTest->formatDataForListTest($project6, $PMList6)) && p('budget,end,PM,PMName') && e('¥ 3万,2030-12-31,pm5,项目经理5');
 
 // 测试步骤7：空项目经理的项目格式化
 $project7 = new stdClass();

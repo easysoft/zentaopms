@@ -163,6 +163,24 @@ class ciModelTest extends baseTest
     }
 
     /**
+     * Send request and return the raw result.
+     * 发送请求并返回原始结果，便于校验参数处理逻辑。
+     *
+     * @param  string $url
+     * @param  object $data
+     * @param  string $userPWD
+     * @access public
+     * @return mixed
+     */
+    public function sendRequestRawTest(string $url, object $data, string $userPWD = '')
+    {
+        $result = $this->instance->sendRequest($url, $data, $userPWD);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test checkCompileStatus method.
      *
      * @param  int    $compileID

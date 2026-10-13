@@ -94,42 +94,44 @@ class webhookTao extends webhookModel
      *
      * @param  object $data
      * @param  object $action
-     * @param  object $object
+     * @param  string $title
      * @param  array  $users
      * @access public
      * @return string
      */
-    protected function getActionText(object $data, object $action, object $object, array $users): string
+    protected function getActionText(object $data, object $action, string $title, array $users): string
     {
-        $text = '';
+        $text = zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$title}]";
 
+        $httpReg = '/\(http(s)?:\/\/[^\)]+\)/';
         if(isset($data->markdown->text))
         {
-            $text = substr($data->markdown->text, 0, strpos($data->markdown->text, '(http'));
+            $text = preg_replace($httpReg, '', $data->markdown->text);
         }
         elseif(isset($data->markdown->content))
         {
-            $text = substr($data->markdown->content, 0, strpos($data->markdown->content, '(http'));
+            $text = preg_replace($httpReg, '', $data->markdown->content);
         }
         elseif(isset($data->text->content))
         {
-            $text = substr($data->text->content, 0, strpos($data->text->content, '(http'));
+            $text = preg_replace($httpReg, '', $data->text->content);
         }
         elseif(isset($data->card->elements))
         {
-            $text = $data->card->elements[0]->content;
-            $text = substr($text, 0, strpos($text, '(http')) ? substr($text, 0, strpos($text, '(http')) : zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
+            $content = $data->card->elements[0]->content;
+            if(strpos($content, '(http') !== false) $text = preg_replace($httpReg, '', $content);
         }
         elseif(isset($data->content))
         {
-            $text = empty($data->content->text) ? '' : (string)$data->content->text;
-            $text = substr($text, 0, strpos($text, '(http')) ? substr($text, 0, strpos($text, '(http')) : zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
+            $content = empty($data->content->text) ? '' : (string)$data->content->text;
+            if(strpos($content, '(http') !== false) $text = preg_replace($httpReg, '', $content);
         }
-        else
+        elseif(strpos($data->text, '(http') !== false)
         {
-            $text = substr($data->text, 0, strpos($data->text, '(http')) ? substr($data->text, 0, strpos($data->text, '(http')) : zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
+            $text = preg_replace($httpReg, '', $data->text);
         }
 
+        $text = preg_replace('/\[([^\]]+)\]/', '$1', $text);
         return $text;
     }
 }

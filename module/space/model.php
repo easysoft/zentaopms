@@ -527,6 +527,8 @@ class spaceModel extends model
             {
                 $this->app->tab = 'space';
                 common::setMenuVars('space', $spaceID);
+
+                if(isset($this->lang->space->menu->settings['subMenu']->group)) unset($this->lang->space->menu->settings['subMenu']->group);
             }
 
             unset($this->lang->devops->homeMenu->space);
