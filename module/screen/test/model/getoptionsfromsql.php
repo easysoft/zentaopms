@@ -20,6 +20,8 @@ cid=18250
  - 属性3 @测试用户2
  - 属性4 @用户1
  - 属性5 @用户2
+- 执行screenTest模块的getOptionsFromSqlTest方法，参数是"SELECT id, account FROM " . TABLE_USER . " WHERE deleted='0' INTO OUTFILE '/tmp/screen_getoptionsfromsql.txt'", 'id', 'account'  @SQL 语句包含危险语法（写文件/读文件），请求已被拒绝。
+- 执行screenTest模块的getOptionsFromSqlTest方法，参数是"SELECT load_file  @SQL 语句包含危险语法（写文件/读文件），请求已被拒绝。
 
 */
 
@@ -48,3 +50,7 @@ r($screenTest->getOptionsFromSqlTest("SELECT id, account FROM " . TABLE_USER . "
 r($screenTest->getOptionsFromSqlTest("SELECT id, account FROM " . TABLE_USER . " WHERE deleted='0' ORDER BY id LIMIT 2", 'nonexistent', 'account')) && p() && e('0');
 r($screenTest->getOptionsFromSqlTest("SELECT id, account FROM " . TABLE_USER . " WHERE deleted='0' ORDER BY id LIMIT 2", 'id', 'nonexistent')) && p() && e('0');
 r($screenTest->getOptionsFromSqlTest("SELECT id, realname FROM " . TABLE_USER . " WHERE deleted='0' ORDER BY id", 'id', 'realname')) && p('1,2,3,4,5') && e('管理员,测试用户1,测试用户2,用户1,用户2');
+
+// 6. 危险语法被拒绝：写文件、读文件
+r($screenTest->getOptionsFromSqlTest("SELECT id, account FROM " . TABLE_USER . " WHERE deleted='0' INTO OUTFILE '/tmp/screen_getoptionsfromsql.txt'", 'id', 'account')) && p() && e('SQL 语句包含危险语法（写文件/读文件），请求已被拒绝。');
+r($screenTest->getOptionsFromSqlTest("SELECT load_file('/etc/passwd') AS id, account FROM " . TABLE_USER . " WHERE deleted='0'", 'id', 'account')) && p() && e('SQL 语句包含危险语法（写文件/读文件），请求已被拒绝。');

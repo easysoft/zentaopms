@@ -12,6 +12,9 @@ cid=17370
 - 步骤3：测试空SQL @1
 - 步骤4：测试无效过滤器 @1
 - 步骤5：测试语言配置 @1
+- 步骤6：into outfile 被拒绝 @SQL 语句包含危险语法（写文件/读文件），请求已被拒绝。
+- 步骤7：load_file 被拒绝 @SQL 语句包含危险语法（写文件/读文件），请求已被拒绝。
+- 步骤8：load data 被拒绝 @SQL 语句包含危险语法（写文件/读文件），请求已被拒绝。
 
 */
 
@@ -85,3 +88,34 @@ $result5 = $pivotTest->genOriginSheetTest(
     'mysql'
 );
 r(count($result5) == 2) && p() && e('1'); // 步骤5：测试语言配置
+
+// 6. 危险语法在明细表执行前被拒绝（写文件/读文件），SQL 不执行
+$result6 = $pivotTest->genOriginSheetTest(
+    array('account' => array('object' => 'user', 'field' => 'account', 'type' => 'string')),
+    array(),
+    "SELECT account FROM zt_user WHERE deleted = '0' INTO OUTFILE '/tmp/pivot_genoriginsheet.txt'",
+    array(),
+    array(),
+    'mysql'
+);
+r($result6) && p() && e('SQL 语句包含危险语法（写文件/读文件），请求已被拒绝。'); // 步骤6：into outfile 被拒绝
+
+$result7 = $pivotTest->genOriginSheetTest(
+    array('account' => array('object' => 'user', 'field' => 'account', 'type' => 'string')),
+    array(),
+    "SELECT load_file('/etc/passwd') AS account FROM zt_user WHERE deleted = '0'",
+    array(),
+    array(),
+    'mysql'
+);
+r($result7) && p() && e('SQL 语句包含危险语法（写文件/读文件），请求已被拒绝。'); // 步骤7：load_file 被拒绝
+
+$result8 = $pivotTest->genOriginSheetTest(
+    array('account' => array('object' => 'user', 'field' => 'account', 'type' => 'string')),
+    array(),
+    "load data infile '/tmp/pivot_genoriginsheet.txt' into table zt_user",
+    array(),
+    array(),
+    'mysql'
+);
+r($result8) && p() && e('SQL 语句包含危险语法（写文件/读文件），请求已被拒绝。'); // 步骤8：load data 被拒绝
