@@ -194,6 +194,7 @@ $lang->pipeline->triggerTypeList['pullreq_branch_updated'] = 'Merge request bran
 $lang->pipeline->triggerTypeList['pullreq_closed']         = 'Merge request close';
 $lang->pipeline->triggerTypeList['pullreq_merged']         = 'Merge request merge';
 $lang->pipeline->triggerTypeList['cron']                   = 'Cron trigger';
+$lang->pipeline->triggerTypeList['auto']                   = 'Auto trigger';
 $lang->pipeline->triggerTypeList['push']            = 'Push';
 $lang->pipeline->triggerTypeList['tag_push']        = 'Tag Push';
 $lang->pipeline->triggerTypeList['merge_requests']  = 'Merge Request';
