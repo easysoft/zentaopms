@@ -195,9 +195,9 @@ $lang->pipeline->triggerTypeList['pullreq_closed']         = '合并请求关闭
 $lang->pipeline->triggerTypeList['pullreq_merged']         = '合并请求合并';
 $lang->pipeline->triggerTypeList['cron']                   = '定时触发';
 $lang->pipeline->triggerTypeList['auto']                   = '自动触发';
-$lang->pipeline->triggerTypeList['push']            = '代码推送';
-$lang->pipeline->triggerTypeList['tag_push']        = '标签推送';
-$lang->pipeline->triggerTypeList['merge_requests']  = '合并请求';
+$lang->pipeline->triggerTypeList['push']                   = '代码推送';
+$lang->pipeline->triggerTypeList['tag_push']               = '标签推送';
+$lang->pipeline->triggerTypeList['merge_requests']         = '合并请求';
 
 $lang->pipeline->notice = new stdclass();
 $lang->pipeline->notice->saveFailed = "保存失败,请重试。";

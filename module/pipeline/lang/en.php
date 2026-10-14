@@ -195,9 +195,9 @@ $lang->pipeline->triggerTypeList['pullreq_closed']         = 'Merge request clos
 $lang->pipeline->triggerTypeList['pullreq_merged']         = 'Merge request merge';
 $lang->pipeline->triggerTypeList['cron']                   = 'Cron trigger';
 $lang->pipeline->triggerTypeList['auto']                   = 'Auto trigger';
-$lang->pipeline->triggerTypeList['push']            = 'Push';
-$lang->pipeline->triggerTypeList['tag_push']        = 'Tag Push';
-$lang->pipeline->triggerTypeList['merge_requests']  = 'Merge Request';
+$lang->pipeline->triggerTypeList['push']                   = 'Push';
+$lang->pipeline->triggerTypeList['tag_push']               = 'Tag Push';
+$lang->pipeline->triggerTypeList['merge_requests']         = 'Merge Request';
 
 $lang->pipeline->notice = new stdclass();
 $lang->pipeline->notice->saveFailed = "Save Failed, Please Retry.";
