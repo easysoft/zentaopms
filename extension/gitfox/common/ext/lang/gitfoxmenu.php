@@ -57,7 +57,7 @@ $lang->dashboard = isset($lang->dashboard->common) ? $lang->dashboard->common : 
 /* 地盘菜单。 */
 $lang->my->menu = new stdclass();
 $lang->my->menu->index   = array('link' => "$lang->dashboard|my|index");
-$lang->my->menu->work    = array('link' => "{$lang->my->work}|my|work|mode=task");
+//$lang->my->menu->work    = array('link' => "{$lang->my->work}|my|work|mode=task");
 $lang->my->menu->audit   = array('link' => "{$lang->review->common}|my|audit|browseType=all&param=&orderBy=time_desc", 'subModule' => 'review');
 $lang->my->menu->dynamic = array('link' => "$lang->dynamic|my|dynamic|");
 $lang->my->menu->ssh     = array('link' => "{$lang->ssh->common}|my|ssh|");
@@ -65,7 +65,7 @@ $lang->my->menu->ssh     = array('link' => "{$lang->ssh->common}|my|ssh|");
 /* 地盘菜单顺序。 */
 $lang->my->menuOrder     = array();
 $lang->my->menuOrder[5]  = 'index';
-$lang->my->menuOrder[10] = 'work';
+//$lang->my->menuOrder[10] = 'work';
 $lang->my->menuOrder[15] = 'audit';
 $lang->my->menuOrder[20] = 'dynamic';
 $lang->my->menuOrder[25] = 'ssh';
