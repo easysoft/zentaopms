@@ -574,6 +574,18 @@ panel
     ),
     formPanel
     (
+        set::className('mt-6'),
+        set::title($lang->testreport->legendActivatedBugs),
+        set::actions(array()),
+        dtable
+        (
+            set::cols($config->testreport->bug->dtable->fieldList),
+            set::data(array_values($activatedBugs)),
+            set::userMap($users)
+        )
+    ),
+    formPanel
+    (
         setID('tabReport'),
         set::className('mt-6'),
         set::title($lang->testreport->legendReport),
