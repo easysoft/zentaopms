@@ -743,6 +743,12 @@ class executionTao extends executionModel
         }
 
         /* Remove the member who left the team. */
+        $removedAccounts = array();
+        foreach(array_keys($team) as $account)
+        {
+            if(in_array($account, $members) || $account == $oldExecution->openedBy) continue;
+            $removedAccounts[] = $account;
+        }
         $this->dao->delete()->from(TABLE_TEAM)
             ->where('root')->eq($executionID)
             ->andWhere('type')->eq('execution')
@@ -751,6 +757,22 @@ class executionTao extends executionModel
             ->andWhere('account')->ne($oldExecution->openedBy)
             ->exec();
         if(isset($execution->project) and $execution->project) $this->addProjectMembers((int)$execution->project, $teamMembers);
+
+        /* 编辑执行维护团队成员后，单独记一条维护团队历史。 */
+        $addedAccounts = array_keys($changedAccounts);
+        if($addedAccounts || $removedAccounts)
+        {
+            $users        = $this->user->getPairs('noletter');
+            $addedNames   = array_map(function($account) use ($users) { return zget($users, $account); }, $addedAccounts);
+            $removedNames = array_map(function($account) use ($users) { return zget($users, $account); }, $removedAccounts);
+
+            $changes = array();
+            if(!empty($addedNames))   $changes[] = array('field' => 'addDiff',    'old' => '', 'new' => '', 'diff' => implode(',', $addedNames));
+            if(!empty($removedNames)) $changes[] = array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => implode(',', $removedNames));
+
+            $actionID = $this->loadModel('action')->create('execution', $executionID, 'managedTeam');
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+        }
 
         /* Fix bug#3074, Update views for team members. */
         if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);
