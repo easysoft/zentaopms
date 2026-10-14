@@ -11035,7 +11035,7 @@ class upgradeModel extends model
                 ->andWhere('type')->eq('zentao')
                 ->andWhere('status')->eq('normal')
                 ->exec();
-            $this->loadModel('setting')->deleteItem('owner=system&module=common&key=lastReleaseID');
+            $this->loadModel('setting')->deleteItems('owner=system&module=common&key=lastReleaseID');
 
             return !dao::isError();
         }
