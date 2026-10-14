@@ -57,7 +57,6 @@ $lang->dashboard = isset($lang->dashboard->common) ? $lang->dashboard->common : 
 /* 地盘菜单。 */
 $lang->my->menu = new stdclass();
 $lang->my->menu->index   = array('link' => "$lang->dashboard|my|index");
-/* 独立版本待处理功能未开发完成，暂时隐藏。 */
 //$lang->my->menu->work    = array('link' => "{$lang->my->work}|my|work|mode=task");
 $lang->my->menu->audit   = array('link' => "{$lang->review->common}|my|audit|browseType=all&param=&orderBy=time_desc", 'subModule' => 'review');
 $lang->my->menu->dynamic = array('link' => "$lang->dynamic|my|dynamic|");

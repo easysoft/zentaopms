@@ -165,6 +165,8 @@ class gitfox extends control
         $this->view->fromVersion     = $fromVersion;
         $this->view->currentVersion  = $currentVersion === '' ? '' : 'v' . ltrim((string)$currentVersion, 'vV');
         $this->view->requiredVersion = 'v' . ltrim((string)$this->config->devops->gitfoxVersion, 'vV');
+        $this->view->currentEdition  = $this->gitfox->getEdition($health);
+        $this->view->requiredEdition = $this->gitfox->getRequiredEdition();
         $this->display();
     }
 

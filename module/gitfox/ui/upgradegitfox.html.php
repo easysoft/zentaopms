@@ -42,7 +42,7 @@ div
                         div
                         (
                             setClass('font-bold text-danger mt-2 mb-4'),
-                            sprintf($lang->gitfox->upgradeGitFoxTip, $currentVersion, $requiredVersion)
+                            sprintf($lang->gitfox->upgradeGitFoxTip, $currentVersion, $currentEdition, $requiredVersion, $requiredEdition)
                         ),
                         div
                         (
