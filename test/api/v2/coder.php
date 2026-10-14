@@ -327,12 +327,28 @@ check(request('POST', '/my/sshkeys', $key)[1]['status'] == 'fail', 'A failed Git
 coderHTTPClient::$response = json_encode(array('code' => 'fail', 'message' => 'key::Duplicate key'));
 check(isset(request('POST', '/my/sshkeys', $key)[1]['message']['publicKey']), 'Map GitFox key errors to publicKey.');
 
-foreach(array('/products/12/repos' => 'GET') as $path => $verb)
+/* Space list results are database fixtures; permission enforcement on a supplied space uses the real zen helper. */
+foreach(array(10 => 'open', 20 => 'private', 30 => 'private', 40 => 'open', 50 => 'private', 60 => 'open', 70 => 'open') as $id => $acl)
+{
+    $spaceModel->records[$id] = (object)array('id' => $id, 'name' => 'Space ' . $id, 'code' => 'space' . $id, 'desc' => 'Description', 'acl' => $acl, 'auth' => in_array($id, array(40, 50)) ? 'reset' : 'extend', 'deleted' => $id == 60 ? 1 : 0);
+}
+$spaceModel->members = array(20 => array('coder' => true), 30 => array('other' => true), 50 => array('coder' => true));
+$spaceModel->visibleIDs = array(10, 20, 40, 50, 70);
+[$code, $data] = request('GET', '/spaces?recPerPage=2&pageID=2&account=other');
+check($code == 200 && $data['status'] == 'success' && array_column($data['spaces'], 'id') === array(40, 50), 'Paginate the visible space list.');
+check($spaceModel->requestedAccount === 'coder', 'Space listings must use the token account.');
+check($data['pager'] === array('recTotal' => 5, 'recPerPage' => 2, 'pageID' => 2, 'pageTotal' => 3), 'Space pagination reports the visible total.');
+check(array_keys($data['spaces'][0]) === array('id', 'name', 'code', 'desc', 'acl', 'auth'), 'Return only the documented space fields.');
+$spaceModel->visibleIDs = array();
+check(request('GET', '/spaces')[1]['spaces'] === array(), 'Empty spaces must be an array.');
+$spaceModel->visibleIDs = array(10, 20, 40, 50, 70);
+
+foreach(array('/products/12/repos' => 'GET', '/spaces' => 'GET') as $path => $verb)
 {
     check(request($verb, $path, $verb == 'POST' ? $newRepo : array(), '12', false, array())[0] == 403, 'Retain method permission checks on ' . $path);
 }
 
-foreach(array('/products/12/repos' => 'GET', '/my/sshkeys' => 'POST') as $path => $allowed)
+foreach(array('/products/12/repos' => 'GET', '/my/sshkeys' => 'POST', '/spaces' => 'GET') as $path => $allowed)
 {
     foreach(array('GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS') as $verb)
     {

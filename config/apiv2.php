@@ -500,6 +500,7 @@ $routes['/:type/modules/:moduleID'] = array(
 
 /* 编码助手使用的禅道接口。ZenTao APIs used by the coding assistant. */
 $codingRoutes = array(
+    '/spaces'                   => '/space/browse',
     '/products/:productID/repos' => '/repo/ajaxGetListByProduct',
     '/my/sshkeys'                => '/my/createSSH'
 );

@@ -1,4 +1,4 @@
-a:370:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:369;s:5:"title";s:11:"获取Token";s:4:"path";s:12:"/users/login";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:11:"获取Token";s:7:"version";i:1;s:6:"params";s:400:"{
+a:371:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:369;s:5:"title";s:11:"获取Token";s:4:"path";s:12:"/users/login";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:11:"获取Token";s:7:"version";i:1;s:6:"params";s:400:"{
     "header": [],
     "params": [
         {
@@ -80124,5 +80124,131 @@ a:370:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "paramsType": "string",
         "required": true,
         "desc": "成功提示；失败时可能返回字段错误对象。"
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}i:370;O:8:"stdClass":24:{s:2:"id";i:371;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:409;s:5:"title";s:27:"获取代码库空间列表";s:4:"path";s:7:"/spaces";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:331:"需要 space.browse 全局权限。复用空间列表的可见性规则，只返回当前 Token 用户可见的未删除空间。按 ID 倒序，支持 pageID、recPerPage；分页总数按可见空间计算。无结果或页码超过总页数时 spaces 为 []。分页参数越界返回 400，不支持的 HTTP 方法返回 405。";s:7:"version";i:1;s:6:"params";s:621:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "禅道 API 访问凭证。"
+        }
+    ],
+    "params": [],
+    "paramsType": "json",
+    "query": [
+        {
+            "field": "pageID",
+            "paramsType": "int",
+            "required": false,
+            "desc": "页码，默认 1，必须大于 0。"
+        },
+        {
+            "field": "recPerPage",
+            "paramsType": "int",
+            "required": false,
+            "desc": "每页记录数，默认 20，范围 1～100。"
+        }
+    ]
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:350:"{
+    "status": "success",
+    "spaces": [
+        {
+            "id": 10,
+            "name": "研发空间",
+            "code": "dev",
+            "desc": "",
+            "acl": "open",
+            "auth": "extend"
+        }
+    ],
+    "pager": {
+        "recTotal": 1,
+        "recPerPage": 20,
+        "pageID": 1,
+        "pageTotal": 1
+    }
+}";s:8:"response";s:2427:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态：success 成功；fail 失败。"
+    },
+    {
+        "field": "spaces",
+        "paramsType": "array",
+        "required": true,
+        "desc": "可见空间数组。",
+        "children": [
+            {
+                "field": "id",
+                "paramsType": "int",
+                "required": true,
+                "desc": "代码库空间 ID。"
+            },
+            {
+                "field": "name",
+                "paramsType": "string",
+                "required": true,
+                "desc": "空间名称。"
+            },
+            {
+                "field": "code",
+                "paramsType": "string",
+                "required": true,
+                "desc": "空间代号。"
+            },
+            {
+                "field": "desc",
+                "paramsType": "string",
+                "required": true,
+                "desc": "空间描述。"
+            },
+            {
+                "field": "acl",
+                "paramsType": "string",
+                "required": true,
+                "desc": "访问控制：open 公开；private 私有。"
+            },
+            {
+                "field": "auth",
+                "paramsType": "string",
+                "required": true,
+                "desc": "权限模式：extend 继承全局；reset 独立授权。"
+            }
+        ]
+    },
+    {
+        "field": "pager",
+        "paramsType": "object",
+        "required": true,
+        "desc": "按当前用户可见记录计算的分页信息。",
+        "children": [
+            {
+                "field": "recTotal",
+                "paramsType": "int",
+                "required": true,
+                "desc": "可见记录总数。"
+            },
+            {
+                "field": "recPerPage",
+                "paramsType": "int",
+                "required": true,
+                "desc": "每页记录数。"
+            },
+            {
+                "field": "pageID",
+                "paramsType": "int",
+                "required": true,
+                "desc": "当前页，从 1 开始。"
+            },
+            {
+                "field": "pageTotal",
+                "paramsType": "int",
+                "required": true,
+                "desc": "总页数；没有记录时为 0。"
+            }
+        ]
     }
 ]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}}

@@ -23,6 +23,32 @@ class space extends control
      */
     public function browse(string $type = 'all', int $queryID = 0, int $recTotal = 20, int $recPerPage = 20, int $pageID = 1)
     {
+        if($this->app->apiVersion == 'v2')
+        {
+            if($this->app->action != 'get')
+            {
+                header('Allow: GET');
+                http_response_code(405);
+                return $this->sendError('Method not allowed.');
+            }
+            if($pageID < 1 || $recPerPage < 1 || $recPerPage > 100)
+            {
+                http_response_code(400);
+                return $this->sendError('Invalid pageID or recPerPage.');
+            }
+
+            $spaces   = $this->space->getListByAccount($this->app->user->account);
+            if(dao::isError()) return $this->sendError(dao::getError());
+            $recTotal = count($spaces);
+            $spaces   = array_slice(array_values($spaces), ($pageID - 1) * $recPerPage, $recPerPage);
+            $spaces   = array_map(function($space)
+            {
+                return (object)array('id' => (int)$space->id, 'name' => $space->name, 'code' => $space->code, 'desc' => $space->desc, 'acl' => $space->acl, 'auth' => $space->auth);
+            }, $spaces);
+
+            return $this->send(array('spaces' => $spaces, 'pager' => array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'pageID' => $pageID, 'pageTotal' => (int)ceil($recTotal / $recPerPage))));
+        }
+
         $type = strtolower($type);
 
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
