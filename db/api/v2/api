@@ -47893,7 +47893,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "required": true,
         "desc": "状态(success 成功 | fail 失败)"
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:245;O:8:"stdClass":24:{s:2:"id";i:246;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:12:"我的待办";s:4:"path";s:9:"/my/todos";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:12:"我的待办";s:7:"version";i:1;s:6:"params";s:1276:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:245;O:8:"stdClass":24:{s:2:"id";i:246;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:12:"我的待办";s:4:"path";s:9:"/my/todos";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:12:"我的待办";s:7:"version";i:1;s:6:"params";s:1424:"{
     "header": [
         {
             "field": "Token",
@@ -47910,7 +47910,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "paramsType": "string",
             "required": false,
             "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | today \u4eca\u5929 | future \u5c06\u6765 | lag \u8fc7\u671f | finished \u5df2\u5b8c\u6210)"
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | today \u4eca\u5929 | thisWeek \u672c\u5468 | thisMonth \u672c\u6708 | future \u5c06\u6765 | undone \u672a\u5b8c\u6210\uff0c\u9700\u540c\u65f6\u4f20 status=undone | cycle \u5468\u671f\u5f85\u529e | assignedToOther \u6307\u6d3e\u4ed6\u4eba)"
         },
         {
             "field": "orderBy",
@@ -47987,7 +47987,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:246;O:8:"stdClass":24:{s:2:"id";i:247;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的任务";s:4:"path";s:9:"/my/tasks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的任务";s:7:"version";i:1;s:6:"params";s:5535:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:246;O:8:"stdClass":24:{s:2:"id";i:247;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的任务";s:4:"path";s:9:"/my/tasks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的任务";s:7:"version";i:1;s:6:"params";s:5738:"{
     "header": [
         {
             "field": "Token",
@@ -48003,8 +48003,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | unclosed \u672a\u5173\u95ed | assignedtome \u6307\u6d3e\u7ed9\u6211 | openedbyme \u6211\u521b\u5efa | finishedbyme \u7531\u6211\u5b8c\u6210 | closedbyme \u7531\u6211\u5173\u95ed)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u53d6\u503c\u533a\u5206\u5927\u5c0f\u5199\u3002(assignedTo \u6307\u6d3e\u7ed9\u6211 | openedBy \u7531\u6211\u521b\u5efa | finishedBy \u7531\u6211\u5b8c\u6210 | myInvolved \u7531\u6211\u53c2\u4e0e | closedBy \u7531\u6211\u5173\u95ed | canceledBy \u7531\u6211\u53d6\u6d88 | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -48103,7 +48103,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:247;O:8:"stdClass":24:{s:2:"id";i:248;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:18:"指派给我的Bug";s:4:"path";s:8:"/my/bugs";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:18:"指派给我的Bug";s:7:"version";i:1;s:6:"params";s:6395:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:247;O:8:"stdClass":24:{s:2:"id";i:248;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:18:"指派给我的Bug";s:4:"path";s:8:"/my/bugs";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:18:"指派给我的Bug";s:7:"version";i:1;s:6:"params";s:6616:"{
     "header": [
         {
             "field": "Token",
@@ -48119,8 +48119,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | unclosed \u672a\u5173\u95ed | assignedtome \u6307\u6d3e\u7ed9\u6211 | openedbyme \u6211\u521b\u5efa | resolvedbyme \u7531\u6211\u89e3\u51b3)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u53d6\u503c\u53d6\u81ea zt_bug \u7684\u5b57\u6bb5\u540d\uff08\u533a\u5206\u5927\u5c0f\u5199\uff09\u3002(assignedTo \u6307\u6d3e\u7ed9\u6211 | openedBy \u7531\u6211\u521b\u5efa | resolvedBy \u7531\u6211\u89e3\u51b3 | closedBy \u7531\u6211\u5173\u95ed | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -48219,7 +48219,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:248;O:8:"stdClass":24:{s:2:"id";i:249;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:27:"指派给我的研发需求";s:4:"path";s:11:"/my/stories";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:27:"指派给我的研发需求";s:7:"version";i:1;s:6:"params";s:6122:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:248;O:8:"stdClass":24:{s:2:"id";i:249;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:27:"指派给我的研发需求";s:4:"path";s:11:"/my/stories";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:27:"指派给我的研发需求";s:7:"version";i:1;s:6:"params";s:6338:"{
     "header": [
         {
             "field": "Token",
@@ -48235,8 +48235,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fallstory\u3002(allstory \u5168\u90e8 | assignedtome \u6307\u6d3e\u7ed9\u6211 | openedbyme \u6211\u521b\u5efa | reviewbyme \u5f85\u6211\u8bc4\u5ba1 | draftstory \u8349\u7a3f)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u53d6\u503c\u533a\u5206\u5927\u5c0f\u5199\u3002(all \u5168\u90e8 | assignedTo \u6307\u6d3e\u7ed9\u6211 | openedBy \u7531\u6211\u521b\u5efa | reviewBy \u5f85\u6211\u8bc4\u5ba1 | reviewedBy \u6211\u8bc4\u5ba1\u8fc7 | closedBy \u7531\u6211\u5173\u95ed | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -49391,7 +49391,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:249;O:8:"stdClass":24:{s:2:"id";i:250;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:27:"指派给我的业务需求";s:4:"path";s:9:"/my/epics";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:27:"指派给我的业务需求";s:7:"version";i:1;s:6:"params";s:6122:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:249;O:8:"stdClass":24:{s:2:"id";i:250;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:27:"指派给我的业务需求";s:4:"path";s:9:"/my/epics";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:27:"指派给我的业务需求";s:7:"version";i:1;s:6:"params";s:6338:"{
     "header": [
         {
             "field": "Token",
@@ -49407,8 +49407,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fallstory\u3002(allstory \u5168\u90e8 | assignedtome \u6307\u6d3e\u7ed9\u6211 | openedbyme \u6211\u521b\u5efa | reviewbyme \u5f85\u6211\u8bc4\u5ba1 | draftstory \u8349\u7a3f)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u53d6\u503c\u533a\u5206\u5927\u5c0f\u5199\u3002(all \u5168\u90e8 | assignedTo \u6307\u6d3e\u7ed9\u6211 | openedBy \u7531\u6211\u521b\u5efa | reviewBy \u5f85\u6211\u8bc4\u5ba1 | reviewedBy \u6211\u8bc4\u5ba1\u8fc7 | closedBy \u7531\u6211\u5173\u95ed | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -50163,7 +50163,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:250;O:8:"stdClass":24:{s:2:"id";i:251;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:27:"指派给我的用户需求";s:4:"path";s:16:"/my/requirements";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:27:"指派给我的用户需求";s:7:"version";i:1;s:6:"params";s:6122:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:250;O:8:"stdClass":24:{s:2:"id";i:251;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:27:"指派给我的用户需求";s:4:"path";s:16:"/my/requirements";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:27:"指派给我的用户需求";s:7:"version";i:1;s:6:"params";s:6338:"{
     "header": [
         {
             "field": "Token",
@@ -50179,8 +50179,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fallstory\u3002(allstory \u5168\u90e8 | assignedtome \u6307\u6d3e\u7ed9\u6211 | openedbyme \u6211\u521b\u5efa | reviewbyme \u5f85\u6211\u8bc4\u5ba1 | draftstory \u8349\u7a3f)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u53d6\u503c\u533a\u5206\u5927\u5c0f\u5199\u3002(all \u5168\u90e8 | assignedTo \u6307\u6d3e\u7ed9\u6211 | openedBy \u7531\u6211\u521b\u5efa | reviewBy \u5f85\u6211\u8bc4\u5ba1 | reviewedBy \u6211\u8bc4\u5ba1\u8fc7 | closedBy \u7531\u6211\u5173\u95ed | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -50935,7 +50935,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:251;O:8:"stdClass":24:{s:2:"id";i:252;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:24:"我负责的的测试单";s:4:"path";s:13:"/my/testtasks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:24:"我负责的的测试单";s:7:"version";i:1;s:6:"params";s:1305:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:251;O:8:"stdClass":24:{s:2:"id";i:252;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:24:"我负责的的测试单";s:4:"path";s:13:"/my/testtasks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:24:"我负责的的测试单";s:7:"version";i:1;s:6:"params";s:1451:"{
     "header": [
         {
             "field": "Token",
@@ -50951,8 +50951,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | wait \u672a\u5f00\u59cb | doing \u8fdb\u884c\u4e2d | done \u5df2\u5b8c\u6210)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u63a5\u53e3\u56fa\u5b9a\u8fd4\u56de\u201c\u6211\u53c2\u4e0e\u7684\u672a\u5b8c\u6210\u6d4b\u8bd5\u5355\u201d\u3002(assignedTo \u6211\u53c2\u4e0e\u7684 | bySearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -51289,7 +51289,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:252;O:8:"stdClass":24:{s:2:"id";i:253;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:18:"我参与的项目";s:4:"path";s:12:"/my/projects";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:18:"我参与的项目";s:7:"version";i:1;s:6:"params";s:1307:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:252;O:8:"stdClass":24:{s:2:"id";i:253;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:18:"我参与的项目";s:4:"path";s:12:"/my/projects";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:18:"我参与的项目";s:7:"version";i:1;s:6:"params";s:1463:"{
     "header": [
         {
             "field": "Token",
@@ -51305,8 +51305,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | undone \u672a\u5b8c\u6210 | wait \u672a\u5f00\u59cb | doing \u8fdb\u884c\u4e2d)"
+            "example": "doing",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fdoing\u3002(doing \u8fdb\u884c\u4e2d | wait \u672a\u5f00\u59cb | suspended \u5df2\u6302\u8d77 | closed \u5df2\u5173\u95ed | done \u5df2\u5b8c\u6210 | undone \u672a\u5b8c\u6210 | delayed \u5df2\u5ef6\u671f | openedbyme \u7531\u6211\u521b\u5efa | all \u5168\u90e8)"
         },
         {
             "field": "orderBy",
@@ -52099,7 +52099,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:253;O:8:"stdClass":24:{s:2:"id";i:254;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的反馈";s:4:"path";s:13:"/my/feedbacks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的反馈";s:7:"version";i:1;s:6:"params";s:2550:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:253;O:8:"stdClass":24:{s:2:"id";i:254;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的反馈";s:4:"path";s:13:"/my/feedbacks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的反馈";s:7:"version";i:1;s:6:"params";s:2769:"{
     "header": [
         {
             "field": "Token",
@@ -52115,8 +52115,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | wait \u5f85\u5904\u7406 | doing \u5904\u7406\u4e2d | toclosed \u5f85\u5173\u95ed)"
+            "example": "assigntome",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassigntome\u3002(assigntome \u6307\u6d3e\u7ed9\u6211 | unclosed \u672a\u5173\u95ed | wait \u5f85\u5904\u7406 | doing \u5904\u7406\u4e2d | toclosed \u5f85\u5173\u95ed | openedbyme \u7531\u6211\u521b\u5efa | reviewedbyme \u6211\u8bc4\u5ba1\u8fc7 | closedbyme \u7531\u6211\u5173\u95ed | assignedbyme \u7531\u6211\u6307\u6d3e)"
         },
         {
             "field": "orderBy",
@@ -52539,7 +52539,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:254;O:8:"stdClass":24:{s:2:"id";i:255;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的工单";s:4:"path";s:11:"/my/tickets";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的工单";s:7:"version";i:1;s:6:"params";s:2644:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:254;O:8:"stdClass":24:{s:2:"id";i:255;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的工单";s:4:"path";s:11:"/my/tickets";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的工单";s:7:"version";i:1;s:6:"params";s:2867:"{
     "header": [
         {
             "field": "Token",
@@ -52555,8 +52555,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | unclosed \u672a\u5173\u95ed | wait \u5f85\u5904\u7406 | doing \u5904\u7406\u4e2d | done \u5f85\u5173\u95ed)"
+            "example": "assignedtome",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedtome\u3002(assignedtome \u6307\u6d3e\u7ed9\u6211 | unclosed \u672a\u5173\u95ed | wait \u5f85\u5904\u7406 | doing \u5904\u7406\u4e2d | done \u5f85\u5173\u95ed | closed \u5df2\u5173\u95ed | openedbyme \u7531\u6211\u521b\u5efa | finishedbyme \u7531\u6211\u89e3\u51b3 | closedbyme \u7531\u6211\u5173\u95ed | assignedbyme \u7531\u6211\u6307\u6d3e)"
         },
         {
             "field": "orderBy",
@@ -53030,7 +53030,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:255;O:8:"stdClass":24:{s:2:"id";i:256;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的用例";s:4:"path";s:13:"/my/testcases";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的用例";s:7:"version";i:1;s:6:"params";s:4519:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:255;O:8:"stdClass":24:{s:2:"id";i:256;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的用例";s:4:"path";s:13:"/my/testcases";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的用例";s:7:"version";i:1;s:6:"params";s:4575:"{
     "header": [
         {
             "field": "Token",
@@ -53046,8 +53046,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | wait \u672a\u6267\u884c | doing \u6267\u884c\u4e2d | pass \u901a\u8fc7 | fail \u5931\u8d25)"
+            "example": "assigntome",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassigntome\u3002(assigntome \u6307\u6d3e\u7ed9\u6211 | openedbyme \u6211\u521b\u5efa\u7684 | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -53146,7 +53146,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:256;O:8:"stdClass":24:{s:2:"id";i:257;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:12:"我的会议";s:4:"path";s:12:"/my/meetings";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:12:"我的会议";s:7:"version";i:1;s:6:"params";s:1400:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:256;O:8:"stdClass":24:{s:2:"id";i:257;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:12:"我的会议";s:4:"path";s:12:"/my/meetings";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:12:"我的会议";s:7:"version";i:1;s:6:"params";s:1410:"{
     "header": [
         {
             "field": "Token",
@@ -53162,7 +53162,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
+            "example": "futureMeeting",
             "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662ffutureMeeting\u3002(futureMeeting \u6211\u53c2\u52a0\u7684\uff08\u672a\u5f00\u59cb\uff09 | all \u5168\u90e8 | booked \u6211\u9884\u7ea6\u7684 | participate \u6211\u53c2\u52a0\u7684\uff08\u5168\u90e8\uff09)"
         },
         {
@@ -53412,7 +53412,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:257;O:8:"stdClass":24:{s:2:"id";i:258;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的问题";s:4:"path";s:10:"/my/issues";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的问题";s:7:"version";i:1;s:6:"params";s:1463:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:257;O:8:"stdClass":24:{s:2:"id";i:258;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的问题";s:4:"path";s:10:"/my/issues";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的问题";s:7:"version";i:1;s:6:"params";s:1607:"{
     "header": [
         {
             "field": "Token",
@@ -53428,8 +53428,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | open \u5f00\u653e | assignto \u6307\u6d3e\u7ed9\u6211 | assignby \u7531\u6211\u6307\u6d3e | closed \u5df2\u5173\u95ed | resolved \u5df2\u89e3\u51b3 | canceled \u5df2\u53d6\u6d88)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u53d6\u503c\u53d6\u81ea zt_issue \u7684\u5b57\u6bb5\u540d\u3002(assignedTo \u6307\u6d3e\u7ed9\u6211 | createdBy \u7531\u6211\u521b\u5efa | resolvedBy \u7531\u6211\u89e3\u51b3 | closedBy \u7531\u6211\u5173\u95ed | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -53462,7 +53462,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "required": true,
         "desc": "状态(success 成功 | fail 失败)"
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:258;O:8:"stdClass":24:{s:2:"id";i:259;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的风险";s:4:"path";s:9:"/my/risks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的风险";s:7:"version";i:1;s:6:"params";s:2707:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:258;O:8:"stdClass":24:{s:2:"id";i:259;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的风险";s:4:"path";s:9:"/my/risks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的风险";s:7:"version";i:1;s:6:"params";s:2812:"{
     "header": [
         {
             "field": "Token",
@@ -53478,8 +53478,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | active \u5f00\u653e | assignTo \u6307\u6d3e\u7ed9\u6211 | assignBy \u7531\u6211\u6307\u6d3e | closed \u5df2\u5173\u95ed | hangup \u5df2\u6302\u8d77 | canceled \u5df2\u53d6\u6d88)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u53d6\u503c\u53d6\u81ea zt_risk \u7684\u5b57\u6bb5\u540d\u3002(assignedTo \u6307\u6d3e\u7ed9\u6211 | createdBy \u7531\u6211\u521b\u5efa | closedBy \u7531\u6211\u5173\u95ed | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -61380,7 +61380,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:272;O:8:"stdClass":24:{s:2:"id";i:273;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:34:"我的地盘-待处理评审问题";s:4:"path";s:16:"/my/reviewissues";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:34:"我的地盘-待处理评审问题";s:7:"version";i:1;s:6:"params";s:2294:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:272;O:8:"stdClass":24:{s:2:"id";i:273;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:34:"我的地盘-待处理评审问题";s:4:"path";s:16:"/my/reviewissues";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:34:"我的地盘-待处理评审问题";s:7:"version";i:1;s:6:"params";s:2545:"{
     "header": [
         {
             "field": "Token",
@@ -61397,7 +61397,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "paramsType": "string",
             "required": false,
             "example": "assignedTo",
-            "desc": "\u5f85\u5904\u7406\u7b5b\u9009\u7c7b\u578b\uff0c\u4e0d\u4f20\u65f6\u4f7f\u7528\u7985\u9053\u9875\u9762\u9ed8\u8ba4\u503c\u3002"
+            "desc": "\u5f85\u5904\u7406\u7b5b\u9009\u7c7b\u578b\uff0c\u9ed8\u8ba4 assignedTo\uff0c\u53d6\u503c\u53d6\u81ea zt_reviewissue \u7684\u5b57\u6bb5\u540d\u3002(assignedTo \u6307\u6d3e\u7ed9\u6211 | createdBy \u7531\u6211\u521b\u5efa | resolutionBy \u7531\u6211\u89e3\u51b3 | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -61660,7 +61660,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:273;O:8:"stdClass":24:{s:2:"id";i:274;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:28:"我的地盘-待处理审批";s:4:"path";s:10:"/my/audits";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:28:"我的地盘-待处理审批";s:7:"version";i:1;s:6:"params";s:1274:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:273;O:8:"stdClass":24:{s:2:"id";i:274;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:28:"我的地盘-待处理审批";s:4:"path";s:10:"/my/audits";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:28:"我的地盘-待处理审批";s:7:"version";i:1;s:6:"params";s:1459:"{
     "header": [
         {
             "field": "Token",
@@ -61677,7 +61677,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "paramsType": "string",
             "required": false,
             "example": "all",
-            "desc": "\u5f85\u5904\u7406\u7b5b\u9009\u7c7b\u578b(all \u5168\u90e8 | check \u5f85\u6211\u68c0\u67e5 | checked \u6211\u5df2\u68c0\u67e5)\uff0c\u4e0d\u4f20\u65f6\u4f7f\u7528\u7985\u9053\u9875\u9762\u9ed8\u8ba4\u503c\u3002"
+            "desc": "\u5f85\u5904\u7406\u5ba1\u6279\u7c7b\u578b\uff0c\u9ed8\u8ba4 all\u3002(all \u5168\u90e8 | demand \u9700\u6c42\u6c60\u9700\u6c42 | story \u7814\u53d1\u9700\u6c42 | requirement \u7528\u6237\u9700\u6c42 | epic \u4e1a\u52a1\u9700\u6c42 | testcase \u7528\u4f8b | project \u9879\u76ee | ppm \u8bc4\u5ba1\u8bf7\u6c42 | feedback \u53cd\u9988 | \u81ea\u5b9a\u4e49\u5de5\u4f5c\u6d41\u6a21\u5757\u4ee3\u53f7)"
         },
         {
             "field": "orderBy",
@@ -66426,7 +66426,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:290;O:8:"stdClass":24:{s:2:"id";i:291;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:34:"我的地盘-待处理审计计划";s:4:"path";s:14:"/my/auditplans";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:34:"我的地盘-待处理审计计划";s:7:"version";i:1;s:6:"params";s:1289:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:290;O:8:"stdClass":24:{s:2:"id";i:291;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:34:"我的地盘-待处理审计计划";s:4:"path";s:14:"/my/auditplans";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:34:"我的地盘-待处理审计计划";s:7:"version";i:1;s:6:"params";s:1446:"{
     "header": [
         {
             "field": "Token",
@@ -66443,7 +66443,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "paramsType": "string",
             "required": false,
             "example": "myChecking",
-            "desc": "\u5f85\u5904\u7406\u7b5b\u9009\u7c7b\u578b(myChecking \u5f85\u6211\u68c0\u67e5 | myChecked \u6211\u5df2\u68c0\u67e5 | all \u5168\u90e8)\uff0c\u4e0d\u4f20\u65f6\u4f7f\u7528\u7985\u9053\u9875\u9762\u9ed8\u8ba4\u503c\u3002"
+            "desc": "\u5f85\u5904\u7406\u7b5b\u9009\u7c7b\u578b\uff0c\u9ed8\u8ba4 myChecking\uff0c\u53d6\u503c\u4e0d\u533a\u5206\u5927\u5c0f\u5199\u3002(mychecking \u5f85\u6211\u68c0\u67e5 | checked \u5df2\u68c0\u67e5 | wait \u672a\u68c0\u67e5 | checking \u68c0\u67e5\u4e2d | assignto \u6307\u6d3e\u7ed9\u6211 | delay \u5df2\u5ef6\u671f | iscycle \u5468\u671f\u6027\u8ba1\u5212 | all \u5168\u90e8)"
         },
         {
             "field": "orderBy",
@@ -66778,7 +66778,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:291;O:8:"stdClass":24:{s:2:"id";i:292;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:34:"我的地盘-待处理不符合项";s:4:"path";s:7:"/my/ncs";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:34:"我的地盘-待处理不符合项";s:7:"version";i:1;s:6:"params";s:1288:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:291;O:8:"stdClass":24:{s:2:"id";i:292;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:34:"我的地盘-待处理不符合项";s:4:"path";s:7:"/my/ncs";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:34:"我的地盘-待处理不符合项";s:7:"version";i:1;s:6:"params";s:1325:"{
     "header": [
         {
             "field": "Token",
@@ -66795,7 +66795,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "paramsType": "string",
             "required": false,
             "example": "createdByMe",
-            "desc": "\u5f85\u5904\u7406\u7b5b\u9009\u7c7b\u578b(assignedToMe \u6307\u6d3e\u7ed9\u6211 | createdByMe \u6211\u521b\u5efa | all \u5168\u90e8)\uff0c\u4e0d\u4f20\u65f6\u4f7f\u7528\u7985\u9053\u9875\u9762\u9ed8\u8ba4\u503c\u3002"
+            "desc": "\u5f85\u5904\u7406\u7b5b\u9009\u7c7b\u578b\uff0c\u9ed8\u8ba4 assignedToMe\u3002(assignedToMe \u6307\u6d3e\u7ed9\u6211 | createdByMe \u7531\u6211\u521b\u5efa | resolvedByMe \u7531\u6211\u89e3\u51b3 | closedByMe \u7531\u6211\u5173\u95ed | all \u5168\u90e8)"
         },
         {
             "field": "orderBy",
