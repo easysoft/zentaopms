@@ -146,6 +146,8 @@ $routes['/testsuites/:id']          = 'testsuite';
 
 $routes['/projects/:projectID/testtasks'] = 'testtasks';
 $routes['/testtasks']                     = 'testtasks';
+$routes['/testtasks/:id/cases/:caseID/results'] = 'testtaskresults';
+$routes['/testtasks/:id/cases'] = 'testtaskcases';
 $routes['/testtasks/:id']                 = 'testtask';
 
 $routes['/projects/:projectID/risks'] = 'risks';

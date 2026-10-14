@@ -14,6 +14,7 @@ declare(strict_types=1);
 <?php
 class testtaskModel extends model
 {
+    public $lastCreatedResultID = 0;
     /**
      * 创建一个测试单。
      * Create a test task.
@@ -1489,6 +1490,7 @@ class testtaskModel extends model
         /* 把上传的文件关联到到执行结果的用例步骤中。*/
         /* Associated the uploaded files to the test case steps of the execution results. */
         $resultID = $this->dao->lastInsertID();
+        $this->lastCreatedResultID = (int)$resultID;
         foreach($stepResults as $stepID => $stepResult) $this->loadModel('file')->saveUpload('stepResult', $resultID, $stepID, "files{$stepID}", "labels{$stepID}");
 
         /* 更新测试用例的执行结果。*/

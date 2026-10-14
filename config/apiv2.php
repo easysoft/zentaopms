@@ -411,3 +411,8 @@ foreach(glob(__DIR__ . DS . 'ext' . DS . 'apiv2' . DS . '*.php') as $file)
 {
     if(is_file($file)) include_once $file;
 }
+
+/* Strict native execution entries, also exposed through API v2/MCP. */
+$routes['/testtasks/:id/cases/:caseID/results'] = array('entry' => 'testtaskresults');
+$routes['/testtasks/:id/cases'] = array('entry' => 'testtaskcases');
+$routes['/testcases/:id/results'] = array('entry' => 'testresults');

@@ -1062,6 +1062,18 @@ class api extends router
         else
         {
             include $this->appRoot . "config/apiv2.php";
+            /* Explicit entry routes reuse the same authenticated v1 boundary in v2. */
+            $entryRoutes = array();
+            foreach($routes as $path => $info) if(isset($info['entry'])) $entryRoutes[$path] = $info['entry'];
+            $this->route($entryRoutes);
+            if($this->entry !== 'error')
+            {
+                if(!in_array($this->action, array('get', 'post', 'options'), true)) throw EndResponseException::create(helper::response(array('error' => 'Method not allowed.'), 405));
+                $this->apiVersion = 'v1';
+                return;
+            }
+            $this->params = array();
+            $this->paramNames = array();
             $this->appendFlowRoutes();
             $this->routeV2($routes);
         }
