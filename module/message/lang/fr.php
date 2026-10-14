@@ -115,7 +115,7 @@ $lang->message->reviewResultList['reject']  = 'Reject';
 $lang->message->reviewResultList['revert']  = 'Revert';
 $lang->message->reviewResultList['clarify'] = 'Clarify';
 
-$lang->message->reviewCommentTemplate = 'Approval comment: %s';
+$lang->message->reviewCommentTemplate = 'Approval comment: %s.';
 
 $lang->message->notice = new stdclass();
 $lang->message->notice->allMarkRead = 'One-click read';
