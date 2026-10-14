@@ -343,12 +343,42 @@ $spaceModel->visibleIDs = array();
 check(request('GET', '/spaces')[1]['spaces'] === array(), 'Empty spaces must be an array.');
 $spaceModel->visibleIDs = array(10, 20, 40, 50, 70);
 
-foreach(array('/products/12/repos' => 'GET', '/spaces' => 'GET') as $path => $verb)
+foreach(array(7 => 'open', 8 => 'private', 9 => 'private', 10 => 'open') as $id => $acl)
+{
+    $repoModel->records[$id] = (object)array('id' => $id, 'name' => 'repo' . $id, 'space' => $id == 10 ? 20 : 10, 'acl' => $acl, 'password' => 'private');
+}
+$repoModel->cloned = array();
+[$code, $data] = request('GET', '/spaces/10/repos?spaceID=30&space=20&recPerPage=1&pageID=2&orderBy=id_asc');
+check($code == 200 && array_column($data['repos'], 'id') === array(9), 'Filter repository permissions before paginating.');
+check($repoModel->listArgs === array(10, 'id_asc'), 'The path space must control the query despite conflicting query parameters.');
+check($data['pager'] === array('recTotal' => 2, 'recPerPage' => 1, 'pageID' => 2, 'pageTotal' => 2), 'Do not count hidden repositories in pagination.');
+check($repoModel->cloned === array(9) && array_keys($data['repos'][0]) === array('id', 'name', 'url'), 'Fetch clone URLs only for visible repositories on the requested page.');
+check(request('GET', '/spaces/10/repos?orderBy=name_desc')[1]['repos'][0]['id'] === 9, 'Repository sorting is honored.');
+check(request('GET', '/spaces/20/repos')[1]['repos'][0]['id'] === 10, 'Allow a member to list a private space.');
+check(request('GET', '/spaces/70/repos')[1]['repos'] === array(), 'An empty space returns an empty repository array.');
+check(request('GET', '/spaces/10/repos?pageID=99')[1]['repos'] === array(), 'A page beyond the last page returns an empty repository array.');
+foreach(array(0 => 400, 30 => 403, 40 => 403, 50 => 403, 60 => 404, 99 => 404) as $spaceID => $expected)
+{
+    check(request('GET', "/spaces/$spaceID/repos")[0] == $expected, 'Reject invalid, hidden or independently unauthorized spaces.');
+}
+$groupModel->privs[50]['repo']['maintain'] = 1;
+check(request('GET', '/spaces/50/repos')[0] == 200, 'Honor independent space list permissions.');
+check(request('GET', '/spaces/30/repos', array(), '12', true)[0] == 200, 'Administrators can access private spaces.');
+foreach(array('/spaces', '/spaces/10/repos') as $path)
+{
+    foreach(array('pageID=0', 'pageID=-1', 'recPerPage=0', 'recPerPage=101') as $query)
+    {
+        check(request('GET', "$path?$query")[0] == 400, 'Reject invalid pagination.');
+    }
+}
+check(request('GET', '/spaces/10/repos?orderBy=password_desc')[0] == 400, 'Reject unsupported sort fields.');
+
+foreach(array('/products/12/repos' => 'GET', '/spaces' => 'GET', '/spaces/10/repos' => 'GET') as $path => $verb)
 {
     check(request($verb, $path, $verb == 'POST' ? $newRepo : array(), '12', false, array())[0] == 403, 'Retain method permission checks on ' . $path);
 }
 
-foreach(array('/products/12/repos' => 'GET', '/my/sshkeys' => 'POST', '/spaces' => 'GET') as $path => $allowed)
+foreach(array('/products/12/repos' => 'GET', '/my/sshkeys' => 'POST', '/spaces' => 'GET', '/spaces/10/repos' => 'GET') as $path => $allowed)
 {
     foreach(array('GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS') as $verb)
     {

@@ -106,11 +106,41 @@ class repo extends control
      * @param  int    $pageID
      * @param  string $type
      * @param  int    $param
+     * @param  int    $spaceID  API space path parameter
      * @access public
      * @return void
      */
-    public function maintain(int $inSpace = 0, int $space = 0, int $objectID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $type = '', int $param = 0)
+    public function maintain(int $inSpace = 0, int $space = 0, int $objectID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $type = '', int $param = 0, int $spaceID = 0)
     {
+        if($this->app->apiVersion == 'v2')
+        {
+            if($this->app->action != 'get')
+            {
+                header('Allow: GET');
+                http_response_code(405);
+                return $this->sendError('Method not allowed.');
+            }
+            if($pageID < 1 || $recPerPage < 1 || $recPerPage > 100 || !in_array($orderBy, array('id_asc', 'id_desc', 'name_asc', 'name_desc')))
+            {
+                http_response_code(400);
+                return $this->sendError('Invalid pagination or orderBy.');
+            }
+            if(!$this->repoZen->checkApiSpace($spaceID, 'maintain')) return;
+
+            $repoList = $this->repo->getList(0, $spaceID, $orderBy);
+            if(dao::isError()) return $this->sendError(dao::getError());
+            $recTotal = count($repoList);
+            $repoList = array_slice(array_values($repoList), ($pageID - 1) * $recPerPage, $recPerPage);
+            $repos    = array();
+            foreach($repoList as $repo)
+            {
+                $scmRepo = $this->repo->processGitService(clone $repo);
+                $repos[] = (object)array('id' => (int)$repo->id, 'name' => $repo->name, 'url' => $this->repo->getCloneUrl($scmRepo));
+            }
+
+            return $this->send(array('repos' => $repos, 'pager' => array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'pageID' => $pageID, 'pageTotal' => (int)ceil($recTotal / $recPerPage))));
+        }
+
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
         if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox"));
         if($serverHeath == 'upgrade') return $this->locate($this->createLink('gitfox', 'upgradeGitFox'));

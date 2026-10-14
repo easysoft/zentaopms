@@ -12,6 +12,48 @@ declare(strict_types=1);
 class repoZen extends repo
 {
     /**
+     * 检查 API 访问空间的权限。
+     * Check space visibility and independent privileges for API requests.
+     *
+     * @param  int    $spaceID
+     * @param  string $method
+     * @access protected
+     * @return bool
+     */
+    protected function checkApiSpace(int $spaceID, string $method): bool
+    {
+        if($spaceID <= 0)
+        {
+            http_response_code(400);
+            $this->sendError('Invalid space ID.');
+            return false;
+        }
+
+        $space = $this->loadModel('space')->fetchByID($spaceID);
+        if(!$space || $space->deleted)
+        {
+            http_response_code(404);
+            $this->sendError('Space does not exist.');
+            return false;
+        }
+        if($this->app->user->admin) return true;
+
+        $members = $this->space->getMemberList();
+        $privs   = $this->loadModel('group')->getDevOpsSpacePrivs($spaceID);
+        $canView = $space->acl == 'open' || isset($members[$spaceID][$this->app->user->account]);
+        $canAct  = $space->auth != 'reset' || !empty($privs['repo'][$method]);
+        /* Match the space selector's create/import permission for private or independently authorized spaces. */
+        if($method == 'createrepo' && ($space->acl == 'private' || $space->auth == 'reset')) $canAct = $canAct && !empty($privs['repo']['create']);
+        if(!$canView || !$canAct)
+        {
+            http_response_code(403);
+            $this->sendError('Space is not allowed.');
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 检查权限数据。
      * Check acl.
      *
