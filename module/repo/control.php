@@ -190,6 +190,18 @@ class repo extends control
      */
     public function createRepo(int $objectID = 0, int $spaceID = 0)
     {
+        if($this->app->apiVersion == 'v2')
+        {
+            if($this->app->action != 'post')
+            {
+                header('Allow: POST');
+                http_response_code(405);
+                return $this->sendError('Method not allowed.');
+            }
+            if(!$this->repoZen->checkApiCreateRepo()) return;
+            if(!$this->repoZen->checkApiSpace((int)$_POST['space'], 'createrepo')) return;
+        }
+
         if($_POST)
         {
             if($objectID && (!$this->post->product || empty(array_filter($this->post->product)))) $this->sendError($this->lang->repo->hasNoProduct);
@@ -203,8 +215,14 @@ class repo extends control
             /* Create a repo. */
             $repoID = $this->repo->createRepo($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(!$repoID) return $this->sendError($this->lang->error->httpServerError);
 
             $this->loadModel('action')->create('repo', $repoID, 'created');
+            if($this->app->apiVersion == 'v2')
+            {
+                if(dao::isError()) return $this->sendError(dao::getError());
+                return $this->sendSuccess(array('id' => $repoID));
+            }
 
             $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));

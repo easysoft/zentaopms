@@ -502,6 +502,7 @@ $routes['/:type/modules/:moduleID'] = array(
 $codingRoutes = array(
     '/spaces'                   => '/space/browse',
     '/spaces/:spaceID/repos'     => '/repo/maintain',
+    '/repos'                    => '/repo/createRepo',
     '/products/:productID/repos' => '/repo/ajaxGetListByProduct',
     '/my/sshkeys'                => '/my/createSSH'
 );

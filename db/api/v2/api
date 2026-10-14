@@ -1,4 +1,4 @@
-a:372:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:369;s:5:"title";s:11:"获取Token";s:4:"path";s:12:"/users/login";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:11:"获取Token";s:7:"version";i:1;s:6:"params";s:400:"{
+a:373:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:369;s:5:"title";s:11:"获取Token";s:4:"path";s:12:"/users/login";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:11:"获取Token";s:7:"version";i:1;s:6:"params";s:400:"{
     "header": [],
     "params": [
         {
@@ -80378,5 +80378,87 @@ a:372:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
                 "desc": "总页数；没有记录时为 0。"
             }
         ]
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}i:372;O:8:"stdClass":24:{s:2:"id";i:373;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:410;s:5:"title";s:15:"创建代码库";s:4:"path";s:6:"/repos";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:881:"在现有空间创建 GitFox 代码库，需要已配置可用的 GitFox、repo.createRepo 全局权限、空间访问权限及关联产品权限。私有空间或独立授权空间还需空间的 repo.create 权限；独立授权空间另需 repo.createRepo 权限，系统管理员不受空间权限限制。复用现有创建流程，默认 main 分支并初始化 README，保留私有库成员设置、Push Webhook 和 created 操作记录。成功为 HTTP 200，返回代码库 ID；必须同时判断 status。字段形状错误返回 400，空间不存在返回 404，空间权限不足返回 403，不支持的方法返回 405；其他业务错误沿用现有 message（可能为字段错误对象），表单失败可能返回 result=fail。远端创建与后续成员、Webhook、历史记录不在同一事务内，后续步骤失败时远端代码库可能已创建。";s:7:"version";i:1;s:6:"params";s:1561:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "禅道 API 访问凭证。"
+        }
+    ],
+    "params": [
+        {
+            "field": "space",
+            "paramsType": "int",
+            "required": true,
+            "desc": "所属代码库空间 ID，正整数。"
+        },
+        {
+            "field": "product",
+            "paramsType": "array",
+            "required": true,
+            "desc": "关联产品 ID 数组，至少一个正整数；产品必须存在且当前用户可访问。"
+        },
+        {
+            "field": "name",
+            "paramsType": "string",
+            "required": true,
+            "desc": "代码库名称，去除首尾空白；以字母或下划线开头，后续可包含字母、数字、下划线、连字符、点。"
+        },
+        {
+            "field": "desc",
+            "paramsType": "string",
+            "required": false,
+            "desc": "描述，默认空字符串。"
+        },
+        {
+            "field": "acl",
+            "paramsType": "string",
+            "required": false,
+            "desc": "open 公开或 private 私有，默认 open。"
+        },
+        {
+            "field": "members",
+            "paramsType": "array",
+            "required": false,
+            "desc": "成员账号数组，账号需为有效且未关闭的用户；acl 为 private 时必填且非空，创建者会自动加入。"
+        }
+    ],
+    "paramsType": "json",
+    "query": []
+}";s:13:"paramsExample";s:136:"{
+    "space": 10,
+    "product": [
+        12
+    ],
+    "name": "demo",
+    "acl": "private",
+    "members": [
+        "alice"
+    ]
+}";s:15:"responseExample";s:72:"{
+    "status": "success",
+    "id": 21,
+    "message": "保存成功"
+}";s:8:"response";s:462:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态：success 成功；fail 失败。"
+    },
+    {
+        "field": "id",
+        "paramsType": "int",
+        "required": true,
+        "desc": "新建代码库 ID。"
+    },
+    {
+        "field": "message",
+        "paramsType": "string",
+        "required": true,
+        "desc": "成功提示；失败时可能为字段错误对象。"
     }
 ]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}}

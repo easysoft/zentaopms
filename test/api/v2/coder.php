@@ -373,18 +373,100 @@ foreach(array('/spaces', '/spaces/10/repos') as $path)
 }
 check(request('GET', '/spaces/10/repos?orderBy=password_desc')[0] == 400, 'Reject unsupported sort fields.');
 
-foreach(array('/products/12/repos' => 'GET', '/spaces' => 'GET', '/spaces/10/repos' => 'GET') as $path => $verb)
+$newRepo = array('space' => 10, 'product' => array(12), 'name' => ' demo ', 'account' => 'other');
+coderHTTPClient::$response = json_encode(array('code' => 'success', 'data' => (object)array('id' => 21, 'gitUID' => 'fixture-uid')));
+[$code, $data] = request('POST', '/repos', $newRepo);
+check($code == 200 && $data['status'] == 'success' && $data['id'] === 21 && !isset($data['load']), 'Repository creation returns the new ID without Web navigation.');
+$sent = end(coderHTTPClient::$requests);
+check((array)$sent['data'] === array('name' => 'demo', 'defaultBranch' => 'main', 'readme' => true, 'desc' => '', 'acl' => 'open', 'spaceID' => 10, 'product' => '12'), 'Use the existing form defaults and GitFox creation payload.');
+check(in_array('Operator: coder', $sent['headers']), 'Repository creation uses the token user.');
+check(end($gitfoxModel->hooks)->id === 21 && end($gitfoxModel->hooks)->gitUID === 'fixture-uid', 'Retain webhook setup with the created repository ID.');
+check(end($actionModel->created) === array('repo', 21, 'created'), 'Record the repository creation action.');
+
+$before = count(coderHTTPClient::$requests);
+$beforeActions = count($actionModel->created);
+foreach(array(
+    array('space' => 0), array('space' => '10'), array('space' => null), array('space' => array(10)),
+    array('name' => ''), array('name' => null), array('name' => array('demo')), array('name' => 'bad name'),
+    array('product' => array()), array('product' => '12'), array('product' => null), array('product' => array('12')), array('product' => array(0)), array('product' => array(99)),
+    array('desc' => null), array('desc' => array()), array('acl' => 'custom'), array('acl' => null),
+    array('members' => 'coder'), array('members' => array('missing')), array('members' => array(12)), array('members' => null),
+    array('acl' => 'private', 'members' => array())
+) as $override)
+{
+    [, $data] = request('POST', '/repos', array_replace($newRepo, $override));
+    check(($data['status'] ?? $data['result'] ?? '') == 'fail', 'Reject invalid repository fields: ' . json_encode($override));
+}
+check(request('POST', '/repos')[1]['status'] == 'fail', 'Reject an empty creation body.');
+check(request('POST', '/repos', $newRepo, '99')[1]['status'] == 'fail', 'Reject inaccessible linked products.');
+foreach(array(20 => 403, 30 => 403, 40 => 403, 50 => 403, 60 => 404, 99 => 404) as $spaceID => $expected)
+{
+    check(request('POST', '/repos', array_replace($newRepo, array('space' => $spaceID)))[0] == $expected, 'Reject creation in inaccessible or unauthorized spaces.');
+}
+check(count(coderHTTPClient::$requests) == $before && count($actionModel->created) == $beforeActions, 'Invalid or forbidden creation must not call GitFox or record actions.');
+
+$groupModel->privs[20]['repo']['create'] = 1;
+[$code, $data] = request('POST', '/repos', array_replace($newRepo, array('space' => 20, 'acl' => 'private', 'members' => array('other'))));
+check($code == 200 && $data['status'] == 'success' && $repoModel->memberships[21] === array('other', 'coder'), 'Create private repositories and include the creator in membership.');
+$groupModel->privs[50]['repo']['create'] = 1;
+check(request('POST', '/repos', array_replace($newRepo, array('space' => 50)))[0] == 403, 'Independent authorization also requires the createRepo action.');
+$groupModel->privs[50]['repo']['createrepo'] = 1;
+check(request('POST', '/repos', array_replace($newRepo, array('space' => 50)))[1]['status'] == 'success', 'Honor independent repository creation permission.');
+check(request('POST', '/repos', array_replace($newRepo, array('space' => 30)), '12', true)[1]['status'] == 'success', 'Administrators can create in private spaces.');
+
+$beforeActions = count($actionModel->created);
+$before = count(coderHTTPClient::$requests);
+$entryModel->enabled = false;
+check(request('POST', '/repos', $newRepo)[1]['status'] == 'fail' && count(coderHTTPClient::$requests) == $before, 'Missing GitFox configuration must not report success.');
+$entryModel->enabled = true;
+foreach(array('', json_encode(array('code' => 'fail', 'message' => 'Duplicate repository')), json_encode(array('code' => 'success', 'data' => new stdClass()))) as $response)
+{
+    coderHTTPClient::$response = $response;
+    check(request('POST', '/repos', $newRepo)[1]['status'] == 'fail', 'Failed creation or a missing repository ID must not report success.');
+}
+coderHTTPClient::$response = json_encode(array('code' => 'success', 'data' => (object)array('id' => 21)));
+$gitfoxModel->hookSuccess = false;
+check(isset(request('POST', '/repos', $newRepo)[1]['message']['webhook']), 'Expose webhook setup failures.');
+$gitfoxModel->hookSuccess = true;
+check(count($actionModel->created) == $beforeActions, 'Do not log successful creation when the repository workflow fails.');
+$actionModel->fail = true;
+check(isset(request('POST', '/repos', $newRepo)[1]['message']['action']), 'Expose action persistence failures.');
+$actionModel->fail = false;
+
+foreach(array('/products/12/repos' => 'GET', '/spaces' => 'GET', '/spaces/10/repos' => 'GET', '/repos' => 'POST') as $path => $verb)
 {
     check(request($verb, $path, $verb == 'POST' ? $newRepo : array(), '12', false, array())[0] == 403, 'Retain method permission checks on ' . $path);
 }
 
-foreach(array('/products/12/repos' => 'GET', '/my/sshkeys' => 'POST', '/spaces' => 'GET', '/spaces/10/repos' => 'GET') as $path => $allowed)
+foreach(array('/products/12/repos' => 'GET', '/my/sshkeys' => 'POST', '/spaces' => 'GET', '/spaces/10/repos' => 'GET', '/repos' => 'POST') as $path => $allowed)
 {
     foreach(array('GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS') as $verb)
     {
         if($verb == $allowed) continue;
         check(request($verb, $path)[0] == 405, "$verb $path must be rejected.");
     }
+}
+
+/* The shared Web creation action must accept normal form values and retain navigation. */
+request('POST', '/repos', $newRepo);
+$app->apiVersion = '';
+$web = fixture('coderWebRepo');
+foreach(array('app', 'config', 'lang', 'repo') as $property) $web->$property = $app->control->$property;
+$web->repoZen = fixture('coderWebRepoZen');
+$web->view = new stdClass();
+$_POST = array();
+$before = count(coderHTTPClient::$requests);
+$web->createRepo(0, 20);
+check($web->displayed && $web->view->spaceID == 20 && count(coderHTTPClient::$requests) == $before, 'Web creation GET still renders the requested space without writes.');
+$_POST = array_replace($newRepo, array('space' => '10'));
+try
+{
+    $web->createRepo();
+}
+catch(EndResponseException $exception)
+{
+    $data = json_decode($exception->getContent(), true, 512, JSON_THROW_ON_ERROR);
+    check($data['status'] == 'success' && $data['load'] === '/repo/showSyncCommit?repoID=21&objectID=0', 'Web creation retains form coercion and the sync page redirect.');
 }
 
 /* The shared SSH Web action must still render its form and request a reload on success. */
