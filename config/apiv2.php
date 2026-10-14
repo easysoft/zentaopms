@@ -498,6 +498,18 @@ $routes['/:type/modules/:moduleID'] = array(
     'delete' => array('redirect' => '/tree/delete?moduleID=:moduleID')
 );
 
+/* 编码助手使用的禅道接口。ZenTao APIs used by the coding assistant. */
+$codingRoutes = array(
+    '/products/:productID/repos' => '/repo/ajaxGetListByProduct',
+    '/my/sshkeys'                => '/my/createSSH'
+);
+foreach($codingRoutes as $codingPath => $codingRedirect)
+{
+    /* Each entry checks its HTTP method, including requests that would otherwise fall back to a different controller. */
+    $routes[$codingPath] = array_fill_keys(array('get', 'post', 'put', 'delete', 'patch', 'head', 'options'), array('redirect' => $codingRedirect));
+}
+unset($codingRoutes, $codingPath, $codingRedirect);
+
 /* AI 知识库接口，由商业扩展提供业务实现。AI knowledge APIs provided by the business extension. */
 $knowledgeRoutes = array(
     '/ai/knowledgelibs'                   => '/ai/ajaxGetKnowledgeLibList',

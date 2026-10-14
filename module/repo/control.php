@@ -1545,14 +1545,36 @@ class repo extends control
      */
     public function ajaxGetListByProduct(int $productID)
     {
-        $repoList = $this->repo->getListByProduct($productID);
-        foreach($repoList as $repo)
+        $isAPIV2 = $this->app->apiVersion == 'v2';
+        if($isAPIV2 && $this->app->action != 'get')
         {
+            header('Allow: GET');
+            http_response_code(405);
+            return $this->sendError('Method not allowed.');
+        }
+        if($isAPIV2 && $productID <= 0)
+        {
+            http_response_code(400);
+            return $this->sendError('Invalid productID.');
+        }
+
+        $repoList = $this->repo->getListByProduct($productID);
+        foreach($repoList as $repoID => $repo)
+        {
+            if($isAPIV2 && !$this->repo->checkPriv($repo))
+            {
+                unset($repoList[$repoID]);
+                continue;
+            }
+
             unset($repo->connector);
             $scmRepo   = $this->repo->processGitService(clone $repo);
             $repo->url = $this->repo->getCloneUrl($scmRepo);
+
+            if($isAPIV2) $repoList[$repoID] = (object)array('id' => (int)$repo->id, 'name' => $repo->name, 'url' => $repo->url);
         }
 
+        if($isAPIV2) return $this->send(array('repos' => array_values($repoList)));
         return print(json_encode(array_values($repoList)));
     }
 

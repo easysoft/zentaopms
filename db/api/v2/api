@@ -1,4 +1,4 @@
-a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:369;s:5:"title";s:11:"获取Token";s:4:"path";s:12:"/users/login";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:11:"获取Token";s:7:"version";i:1;s:6:"params";s:400:"{
+a:370:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:369;s:5:"title";s:11:"获取Token";s:4:"path";s:12:"/users/login";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:11:"获取Token";s:7:"version";i:1;s:6:"params";s:400:"{
     "header": [],
     "params": [
         {
@@ -80010,4 +80010,119 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}}
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:368;O:8:"stdClass":24:{s:2:"id";i:369;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:372;s:5:"title";s:24:"获取产品代码仓库";s:4:"path";s:26:"/products/:productID/repos";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:385:"productID 为正整数产品 ID。需要 repo.browse 权限及产品访问权限；返回该产品关联的未删除、非导入中的仓库，并按现有仓库权限过滤。只返回 id、name、url，克隆地址保持 GitFox 返回的原值；无可见仓库时 repos 为 []。产品不存在、已删除或不可访问时返回业务失败；不支持的 HTTP 方法返回 405。";s:7:"version";i:1;s:6:"params";s:251:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "禅道 API 访问凭证。"
+        }
+    ],
+    "params": [],
+    "paramsType": "json",
+    "query": []
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:277:"{
+    "status": "success",
+    "repos": [
+        {
+            "id": 7,
+            "name": "demo",
+            "url": {
+                "http": "https://git.example.com/team/demo.git",
+                "ssh": "git@git.example.com:team/demo.git"
+            }
+        }
+    ]
+}";s:8:"response";s:1401:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态：success 成功；fail 失败。"
+    },
+    {
+        "field": "repos",
+        "paramsType": "array",
+        "required": true,
+        "desc": "可见仓库数组。",
+        "children": [
+            {
+                "field": "id",
+                "paramsType": "int",
+                "required": true,
+                "desc": "仓库 ID。"
+            },
+            {
+                "field": "name",
+                "paramsType": "string",
+                "required": true,
+                "desc": "仓库名称。"
+            },
+            {
+                "field": "url",
+                "paramsType": "object",
+                "required": true,
+                "desc": "可用的克隆地址；没有地址时为 {}。",
+                "children": [
+                    {
+                        "field": "http",
+                        "paramsType": "string",
+                        "required": false,
+                        "desc": "HTTP/HTTPS 克隆地址。"
+                    },
+                    {
+                        "field": "ssh",
+                        "paramsType": "string",
+                        "required": false,
+                        "desc": "SSH 克隆地址。"
+                    }
+                ]
+            }
+        ]
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}i:369;O:8:"stdClass":24:{s:2:"id";i:370;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:23:"创建我的 SSH 公钥";s:4:"path";s:11:"/my/sshkeys";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:396:"将 SSH 公钥添加到当前 Token 所属用户的 GitFox 账号。沿用 my.createSSH 表单、名称及公钥前缀校验和 GitFox 错误处理，不接受其他用户归属。后端失败不会返回成功。成功为 HTTP 200；调用方必须同时判断业务 status，必填表单校验失败可能沿用 result=fail 和 message 字段错误对象。不支持的 HTTP 方法返回 405。";s:7:"version";i:1;s:6:"params";s:782:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "禅道 API 访问凭证。"
+        }
+    ],
+    "params": [
+        {
+            "field": "name",
+            "paramsType": "string",
+            "required": true,
+            "desc": "密钥名称，去除首尾空白；只能包含字母、数字、-、_、. 和 $。"
+        },
+        {
+            "field": "publicKey",
+            "paramsType": "string",
+            "required": true,
+            "desc": "完整 SSH 公钥，去除首尾空白；支持现有 SSH 密钥类型，例如 ssh-ed25519 或 ssh-rsa。示例中的占位内容必须替换为真实公钥。"
+        }
+    ],
+    "paramsType": "json",
+    "query": []
+}";s:13:"paramsExample";s:82:"{
+    "name": "coder",
+    "publicKey": "ssh-ed25519 <完整公钥内容> coder"
+}";s:15:"responseExample";s:58:"{
+    "status": "success",
+    "message": "保存成功"
+}";s:8:"response";s:334:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态：success 成功；fail 失败。"
+    },
+    {
+        "field": "message",
+        "paramsType": "string",
+        "required": true,
+        "desc": "成功提示；失败时可能返回字段错误对象。"
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}}
