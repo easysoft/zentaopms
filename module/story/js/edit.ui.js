@@ -213,6 +213,8 @@ window.locateChange = function(obj)
     const $form    = $(obj).closest('form');
     const formData = new FormData($form[0]);
     let   changed  = false;
+    const $modal   = $this.closest('.modal');
+    const inModal  = $modal.length > 0;
 
     $this.parent().find('.toolbar-item').attr('disabled', 'disabled');
     for(let entry of formData.entries())
@@ -228,7 +230,7 @@ window.locateChange = function(obj)
             field   = key.replace('[]', '');
         }
         if(field == 'comment' && value != '') changed = true;
-        if(storyData[field] == undefined || field == 'title' || field == 'reviewer') continue;
+        if(storyData[field] == undefined || field == 'title' || field == 'reviewer' || field == 'files') continue;
 
         if(!isArray)
         {
@@ -242,11 +244,12 @@ window.locateChange = function(obj)
         if(changed) break;
     }
 
-    if(!changed) return loadPage($.createLink(config.rawModule, 'change', 'storyID=' + storyData.id));
+    const changeUrl = $.createLink(storyType, 'change', 'storyID=' + storyData.id);
+    if(!changed) return inModal ? loadModal(changeUrl) : loadPage(changeUrl);
 
     zui.Modal.confirm(langConfirmChange).then((result) =>
     {
-        if(!result) return loadPage($.createLink(config.rawModule, 'change', 'storyID=' + storyData.id));
+        if(!result) return inModal ? loadModal(changeUrl) : loadPage(changeUrl);
 
         formData.append('locate', 'change');
         $.ajaxSubmit({url: $form.attr('action'), data: formData, onFail: (error) =>
