@@ -34,6 +34,7 @@ common:
 	mkdir zentaopms
 	cp LICENSE.CN zentaopms/
 	cp LICENSE.EN zentaopms/
+	cp GITFOX_LICENSE zentaopms/
 	cp -fr api zentaopms/
 	cp -fr bin zentaopms/
 	cp -fr config zentaopms/ && rm -fr zentaopms/config/my.php
