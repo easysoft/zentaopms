@@ -357,9 +357,11 @@ class dao extends baseDAO
                     if(!isset($_FILES[$field->field])) continue;
 
                     /* 由于现在的附件控件会显示历史附件，所以历史上传过附件也不会触发必填校验了。 */
-                    if(!empty($this->sqlobj->data->id) && is_int($this->sqlobj->data->id))
+                    if(!empty($this->sqlobj->data->id))
                     {
-                        $files = $this->dbh->query("SELECT 1 FROM " . TABLE_FILE . " WHERE `objectType` = '{$module}' AND `objectID` = {$this->sqlobj->data->id} AND extra = '{$field->field}'")->fetch();
+                        $objectID    = (int)$this->sqlobj->data->id;
+                        $deleteFiles = !empty($_POST['deleteFiles']) ? implode(',', $_POST['deleteFiles']) : 0;
+                        $files       = $this->dbh->query("SELECT 1 FROM " . TABLE_FILE . " WHERE `objectType` = '{$module}' AND `objectID` = {$objectID} AND extra = '{$field->field}' AND id NOT IN ($deleteFiles)")->fetch();
                         if(!empty($files)) continue;
                     }
 
