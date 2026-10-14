@@ -12,6 +12,94 @@ declare(strict_types=1);
 class repoZen extends repo
 {
     /**
+     * 检查 API 访问空间的权限。
+     * Check space visibility and independent privileges for API requests.
+     *
+     * @param  int    $spaceID
+     * @param  string $method
+     * @access protected
+     * @return bool
+     */
+    protected function checkApiSpace(int $spaceID, string $method): bool
+    {
+        if($spaceID <= 0)
+        {
+            http_response_code(400);
+            $this->sendError('Invalid space ID.');
+            return false;
+        }
+
+        $space = $this->loadModel('space')->fetchByID($spaceID);
+        if(!$space || $space->deleted)
+        {
+            http_response_code(404);
+            $this->sendError('Space does not exist.');
+            return false;
+        }
+        if($this->app->user->admin) return true;
+
+        $members = $this->space->getMemberList();
+        $privs   = $this->loadModel('group')->getDevOpsSpacePrivs($spaceID);
+        $canView = $space->acl == 'open' || isset($members[$spaceID][$this->app->user->account]);
+        $canAct  = $space->auth != 'reset' || !empty($privs['repo'][$method]);
+        /* Match the space selector's create/import permission for private or independently authorized spaces. */
+        if($method == 'createrepo' && ($space->acl == 'private' || $space->auth == 'reset')) $canAct = $canAct && !empty($privs['repo']['create']);
+        if(!$canView || !$canAct)
+        {
+            http_response_code(403);
+            $this->sendError('Space is not allowed.');
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 检查创建代码库 API 的 JSON 字段，之后仍使用原有表单和业务校验。
+     * Validate JSON field shapes before the existing form and business validation.
+     *
+     * @access protected
+     * @return bool
+     */
+    protected function checkApiCreateRepo(): bool
+    {
+        $errors = array();
+        if(!isset($_POST['space']) || !is_int($_POST['space']) || $_POST['space'] <= 0) $errors['space'] = 'A positive integer space ID is required.';
+        if(!isset($_POST['name']) || !is_string($_POST['name']) || trim($_POST['name']) === '') $errors['name'] = 'A repository name is required.';
+        if(!isset($_POST['product']) || !is_array($_POST['product']) || !array_is_list($_POST['product']) || !$_POST['product'])
+        {
+            $errors['product'] = 'A non-empty array of product IDs is required.';
+        }
+        else
+        {
+            foreach($_POST['product'] as $productID) if(!is_int($productID) || $productID <= 0) $errors['product'] = 'Product IDs must be positive integers.';
+        }
+        if(array_key_exists('desc', $_POST) && !is_string($_POST['desc'])) $errors['desc'] = 'Description must be a string.';
+        if(array_key_exists('acl', $_POST) && !in_array($_POST['acl'], array('open', 'private'), true)) $errors['acl'] = 'ACL must be open or private.';
+        if(array_key_exists('members', $_POST))
+        {
+            if(!is_array($_POST['members']) || !array_is_list($_POST['members']))
+            {
+                $errors['members'] = 'Members must be an array of user accounts.';
+            }
+            else
+            {
+                $users = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+                foreach($_POST['members'] as $account)
+                {
+                    if(!is_string($account) || !isset($users[$account])) $errors['members'] = 'Member does not exist or is inactive.';
+                }
+            }
+        }
+        if($errors)
+        {
+            http_response_code(400);
+            $this->sendError($errors);
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 检查权限数据。
      * Check acl.
      *

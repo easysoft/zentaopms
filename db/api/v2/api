@@ -1,4 +1,4 @@
-a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:369;s:5:"title";s:11:"获取Token";s:4:"path";s:12:"/users/login";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:11:"获取Token";s:7:"version";i:1;s:6:"params";s:400:"{
+a:373:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:369;s:5:"title";s:11:"获取Token";s:4:"path";s:12:"/users/login";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:11:"获取Token";s:7:"version";i:1;s:6:"params";s:400:"{
     "header": [],
     "params": [
         {
@@ -80010,4 +80010,455 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}}
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:368;O:8:"stdClass":24:{s:2:"id";i:369;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:372;s:5:"title";s:24:"获取产品代码仓库";s:4:"path";s:26:"/products/:productID/repos";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:385:"productID 为正整数产品 ID。需要 repo.browse 权限及产品访问权限；返回该产品关联的未删除、非导入中的仓库，并按现有仓库权限过滤。只返回 id、name、url，克隆地址保持 GitFox 返回的原值；无可见仓库时 repos 为 []。产品不存在、已删除或不可访问时返回业务失败；不支持的 HTTP 方法返回 405。";s:7:"version";i:1;s:6:"params";s:251:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "禅道 API 访问凭证。"
+        }
+    ],
+    "params": [],
+    "paramsType": "json",
+    "query": []
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:277:"{
+    "status": "success",
+    "repos": [
+        {
+            "id": 7,
+            "name": "demo",
+            "url": {
+                "http": "https://git.example.com/team/demo.git",
+                "ssh": "git@git.example.com:team/demo.git"
+            }
+        }
+    ]
+}";s:8:"response";s:1401:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态：success 成功；fail 失败。"
+    },
+    {
+        "field": "repos",
+        "paramsType": "array",
+        "required": true,
+        "desc": "可见仓库数组。",
+        "children": [
+            {
+                "field": "id",
+                "paramsType": "int",
+                "required": true,
+                "desc": "仓库 ID。"
+            },
+            {
+                "field": "name",
+                "paramsType": "string",
+                "required": true,
+                "desc": "仓库名称。"
+            },
+            {
+                "field": "url",
+                "paramsType": "object",
+                "required": true,
+                "desc": "可用的克隆地址；没有地址时为 {}。",
+                "children": [
+                    {
+                        "field": "http",
+                        "paramsType": "string",
+                        "required": false,
+                        "desc": "HTTP/HTTPS 克隆地址。"
+                    },
+                    {
+                        "field": "ssh",
+                        "paramsType": "string",
+                        "required": false,
+                        "desc": "SSH 克隆地址。"
+                    }
+                ]
+            }
+        ]
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}i:369;O:8:"stdClass":24:{s:2:"id";i:370;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:23:"创建我的 SSH 公钥";s:4:"path";s:11:"/my/sshkeys";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:396:"将 SSH 公钥添加到当前 Token 所属用户的 GitFox 账号。沿用 my.createSSH 表单、名称及公钥前缀校验和 GitFox 错误处理，不接受其他用户归属。后端失败不会返回成功。成功为 HTTP 200；调用方必须同时判断业务 status，必填表单校验失败可能沿用 result=fail 和 message 字段错误对象。不支持的 HTTP 方法返回 405。";s:7:"version";i:1;s:6:"params";s:782:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "禅道 API 访问凭证。"
+        }
+    ],
+    "params": [
+        {
+            "field": "name",
+            "paramsType": "string",
+            "required": true,
+            "desc": "密钥名称，去除首尾空白；只能包含字母、数字、-、_、. 和 $。"
+        },
+        {
+            "field": "publicKey",
+            "paramsType": "string",
+            "required": true,
+            "desc": "完整 SSH 公钥，去除首尾空白；支持现有 SSH 密钥类型，例如 ssh-ed25519 或 ssh-rsa。示例中的占位内容必须替换为真实公钥。"
+        }
+    ],
+    "paramsType": "json",
+    "query": []
+}";s:13:"paramsExample";s:82:"{
+    "name": "coder",
+    "publicKey": "ssh-ed25519 <完整公钥内容> coder"
+}";s:15:"responseExample";s:58:"{
+    "status": "success",
+    "message": "保存成功"
+}";s:8:"response";s:334:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态：success 成功；fail 失败。"
+    },
+    {
+        "field": "message",
+        "paramsType": "string",
+        "required": true,
+        "desc": "成功提示；失败时可能返回字段错误对象。"
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}i:370;O:8:"stdClass":24:{s:2:"id";i:371;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:409;s:5:"title";s:27:"获取代码库空间列表";s:4:"path";s:7:"/spaces";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:331:"需要 space.browse 全局权限。复用空间列表的可见性规则，只返回当前 Token 用户可见的未删除空间。按 ID 倒序，支持 pageID、recPerPage；分页总数按可见空间计算。无结果或页码超过总页数时 spaces 为 []。分页参数越界返回 400，不支持的 HTTP 方法返回 405。";s:7:"version";i:1;s:6:"params";s:621:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "禅道 API 访问凭证。"
+        }
+    ],
+    "params": [],
+    "paramsType": "json",
+    "query": [
+        {
+            "field": "pageID",
+            "paramsType": "int",
+            "required": false,
+            "desc": "页码，默认 1，必须大于 0。"
+        },
+        {
+            "field": "recPerPage",
+            "paramsType": "int",
+            "required": false,
+            "desc": "每页记录数，默认 20，范围 1～100。"
+        }
+    ]
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:350:"{
+    "status": "success",
+    "spaces": [
+        {
+            "id": 10,
+            "name": "研发空间",
+            "code": "dev",
+            "desc": "",
+            "acl": "open",
+            "auth": "extend"
+        }
+    ],
+    "pager": {
+        "recTotal": 1,
+        "recPerPage": 20,
+        "pageID": 1,
+        "pageTotal": 1
+    }
+}";s:8:"response";s:2427:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态：success 成功；fail 失败。"
+    },
+    {
+        "field": "spaces",
+        "paramsType": "array",
+        "required": true,
+        "desc": "可见空间数组。",
+        "children": [
+            {
+                "field": "id",
+                "paramsType": "int",
+                "required": true,
+                "desc": "代码库空间 ID。"
+            },
+            {
+                "field": "name",
+                "paramsType": "string",
+                "required": true,
+                "desc": "空间名称。"
+            },
+            {
+                "field": "code",
+                "paramsType": "string",
+                "required": true,
+                "desc": "空间代号。"
+            },
+            {
+                "field": "desc",
+                "paramsType": "string",
+                "required": true,
+                "desc": "空间描述。"
+            },
+            {
+                "field": "acl",
+                "paramsType": "string",
+                "required": true,
+                "desc": "访问控制：open 公开；private 私有。"
+            },
+            {
+                "field": "auth",
+                "paramsType": "string",
+                "required": true,
+                "desc": "权限模式：extend 继承全局；reset 独立授权。"
+            }
+        ]
+    },
+    {
+        "field": "pager",
+        "paramsType": "object",
+        "required": true,
+        "desc": "按当前用户可见记录计算的分页信息。",
+        "children": [
+            {
+                "field": "recTotal",
+                "paramsType": "int",
+                "required": true,
+                "desc": "可见记录总数。"
+            },
+            {
+                "field": "recPerPage",
+                "paramsType": "int",
+                "required": true,
+                "desc": "每页记录数。"
+            },
+            {
+                "field": "pageID",
+                "paramsType": "int",
+                "required": true,
+                "desc": "当前页，从 1 开始。"
+            },
+            {
+                "field": "pageTotal",
+                "paramsType": "int",
+                "required": true,
+                "desc": "总页数；没有记录时为 0。"
+            }
+        ]
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}i:371;O:8:"stdClass":24:{s:2:"id";i:372;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:410;s:5:"title";s:33:"获取空间下的代码库列表";s:4:"path";s:22:"/spaces/:spaceID/repos";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:483:"spaceID 为正整数空间 ID，以路径为准。需要 repo.maintain 全局权限及空间访问权限；独立授权空间还需该空间的 repo.maintain 权限。仅返回该空间未删除、非导入中且当前用户可访问的代码库，先过滤权限再分页，克隆地址沿用现有 SCM 实现。空间不存在或已删除返回 404，无空间权限返回 403，分页或排序参数无效返回 400，不支持的 HTTP 方法返回 405。空结果 repos 为 []。";s:7:"version";i:1;s:6:"params";s:839:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "禅道 API 访问凭证。"
+        }
+    ],
+    "params": [],
+    "paramsType": "json",
+    "query": [
+        {
+            "field": "pageID",
+            "paramsType": "int",
+            "required": false,
+            "desc": "页码，默认 1，必须大于 0。"
+        },
+        {
+            "field": "recPerPage",
+            "paramsType": "int",
+            "required": false,
+            "desc": "每页记录数，默认 20，范围 1～100。"
+        },
+        {
+            "field": "orderBy",
+            "paramsType": "string",
+            "required": false,
+            "desc": "排序，默认 id_desc；支持 id_asc、id_desc、name_asc、name_desc。"
+        }
+    ]
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:390:"{
+    "status": "success",
+    "repos": [
+        {
+            "id": 7,
+            "name": "demo",
+            "url": {
+                "http": "https://git.example.com/dev/demo.git",
+                "ssh": "git@git.example.com:dev/demo.git"
+            }
+        }
+    ],
+    "pager": {
+        "recTotal": 1,
+        "recPerPage": 20,
+        "pageID": 1,
+        "pageTotal": 1
+    }
+}";s:8:"response";s:2376:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态：success 成功；fail 失败。"
+    },
+    {
+        "field": "repos",
+        "paramsType": "array",
+        "required": true,
+        "desc": "当前空间的可见代码库数组。",
+        "children": [
+            {
+                "field": "id",
+                "paramsType": "int",
+                "required": true,
+                "desc": "仓库 ID。"
+            },
+            {
+                "field": "name",
+                "paramsType": "string",
+                "required": true,
+                "desc": "仓库名称。"
+            },
+            {
+                "field": "url",
+                "paramsType": "object",
+                "required": true,
+                "desc": "可用的克隆地址；没有地址时为 {}。",
+                "children": [
+                    {
+                        "field": "http",
+                        "paramsType": "string",
+                        "required": false,
+                        "desc": "HTTP/HTTPS 克隆地址。"
+                    },
+                    {
+                        "field": "ssh",
+                        "paramsType": "string",
+                        "required": false,
+                        "desc": "SSH 克隆地址。"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "field": "pager",
+        "paramsType": "object",
+        "required": true,
+        "desc": "按当前用户可见记录计算的分页信息。",
+        "children": [
+            {
+                "field": "recTotal",
+                "paramsType": "int",
+                "required": true,
+                "desc": "可见记录总数。"
+            },
+            {
+                "field": "recPerPage",
+                "paramsType": "int",
+                "required": true,
+                "desc": "每页记录数。"
+            },
+            {
+                "field": "pageID",
+                "paramsType": "int",
+                "required": true,
+                "desc": "当前页，从 1 开始。"
+            },
+            {
+                "field": "pageTotal",
+                "paramsType": "int",
+                "required": true,
+                "desc": "总页数；没有记录时为 0。"
+            }
+        ]
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}i:372;O:8:"stdClass":24:{s:2:"id";i:373;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:410;s:5:"title";s:15:"创建代码库";s:4:"path";s:6:"/repos";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:881:"在现有空间创建 GitFox 代码库，需要已配置可用的 GitFox、repo.createRepo 全局权限、空间访问权限及关联产品权限。私有空间或独立授权空间还需空间的 repo.create 权限；独立授权空间另需 repo.createRepo 权限，系统管理员不受空间权限限制。复用现有创建流程，默认 main 分支并初始化 README，保留私有库成员设置、Push Webhook 和 created 操作记录。成功为 HTTP 200，返回代码库 ID；必须同时判断 status。字段形状错误返回 400，空间不存在返回 404，空间权限不足返回 403，不支持的方法返回 405；其他业务错误沿用现有 message（可能为字段错误对象），表单失败可能返回 result=fail。远端创建与后续成员、Webhook、历史记录不在同一事务内，后续步骤失败时远端代码库可能已创建。";s:7:"version";i:1;s:6:"params";s:1561:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "禅道 API 访问凭证。"
+        }
+    ],
+    "params": [
+        {
+            "field": "space",
+            "paramsType": "int",
+            "required": true,
+            "desc": "所属代码库空间 ID，正整数。"
+        },
+        {
+            "field": "product",
+            "paramsType": "array",
+            "required": true,
+            "desc": "关联产品 ID 数组，至少一个正整数；产品必须存在且当前用户可访问。"
+        },
+        {
+            "field": "name",
+            "paramsType": "string",
+            "required": true,
+            "desc": "代码库名称，去除首尾空白；以字母或下划线开头，后续可包含字母、数字、下划线、连字符、点。"
+        },
+        {
+            "field": "desc",
+            "paramsType": "string",
+            "required": false,
+            "desc": "描述，默认空字符串。"
+        },
+        {
+            "field": "acl",
+            "paramsType": "string",
+            "required": false,
+            "desc": "open 公开或 private 私有，默认 open。"
+        },
+        {
+            "field": "members",
+            "paramsType": "array",
+            "required": false,
+            "desc": "成员账号数组，账号需为有效且未关闭的用户；acl 为 private 时必填且非空，创建者会自动加入。"
+        }
+    ],
+    "paramsType": "json",
+    "query": []
+}";s:13:"paramsExample";s:136:"{
+    "space": 10,
+    "product": [
+        12
+    ],
+    "name": "demo",
+    "acl": "private",
+    "members": [
+        "alice"
+    ]
+}";s:15:"responseExample";s:72:"{
+    "status": "success",
+    "id": 21,
+    "message": "保存成功"
+}";s:8:"response";s:462:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态：success 成功；fail 失败。"
+    },
+    {
+        "field": "id",
+        "paramsType": "int",
+        "required": true,
+        "desc": "新建代码库 ID。"
+    },
+    {
+        "field": "message",
+        "paramsType": "string",
+        "required": true,
+        "desc": "成功提示；失败时可能为字段错误对象。"
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}}
