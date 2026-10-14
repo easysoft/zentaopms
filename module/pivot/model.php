@@ -2004,6 +2004,10 @@ class pivotModel extends model
         $sql = $this->trimSemicolon($sql);
         $sql = $this->appendWhereFilterToSql($sql, $filters, $driver);
 
+        /* 明细表与 genSheet 走 queryWithDriver 的路径对齐：执行前统一拒绝写文件/读文件等危险语法。*/
+        /* Validate the executable sql as genSheet does through queryWithDriver. */
+        $this->bi->checkExecutableSql($sql);
+
         $dbh          = $this->app->loadDriver($driver);
         $rows         = $dbh->query($sql)->fetchAll();
         $rows         = $this->filterSpecialChars($rows);
