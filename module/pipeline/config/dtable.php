@@ -189,7 +189,7 @@ $config->pipeline->execution->actionList['view']['hint']     = $lang->pipeline->
 $config->pipeline->execution->actionList['view']['data-app'] = $app->tab;
 $config->pipeline->execution->actionList['view']['url']      = array('module' => 'pipeline', 'method' => 'execView', 'params' => "execID={id}");
 
-$config->pipeline->execution->actionList['cancel']['icon']         = 'ban';
+$config->pipeline->execution->actionList['cancel']['icon']         = 'cancel';
 $config->pipeline->execution->actionList['cancel']['text']         = $lang->pipeline->cancelBtn;
 $config->pipeline->execution->actionList['cancel']['hint']         = $lang->pipeline->cancelBtn;
 $config->pipeline->execution->actionList['cancel']['ajaxSubmit']   = true;

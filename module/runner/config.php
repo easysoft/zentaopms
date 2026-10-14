@@ -1,6 +1,6 @@
 <?php
 global $lang;
-$config->runner->packageURL  = 'https://pkg.zentao.net/qucheng/runner/community/2.2/';  // 开源版为 community，专业版由插件覆盖此行。
+$config->runner->packageURL  = 'https://pkg.zentao.net/qucheng/runner/community/4.3/';  // 开源版为 community，专业版由插件覆盖此行。
 $config->runner->cmdList     = $lang->runner->cmdList;
 
 $config->runner->actionList = array();
