@@ -115,7 +115,7 @@ $lang->message->reviewResultList['reject']  = '不通过';
 $lang->message->reviewResultList['revert']  = '撤销';
 $lang->message->reviewResultList['clarify'] = '有待明确';
 
-$lang->message->reviewCommentTemplate = '审批意见：%s。';
+$lang->message->reviewCommentTemplate = '审批意见：%s';
 
 $lang->message->notice = new stdclass();
 $lang->message->notice->allMarkRead = '一键已读';
