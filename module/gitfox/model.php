@@ -49,9 +49,42 @@ class gitfoxModel extends model
         $version = trim((string)zget($health, 'version', ''));
         if($version === '') return 'beta';
 
+        if($this->getEdition($health) != $this->getRequiredEdition()) return 'upgrade';
+
         $currentVersion  = ltrim($version, 'vV');
         $requiredVersion = ltrim((string)$this->config->devops->gitfoxVersion, 'vV');
         return version_compare($currentVersion, $requiredVersion, '<') ? 'upgrade' : 'healthy';
+    }
+
+    /**
+     * 获取运行中GitFox引擎的发行版本。
+     * Get the edition of the running GitFox engine.
+     *
+     * @param  object|false|null $health
+     * @access public
+     * @return string
+     */
+    public function getEdition(object|false|null $health = null): string
+    {
+        if($health === null) $health = $this->getHealth();
+        $edition = $health ? trim((string)zget($health, 'edition', '')) : '';
+
+        /* 旧版本引擎未返回edition字段时按社区版处理。 */
+        /* Treat the engine as community when the older versions do not return the edition field. */
+        return $edition === '' ? 'community' : strtolower($edition);
+    }
+
+    /**
+     * 获取当前系统要求的GitFox引擎发行版本。
+     * Get the edition of the GitFox engine required by the system.
+     *
+     * @access public
+     * @return string
+     */
+    public function getRequiredEdition(): string
+    {
+        $edition = trim((string)zget($this->config->devops, 'gitfoxEdition', ''));
+        return $edition === '' ? 'community' : strtolower($edition);
     }
 
     /**

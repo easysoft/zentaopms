@@ -153,7 +153,7 @@ $lang->gitfox->startUse          = 'Start Use';
 $lang->gitfox->completedInstall  = 'Completed Install';
 $lang->gitfox->InstallScript     = 'Install Script';
 $lang->gitfox->upgradeGitFox     = 'Upgrade GitFox';
-$lang->gitfox->upgradeGitFoxTip  = 'The currently installed GitFox engine version (%s) is lower than the minimum version (%s) required by ZenTao DevOps. Please run the upgrade script below on the host machine to upgrade GitFox.';
+$lang->gitfox->upgradeGitFoxTip  = 'The currently installed GitFox engine version (%s, %s) does not match the version (%s, %s) required by ZenTao DevOps. Please run the upgrade script below on the host machine to upgrade GitFox.';
 $lang->gitfox->completedUpgrade  = 'Completed Upgrade';
 $lang->gitfox->laterUpgrade      = 'Upgrade Later';
 $lang->gitfox->UpgradeScript     = 'Upgrade Script';
@@ -162,6 +162,6 @@ $lang->gitfox->upgradeGitFoxFail = 'GitFox upgrade is not complete. Please run t
 global $config;
 if($config->inContainer)
 {
-    $lang->gitfox->upgradeGitFoxTip  = 'The currently installed GitFox engine version (%s) is lower than the minimum version (%s) required by ZenTao DevOps. Please run the upgrade script below inside the container to upgrade GitFox.';
+    $lang->gitfox->upgradeGitFoxTip  = 'The currently installed GitFox engine version (%s, %s) does not match the version (%s, %s) required by ZenTao DevOps. Please run the upgrade script below inside the container to upgrade GitFox.';
     $lang->gitfox->upgradeGitFoxFail = 'GitFox upgrade is not complete. Please run the upgrade script inside the container first, then click "Completed Upgrade".';
 }

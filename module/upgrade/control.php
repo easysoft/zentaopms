@@ -770,7 +770,7 @@ class upgrade extends control
     {
         $this->view->title     = $this->lang->upgrade->dbView->common;
         $this->view->viewList  = $this->upgrade->getViews();
-        $this->view->viewCount = count($this->upgrade->getViewSQLs());
+        $this->view->viewCount = count($this->view->viewList);
         $this->display();
     }
 

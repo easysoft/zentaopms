@@ -33,7 +33,7 @@ foreach($viewList as $view)
         ),
         a
         (
-            set::href('javascript:showSQL(' . json_encode($view['sql']) . ')'),
+            set::href('javascript:showSQL(' . json_encode(implode(";\n\n", $view['statements'])) . ')'),
             icon(setClass('text-lg text-gray-400'), 'fields')
         )
     );
@@ -59,6 +59,7 @@ col
     (
         setID('viewBox'),
         setClass('gap-2 overflow-x-hidden overflow-y-auto flex-1'),
+        setData(['count' => $count]),
         $items
     )
 );

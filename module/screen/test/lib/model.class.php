@@ -1304,10 +1304,18 @@ class screenModelTest extends baseTest
      */
     public function getOptionsFromSqlTest($sql, $keyField, $valueField)
     {
-        $result = $this->instance->getOptionsFromSql($sql, $keyField, $valueField);
-        if(dao::isError()) return dao::getError();
+        try
+        {
+            $result = $this->instance->getOptionsFromSql($sql, $keyField, $valueField);
+            if(dao::isError()) return dao::getError();
 
-        return $result;
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**

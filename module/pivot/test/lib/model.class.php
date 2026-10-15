@@ -743,11 +743,19 @@ class pivotModelTest extends baseTest
      */
     public function genOriginSheetTest($fields, $settings, $sql, $filters, $langs = array(), $driver = 'mysql')
     {
-        if(dao::isError()) return dao::getError();
+        try
+        {
+            if(dao::isError()) return dao::getError();
 
-        $result = $this->instance->genOriginSheet($fields, $settings, $sql, $filters, $langs, $driver);
+            $result = $this->instance->genOriginSheet($fields, $settings, $sql, $filters, $langs, $driver);
 
-        return $result;
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            if($e instanceof EndResponseException) return $e->getContent();
+            return 'error:' . get_class($e);
+        }
     }
 
     /**

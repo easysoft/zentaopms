@@ -2204,6 +2204,7 @@ class productModel extends model
         /* 2. Refresh stats to db. */
         foreach($stats as $productID=> $product)
         {
+            if(empty($productID)) continue;
             $this->dao->update(TABLE_PRODUCT)->data($product)->where('id')->eq($productID)->exec();
         }
 

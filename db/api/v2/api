@@ -1,4 +1,4 @@
-a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:369;s:5:"title";s:11:"获取Token";s:4:"path";s:12:"/users/login";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:11:"获取Token";s:7:"version";i:1;s:6:"params";s:400:"{
+a:373:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:369;s:5:"title";s:11:"获取Token";s:4:"path";s:12:"/users/login";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:11:"获取Token";s:7:"version";i:1;s:6:"params";s:400:"{
     "header": [],
     "params": [
         {
@@ -21,7 +21,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
     "password": "123Qwe!@#"
 }";s:15:"responseExample";s:76:"{
     "status": "success",
-    "token": "e8ab42c608bb7bd2bfca6a8adc808aea"
+    "token": "ca52d863a1cbe15019d3b5fd6ac22ef0"
 }";s:8:"response";s:407:"[
     {
         "field": "status",
@@ -245,7 +245,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "desc": "\u6761\u4ef6\u7ec4\u4e4b\u95f4\u7684\u8fde\u63a5\u65b9\u5f0f(and | or)"
         }
     ]
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:2494:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:2529:"{
     "status": "success",
     "users": [
         {
@@ -274,10 +274,10 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "address": "",
             "zipcode": "",
             "join": "",
-            "visits": 2,
+            "visits": 1,
             "visions": "or,rnd,lite",
             "ip": "10.0.4.7",
-            "last": "2026-10-10 10:28:13",
+            "last": "2026-10-14 12:57:32",
             "fails": 0,
             "locked": "",
             "feedback": 0,
@@ -299,25 +299,25 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "dept": 0,
             "account": "productmanager",
             "role": "",
-            "realname": "产品经理",
+            "realname": "技术经理",
             "superior": "",
             "pinyin": "",
             "nickname": "",
             "commiter": "",
             "birthday": "",
             "gender": "m",
-            "email": "",
+            "email": "test@test.com",
             "skype": "",
             "qq": "",
-            "mobile": "",
+            "mobile": "13812345678",
             "phone": "",
-            "weixin": "",
+            "weixin": "15512345678",
             "dingding": "",
             "slack": "",
             "whatsapp": "",
             "address": "",
             "zipcode": "",
-            "join": "2026-10-10",
+            "join": "2025-01-01",
             "visits": 0,
             "visions": "rnd",
             "ip": "",
@@ -694,7 +694,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
     "params": [],
     "paramsType": "json",
     "query": []
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:1124:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:1159:"{
     "status": "success",
     "user": {
         "id": 2,
@@ -703,7 +703,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "dept": 0,
         "account": "productmanager",
         "role": "",
-        "realname": "产品经理",
+        "realname": "技术经理",
         "superior": "",
         "pinyin": "",
         "nickname": "",
@@ -711,12 +711,12 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "avatar": "",
         "birthday": "",
         "gender": "m",
-        "email": "",
+        "email": "test@test.com",
         "skype": "",
         "qq": "",
-        "mobile": "",
+        "mobile": "13812345678",
         "phone": "",
-        "weixin": "",
+        "weixin": "15512345678",
         "dingding": "",
         "slack": "",
         "whatsapp": "",
@@ -725,7 +725,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "nature": "",
         "analysis": "",
         "strategy": "",
-        "join": "2026-10-10",
+        "join": "2025-01-01",
         "visits": 0,
         "visions": "rnd",
         "ip": "",
@@ -8421,10 +8421,10 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "market": 0,
         "PI": 0,
         "openedBy": "admin",
-        "openedDate": "2026-10-10 10:28:19",
+        "openedDate": "2026-10-14 12:57:37",
         "openedVersion": "ipd5.7",
         "lastEditedBy": "admin",
-        "lastEditedDate": "2026-10-10 10:28:20",
+        "lastEditedDate": "2026-10-14 12:57:39",
         "closedBy": "",
         "closedDate": "",
         "closedReason": "",
@@ -8456,7 +8456,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "vision": "rnd",
         "frozen": "",
         "deleted": 0,
-        "delay": 187,
+        "delay": 190,
         "totalHours": "224.0",
         "totalEstimate": 0,
         "totalConsumed": 0,
@@ -8490,7 +8490,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "end": "2026-10-01",
             "firstEnd": "",
             "realBegan": "",
-            "realEnd": "2026-10-10",
+            "realEnd": "2026-10-14",
             "days": 0,
             "schedule": "",
             "status": "closed",
@@ -8505,16 +8505,16 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "estimate": "0.00",
             "left": "0.00",
             "consumed": "0.00",
-            "teamCount": 1,
+            "teamCount": 0,
             "market": 0,
             "PI": 0,
             "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:16",
+            "openedDate": "2026-10-14 12:57:35",
             "openedVersion": "",
             "lastEditedBy": "admin",
-            "lastEditedDate": "2026-10-10 10:28:18",
+            "lastEditedDate": "2026-10-14 12:57:37",
             "closedBy": "admin",
-            "closedDate": "2026-10-10 10:28:18",
+            "closedDate": "2026-10-14 12:57:37",
             "closedReason": "",
             "canceledBy": "",
             "canceledDate": "",
@@ -28488,7 +28488,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "role": "",
             "position": "",
             "limited": "no",
-            "join": "2026-10-10",
+            "join": "2026-10-14",
             "days": 0,
             "hours": "7.0",
             "estimate": "0.00",
@@ -28508,7 +28508,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "role": "",
             "position": "",
             "limited": "no",
-            "join": "2026-10-10",
+            "join": "2026-10-14",
             "days": 16,
             "hours": "7.0",
             "estimate": "0.00",
@@ -28517,7 +28517,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "order": 0,
             "totalHours": "112.0",
             "userID": 2,
-            "realname": "产品经理"
+            "realname": "技术经理"
         }
     ]
 }";s:8:"response";s:3861:"[
@@ -28686,7 +28686,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "role": "",
             "position": "",
             "limited": "no",
-            "join": "2026-10-10",
+            "join": "2026-10-14",
             "days": 0,
             "hours": "7.0",
             "estimate": "0.00",
@@ -28706,7 +28706,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "role": "",
             "position": "",
             "limited": "no",
-            "join": "2026-10-10",
+            "join": "2026-10-14",
             "days": 16,
             "hours": "7.0",
             "estimate": "0.00",
@@ -28715,7 +28715,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "order": 0,
             "totalHours": "112.0",
             "userID": 2,
-            "realname": "产品经理"
+            "realname": "技术经理"
         }
     ]
 }";s:8:"response";s:3861:"[
@@ -28965,7 +28965,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "role": "",
             "position": "",
             "limited": "no",
-            "join": "2026-10-10",
+            "join": "2026-10-14",
             "days": "16天",
             "hours": "7工时",
             "estimate": "0.00",
@@ -28989,7 +28989,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "role": "",
             "position": "",
             "limited": "no",
-            "join": "2026-10-10",
+            "join": "2026-10-14",
             "days": "16天",
             "hours": "7工时",
             "estimate": "0.00",
@@ -28998,7 +28998,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "order": 0,
             "totalHours": "112.0",
             "userID": 2,
-            "realname": "产品经理",
+            "realname": "技术经理",
             "total": "112工时",
             "actions": [
                 "unlink"
@@ -29185,7 +29185,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "role": "",
             "position": "",
             "limited": "no",
-            "join": "2026-10-10",
+            "join": "2026-10-14",
             "days": "16天",
             "hours": "7工时",
             "estimate": "0.00",
@@ -29209,7 +29209,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "role": "",
             "position": "",
             "limited": "no",
-            "join": "2026-10-10",
+            "join": "2026-10-14",
             "days": "16天",
             "hours": "7工时",
             "estimate": "0.00",
@@ -29218,7 +29218,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "order": 0,
             "totalHours": "112.0",
             "userID": 2,
-            "realname": "产品经理",
+            "realname": "技术经理",
             "total": "112工时",
             "actions": [
                 "unlink"
@@ -35116,6 +35116,26 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
     "status": "success",
     "dataList": [
         {
+            "id": 33,
+            "parent": 0,
+            "program": 0,
+            "product": 0,
+            "project": 0,
+            "execution": 0,
+            "assignedTo": "",
+            "status": "",
+            "createdBy": "admin",
+            "createdDate": "2026-10-14 12:58:10",
+            "editedBy": "",
+            "editedDate": "",
+            "assignedBy": "",
+            "assignedDate": "",
+            "mailto": [
+                ""
+            ],
+            "deleted": "0"
+        },
+        {
             "id": 32,
             "parent": 0,
             "program": 0,
@@ -35494,30 +35514,10 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
                 ""
             ],
             "deleted": "0"
-        },
-        {
-            "id": 13,
-            "parent": 0,
-            "program": 0,
-            "product": 0,
-            "project": 0,
-            "execution": 0,
-            "assignedTo": "",
-            "status": "",
-            "createdBy": "admin",
-            "createdDate": "2026-10-09 17:42:47",
-            "editedBy": "",
-            "editedDate": "",
-            "assignedBy": "",
-            "assignedDate": "",
-            "mailto": [
-                ""
-            ],
-            "deleted": "0"
         }
     ],
     "pager": {
-        "recTotal": 31,
+        "recTotal": 32,
         "recPerPage": 20,
         "pageID": 1
     }
@@ -47893,7 +47893,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "required": true,
         "desc": "状态(success 成功 | fail 失败)"
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:245;O:8:"stdClass":24:{s:2:"id";i:246;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:12:"我的待办";s:4:"path";s:9:"/my/todos";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:12:"我的待办";s:7:"version";i:1;s:6:"params";s:1276:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:245;O:8:"stdClass":24:{s:2:"id";i:246;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:12:"我的待办";s:4:"path";s:9:"/my/todos";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:12:"我的待办";s:7:"version";i:1;s:6:"params";s:1424:"{
     "header": [
         {
             "field": "Token",
@@ -47910,7 +47910,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "paramsType": "string",
             "required": false,
             "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | today \u4eca\u5929 | future \u5c06\u6765 | lag \u8fc7\u671f | finished \u5df2\u5b8c\u6210)"
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | today \u4eca\u5929 | thisWeek \u672c\u5468 | thisMonth \u672c\u6708 | future \u5c06\u6765 | undone \u672a\u5b8c\u6210\uff0c\u9700\u540c\u65f6\u4f20 status=undone | cycle \u5468\u671f\u5f85\u529e | assignedToOther \u6307\u6d3e\u4ed6\u4eba)"
         },
         {
             "field": "orderBy",
@@ -47987,7 +47987,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:246;O:8:"stdClass":24:{s:2:"id";i:247;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的任务";s:4:"path";s:9:"/my/tasks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的任务";s:7:"version";i:1;s:6:"params";s:5535:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:246;O:8:"stdClass":24:{s:2:"id";i:247;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的任务";s:4:"path";s:9:"/my/tasks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的任务";s:7:"version";i:1;s:6:"params";s:5738:"{
     "header": [
         {
             "field": "Token",
@@ -48003,8 +48003,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | unclosed \u672a\u5173\u95ed | assignedtome \u6307\u6d3e\u7ed9\u6211 | openedbyme \u6211\u521b\u5efa | finishedbyme \u7531\u6211\u5b8c\u6210 | closedbyme \u7531\u6211\u5173\u95ed)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u53d6\u503c\u533a\u5206\u5927\u5c0f\u5199\u3002(assignedTo \u6307\u6d3e\u7ed9\u6211 | openedBy \u7531\u6211\u521b\u5efa | finishedBy \u7531\u6211\u5b8c\u6210 | myInvolved \u7531\u6211\u53c2\u4e0e | closedBy \u7531\u6211\u5173\u95ed | canceledBy \u7531\u6211\u53d6\u6d88 | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -48050,15 +48050,263 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "desc": "\u6761\u4ef6\u7ec4\u4e4b\u95f4\u7684\u8fde\u63a5\u65b9\u5f0f(and | or)"
         }
     ]
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:135:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:7725:"{
     "status": "success",
-    "tasks": [],
+    "tasks": [
+        {
+            "id": 1,
+            "project": 2,
+            "parent": 0,
+            "isParent": 0,
+            "isTpl": 0,
+            "path": ",1,",
+            "execution": 3,
+            "module": 1,
+            "design": 0,
+            "story": 1,
+            "storyVersion": 2,
+            "designVersion": 1,
+            "fromBug": 0,
+            "feedback": 0,
+            "fromIssue": 0,
+            "fromDeliverable": 0,
+            "docs": "",
+            "docVersions": "[]",
+            "name": "开发电容光敏监测模块",
+            "type": "devel",
+            "mode": "",
+            "pri": 1,
+            "estimate": "1.00h",
+            "consumed": "2.00h",
+            "left": "1.00h",
+            "deadline": "2026-11-13",
+            "status": "doing",
+            "subStatus": "",
+            "color": "",
+            "mailto": "",
+            "keywords": "",
+            "desc": "",
+            "deliverable": "",
+            "version": 2,
+            "openedBy": "admin",
+            "openedDate": "2026-10-14 12:57:54",
+            "assignedTo": "admin",
+            "assignedDate": "2026-10-14 12:57:56",
+            "estStarted": "2025-12-25",
+            "realStarted": "2025-12-25 09:00:00",
+            "finishedBy": "",
+            "finishedDate": null,
+            "finishedList": "",
+            "canceledBy": "",
+            "canceledDate": null,
+            "closedBy": "",
+            "closedDate": null,
+            "planDuration": 4,
+            "realDuration": 4,
+            "closedReason": "",
+            "lastEditedBy": "admin",
+            "lastEditedDate": "2026-10-14 12:57:56",
+            "activatedDate": "2026-10-14 12:57:57",
+            "order": 0,
+            "repo": 0,
+            "mr": 0,
+            "entry": "",
+            "lines": "",
+            "v1": "",
+            "v2": "",
+            "vision": "rnd",
+            "deleted": 0,
+            "executionID": 3,
+            "executionName": "智能设备研发3.2版本开发",
+            "projectName": "智能设备研发",
+            "executionMultiple": 1,
+            "executionType": "sprint",
+            "storyID": 1,
+            "storyTitle": "智能照明的定时",
+            "storyStatus": "changing",
+            "latestStoryVersion": 2,
+            "priOrder": 1,
+            "needConfirm": false,
+            "cases": [],
+            "assignedToRealName": "admin",
+            "progress": 67,
+            "rawParent": 0,
+            "designName": "",
+            "canBeChanged": true,
+            "isChild": false,
+            "parentName": ""
+        },
+        {
+            "id": 2,
+            "project": 2,
+            "parent": 0,
+            "isParent": 0,
+            "isTpl": 0,
+            "path": ",2,",
+            "execution": 3,
+            "module": 0,
+            "design": 0,
+            "story": 0,
+            "storyVersion": 1,
+            "designVersion": 1,
+            "fromBug": 0,
+            "feedback": 0,
+            "fromIssue": 0,
+            "fromDeliverable": 0,
+            "docs": "",
+            "docVersions": "[]",
+            "name": "无执行项目任务",
+            "type": "devel",
+            "mode": "",
+            "pri": 1,
+            "estimate": "1.00h",
+            "consumed": "0.00h",
+            "left": "1.00h",
+            "deadline": "2026-11-13",
+            "status": "wait",
+            "subStatus": "",
+            "color": "",
+            "mailto": "",
+            "keywords": "",
+            "desc": "",
+            "deliverable": "",
+            "version": 1,
+            "openedBy": "admin",
+            "openedDate": "2026-10-14 12:57:55",
+            "assignedTo": "admin",
+            "assignedDate": "2026-10-14 12:57:55",
+            "estStarted": "2026-11-13",
+            "realStarted": null,
+            "finishedBy": "",
+            "finishedDate": null,
+            "finishedList": "",
+            "canceledBy": "",
+            "canceledDate": null,
+            "closedBy": "",
+            "closedDate": null,
+            "planDuration": 0,
+            "realDuration": 0,
+            "closedReason": "",
+            "lastEditedBy": "",
+            "lastEditedDate": null,
+            "activatedDate": null,
+            "order": 0,
+            "repo": 0,
+            "mr": 0,
+            "entry": "",
+            "lines": "",
+            "v1": "",
+            "v2": "",
+            "vision": "rnd",
+            "deleted": 0,
+            "executionID": 3,
+            "executionName": "智能设备研发3.2版本开发",
+            "projectName": "智能设备研发",
+            "executionMultiple": 1,
+            "executionType": "sprint",
+            "storyID": "",
+            "storyTitle": "",
+            "storyStatus": "",
+            "latestStoryVersion": "",
+            "priOrder": 1,
+            "needConfirm": false,
+            "assignedToRealName": "admin",
+            "progress": 0,
+            "rawParent": 0,
+            "designName": "",
+            "canBeChanged": true,
+            "isChild": false,
+            "parentName": ""
+        },
+        {
+            "id": 3,
+            "project": 2,
+            "parent": 0,
+            "isParent": 0,
+            "isTpl": 0,
+            "path": ",3,",
+            "execution": 3,
+            "module": 0,
+            "design": 0,
+            "story": 0,
+            "storyVersion": 1,
+            "designVersion": 1,
+            "fromBug": 0,
+            "feedback": 1,
+            "fromIssue": 0,
+            "fromDeliverable": 0,
+            "docs": "",
+            "docVersions": "[]",
+            "name": "从反馈创建的任务",
+            "type": "devel",
+            "mode": "",
+            "pri": 3,
+            "estimate": "0.00h",
+            "consumed": "0.00h",
+            "left": "0.00h",
+            "deadline": "2026-11-13",
+            "status": "wait",
+            "subStatus": "",
+            "color": "",
+            "mailto": "",
+            "keywords": "",
+            "desc": "反馈转任务",
+            "deliverable": "",
+            "version": 1,
+            "openedBy": "admin",
+            "openedDate": "2026-10-14 12:58:03",
+            "assignedTo": "admin",
+            "assignedDate": "2026-10-14 12:58:03",
+            "estStarted": "2026-11-13",
+            "realStarted": null,
+            "finishedBy": "",
+            "finishedDate": null,
+            "finishedList": "",
+            "canceledBy": "",
+            "canceledDate": null,
+            "closedBy": "",
+            "closedDate": null,
+            "planDuration": 0,
+            "realDuration": 0,
+            "closedReason": "",
+            "lastEditedBy": "",
+            "lastEditedDate": null,
+            "activatedDate": null,
+            "order": 0,
+            "repo": 0,
+            "mr": 0,
+            "entry": "",
+            "lines": "",
+            "v1": "",
+            "v2": "",
+            "vision": "rnd",
+            "deleted": 0,
+            "executionID": 3,
+            "executionName": "智能设备研发3.2版本开发",
+            "projectName": "智能设备研发",
+            "executionMultiple": 1,
+            "executionType": "sprint",
+            "storyID": "",
+            "storyTitle": "",
+            "storyStatus": "",
+            "latestStoryVersion": "",
+            "priOrder": 3,
+            "needConfirm": false,
+            "assignedToRealName": "admin",
+            "progress": 0,
+            "rawParent": 0,
+            "designName": "",
+            "canBeChanged": true,
+            "isChild": false,
+            "parentName": ""
+        }
+    ],
     "pager": {
-        "recTotal": 0,
+        "recTotal": 3,
         "recPerPage": 20,
         "pageID": 1
     }
-}";s:8:"response";s:1117:"[
+}";s:8:"response";s:17614:"[
     {
         "field": "status",
         "paramsType": "string",
@@ -48071,7 +48319,575 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "required": false,
         "desc": "任务",
         "level": 1,
-        "children": []
+        "children": [
+            {
+                "field": "id",
+                "paramsType": "int",
+                "required": false,
+                "desc": "编号",
+                "level": 2
+            },
+            {
+                "field": "project",
+                "paramsType": "int",
+                "required": false,
+                "desc": "所属项目",
+                "level": 2
+            },
+            {
+                "field": "parent",
+                "paramsType": "int",
+                "required": false,
+                "desc": "父任务",
+                "level": 2
+            },
+            {
+                "field": "isParent",
+                "paramsType": "int",
+                "required": false,
+                "desc": "是父任务",
+                "level": 2
+            },
+            {
+                "field": "isTpl",
+                "paramsType": "int",
+                "required": false,
+                "desc": "是模板",
+                "level": 2
+            },
+            {
+                "field": "path",
+                "paramsType": "string",
+                "required": false,
+                "desc": "路径",
+                "level": 2
+            },
+            {
+                "field": "execution",
+                "paramsType": "int",
+                "required": false,
+                "desc": "所属执行",
+                "level": 2
+            },
+            {
+                "field": "module",
+                "paramsType": "int",
+                "required": false,
+                "desc": "所属模块",
+                "level": 2
+            },
+            {
+                "field": "design",
+                "paramsType": "int",
+                "required": false,
+                "desc": "相关设计",
+                "level": 2
+            },
+            {
+                "field": "story",
+                "paramsType": "int",
+                "required": false,
+                "desc": "相关用户故事",
+                "level": 2
+            },
+            {
+                "field": "storyVersion",
+                "paramsType": "int",
+                "required": false,
+                "desc": "用户故事版本",
+                "level": 2
+            },
+            {
+                "field": "designVersion",
+                "paramsType": "int",
+                "required": false,
+                "desc": "设计版本",
+                "level": 2
+            },
+            {
+                "field": "fromBug",
+                "paramsType": "int",
+                "required": false,
+                "desc": "来源Bug",
+                "level": 2
+            },
+            {
+                "field": "feedback",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "fromIssue",
+                "paramsType": "int",
+                "required": false,
+                "desc": "来源问题",
+                "level": 2
+            },
+            {
+                "field": "fromDeliverable",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "docs",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "docVersions",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "name",
+                "paramsType": "string",
+                "required": false,
+                "desc": "任务名称",
+                "level": 2
+            },
+            {
+                "field": "type",
+                "paramsType": "string",
+                "required": false,
+                "desc": "任务类型",
+                "level": 2
+            },
+            {
+                "field": "mode",
+                "paramsType": "string",
+                "required": false,
+                "desc": "任务模式",
+                "level": 2
+            },
+            {
+                "field": "pri",
+                "paramsType": "int",
+                "required": false,
+                "desc": "优先级",
+                "level": 2
+            },
+            {
+                "field": "estimate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "最初预计",
+                "level": 2
+            },
+            {
+                "field": "consumed",
+                "paramsType": "string",
+                "required": false,
+                "desc": "总计消耗",
+                "level": 2
+            },
+            {
+                "field": "left",
+                "paramsType": "string",
+                "required": false,
+                "desc": "预计剩余",
+                "level": 2
+            },
+            {
+                "field": "deadline",
+                "paramsType": "string",
+                "required": false,
+                "desc": "截止日期",
+                "level": 2
+            },
+            {
+                "field": "status",
+                "paramsType": "string",
+                "required": false,
+                "desc": "任务状态",
+                "level": 2
+            },
+            {
+                "field": "subStatus",
+                "paramsType": "string",
+                "required": false,
+                "desc": "子状态",
+                "level": 2
+            },
+            {
+                "field": "color",
+                "paramsType": "string",
+                "required": false,
+                "desc": "标题颜色",
+                "level": 2
+            },
+            {
+                "field": "mailto",
+                "paramsType": "string",
+                "required": false,
+                "desc": "抄送给",
+                "level": 2
+            },
+            {
+                "field": "keywords",
+                "paramsType": "string",
+                "required": false,
+                "desc": "关键词",
+                "level": 2
+            },
+            {
+                "field": "desc",
+                "paramsType": "string",
+                "required": false,
+                "desc": "任务描述",
+                "level": 2
+            },
+            {
+                "field": "deliverable",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "version",
+                "paramsType": "int",
+                "required": false,
+                "desc": "版本",
+                "level": 2
+            },
+            {
+                "field": "openedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁创建",
+                "level": 2
+            },
+            {
+                "field": "openedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "创建日期",
+                "level": 2
+            },
+            {
+                "field": "assignedTo",
+                "paramsType": "string",
+                "required": false,
+                "desc": "指派给",
+                "level": 2
+            },
+            {
+                "field": "assignedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "指派日期",
+                "level": 2
+            },
+            {
+                "field": "estStarted",
+                "paramsType": "string",
+                "required": false,
+                "desc": "预计开始",
+                "level": 2
+            },
+            {
+                "field": "realStarted",
+                "paramsType": "string",
+                "required": false,
+                "desc": "实际开始",
+                "level": 2
+            },
+            {
+                "field": "finishedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁完成",
+                "level": 2
+            },
+            {
+                "field": "finishedDate",
+                "paramsType": "NULL",
+                "required": false,
+                "desc": "实际完成",
+                "level": 2
+            },
+            {
+                "field": "finishedList",
+                "paramsType": "string",
+                "required": false,
+                "desc": "完成者列表",
+                "level": 2
+            },
+            {
+                "field": "canceledBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁取消",
+                "level": 2
+            },
+            {
+                "field": "canceledDate",
+                "paramsType": "NULL",
+                "required": false,
+                "desc": "取消时间",
+                "level": 2
+            },
+            {
+                "field": "closedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁关闭",
+                "level": 2
+            },
+            {
+                "field": "closedDate",
+                "paramsType": "NULL",
+                "required": false,
+                "desc": "关闭时间",
+                "level": 2
+            },
+            {
+                "field": "planDuration",
+                "paramsType": "int",
+                "required": false,
+                "desc": "计划持续天数",
+                "level": 2
+            },
+            {
+                "field": "realDuration",
+                "paramsType": "int",
+                "required": false,
+                "desc": "实际持续天数",
+                "level": 2
+            },
+            {
+                "field": "closedReason",
+                "paramsType": "string",
+                "required": false,
+                "desc": "关闭原因",
+                "level": 2
+            },
+            {
+                "field": "lastEditedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "最后修改",
+                "level": 2
+            },
+            {
+                "field": "lastEditedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "最后修改日期",
+                "level": 2
+            },
+            {
+                "field": "activatedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "激活日期",
+                "level": 2
+            },
+            {
+                "field": "order",
+                "paramsType": "int",
+                "required": false,
+                "desc": "排序",
+                "level": 2
+            },
+            {
+                "field": "repo",
+                "paramsType": "int",
+                "required": false,
+                "desc": "所属代码库",
+                "level": 2
+            },
+            {
+                "field": "mr",
+                "paramsType": "int",
+                "required": false,
+                "desc": "合并请求",
+                "level": 2
+            },
+            {
+                "field": "entry",
+                "paramsType": "string",
+                "required": false,
+                "desc": "代码路径",
+                "level": 2
+            },
+            {
+                "field": "lines",
+                "paramsType": "string",
+                "required": false,
+                "desc": "代码行",
+                "level": 2
+            },
+            {
+                "field": "v1",
+                "paramsType": "string",
+                "required": false,
+                "desc": "版本1",
+                "level": 2
+            },
+            {
+                "field": "v2",
+                "paramsType": "string",
+                "required": false,
+                "desc": "版本2",
+                "level": 2
+            },
+            {
+                "field": "vision",
+                "paramsType": "string",
+                "required": false,
+                "desc": "所属界面",
+                "level": 2
+            },
+            {
+                "field": "deleted",
+                "paramsType": "int",
+                "required": false,
+                "desc": "已删除",
+                "level": 2
+            },
+            {
+                "field": "executionID",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "executionName",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "projectName",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "executionMultiple",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "executionType",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "storyID",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "storyTitle",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "storyStatus",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "latestStoryVersion",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "priOrder",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "needConfirm",
+                "paramsType": "boolean",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "cases",
+                "paramsType": "array",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "assignedToRealName",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "progress",
+                "paramsType": "int",
+                "required": false,
+                "desc": "进度",
+                "level": 2
+            },
+            {
+                "field": "rawParent",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "designName",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "canBeChanged",
+                "paramsType": "boolean",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "isChild",
+                "paramsType": "boolean",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "parentName",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            }
+        ]
     },
     {
         "field": "pager",
@@ -48103,7 +48919,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:247;O:8:"stdClass":24:{s:2:"id";i:248;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:18:"指派给我的Bug";s:4:"path";s:8:"/my/bugs";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:18:"指派给我的Bug";s:7:"version";i:1;s:6:"params";s:6395:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:247;O:8:"stdClass":24:{s:2:"id";i:248;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:18:"指派给我的Bug";s:4:"path";s:8:"/my/bugs";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:18:"指派给我的Bug";s:7:"version";i:1;s:6:"params";s:6616:"{
     "header": [
         {
             "field": "Token",
@@ -48119,8 +48935,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | unclosed \u672a\u5173\u95ed | assignedtome \u6307\u6d3e\u7ed9\u6211 | openedbyme \u6211\u521b\u5efa | resolvedbyme \u7531\u6211\u89e3\u51b3)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u53d6\u503c\u53d6\u81ea zt_bug \u7684\u5b57\u6bb5\u540d\uff08\u533a\u5206\u5927\u5c0f\u5199\uff09\u3002(assignedTo \u6307\u6d3e\u7ed9\u6211 | openedBy \u7531\u6211\u521b\u5efa | resolvedBy \u7531\u6211\u89e3\u51b3 | closedBy \u7531\u6211\u5173\u95ed | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -48166,15 +48982,88 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "desc": "\u6761\u4ef6\u7ec4\u4e4b\u95f4\u7684\u8fde\u63a5\u65b9\u5f0f(and | or)"
         }
     ]
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:134:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:2260:"{
     "status": "success",
-    "bugs": [],
+    "bugs": [
+        {
+            "id": 1,
+            "project": 2,
+            "product": 1,
+            "injection": "",
+            "identify": "",
+            "branch": 0,
+            "module": 0,
+            "execution": 3,
+            "plan": 0,
+            "story": 0,
+            "storyVersion": 0,
+            "task": 0,
+            "toTask": 0,
+            "toStory": 0,
+            "title": "光敏元件显示错误",
+            "keywords": "",
+            "severity": 3,
+            "pri": 3,
+            "type": "codeerror",
+            "os": "",
+            "browser": "",
+            "hardware": "",
+            "found": "",
+            "steps": "[步骤] [结果] [期望]",
+            "status": "active",
+            "subStatus": "",
+            "color": "",
+            "confirmed": 1,
+            "activatedCount": 1,
+            "activatedDate": "2026-10-14 12:57:52",
+            "feedbackBy": "",
+            "notifyEmail": "",
+            "mailto": "admin",
+            "openedBy": "admin",
+            "openedDate": "2026-10-14 12:57:49",
+            "openedBuild": "主干",
+            "assignedTo": "admin",
+            "assignedDate": "2026-10-14 12:57:52",
+            "deadline": "2025-12-12",
+            "resolvedBy": "",
+            "resolution": "",
+            "resolvedBuild": "",
+            "resolvedDate": "",
+            "closedBy": "",
+            "closedDate": "",
+            "duplicateBug": 0,
+            "relatedBug": "",
+            "case": 0,
+            "caseVersion": 0,
+            "feedback": 0,
+            "result": 0,
+            "repo": 0,
+            "mr": 0,
+            "entry": "",
+            "lines": "",
+            "v1": "",
+            "v2": "",
+            "repoType": "",
+            "issueKey": "",
+            "testtask": 0,
+            "lastEditedBy": "admin",
+            "lastEditedDate": "2026-10-14 12:57:52",
+            "deleted": 0,
+            "priOrder": 3,
+            "severityOrder": 3,
+            "productName": "智能照明",
+            "shadow": 0,
+            "delay": 306,
+            "confirmeObject": [],
+            "URs": ""
+        }
+    ],
     "pager": {
-        "recTotal": 0,
+        "recTotal": 1,
         "recPerPage": 20,
         "pageID": 1
     }
-}";s:8:"response";s:1113:"[
+}";s:8:"response";s:15394:"[
     {
         "field": "status",
         "paramsType": "string",
@@ -48187,7 +49076,498 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "required": false,
         "desc": "Bug",
         "level": 1,
-        "children": []
+        "children": [
+            {
+                "field": "id",
+                "paramsType": "int",
+                "required": false,
+                "desc": "Bug编号",
+                "level": 2
+            },
+            {
+                "field": "project",
+                "paramsType": "int",
+                "required": false,
+                "desc": "所属项目",
+                "level": 2
+            },
+            {
+                "field": "product",
+                "paramsType": "int",
+                "required": false,
+                "desc": "所属产品",
+                "level": 2
+            },
+            {
+                "field": "injection",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "identify",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "branch",
+                "paramsType": "int",
+                "required": false,
+                "desc": "平台\/分支",
+                "level": 2
+            },
+            {
+                "field": "module",
+                "paramsType": "int",
+                "required": false,
+                "desc": "所属模块",
+                "level": 2
+            },
+            {
+                "field": "execution",
+                "paramsType": "int",
+                "required": false,
+                "desc": "所属执行",
+                "level": 2
+            },
+            {
+                "field": "plan",
+                "paramsType": "int",
+                "required": false,
+                "desc": "所属计划",
+                "level": 2
+            },
+            {
+                "field": "story",
+                "paramsType": "int",
+                "required": false,
+                "desc": "相关需求",
+                "level": 2
+            },
+            {
+                "field": "storyVersion",
+                "paramsType": "int",
+                "required": false,
+                "desc": "用户故事版本",
+                "level": 2
+            },
+            {
+                "field": "task",
+                "paramsType": "int",
+                "required": false,
+                "desc": "相关任务",
+                "level": 2
+            },
+            {
+                "field": "toTask",
+                "paramsType": "int",
+                "required": false,
+                "desc": "转任务",
+                "level": 2
+            },
+            {
+                "field": "toStory",
+                "paramsType": "int",
+                "required": false,
+                "desc": "转用户故事",
+                "level": 2
+            },
+            {
+                "field": "title",
+                "paramsType": "string",
+                "required": false,
+                "desc": "Bug标题",
+                "level": 2
+            },
+            {
+                "field": "keywords",
+                "paramsType": "string",
+                "required": false,
+                "desc": "关键词",
+                "level": 2
+            },
+            {
+                "field": "severity",
+                "paramsType": "int",
+                "required": false,
+                "desc": "严重程度",
+                "level": 2
+            },
+            {
+                "field": "pri",
+                "paramsType": "int",
+                "required": false,
+                "desc": "优先级",
+                "level": 2
+            },
+            {
+                "field": "type",
+                "paramsType": "string",
+                "required": false,
+                "desc": "Bug类型",
+                "level": 2
+            },
+            {
+                "field": "os",
+                "paramsType": "string",
+                "required": false,
+                "desc": "操作系统",
+                "level": 2
+            },
+            {
+                "field": "browser",
+                "paramsType": "string",
+                "required": false,
+                "desc": "浏览器",
+                "level": 2
+            },
+            {
+                "field": "hardware",
+                "paramsType": "string",
+                "required": false,
+                "desc": "硬件",
+                "level": 2
+            },
+            {
+                "field": "found",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "steps",
+                "paramsType": "string",
+                "required": false,
+                "desc": "重现步骤",
+                "level": 2
+            },
+            {
+                "field": "status",
+                "paramsType": "string",
+                "required": false,
+                "desc": "Bug状态",
+                "level": 2
+            },
+            {
+                "field": "subStatus",
+                "paramsType": "string",
+                "required": false,
+                "desc": "子状态",
+                "level": 2
+            },
+            {
+                "field": "color",
+                "paramsType": "string",
+                "required": false,
+                "desc": "标题颜色",
+                "level": 2
+            },
+            {
+                "field": "confirmed",
+                "paramsType": "int",
+                "required": false,
+                "desc": "是否确认",
+                "level": 2
+            },
+            {
+                "field": "activatedCount",
+                "paramsType": "int",
+                "required": false,
+                "desc": "激活次数",
+                "level": 2
+            },
+            {
+                "field": "activatedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "激活时间",
+                "level": 2
+            },
+            {
+                "field": "feedbackBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "反馈者",
+                "level": 2
+            },
+            {
+                "field": "notifyEmail",
+                "paramsType": "string",
+                "required": false,
+                "desc": "通知邮箱",
+                "level": 2
+            },
+            {
+                "field": "mailto",
+                "paramsType": "string",
+                "required": false,
+                "desc": "抄送给",
+                "level": 2
+            },
+            {
+                "field": "openedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁创建",
+                "level": 2
+            },
+            {
+                "field": "openedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "创建日期",
+                "level": 2
+            },
+            {
+                "field": "openedBuild",
+                "paramsType": "string",
+                "required": false,
+                "desc": "影响版本",
+                "level": 2
+            },
+            {
+                "field": "assignedTo",
+                "paramsType": "string",
+                "required": false,
+                "desc": "指派给",
+                "level": 2
+            },
+            {
+                "field": "assignedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "指派日期",
+                "level": 2
+            },
+            {
+                "field": "deadline",
+                "paramsType": "string",
+                "required": false,
+                "desc": "截止日期",
+                "level": 2
+            },
+            {
+                "field": "resolvedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "解决者",
+                "level": 2
+            },
+            {
+                "field": "resolution",
+                "paramsType": "string",
+                "required": false,
+                "desc": "解决方案",
+                "level": 2
+            },
+            {
+                "field": "resolvedBuild",
+                "paramsType": "string",
+                "required": false,
+                "desc": "解决版本",
+                "level": 2
+            },
+            {
+                "field": "resolvedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "解决日期",
+                "level": 2
+            },
+            {
+                "field": "closedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁关闭",
+                "level": 2
+            },
+            {
+                "field": "closedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "关闭日期",
+                "level": 2
+            },
+            {
+                "field": "duplicateBug",
+                "paramsType": "int",
+                "required": false,
+                "desc": "重复Bug",
+                "level": 2
+            },
+            {
+                "field": "relatedBug",
+                "paramsType": "string",
+                "required": false,
+                "desc": "相关Bug",
+                "level": 2
+            },
+            {
+                "field": "case",
+                "paramsType": "int",
+                "required": false,
+                "desc": "来源用例",
+                "level": 2
+            },
+            {
+                "field": "caseVersion",
+                "paramsType": "int",
+                "required": false,
+                "desc": "用例版本",
+                "level": 2
+            },
+            {
+                "field": "feedback",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "result",
+                "paramsType": "int",
+                "required": false,
+                "desc": "结果",
+                "level": 2
+            },
+            {
+                "field": "repo",
+                "paramsType": "int",
+                "required": false,
+                "desc": "所属代码库",
+                "level": 2
+            },
+            {
+                "field": "mr",
+                "paramsType": "int",
+                "required": false,
+                "desc": "合并请求",
+                "level": 2
+            },
+            {
+                "field": "entry",
+                "paramsType": "string",
+                "required": false,
+                "desc": "代码路径",
+                "level": 2
+            },
+            {
+                "field": "lines",
+                "paramsType": "string",
+                "required": false,
+                "desc": "代码行",
+                "level": 2
+            },
+            {
+                "field": "v1",
+                "paramsType": "string",
+                "required": false,
+                "desc": "版本1",
+                "level": 2
+            },
+            {
+                "field": "v2",
+                "paramsType": "string",
+                "required": false,
+                "desc": "版本2",
+                "level": 2
+            },
+            {
+                "field": "repoType",
+                "paramsType": "string",
+                "required": false,
+                "desc": "代码库类型",
+                "level": 2
+            },
+            {
+                "field": "issueKey",
+                "paramsType": "string",
+                "required": false,
+                "desc": "Sonarqube问题键值",
+                "level": 2
+            },
+            {
+                "field": "testtask",
+                "paramsType": "int",
+                "required": false,
+                "desc": "测试单",
+                "level": 2
+            },
+            {
+                "field": "lastEditedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "最后修改者",
+                "level": 2
+            },
+            {
+                "field": "lastEditedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "修改日期",
+                "level": 2
+            },
+            {
+                "field": "deleted",
+                "paramsType": "int",
+                "required": false,
+                "desc": "已删除",
+                "level": 2
+            },
+            {
+                "field": "priOrder",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "severityOrder",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "productName",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "shadow",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "delay",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "confirmeObject",
+                "paramsType": "array",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "URs",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            }
+        ]
     },
     {
         "field": "pager",
@@ -48219,7 +49599,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:248;O:8:"stdClass":24:{s:2:"id";i:249;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:27:"指派给我的研发需求";s:4:"path";s:11:"/my/stories";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:27:"指派给我的研发需求";s:7:"version";i:1;s:6:"params";s:6122:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:248;O:8:"stdClass":24:{s:2:"id";i:249;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:27:"指派给我的研发需求";s:4:"path";s:11:"/my/stories";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:27:"指派给我的研发需求";s:7:"version";i:1;s:6:"params";s:6338:"{
     "header": [
         {
             "field": "Token",
@@ -48235,8 +49615,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fallstory\u3002(allstory \u5168\u90e8 | assignedtome \u6307\u6d3e\u7ed9\u6211 | openedbyme \u6211\u521b\u5efa | reviewbyme \u5f85\u6211\u8bc4\u5ba1 | draftstory \u8349\u7a3f)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u53d6\u503c\u533a\u5206\u5927\u5c0f\u5199\u3002(all \u5168\u90e8 | assignedTo \u6307\u6d3e\u7ed9\u6211 | openedBy \u7531\u6211\u521b\u5efa | reviewBy \u5f85\u6211\u8bc4\u5ba1 | reviewedBy \u6211\u8bc4\u5ba1\u8fc7 | closedBy \u7531\u6211\u5173\u95ed | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -48282,7 +49662,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "desc": "\u6761\u4ef6\u7ec4\u4e4b\u95f4\u7684\u8fde\u63a5\u65b9\u5f0f(and | or)"
         }
     ]
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:13374:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:5604:"{
     "status": "success",
     "stories": [
         {
@@ -48318,21 +49698,21 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "fromStory": 0,
             "fromVersion": 1,
             "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:22",
+            "openedDate": "2026-10-14 12:57:41",
             "assignedTo": "admin",
-            "assignedDate": "2026-10-10 10:28:25",
+            "assignedDate": "2026-10-14 12:57:44",
             "approvedDate": "",
             "lastEditedBy": "admin",
-            "lastEditedDate": "2026-10-10 10:28:25",
+            "lastEditedDate": "2026-10-14 12:57:44",
             "changedBy": "admin",
-            "changedDate": "2026-10-10 10:28:23",
+            "changedDate": "2026-10-14 12:57:42",
             "reviewedBy": "",
             "reviewedDate": "",
             "releasedDate": "",
             "closedBy": "",
             "closedDate": "",
             "closedReason": "",
-            "activatedDate": "2026-10-10 10:28:25",
+            "activatedDate": "2026-10-14 12:57:44",
             "toBug": 0,
             "linkStories": "",
             "linkRequirements": "",
@@ -48378,96 +49758,6 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "relatedObject": 1
         },
         {
-            "id": 2,
-            "parent": [],
-            "isParent": 0,
-            "root": 2,
-            "path": ",2,",
-            "grade": 1,
-            "product": 1,
-            "branch": 0,
-            "module": 0,
-            "plan": "",
-            "source": "",
-            "sourceNote": "",
-            "fromBug": 0,
-            "feedback": 0,
-            "title": "项目型项目的需求",
-            "keywords": "",
-            "type": "story",
-            "category": "feature",
-            "pri": 3,
-            "estimate": "0.00h",
-            "status": "reviewing",
-            "subStatus": "",
-            "color": "",
-            "cardColor": "",
-            "stage": "projected",
-            "stagedBy": "",
-            "prevReviewers": "productManager",
-            "mailto": "",
-            "lib": 0,
-            "fromStory": 0,
-            "fromVersion": 1,
-            "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:23",
-            "assignedTo": "",
-            "assignedDate": "",
-            "approvedDate": "",
-            "lastEditedBy": "",
-            "lastEditedDate": "",
-            "changedBy": "",
-            "changedDate": "",
-            "reviewedBy": "",
-            "reviewedDate": "",
-            "releasedDate": "",
-            "closedBy": "",
-            "closedDate": "",
-            "closedReason": "",
-            "activatedDate": "",
-            "toBug": 0,
-            "linkStories": "",
-            "linkRequirements": "",
-            "docs": "",
-            "twins": "",
-            "duplicateStory": 0,
-            "version": 1,
-            "parentVersion": 1,
-            "demandVersion": 1,
-            "storyChanged": 0,
-            "feedbackBy": "",
-            "notifyEmail": "",
-            "BSA": "",
-            "duration": "",
-            "demand": 0,
-            "submitedBy": "",
-            "roadmap": "",
-            "URChanged": 0,
-            "unlinkReason": "",
-            "retractedReason": "",
-            "retractedBy": "",
-            "retractedDate": "",
-            "verifiedDate": "",
-            "vision": "rnd",
-            "frozen": "",
-            "deleted": 0,
-            "priOrder": 3,
-            "productTitle": "智能照明",
-            "shadow": 0,
-            "planTitle": " ",
-            "originParent": 0,
-            "reviewer": [
-                "productManager"
-            ],
-            "notReview": [
-                "productManager"
-            ],
-            "taskCount": 0,
-            "bugCount": 0,
-            "caseCount": 0,
-            "relatedObject": 0
-        },
-        {
             "id": 3,
             "parent": [],
             "isParent": 0,
@@ -48500,21 +49790,21 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "fromStory": 0,
             "fromVersion": 1,
             "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:24",
+            "openedDate": "2026-10-14 12:57:43",
             "assignedTo": "admin",
-            "assignedDate": "2026-10-10 10:28:27",
+            "assignedDate": "2026-10-14 12:57:47",
             "approvedDate": "",
             "lastEditedBy": "admin",
-            "lastEditedDate": "2026-10-10 10:28:27",
+            "lastEditedDate": "2026-10-14 12:57:47",
             "changedBy": "admin",
-            "changedDate": "2026-10-10 10:28:26",
+            "changedDate": "2026-10-14 12:57:46",
             "reviewedBy": "",
             "reviewedDate": "",
             "releasedDate": "",
             "closedBy": "",
             "closedDate": "",
             "closedReason": "",
-            "activatedDate": "2026-10-10 10:28:27",
+            "activatedDate": "2026-10-14 12:57:47",
             "toBug": 0,
             "linkStories": "",
             "linkRequirements": "",
@@ -48556,190 +49846,10 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "bugCount": 0,
             "caseCount": 0,
             "relatedObject": 0
-        },
-        {
-            "id": 6,
-            "parent": [],
-            "isParent": 0,
-            "root": 6,
-            "path": ",6,",
-            "grade": 1,
-            "product": 1,
-            "branch": 0,
-            "module": 0,
-            "plan": "",
-            "source": "",
-            "sourceNote": "admin",
-            "fromBug": 0,
-            "feedback": 1,
-            "title": "从反馈创建的需求",
-            "keywords": "",
-            "type": "story",
-            "category": "feature",
-            "pri": 3,
-            "estimate": "0.00h",
-            "status": "reviewing",
-            "subStatus": "",
-            "color": "",
-            "cardColor": "",
-            "stage": "wait",
-            "stagedBy": "",
-            "prevReviewers": "normal",
-            "mailto": "",
-            "lib": 0,
-            "fromStory": 0,
-            "fromVersion": 1,
-            "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:43",
-            "assignedTo": "",
-            "assignedDate": "",
-            "approvedDate": "",
-            "lastEditedBy": "",
-            "lastEditedDate": "",
-            "changedBy": "",
-            "changedDate": "",
-            "reviewedBy": "",
-            "reviewedDate": "",
-            "releasedDate": "",
-            "closedBy": "",
-            "closedDate": "",
-            "closedReason": "",
-            "activatedDate": "",
-            "toBug": 0,
-            "linkStories": "",
-            "linkRequirements": "",
-            "docs": "",
-            "twins": "",
-            "duplicateStory": 0,
-            "version": 1,
-            "parentVersion": 1,
-            "demandVersion": 1,
-            "storyChanged": 0,
-            "feedbackBy": "",
-            "notifyEmail": "",
-            "BSA": "",
-            "duration": "",
-            "demand": 0,
-            "submitedBy": "",
-            "roadmap": "",
-            "URChanged": 0,
-            "unlinkReason": "",
-            "retractedReason": "",
-            "retractedBy": "",
-            "retractedDate": "",
-            "verifiedDate": "",
-            "vision": "rnd",
-            "frozen": "",
-            "deleted": 0,
-            "priOrder": 3,
-            "productTitle": "智能照明",
-            "shadow": 0,
-            "planTitle": " ",
-            "originParent": 0,
-            "reviewer": [
-                "normal"
-            ],
-            "notReview": [
-                "normal"
-            ],
-            "taskCount": 0,
-            "bugCount": 0,
-            "caseCount": 0,
-            "relatedObject": 1
-        },
-        {
-            "id": 7,
-            "parent": [],
-            "isParent": 0,
-            "root": 7,
-            "path": ",7,",
-            "grade": 1,
-            "product": 1,
-            "branch": 0,
-            "module": 0,
-            "plan": "",
-            "source": "",
-            "sourceNote": "admin",
-            "fromBug": 0,
-            "feedback": 0,
-            "title": "从工单创建的需求",
-            "keywords": "",
-            "type": "story",
-            "category": "feature",
-            "pri": 3,
-            "estimate": "0.00h",
-            "status": "reviewing",
-            "subStatus": "",
-            "color": "",
-            "cardColor": "",
-            "stage": "wait",
-            "stagedBy": "",
-            "prevReviewers": "normal",
-            "mailto": "",
-            "lib": 0,
-            "fromStory": 0,
-            "fromVersion": 1,
-            "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:45",
-            "assignedTo": "",
-            "assignedDate": "",
-            "approvedDate": "",
-            "lastEditedBy": "",
-            "lastEditedDate": "",
-            "changedBy": "",
-            "changedDate": "",
-            "reviewedBy": "",
-            "reviewedDate": "",
-            "releasedDate": "",
-            "closedBy": "",
-            "closedDate": "",
-            "closedReason": "",
-            "activatedDate": "",
-            "toBug": 0,
-            "linkStories": "",
-            "linkRequirements": "",
-            "docs": "",
-            "twins": "",
-            "duplicateStory": 0,
-            "version": 1,
-            "parentVersion": 1,
-            "demandVersion": 1,
-            "storyChanged": 0,
-            "feedbackBy": "",
-            "notifyEmail": "",
-            "BSA": "",
-            "duration": "",
-            "demand": 0,
-            "submitedBy": "",
-            "roadmap": "",
-            "URChanged": 0,
-            "unlinkReason": "",
-            "retractedReason": "",
-            "retractedBy": "",
-            "retractedDate": "",
-            "verifiedDate": "",
-            "vision": "rnd",
-            "frozen": "",
-            "deleted": 0,
-            "priOrder": 3,
-            "productTitle": "智能照明",
-            "shadow": 0,
-            "planTitle": " ",
-            "originParent": 0,
-            "reviewer": [
-                "normal"
-            ],
-            "notReview": [
-                "normal"
-            ],
-            "taskCount": 0,
-            "bugCount": 0,
-            "caseCount": 0,
-            "relatedObject": 1
         }
     ],
     "pager": {
-        "recTotal": 5,
+        "recTotal": 2,
         "recPerPage": 20,
         "pageID": 1
     }
@@ -49391,7 +50501,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:249;O:8:"stdClass":24:{s:2:"id";i:250;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:27:"指派给我的业务需求";s:4:"path";s:9:"/my/epics";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:27:"指派给我的业务需求";s:7:"version";i:1;s:6:"params";s:6122:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:249;O:8:"stdClass":24:{s:2:"id";i:250;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:27:"指派给我的业务需求";s:4:"path";s:9:"/my/epics";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:27:"指派给我的业务需求";s:7:"version";i:1;s:6:"params";s:6338:"{
     "header": [
         {
             "field": "Token",
@@ -49407,8 +50517,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fallstory\u3002(allstory \u5168\u90e8 | assignedtome \u6307\u6d3e\u7ed9\u6211 | openedbyme \u6211\u521b\u5efa | reviewbyme \u5f85\u6211\u8bc4\u5ba1 | draftstory \u8349\u7a3f)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u53d6\u503c\u533a\u5206\u5927\u5c0f\u5199\u3002(all \u5168\u90e8 | assignedTo \u6307\u6d3e\u7ed9\u6211 | openedBy \u7531\u6211\u521b\u5efa | reviewBy \u5f85\u6211\u8bc4\u5ba1 | reviewedBy \u6211\u8bc4\u5ba1\u8fc7 | closedBy \u7531\u6211\u5173\u95ed | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -50163,7 +51273,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:250;O:8:"stdClass":24:{s:2:"id";i:251;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:27:"指派给我的用户需求";s:4:"path";s:16:"/my/requirements";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:27:"指派给我的用户需求";s:7:"version";i:1;s:6:"params";s:6122:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:250;O:8:"stdClass":24:{s:2:"id";i:251;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:27:"指派给我的用户需求";s:4:"path";s:16:"/my/requirements";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:27:"指派给我的用户需求";s:7:"version";i:1;s:6:"params";s:6338:"{
     "header": [
         {
             "field": "Token",
@@ -50179,8 +51289,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fallstory\u3002(allstory \u5168\u90e8 | assignedtome \u6307\u6d3e\u7ed9\u6211 | openedbyme \u6211\u521b\u5efa | reviewbyme \u5f85\u6211\u8bc4\u5ba1 | draftstory \u8349\u7a3f)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u53d6\u503c\u533a\u5206\u5927\u5c0f\u5199\u3002(all \u5168\u90e8 | assignedTo \u6307\u6d3e\u7ed9\u6211 | openedBy \u7531\u6211\u521b\u5efa | reviewBy \u5f85\u6211\u8bc4\u5ba1 | reviewedBy \u6211\u8bc4\u5ba1\u8fc7 | closedBy \u7531\u6211\u5173\u95ed | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -50935,7 +52045,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:251;O:8:"stdClass":24:{s:2:"id";i:252;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:24:"我负责的的测试单";s:4:"path";s:13:"/my/testtasks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:24:"我负责的的测试单";s:7:"version";i:1;s:6:"params";s:1305:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:251;O:8:"stdClass":24:{s:2:"id";i:252;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:24:"我负责的的测试单";s:4:"path";s:13:"/my/testtasks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:24:"我负责的的测试单";s:7:"version";i:1;s:6:"params";s:1451:"{
     "header": [
         {
             "field": "Token",
@@ -50951,8 +52061,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | wait \u672a\u5f00\u59cb | doing \u8fdb\u884c\u4e2d | done \u5df2\u5b8c\u6210)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u63a5\u53e3\u56fa\u5b9a\u8fd4\u56de\u201c\u6211\u53c2\u4e0e\u7684\u672a\u5b8c\u6210\u6d4b\u8bd5\u5355\u201d\u3002(assignedTo \u6211\u53c2\u4e0e\u7684 | bySearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -51289,7 +52399,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:252;O:8:"stdClass":24:{s:2:"id";i:253;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:18:"我参与的项目";s:4:"path";s:12:"/my/projects";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:18:"我参与的项目";s:7:"version";i:1;s:6:"params";s:1307:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:252;O:8:"stdClass":24:{s:2:"id";i:253;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:18:"我参与的项目";s:4:"path";s:12:"/my/projects";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:18:"我参与的项目";s:7:"version";i:1;s:6:"params";s:1463:"{
     "header": [
         {
             "field": "Token",
@@ -51305,8 +52415,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | undone \u672a\u5b8c\u6210 | wait \u672a\u5f00\u59cb | doing \u8fdb\u884c\u4e2d)"
+            "example": "doing",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fdoing\u3002(doing \u8fdb\u884c\u4e2d | wait \u672a\u5f00\u59cb | suspended \u5df2\u6302\u8d77 | closed \u5df2\u5173\u95ed | done \u5df2\u5b8c\u6210 | undone \u672a\u5b8c\u6210 | delayed \u5df2\u5ef6\u671f | openedbyme \u7531\u6211\u521b\u5efa | all \u5168\u90e8)"
         },
         {
             "field": "orderBy",
@@ -51330,12 +52440,12 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "desc": "\u9875\u7801\uff0c\u4ece\u7b2c1\u9875\u5f00\u59cb"
         }
     ]
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:2864:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:3040:"{
     "status": "success",
     "projects": [
         {
             "role": "PM",
-            "join": "2026-10-10",
+            "join": "2026-10-14",
             "days": 0,
             "hours": "7.0",
             "id": 2,
@@ -51361,13 +52471,13 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "code": "",
             "hasProduct": 1,
             "workflowGroup": 13,
-            "begin": "2025-01-01",
-            "end": "2026-10-01",
+            "begin": "2026-10-14",
+            "end": "2026-11-13",
             "firstEnd": "",
             "realBegan": "",
-            "realEnd": "2026-10-10",
+            "realEnd": "",
             "schedule": "",
-            "status": "closed",
+            "status": "doing",
             "subStatus": "",
             "pri": 1,
             "desc": "",
@@ -51383,12 +52493,12 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "market": 0,
             "PI": 0,
             "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:16",
+            "openedDate": "2026-10-14 12:57:35",
             "openedVersion": "",
             "lastEditedBy": "admin",
-            "lastEditedDate": "2026-10-10 10:28:18",
-            "closedBy": "admin",
-            "closedDate": "2026-10-10 10:28:18",
+            "lastEditedDate": "2026-10-14 12:58:26",
+            "closedBy": "",
+            "closedDate": "",
             "closedReason": "",
             "canceledBy": "",
             "canceledDate": "",
@@ -51421,7 +52531,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "storyPoints": 2,
             "storyCount": 3,
             "executionCount": 1,
-            "deliverable": "0 \/ 0",
+            "deliverable": "<a href='\/index.php?m=project&f=closuredeliverable&t=json&projectID=2' title='交付物提交比例=已提交交付物个数\/还没有上传的必填+已提交交付物的总数' data-toggle=\"modal\" >0 \/ 0<\/a>\n",
             "PMUserID": 0
         }
     ],
@@ -52099,7 +53209,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:253;O:8:"stdClass":24:{s:2:"id";i:254;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的反馈";s:4:"path";s:13:"/my/feedbacks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的反馈";s:7:"version";i:1;s:6:"params";s:2550:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:253;O:8:"stdClass":24:{s:2:"id";i:254;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的反馈";s:4:"path";s:13:"/my/feedbacks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的反馈";s:7:"version";i:1;s:6:"params";s:2769:"{
     "header": [
         {
             "field": "Token",
@@ -52115,8 +53225,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | wait \u5f85\u5904\u7406 | doing \u5904\u7406\u4e2d | toclosed \u5f85\u5173\u95ed)"
+            "example": "assigntome",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassigntome\u3002(assigntome \u6307\u6d3e\u7ed9\u6211 | unclosed \u672a\u5173\u95ed | wait \u5f85\u5904\u7406 | doing \u5904\u7406\u4e2d | toclosed \u5f85\u5173\u95ed | openedbyme \u7531\u6211\u521b\u5efa | reviewedbyme \u6211\u8bc4\u5ba1\u8fc7 | closedbyme \u7531\u6211\u5173\u95ed | assignedbyme \u7531\u6211\u6307\u6d3e)"
         },
         {
             "field": "orderBy",
@@ -52162,7 +53272,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "desc": "\u6761\u4ef6\u7ec4\u4e4b\u95f4\u7684\u8fde\u63a5\u65b9\u5f0f(and | or)"
         }
     ]
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:1462:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:1486:"{
     "status": "success",
     "feedbacks": [
         {
@@ -52185,19 +53295,19 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "result": 3,
             "faq": 0,
             "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:41",
+            "openedDate": "2026-10-14 12:58:02",
             "reviewedBy": "",
             "reviewedDate": "",
             "processedBy": "admin",
-            "processedDate": "2026-10-10 10:28:43",
+            "processedDate": "2026-10-14 12:58:04",
             "closedBy": "",
             "closedDate": "",
             "closedReason": "",
             "editedBy": "admin",
-            "editedDate": "2026-10-10 10:28:41",
-            "assignedTo": "",
+            "editedDate": "2026-10-14 12:58:26",
+            "assignedTo": "admin",
             "prevAssignedTo": "",
-            "assignedDate": "",
+            "assignedDate": "2026-10-14 12:58:26",
             "activatedBy": "",
             "activatedDate": "",
             "feedbackBy": "客户对接人",
@@ -52539,7 +53649,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:254;O:8:"stdClass":24:{s:2:"id";i:255;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的工单";s:4:"path";s:11:"/my/tickets";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的工单";s:7:"version";i:1;s:6:"params";s:2644:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:254;O:8:"stdClass":24:{s:2:"id";i:255;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的工单";s:4:"path";s:11:"/my/tickets";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的工单";s:7:"version";i:1;s:6:"params";s:2867:"{
     "header": [
         {
             "field": "Token",
@@ -52555,8 +53665,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | unclosed \u672a\u5173\u95ed | wait \u5f85\u5904\u7406 | doing \u5904\u7406\u4e2d | done \u5f85\u5173\u95ed)"
+            "example": "assignedtome",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedtome\u3002(assignedtome \u6307\u6d3e\u7ed9\u6211 | unclosed \u672a\u5173\u95ed | wait \u5f85\u5904\u7406 | doing \u5904\u7406\u4e2d | done \u5f85\u5173\u95ed | closed \u5df2\u5173\u95ed | openedbyme \u7531\u6211\u521b\u5efa | finishedbyme \u7531\u6211\u89e3\u51b3 | closedbyme \u7531\u6211\u5173\u95ed | assignedbyme \u7531\u6211\u6307\u6d3e)"
         },
         {
             "field": "orderBy",
@@ -52602,52 +53712,9 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "desc": "\u6761\u4ef6\u7ec4\u4e4b\u95f4\u7684\u8fde\u63a5\u65b9\u5f0f(and | or)"
         }
     ]
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:2768:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:1505:"{
     "status": "success",
     "tickets": [
-        {
-            "id": 1,
-            "product": 1,
-            "module": 1,
-            "title": "从反馈创建的工单",
-            "type": "code",
-            "desc": "反馈转工单",
-            "openedBuild": "",
-            "feedback": 1,
-            "assignedTo": "",
-            "assignedDate": "",
-            "realStarted": "",
-            "startedBy": "",
-            "startedDate": "",
-            "deadline": "",
-            "pri": 3,
-            "estimate": "0.00",
-            "left": "0.00",
-            "status": "wait",
-            "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:42",
-            "activatedCount": 0,
-            "activatedBy": "",
-            "activatedDate": "",
-            "closedBy": "",
-            "closedDate": "",
-            "closedReason": "",
-            "finishedBy": "",
-            "finishedDate": "",
-            "resolvedBy": "",
-            "resolvedDate": "",
-            "resolution": "",
-            "editedBy": "",
-            "editedDate": "",
-            "keywords": "",
-            "repeatTicket": 0,
-            "mailto": "",
-            "deleted": 0,
-            "subStatus": "",
-            "dept": 0,
-            "consumed": 0,
-            "feedbackTip": "#1"
-        },
         {
             "id": 2,
             "product": 1,
@@ -52658,7 +53725,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "openedBuild": "trunk",
             "feedback": 0,
             "assignedTo": "admin",
-            "assignedDate": "2026-10-10 10:28:46",
+            "assignedDate": "2026-10-14 12:58:06",
             "realStarted": "",
             "startedBy": "",
             "startedDate": "",
@@ -52668,10 +53735,10 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "left": "0.00",
             "status": "doing",
             "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:44",
+            "openedDate": "2026-10-14 12:58:05",
             "activatedCount": 1,
             "activatedBy": "admin",
-            "activatedDate": "2026-10-10 10:28:46",
+            "activatedDate": "2026-10-14 12:58:06",
             "closedBy": "",
             "closedDate": "",
             "closedReason": "",
@@ -52681,7 +53748,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "resolvedDate": "",
             "resolution": "",
             "editedBy": "admin",
-            "editedDate": "2026-10-10 10:28:46",
+            "editedDate": "2026-10-14 12:58:06",
             "keywords": "",
             "repeatTicket": 0,
             "mailto": "",
@@ -52693,7 +53760,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         }
     ],
     "pager": {
-        "recTotal": 2,
+        "recTotal": 1,
         "recPerPage": 20,
         "pageID": 1
     }
@@ -53030,7 +54097,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:255;O:8:"stdClass":24:{s:2:"id";i:256;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的用例";s:4:"path";s:13:"/my/testcases";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的用例";s:7:"version";i:1;s:6:"params";s:4519:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:255;O:8:"stdClass":24:{s:2:"id";i:256;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的用例";s:4:"path";s:13:"/my/testcases";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的用例";s:7:"version";i:1;s:6:"params";s:4575:"{
     "header": [
         {
             "field": "Token",
@@ -53046,8 +54113,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | wait \u672a\u6267\u884c | doing \u6267\u884c\u4e2d | pass \u901a\u8fc7 | fail \u5931\u8d25)"
+            "example": "assigntome",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassigntome\u3002(assigntome \u6307\u6d3e\u7ed9\u6211 | openedbyme \u6211\u521b\u5efa\u7684 | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -53146,7 +54213,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:256;O:8:"stdClass":24:{s:2:"id";i:257;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:12:"我的会议";s:4:"path";s:12:"/my/meetings";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:12:"我的会议";s:7:"version";i:1;s:6:"params";s:1400:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:256;O:8:"stdClass":24:{s:2:"id";i:257;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:12:"我的会议";s:4:"path";s:12:"/my/meetings";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:12:"我的会议";s:7:"version";i:1;s:6:"params";s:1410:"{
     "header": [
         {
             "field": "Token",
@@ -53162,7 +54229,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
+            "example": "futureMeeting",
             "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662ffutureMeeting\u3002(futureMeeting \u6211\u53c2\u52a0\u7684\uff08\u672a\u5f00\u59cb\uff09 | all \u5168\u90e8 | booked \u6211\u9884\u7ea6\u7684 | participate \u6211\u53c2\u52a0\u7684\uff08\u5168\u90e8\uff09)"
         },
         {
@@ -53412,7 +54479,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:257;O:8:"stdClass":24:{s:2:"id";i:258;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的问题";s:4:"path";s:10:"/my/issues";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的问题";s:7:"version";i:1;s:6:"params";s:1463:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:257;O:8:"stdClass":24:{s:2:"id";i:258;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的问题";s:4:"path";s:10:"/my/issues";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的问题";s:7:"version";i:1;s:6:"params";s:1607:"{
     "header": [
         {
             "field": "Token",
@@ -53428,8 +54495,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | open \u5f00\u653e | assignto \u6307\u6d3e\u7ed9\u6211 | assignby \u7531\u6211\u6307\u6d3e | closed \u5df2\u5173\u95ed | resolved \u5df2\u89e3\u51b3 | canceled \u5df2\u53d6\u6d88)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u53d6\u503c\u53d6\u81ea zt_issue \u7684\u5b57\u6bb5\u540d\u3002(assignedTo \u6307\u6d3e\u7ed9\u6211 | createdBy \u7531\u6211\u521b\u5efa | resolvedBy \u7531\u6211\u89e3\u51b3 | closedBy \u7531\u6211\u5173\u95ed | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -53453,16 +54520,312 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "desc": "\u9875\u7801\uff0c\u4ece\u7b2c1\u9875\u5f00\u59cb"
         }
     ]
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:27:"{
-    "status": "success"
-}";s:8:"response";s:155:"[
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:1123:"{
+    "status": "success",
+    "issues": [
+        {
+            "id": 1,
+            "resolvedBy": "",
+            "project": 2,
+            "execution": 3,
+            "title": "关键路径延期",
+            "pri": 3,
+            "severity": 3,
+            "type": "design",
+            "activity": "",
+            "deadline": "2026-03-01",
+            "resolution": "",
+            "objectID": "2",
+            "resolvedDate": "",
+            "status": "unconfirmed",
+            "owner": "admin",
+            "lib": 0,
+            "from": 0,
+            "version": 1,
+            "createdBy": "admin",
+            "createdDate": "2026-10-14 12:57:57",
+            "editedBy": "",
+            "editedDate": "",
+            "activateBy": "",
+            "activateDate": "",
+            "closedBy": "",
+            "closedDate": "",
+            "assignedTo": "admin",
+            "assignedBy": "admin",
+            "assignedDate": "2026-10-14 12:57:57",
+            "approvedDate": "",
+            "deleted": 0
+        }
+    ],
+    "pager": {
+        "recTotal": 1,
+        "recPerPage": 20,
+        "pageID": 1
+    }
+}";s:8:"response";s:7481:"[
     {
         "field": "status",
         "paramsType": "string",
         "required": true,
         "desc": "状态(success 成功 | fail 失败)"
+    },
+    {
+        "field": "issues",
+        "paramsType": "array",
+        "required": false,
+        "desc": "问题列表",
+        "level": 1,
+        "children": [
+            {
+                "field": "id",
+                "paramsType": "int",
+                "required": false,
+                "desc": "编号",
+                "level": 2
+            },
+            {
+                "field": "resolvedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "解决者",
+                "level": 2
+            },
+            {
+                "field": "project",
+                "paramsType": "int",
+                "required": false,
+                "desc": "所属项目",
+                "level": 2
+            },
+            {
+                "field": "execution",
+                "paramsType": "int",
+                "required": false,
+                "desc": "所属执行",
+                "level": 2
+            },
+            {
+                "field": "title",
+                "paramsType": "string",
+                "required": false,
+                "desc": "问题名称",
+                "level": 2
+            },
+            {
+                "field": "pri",
+                "paramsType": "int",
+                "required": false,
+                "desc": "优先级",
+                "level": 2
+            },
+            {
+                "field": "severity",
+                "paramsType": "int",
+                "required": false,
+                "desc": "严重程度",
+                "level": 2
+            },
+            {
+                "field": "type",
+                "paramsType": "string",
+                "required": false,
+                "desc": "类型",
+                "level": 2
+            },
+            {
+                "field": "activity",
+                "paramsType": "string",
+                "required": false,
+                "desc": "活动列表",
+                "level": 2
+            },
+            {
+                "field": "deadline",
+                "paramsType": "string",
+                "required": false,
+                "desc": "计划解决日期",
+                "level": 2
+            },
+            {
+                "field": "resolution",
+                "paramsType": "string",
+                "required": false,
+                "desc": "解决方式",
+                "level": 2
+            },
+            {
+                "field": "objectID",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "resolvedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "实际解决日期",
+                "level": 2
+            },
+            {
+                "field": "status",
+                "paramsType": "string",
+                "required": false,
+                "desc": "结果",
+                "level": 2
+            },
+            {
+                "field": "owner",
+                "paramsType": "string",
+                "required": false,
+                "desc": "提出人",
+                "level": 2
+            },
+            {
+                "field": "lib",
+                "paramsType": "int",
+                "required": false,
+                "desc": "问题库",
+                "level": 2
+            },
+            {
+                "field": "from",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "version",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "createdBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁创建",
+                "level": 2
+            },
+            {
+                "field": "createdDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "创建日期",
+                "level": 2
+            },
+            {
+                "field": "editedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁编辑",
+                "level": 2
+            },
+            {
+                "field": "editedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "编辑日期",
+                "level": 2
+            },
+            {
+                "field": "activateBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁激活",
+                "level": 2
+            },
+            {
+                "field": "activateDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "激活日期",
+                "level": 2
+            },
+            {
+                "field": "closedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁关闭",
+                "level": 2
+            },
+            {
+                "field": "closedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "关闭日期",
+                "level": 2
+            },
+            {
+                "field": "assignedTo",
+                "paramsType": "string",
+                "required": false,
+                "desc": "指派给",
+                "level": 2
+            },
+            {
+                "field": "assignedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁指派",
+                "level": 2
+            },
+            {
+                "field": "assignedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "指派时间",
+                "level": 2
+            },
+            {
+                "field": "approvedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "deleted",
+                "paramsType": "int",
+                "required": false,
+                "desc": "已删除",
+                "level": 2
+            }
+        ]
+    },
+    {
+        "field": "pager",
+        "paramsType": "object",
+        "required": false,
+        "desc": "分页信息",
+        "level": 1,
+        "children": [
+            {
+                "field": "recTotal",
+                "paramsType": "int",
+                "required": false,
+                "desc": "总记录数",
+                "level": 2
+            },
+            {
+                "field": "recPerPage",
+                "paramsType": "int",
+                "required": false,
+                "desc": "每页数量",
+                "level": 2
+            },
+            {
+                "field": "pageID",
+                "paramsType": "int",
+                "required": false,
+                "desc": "当前页码",
+                "level": 2
+            }
+        ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:258;O:8:"stdClass":24:{s:2:"id";i:259;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的风险";s:4:"path";s:9:"/my/risks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的风险";s:7:"version";i:1;s:6:"params";s:2707:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:258;O:8:"stdClass":24:{s:2:"id";i:259;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:21:"指派给我的风险";s:4:"path";s:9:"/my/risks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:21:"指派给我的风险";s:7:"version";i:1;s:6:"params";s:2812:"{
     "header": [
         {
             "field": "Token",
@@ -53478,8 +54841,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "browseType",
             "paramsType": "string",
             "required": false,
-            "example": "all",
-            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fall\u3002(all \u5168\u90e8 | active \u5f00\u653e | assignTo \u6307\u6d3e\u7ed9\u6211 | assignBy \u7531\u6211\u6307\u6d3e | closed \u5df2\u5173\u95ed | hangup \u5df2\u6302\u8d77 | canceled \u5df2\u53d6\u6d88)"
+            "example": "assignedTo",
+            "desc": "\u72b6\u6001\uff0c\u9ed8\u8ba4\u662fassignedTo\uff0c\u53d6\u503c\u53d6\u81ea zt_risk \u7684\u5b57\u6bb5\u540d\u3002(assignedTo \u6307\u6d3e\u7ed9\u6211 | createdBy \u7531\u6211\u521b\u5efa | closedBy \u7531\u6211\u5173\u95ed | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -53525,14 +54888,382 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "desc": "\u6761\u4ef6\u7ec4\u4e4b\u95f4\u7684\u8fde\u63a5\u65b9\u5f0f(and | or)"
         }
     ]
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:27:"{
-    "status": "success"
-}";s:8:"response";s:155:"[
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:1413:"{
+    "status": "success",
+    "risks": [
+        {
+            "id": 1,
+            "project": 2,
+            "execution": 3,
+            "PI": 0,
+            "team": 0,
+            "name": "关键路径延期",
+            "source": "business",
+            "category": "technical",
+            "strategy": "avoidance",
+            "status": "active",
+            "impact": "3",
+            "probability": "3",
+            "rate": "9",
+            "pri": 2,
+            "identifiedDate": "2026-01-01",
+            "plannedClosedDate": "2026-03-01",
+            "actualClosedDate": "",
+            "lib": 0,
+            "from": 0,
+            "version": 1,
+            "createdBy": "admin",
+            "createdDate": "2026-10-14 12:57:58",
+            "editedBy": "admin",
+            "editedDate": "2026-10-14 12:57:58",
+            "resolvedBy": "",
+            "activateBy": "",
+            "activateDate": "",
+            "assignedTo": "admin",
+            "assignedDate": "",
+            "closedBy": "",
+            "closedDate": "",
+            "cancelBy": "",
+            "cancelDate": "",
+            "cancelReason": "",
+            "hangupBy": "",
+            "hangupDate": "",
+            "trackedBy": "",
+            "trackedDate": "",
+            "approvedDate": "",
+            "deleted": 0
+        }
+    ],
+    "pager": {
+        "recTotal": 1,
+        "recPerPage": 20,
+        "pageID": 1
+    }
+}";s:8:"response";s:9348:"[
     {
         "field": "status",
         "paramsType": "string",
         "required": true,
         "desc": "状态(success 成功 | fail 失败)"
+    },
+    {
+        "field": "risks",
+        "paramsType": "array",
+        "required": false,
+        "desc": "风险列表",
+        "level": 1,
+        "children": [
+            {
+                "field": "id",
+                "paramsType": "int",
+                "required": false,
+                "desc": "ID",
+                "level": 2
+            },
+            {
+                "field": "project",
+                "paramsType": "int",
+                "required": false,
+                "desc": "所属项目",
+                "level": 2
+            },
+            {
+                "field": "execution",
+                "paramsType": "int",
+                "required": false,
+                "desc": "所属执行",
+                "level": 2
+            },
+            {
+                "field": "PI",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "team",
+                "paramsType": "int",
+                "required": false,
+                "desc": "团队",
+                "level": 2
+            },
+            {
+                "field": "name",
+                "paramsType": "string",
+                "required": false,
+                "desc": "风险名称",
+                "level": 2
+            },
+            {
+                "field": "source",
+                "paramsType": "string",
+                "required": false,
+                "desc": "来源",
+                "level": 2
+            },
+            {
+                "field": "category",
+                "paramsType": "string",
+                "required": false,
+                "desc": "类型",
+                "level": 2
+            },
+            {
+                "field": "strategy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "策略",
+                "level": 2
+            },
+            {
+                "field": "status",
+                "paramsType": "string",
+                "required": false,
+                "desc": "状态",
+                "level": 2
+            },
+            {
+                "field": "impact",
+                "paramsType": "string",
+                "required": false,
+                "desc": "影响程度",
+                "level": 2
+            },
+            {
+                "field": "probability",
+                "paramsType": "string",
+                "required": false,
+                "desc": "发生概率",
+                "level": 2
+            },
+            {
+                "field": "rate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "风险系数",
+                "level": 2
+            },
+            {
+                "field": "pri",
+                "paramsType": "int",
+                "required": false,
+                "desc": "优先级",
+                "level": 2
+            },
+            {
+                "field": "identifiedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "识别日期",
+                "level": 2
+            },
+            {
+                "field": "plannedClosedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "计划关闭日期",
+                "level": 2
+            },
+            {
+                "field": "actualClosedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "实际关闭日期",
+                "level": 2
+            },
+            {
+                "field": "lib",
+                "paramsType": "int",
+                "required": false,
+                "desc": "风险库",
+                "level": 2
+            },
+            {
+                "field": "from",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "version",
+                "paramsType": "int",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "createdBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁创建",
+                "level": 2
+            },
+            {
+                "field": "createdDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "创建日期",
+                "level": 2
+            },
+            {
+                "field": "editedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁编辑",
+                "level": 2
+            },
+            {
+                "field": "editedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "编辑日期",
+                "level": 2
+            },
+            {
+                "field": "resolvedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "解决者",
+                "level": 2
+            },
+            {
+                "field": "activateBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁激活",
+                "level": 2
+            },
+            {
+                "field": "activateDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "激活日期",
+                "level": 2
+            },
+            {
+                "field": "assignedTo",
+                "paramsType": "string",
+                "required": false,
+                "desc": "指派给",
+                "level": 2
+            },
+            {
+                "field": "assignedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "指派日期",
+                "level": 2
+            },
+            {
+                "field": "closedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁关闭",
+                "level": 2
+            },
+            {
+                "field": "closedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "关闭日期",
+                "level": 2
+            },
+            {
+                "field": "cancelBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁取消",
+                "level": 2
+            },
+            {
+                "field": "cancelDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "取消日期",
+                "level": 2
+            },
+            {
+                "field": "cancelReason",
+                "paramsType": "string",
+                "required": false,
+                "desc": "取消原因",
+                "level": 2
+            },
+            {
+                "field": "hangupBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁挂起",
+                "level": 2
+            },
+            {
+                "field": "hangupDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "挂起日期",
+                "level": 2
+            },
+            {
+                "field": "trackedBy",
+                "paramsType": "string",
+                "required": false,
+                "desc": "由谁跟踪",
+                "level": 2
+            },
+            {
+                "field": "trackedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "跟踪日期",
+                "level": 2
+            },
+            {
+                "field": "approvedDate",
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": "deleted",
+                "paramsType": "int",
+                "required": false,
+                "desc": "已删除",
+                "level": 2
+            }
+        ]
+    },
+    {
+        "field": "pager",
+        "paramsType": "object",
+        "required": false,
+        "desc": "分页信息",
+        "level": 1,
+        "children": [
+            {
+                "field": "recTotal",
+                "paramsType": "int",
+                "required": false,
+                "desc": "总记录数",
+                "level": 2
+            },
+            {
+                "field": "recPerPage",
+                "paramsType": "int",
+                "required": false,
+                "desc": "每页数量",
+                "level": 2
+            },
+            {
+                "field": "pageID",
+                "paramsType": "int",
+                "required": false,
+                "desc": "当前页码",
+                "level": 2
+            }
+        ]
     }
 ]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:259;O:8:"stdClass":24:{s:2:"id";i:260;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:25:"我的地盘-贡献任务";s:4:"path";s:18:"/my/activity/tasks";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:25:"我的地盘-贡献任务";s:7:"version";i:1;s:6:"params";s:5278:"{
     "header": [
@@ -53597,7 +55328,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "desc": "\u6761\u4ef6\u7ec4\u4e4b\u95f4\u7684\u8fde\u63a5\u65b9\u5f0f(and | or)"
         }
     ]
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:7803:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:7725:"{
     "status": "success",
     "tasks": [
         {
@@ -53626,7 +55357,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "estimate": "0.00h",
             "consumed": "0.00h",
             "left": "0.00h",
-            "deadline": "2026-01-10",
+            "deadline": "2026-11-13",
             "status": "wait",
             "subStatus": "",
             "color": "",
@@ -53636,10 +55367,10 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "deliverable": "",
             "version": 1,
             "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:43",
+            "openedDate": "2026-10-14 12:58:03",
             "assignedTo": "admin",
-            "assignedDate": "2026-10-10 10:28:43",
-            "estStarted": "2026-01-01",
+            "assignedDate": "2026-10-14 12:58:03",
+            "estStarted": "2026-11-13",
             "realStarted": null,
             "finishedBy": "",
             "finishedDate": null,
@@ -53673,7 +55404,6 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "storyStatus": "",
             "latestStoryVersion": "",
             "priOrder": 3,
-            "delay": 194,
             "needConfirm": false,
             "assignedToRealName": "admin",
             "progress": 0,
@@ -53709,7 +55439,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "estimate": "1.00h",
             "consumed": "0.00h",
             "left": "1.00h",
-            "deadline": "2026-01-10",
+            "deadline": "2026-11-13",
             "status": "wait",
             "subStatus": "",
             "color": "",
@@ -53719,10 +55449,10 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "deliverable": "",
             "version": 1,
             "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:34",
+            "openedDate": "2026-10-14 12:57:55",
             "assignedTo": "admin",
-            "assignedDate": "2026-10-10 10:28:34",
-            "estStarted": "2026-01-01",
+            "assignedDate": "2026-10-14 12:57:55",
+            "estStarted": "2026-11-13",
             "realStarted": null,
             "finishedBy": "",
             "finishedDate": null,
@@ -53756,7 +55486,6 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "storyStatus": "",
             "latestStoryVersion": "",
             "priOrder": 1,
-            "delay": 194,
             "needConfirm": false,
             "assignedToRealName": "admin",
             "progress": 0,
@@ -53792,7 +55521,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "estimate": "1.00h",
             "consumed": "2.00h",
             "left": "1.00h",
-            "deadline": "2025-12-30",
+            "deadline": "2026-11-13",
             "status": "doing",
             "subStatus": "",
             "color": "",
@@ -53802,9 +55531,9 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "deliverable": "",
             "version": 2,
             "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:34",
+            "openedDate": "2026-10-14 12:57:54",
             "assignedTo": "admin",
-            "assignedDate": "2026-10-10 10:28:36",
+            "assignedDate": "2026-10-14 12:57:56",
             "estStarted": "2025-12-25",
             "realStarted": "2025-12-25 09:00:00",
             "finishedBy": "",
@@ -53818,8 +55547,8 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "realDuration": 4,
             "closedReason": "",
             "lastEditedBy": "admin",
-            "lastEditedDate": "2026-10-10 10:28:36",
-            "activatedDate": "2026-10-10 10:28:36",
+            "lastEditedDate": "2026-10-14 12:57:56",
+            "activatedDate": "2026-10-14 12:57:57",
             "order": 0,
             "repo": 0,
             "mr": 0,
@@ -53839,7 +55568,6 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "storyStatus": "changing",
             "latestStoryVersion": 2,
             "priOrder": 1,
-            "delay": 203,
             "needConfirm": false,
             "cases": [],
             "assignedToRealName": "admin",
@@ -53856,7 +55584,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "recPerPage": 20,
         "pageID": 1
     }
-}";s:8:"response";s:17612:"[
+}";s:8:"response";s:17422:"[
     {
         "field": "status",
         "paramsType": "string",
@@ -54369,13 +56097,6 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             },
             {
                 "field": "priOrder",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "delay",
                 "paramsType": "int",
                 "required": false,
                 "desc": "",
@@ -60801,7 +62522,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "desc": "\u6761\u4ef6\u7ec4\u4e4b\u95f4\u7684\u8fde\u63a5\u65b9\u5f0f(and | or)"
         }
     ]
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:1462:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:1486:"{
     "status": "success",
     "feedbacks": [
         {
@@ -60824,19 +62545,19 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "result": 3,
             "faq": 0,
             "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:41",
+            "openedDate": "2026-10-14 12:58:02",
             "reviewedBy": "",
             "reviewedDate": "",
             "processedBy": "admin",
-            "processedDate": "2026-10-10 10:28:43",
+            "processedDate": "2026-10-14 12:58:04",
             "closedBy": "",
             "closedDate": "",
             "closedReason": "",
             "editedBy": "admin",
-            "editedDate": "2026-10-10 10:28:41",
-            "assignedTo": "",
+            "editedDate": "2026-10-14 12:58:26",
+            "assignedTo": "admin",
             "prevAssignedTo": "",
-            "assignedDate": "",
+            "assignedDate": "2026-10-14 12:58:26",
             "activatedBy": "",
             "activatedDate": "",
             "feedbackBy": "客户对接人",
@@ -61380,7 +63101,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:272;O:8:"stdClass":24:{s:2:"id";i:273;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:34:"我的地盘-待处理评审问题";s:4:"path";s:16:"/my/reviewissues";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:34:"我的地盘-待处理评审问题";s:7:"version";i:1;s:6:"params";s:2294:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:272;O:8:"stdClass":24:{s:2:"id";i:273;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:34:"我的地盘-待处理评审问题";s:4:"path";s:16:"/my/reviewissues";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:34:"我的地盘-待处理评审问题";s:7:"version";i:1;s:6:"params";s:2545:"{
     "header": [
         {
             "field": "Token",
@@ -61397,7 +63118,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "paramsType": "string",
             "required": false,
             "example": "assignedTo",
-            "desc": "\u5f85\u5904\u7406\u7b5b\u9009\u7c7b\u578b\uff0c\u4e0d\u4f20\u65f6\u4f7f\u7528\u7985\u9053\u9875\u9762\u9ed8\u8ba4\u503c\u3002"
+            "desc": "\u5f85\u5904\u7406\u7b5b\u9009\u7c7b\u578b\uff0c\u9ed8\u8ba4 assignedTo\uff0c\u53d6\u503c\u53d6\u81ea zt_reviewissue \u7684\u5b57\u6bb5\u540d\u3002(assignedTo \u6307\u6d3e\u7ed9\u6211 | createdBy \u7531\u6211\u521b\u5efa | resolutionBy \u7531\u6211\u89e3\u51b3 | assignedBy \u7531\u6211\u6307\u6d3e | bysearch \u6309\u67e5\u8be2\u641c\u7d22\uff0c\u9700\u540c\u65f6\u4f20 param)"
         },
         {
             "field": "orderBy",
@@ -61660,7 +63381,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:273;O:8:"stdClass":24:{s:2:"id";i:274;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:28:"我的地盘-待处理审批";s:4:"path";s:10:"/my/audits";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:28:"我的地盘-待处理审批";s:7:"version";i:1;s:6:"params";s:1274:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:273;O:8:"stdClass":24:{s:2:"id";i:274;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:28:"我的地盘-待处理审批";s:4:"path";s:10:"/my/audits";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:28:"我的地盘-待处理审批";s:7:"version";i:1;s:6:"params";s:1459:"{
     "header": [
         {
             "field": "Token",
@@ -61677,7 +63398,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "paramsType": "string",
             "required": false,
             "example": "all",
-            "desc": "\u5f85\u5904\u7406\u7b5b\u9009\u7c7b\u578b(all \u5168\u90e8 | check \u5f85\u6211\u68c0\u67e5 | checked \u6211\u5df2\u68c0\u67e5)\uff0c\u4e0d\u4f20\u65f6\u4f7f\u7528\u7985\u9053\u9875\u9762\u9ed8\u8ba4\u503c\u3002"
+            "desc": "\u5f85\u5904\u7406\u5ba1\u6279\u7c7b\u578b\uff0c\u9ed8\u8ba4 all\u3002(all \u5168\u90e8 | demand \u9700\u6c42\u6c60\u9700\u6c42 | story \u7814\u53d1\u9700\u6c42 | requirement \u7528\u6237\u9700\u6c42 | epic \u4e1a\u52a1\u9700\u6c42 | testcase \u7528\u4f8b | project \u9879\u76ee | ppm \u8bc4\u5ba1\u8bf7\u6c42 | feedback \u53cd\u9988 | \u81ea\u5b9a\u4e49\u5de5\u4f5c\u6d41\u6a21\u5757\u4ee3\u53f7)"
         },
         {
             "field": "orderBy",
@@ -66426,7 +68147,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:290;O:8:"stdClass":24:{s:2:"id";i:291;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:34:"我的地盘-待处理审计计划";s:4:"path";s:14:"/my/auditplans";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:34:"我的地盘-待处理审计计划";s:7:"version";i:1;s:6:"params";s:1289:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:290;O:8:"stdClass":24:{s:2:"id";i:291;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:34:"我的地盘-待处理审计计划";s:4:"path";s:14:"/my/auditplans";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:34:"我的地盘-待处理审计计划";s:7:"version";i:1;s:6:"params";s:1446:"{
     "header": [
         {
             "field": "Token",
@@ -66443,7 +68164,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "paramsType": "string",
             "required": false,
             "example": "myChecking",
-            "desc": "\u5f85\u5904\u7406\u7b5b\u9009\u7c7b\u578b(myChecking \u5f85\u6211\u68c0\u67e5 | myChecked \u6211\u5df2\u68c0\u67e5 | all \u5168\u90e8)\uff0c\u4e0d\u4f20\u65f6\u4f7f\u7528\u7985\u9053\u9875\u9762\u9ed8\u8ba4\u503c\u3002"
+            "desc": "\u5f85\u5904\u7406\u7b5b\u9009\u7c7b\u578b\uff0c\u9ed8\u8ba4 myChecking\uff0c\u53d6\u503c\u4e0d\u533a\u5206\u5927\u5c0f\u5199\u3002(mychecking \u5f85\u6211\u68c0\u67e5 | checked \u5df2\u68c0\u67e5 | wait \u672a\u68c0\u67e5 | checking \u68c0\u67e5\u4e2d | assignto \u6307\u6d3e\u7ed9\u6211 | delay \u5df2\u5ef6\u671f | iscycle \u5468\u671f\u6027\u8ba1\u5212 | all \u5168\u90e8)"
         },
         {
             "field": "orderBy",
@@ -66778,7 +68499,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:291;O:8:"stdClass":24:{s:2:"id";i:292;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:34:"我的地盘-待处理不符合项";s:4:"path";s:7:"/my/ncs";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:34:"我的地盘-待处理不符合项";s:7:"version";i:1;s:6:"params";s:1288:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:291;O:8:"stdClass":24:{s:2:"id";i:292;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:34:"我的地盘-待处理不符合项";s:4:"path";s:7:"/my/ncs";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:34:"我的地盘-待处理不符合项";s:7:"version";i:1;s:6:"params";s:1325:"{
     "header": [
         {
             "field": "Token",
@@ -66795,7 +68516,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "paramsType": "string",
             "required": false,
             "example": "createdByMe",
-            "desc": "\u5f85\u5904\u7406\u7b5b\u9009\u7c7b\u578b(assignedToMe \u6307\u6d3e\u7ed9\u6211 | createdByMe \u6211\u521b\u5efa | all \u5168\u90e8)\uff0c\u4e0d\u4f20\u65f6\u4f7f\u7528\u7985\u9053\u9875\u9762\u9ed8\u8ba4\u503c\u3002"
+            "desc": "\u5f85\u5904\u7406\u7b5b\u9009\u7c7b\u578b\uff0c\u9ed8\u8ba4 assignedToMe\u3002(assignedToMe \u6307\u6d3e\u7ed9\u6211 | createdByMe \u7531\u6211\u521b\u5efa | resolvedByMe \u7531\u6211\u89e3\u51b3 | closedByMe \u7531\u6211\u5173\u95ed | all \u5168\u90e8)"
         },
         {
             "field": "orderBy",
@@ -69505,9 +71226,9 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "version": "",
         "frozen": "",
         "createdBy": "admin",
-        "createdDate": "2026-10-10",
+        "createdDate": "2026-10-14",
         "submittedBy": "admin",
-        "submittedDate": "2026-10-10 10:29:21",
+        "submittedDate": "2026-10-14 12:58:43",
         "activity": 494,
         "module": 332,
         "category": "SRS",
@@ -69523,7 +71244,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "reviewID": 0,
         "actions": [
             {
-                "id": 280,
+                "id": 281,
                 "objectType": "projectdeliverable",
                 "objectID": 13,
                 "product": ",0,",
@@ -69531,7 +71252,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
                 "execution": 0,
                 "actor": "admin",
                 "action": "submited",
-                "date": "2026-10-10 10:29:21",
+                "date": "2026-10-14 12:58:43",
                 "comment": "",
                 "files": [],
                 "extra": "",
@@ -69577,12 +71298,12 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "collects": 0,
             "weeklyDate": "",
             "addedBy": "admin",
-            "addedDate": "2026-10-10 10:29:03",
+            "addedDate": "2026-10-14 12:58:24",
             "assignedTo": "",
             "assignedDate": "",
             "approvedDate": "",
             "editedBy": "admin",
-            "editedDate": "2026-10-10 10:29:03",
+            "editedDate": "2026-10-14 12:58:24",
             "editingDate": "",
             "editedList": "",
             "mailto": "",
@@ -69598,7 +71319,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "vision": "rnd",
             "deleted": 0,
             "collector": "",
-            "releasedDate": "2026-10-10 10:29:03",
+            "releasedDate": "2026-10-14 12:58:24",
             "releasedBy": "admin",
             "files": [],
             "digest": "",
@@ -71366,185 +73087,20 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "desc": "\u9875\u7801\u3002"
         }
     ]
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:5949:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:535:"{
     "status": "success",
     "objects": [
         {
             "id": 3,
-            "project": 2,
-            "parent": 0,
-            "isParent": 0,
-            "isTpl": 0,
-            "path": ",3,",
-            "execution": 3,
-            "module": 0,
-            "design": 0,
-            "story": 0,
-            "storyVersion": 1,
-            "designVersion": 1,
-            "fromBug": 0,
-            "feedback": 1,
-            "fromIssue": 0,
-            "fromDeliverable": 0,
-            "name": "从反馈创建的任务",
-            "type": "devel",
-            "mode": "",
-            "pri": 3,
-            "estimate": "0.00",
-            "consumed": "0.00",
-            "left": "0.00",
-            "deadline": "2026-01-10",
-            "status": "wait",
-            "subStatus": "",
-            "color": "",
-            "keywords": "",
-            "version": 1,
-            "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:43",
-            "assignedTo": "admin",
-            "assignedDate": "2026-10-10 10:28:43",
-            "estStarted": "2026-01-01",
-            "realStarted": "",
-            "finishedBy": "",
-            "finishedDate": "",
-            "canceledBy": "",
-            "canceledDate": "",
-            "closedBy": "",
-            "closedDate": "",
-            "planDuration": 0,
-            "realDuration": 0,
-            "closedReason": "",
-            "lastEditedBy": "",
-            "lastEditedDate": "",
-            "activatedDate": "",
-            "order": 0,
-            "repo": 0,
-            "mr": 0,
-            "entry": "",
-            "lines": "",
-            "v1": "",
-            "v2": "",
-            "vision": "rnd",
-            "deleted": 0,
-            "relation": 1
+            "title": "从反馈创建的任务"
         },
         {
             "id": 2,
-            "project": 2,
-            "parent": 0,
-            "isParent": 0,
-            "isTpl": 0,
-            "path": ",2,",
-            "execution": 3,
-            "module": 0,
-            "design": 0,
-            "story": 0,
-            "storyVersion": 1,
-            "designVersion": 1,
-            "fromBug": 0,
-            "feedback": 0,
-            "fromIssue": 0,
-            "fromDeliverable": 0,
-            "name": "无执行项目任务",
-            "type": "devel",
-            "mode": "",
-            "pri": 1,
-            "estimate": "1.00",
-            "consumed": "0.00",
-            "left": "1.00",
-            "deadline": "2026-01-10",
-            "status": "wait",
-            "subStatus": "",
-            "color": "",
-            "keywords": "",
-            "version": 1,
-            "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:34",
-            "assignedTo": "admin",
-            "assignedDate": "2026-10-10 10:28:34",
-            "estStarted": "2026-01-01",
-            "realStarted": "",
-            "finishedBy": "",
-            "finishedDate": "",
-            "canceledBy": "",
-            "canceledDate": "",
-            "closedBy": "",
-            "closedDate": "",
-            "planDuration": 0,
-            "realDuration": 0,
-            "closedReason": "",
-            "lastEditedBy": "",
-            "lastEditedDate": "",
-            "activatedDate": "",
-            "order": 0,
-            "repo": 0,
-            "mr": 0,
-            "entry": "",
-            "lines": "",
-            "v1": "",
-            "v2": "",
-            "vision": "rnd",
-            "deleted": 0,
-            "relation": 1
+            "title": "无执行项目任务"
         },
         {
             "id": 1,
-            "project": 2,
-            "parent": 0,
-            "isParent": 0,
-            "isTpl": 0,
-            "path": ",1,",
-            "execution": 3,
-            "module": 1,
-            "design": 0,
-            "story": 1,
-            "storyVersion": 2,
-            "designVersion": 1,
-            "fromBug": 0,
-            "feedback": 0,
-            "fromIssue": 0,
-            "fromDeliverable": 0,
-            "name": "开发电容光敏监测模块",
-            "type": "devel",
-            "mode": "",
-            "pri": 1,
-            "estimate": "1.00",
-            "consumed": "2.00",
-            "left": "1.00",
-            "deadline": "2025-12-30",
-            "status": "doing",
-            "subStatus": "",
-            "color": "",
-            "keywords": "",
-            "version": 2,
-            "openedBy": "admin",
-            "openedDate": "2026-10-10 10:28:34",
-            "assignedTo": "admin",
-            "assignedDate": "2026-10-10 10:28:36",
-            "estStarted": "2025-12-25",
-            "realStarted": "2025-12-25 09:00:00",
-            "finishedBy": "",
-            "finishedDate": "",
-            "canceledBy": "",
-            "canceledDate": "",
-            "closedBy": "",
-            "closedDate": "",
-            "planDuration": 4,
-            "realDuration": 4,
-            "closedReason": "",
-            "lastEditedBy": "admin",
-            "lastEditedDate": "2026-10-10 10:28:36",
-            "activatedDate": "2026-10-10 10:28:36",
-            "order": 0,
-            "repo": 0,
-            "mr": 0,
-            "entry": "",
-            "lines": "",
-            "v1": "",
-            "v2": "",
-            "vision": "rnd",
-            "deleted": 0,
-            "relation": 1
+            "title": "开发电容光敏监测模块"
         }
     ],
     "relationPairs": {
@@ -71553,30 +73109,12 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "3": "重复",
         "4": "引用"
     },
-    "objectTypes": {
-        "demand": "需求池需求",
-        "epic": "业务需求",
-        "requirement": "用户需求",
-        "story": "研发需求",
-        "task": "任务",
-        "bug": "Bug",
-        "testcase": "用例",
-        "doc": "文档",
-        "design": "设计",
-        "repocommit": "提交",
-        "feedback": "反馈",
-        "ticket": "工单",
-        "issue": "问题",
-        "risk": "风险",
-        "projectdeliverable": "交付物",
-        "workflow_contract": "合同"
-    },
     "pager": {
         "recTotal": 3,
         "recPerPage": 20,
         "pageID": 1
     }
-}";s:8:"response";s:16480:"[
+}";s:8:"response";s:2056:"[
     {
         "field": "status",
         "paramsType": "string",
@@ -71587,406 +73125,21 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "field": "objects",
         "paramsType": "array",
         "required": false,
-        "desc": "自定义",
+        "desc": "可关联的候选对象列表",
         "level": 1,
         "children": [
             {
                 "field": "id",
                 "paramsType": "int",
                 "required": false,
-                "desc": "编号",
+                "desc": "候选对象编号",
                 "level": 2
             },
             {
-                "field": "project",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "parent",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "isParent",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "isTpl",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "path",
+                "field": "title",
                 "paramsType": "string",
                 "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "execution",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "module",
-                "paramsType": "int",
-                "required": false,
-                "desc": "模块",
-                "level": 2
-            },
-            {
-                "field": "design",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "story",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "storyVersion",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "designVersion",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "fromBug",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "feedback",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "fromIssue",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "fromDeliverable",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "name",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "type",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "mode",
-                "paramsType": "string",
-                "required": false,
-                "desc": "模式",
-                "level": 2
-            },
-            {
-                "field": "pri",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "estimate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "consumed",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "left",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "deadline",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "status",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "subStatus",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "color",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "keywords",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "version",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "openedBy",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "openedDate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "assignedTo",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "assignedDate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "estStarted",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "realStarted",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "finishedBy",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "finishedDate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "canceledBy",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "canceledDate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "closedBy",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "closedDate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "planDuration",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "realDuration",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "closedReason",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "lastEditedBy",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "lastEditedDate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "activatedDate",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "order",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "repo",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "mr",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "entry",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "lines",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "v1",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "v2",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "vision",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "deleted",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "relation",
-                "paramsType": "int",
-                "required": false,
-                "desc": "",
+                "desc": "候选对象标题",
                 "level": 2
             }
         ]
@@ -71995,156 +73148,14 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "field": "relationPairs",
         "paramsType": "object",
         "required": false,
-        "desc": "自定义",
+        "desc": "可选关系 key 与显示名称",
         "level": 1,
         "children": [
             {
-                "field": 1,
+                "field": "key",
                 "paramsType": "string",
                 "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": 2,
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": 3,
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": 4,
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            }
-        ]
-    },
-    {
-        "field": "objectTypes",
-        "paramsType": "object",
-        "required": false,
-        "desc": "自定义",
-        "level": 1,
-        "children": [
-            {
-                "field": "demand",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "epic",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "requirement",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "story",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "task",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "bug",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "testcase",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "doc",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "design",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "repocommit",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "feedback",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "ticket",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "issue",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "risk",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "projectdeliverable",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
-                "level": 2
-            },
-            {
-                "field": "workflow_contract",
-                "paramsType": "string",
-                "required": false,
-                "desc": "",
+                "desc": "关系 key → 显示名称（内置关系：1 相关、2 依赖、3 重复、4 引用）",
                 "level": 2
             }
         ]
@@ -72211,7 +73222,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "required": true,
         "desc": "状态(success 成功 | fail 失败)"
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:318;O:8:"stdClass":24:{s:2:"id";i:319;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:403;s:5:"title";s:18:"查询关联对象";s:4:"path";s:32:"/relations/:objectType/:objectID";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:710:"查询指定对象已关联的对象。objectType 取值范围：demand(需求池需求，IPD) | epic(业务需求，旗舰版) | requirement(用户需求) | story(研发需求) | task(任务) | bug(Bug) | testcase(用例) | doc(文档) | design(设计) | repocommit(代码提交，devops) | feedback(反馈) | ticket(工单) | issue(问题，旗舰版) | risk(风险，旗舰版) | projectdeliverable(交付物，旗舰版) | workflow_xxx(工作流对象，如 workflow_contract)。可关联范围随版本和功能开关变化，实际以候选接口返回的 objectTypes 为准。relations 保留分组结构，items 是扁平列表；解除关联时使用关联对象的类型、ID 和关系显示名称。";s:7:"version";i:1;s:6:"params";s:240:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:318;O:8:"stdClass":24:{s:2:"id";i:319;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:403;s:5:"title";s:18:"查询关联对象";s:4:"path";s:32:"/relations/:objectType/:objectID";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:766:"查询指定对象已关联的对象。objectType 取值范围：demand(需求池需求，IPD) | epic(业务需求，旗舰版) | requirement(用户需求) | story(研发需求) | task(任务) | bug(Bug) | testcase(用例) | doc(文档) | design(设计) | repocommit(代码提交，devops) | feedback(反馈) | ticket(工单) | issue(问题，旗舰版) | risk(风险，旗舰版) | projectdeliverable(交付物，旗舰版) | workflow_xxx(工作流对象，如 workflow_contract)。可关联范围随版本和功能开关变化，实际以候选接口返回的 objectTypes 为准。relations 为关联对象列表，每项包含关系名称、关系类型、关联对象类型/编号/标题；解除关联时使用关联对象的类型、ID 和关系显示名称。";s:7:"version";i:1;s:6:"params";s:240:"{
     "header": [
         {
             "field": "Token",
@@ -72223,33 +73234,25 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
     "params": [],
     "paramsType": "json",
     "query": []
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:794:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:460:"{
     "status": "success",
-    "relations": {
-        "custom_相关": {
-            "task": {
-                "1": {
-                    "title": "开发电容光敏监测模块",
-                    "url": "\/index.php?m=task&f=view&t=json&objectID=1",
-                    "status": "doing",
-                    "assignedTo": "admin",
-                    "tab": "admin"
-                }
-            }
+    "relations": [
+        {
+            "relation": "相关",
+            "relationType": "custom",
+            "objectType": "task",
+            "id": 1,
+            "title": "开发电容光敏监测模块"
         },
-        "default_产生了": {
-            "task": {
-                "1": {
-                    "title": "开发电容光敏监测模块",
-                    "url": "\/index.php?m=task&f=view&t=json&objectID=1",
-                    "status": "doing",
-                    "assignedTo": "admin",
-                    "tab": "admin"
-                }
-            }
+        {
+            "relation": "产生了",
+            "relationType": "default",
+            "objectType": "task",
+            "id": 1,
+            "title": "开发电容光敏监测模块"
         }
-    }
-}";s:8:"response";s:741:"[
+    ]
+}";s:8:"response";s:1450:"[
     {
         "field": "status",
         "paramsType": "string",
@@ -72258,23 +73261,44 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
     },
     {
         "field": "relations",
-        "paramsType": "object",
+        "paramsType": "array",
         "required": false,
-        "desc": "自定义",
+        "desc": "关联对象列表",
         "level": 1,
         "children": [
             {
-                "field": "custom_相关",
-                "paramsType": "array",
+                "field": "relation",
+                "paramsType": "string",
                 "required": false,
-                "desc": "",
+                "desc": "关系名称",
                 "level": 2
             },
             {
-                "field": "default_产生了",
-                "paramsType": "array",
+                "field": "relationType",
+                "paramsType": "string",
                 "required": false,
-                "desc": "",
+                "desc": "关系类型(default 系统内置关系 | custom 自定义关系)",
+                "level": 2
+            },
+            {
+                "field": "objectType",
+                "paramsType": "string",
+                "required": false,
+                "desc": "关联对象类型",
+                "level": 2
+            },
+            {
+                "field": "id",
+                "paramsType": "int",
+                "required": false,
+                "desc": "关联对象编号",
+                "level": 2
+            },
+            {
+                "field": "title",
+                "paramsType": "string",
+                "required": false,
+                "desc": "关联对象标题",
                 "level": 2
             }
         ]
@@ -73210,12 +74234,12 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "desc": "\u9017\u53f7\u5206\u9694\u7684\u90e8\u95e8 ID\uff1b\u4ec5\u62e5\u6709\u67e5\u770b\u6240\u6709\u4eba\u6743\u9650\u65f6\u751f\u6548\u3002"
         }
     ]
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:28363:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:30189:"{
     "status": "success",
     "resourceCalendars": {
         "type": "company-wait",
-        "beginDate": "2026-10-12",
-        "endDate": "2026-10-16",
+        "beginDate": "2026-10-14",
+        "endDate": "2026-10-20",
         "holidays": [
             "2026-10-17",
             "2026-10-18",
@@ -73234,7 +74258,9 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "2026-12-05",
             "2026-12-06",
             "2026-12-12",
-            "2026-12-13"
+            "2026-12-13",
+            "2026-12-19",
+            "2026-12-20"
         ],
         "workDays": [
             1,
@@ -73244,7 +74270,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             5
         ],
         "userLink": {
-            "data-url": "\/index.php?m=resourcecalendars&f=project&t=json&projectID=2&type=person&mode=wait&account={account}&begin=1791734400&end=1792080000#app=project",
+            "data-url": "\/index.php?m=resourcecalendars&f=project&t=json&projectID=2&type=person&mode=wait&account={account}&begin=1791907200&end=1792425600#app=project",
             "data-user": "{account}",
             "data-type": "userLink"
         },
@@ -73315,7 +74341,7 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
                 "taskCount": 0,
                 "taskEstimatedHours": 0,
                 "taskConsumeHours": 0,
-                "itemCount": 0,
+                "itemCount": 1,
                 "itemEstimatedHours": 0,
                 "itemConsumeHours": 0,
                 "otherCount": 3,
@@ -73324,14 +74350,6 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
                 "totalConsumeHours": 0,
                 "totalPredictHours": 0,
                 "dailyLoads": [
-                    {
-                        "date": "2026-10-12",
-                        "hours": 0
-                    },
-                    {
-                        "date": "2026-10-13",
-                        "hours": 0
-                    },
                     {
                         "date": "2026-10-14",
                         "hours": 0
@@ -73343,9 +74361,52 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
                     {
                         "date": "2026-10-16",
                         "hours": 0
+                    },
+                    {
+                        "date": "2026-10-19",
+                        "hours": 0
+                    },
+                    {
+                        "date": "2026-10-20",
+                        "hours": 0
                     }
                 ],
                 "details": [
+                    {
+                        "type": "currentItem",
+                        "key": "currentItemadmin",
+                        "name": "本项目其他",
+                        "dailyLoads": [],
+                        "workHours": "0",
+                        "predictHours": "0",
+                        "hint": "指本项目的非任务类条目，包含研发需求、Bug、用例、测试单、风险、问题、评审、QA",
+                        "items": [
+                            {
+                                "id": 1,
+                                "name": "检查记录不完整-已编辑",
+                                "status": "active",
+                                "assignedTo": "admin",
+                                "deadline": "2026-10-21",
+                                "severity": 2,
+                                "project": 2,
+                                "predictHours": 0,
+                                "dateList": [],
+                                "workHours": "0",
+                                "type": "nc",
+                                "expired": false,
+                                "statusName": "激活",
+                                "dailyLoads": [],
+                                "url": {
+                                    "href": "\/index.php?m=nc&f=view&t=json&itemID=1",
+                                    "target": "_blank"
+                                },
+                                "priName": "中等",
+                                "badgeHtml": "<span class='label-severity-2'>中等<\/span>"
+                            }
+                        ],
+                        "deadline": "2026-10-21",
+                        "expired": false
+                    },
                     {
                         "type": "otherItem",
                         "key": "otherItemadmin",
@@ -78949,4 +80010,455 @@ a:368:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}}
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:368;O:8:"stdClass":24:{s:2:"id";i:369;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:372;s:5:"title";s:24:"获取产品代码仓库";s:4:"path";s:26:"/products/:productID/repos";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:385:"productID 为正整数产品 ID。需要 repo.browse 权限及产品访问权限；返回该产品关联的未删除、非导入中的仓库，并按现有仓库权限过滤。只返回 id、name、url，克隆地址保持 GitFox 返回的原值；无可见仓库时 repos 为 []。产品不存在、已删除或不可访问时返回业务失败；不支持的 HTTP 方法返回 405。";s:7:"version";i:1;s:6:"params";s:251:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "禅道 API 访问凭证。"
+        }
+    ],
+    "params": [],
+    "paramsType": "json",
+    "query": []
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:277:"{
+    "status": "success",
+    "repos": [
+        {
+            "id": 7,
+            "name": "demo",
+            "url": {
+                "http": "https://git.example.com/team/demo.git",
+                "ssh": "git@git.example.com:team/demo.git"
+            }
+        }
+    ]
+}";s:8:"response";s:1401:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态：success 成功；fail 失败。"
+    },
+    {
+        "field": "repos",
+        "paramsType": "array",
+        "required": true,
+        "desc": "可见仓库数组。",
+        "children": [
+            {
+                "field": "id",
+                "paramsType": "int",
+                "required": true,
+                "desc": "仓库 ID。"
+            },
+            {
+                "field": "name",
+                "paramsType": "string",
+                "required": true,
+                "desc": "仓库名称。"
+            },
+            {
+                "field": "url",
+                "paramsType": "object",
+                "required": true,
+                "desc": "可用的克隆地址；没有地址时为 {}。",
+                "children": [
+                    {
+                        "field": "http",
+                        "paramsType": "string",
+                        "required": false,
+                        "desc": "HTTP/HTTPS 克隆地址。"
+                    },
+                    {
+                        "field": "ssh",
+                        "paramsType": "string",
+                        "required": false,
+                        "desc": "SSH 克隆地址。"
+                    }
+                ]
+            }
+        ]
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}i:369;O:8:"stdClass":24:{s:2:"id";i:370;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:395;s:5:"title";s:23:"创建我的 SSH 公钥";s:4:"path";s:11:"/my/sshkeys";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:396:"将 SSH 公钥添加到当前 Token 所属用户的 GitFox 账号。沿用 my.createSSH 表单、名称及公钥前缀校验和 GitFox 错误处理，不接受其他用户归属。后端失败不会返回成功。成功为 HTTP 200；调用方必须同时判断业务 status，必填表单校验失败可能沿用 result=fail 和 message 字段错误对象。不支持的 HTTP 方法返回 405。";s:7:"version";i:1;s:6:"params";s:782:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "禅道 API 访问凭证。"
+        }
+    ],
+    "params": [
+        {
+            "field": "name",
+            "paramsType": "string",
+            "required": true,
+            "desc": "密钥名称，去除首尾空白；只能包含字母、数字、-、_、. 和 $。"
+        },
+        {
+            "field": "publicKey",
+            "paramsType": "string",
+            "required": true,
+            "desc": "完整 SSH 公钥，去除首尾空白；支持现有 SSH 密钥类型，例如 ssh-ed25519 或 ssh-rsa。示例中的占位内容必须替换为真实公钥。"
+        }
+    ],
+    "paramsType": "json",
+    "query": []
+}";s:13:"paramsExample";s:82:"{
+    "name": "coder",
+    "publicKey": "ssh-ed25519 <完整公钥内容> coder"
+}";s:15:"responseExample";s:58:"{
+    "status": "success",
+    "message": "保存成功"
+}";s:8:"response";s:334:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态：success 成功；fail 失败。"
+    },
+    {
+        "field": "message",
+        "paramsType": "string",
+        "required": true,
+        "desc": "成功提示；失败时可能返回字段错误对象。"
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}i:370;O:8:"stdClass":24:{s:2:"id";i:371;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:409;s:5:"title";s:27:"获取代码库空间列表";s:4:"path";s:7:"/spaces";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:331:"需要 space.browse 全局权限。复用空间列表的可见性规则，只返回当前 Token 用户可见的未删除空间。按 ID 倒序，支持 pageID、recPerPage；分页总数按可见空间计算。无结果或页码超过总页数时 spaces 为 []。分页参数越界返回 400，不支持的 HTTP 方法返回 405。";s:7:"version";i:1;s:6:"params";s:621:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "禅道 API 访问凭证。"
+        }
+    ],
+    "params": [],
+    "paramsType": "json",
+    "query": [
+        {
+            "field": "pageID",
+            "paramsType": "int",
+            "required": false,
+            "desc": "页码，默认 1，必须大于 0。"
+        },
+        {
+            "field": "recPerPage",
+            "paramsType": "int",
+            "required": false,
+            "desc": "每页记录数，默认 20，范围 1～100。"
+        }
+    ]
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:350:"{
+    "status": "success",
+    "spaces": [
+        {
+            "id": 10,
+            "name": "研发空间",
+            "code": "dev",
+            "desc": "",
+            "acl": "open",
+            "auth": "extend"
+        }
+    ],
+    "pager": {
+        "recTotal": 1,
+        "recPerPage": 20,
+        "pageID": 1,
+        "pageTotal": 1
+    }
+}";s:8:"response";s:2427:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态：success 成功；fail 失败。"
+    },
+    {
+        "field": "spaces",
+        "paramsType": "array",
+        "required": true,
+        "desc": "可见空间数组。",
+        "children": [
+            {
+                "field": "id",
+                "paramsType": "int",
+                "required": true,
+                "desc": "代码库空间 ID。"
+            },
+            {
+                "field": "name",
+                "paramsType": "string",
+                "required": true,
+                "desc": "空间名称。"
+            },
+            {
+                "field": "code",
+                "paramsType": "string",
+                "required": true,
+                "desc": "空间代号。"
+            },
+            {
+                "field": "desc",
+                "paramsType": "string",
+                "required": true,
+                "desc": "空间描述。"
+            },
+            {
+                "field": "acl",
+                "paramsType": "string",
+                "required": true,
+                "desc": "访问控制：open 公开；private 私有。"
+            },
+            {
+                "field": "auth",
+                "paramsType": "string",
+                "required": true,
+                "desc": "权限模式：extend 继承全局；reset 独立授权。"
+            }
+        ]
+    },
+    {
+        "field": "pager",
+        "paramsType": "object",
+        "required": true,
+        "desc": "按当前用户可见记录计算的分页信息。",
+        "children": [
+            {
+                "field": "recTotal",
+                "paramsType": "int",
+                "required": true,
+                "desc": "可见记录总数。"
+            },
+            {
+                "field": "recPerPage",
+                "paramsType": "int",
+                "required": true,
+                "desc": "每页记录数。"
+            },
+            {
+                "field": "pageID",
+                "paramsType": "int",
+                "required": true,
+                "desc": "当前页，从 1 开始。"
+            },
+            {
+                "field": "pageTotal",
+                "paramsType": "int",
+                "required": true,
+                "desc": "总页数；没有记录时为 0。"
+            }
+        ]
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}i:371;O:8:"stdClass":24:{s:2:"id";i:372;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:410;s:5:"title";s:33:"获取空间下的代码库列表";s:4:"path";s:22:"/spaces/:spaceID/repos";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:483:"spaceID 为正整数空间 ID，以路径为准。需要 repo.maintain 全局权限及空间访问权限；独立授权空间还需该空间的 repo.maintain 权限。仅返回该空间未删除、非导入中且当前用户可访问的代码库，先过滤权限再分页，克隆地址沿用现有 SCM 实现。空间不存在或已删除返回 404，无空间权限返回 403，分页或排序参数无效返回 400，不支持的 HTTP 方法返回 405。空结果 repos 为 []。";s:7:"version";i:1;s:6:"params";s:839:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "禅道 API 访问凭证。"
+        }
+    ],
+    "params": [],
+    "paramsType": "json",
+    "query": [
+        {
+            "field": "pageID",
+            "paramsType": "int",
+            "required": false,
+            "desc": "页码，默认 1，必须大于 0。"
+        },
+        {
+            "field": "recPerPage",
+            "paramsType": "int",
+            "required": false,
+            "desc": "每页记录数，默认 20，范围 1～100。"
+        },
+        {
+            "field": "orderBy",
+            "paramsType": "string",
+            "required": false,
+            "desc": "排序，默认 id_desc；支持 id_asc、id_desc、name_asc、name_desc。"
+        }
+    ]
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:390:"{
+    "status": "success",
+    "repos": [
+        {
+            "id": 7,
+            "name": "demo",
+            "url": {
+                "http": "https://git.example.com/dev/demo.git",
+                "ssh": "git@git.example.com:dev/demo.git"
+            }
+        }
+    ],
+    "pager": {
+        "recTotal": 1,
+        "recPerPage": 20,
+        "pageID": 1,
+        "pageTotal": 1
+    }
+}";s:8:"response";s:2376:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态：success 成功；fail 失败。"
+    },
+    {
+        "field": "repos",
+        "paramsType": "array",
+        "required": true,
+        "desc": "当前空间的可见代码库数组。",
+        "children": [
+            {
+                "field": "id",
+                "paramsType": "int",
+                "required": true,
+                "desc": "仓库 ID。"
+            },
+            {
+                "field": "name",
+                "paramsType": "string",
+                "required": true,
+                "desc": "仓库名称。"
+            },
+            {
+                "field": "url",
+                "paramsType": "object",
+                "required": true,
+                "desc": "可用的克隆地址；没有地址时为 {}。",
+                "children": [
+                    {
+                        "field": "http",
+                        "paramsType": "string",
+                        "required": false,
+                        "desc": "HTTP/HTTPS 克隆地址。"
+                    },
+                    {
+                        "field": "ssh",
+                        "paramsType": "string",
+                        "required": false,
+                        "desc": "SSH 克隆地址。"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "field": "pager",
+        "paramsType": "object",
+        "required": true,
+        "desc": "按当前用户可见记录计算的分页信息。",
+        "children": [
+            {
+                "field": "recTotal",
+                "paramsType": "int",
+                "required": true,
+                "desc": "可见记录总数。"
+            },
+            {
+                "field": "recPerPage",
+                "paramsType": "int",
+                "required": true,
+                "desc": "每页记录数。"
+            },
+            {
+                "field": "pageID",
+                "paramsType": "int",
+                "required": true,
+                "desc": "当前页，从 1 开始。"
+            },
+            {
+                "field": "pageTotal",
+                "paramsType": "int",
+                "required": true,
+                "desc": "总页数；没有记录时为 0。"
+            }
+        ]
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}i:372;O:8:"stdClass":24:{s:2:"id";i:373;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:410;s:5:"title";s:15:"创建代码库";s:4:"path";s:6:"/repos";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:881:"在现有空间创建 GitFox 代码库，需要已配置可用的 GitFox、repo.createRepo 全局权限、空间访问权限及关联产品权限。私有空间或独立授权空间还需空间的 repo.create 权限；独立授权空间另需 repo.createRepo 权限，系统管理员不受空间权限限制。复用现有创建流程，默认 main 分支并初始化 README，保留私有库成员设置、Push Webhook 和 created 操作记录。成功为 HTTP 200，返回代码库 ID；必须同时判断 status。字段形状错误返回 400，空间不存在返回 404，空间权限不足返回 403，不支持的方法返回 405；其他业务错误沿用现有 message（可能为字段错误对象），表单失败可能返回 result=fail。远端创建与后续成员、Webhook、历史记录不在同一事务内，后续步骤失败时远端代码库可能已创建。";s:7:"version";i:1;s:6:"params";s:1561:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "禅道 API 访问凭证。"
+        }
+    ],
+    "params": [
+        {
+            "field": "space",
+            "paramsType": "int",
+            "required": true,
+            "desc": "所属代码库空间 ID，正整数。"
+        },
+        {
+            "field": "product",
+            "paramsType": "array",
+            "required": true,
+            "desc": "关联产品 ID 数组，至少一个正整数；产品必须存在且当前用户可访问。"
+        },
+        {
+            "field": "name",
+            "paramsType": "string",
+            "required": true,
+            "desc": "代码库名称，去除首尾空白；以字母或下划线开头，后续可包含字母、数字、下划线、连字符、点。"
+        },
+        {
+            "field": "desc",
+            "paramsType": "string",
+            "required": false,
+            "desc": "描述，默认空字符串。"
+        },
+        {
+            "field": "acl",
+            "paramsType": "string",
+            "required": false,
+            "desc": "open 公开或 private 私有，默认 open。"
+        },
+        {
+            "field": "members",
+            "paramsType": "array",
+            "required": false,
+            "desc": "成员账号数组，账号需为有效且未关闭的用户；acl 为 private 时必填且非空，创建者会自动加入。"
+        }
+    ],
+    "paramsType": "json",
+    "query": []
+}";s:13:"paramsExample";s:136:"{
+    "space": 10,
+    "product": [
+        12
+    ],
+    "name": "demo",
+    "acl": "private",
+    "members": [
+        "alice"
+    ]
+}";s:15:"responseExample";s:72:"{
+    "status": "success",
+    "id": 21,
+    "message": "保存成功"
+}";s:8:"response";s:462:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态：success 成功；fail 失败。"
+    },
+    {
+        "field": "id",
+        "paramsType": "int",
+        "required": true,
+        "desc": "新建代码库 ID。"
+    },
+    {
+        "field": "message",
+        "paramsType": "string",
+        "required": true,
+        "desc": "成功提示；失败时可能为字段错误对象。"
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}}

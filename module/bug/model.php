@@ -617,14 +617,6 @@ class bugModel extends model
         $this->dao->update(TABLE_BUG)->data($bug, 'comment')->check('openedBuild', 'notempty')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
         if(dao::isError()) return false;
 
-        /* Update build. */
-        $solveBuild = $this->dao->select('id, bugs')->from(TABLE_BUILD)->where("FIND_IN_SET('{$bug->id}', bugs)")->limit(1)->fetch();
-        if($solveBuild)
-        {
-            $buildBugs = trim(str_replace(",{$bug->id},", ',', ",$solveBuild->bugs,"), ',');
-            $this->dao->update(TABLE_BUILD)->set('bugs')->eq($buildBugs)->where('id')->eq($solveBuild->id)->exec();
-        }
-
         /* Update kanban. */
         if($oldBug->execution)
         {

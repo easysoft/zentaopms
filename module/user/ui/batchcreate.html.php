@@ -12,6 +12,7 @@ namespace zin;
 
 jsVar('roleGroup', $roleGroup);
 jsVar('passwordStrengthList', $lang->user->passwordStrengthList);
+jsVar('accountRequiredTip', sprintf($lang->error->notempty, $lang->user->account));
 h::jsCall('$.getLib', 'md5.js', array('root' => $this->app->getWebRoot() . 'js/'));
 
 $companies     += array('ditto' => $lang->user->ditto);
@@ -28,6 +29,7 @@ formBatchPanel
     on::keyup('[name="verifyPassword"]', 'changePassword'),
     on::click('button[type=submit]', 'encryptPassword'),
     set::onRenderRow(jsRaw('renderRowData')),
+    set::ajax(array('beforeSubmit' => jsRaw('checkBatchUserAccount'))),
     to::titleSuffix
     (
         div

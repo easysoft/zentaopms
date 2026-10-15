@@ -455,12 +455,13 @@ class story extends control
             $storyData = $this->storyZen->buildStoryForChange($storyID);
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $location = $this->storyZen->getAfterChangeLocation($storyID, $storyType);
+            $location    = $this->storyZen->getAfterChangeLocation($storyID, $storyType);
             $dataChanged = $this->storyZen->checkDataChanged($storyID, $storyData);
-            if(!$dataChanged) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $location));
-
-            $changes = $this->story->change($storyID, $storyData);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($dataChanged)
+            {
+                $this->story->change($storyID, $storyData);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
 
             $message = $this->executeHooks($storyID);
             if(empty($message)) $message = $this->lang->saveSuccess;

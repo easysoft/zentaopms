@@ -405,7 +405,7 @@ class messageModel extends model
                 $this->loadModel('testcase');
                 $reviewResultList = $this->lang->testcase->reviewResultList;
             }
-            $reviewResult = zget($reviewResultList, strtolower($reviewResult), '');
+            $reviewResult = zget($reviewResultList, strtolower($reviewResult));
             $noticeText   = str_replace(array('{submitter}', '{reviewResult}'), array($submitter, $reviewResult), $noticeText);
         }
 
@@ -413,7 +413,7 @@ class messageModel extends model
         {
             $result  = (string)$action->extra;
             if(strpos($result, '|') !== false) $result = explode('|', $result)[0];
-            $reviewResult  = $objectType == 'projectchange' ? $action->extra : zget($this->lang->message->reviewResultList, strtolower($result), '');
+            $reviewResult  = $objectType == 'projectchange' ? $action->extra : zget($this->lang->message->reviewResultList, strtolower($result));
             $reviewComment = trim(strip_tags((string)$action->comment));
             if(!empty($reviewComment)) $reviewComment = sprintf($this->lang->message->reviewCommentTemplate, $reviewComment);
 

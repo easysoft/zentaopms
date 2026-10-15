@@ -43,15 +43,16 @@ $lang->testreport->all         = '所有报告';
 $lang->testreport->deleted     = '已删除';
 $lang->testreport->selectTask  = '按测试单创建报告';
 
-$lang->testreport->legendBasic       = '基本信息';
-$lang->testreport->legendStoryAndBug = '测试范围';
-$lang->testreport->legendBuild       = '测试轮次';
-$lang->testreport->legendCase        = '关联的用例';
-$lang->testreport->legendLegacyBugs  = '遗留的Bug';
-$lang->testreport->legendReport      = '报表';
-$lang->testreport->legendComment     = '总结';
-$lang->testreport->legendMore        = '更多功能';
-$lang->testreport->date              = '日期';
+$lang->testreport->legendBasic         = '基本信息';
+$lang->testreport->legendStoryAndBug   = '测试范围';
+$lang->testreport->legendBuild         = '测试轮次';
+$lang->testreport->legendCase          = '关联的用例';
+$lang->testreport->legendLegacyBugs    = '遗留的Bug';
+$lang->testreport->legendActivatedBugs = '重新激活的Bug';
+$lang->testreport->legendReport        = '报表';
+$lang->testreport->legendComment       = '总结';
+$lang->testreport->legendMore          = '更多功能';
+$lang->testreport->date                = '日期';
 
 $lang->testreport->bugSeverityGroups   = 'Bug严重级别分布';
 $lang->testreport->bugTypeGroups       = 'Bug类型分布';

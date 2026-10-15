@@ -342,7 +342,7 @@ class cron extends control
         }
 
         /* 一次性查询已有 wait/doing 任务的 cron，避免循环内逐条查询。 */
-        $pendingCrons = $this->dao->select('`cron`')->from(TABLE_QUEUE)->where('status')->in(array('wait', 'doing'))->fetchPairs('cron', 'cron');
+        $pendingCrons = $this->dao->select('`cron`,`startedDate`')->from(TABLE_QUEUE)->where('status')->in(array('wait', 'doing'))->orderBy('`startedDate`')->fetchPairs('cron', 'startedDate');
 
         $parsedCrons = $this->cron->parseCron($crons);
         $now         = date(DT_DATETIME1);
@@ -360,7 +360,11 @@ class cron extends control
             if($now < $cron['time']->format(DT_DATETIME1)) continue;
 
             /* 该 cron 已有排队/执行中的任务则跳过，避免重复入队。 */
-            if(isset($pendingCrons[$id])) continue;
+            if(isset($pendingCrons[$id]))
+            {
+                if(helper::isZeroDate($pendingCrons[$id]) || (time() - strtotime($pendingCrons[$id])) < 3600) continue;
+                $this->dao->update(TABLE_QUEUE)->set('status')->eq('done')->set('pending')->eq(null)->where('cron')->eq($id)->andWhere('status')->eq('doing')->exec();
+            }
 
             /* Push task into queue. */
             $task = new stdclass();
@@ -460,6 +464,7 @@ class cron extends control
             $this->common->setCompany();
             $this->common->loadConfigFromDB();
 
+            $taskEditions = $this->config->cron->taskEditions;
             try
             {
                 if($task->type == 'zentao')
@@ -468,12 +473,15 @@ class cron extends control
                     if(isset($params['moduleName']) and isset($params['methodName']))
                     {
                         $this->viewType = 'html';
-                        $moduleName     = $params['moduleName'];
-                        $methodName     = $params['methodName'];
+                        $moduleName     = strtolower($params['moduleName']);
+                        $methodName     = strtolower($params['methodName']);
                         $this->app->loadLang($moduleName);
                         $this->app->loadConfig($moduleName);
                         unset($params['moduleName'], $params['methodName']);
-                        $output = $this->fetch($moduleName, $methodName, $params);
+
+                        $canExec = true;
+                        if(isset($taskEditions["{$moduleName}-{$methodName}"]) && !in_array($this->config->edition, $taskEditions["{$moduleName}-{$methodName}"])) $canExec = false;
+                        if($canExec) $output = $this->fetch($moduleName, $methodName, $params);
                     }
                 }
                 elseif($task->type == 'system')

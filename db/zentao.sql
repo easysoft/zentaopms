@@ -2619,25 +2619,37 @@ REPLACE INTO `zt_stage` (`name`, `percent`, `type`, `createdBy`, `createdDate`, 
 ('总结评审', '5',  'review',  'admin', '2020-02-08 21:08:45', 'admin', '2020-02-12 13:50:27', '0');
 
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES
-('',   'system', 'common',      '',       'CRProduct',            '1'),
-('',   'system', 'common',      '',       'CRExecution',          '1'),
-('',   'system', 'common',      '',       'disabledFeatures',     'otherOA'),
-('',   'system', 'common',      'global', 'mode',                 'ALM'),
-('',   'system', 'common',      'global', 'syncProduct',          '{"feedback":{},"ticket":{}}'),
-('',   'system', 'common',      'global', 'installedDate',        CURDATE()),
-('',   'system', 'custom',      '',       'enableER',             '1'),
-('',   'system', 'custom',      '',       'hourPoint',            '0'),
-('',   'system', 'custom',      '',       'URSR',                 '2'),
-('',   'system', 'project',     '',       'defaultCurrency',      'CNY'),
-('',   'system', 'project',     '',       'unitList',             'CNY,USD'),
-('',   'system', 'project',     '',       'ganttVersionSettings', 'deliverable'),
-('',   'system', 'execution',   '',       'ganttVersionSettings', 'gantt'),
-('',   'system', 'epic',        '',       'gradeRule',            'stepwise'),
-('',   'system', 'requirement', '',       'gradeRule',            'stepwise'),
-('',   'system', 'story',       '',       'gradeRule',            'stepwise'),
-('',   'system', 'story',       '',       'reviewRules',          'allpass'),
-('or', 'system', 'demand',      '',       'reviewRules',          'allpass'),
-('or', 'system', 'demand',      '',       'needReview',           '1');
+('',   'system', 'common',       '',         'CRProduct',            '1'),
+('',   'system', 'common',       '',         'CRExecution',          '1'),
+('',   'system', 'common',       '',         'disabledFeatures',     'otherOA'),
+('',   'system', 'common',       'global',   'mode',                 'ALM'),
+('',   'system', 'common',       'global',   'syncProduct',          '{"feedback":{},"ticket":{}}'),
+('',   'system', 'common',       'global',   'installedDate',        CURDATE()),
+('',   'system', 'custom',       '',         'enableER',             '1'),
+('',   'system', 'custom',       '',         'hourPoint',            '0'),
+('',   'system', 'custom',       '',         'URSR',                 '2'),
+('',   'system', 'project',      '',         'defaultCurrency',      'CNY'),
+('',   'system', 'project',      '',         'unitList',             'CNY,USD'),
+('',   'system', 'project',      '',         'ganttVersionSettings', 'deliverable'),
+('',   'system', 'execution',    '',         'ganttVersionSettings', 'gantt'),
+('',   'system', 'epic',         '',         'gradeRule',            'stepwise'),
+('',   'system', 'requirement',  '',         'gradeRule',            'stepwise'),
+('',   'system', 'story',        '',         'gradeRule',            'stepwise'),
+('',   'system', 'story',        '',         'reviewRules',          'allpass'),
+('or', 'system', 'demand',       '',         'reviewRules',          'allpass'),
+('or', 'system', 'demand',       '',         'needReview',           '1'),
+('',   'system', 'bug',          'browse',   'showModule',           'end'),
+('',   'system', 'execution',    'task',     'showModule',           'end'),
+('',   'system', 'execution',    'story',    'showModule',           'end'),
+('',   'system', 'execution',    'bug',      'showModule',           'end'),
+('',   'system', 'execution',    'testcase', 'showModule',           'end'),
+('',   'system', 'feedback',     'admin',    'showModule',           'end'),
+('',   'system', 'product',      'browse',   'showModule',           'end'),
+('',   'system', 'project',      'bug',      'showModule',           'end'),
+('',   'system', 'project',      'testcase', 'showModule',           'end'),
+('',   'system', 'projectstory', 'story',    'showModule',           'end'),
+('',   'system', 'testcase',     'browse',   'showModule',           'end'),
+('',   'system', 'ticket',       'browse',   'showModule',           'end');
 
  -- DROP TABLE IF EXISTS `zt_relationoftasks`;
 CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
@@ -15331,7 +15343,7 @@ CREATE TABLE `zt_ai_useragent` (
   `type` varchar(30) NOT NULL DEFAULT '' COMMENT '类型：'' | executor',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`);
+CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`(225));
 
 INSERT INTO `zt_ai_miniprogramfield` (`appID`, `name`, `type`, `placeholder`, `options`, `required`) VALUES
 (1, '教育背景', 'textarea', '学历/专业', NULL, '0'),
@@ -16279,7 +16291,7 @@ CREATE TABLE IF NOT EXISTS `ops_public_keys` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='SSH公钥表';
 CREATE UNIQUE INDEX `uk_fingerprint` ON `ops_public_keys` (`fingerprint`);
-CREATE UNIQUE INDEX `uk_identifier_account` ON `ops_public_keys` (`identifier`, `account`);
+CREATE UNIQUE INDEX `uk_identifier_account` ON `ops_public_keys` (`identifier`(225), `account`);
 
 -- DROP TABLE IF EXISTS `ops_repo`;
 CREATE TABLE IF NOT EXISTS `ops_repo` (
@@ -16849,7 +16861,7 @@ CREATE TABLE IF NOT EXISTS `ops_tokens` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='令牌表';
-CREATE UNIQUE INDEX `uk_identifier_account` ON `ops_tokens` (`identifier`, `account`);
+CREATE UNIQUE INDEX `uk_identifier_account` ON `ops_tokens` (`identifier`(225), `account`);
 
 -- DROP TABLE IF EXISTS `ops_triggers`;
 CREATE TABLE IF NOT EXISTS `ops_triggers` (

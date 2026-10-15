@@ -43,15 +43,16 @@ $lang->testreport->all         = 'Tous Rapports';
 $lang->testreport->deleted     = 'Supprimé';
 $lang->testreport->selectTask  = 'Créer rapport par Campagne';
 
-$lang->testreport->legendBasic       = 'Infos de Base';
-$lang->testreport->legendStoryAndBug = 'Périmètre';
-$lang->testreport->legendBuild       = 'Test Rounds';
-$lang->testreport->legendCase        = 'CasTests associés';
-$lang->testreport->legendLegacyBugs  = 'Bugs Restants';
-$lang->testreport->legendReport      = 'Rapport';
-$lang->testreport->legendComment     = 'Résumé';
-$lang->testreport->legendMore        = 'Plus';
-$lang->testreport->date              = 'Date';
+$lang->testreport->legendBasic         = 'Infos de Base';
+$lang->testreport->legendStoryAndBug   = 'Périmètre';
+$lang->testreport->legendBuild         = 'Test Rounds';
+$lang->testreport->legendCase          = 'CasTests associés';
+$lang->testreport->legendLegacyBugs    = 'Bugs Restants';
+$lang->testreport->legendActivatedBugs = 'Reactivated Bugs';
+$lang->testreport->legendReport        = 'Rapport';
+$lang->testreport->legendComment       = 'Résumé';
+$lang->testreport->legendMore          = 'Plus';
+$lang->testreport->date                = 'Date';
 
 $lang->testreport->bugSeverityGroups   = 'Distribution Sévérité de Bug';
 $lang->testreport->bugTypeGroups       = 'Distribution Type de Bug';

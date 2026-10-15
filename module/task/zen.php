@@ -955,7 +955,7 @@ class taskZen extends task
     protected function buildTaskForFinish(object $oldTask): object
     {
         $now = helper::now();
-        $task = form::data($this->config->task->form->finish, $oldTask->id)
+        $task = form::data($this->config->task->form->finish, $oldTask->id)->add('id', $oldTask->id)
             ->setIF(!$this->post->realStarted && helper::isZeroDate($oldTask->realStarted), 'realStarted', $now)
             ->setDefault('assignedTo', $oldTask->openedBy)
             ->get();

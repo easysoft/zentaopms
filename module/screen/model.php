@@ -1673,6 +1673,10 @@ class screenModel extends model
      */
     public function getOptionsFromSql($sql, $keyField, $valueField)
     {
+        /* 与 biModel::getOptionsFromSql() 保持一致，执行前拒绝写文件/读文件等危险语法。*/
+        /* Keep the same protection as biModel::getOptionsFromSql(). */
+        $this->loadModel('bi')->checkExecutableSql((string)$sql);
+
         $options = array();
         $cols    = $this->dbh->query($sql)->fetchAll();
         $sample  = current($cols);

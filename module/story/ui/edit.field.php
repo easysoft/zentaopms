@@ -15,7 +15,7 @@ $showPlan       = $config->vision == 'or' ? false : true;
 
 $minStage    = data('story.stage') ?: '';
 $stageList   = implode(',', array_keys($lang->story->stageList));
-$minStagePos = strpos($stageList, $minStage);
+$minStagePos = $minStage ? strpos($stageList, $minStage) : false;
 if(!empty(data('story.stages')) && isset($fieldData['stage']['options']))
 {
     foreach(data('story.stages') as $branch => $stage)

@@ -11035,7 +11035,7 @@ class upgradeModel extends model
                 ->andWhere('type')->eq('zentao')
                 ->andWhere('status')->eq('normal')
                 ->exec();
-            $this->loadModel('setting')->deleteItem('owner=system&module=common&key=lastReleaseID');
+            $this->loadModel('setting')->deleteItems('owner=system&module=common&key=lastReleaseID');
 
             return !dao::isError();
         }
@@ -11243,18 +11243,31 @@ class upgradeModel extends model
     }
 
     /**
-     * 获取数据库视图列表（视图名与重建 SQL）。
-     * Get the database view list with names and regenerate SQLs.
+     * 获取数据库视图列表（视图名与重建语句）。
+     * Get the database view list with names and regenerate statements.
      *
      * @access public
      * @return array
      */
     public function getViews(): array
     {
-        $views = array();
+        $views  = array();
+        $drops  = array();
         foreach($this->getViewSQLs() as $sql)
         {
-            if(preg_match('/CREATE OR REPLACE VIEW `([^`]+)`/i', $sql, $matches)) $views[] = array('name' => $matches[1], 'sql' => $sql);
+            /* 视图定义文件里的删除语句按视图名暂存，重建视图时先删除再创建。*/
+            /* Cache the drop statements by view name, so the view can be dropped before being created. */
+            if(preg_match('/^DROP\s+VIEW\s+IF\s+EXISTS\s+`?([^`\s]+)`?/i', $sql, $matches))
+            {
+                $drops[$matches[1]] = $sql;
+                continue;
+            }
+
+            if(!preg_match('/^CREATE\s+(OR\s+REPLACE\s+)?VIEW\s+`?([^`\s]+)`?/i', $sql, $matches)) continue;
+
+            $name       = $matches[2];
+            $statements = isset($drops[$name]) ? array($drops[$name], $sql) : array($sql);
+            $views[]    = array('name' => $name, 'statements' => $statements);
         }
         return $views;
     }
@@ -11275,7 +11288,7 @@ class upgradeModel extends model
 
             try
             {
-                $this->dbh->exec($viewItem['sql']);
+                foreach($viewItem['statements'] as $sql) $this->dbh->exec($sql);
                 return true;
             }
             catch(PDOException $e)
@@ -12155,8 +12168,16 @@ class upgradeModel extends model
         $deliverableStage->required = '0';
         $deliverableStage->stage    = 'project';
 
+        $projectDeliverable = new stdclass();
+        $projectDeliverable->sourceType  = 'project';
+        $projectDeliverable->createdBy   = 'system';
+        $projectDeliverable->createdDate = helper::now();
+        $projectDeliverable->hasApproval = 1;
+        $projectDeliverable->status      = 'draft';
+
         $this->loadModel('workflowgroup');
         $workflows = $this->dao->select('id,`projectModel`')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('`projectModel`')->ne('kanban')->fetchAll('id');
+        $projects  = $this->dao->select('id,workflowGroup')->from(TABLE_PROJECT)->where('workflowGroup')->in(array_keys($workflows))->andWhere('type')->eq('project')->fetchGroup('workflowGroup', 'id');
         foreach($workflows as $workflow)
         {
             $groupID = $workflow->id;
@@ -12174,6 +12195,19 @@ class upgradeModel extends model
                 $deliverable->category = $key; // 标记交付物的类型。
                 $deliverableID = $this->addDeliverable($name . $this->lang->upgrade->list, $deliverable, $deliverableStage);
                 $this->workflowgroup->createApprovalFlow($groupID, $deliverableID);
+
+                $projectIdList = zget($projects, $groupID, array());
+                if(empty($projectIdList)) continue;
+
+                foreach(array_keys($projectIdList) as $projectID)
+                {
+                    $projectDeliverable->project     = $projectID;
+                    $projectDeliverable->sourceID    = $projectID;
+                    $projectDeliverable->deliverable = $deliverableID;
+                    $projectDeliverable->name        = $name . $this->lang->upgrade->list;
+                    $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($projectDeliverable)->exec();
+                    $this->loadModel('action')->create('projectdeliverable', $deliverableID, 'opened');
+                }
             }
         }
         return true;
