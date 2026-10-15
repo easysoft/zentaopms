@@ -12206,7 +12206,8 @@ class upgradeModel extends model
                     $projectDeliverable->deliverable = $deliverableID;
                     $projectDeliverable->name        = $name . $this->lang->upgrade->list;
                     $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($projectDeliverable)->exec();
-                    $this->loadModel('action')->create('projectdeliverable', $deliverableID, 'opened');
+                    $projectDeliverableID = $this->dao->lastInsertId();
+                    $this->loadModel('action')->create('projectdeliverable', $projectDeliverableID, 'opened');
                 }
             }
         }
