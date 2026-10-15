@@ -109,8 +109,15 @@ class report extends control
      */
     protected function runAlertRulesDaily()
     {
+        /* 规则队列模块仅商业版提供，开源版直接返回。The rule queue module is only available in the biz edition. */
+        if($this->config->edition == 'open') return;
+
+        /* 商业版也需确认模块存在，避免加载失败时对 false 调用方法。Also check the module exists to avoid calling a method on false. */
+        $ruleQueue = $this->loadModel('rulequeue');
+        if(!$ruleQueue) return;
+
         echo date('Y-m-d H:i:s') . " running alert rules...\n";
-        $this->loadModel('rulequeue')->runDailyAlerts();
+        $ruleQueue->runDailyAlerts();
         echo date('Y-m-d H:i:s') . " alert rules done.\n";
     }
 
