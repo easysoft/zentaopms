@@ -12155,8 +12155,16 @@ class upgradeModel extends model
         $deliverableStage->required = '0';
         $deliverableStage->stage    = 'project';
 
+        $projectDeliverable = new stdclass();
+        $projectDeliverable->sourceType  = 'project';
+        $projectDeliverable->createdBy   = 'system';
+        $projectDeliverable->createdDate = helper::now();
+        $projectDeliverable->hasApproval = 1;
+        $projectDeliverable->status      = 'draft';
+
         $this->loadModel('workflowgroup');
         $workflows = $this->dao->select('id,`projectModel`')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('`projectModel`')->ne('kanban')->fetchAll('id');
+        $projects  = $this->dao->select('id,workflowGroup')->from(TABLE_PROJECT)->where('workflowGroup')->in(array_keys($workflows))->andWhere('type')->eq('project')->fetchGroup('workflowGroup', 'id');
         foreach($workflows as $workflow)
         {
             $groupID = $workflow->id;
@@ -12174,6 +12182,19 @@ class upgradeModel extends model
                 $deliverable->category = $key; // 标记交付物的类型。
                 $deliverableID = $this->addDeliverable($name . $this->lang->upgrade->list, $deliverable, $deliverableStage);
                 $this->workflowgroup->createApprovalFlow($groupID, $deliverableID);
+
+                $projectIdList = zget($projects, $groupID, array());
+                if(empty($projectIdList)) continue;
+
+                foreach(array_keys($projectIdList) as $projectID)
+                {
+                    $projectDeliverable->project     = $projectID;
+                    $projectDeliverable->sourceID    = $projectID;
+                    $projectDeliverable->deliverable = $deliverableID;
+                    $projectDeliverable->name        = $name . $this->lang->upgrade->list;
+                    $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($projectDeliverable)->exec();
+                    $this->loadModel('action')->create('projectdeliverable', $deliverableID, 'opened');
+                }
             }
         }
         return true;
