@@ -858,6 +858,8 @@ class productTao extends productModel
         $stats = array();
         foreach($productIdList as $productID)
         {
+            if(empty($productID)) continue;
+
             $product = new stdclass();
 
             $product->draftEpics       = isset($productStories[$productID]['epic']) ? $productStories[$productID]['epic']['draft']     : 0;
