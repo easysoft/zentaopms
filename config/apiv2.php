@@ -226,6 +226,9 @@ $routes['/projects/:projectID/deliverables'] = array(
     'get'  => array('redirect' => '/projects/deliverable?projectID=:projectID', 'response' => 'deliverables(array),pager'),
     'post' => array('redirect' => '/project/createDeliverable?projectID=:projectID', 'response' => '*')
 );
+$routes['/projects/:projectID/deliverable-options'] = array(
+    'get' => array('redirect' => '/project/createDeliverable?projectID=:projectID', 'response' => 'deliverables')
+);
 $routes['/deliverables/:deliverableID']      = array(
     'get'    => array('redirect' => '/projects/viewDeliverable?deliverableID=:deliverableID', 'response' => 'deliverable,review,actions(array),doc,relatedObjects(array)'),
     'delete' => array('redirect' => '/project/deleteDeliverable?deliverableID=:deliverableID', 'response' => '*')
