@@ -483,6 +483,8 @@ class testreportZen extends testreport
         $bugSummary['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((zget($resolutionGroups, 'fixed', 0) + zget($resolutionGroups, 'postponed', 0)) / $resolvedBugs * 100, 2);
         $bugSummary['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($foundBugs) * 100, 2);
 
+        $this->view->activatedBugs = $activatedBugs;
+
         /* Set bug info. */
         $bugInfo = $this->buildBugInfo($stageGroups, $handleGroups, $severityGroups, $typeGroups, $statusGroups, $openedByGroups, $moduleGroups, $resolvedByGroups, $resolutionGroups, $productIdList);
 

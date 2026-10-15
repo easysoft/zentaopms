@@ -477,6 +477,21 @@ detailBody
             ),
             tabPane
             (
+                set::key('tabActivatedBugs'),
+                to::prefix(icon('bug')),
+                set::title($lang->testreport->legendActivatedBugs),
+                sectionList
+                (
+                    dtable
+                    (
+                        set::cols($config->testreport->bug->dtable->fieldList),
+                        set::data(array_values($activatedBugs)),
+                        set::userMap($users)
+                    )
+                )
+            ),
+            tabPane
+            (
                 set::key('tabReport'),
                 to::divider(true),
                 set::title($lang->testreport->legendReport),
