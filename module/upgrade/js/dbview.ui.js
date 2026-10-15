@@ -6,7 +6,10 @@ $(function()
 
     if(!$items.length)
     {
-        dataProcessScheduler.finishStep(step, true);
+        /* 视图定义里有待执行的语句却没有解析出视图条目时按失败处理，避免静默跳过本步骤。*/
+        /* Fail the step when there are statements while no view item is parsed, so the step will not be skipped silently. */
+        const expected = parseInt($('#viewBox').data('count') || 0, 10);
+        dataProcessScheduler.finishStep(step, expected === 0);
         return;
     }
 

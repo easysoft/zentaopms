@@ -1094,4 +1094,33 @@ class upgradeModelTest extends baseTest
         $this->instance->processPIRiskData();
         return $this->instance->dao->select('*')->from(TABLE_RISK)->where('PI')->ne('0')->fetchAll();
     }
+
+    /**
+     * 测试获取数据库视图列表。
+     * Test get the database view list.
+     *
+     * @access public
+     * @return string
+     */
+    public function getViewsTest(): string
+    {
+        global $tester;
+
+        /* 视图条目数应与定义文件里的 CREATE VIEW 语句数一致，且每条视图都配有删除语句。*/
+        /* The view count should equal the CREATE VIEW statements of the definition file, and every view should have a drop statement. */
+        $viewFile = $tester->app->getAppRoot() . 'db' . DS . 'dbviews.sql';
+        $creates  = array();
+        foreach(explode(';', file_get_contents($viewFile)) as $sql)
+        {
+            if(preg_match('/^CREATE\s+(OR\s+REPLACE\s+)?VIEW\s+`?([^`\s]+)`?/i', trim($sql), $matches)) $creates[] = $matches[2];
+        }
+
+        $views = $this->instance->getViews();
+        $names = array_column($views, 'name');
+
+        $dropped = 0;
+        foreach($views as $view) if(count($view['statements']) > 1) $dropped++;
+
+        return 'views:' . count($views) . ';creates:' . count($creates) . ';missing:' . count(array_diff($creates, $names)) . ';dropped:' . $dropped;
+    }
 }
