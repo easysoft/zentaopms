@@ -11243,18 +11243,31 @@ class upgradeModel extends model
     }
 
     /**
-     * 获取数据库视图列表（视图名与重建 SQL）。
-     * Get the database view list with names and regenerate SQLs.
+     * 获取数据库视图列表（视图名与重建语句）。
+     * Get the database view list with names and regenerate statements.
      *
      * @access public
      * @return array
      */
     public function getViews(): array
     {
-        $views = array();
+        $views  = array();
+        $drops  = array();
         foreach($this->getViewSQLs() as $sql)
         {
-            if(preg_match('/CREATE OR REPLACE VIEW `([^`]+)`/i', $sql, $matches)) $views[] = array('name' => $matches[1], 'sql' => $sql);
+            /* 视图定义文件里的删除语句按视图名暂存，重建视图时先删除再创建。*/
+            /* Cache the drop statements by view name, so the view can be dropped before being created. */
+            if(preg_match('/^DROP\s+VIEW\s+IF\s+EXISTS\s+`?([^`\s]+)`?/i', $sql, $matches))
+            {
+                $drops[$matches[1]] = $sql;
+                continue;
+            }
+
+            if(!preg_match('/^CREATE\s+(OR\s+REPLACE\s+)?VIEW\s+`?([^`\s]+)`?/i', $sql, $matches)) continue;
+
+            $name       = $matches[2];
+            $statements = isset($drops[$name]) ? array($drops[$name], $sql) : array($sql);
+            $views[]    = array('name' => $name, 'statements' => $statements);
         }
         return $views;
     }
@@ -11275,7 +11288,7 @@ class upgradeModel extends model
 
             try
             {
-                $this->dbh->exec($viewItem['sql']);
+                foreach($viewItem['statements'] as $sql) $this->dbh->exec($sql);
                 return true;
             }
             catch(PDOException $e)
