@@ -232,7 +232,7 @@ A：在AI接管地球之前，先别着急。受限于Agent能力，目前还不
 
 ##### Q：可以在禅道AI里使用吗？
 
-A：暂时还不支持在禅道内直接用CLI，但我们正在加紧开发ZAI Agents平台，之后会在禅道里直接支持安装技能。
+A：暂时还不支持在禅道内直接用CLI，禅道[企业版13.5](https://www.zentao.net/download/biz13.5-86523.html)、[旗舰版8.5](https://www.zentao.net/download/max8.5-86524.html)、[IPD版5.5](https://www.zentao.net/download/ipd5.5-86525.html)已经内置AI访问和操作禅道数据的能力，可以直接在禅道网页端使用等同CLI的能力。
 
 ##### Q：为什么有些操作（比如操作模块、读写文档）实现不了？
 

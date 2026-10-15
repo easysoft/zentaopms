@@ -233,7 +233,7 @@ A: No worries. You don't need to master everything on day one. Given the current
 
 ##### Q: Can I use this in ZenTao AI?
 
-A: Direct CLI usage inside ZenTao AI is not supported yet. We are actively developing the ZAI Agents platform, which will support installing skills directly inside ZenTao in the future.
+A: Direct CLI usage inside ZenTao is not supported yet. ZenTao [Biz 13.5](https://www.zentao.net/download/biz13.5-86523.html), [Max 8.5](https://www.zentao.net/download/max8.5-86524.html), and [IPD 5.5](https://www.zentao.net/download/ipd5.5-86525.html) already include built-in AI capabilities to access and manage ZenTao data. You can use these capabilities, equivalent to those of the CLI, directly in the ZenTao web interface.
 
 ##### Q: Why can't I perform certain operations, such as module operations or reading and writing documents?
 
