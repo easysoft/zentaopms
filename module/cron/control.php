@@ -464,6 +464,7 @@ class cron extends control
             $this->common->setCompany();
             $this->common->loadConfigFromDB();
 
+            $taskEditions = $this->config->cron->taskEditions;
             try
             {
                 if($task->type == 'zentao')
@@ -472,12 +473,15 @@ class cron extends control
                     if(isset($params['moduleName']) and isset($params['methodName']))
                     {
                         $this->viewType = 'html';
-                        $moduleName     = $params['moduleName'];
-                        $methodName     = $params['methodName'];
+                        $moduleName     = strtolower($params['moduleName']);
+                        $methodName     = strtolower($params['methodName']);
                         $this->app->loadLang($moduleName);
                         $this->app->loadConfig($moduleName);
                         unset($params['moduleName'], $params['methodName']);
-                        $output = $this->fetch($moduleName, $methodName, $params);
+
+                        $canExec = true;
+                        if(isset($taskEditions["{$moduleName}-{$methodName}"]) && !in_array($this->config->edition, $taskEditions["{$moduleName}-{$methodName}"])) $canExec = false;
+                        if($canExec) $output = $this->fetch($moduleName, $methodName, $params);
                     }
                 }
                 elseif($task->type == 'system')

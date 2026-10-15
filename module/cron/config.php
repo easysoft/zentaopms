@@ -31,3 +31,10 @@ $config->cron->dtable->fieldList['status']   = array('sortType' => false, 'type'
 $config->cron->dtable->fieldList['remark']   = array('sortType' => false, 'type' => 'text',     'title' => $lang->cron->remark);
 $config->cron->dtable->fieldList['lastTime'] = array('sortType' => false, 'type' => 'datetime', 'title' => $lang->cron->lastTime);
 $config->cron->dtable->fieldList['actions']  = array('sortType' => false, 'width' => '110px',   'title' => $lang->actions, 'type' => 'html');
+
+$config->cron->taskEditions['weekly-createcyclereport']           = ['max', 'ipd'];
+$config->cron->taskEditions['effort-remindnotrecord']             = ['biz', 'max', 'ipd'];
+$config->cron->taskEditions['execution-computetaskeffort']        = ['biz', 'max', 'ipd'];
+$config->cron->taskEditions['auditplan-ajaxcreatecycleauditplan'] = ['max', 'ipd'];
+$config->cron->taskEditions['ai-runtimeragents']                  = ['biz', 'max', 'ipd'];
+$config->cron->taskEditions['aitask-exec']                        = ['biz', 'max', 'ipd'];
