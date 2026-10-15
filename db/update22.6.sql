@@ -358,3 +358,6 @@ INSERT INTO `zt_ai_procedurestep` (`id`, `procedure`, `agent`, `name`, `inputs`,
 (88,	2,	122,	'Bug修改方案',	NULL,	2),
 (89,	2,	120,	'Bug修改',	'{\"1\":88}',	3),
 (90,	2,	121,	'Bug自测清单',	NULL,	4);
+
+
+UPDATE `zt_cron` SET `command` = 'moduleName=execution&methodName=computeburn' WHERE `command` = 'moduleName=project&methodName=computeburn';
