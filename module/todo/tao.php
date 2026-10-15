@@ -457,7 +457,7 @@ class todoTao extends todoModel
             ->markRight(1)
             ->beginIF($begin && $type != 'future')->andWhere('date')->ge($begin)->fi()
             ->beginIF($end   && $type != 'future')->andWhere('date')->le($end)->fi()
-            ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+            ->beginIF(!in_array($status, array('all', 'undone', 'noclosed')))->andWhere('status')->in($status)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->notin('closed')->fi()
             ->beginIF($type == 'cycle')->andWhere('cycle')->eq('1')->fi()
