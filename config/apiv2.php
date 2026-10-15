@@ -226,6 +226,9 @@ $routes['/projects/:projectID/deliverables'] = array(
     'get'  => array('redirect' => '/projects/deliverable?projectID=:projectID', 'response' => 'deliverables(array),pager'),
     'post' => array('redirect' => '/project/createDeliverable?projectID=:projectID', 'response' => '*')
 );
+$routes['/projects/:projectID/deliverable-options'] = array(
+    'get' => array('redirect' => '/project/createDeliverable?projectID=:projectID', 'response' => 'deliverables')
+);
 $routes['/deliverables/:deliverableID']      = array(
     'get'    => array('redirect' => '/projects/viewDeliverable?deliverableID=:deliverableID', 'response' => 'deliverable,review,actions(array),doc,relatedObjects(array)'),
     'delete' => array('redirect' => '/project/deleteDeliverable?deliverableID=:deliverableID', 'response' => '*')
@@ -330,10 +333,10 @@ $routes['/systems']                     = array('response' => 'appList(array)|sy
 $routes['/products/:productID/systems'] = array('redirect' => '/systems?productID=:productID');
 $routes['/systems/:systemID']           = array('response' => 'system,actions(array)');
 
-$routes['/relations/:objectType/:objectID']                                                   = array('get' => array('redirect' => '/custom/showRelationGraph?objectID=:objectID&objectType=:objectType', 'response' => 'relations(array)'));
-$routes['/relations/:objectType/:objectID/candidates/:relatedObjectType']                     = array('get' => array('redirect' => '/custom/relateObject?objectID=:objectID&objectType=:objectType&relatedObjectType=:relatedObjectType', 'response' => 'objects(array),relationPairs,pager'));
-$routes['/relations/:objectType/:objectID/:relatedObjectType']                                = array('post' => array('redirect' => '/custom/relateObject?objectID=:objectID&objectType=:objectType&relatedObjectType=:relatedObjectType', 'response' => '*'));
-$routes['/relations/:objectType/:objectID/:relatedObjectType/:relatedObjectID/:relationName'] = array('delete' => array('redirect' => '/custom/removeObjects?objectID=:objectID&objectType=:objectType&relationName=:relationName&relatedObjectID=:relatedObjectID&relatedObjectType=:relatedObjectType', 'response' => '*'));
+$routes['/relations/:objectType/:objectID']                               = array('get' => array('redirect' => '/custom/showRelationGraph?objectID=:objectID&objectType=:objectType', 'response' => 'relations(array)'));
+$routes['/relations/:objectType/:objectID/candidates/:relatedObjectType'] = array('get' => array('redirect' => '/custom/relateObject?objectID=:objectID&objectType=:objectType&relatedObjectType=:relatedObjectType', 'response' => 'objects(array),relationPairs,pager'));
+$routes['/relations/:objectType/:objectID/:relatedObjectType']            = array('post' => array('redirect' => '/custom/relateObject?objectID=:objectID&objectType=:objectType&relatedObjectType=:relatedObjectType', 'response' => '*'));
+$routes['/relations/:relationID']                                         = array('delete' => array('redirect' => '/custom/removeObjects?objectID=0&objectType=&relationName=&relatedObjectID=0&relatedObjectType=&relationID=:relationID', 'response' => '*'));
 
 $routes['/todos/my']      = array('redirect' => '/my/todo', 'response' => 'todos(array),pager');
 $routes['/todos/:todoID'] = array('response' => 'todo');
