@@ -27,8 +27,8 @@ cid=15344
 - 状态是 closed   的 bug 激活后的状态是 active，激活次数加 1。
  - 属性status @active
  - 属性activatedCount @1
-- 状态是 resolved 的 bug 激活后版本解决的 bug 中不再包含这个 bug。属性bugs @4,6
-- 状态是 closed   的 bug 激活后版本解决的 bug 中不再包含这个 bug。属性bugs @4
+- 状态是 resolved 的 bug 激活后版本解决的 bug 中还会包含这个 bug。属性bugs @4,5,6
+- 状态是 closed   的 bug 激活后版本解决的 bug 中还会包含这个 bug。属性bugs @4,5,6
 - 状态是 resolved 的 bug 激活后记录状态改变日志。第0条的field属性 @status
 - 状态是 closed   的 bug 激活后记录状态改变日志。第0条的field属性 @status
 - 状态是 resolved 的 bug 激活后记录激活次数改变日志。第1条的field属性 @activatedCount
@@ -52,7 +52,7 @@ r($bug->activateTest(3)) && p('status,activatedCount') && e('active,1'); // 状�
 
 
 r($bug->activateTest(5, 1, $kanbanParams, 'build')) && p('bugs', ';') && e('4,5,6'); // 状态是 resolved 的 bug 激活后版本解决的 bug 中还会包含这个 bug。
-r($bug->activateTest(6, 1, $kanbanParams, 'build')) && p('bugs')      && e('4,5,6'); // 状态是 closed   的 bug 激活后版本解决的 bug 中还会包含这个 bug。
+r($bug->activateTest(6, 1, $kanbanParams, 'build')) && p('bugs', ';') && e('4,5,6'); // 状态是 closed   的 bug 激活后版本解决的 bug 中还会包含这个 bug。
 
 r($bug->activateTest(8,  0, $kanbanParams, 'action')) && p('0:field') && e('status');         // 状态是 resolved 的 bug 激活后记录状态改变日志。
 r($bug->activateTest(9,  0, $kanbanParams, 'action')) && p('0:field') && e('status');         // 状态是 closed   的 bug 激活后记录状态改变日志。

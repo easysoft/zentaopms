@@ -38,7 +38,7 @@ r($pivotTest->initVarFilterTest(array(array('field' => 'status', 'from' => 'bug'
 r($pivotTest->initVarFilterTest(array(array('field' => 'status', 'from' => '', 'default' => 'active')), 'SELECT * FROM zt_bug WHERE status = $status')) && p() && e("SELECT * FROM zt_bug WHERE status = ''"); // 步骤6：from字段为空时跳过该过滤器但清理变量
 
 /* 步骤7：注入载荷被 quote 转义，不能闭合引号。The injection payload is quoted. */
-r($pivotTest->initVarFilterTest(array(array('field' => 'status', 'from' => 'bug', 'default' => "active' or sleep(3)-- ")), 'SELECT * FROM zt_bug WHERE status = $status')) && p() && e("SELECT * FROM zt_bug WHERE status = 'active\\' or sleep(3)-- '"); // 步骤7：注入载荷被转义为字面量
+r($pivotTest->initVarFilterTest(array(array('field' => 'status', 'from' => 'bug', 'default' => "active' or sleep(3)-- ")), 'SELECT * FROM zt_bug WHERE status = $status')) && p() && e("SELECT * FROM zt_bug WHERE status = 'active\' or sleep(3)-- '"); // 步骤7：注入载荷被转义为字面量
 
 /* 步骤8：值中携带的嵌套变量不会在替换结果中再次拼进SQL。A nested variable inside the replaced text is not replaced again. */
 $nestedSQL     = "select t2.status from zt_product t2 where (case when \$productStatus='' then 1=1 else t2.status=\$productStatus end) and (case when \$product='0' then 1=1 else t2.id=\$product end)";
