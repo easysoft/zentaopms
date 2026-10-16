@@ -6,7 +6,7 @@ $lang->install->success = 'gitfox安装成功';
 $lang->install->desc = 'gitfox是一款专注企业研发协同场景的开源Git源代码管理平台，串联代码、AI 评审、CI/CD 流水线、自动化测试、制品管理和部署上线，打通代码管理与工程研发链路，打造一体化智能研发工厂，为企业构建可追溯、可度量的研发交付闭环。';
 $lang->install->links = <<<EOT
 gitfox由<strong class='text-danger'>渠成极客软件（青岛）有限公司</strong>开发。
-官方网站：<a href='https://www.gitfox.net' target='_blank'>https://www.zentao.net</a>
+官方网站：<a href='https://www.gitfox.net' target='_blank'>https://www.gitfox.net</a>
 
 
 
