@@ -70777,7 +70777,7 @@ a:374:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "required": true,
         "desc": "状态(success 成功 | fail 失败)"
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:303;O:8:"stdClass":24:{s:2:"id";i:304;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:400;s:5:"title";s:27:"获取项目交付物列表";s:4:"path";s:33:"/projects/:projectID/deliverables";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:27:"获取项目交付物列表";s:7:"version";i:1;s:6:"params";s:1724:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:303;O:8:"stdClass":24:{s:2:"id";i:304;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:400;s:5:"title";s:27:"获取项目交付物列表";s:4:"path";s:33:"/projects/:projectID/deliverables";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:27:"获取项目交付物列表";s:7:"version";i:1;s:6:"params";s:1819:"{
     "header": [
         {
             "field": "Token",
@@ -70794,7 +70794,7 @@ a:374:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "paramsType": "string",
             "required": false,
             "example": "normal",
-            "desc": "\u4ea4\u4ed8\u7269\u7b5b\u9009\u7c7b\u578b\uff0c\u9ed8\u8ba4 normal\u3002(normal \u5168\u90e8 | pending \u5f85\u63d0\u4ea4 | pendingme \u5f85\u6211\u8bc4\u5ba1 | submitbyme \u6211\u63d0\u4ea4\u7684 | reviewedbyme \u6211\u8bc4\u5ba1\u8fc7\u7684 | pass \u5df2\u901a\u8fc7 | fail \u672a\u901a\u8fc7 | bymodule \u6309\u6a21\u5757 | bysearch \u641c\u7d22)"
+            "desc": "\u4ea4\u4ed8\u7269\u7b5b\u9009\u7c7b\u578b\uff0c\u9ed8\u8ba4 normal\u3002(normal \u5df2\u63d0\u4ea4 | wait \u672a\u63d0\u4ea4 | mine \u6211\u63d0\u4ea4 | submitbyme \u7531\u6211\u53d1\u8d77 | pending \u5f85\u8bc4\u5ba1 | pendingme \u5f85\u6211\u8bc4\u5ba1 | reviewing \u8bc4\u5ba1\u4e2d | reviewedbyme \u6211\u8bc4\u5ba1\u8fc7 | pass \u8bc4\u5ba1\u901a\u8fc7 | fail \u8bc4\u5ba1\u5931\u8d25 | bymodule \u6309\u6a21\u5757 | bysearch \u641c\u7d22)"
         },
         {
             "field": "param",
