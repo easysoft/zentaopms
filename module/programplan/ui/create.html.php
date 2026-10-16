@@ -83,8 +83,19 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $canP
     );
 };
 
+/* 已有阶段填过负责人或计划日期时，同上默认关闭，避免打开页面覆盖已有数据。 */
+$defaultDitto = 'on';
+foreach($plans as $plan)
+{
+    if(!empty($plan->PM) || !helper::isZeroDate($plan->begin) || !helper::isZeroDate($plan->end))
+    {
+        $defaultDitto = 'off';
+        break;
+    }
+}
+
 /* Generate form fields. */
-$fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $project, $syncData, $app)
+$fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $project, $syncData, $app, $defaultDitto)
 {
     $items = array();
     $isEn  = $app->getClientLang() == 'en';
@@ -182,6 +193,8 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
             );
         }
         if($name == 'defaultPoint') $field['hidden'] = true;
+
+        if(isset($field['ditto']) && $field['ditto']) $field['defaultDitto'] = $defaultDitto;
 
         if($name == 'name') $field['width'] = '240px';
         if(!isset($field['width'])) $field['width'] = '120px';
