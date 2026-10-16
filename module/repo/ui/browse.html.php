@@ -112,7 +112,7 @@ $createItem = array('text' => $lang->repo->createAction, 'url' => createLink('re
 $config->repo->repoDtable->fieldList['revision']['link'] = inLink('revision', "repoID={$repo->id}&objectID={$objectID}&revision={revision}");
 $tableData = initTableData($infos, $config->repo->repoDtable->fieldList, $this->repo);
 
-$downloadWg = hasPriv('repo', 'downloadCode') ? div
+$downloadWg = hasPriv('repo', 'download') ? div
 (
     set::id('modal-downloadCode'),
     set::title($lang->repo->downloadCode),
@@ -208,7 +208,7 @@ $downloadWg = hasPriv('repo', 'downloadCode') ? div
     (
         setID('download-btn-group'),
         setStyle(array('margin-top' => '20px')),
-        common::hasPriv('repo', 'download') ? btn
+        common::hasPriv('repo', 'downloadCode') ? btn
         (
             on::click()->call('downloadZip'),
             set::icon('down-circle'),
@@ -286,7 +286,7 @@ toolbar
         ),
         to::items
         (
-            array($downloadWg)
+           hasPriv('repo', 'download') ? array($downloadWg) : null
         )
     ) : null,
     //hasPriv('repo', 'create') && $app->tab == 'project' ? item

@@ -34,7 +34,13 @@ $isInPlanView ? null : featureBar
     )) : null,
     div(searchToggle(set::module('codeScanTask'), set::open($type == 'bySearch')))
 );
-$config->codescan->task->dtable->fieldList['repo']['map']   = $repoList;
+$repoMap = $repoList;
+foreach($tasks as $task)
+{
+    if(isset($repoMap[$task->repoID]) || empty($task->repoName)) continue;
+    $repoMap[$task->repoID] = $task->repoName;
+}
+$config->codescan->task->dtable->fieldList['repo']['map']   = $repoMap;
 if($repoID) unset($config->codescan->task->dtable->fieldList['repoID']);
 if($isInPlanView)
 {
