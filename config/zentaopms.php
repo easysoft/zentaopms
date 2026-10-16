@@ -182,6 +182,8 @@ $config->hourPointCommonList['pt'][2] = 'Ponto de função';
 $config->manualUrl['home'] = 'https://www.zentao.net/book/zentaopms/38.html?fullScreen=zentao';
 $config->manualUrl['int']  = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html?fullScreen=zentao';
 
+$config->gitfoxManualUrl['home'] = 'https://gitfox.net/book/open-source/40.html?fullScreen=gitfox';
+
 /* Supported charsets. */
 $config->charsets['zh-cn']['utf-8'] = 'UTF-8';
 $config->charsets['zh-cn']['gbk']   = 'GBK';
