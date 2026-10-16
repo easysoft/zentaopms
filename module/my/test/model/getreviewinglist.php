@@ -13,6 +13,12 @@ zenData('demandreview')->gen('20');
 zenData('user')->gen('10');
 zenData('action')->gen('0');
 
+/* 清空GitFox应用和ppm评审数据，避免其他用例残留数据影响待评审列表。 */
+zenData('entry')->gen(0);
+zenData('ops_ppm')->gen(0);
+zenData('ops_request_reviewers')->gen(0);
+zenData('ops_review_flow')->gen(0);
+
 /**
 
 title=测试 myModel->getReviewingList();

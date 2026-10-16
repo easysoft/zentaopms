@@ -1103,7 +1103,7 @@ class testcaseZen extends testcase
             $modules[$branchID] = array();
             foreach($moduleList as $moduleID => $moduleName)
             {
-                $modules[$branchID][$moduleID] = $moduleName;
+                $modules[$branchID][] = array('text' => $moduleName, 'value' => $moduleID);
             }
         }
 
