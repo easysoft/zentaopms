@@ -40,7 +40,6 @@ class myProduct extends product
         {
             $this->app->tab = 'space';
             $this->loadModel('space')->setMenu($spaceID);
-            $this->config->excludeDropmenuList[] = 'product-browse';
         }
 
         $browseType = $browseType === '' ? 'noclosed' : strtolower($browseType);
