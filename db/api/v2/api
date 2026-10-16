@@ -1,4 +1,4 @@
-a:373:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:369;s:5:"title";s:11:"获取Token";s:4:"path";s:12:"/users/login";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:11:"获取Token";s:7:"version";i:1;s:6:"params";s:400:"{
+a:374:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:369;s:5:"title";s:11:"获取Token";s:4:"path";s:12:"/users/login";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:11:"获取Token";s:7:"version";i:1;s:6:"params";s:400:"{
     "header": [],
     "params": [
         {
@@ -73222,7 +73222,7 @@ a:373:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "required": true,
         "desc": "状态(success 成功 | fail 失败)"
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:318;O:8:"stdClass":24:{s:2:"id";i:319;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:403;s:5:"title";s:18:"查询关联对象";s:4:"path";s:32:"/relations/:objectType/:objectID";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:766:"查询指定对象已关联的对象。objectType 取值范围：demand(需求池需求，IPD) | epic(业务需求，旗舰版) | requirement(用户需求) | story(研发需求) | task(任务) | bug(Bug) | testcase(用例) | doc(文档) | design(设计) | repocommit(代码提交，devops) | feedback(反馈) | ticket(工单) | issue(问题，旗舰版) | risk(风险，旗舰版) | projectdeliverable(交付物，旗舰版) | workflow_xxx(工作流对象，如 workflow_contract)。可关联范围随版本和功能开关变化，实际以候选接口返回的 objectTypes 为准。relations 为关联对象列表，每项包含关系名称、关系类型、关联对象类型/编号/标题；解除关联时使用关联对象的类型、ID 和关系显示名称。";s:7:"version";i:1;s:6:"params";s:240:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:318;O:8:"stdClass":24:{s:2:"id";i:319;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:403;s:5:"title";s:18:"查询关联对象";s:4:"path";s:32:"/relations/:objectType/:objectID";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:796:"查询指定对象已关联的对象。objectType 取值范围：demand(需求池需求，IPD) | epic(业务需求，旗舰版) | requirement(用户需求) | story(研发需求) | task(任务) | bug(Bug) | testcase(用例) | doc(文档) | design(设计) | repocommit(代码提交，devops) | feedback(反馈) | ticket(工单) | issue(问题，旗舰版) | risk(风险，旗舰版) | projectdeliverable(交付物，旗舰版) | workflow_xxx(工作流对象，如 workflow_contract)。可关联范围随版本和功能开关变化，实际以候选接口返回的 objectTypes 为准。relations 为关联对象列表，每项包含关系记录 ID、关系名称、关系类型、关联对象类型/编号/标题；relationType 为 custom 的自定义关系可通过 relations[].relationID 删除。";s:7:"version";i:1;s:6:"params";s:240:"{
     "header": [
         {
             "field": "Token",
@@ -73234,10 +73234,12 @@ a:373:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
     "params": [],
     "paramsType": "json",
     "query": []
-}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:460:"{
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:590:"{
     "status": "success",
     "relations": [
         {
+            "relationID": 8,
+            "relationKey": "1",
             "relation": "相关",
             "relationType": "custom",
             "objectType": "task",
@@ -73245,6 +73247,8 @@ a:373:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "title": "开发电容光敏监测模块"
         },
         {
+            "relationID": 1,
+            "relationKey": "generated",
             "relation": "产生了",
             "relationType": "default",
             "objectType": "task",
@@ -73252,7 +73256,7 @@ a:373:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "title": "开发电容光敏监测模块"
         }
     ]
-}";s:8:"response";s:1450:"[
+}";s:8:"response";s:1908:"[
     {
         "field": "status",
         "paramsType": "string",
@@ -73266,6 +73270,20 @@ a:373:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "desc": "关联对象列表",
         "level": 1,
         "children": [
+            {
+                "field": "relationID",
+                "paramsType": "int",
+                "required": false,
+                "desc": "关系记录 ID，删除自定义关系时使用",
+                "level": 2
+            },
+            {
+                "field": "relationKey",
+                "paramsType": "string",
+                "required": false,
+                "desc": "关系标识 key",
+                "level": 2
+            },
             {
                 "field": "relation",
                 "paramsType": "string",
@@ -73303,7 +73321,7 @@ a:373:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:319;O:8:"stdClass":24:{s:2:"id";i:320;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:403;s:5:"title";s:18:"删除关联对象";s:4:"path";s:82:"/relations/:objectType/:objectID/:relatedObjectType/:relatedObjectID/:relationName";s:8:"protocol";s:4:"HTTP";s:6:"method";s:6:"DELETE";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:716:"解除指定对象与关联对象之间的一条关联关系。objectType、relatedObjectType 取值范围：demand(需求池需求，IPD) | epic(业务需求，旗舰版) | requirement(用户需求) | story(研发需求) | task(任务) | bug(Bug) | testcase(用例) | doc(文档) | design(设计) | repocommit(代码提交，devops) | feedback(反馈) | ticket(工单) | issue(问题，旗舰版) | risk(风险，旗舰版) | projectdeliverable(交付物，旗舰版) | workflow_xxx(工作流对象，如 workflow_contract)。可关联范围随版本和功能开关变化，实际以候选接口返回的 objectTypes 为准。relationName 使用关系显示名称（URL 编码），系统内置关系不能解除。";s:7:"version";i:1;s:6:"params";s:240:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:319;O:8:"stdClass":24:{s:2:"id";i:320;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:403;s:5:"title";s:18:"删除关联关系";s:4:"path";s:22:"/relations/:relationID";s:8:"protocol";s:4:"HTTP";s:6:"method";s:6:"DELETE";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:202:"根据关系记录 ID 删除自定义关联关系。relationID 从查询关联对象接口返回的 relations[].relationID 字段获取，只有 relationType 为 custom 的自定义关系可以删除。";s:7:"version";i:1;s:6:"params";s:240:"{
     "header": [
         {
             "field": "Token",
@@ -80461,4 +80479,92 @@ a:373:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "required": true,
         "desc": "成功提示；失败时可能为字段错误对象。"
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}}
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-10-13 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-10-13 00:00:00";s:7:"deleted";i:0;}i:373;O:8:"stdClass":24:{s:2:"id";i:374;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:400;s:5:"title";s:33:"获取项目可选交付物列表";s:4:"path";s:40:"/projects/:projectID/deliverable-options";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:182:"获取当前项目流程下可以提交的交付物定义。返回结果中 deliverables 的属性名为交付物定义 ID，值为交付物名称，可用于创建项目交付物。";s:7:"version";i:1;s:6:"params";s:240:"{
+    "header": [
+        {
+            "field": "Token",
+            "paramsType": "string",
+            "required": true,
+            "desc": "API\u51ed\u8bc1"
+        }
+    ],
+    "params": [],
+    "paramsType": "json",
+    "query": []
+}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:290:"{
+    "status": "success",
+    "deliverables": {
+        "157": "质量保证计划",
+        "158": "配置管理计划",
+        "159": "集成测试计划",
+        "161": "程序代码",
+        "162": "系统测试计划",
+        "163": "用户手册",
+        "170": "其他"
+    }
+}";s:8:"response";s:1663:"[
+    {
+        "field": "status",
+        "paramsType": "string",
+        "required": true,
+        "desc": "状态(success 成功 | fail 失败)"
+    },
+    {
+        "field": "deliverables",
+        "paramsType": "object",
+        "required": false,
+        "desc": "交付物",
+        "level": 1,
+        "children": [
+            {
+                "field": 157,
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": 158,
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": 159,
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": 161,
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": 162,
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": 163,
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            },
+            {
+                "field": 170,
+                "paramsType": "string",
+                "required": false,
+                "desc": "",
+                "level": 2
+            }
+        ]
+    }
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}}
