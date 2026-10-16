@@ -15,6 +15,8 @@ cid=15660
 - 判断工作流方法的权限，用户没有权限时，返回跳转的URL @{"load":"user-deny-flowModule-flowMethod.html"}没有权限
 - 用户有权限时，返回TRUE @1
 - 不需要判断权限的，返回TRUE @1
+- GitFox空间管理员数据准备正确 @manager
+- 空间权限中包含代码库review权限 @1
 - GitFox空间管理员在空间内鉴权应合并空间权限 @1
 - GitFox空间普通成员没有问题权限时鉴权拒绝 @{"load":"user-deny-repo-review.html"}没有权限
 
@@ -102,6 +104,8 @@ r($result) && p() && e('1'); // 不需要判断权限的，返回TRUE
 // 6. GitFox独立版空间管理员在空间内的鉴权：空间管理员隐式拥有空间内全部权限，鉴权结果应与菜单保持一致。
 zenData('company')->gen(1);
 zenData('user')->gen(2);
+zenData('ops_repouser')->gen(0);
+unset($_SESSION['devopsSpace']);
 
 $group = zenData('group');
 $group->id->range('1');
@@ -147,6 +151,10 @@ $app->tab        = 'repo';
 $app->moduleName = 'repo';
 $app->methodName = 'review';
 $app->params     = array('repoID' => 1);
+
+/* 前置校验：user1是空间1的管理员，且空间权限中包含代码库模块权限。 */
+r($tester->dao->select('role')->from(TABLE_DEVOPSSPACEUSER)->where('space')->eq(1)->andWhere('account')->eq('user1')->fetch('role')) && p() && e('manager'); // GitFox空间管理员数据准备正确
+r(isset($tester->loadModel('space')->getDevOpsAllPrivs()['repo']['review'])) && p() && e('1'); // 空间权限中包含代码库review权限
 
 try
 {
