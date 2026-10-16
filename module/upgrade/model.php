@@ -12031,15 +12031,15 @@ class upgradeModel extends model
         $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
         $deliverableID = $this->dao->lastInsertID();
 
-        /* “其他”类型；新加type，stage 与历史数据一致。 */
+        /* 任务关闭时的检查环节由 22.6 的 modifyOtherDeliverable 补齐，其余环节的 type 由 22.6 的 update22.6.sql 补齐。*/
         $stageList = $this->config->edition != 'biz' ? $this->loadModel('deliverable')->buildStageList($workflowGroupID) : array();
         foreach($stageList as $type => $stages)
         {
+            if($type == 'task') continue;
             foreach($stages as $stage => $label)
             {
                 $deliverableStage = new stdclass();
                 $deliverableStage->deliverable = $deliverableID;
-                $deliverableStage->type        = $type;
                 $deliverableStage->stage       = $stage;
                 $deliverableStage->required    = '0';
                 $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
