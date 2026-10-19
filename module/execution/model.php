@@ -5215,7 +5215,14 @@ class executionModel extends model
             if(!empty($execution->tasks))  $rows = $this->appendTasks($execution->tasks, $rows, $users, $avatarList, $canModify);
         }
 
-        if(in_array($this->config->edition, array('max', 'ipd'))) $rows = $this->loadModel('project')->countDeliverable($rows, 'execution');
+        /* 交付物提交进度。列表未展示该字段时不统计。 */
+        if(in_array($this->config->edition, array('max', 'ipd')))
+        {
+            $module = $this->app->rawModule ? $this->app->rawModule : $this->app->getModuleName();
+            $method = $this->app->rawMethod ? $this->app->rawMethod : $this->app->getMethodName();
+            $cols   = $this->loadModel('datatable')->getSetting($module, $method);
+            if(isset($cols['deliverable'])) $rows = $this->loadModel('project')->countDeliverable($rows, 'execution');
+        }
         return $rows;
     }
 
