@@ -1255,12 +1255,20 @@ class codescan extends control
             $this->loadModel('ci')->setMenu($repoID);
         }
 
-        $repoList = $this->loadModel('repo')->getRepoPairs();
+        $originTaskID = $taskID;
+        $taskID       = empty($params['taskID']) ? $taskID : (int)$params['taskID'];
+
+        $repoList    = $this->loadModel('repo')->getRepoPairs();
+        $issueRepoID = $repoID;
 
         if($taskID)
         {
             $task = $this->codescan->getScanTask((int)$taskID, $serviceRepoID);
-            $this->view->task = $this->codescanZen->processTaskData($task, $repoList);
+            if(!empty($task))
+            {
+                if(!empty($task->repoID)) $issueRepoID = (int)$task->repoID;
+                $this->view->task = $this->codescanZen->processTaskData($task, $repoList);
+            }
 
             unset($this->config->codescan->issue->search['fields']['plan']);
             unset($this->config->codescan->issue->search['params']['plan']);
@@ -1269,13 +1277,10 @@ class codescan extends control
             unset($this->config->codescan->issue->search['params']['scanBranch']);
         }
 
-        $originTaskID = $taskID;
-        $taskID       = empty($params['taskID']) ? $taskID : (int)$params['taskID'];
-
         $this->codescanZen->commonData('plugin');
 
-        $pager    = $this->codescanZen->setPager($recPerPage, $pageID);
-        $repo = $this->loadModel('repo')->getByID($repoID);
+        $pager = $this->codescanZen->setPager($recPerPage, $pageID);
+        $repo  = $this->loadModel('repo')->getByID($repoID);
         if(!empty($repo))
         {
             $scm = $this->app->loadClass('scm');
@@ -1283,10 +1288,13 @@ class codescan extends control
             $this->config->codescan->issue->search['params']['scanBranch']['values'] = $scm->branch();
 
             if(empty($serviceRepoID)) $serviceRepoID = $repo->id;
+        }
 
+        if($issueRepoID)
+        {
             $urlTpl   = inLink('issue', "repoID={$repoID}&taskID=0&serviceRepoID={$serviceRepoID}&type=" . ($type == 'bySearch' ? 'wait' : $type) . "&queryID=0&severity={$severity}&extras=%s&orderBy={$orderBy}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
-            $fileTree = $this->codescan->getIssueTreeList($repoID, $taskID, 'file', array('check', 'smell'));
-            $ruleTree = $this->codescan->getIssueTreeList($repoID, $taskID, 'rule');
+            $fileTree = $this->codescan->getIssueTreeList($issueRepoID, $taskID, 'file', array('check', 'smell'));
+            $ruleTree = $this->codescan->getIssueTreeList($issueRepoID, $taskID, 'rule');
 
             $this->view->fileTree = $this->codescanZen->processIssueFileTree($fileTree, $urlTpl, $params);
             $this->view->ruleTree = $this->codescanZen->processIssueRuleTree($ruleTree, $urlTpl, $params);
@@ -1310,7 +1318,8 @@ class codescan extends control
         $issueList  = $this->codescan->getScanIssueList((int)$taskID, $conditions);
         $pager->recTotal = zget(zget($issueList, 'pager', array()), 'total', 0);
 
-        $taskList = $this->codescanZen->getListByQuery('task', (int)$serviceRepoID);
+        $taskListRepoID = $repoID ? (int)$serviceRepoID : 0;
+        $taskList = $this->codescanZen->getListByQuery('task', $taskListRepoID);
         foreach($taskList as &$repoTask) $repoTask = $this->codescanZen->processTaskData($repoTask, $repoList);
         if(isset($issueList->data) && is_array($issueList->data)) foreach($issueList->data as &$issue) $issue = $this->codescanZen->processIssueData($issue);
 
@@ -1322,7 +1331,7 @@ class codescan extends control
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $type;
         $this->view->repoID        = $repoID;
-        $this->view->realRepoID    = $repoID;
+        $this->view->realRepoID    = $issueRepoID;
         $this->view->productID     = empty($repo) || empty($repo->product) ? 0 : explode(',', $repo->product)[0];
         $this->view->taskID        = $originTaskID;
         $this->view->queryID       = $queryID;
