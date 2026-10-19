@@ -79,6 +79,7 @@ $lang->file->errorFileSize    = "File exceeds %s and may not upload successfully
 $lang->file->errorFileUpload  = "Upload failed: File size may exceed the limit.";
 $lang->file->errorFileFormat  = "Upload failed: Unsupported file format.";
 $lang->file->errorFileMove    = "Upload failed: Error moving file.";
+$lang->file->errorUploadUID   = "Upload failed: Invalid upload ID.";
 $lang->file->errorFileCount   = "Limit: %s files. Excess files will be ignored.";
 $lang->file->dangerFile       = "Upload blocked: Security risk detected in selected file.";
 $lang->file->errorSuffix      = 'Invalid format, .zip files ONLY!';

@@ -79,6 +79,7 @@ $lang->file->errorFileSize    = " Taille du fichier excédant la limite. Il ne p
 $lang->file->errorFileUpload  = " Echec du chargement. La taille du fichier peut excéder la limite.";
 $lang->file->errorFileFormat  = " Echec du chargement. Le format du fichier est non autorisé.";
 $lang->file->errorFileMove    = " Echec du chargement. Une erreur est survenue lors du chargement.";
+$lang->file->errorUploadUID   = " Échec du chargement : identifiant de téléchargement invalide.";
 $lang->file->errorFileCount   = " Uploading failed. Files that exceed the limit cannot be uploaded.";
 $lang->file->dangerFile       = " Le fichier n'a pas pu être chargé pour des raisons de sécurité.";
 $lang->file->errorSuffix      = 'Format incorrect. Fichiers .zip SEULEMENT !';

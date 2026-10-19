@@ -21,6 +21,9 @@ cid=16527
 - 执行fileTest模块的saveChunkedFileTest方法，参数是$largeFile, $largeUid 
  - 属性size @10485760
  - 属性extension @zip
+- 执行fileTest模块的saveChunkedFileTest方法，参数是$traversalFile, $traversalUid @0
+- 执行fileTest模块的saveChunkedFileTest方法，参数是$encodedTraversalFile, $encodedTraversalUid @0
+- 执行fileTest模块的saveChunkedFileTest方法，参数是$dotFile, $dotUid @0
 
 */
 
@@ -90,3 +93,25 @@ $largeFile = array(
 );
 $largeUid = 'test_uid_005';
 r($fileTest->saveChunkedFileTest($largeFile, $largeUid)) && p('size,extension') && e('10485760,zip');
+
+// 测试步骤6：拒绝普通路径穿越
+$traversalFile = array(
+    'extension' => 'jpg',
+    'title' => 'traversal_file',
+    'size' => 1,
+    'pathname' => 'traversal_path',
+    'chunks' => 1,
+    'chunkIndex' => 0
+);
+$traversalUid = '../../www/data/vuln015';
+r($fileTest->saveChunkedFileTest($traversalFile, $traversalUid)) && p() && e('0');
+
+// 测试步骤7：拒绝编码后的路径穿越
+$encodedTraversalFile = $traversalFile;
+$encodedTraversalUid  = '..%2F..%2Fwww%2Fdata%2Fvuln015';
+r($fileTest->saveChunkedFileTest($encodedTraversalFile, $encodedTraversalUid)) && p() && e('0');
+
+// 测试步骤8：拒绝父目录标识
+$dotFile = $traversalFile;
+$dotUid  = '..';
+r($fileTest->saveChunkedFileTest($dotFile, $dotUid)) && p() && e('0');

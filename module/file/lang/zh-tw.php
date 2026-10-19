@@ -71,6 +71,7 @@ $lang->file->errorFileSize    = " 檔案大小已經超過%s，可能不能成�
 $lang->file->errorFileUpload  = " 檔案上傳失敗，檔案大小可能超出限制";
 $lang->file->errorFileFormat  = " 檔案上傳失敗，檔案格式不在規定範圍內";
 $lang->file->errorFileMove    = " 檔案上傳失敗，移動檔案時出錯";
+$lang->file->errorUploadUID   = " 檔案上傳失敗，上傳標識不合法";
 $lang->file->dangerFile       = " 您選擇的檔案存在安全風險，系統將不予上傳。";
 $lang->file->errorSuffix      = '壓縮包格式錯誤，只能上傳zip壓縮包！';
 $lang->file->errorExtract     = '解壓縮失敗！可能檔案已經損壞，或壓縮包裡含有非法上傳檔案。';
