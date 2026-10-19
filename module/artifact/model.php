@@ -42,31 +42,11 @@ class artifactModel extends model
             $privCondition = "((`repoID` = 0 AND `spaceID` IN ({$spaceIds})) OR (`repoID` != 0 AND `repoID` IN ({$repoIds})))";
         }
 
-        $repos = array();
-        if(!$repoID && !$this->app->user->admin)
-        {
-            if($scope == 'all') $repos[] = 0;
-            $spaceRepos   = $this->space->getReposBySpace($spaceID);
-            $privateRepos = $this->dao->select('repo')->from(TABLE_DEVOPSREPOUSER)
-                ->where('account')->eq($this->app->user->account)
-                ->fetchPairs();
-            foreach($spaceRepos as $repo)
-            {
-                if($repo->acl == 'open')
-                {
-                    $repos[] = $repo->id;
-                    continue;
-                }
-                if(!isset($privateRepos[$repo->id])) continue;
-                $repos[] = $repo->id;
-            }
-        }
         return $this->dao->select('*')->from(TABLE_ARTIFACT)
             ->where('deleted')->eq(0)
             ->beginIF($scope != 'all')->andWhere('scope')->eq($scope)->fi()
             ->beginIF($this->app->tab != 'artifact' || $spaceID != 0)->andWhere('`spaceID`')->eq($spaceID)->fi()
             ->beginIF($repoID && $scope != 'all')->andWhere('`repoID`')->eq($repoID)->fi()
-            ->beginIF(!$repoID && $scope != 'space' && !empty($repos))->andWhere('`repoID`')->in($repos)->fi()
             ->beginIF(!empty($privCondition))->andWhere($privCondition)->fi()
             ->orderBy($orderBy)
             ->page($pager)

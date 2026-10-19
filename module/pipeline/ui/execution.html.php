@@ -37,6 +37,7 @@ featureBar
         setClass('mr-2'),
         set::icon('back'),
         set::type('secondary'),
+        $app->tab == 'pipeline' ? set::url($this->createLink('pipeline', 'browse', "space=0&repoID=0&type={$type}")) :
         set::url($this->createLink('pipeline', 'browse', "space={$spaceID}&repoID={$repoID}&type={$type}")),
         $lang->goback . $lang->pipeline->common
     ),

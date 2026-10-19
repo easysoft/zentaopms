@@ -70,9 +70,11 @@ class heading extends wg
         if(empty($currentModule) || empty($currentMethod)) return null;
 
         $url = createLink($currentModule, $currentMethod);
+        global $config;
         return item
         (
             set::url($url),
+            $config->vision == 'gitfox' ? setData('app', $tab) : null,
             set::hint($lang->$tab->common),
             ($tab == 'devops' || $tab == 'bi' || $tab == 'safe') ? setClass('font-brand') : null,
             set::icon($icon),

@@ -65,7 +65,7 @@ if($config->edition == 'gitfox' || $config->vision == 'gitfox')
                 'help'
             )
         ),
-        setClass('teamachievement-block'),
+        setClass('teamachievement-block gitfox-teamachievement-block'),
         set::bodyClass('ml-6'),
         div
         (

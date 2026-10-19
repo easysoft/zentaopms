@@ -15,7 +15,8 @@ if($repoID)
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
 }
 
-$backUrl = createLink('pipeline', "browse", "space={$spaceID}&repoID={$repoID}&type={$type}");
+$backApp = $app->tab;
+$backUrl = createLink('pipeline', "browse", "space={$spaceID}&repoID={$repoID}&type={$type}") . "#app={$backApp}";
 
 panel
 (
@@ -23,7 +24,7 @@ panel
     (
         set::id('flowApp'),
         set::height('calc(100vh - 96px)'),
-        set::goBack(jsRaw("() => {goBack('pipeline', '{$backUrl}')}")),
+        set::goBack(jsRaw("() => {goBack('{$backApp}', '{$backUrl}')}")),
         set::id($pipeline->id),
         set::name($pipeline->name),
         set::published($pipeline->status == 'active'),

@@ -1,4 +1,5 @@
 .teamachievement-block .item-row {min-height: 88px;}
+.teamachievement-block.gitfox-teamachievement-block .item-row {min-height: 74px;}
 .teamachievement-block .item-row .item-icon {background-size: 100%; position: relative; top: 10px; left: -38px;}
 .teamachievement-block .item-row .item-task .item-icon {background: url(static/svg/block-task.svg) center no-repeat;}
 .teamachievement-block .item-row .item-bug .item-icon {background: url(static/svg/block-bug.svg) center no-repeat;}
