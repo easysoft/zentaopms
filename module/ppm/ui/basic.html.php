@@ -65,7 +65,8 @@ foreach($pipelines as $pipeline)
                 span(setClass('font-bold'), "{$lang->ppm->codeScan}: {$taskName}"),
                 $pipeline->task->result && $pipeline->task->result == 'pass' ? label(setClass('success ml-4'), $lang->codescan->latestScanResultList['pass']) : null,
                 $pipeline->task->result && $pipeline->task->result != 'pass' ? label(setClass('danger ml-4'), $lang->codescan->latestScanResultList[$pipeline->task->result]) : null,
-                !$pipeline->task->result ? label(setClass('secondary ml-4'), $lang->codescan->latestExecStatusList['in_progress']) : null,
+                !$pipeline->task->result && $pipeline->task->status == 'in_progress' ? label(setClass('secondary ml-4'), $lang->codescan->latestExecStatusList['in_progress']) : null,
+                !$pipeline->task->result && $pipeline->task->status != 'in_progress' ? label(setClass('danger ml-4'), zget($lang->codescan->latestExecStatusList, $pipeline->task->status, $lang->codescan->latestExecStatusList['failed'])) : null,
                 $canViewTask ? div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->ppm->locateView), set::url('codescan', 'taskView', "repoID={$repoID}&id={$pipeline->task->id}&serviceRepoID={$repoID}&type=issue"), set::target('_blank'))) : null
             )
         );
