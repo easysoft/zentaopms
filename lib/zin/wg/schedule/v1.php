@@ -39,6 +39,8 @@ class schedule extends wg
                 let disabled = true;
                 if(disabled && (!begin || !end  || end == `{$longTime}`) || typeof end == 'undefined') disabled = false;
                 if(disabled && begin > end) disabled = false;
+                const enabledBox = parent.find('input[type=checkbox][name^="enabled"]');
+                if(enabledBox.length && !enabledBox.prop('checked')) disabled = false;
                 parent.find('.btn-calendar').toggleClass('disabled', !disabled);
             });
 JS
