@@ -6,3 +6,7 @@ if($config->vision == 'gitfox')
     $config->admin->menuGroup['service']    = array('provider');
     $config->admin->menuGroup['runner']     = array('runner');
 }
+
+$config->admin->apiSite       = 'https://www.gitfox.net/';
+$config->admin->dynamicAPIURL = $config->admin->apiSite . 'dynamic-activities.json';
+$config->admin->dynamicURL    = $config->admin->apiSite . 'activity.html';
