@@ -16,9 +16,9 @@ class xuanxuanMessage extends messageModel
                 $this->loadModel('action');
                 $actorAccount = $actor ?: zget($this->app->user, 'account', '');
                 $actorUser    = $this->loadModel('user')->getById($actorAccount);
-                if(!$actorUser && $actorAccount != 'guest') return;
+                if(!$actorUser && !in_array($actorAccount, array('guest', 'system'))) return;
                 $actorID   = $actorUser ? $actorUser->id : 0;
-                $actorName = $actorUser ? $actorUser->realname : 'guest';
+                $actorName = $actorUser ? $actorUser->realname : $actor;
 
                 $field = 'obj.*';
                 if($objectType == 'task')     $field = 'obj.*,project.name as projectName,execu.name as execuName';
