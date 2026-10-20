@@ -15346,7 +15346,7 @@ CREATE TABLE `zt_ai_useragent` (
   `type` varchar(30) NOT NULL DEFAULT '' COMMENT '类型：'' | executor',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`(225));
+CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`(190));
 
 INSERT INTO `zt_ai_miniprogramfield` (`appID`, `name`, `type`, `placeholder`, `options`, `required`) VALUES
 (1, '教育背景', 'textarea', '学历/专业', NULL, '0'),
