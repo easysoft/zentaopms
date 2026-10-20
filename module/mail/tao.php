@@ -245,7 +245,7 @@ class mailTao extends mailModel
         if($objectType == 'aitask')
         {
             $toList = !empty($object->assignedTo) ? $object->assignedTo : ($object->createdBy ?? '');
-            return array('to' => trim($toList, ','), 'cc' => '');
+            return array(trim($toList, ','), '');
         }
 
         if(method_exists($objectModel, 'getToAndCcList'))

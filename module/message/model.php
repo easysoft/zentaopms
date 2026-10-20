@@ -213,7 +213,7 @@ class messageModel extends model
 
         $this->loadModel('action');
         $user = $this->loadModel('user')->getById($actor);
-        if(!$user && $actor != 'guest') return false;
+        if(!$user && !in_array($actor, array('guest', 'system'))) return false;
 
         $table  = $this->config->objectTables[$objectType];
         $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
