@@ -1195,7 +1195,7 @@ CREATE TABLE `zt_ai_useragent` (
   `account` varchar(30) NOT NULL DEFAULT '' COMMENT '禅道用户名',
   `agent` varchar(255) NOT NULL DEFAULT '' COMMENT 'ZAI agent ID',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_account_agent` (`account`,`agent`)
+  UNIQUE KEY `uk_account_agent` (`account`,`agent`(190))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_api` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
