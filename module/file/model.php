@@ -351,6 +351,45 @@ class fileModel extends model
     }
 
     /**
+     * Check upload uid.
+     *
+     * @param  string $uid
+     * @access public
+     * @return bool
+     */
+    public function isValidUploadUID(string $uid): bool
+    {
+        return $uid === '' || preg_match('/^[A-Za-z0-9_-]+$/', $uid) === 1;
+    }
+
+    /**
+     * Get upload save path.
+     *
+     * @param  string $uid
+     * @access public
+     * @return string
+     */
+    public function getUploadSavePath(string $uid): string
+    {
+        if(!$this->isValidUploadUID($uid)) return '';
+
+        $tmpFilePath = $this->app->getTmpRoot() . 'uploadfiles' . DS;
+        if(!is_dir($tmpFilePath) && !mkdir($tmpFilePath, 0755, true) && !is_dir($tmpFilePath)) return '';
+
+        $realTmpFilePath = realpath($tmpFilePath);
+        if($realTmpFilePath === false) return '';
+
+        $tmpFileSavePath = $tmpFilePath . $uid . DS;
+        if(!is_dir($tmpFileSavePath) && !mkdir($tmpFileSavePath, 0755) && !is_dir($tmpFileSavePath)) return '';
+
+        $realTmpFileSavePath = realpath($tmpFileSavePath);
+        if($realTmpFileSavePath === false) return '';
+        if($realTmpFileSavePath !== $realTmpFilePath && strpos($realTmpFileSavePath . DS, $realTmpFilePath . DS) !== 0) return '';
+
+        return $realTmpFileSavePath . DS;
+    }
+
+    /**
      * Save uploaded file by chunk.
      *
      * @param  array  $file
@@ -362,12 +401,13 @@ class fileModel extends model
     {
         if($file['chunks'] == 0) return array();
 
-        $tmpFilePath = $this->app->getTmpRoot() . 'uploadfiles/';
-        $tmpFileSavePath = $tmpFilePath . $uid . '/';
-        if(!is_dir($tmpFileSavePath)) mkdir($tmpFileSavePath, 0777, true);
+        $tmpFileSavePath = $this->getUploadSavePath($uid);
+        if($tmpFileSavePath === '') return array();
 
         $file['realpath'] = $tmpFileSavePath . basename($this->getSaveName($file['pathname']));
-        file_put_contents($file['realpath'], file_get_contents('php://input'), $file['chunkIndex'] == 0 ? 0 : FILE_APPEND);
+        $contents = file_get_contents('php://input');
+        if($contents === false) return array();
+        if(file_put_contents($file['realpath'], $contents, $file['chunkIndex'] == 0 ? 0 : FILE_APPEND) === false) return array();
 
         $uploadFile = array();
         $uploadFile['extension'] = $file['extension'];

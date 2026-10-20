@@ -13151,13 +13151,16 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (23, 'repo', 'browseSystem'),
 (23, 'repo', 'browseTag'),
 (23, 'repo', 'browseWebhooks'),
+(23, 'repo', 'create'),
 (23, 'repo', 'createBranch'),
+(23, 'repo', 'createRepo'),
 (23, 'repo', 'createTag'),
 (23, 'repo', 'deleteBranch'),
 (23, 'repo', 'deleteTag'),
 (23, 'repo', 'diff'),
 (23, 'repo', 'download'),
 (23, 'repo', 'downloadCode'),
+(23, 'repo', 'edit'),
 (23, 'repo', 'linkBug'),
 (23, 'repo', 'linkStory'),
 (23, 'repo', 'linkTask'),
@@ -15343,7 +15346,7 @@ CREATE TABLE `zt_ai_useragent` (
   `type` varchar(30) NOT NULL DEFAULT '' COMMENT '类型：'' | executor',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`(225));
+CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`(190));
 
 INSERT INTO `zt_ai_miniprogramfield` (`appID`, `name`, `type`, `placeholder`, `options`, `required`) VALUES
 (1, '教育背景', 'textarea', '学历/专业', NULL, '0'),

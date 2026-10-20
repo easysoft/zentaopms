@@ -79,6 +79,7 @@ $lang->file->errorFileSize    = " 文件大小已经超过%s，可能不能成�
 $lang->file->errorFileUpload  = " 文件上传失败，文件大小为0或者超出限制";
 $lang->file->errorFileFormat  = " 文件上传失败，文件格式不在规定范围内";
 $lang->file->errorFileMove    = " 文件上传失败，移动文件时出错";
+$lang->file->errorUploadUID   = " 文件上传失败，上传标识不合法";
 $lang->file->errorFileCount   = " 只能上传 %s 个文件，超出数量限制的文件无法上传。";
 $lang->file->dangerFile       = " 您选择的文件存在安全风险，系统将不予上传。";
 $lang->file->errorSuffix      = '压缩包格式错误，只能上传zip压缩包！';

@@ -12169,7 +12169,6 @@ class upgradeModel extends model
         $deliverableStage->stage    = 'project';
 
         $projectDeliverable = new stdclass();
-        $projectDeliverable->sourceType  = 'project';
         $projectDeliverable->createdBy   = 'system';
         $projectDeliverable->createdDate = helper::now();
         $projectDeliverable->hasApproval = 1;
@@ -12202,7 +12201,7 @@ class upgradeModel extends model
                 foreach(array_keys($projectIdList) as $projectID)
                 {
                     $projectDeliverable->project     = $projectID;
-                    $projectDeliverable->sourceID    = $projectID;
+                    $projectDeliverable->submitFrom  = $projectID;
                     $projectDeliverable->deliverable = $deliverableID;
                     $projectDeliverable->name        = $name . $this->lang->upgrade->list;
                     $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($projectDeliverable)->exec();
@@ -13293,7 +13292,8 @@ class upgradeModel extends model
 
         $includePackage = array('git', 'subversion');
         $includeMethod  = array('repo-diff', 'repo-blame', 'host-treemap', 'deploy-steps', 'deploy-viewStep');
-        $excludePackage = array('manageRepo', 'manageArtifactrepo', 'deleteRepo', 'deleteArtifactrepo');
+        $excludePackage = array('manageArtifactrepo', 'deleteRepo', 'deleteArtifactrepo');
+        $excludeMethod  = array('repo-delete');
 
         $devopsPriv = $this->loadModel('group')->getPrivsByNav('devops');
         $this->app->loadLang('install');
@@ -13322,7 +13322,7 @@ class upgradeModel extends model
                     if(strpos($package, 'browse') !== 0 && !in_array($package, $includePackage) && !in_array($method, $includeMethod) && !in_array($priv->method, array('browse', 'view'))) continue;
                     if(in_array($method, array('store-browse'))) continue;
                 }
-                if($group == 'DEVOPSUSER' && ($priv->module == 'space' || $priv->subset == 'repoSettings' || in_array($package, $excludePackage))) continue;
+                if($group == 'DEVOPSUSER' && ($priv->module == 'space' || $priv->subset == 'repoSettings' || in_array($package, $excludePackage) || in_array($method, $excludeMethod))) continue;
 
                 $insertPriv = new stdclass();
                 $insertPriv->group  = $groupID;

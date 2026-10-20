@@ -69,10 +69,10 @@ foreach($severityList as &$value)
 $repoItems = array();
 if($config->vision == 'gitfox' && $app->tab == 'issue')
 {
-    $repoItems[] = array('text' => $lang->codescan->allRepo, 'data-app' => 'issue', 'url' => createLink('codescan', 'issue', "repoID=0&taskID=0&serviceRepoID=0&type={$browseType}&queryID={$queryID}&severity={$severity}&extras={$extras}"));
+    $repoItems[] = array('text' => $lang->codescan->allRepo, 'data-app' => 'issue', 'url' => createLink('codescan', 'issue', "repoID=0&taskID=0&serviceRepoID=0&type={$browseType}&queryID={$queryID}&severity={$severity}&extras="));
     foreach($repoList as $repoId => $repoName)
     {
-        $repoItems[] = array('text' => $repoName, 'data-app' => 'issue', 'url' => createLink('codescan', 'issue', "repoID={$repoId}&taskID=0&serviceRepoID=0&type={$browseType}&queryID={$queryID}&severity={$severity}&extras={$extras}"));
+        $repoItems[] = array('text' => $repoName, 'data-app' => 'issue', 'url' => createLink('codescan', 'issue', "repoID={$repoId}&taskID=0&serviceRepoID=0&type={$browseType}&queryID={$queryID}&severity={$severity}&extras="));
     }
 }
 

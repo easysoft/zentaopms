@@ -155,9 +155,11 @@ class artifact extends control
         $node      = $this->artifactZen->getNodeByPath($artifactLib, $selectPath);
         $assetList = $this->artifact->getAssetListByNodeID(empty($node) || empty($node->entityID) ? '' : $node->entityID, $artifactLibID, $orderBy, $pager);
 
+        $formSpaceID = $this->app->tab == 'artifact' ? 0 : $spaceID;
+
         $this->view->title           = $artifactLib->name . $this->lang->hyphen . $this->lang->artifact->repoBrowser;
         $this->view->artifact        = $artifactLib;
-        $this->view->browseLink      = $this->createLink('artifact', 'browse', "space={$spaceID}&repoID={$repoID}&type={$type}");
+        $this->view->browseLink      = $this->createLink('artifact', 'browse', "space={$formSpaceID}&repoID={$repoID}&type={$type}");
         $this->view->treeItems       = $this->artifactZen->getArtifactLibTreeData($artifactLib, '/', $selectPath, $spaceID, $repoID, $type, $leaf);
         $this->view->selectNode      = $selectNode;
         $this->view->spaceID         = $spaceID;
