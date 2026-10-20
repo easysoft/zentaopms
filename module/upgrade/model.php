@@ -12169,7 +12169,6 @@ class upgradeModel extends model
         $deliverableStage->stage    = 'project';
 
         $projectDeliverable = new stdclass();
-        $projectDeliverable->sourceType  = 'project';
         $projectDeliverable->createdBy   = 'system';
         $projectDeliverable->createdDate = helper::now();
         $projectDeliverable->hasApproval = 1;
@@ -12202,7 +12201,7 @@ class upgradeModel extends model
                 foreach(array_keys($projectIdList) as $projectID)
                 {
                     $projectDeliverable->project     = $projectID;
-                    $projectDeliverable->sourceID    = $projectID;
+                    $projectDeliverable->submitFrom  = $projectID;
                     $projectDeliverable->deliverable = $deliverableID;
                     $projectDeliverable->name        = $name . $this->lang->upgrade->list;
                     $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($projectDeliverable)->exec();
