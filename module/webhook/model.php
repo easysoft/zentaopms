@@ -124,7 +124,7 @@ class webhookModel extends model
                 $object->$field = '';
             }
 
-            $log->action    = $this->webhookTao->getActionText($data, $action, $object->$field, $users);
+            $log->action    = $this->webhookTao->getActionText($data, $action, zget($object, $field, ''), $users);
             $log->actionURL = $this->getViewLink($action->objectType, $action->objectID);
             $log->module    = $action->objectType;
             $log->moduleID  = $action->objectID;
