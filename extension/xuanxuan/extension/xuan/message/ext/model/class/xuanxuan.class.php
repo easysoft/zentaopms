@@ -116,7 +116,7 @@ class xuanxuanMessage extends messageModel
                 $target = explode(',', $target);
                 $target = $this->dao->select('id')->from(TABLE_USER)
                     ->where('account')->in($target)
-                    ->beginIF($objectType != 'mr')->andWhere('account')->ne($this->app->user->account)->fi()
+                    ->beginIF(!in_array($objectType, array('mr', 'aitask')))->andWhere('account')->ne($this->app->user->account)->fi()
                     ->fetchAll('id');
                 $target = array_keys($target);
 

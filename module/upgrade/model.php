@@ -9605,6 +9605,8 @@ class upgradeModel extends model
      */
     public function importBuildinWorkflow($vision = 'all', $importModule = '', $importAction = '', $hasGroup = 0)
     {
+        if($this->config->edition == 'open') return true;
+
         $this->loadModel('workflow');
         $this->loadModel('workflowaction');
         $this->loadModel('workflowfield');
