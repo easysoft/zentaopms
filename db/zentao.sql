@@ -15522,7 +15522,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_vectorqueue` (
   `editedDate` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-CREATE UNIQUE INDEX `uk_object` ON `zt_ai_vectorqueue` (`objectType`, `objectID`);
+CREATE UNIQUE INDEX `uk_object` ON `zt_ai_vectorqueue` (`objectType`(190), `objectID`);
 CREATE INDEX `idx_retries` ON `zt_ai_vectorqueue` (`retries`);
 
 -- DROP TABLE IF EXISTS `zt_ai_teammate`;
