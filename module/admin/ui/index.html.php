@@ -310,11 +310,11 @@ div
             setClass('flex'),
             div
             (
-                setClass('bg-white rounded-md mb-4 ' . ($isGitfox ? 'w-full' : 'w-1/3')),
+                setClass('bg-white rounded-md ' . ($isGitfox ? 'w-full' : 'w-1/3 mb-4')),
                 $buildHeader($lang->admin->officialAccount),
                 div
                 (
-                    setClass('flex px-4'),
+                    setClass('flex px-4' . ($isGitfox ? ' pb-4' : '')),
                     img
                     (
                         setClass($isGitfox ? 'w-28' : 'w-1/3'),
