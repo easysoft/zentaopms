@@ -201,7 +201,7 @@ class zfile
             else
             {
                 $nextDir = $dir . $entry;
-                $this->readDir($nextDir);
+                $this->readDir($nextDir, $exceptions);
             }
         }
         return $files;
