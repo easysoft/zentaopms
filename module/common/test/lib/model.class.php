@@ -1182,6 +1182,63 @@ class commonModelTest extends baseTest
         }
     }
 
+    /**
+     * Test checkMenuVarsReplaced method.
+     *
+     * @param  int    $testCase
+     * @param  int    $repoID
+     * @access public
+     * @return string
+     */
+    public function checkMenuVarsReplacedTest(int $testCase = 1, int $repoID = 0): string
+    {
+        global $app, $lang;
+
+        $oldTab    = $app->tab;
+        $oldVision = $app->config->vision;
+        $oldRepoID = isset($app->session->repoID) ? $app->session->repoID : 0;
+        $oldIssue  = isset($lang->issue) ? $lang->issue : null;
+        $oldMenu   = isset($lang->menu) ? $lang->menu : null;
+
+        $app->tab            = 'issue';
+        $app->config->vision = 'gitfox';
+        $app->session->set('repoID', $repoID);
+
+        $lang->issue       = new stdclass();
+        $lang->issue->menu = new stdclass();
+        $lang->issue->menu->review   = array('link' => '评审问题|repo|review|repoID=%s');
+        $lang->issue->menu->codescan = array('link' => '扫描问题|codescan|issue|repoID=%s');
+        $lang->menu = $lang->issue->menu;
+
+        if($testCase == 4)
+        {
+            $lang->issue->menu->review = array('link' => '评审问题|repo|review|repoID=2');
+        }
+        elseif($testCase == 5)
+        {
+            $app->tab   = 'my';
+            $lang->menu = new stdclass();
+            $lang->menu->index = array('link' => '地盘|my|index|');
+        }
+
+        commonModel::checkMenuVarsReplaced();
+
+        if($testCase == 2)      $result = $lang->menu->codescan['link'];
+        elseif($testCase == 5)  $result = $lang->menu->index['link'];
+        else                    $result = $lang->menu->review['link'];
+
+        $app->tab            = $oldTab;
+        $app->config->vision = $oldVision;
+        $app->session->set('repoID', $oldRepoID);
+
+        if($oldIssue === null) unset($lang->issue);
+        else                   $lang->issue = $oldIssue;
+        if($oldMenu === null) unset($lang->menu);
+        else                  $lang->menu = $oldMenu;
+
+        return $result;
+    }
+
 
     /**
      * Test setMenuVars method.
