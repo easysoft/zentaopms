@@ -12,6 +12,7 @@ cid=15317
 - 执行blockTest模块的processBlockForRenderTest方法，参数是array 第0条的top属性 @-1
 - 执行blockTest模块的processBlockForRenderTest方法，参数是array 第0条的left属性 @2
 - 执行blockTest模块的processBlockForRenderTest方法，参数是array  @3
+- 步骤6：GitFox独立版已有团队成就区块按配置重置高度 @4
 
 */
 
@@ -102,3 +103,20 @@ $block3->height = 3;
 $block3->left = 0;
 $block3->top = 0;
 r(count($blockTest->processBlockForRenderTest(array($block1, $block2, $block3), 0))) && p() && e('3');
+
+// 测试步骤6:GitFox独立版团队成就区块已有高度为6时，渲染时按配置重置为4
+$config->edition = 'gitfox';
+$config->vision  = 'gitfox';
+$extConfigPath = $tester->app->getModuleExtPath('block', 'config');
+include $extConfigPath['common'] . 'gitfox.php';
+
+$block4 = new stdClass();
+$block4->id = 4;
+$block4->module = 'teamachievement';
+$block4->code = 'teamachievement';
+$block4->params = '{}';
+$block4->width = 1;
+$block4->height = 6;
+$block4->left = 2;
+$block4->top = 0;
+r($blockTest->processBlockForRenderTest(array($block4), 0)) && p('0:height') && e('4');

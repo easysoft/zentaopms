@@ -21,6 +21,7 @@ cid=15244
 - 步骤12：GitFox独立版第6个区块是团队成就 @teamachievement|teamachievement
 - 步骤13：GitFox独立版左侧三个区块都是长区块 @6
 - 步骤14：GitFox独立版右侧三个区块都是短区块 @3
+- 步骤15：GitFox独立版团队成就区块高度为4 @4
 
 */
 
@@ -52,7 +53,7 @@ $account = $tester->app->user->account;
 $tester->dao->delete()->from(TABLE_BLOCK)->where('account')->eq($account)->andWhere('dashboard')->eq('my')->exec();
 $blockTest->zenInitBlockTest('my');
 
-$gitfoxBlocks = $tester->dao->select('module,code,width')->from(TABLE_BLOCK)->where('account')->eq($account)->andWhere('dashboard')->eq('my')->orderBy('id')->fetchAll();
+$gitfoxBlocks = $tester->dao->select('module,code,width,height')->from(TABLE_BLOCK)->where('account')->eq($account)->andWhere('dashboard')->eq('my')->orderBy('id')->fetchAll();
 $gitfoxBlockList = array();
 foreach($gitfoxBlocks as $gitfoxBlock) $gitfoxBlockList[] = $gitfoxBlock->module . '|' . $gitfoxBlock->code;
 
@@ -65,3 +66,4 @@ r($gitfoxBlockList[4]) && p() && e('dynamic|dynamic'); // 步骤11：第5个区�
 r($gitfoxBlockList[5]) && p() && e('teamachievement|teamachievement'); // 步骤12：第6个区块是团队成就
 r((int)$gitfoxBlocks[0]->width + (int)$gitfoxBlocks[1]->width + (int)$gitfoxBlocks[2]->width) && p() && e('6'); // 步骤13：左侧都是长区块
 r((int)$gitfoxBlocks[3]->width + (int)$gitfoxBlocks[4]->width + (int)$gitfoxBlocks[5]->width) && p() && e('3'); // 步骤14：右侧都是短区块
+r((int)$gitfoxBlocks[5]->height) && p() && e('4'); // 步骤15：团队成就区块高度为4

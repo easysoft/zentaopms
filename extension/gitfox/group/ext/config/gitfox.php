@@ -79,6 +79,10 @@ $config->group->subset->artifact = new stdclass();
 $config->group->subset->artifact->order = 2460;
 $config->group->subset->artifact->nav = 'artifact';
 
+$config->group->subset->systemdynamic = new stdclass();
+$config->group->subset->systemdynamic->order = 2465;
+$config->group->subset->systemdynamic->nav   = 'organization';
+
 $config->group->subset->systemManage = new stdclass();
 $config->group->subset->systemManage->order = 2470;
 $config->group->subset->systemManage->nav = 'system';
@@ -631,3 +635,9 @@ $config->group->package->commonEffort->order  = 5;
 $config->group->package->commonEffort->subset = 'generaleffort';
 $config->group->package->commonEffort->privs  = array();
 $config->group->package->commonEffort->privs['effort-createForObject'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 3, 'depend' => array(), 'recommend' => array(0 => 'effort-delete', 1 => 'effort-edit'));
+
+$config->group->package->companyDynamic = new stdclass();
+$config->group->package->companyDynamic->order  = 5;
+$config->group->package->companyDynamic->subset = 'systemdynamic';
+$config->group->package->companyDynamic->privs  = array();
+$config->group->package->companyDynamic->privs['company-dynamic'] = array('edition' => 'gitfox', 'vision' => 'gitfox', 'order' => 20, 'depend' => array('my-team'), 'recommend' => array());
