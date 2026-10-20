@@ -20,7 +20,7 @@ foreach($disabledFeatures as $feature)
     (
         h::td
         (
-            is_array($feature) && !empty($disabledScrumFeatures) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $disabledScrumFeatures)) : $this->lang->custom->features[$feature],
+            is_array($feature) && !empty($disabledScrumFeatures) ? implode($lang->comma, $disabledScrumFeatures) : $this->lang->custom->features[$feature],
         ),
         h::td
         (
@@ -43,13 +43,13 @@ foreach($disabledFeatures as $feature)
 foreach($config->custom->allFeatures as $feature)
 {
     if(in_array($feature, $disabledFeatures)) continue;
-    if($feature == 'scrumDetail' && empty($enabledScrumFeatures)) continue;
+    if($feature == 'projectDetail' && empty($enabledScrumFeatures)) continue;
 
     $trs[] = h::tr
     (
         h::td
         (
-            ($feature == 'scrumDetail' && !empty($enabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $enabledScrumFeatures)) : $this->lang->custom->features[$feature]
+            ($feature == 'projectDetail' && !empty($enabledScrumFeatures)) ? implode($lang->comma, $enabledScrumFeatures) : $this->lang->custom->features[$feature]
         ),
         h::td
         (
