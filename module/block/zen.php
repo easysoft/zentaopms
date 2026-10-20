@@ -358,7 +358,8 @@ class blockZen extends block
 
         /* 调取接口获取数据。 */
         $startTime = microtime(true);
-        $result    = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http(sprintf($this->config->admin->dynamicAPIURL, $this->config->version))));
+        $apiURL    = $this->config->vision == 'gitfox' || $this->config->edition == 'gitfox' ? $this->config->admin->dynamicAPIURL : sprintf($this->config->admin->dynamicAPIURL, $this->config->version);
+        $result    = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http($apiURL)));
 
         /* 请求超过一定时间后判断为网络请求缓慢。 */
         if(microtime(true) - $startTime > $this->config->timeout / 1000) $this->session->set('isSlowNetwork', true);
