@@ -13151,13 +13151,16 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (23, 'repo', 'browseSystem'),
 (23, 'repo', 'browseTag'),
 (23, 'repo', 'browseWebhooks'),
+(23, 'repo', 'create'),
 (23, 'repo', 'createBranch'),
+(23, 'repo', 'createRepo'),
 (23, 'repo', 'createTag'),
 (23, 'repo', 'deleteBranch'),
 (23, 'repo', 'deleteTag'),
 (23, 'repo', 'diff'),
 (23, 'repo', 'download'),
 (23, 'repo', 'downloadCode'),
+(23, 'repo', 'edit'),
 (23, 'repo', 'linkBug'),
 (23, 'repo', 'linkStory'),
 (23, 'repo', 'linkTask'),
@@ -15343,7 +15346,7 @@ CREATE TABLE `zt_ai_useragent` (
   `type` varchar(30) NOT NULL DEFAULT '' COMMENT '类型：'' | executor',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`(225));
+CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`(190));
 
 INSERT INTO `zt_ai_miniprogramfield` (`appID`, `name`, `type`, `placeholder`, `options`, `required`) VALUES
 (1, '教育背景', 'textarea', '学历/专业', NULL, '0'),
@@ -15674,7 +15677,6 @@ CREATE TABLE IF NOT EXISTS `zt_ai_procedurerun` (
 
 INSERT INTO `zt_ai_procedure` (`id`, `name`, `module`, `desc`, `status`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `publishedBy`, `unpublishedBy`, `deleted`) VALUES
 (1,	'研发需求工序',	'story',	'需求完善--需求检查--工作量估算--价值评估',	'draft',	'admin',	'2026-08-26 18:37:14',	'',	NULL,	'',	'',	0),
-(2,	'Bug修改工序',	'bug',	'Bug分析--Bug修改方案--Bug修改--自测',	'draft',	'admin',	'2026-08-26 18:55:16',	'admin',	'2026-08-26 18:55:37',	'',	'',	0),
 (3,	'详细设计文档编写',	'task',	'理解需求 → 现状约束 → 方案设计 → 方案选型 → 接口数据 → 异常回滚 → 风险评审',	'draft',	'admin',	'2026-09-20 16:16:42',	'admin',	'2026-09-20 16:29:40',	'',	'',	0),
 (4,	'测试用例设计',	'story',	'测试点提炼 → 场景拆解 → 用例编写',	'draft',	'admin',	'2026-09-20 16:37:43',	'admin',	'2026-09-20 16:52:21',	'admin',	'admin',	0),
 (5,	'客户反馈受理与分派',	'feedback',	'反馈原文规范 → 反馈信息澄清 → 反馈去重 → 反馈处理方案',	'draft',	'admin',	'2026-09-20 16:47:36',	'admin',	'2026-09-20 16:55:02',	'',	'',	0);
@@ -15697,11 +15699,7 @@ INSERT INTO `zt_ai_procedurestep` (`id`, `procedure`, `agent`, `name`, `inputs`,
 (73,	1, 19,	'需求完善',	NULL,	1),
 (74,	1, 18,	'需求检查',	NULL,	2),
 (75,	1, 17,	'需求工作量估算',	NULL,	3),
-(76,	1, 16,	'需求价值评估',	NULL,	4),
-(87,	2, 23,	'Bug分析',	NULL,	1),
-(88,	2, 22,	'Bug修改方案',	NULL,	2),
-(89,	2, 20,	'Bug修改',	'{\"1\":88}',	3),
-(90,	2, 21,	'Bug自测清单',	NULL,	4);
+(76,	1, 16,	'需求价值评估',	NULL,	4);
 
 -- DROP TABLE IF EXISTS `zt_market`;
 CREATE TABLE IF NOT EXISTS `zt_market` (

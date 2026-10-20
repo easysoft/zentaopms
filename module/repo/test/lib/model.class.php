@@ -3237,21 +3237,30 @@ SQL);
     public function getGitLabReposFirstFieldTest(string $apiRoot, string $field): string
     {
         $repos = $this->getGitLabReposTest($apiRoot);
-        $repo  = is_array($repos) ? reset($repos) : false;
+        if(!is_array($repos)) return '0';
+        if(empty($repos)) return '1';
+
+        $repo = reset($repos);
         return is_object($repo) && property_exists($repo, $field) ? '1' : '0';
     }
 
     public function getGiteaReposFirstFieldTest(string $apiRoot, string $field): string
     {
         $repos = $this->getGiteaReposTest($apiRoot);
-        $repo  = is_array($repos) ? reset($repos) : false;
+        if(!is_array($repos)) return '0';
+        if(empty($repos)) return '1';
+
+        $repo = reset($repos);
         return is_object($repo) && property_exists($repo, $field) ? '1' : '0';
     }
 
     public function getGogsReposFirstFieldTest(string $apiRoot, string $field): string
     {
         $repos = $this->getGogsReposTest($apiRoot);
-        $repo  = is_array($repos) ? reset($repos) : false;
+        if(!is_array($repos)) return '0';
+        if(empty($repos)) return '1';
+
+        $repo = reset($repos);
         return is_object($repo) && property_exists($repo, $field) ? '1' : '0';
     }
 

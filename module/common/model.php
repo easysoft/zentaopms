@@ -2365,6 +2365,11 @@ eof;
             if(!$varsReplaced) break;
         }
 
+        if(!$varsReplaced && $tab == 'issue' && isset($lang->issue->menu))
+        {
+            static::setMenuVars('issue', 0);
+        }
+
         if(!$varsReplaced and strpos("|program|product|project|execution|qa|safe|", "|{$tab}|") !== false)
         {
             $isTutorialMode = common::isTutorialMode();

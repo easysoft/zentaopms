@@ -367,7 +367,8 @@ class webhookModel extends model
                 foreach($userList as $account)
                 {
                     /* 用户没有绑定，跳过 */
-                    if(!empty($openIdList) && !isset($openIdList[$account]) && $account == $this->app->user->account) continue;
+                    if(!empty($openIdList) && !isset($openIdList[$account])) continue;
+                    if($objectType != 'aitask' && $account == $this->app->user->account) continue;
 
                     $postData = $this->buildData($objectType, $object, $actionType, $actionID, $webhook, $account, $role);
                     if(!$postData) continue;

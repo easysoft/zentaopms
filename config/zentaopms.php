@@ -14,6 +14,12 @@ $config->contactUs['phone']  = '4006-8899-23';
 $config->contactUs['email']  = 'co@zentao.net';
 $config->contactUs['qq']     = '1492153927';
 $config->contactUs['wechat'] = '13730922971';
+if(!empty($config->edition) && $config->edition == 'gitfox')
+{
+    $config->contactUs['email']  = 'wangzhaoning@chandao.com';
+    $config->contactUs['qq']     = '3684528290';
+    $config->contactUs['wechat'] = '17669512663';
+}
 
 /* Product common list. */
 $config->productCommonList['zh-cn'][0] = '产品';
@@ -181,6 +187,8 @@ $config->hourPointCommonList['pt'][2] = 'Ponto de função';
 
 $config->manualUrl['home'] = 'https://www.zentao.net/book/zentaopms/38.html?fullScreen=zentao';
 $config->manualUrl['int']  = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html?fullScreen=zentao';
+
+$config->gitfoxManualUrl['home'] = 'https://gitfox.net/book/open-source/40.html?fullScreen=gitfox';
 
 /* Supported charsets. */
 $config->charsets['zh-cn']['utf-8'] = 'UTF-8';

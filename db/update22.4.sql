@@ -27,7 +27,7 @@ CREATE TABLE `zt_ai_useragent` (
   `agent` varchar(255) NOT NULL DEFAULT '' COMMENT 'ZAI agent ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`);
+CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`(190));
 
 ALTER TABLE `zt_testrun` ADD COLUMN `caseVersion` smallint unsigned NOT NULL DEFAULT 0 COMMENT '用例版本' AFTER `case`;
 ALTER TABLE `zt_suitecase` ADD COLUMN `caseVersion` smallint unsigned NOT NULL DEFAULT 0 COMMENT '用例版本' AFTER `case`;

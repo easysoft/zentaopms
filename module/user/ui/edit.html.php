@@ -214,6 +214,7 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->visions),
             set::required(true),
+            set::className($config->edition != 'gitfox' ? '' : 'hidden'),
             checkList
             (
                 set::name('visions[]'),

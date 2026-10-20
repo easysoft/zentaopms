@@ -534,7 +534,11 @@ class codescanZen extends codescan
         $task->triggerType = zget($trigger, 'triggerType', '');
         $task->triggerID   = zget($trigger, 'triggerID', 0);
         $task->branch      = str_replace('refs/heads/', '', zget($task, 'executionRef', ''));
-        $task->name        = zget($repoList, $task->repoID) . sprintf($this->lang->codescan->scanNo, $task->repoNumber) . '(' . $task->branch . ')';
+
+        $repoName = zget($repoList, $task->repoID, '');
+        if($repoName === '') $repoName = zget($task, 'repoName', '');
+
+        $task->name        = $repoName . sprintf($this->lang->codescan->scanNo, $task->repoNumber) . '(' . $task->branch . ')';
         $task->triggerName = zget($trigger, 'triggerName', '');
         $task->trigger     = $task->triggerName;
         $task->repo        = $task->repoID;

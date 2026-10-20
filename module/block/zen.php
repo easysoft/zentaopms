@@ -242,6 +242,8 @@ class blockZen extends block
             if(empty($block->width))  $block->width  = array_key_first($sizeConfig);
             if(empty($block->height)) $block->height = zget($sizeConfig, $block->width, reset($sizeConfig));
 
+            if(($this->config->edition == 'gitfox' || $this->config->vision == 'gitfox') && $block->module == 'teamachievement') $block->height = zget($sizeConfig, $block->width, reset($sizeConfig));
+
             /* 设置区块距离左侧的宽度和距离顶部的高度。 */
             if($block->left === '') $block->left = $block->width == 1 ? 2 : 0;
             if($block->top  === 0)  $block->top  = -1; // -1 将会自动计算高度。
@@ -356,7 +358,8 @@ class blockZen extends block
 
         /* 调取接口获取数据。 */
         $startTime = microtime(true);
-        $result    = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http(sprintf($this->config->admin->dynamicAPIURL, $this->config->version))));
+        $apiURL    = $this->config->vision == 'gitfox' || $this->config->edition == 'gitfox' ? $this->config->admin->dynamicAPIURL : sprintf($this->config->admin->dynamicAPIURL, $this->config->version);
+        $result    = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http($apiURL)));
 
         /* 请求超过一定时间后判断为网络请求缓慢。 */
         if(microtime(true) - $startTime > $this->config->timeout / 1000) $this->session->set('isSlowNetwork', true);

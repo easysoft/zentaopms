@@ -171,7 +171,7 @@ fi
 rm -f "\${GITFOX_ZIP}"
 
 chmod +x "\${INSTALL_DIR}/gitfox"
-GITFOX_LANG={$setLang} "\${INSTALL_DIR}/gitfox" install && GITFOX_LANG={$setLang} "\${INSTALL_DIR}/gitfox" start && echo "GitFox has been installed to \${INSTALL_DIR}"
+GITFOX_LANG={$setLang} "\${INSTALL_DIR}/gitfox" install && echo "GitFox has been installed to \${INSTALL_DIR}"
 EOT;
 
 $config->gitfox->installGitfox['win'] = <<<EOT
@@ -213,7 +213,7 @@ cscript //nologo "%temp%\unzip.vbs"
 
 del /f /q "%GITFOX_ZIP%"
 
-"%INSTALL_DIR%\gitfox.exe" install && "%INSTALL_DIR%\gitfox.exe" start
+"%INSTALL_DIR%\gitfox.exe" install
 EOT;
 
 $config->gitfox->upgradeGitfox = array();

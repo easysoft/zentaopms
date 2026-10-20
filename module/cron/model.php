@@ -35,15 +35,13 @@ class cronModel extends model
     {
         /* 根据版本显示相关的定时任务。 */
         $showCommands = zget($this->config->cron->showCommands, $this->config->edition, array());
+        $hideCommands = zget($this->config->cron->hideCommands, $this->config->edition, array());
 
         return $this->dao->select('*')->from(TABLE_CRON)
             ->where('1=1')
             ->beginIF(strpos($params, 'nostop') !== false)->andWhere('status')->ne('stop')->fi()
-            ->beginIF($this->config->edition != 'max')
-            ->andWhere('command')->ne('moduleName=measurement&methodName=initCrontabQueue')
-            ->andWhere('command')->ne('moduleName=measurement&methodName=execCrontabQueue')
-            ->fi()
             ->beginIF(!empty($showCommands))->andWhere('command')->in($showCommands)->fi()
+            ->beginIF(!empty($hideCommands))->andWhere('command')->notIn($hideCommands)->fi()
             ->fetchAll('id', false);
     }
 

@@ -18,6 +18,10 @@ $config->cron->showCommands['gitfox'][] = 'moduleName=admin&methodName=deleteLog
 $config->cron->showCommands['gitfox'][] = 'moduleName=errorlog&methodName=deleteLog';
 $config->cron->showCommands['gitfox'][] = 'moduleName=backup&methodName=backup';
 
+$config->cron->hideCommands = array();
+$config->cron->hideCommands['open'][] = 'moduleName=aitask&methodName=exec';
+$config->cron->hideCommands['open'][] = 'moduleName=ai&methodName=runTimerAgents';
+
 global $lang;
 $config->cron->dtable = new stdclass();
 $config->cron->dtable->fieldList = array();

@@ -9605,6 +9605,8 @@ class upgradeModel extends model
      */
     public function importBuildinWorkflow($vision = 'all', $importModule = '', $importAction = '', $hasGroup = 0)
     {
+        if($this->config->edition == 'open') return true;
+
         $this->loadModel('workflow');
         $this->loadModel('workflowaction');
         $this->loadModel('workflowfield');
@@ -12031,15 +12033,15 @@ class upgradeModel extends model
         $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
         $deliverableID = $this->dao->lastInsertID();
 
-        /* “其他”类型；新加type，stage 与历史数据一致。 */
+        /* 任务关闭时的检查环节由 22.6 的 modifyOtherDeliverable 补齐，其余环节的 type 由 22.6 的 update22.6.sql 补齐。*/
         $stageList = $this->config->edition != 'biz' ? $this->loadModel('deliverable')->buildStageList($workflowGroupID) : array();
         foreach($stageList as $type => $stages)
         {
+            if($type == 'task') continue;
             foreach($stages as $stage => $label)
             {
                 $deliverableStage = new stdclass();
                 $deliverableStage->deliverable = $deliverableID;
-                $deliverableStage->type        = $type;
                 $deliverableStage->stage       = $stage;
                 $deliverableStage->required    = '0';
                 $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
@@ -12169,7 +12171,6 @@ class upgradeModel extends model
         $deliverableStage->stage    = 'project';
 
         $projectDeliverable = new stdclass();
-        $projectDeliverable->sourceType  = 'project';
         $projectDeliverable->createdBy   = 'system';
         $projectDeliverable->createdDate = helper::now();
         $projectDeliverable->hasApproval = 1;
@@ -12202,11 +12203,12 @@ class upgradeModel extends model
                 foreach(array_keys($projectIdList) as $projectID)
                 {
                     $projectDeliverable->project     = $projectID;
-                    $projectDeliverable->sourceID    = $projectID;
+                    $projectDeliverable->submitFrom  = $projectID;
                     $projectDeliverable->deliverable = $deliverableID;
                     $projectDeliverable->name        = $name . $this->lang->upgrade->list;
                     $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($projectDeliverable)->exec();
-                    $this->loadModel('action')->create('projectdeliverable', $deliverableID, 'opened');
+                    $projectDeliverableID = $this->dao->lastInsertId();
+                    $this->loadModel('action')->create('projectdeliverable', $projectDeliverableID, 'opened');
                 }
             }
         }
@@ -13292,7 +13294,8 @@ class upgradeModel extends model
 
         $includePackage = array('git', 'subversion');
         $includeMethod  = array('repo-diff', 'repo-blame', 'host-treemap', 'deploy-steps', 'deploy-viewStep');
-        $excludePackage = array('manageRepo', 'manageArtifactrepo', 'deleteRepo', 'deleteArtifactrepo');
+        $excludePackage = array('manageArtifactrepo', 'deleteRepo', 'deleteArtifactrepo');
+        $excludeMethod  = array('repo-delete');
 
         $devopsPriv = $this->loadModel('group')->getPrivsByNav('devops');
         $this->app->loadLang('install');
@@ -13321,7 +13324,7 @@ class upgradeModel extends model
                     if(strpos($package, 'browse') !== 0 && !in_array($package, $includePackage) && !in_array($method, $includeMethod) && !in_array($priv->method, array('browse', 'view'))) continue;
                     if(in_array($method, array('store-browse'))) continue;
                 }
-                if($group == 'DEVOPSUSER' && ($priv->module == 'space' || $priv->subset == 'repoSettings' || in_array($package, $excludePackage))) continue;
+                if($group == 'DEVOPSUSER' && ($priv->module == 'space' || $priv->subset == 'repoSettings' || in_array($package, $excludePackage) || in_array($method, $excludeMethod))) continue;
 
                 $insertPriv = new stdclass();
                 $insertPriv->group  = $groupID;

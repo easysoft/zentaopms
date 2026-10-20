@@ -15,6 +15,10 @@ if($config->vision == 'gitfox')
 
     /* GitFox独立版不展示重建索引菜单。*/
     unset($lang->admin->menuList->system['subMenu']['buildindex']);
+    unset($lang->admin->menuList->system['subMenu']['mode']);
+    unset($lang->admin->menuList->system['subMenu']['xuanxuan']);
+    unset($lang->admin->menuList->system['menuOrder']['5']);
+    unset($lang->admin->menuList->system['menuOrder']['20']);
     unset($lang->admin->menuList->system['menuOrder']['50']);
 
     $lang->admin->menuList->branchType['name']  = $lang->devops->branchType;

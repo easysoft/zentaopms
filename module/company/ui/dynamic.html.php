@@ -31,7 +31,7 @@ featureBar
             on::change('changeItem')
         )
     ),
-    $this->config->vision == 'rnd' ? li
+    $config->vision == 'rnd' ? li
     (
         setClass('w-28 ml-4'),
         picker
@@ -45,7 +45,7 @@ featureBar
             on::change('changeItem')
         )
     ) : null,
-    li
+    $config->vision == 'gitfox' ? null : li
     (
         setClass('w-28 ml-4'),
         picker
@@ -59,7 +59,7 @@ featureBar
             on::change('changeItem')
         )
     ),
-    li
+    $config->vision == 'gitfox' ? null : li
     (
         setClass('w-28 ml-4'),
         picker

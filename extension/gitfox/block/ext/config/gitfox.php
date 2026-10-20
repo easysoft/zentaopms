@@ -31,3 +31,5 @@ $config->block->modules['ppm'] = new stdclass();
 $config->block->modules['ppm']->moreLinkList = new stdclass();
 $config->block->modules['ppm']->moreLinkList->reviewbyme        = 'my|audit|browseType=ppm';
 $config->block->modules['ppm']->moreLinkList->reviewcreatedbyme = 'ppm|browse|repoID=0&mode=status&param=creator';
+
+$config->block->size['teamachievement']['teamachievement'] = array(1 => 4);

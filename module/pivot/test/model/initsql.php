@@ -38,4 +38,4 @@ catch(Throwable $e)
 {
     if($e instanceof EndResponseException) $deniedResult = $e->getContent();
 }
-r($deniedResult) && p() && e($lang->bi->errorIllegalFilter['value']); // 过滤值不合法时拒绝请求
+r($deniedResult) && p() && e('过滤条件的值不合法，只允许数字或引号包裹的字符串，请求已被拒绝。'); // 过滤值不合法时拒绝请求

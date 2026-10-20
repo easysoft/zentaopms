@@ -240,6 +240,7 @@ class header extends wg
         }
         else
         {
+            $manualUrl = $config->gitfoxManualUrl['home'] . '&theme=' . $_COOKIE['theme'];
             $items[] = array('text' => $lang->manual, 'icon' => 'help', 'url' => $manualUrl, 'attrs' => array('data-app' => 'help'));
         }
         $items[] = array('type' => 'divider');

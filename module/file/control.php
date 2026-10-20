@@ -433,6 +433,8 @@ class file extends control
      */
     public function uploadImages(string $module, string $params, string $uid = '', string $locate = '')
     {
+        if(!$this->file->isValidUploadUID($uid)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorUploadUID)));
+
         if($locate)
         {
             $sessionName = $uid . 'ImagesFile';
@@ -449,16 +451,15 @@ class file extends control
             if(empty($file['extension']) or !in_array($file['extension'], $this->config->file->imageExtensions)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat)));
 
             $imageFile = $this->file->saveChunkedFile($file, $uid);
-            if(!empty($imageFile))
-            {
-                $sessionName = $uid . 'ImagesFile';
-                $imageFiles  = $this->session->$sessionName;
-                $fileName    = basename($imageFile['pathname']);
+            if(empty($imageFile)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileMove)));
 
-                if(empty($imageFiles)) $imageFiles = array();
-                $imageFiles[$fileName] = $imageFile;
-                $this->session->set($sessionName, $imageFiles);
-            }
+            $sessionName = $uid . 'ImagesFile';
+            $imageFiles  = $this->session->$sessionName;
+            $fileName    = basename($imageFile['pathname']);
+
+            if(empty($imageFiles)) $imageFiles = array();
+            $imageFiles[$fileName] = $imageFile;
+            $this->session->set($sessionName, $imageFiles);
             return print(json_encode(array('result' => 'success', 'file' => $file, 'message' => $this->lang->file->uploadSuccess)));
         }
 

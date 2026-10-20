@@ -138,7 +138,7 @@ window.changeIssueTask = function()
     if(!type) type = 'all';
 
     let url = taskURL.replace('%s', type);
-    window.location.href = url.replace('%s', 'taskID=' + task);
+    loadPage(url.replace('%s', 'taskID=' + task));
 }
 
 window.toggleSearchForm = function()

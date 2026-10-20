@@ -14,6 +14,9 @@ cid=0
 - 测试带repoList返回对象 >> 1
 - 测试空task空repoList返回对象 >> 1
 - 测试有效task返回对象 >> 1
+- 代码库不在代码库列表中时任务名称使用服务返回的代码库名称 >> service-repo的第6次扫描(main)
+- 代码库不在代码库列表中时任务仍保留代码库 ID 供链接使用 >> 200
+- 代码库在代码库列表中时任务名称使用本地代码库名称 >> local-repo的第6次扫描(main)
 
 */
 
@@ -27,8 +30,12 @@ $task->started = 1700000000000;
 $task->finished = 1700000125000;
 $task->repoNumber = 5;
 $emptyTask = (object)array('repoID' => 0, 'repoNumber' => 0);
+$serviceTask = (object)array('repoID' => 200, 'repoName' => 'service-repo', 'repoNumber' => 6, 'executionRef' => 'refs/heads/main');
 r($test->processTaskDataTest($task)) && p('runTime') && e('2m5s');
 r(is_object($test->processTaskDataTest($emptyTask))) && p() && e('1');
 r(is_object($test->processTaskDataTest($task, array(100 => 'my-repo')))) && p() && e('1');
 r(is_object($test->processTaskDataTest($emptyTask, array()))) && p() && e('1');
 r(is_object($test->processTaskDataTest($task))) && p() && e('1');
+r($test->processTaskDataTest($serviceTask)) && p('name') && e('service-repo的第6次扫描(main)');         // 步骤6：代码库不在代码库列表中时任务名称使用服务返回的代码库名称
+r($test->processTaskDataTest($serviceTask)) && p('repo') && e('200');                                   // 步骤7：代码库不在代码库列表中时仍保留代码库 ID 供链接使用
+r($test->processTaskDataTest($serviceTask, array(200 => 'local-repo'))) && p('name') && e('local-repo的第6次扫描(main)'); // 步骤8：代码库在代码库列表中时任务名称使用本地代码库名称

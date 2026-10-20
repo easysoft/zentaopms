@@ -3095,12 +3095,23 @@ class projectModel extends model
     public function computeSchedule(string $begin, string $end, array $schedule, ?object $project = null): object
     {
         $calendar        = array();
-        $weekends        = array(1, 2);
         $begin           = date('Y-m-d', strtotime($begin));
         $end             = date('Y-m-d', strtotime($end));
         $workingDays     = $this->getWorkingDays($begin, $end);
         $projectSchedule = $project ? json_decode($project->schedule, true) : array();
         $hasSaturday     = $hasSunday = false;
+        $missSaturday    = $missSunday = false;
+        $hasWorkDays     = isset($schedule['workDays']);
+        $workDayFlags    = array();
+        if($hasWorkDays)
+        {
+            foreach(explode(',', (string)$schedule['workDays']) as $flag)
+            {
+                if($flag === '1' || $flag === '2') $workDayFlags[$flag] = $flag;
+            }
+        }
+        $oldBegin = !empty($schedule['begin']) ? $schedule['begin'] : '';
+        $oldEnd   = !empty($schedule['end']) ? $schedule['end'] : '';
         for($start = $begin; $start <= $end; $start = date('Y-m-d', strtotime('+1 day', strtotime($start))))
         {
             if(!empty($schedule['begin']) && !empty($schedule['end']) && $start >= $schedule['begin'] && $start <= $schedule['end'])
@@ -3117,11 +3128,36 @@ class projectModel extends model
             }
 
             $week = date('w', strtotime($start));
-            if($week == '6') $hasSaturday = true;
-            if($week == '0') $hasSunday = true;
-            if((!isset($calendar[$start]) && $week == '6') || !$hasSaturday) unset($weekends[0]);
-            if((!isset($calendar[$start]) && $week == '0') || !$hasSunday) unset($weekends[1]);
+            /* 周六上班(1)、周日上班(2)按规则补到新的日期范围，已有范围内的单独勾选保持不变。 */
+            if($hasWorkDays)
+            {
+                $inOldRange = $oldBegin && $oldEnd && $start >= $oldBegin && $start <= $oldEnd;
+                if($week == '6')
+                {
+                    if(isset($workDayFlags['1'])) $calendar[$start] = $start;
+                    elseif(!$inOldRange) unset($calendar[$start]);
+                }
+                if($week == '0')
+                {
+                    if(isset($workDayFlags['2'])) $calendar[$start] = $start;
+                    elseif(!$inOldRange) unset($calendar[$start]);
+                }
+            }
+            if($week == '6')
+            {
+                $hasSaturday = true;
+                if(!isset($calendar[$start])) $missSaturday = true;
+            }
+            if($week == '0')
+            {
+                $hasSunday = true;
+                if(!isset($calendar[$start])) $missSunday = true;
+            }
         }
+
+        $weekends = array();
+        if($hasSaturday && !$missSaturday) $weekends[] = 1;
+        if($hasSunday && !$missSunday)     $weekends[] = 2;
 
         $scheduleData = new stdclass();
         $scheduleData->begin        = $begin;

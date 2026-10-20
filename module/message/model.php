@@ -263,7 +263,8 @@ class messageModel extends model
         {
             foreach(array_unique(array_filter(explode(',', $userList))) as $account)
             {
-                if($account == $actor || empty($account) || !isset($users[$account])) continue;
+                if(empty($account) || !isset($users[$account])) continue;
+                if($objectType != 'aitask' && $account == $actor) continue;
 
                 $notify = new stdclass();
                 $notify->objectType  = 'message';
