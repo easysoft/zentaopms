@@ -399,15 +399,15 @@ foreach(array(
 }
 check(request('POST', '/repos')[1]['status'] == 'fail', 'Reject an empty creation body.');
 check(request('POST', '/repos', $newRepo, '99')[1]['status'] == 'fail', 'Reject inaccessible linked products.');
-foreach(array(20 => 403, 30 => 403, 40 => 403, 50 => 403, 60 => 404, 99 => 404) as $spaceID => $expected)
+foreach(array(30 => 403, 40 => 403, 50 => 403, 60 => 404, 99 => 404) as $spaceID => $expected)
 {
     check(request('POST', '/repos', array_replace($newRepo, array('space' => $spaceID)))[0] == $expected, 'Reject creation in inaccessible or unauthorized spaces.');
 }
 check(count(coderHTTPClient::$requests) == $before && count($actionModel->created) == $beforeActions, 'Invalid or forbidden creation must not call GitFox or record actions.');
 
-$groupModel->privs[20]['repo']['create'] = 1;
+check(!isset($groupModel->privs[20]['repo']['create']), 'Private inherited-space creation test must start without a space create privilege.');
 [$code, $data] = request('POST', '/repos', array_replace($newRepo, array('space' => 20, 'acl' => 'private', 'members' => array('other'))));
-check($code == 200 && $data['status'] == 'success' && $repoModel->memberships[21] === array('other', 'coder'), 'Create private repositories and include the creator in membership.');
+check($code == 200 && $data['status'] == 'success' && $repoModel->memberships[21] === array('other', 'coder'), 'Allow inherited private-space members to create repositories.');
 $groupModel->privs[50]['repo']['create'] = 1;
 check(request('POST', '/repos', array_replace($newRepo, array('space' => 50)))[0] == 403, 'Independent authorization also requires the createRepo action.');
 $groupModel->privs[50]['repo']['createrepo'] = 1;

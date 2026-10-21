@@ -42,8 +42,8 @@ class repoZen extends repo
         $privs   = $this->loadModel('group')->getDevOpsSpacePrivs($spaceID);
         $canView = $space->acl == 'open' || isset($members[$spaceID][$this->app->user->account]);
         $canAct  = $space->auth != 'reset' || !empty($privs['repo'][$method]);
-        /* Match the space selector's create/import permission for private or independently authorized spaces. */
-        if($method == 'createrepo' && ($space->acl == 'private' || $space->auth == 'reset')) $canAct = $canAct && !empty($privs['repo']['create']);
+        /* Match the space selector's create/import permission for independently authorized spaces. */
+        if($method == 'createrepo' && $space->auth == 'reset') $canAct = $canAct && !empty($privs['repo']['create']);
         if(!$canView || !$canAct)
         {
             http_response_code(403);

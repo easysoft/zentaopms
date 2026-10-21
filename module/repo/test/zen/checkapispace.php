@@ -86,14 +86,14 @@ cid=0
  - 属性result @false
  - 属性code @403
  - 属性message @Space is not allowed.
-- 私有空间成员不能仅凭成员身份创建
- - 属性result @false
- - 属性code @403
- - 属性message @Space is not allowed.
-- 私有空间创建还需要repo.create权限
- - 属性result @false
- - 属性code @403
- - 属性message @Space is not allowed.
+- 私有继承授权空间成员可以创建
+ - 属性result @true
+ - 属性code @200
+ - 属性errorCount @0
+- 私有继承授权空间不要求repo.create权限
+ - 属性result @true
+ - 属性code @200
+ - 属性errorCount @0
 - 私有继承授权空间持有创建权限即可创建
  - 属性result @true
  - 属性code @200
@@ -202,8 +202,8 @@ r($test->checkApiSpaceTest(40, 'maintain', $context)) && p('result,code,message'
 r($test->checkApiSpaceTest(40, 'maintain', $listPrivs)) && p('result,code,errorCount') && e('true,200,0'); // 私有独立授权空间成员有列表权限可以读取
 r($test->checkApiSpaceTest(40, 'maintain', array_replace($listPrivs, array('user' => $outsider['user'])))) && p('result,code,message') && e('false,403,Space is not allowed.'); // 方法权限不能绕过私有空间成员检查
 r($test->checkApiSpaceTest(30, 'maintain', $createOnly)) && p('result,code,message') && e('false,403,Space is not allowed.'); // 创建权限不能替代列表权限
-r($test->checkApiSpaceTest(20, 'createrepo', $context)) && p('result,code,message') && e('false,403,Space is not allowed.'); // 私有空间成员不能仅凭成员身份创建
-r($test->checkApiSpaceTest(20, 'createrepo', $actionOnly)) && p('result,code,message') && e('false,403,Space is not allowed.'); // 私有空间创建还需要repo.create权限
+r($test->checkApiSpaceTest(20, 'createrepo', $context)) && p('result,code,errorCount') && e('true,200,0'); // 私有继承授权空间成员可以创建
+r($test->checkApiSpaceTest(20, 'createrepo', $actionOnly)) && p('result,code,errorCount') && e('true,200,0'); // 私有继承授权空间不要求repo.create权限
 r($test->checkApiSpaceTest(20, 'createrepo', $createOnly)) && p('result,code,errorCount') && e('true,200,0'); // 私有继承授权空间持有创建权限即可创建
 r($test->checkApiSpaceTest(30, 'createrepo', $createOnly)) && p('result,code,message') && e('false,403,Space is not allowed.'); // 独立授权创建不能缺少createrepo权限
 r($test->checkApiSpaceTest(30, 'createrepo', $actionOnly)) && p('result,code,message') && e('false,403,Space is not allowed.'); // 独立授权创建不能缺少create权限
