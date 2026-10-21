@@ -34,6 +34,8 @@ $config->runner->dtable->fieldList['os']['sortType'] = true;
 $config->runner->dtable->fieldList['os']['hint']     = true;
 $config->runner->dtable->fieldList['os']['show']     = true;
 $config->runner->dtable->fieldList['os']['map']      = $lang->runner->osList;
+$config->runner->dtable->fieldList['os']['type']     = 'text';
+$config->runner->dtable->fieldList['os']['width']    = 50;
 
 $config->runner->dtable->fieldList['arch']['title']    = $lang->runner->arch;
 $config->runner->dtable->fieldList['arch']['name']     = 'arch';
@@ -41,6 +43,8 @@ $config->runner->dtable->fieldList['arch']['sortType'] = true;
 $config->runner->dtable->fieldList['arch']['hint']     = true;
 $config->runner->dtable->fieldList['arch']['show']     = true;
 $config->runner->dtable->fieldList['arch']['map']      = $lang->runner->archList;
+$config->runner->dtable->fieldList['arch']['type']     = 'text';
+$config->runner->dtable->fieldList['arch']['width']    = 50;
 
 $config->runner->dtable->fieldList['runtime']['title']    = $lang->runner->runtime;
 $config->runner->dtable->fieldList['runtime']['name']     = 'runtime';
@@ -54,6 +58,8 @@ $config->runner->dtable->fieldList['version']['name']     = 'version';
 $config->runner->dtable->fieldList['version']['sortType'] = false;
 $config->runner->dtable->fieldList['version']['hint']     = true;
 $config->runner->dtable->fieldList['version']['show']     = true;
+$config->runner->dtable->fieldList['version']['type']     = 'text';
+$config->runner->dtable->fieldList['version']['width']    = 50;
 
 $config->runner->dtable->fieldList['ip']['title']    = $lang->runner->ip;
 $config->runner->dtable->fieldList['ip']['name']     = 'ip';
