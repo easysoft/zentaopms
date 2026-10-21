@@ -618,7 +618,7 @@ class mailModel extends model
         if($objectType == 'ticket') $emails = $this->loadModel('ticket')->getContactEmails($object->id, $toList, $ccList, $action->action == 'closed');
 
         $includeMe = $objectType == 'aitask';
-        $this->send($toList, $subject, $mailContent, $ccList, $includeMe, $emails);
+        $this->send((string)$toList, $subject, $mailContent, $ccList, $includeMe, $emails);
 
         if($this->isError()) error_log(implode("\n", $this->getError()));
     }
