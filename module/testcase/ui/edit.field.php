@@ -321,7 +321,7 @@ $fields->field('linkCaseList')
     ->hidden(data('isLibCase') || !hasPriv('testcase', 'linkCases') || $config->edition != 'open')
     ->label('')
     ->className(data('case.linkCaseTitles') === null ? 'hidden' : '')
-    ->control(array('control' => 'checkList', 'name' => 'linkCase[]'))
+    ->control(array('control' => 'checkList', 'id' => 'linkCase', 'name' => 'linkCase[]'))
     ->items($linkCaseItems)
     ->value(data('case.linkCaseTitles') !== null ? array_keys(data('case.linkCaseTitles')) : '');
 
@@ -337,7 +337,7 @@ $fields->field('linkBugList')
     ->hidden(data('isLibCase') || !hasPriv('testcase', 'linkBugs'))
     ->label('')
     ->className(data('case.toBugs') === null ? 'hidden' : '')
-    ->control(array('control' => 'checkList', 'name' => 'linkBug[]'))
+    ->control(array('control' => 'checkList', 'id' => 'linkBug', 'name' => 'linkBug[]'))
     ->items($linkBugItems)
     ->value(data('case.toBugs') !== null ? array_keys(data('case.toBugs')) : '');
 
