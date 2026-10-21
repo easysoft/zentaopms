@@ -11,7 +11,7 @@ $(document).off('click', '.link-btn').on('click', '.link-btn', function()
         const caseTitle =  '#' + id + rowData.title;
 
         $('#linkCase').append("<div class='checkbox-primary'><input type='checkbox' id='linkCase[]_" + id + "' name='linkCase[]' checked value=" + id + "><label for='linkCase[]_" + id + "'>" + caseTitle + "</label></div>");
-        $('#linkCase').closest('tr').removeClass('hidden');
+        $('#linkCase').closest('.form-group').removeClass('hidden');
     });
 
     $(this).closest('.modal').modal('hide');

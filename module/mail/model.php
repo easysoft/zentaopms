@@ -613,7 +613,7 @@ class mailModel extends model
         $users       = $this->loadModel('user')->getPairs('noletter|noclosed|noempty');
         $subject     = $this->loadModel('message')->buildNoticeTextByAccount('', $object, $action->action, $action->id, $objectType, $subject, 'other', $users, true);
         $emails      = array();
-        $mailContent = $this->mailTao->getMailContent($objectType, $object, $action);
+        $mailContent =  $objectType == 'aitask' ? $subject : $this->mailTao->getMailContent($objectType, $object, $action);
 
         if($objectType == 'ticket') $emails = $this->loadModel('ticket')->getContactEmails($object->id, $toList, $ccList, $action->action == 'closed');
 
