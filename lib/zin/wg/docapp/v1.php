@@ -368,6 +368,16 @@ class docApp extends wg
         if(!isset($privs['downloadFile'])) $privs['downloadFile'] = $canDownloadFile;
         if(!isset($privs['previewFile']))  $privs['previewFile']  = $canPreviewOffice;
 
+        /* 交付物从模板创建时先创建文档草稿，确保模板区块在打开编辑器前完成复制和 ID 替换。 */
+        $docAppProps          = $this->props;
+        $templateDocID        = data('docID');
+        $createFromTemplateID = $this->prop('mode') == 'create' && !empty($templateDocID) ? (int)$templateDocID : 0;
+        if($createFromTemplateID)
+        {
+            jsVar('window.createFromTemplateID', $createFromTemplateID);
+            $docAppProps = array_merge($this->props->toArray(), array('mode' => 'list', 'docID' => 0));
+        }
+
         return zui::docApp
         (
             set::_class('shadow rounded ring canvas'),
@@ -407,7 +417,7 @@ class docApp extends wg
             set::downloadUrl($downloadUrl),
             set::sessionStr($sessionStr),
             set('$options', jsRaw('window.setDocAppOptions')),
-            set($this->props),
+            set($docAppProps),
             set::privs($privs),
             set::fileUrl($fileUrl),
             set::viewModeUrl($viewModeUrl),
