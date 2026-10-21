@@ -250,7 +250,7 @@ class actionModel extends model
             if(in_array($actionName, array('opened', 'managed', 'edited')) && in_array($objectType, array('execution', 'project'))) $this->processExecutionAndProjectActionExtra($action);
             if(in_array($actionName, array('linkstory', 'unlinkstory', 'linkur', 'unlinkur', 'linkrelatedstory', 'unlinkrelatedstory'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'story', 'storyView');
             if(in_array($actionName, array('linkbug', 'unlinkbug'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'bug', 'view');
-            if($actionName == 'repocreated') $action->extra = str_replace("class='iframe'", 'data-app="devops"', $action->extra);
+            if($actionName == 'repocreated') $action->extra = str_replace("class='iframe'", 'data-app="devops"', (string)preg_replace('~/api\.php/v\d+/[^/?#]+/(?=repo-(?:view|diff)-)~i', '/', (string)$action->extra));
             if($actionName == 'createdsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $action->extra == 'defaultSnap') $action->actor = $this->lang->action->system;
             if($actionName == 'syncgrade') $this->actionTao->processStoryGradeActionExtra($action);
             if(in_array($actionName, array('createdsubtabledata', 'editedsubtabledata', 'deletedsubtabledata'))) $action->extra = !empty($flowList[$action->objectType]->name) ? $flowList[$action->objectType]->name . $action->objectID : '';
@@ -261,6 +261,7 @@ class actionModel extends model
             {
                 if($history->field == 'subversion' || $history->field == 'git')
                 {
+                    $history->diff = (string)preg_replace('~/api\.php/v\d+/[^/?#]+/(?=repo-(?:view|diff)-)~i', '/', (string)$history->diff);
                     $history->diff = str_replace(array("class='iframe'", '+'), array("data-size='{\"width\": 800, \"height\": 500}' data-toggle='modal'", '%2B'), $history->diff);
                 }
 
@@ -426,7 +427,7 @@ class actionModel extends model
 
         /* 当action值为repocreated的时候拼接域名。 */
         /* Splice domain name for connection when the action is equal to 'repocreated'.*/
-        if($action->action == 'repocreated') $action->extra = str_replace("href='", "href='" . common::getSysURL(), $action->extra);
+        if($action->action == 'repocreated') $action->extra = str_replace("href='", "href='" . common::getSysURL(), (string)preg_replace('~/api\.php/v\d+/[^/?#]+/(?=repo-(?:view|diff)-)~i', '/', (string)$action->extra));
 
         return $action;
     }

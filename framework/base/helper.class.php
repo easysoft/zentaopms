@@ -1567,19 +1567,17 @@ function getWebRoot($full = false)
         if(is_string($requestPath) && $requestPath !== '')
         {
             $requestPath = rawurldecode($requestPath);
-            /* REQUEST_URI may contain extra PATH_INFO after the entry script, such as /www/api.php/v2/bugs/1. */
-            $entryScript = basename($path);
-            $entryMarker = $entryScript ? '/' . $entryScript : '';
+            $entryPath   = '';
+            foreach(explode('/', trim($requestPath, '/')) as $segment)
+            {
+                $entryPath .= '/' . $segment;
+                if(substr($segment, -4) !== '.php') continue;
 
-            if($entryMarker && str_contains($requestPath, $entryMarker))
-            {
-                $entryPos = strpos($requestPath, $entryMarker);
-                $path     = substr($requestPath, 0, $entryPos + strlen($entryMarker));
+                $path = $entryPath;
+                break;
             }
-            elseif(empty($path))
-            {
-                $path = $requestPath;
-            }
+
+            if(empty($path)) $path = $requestPath;
         }
     }
 
