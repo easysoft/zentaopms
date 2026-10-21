@@ -425,7 +425,7 @@ class programplanModel extends model
                 if(dao::isError()) return false;
 
                 /* 新建子阶段时，已有阶段的排序会自动重算，排序变化不应生成编辑动作和通知。 */
-                $changes = array_filter($changes, function($change){return $change['field'] != 'order';});
+                if(is_array($changes)) $changes = array_filter($changes, function($change){return $change['field'] != 'order';});
                 if(!empty($changes))
                 {
                     $actionID = $this->action->create('execution', $stageID, 'edited');
