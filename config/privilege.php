@@ -259,10 +259,10 @@ $config->logonMethods[] = 'zai.ajaxgettoken';
 $config->logonMethods[] = 'zai.ajaxgetuseragent';
 $config->logonMethods[] = 'zai.ajaxsearchknowledges';
 $config->logonMethods[] = 'repo.import';
+$config->logonMethods[] = 'action.ajaxgetlist';
+$config->logonMethods[] = 'action.ajaxgetmoreactions';
 
 /* Ajax 方法依赖的方法。The methods that Ajax methods depend on. */
-$config->ajaxDependencies['action.ajaxgetlist']                               = ['doc.templatelist', 'reporttemplate.browse', 'doc.edit', 'doc.view', 'ppm.view'];
-$config->ajaxDependencies['action.ajaxgetmoreactions']                        = ['project.dynamic', 'product.dynamic', 'my.dynamic', 'block.printblock', 'company.dynamic', 'execution.dynamic', 'user.dynamic', 'product.view', 'execution.view'];
 $config->ajaxDependencies['admin.ajaxchangetableengine']                      = 'admin.tableengine';
 $config->ajaxDependencies['admin.ajaxchangecharset']                          = 'admin.charset';
 $config->ajaxDependencies['admin.ajaxregenerateview']                         = 'admin.dbview';
