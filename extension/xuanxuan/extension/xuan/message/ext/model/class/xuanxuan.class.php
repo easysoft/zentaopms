@@ -226,7 +226,7 @@ class xuanxuanMessage extends messageModel
                 $content   = json_encode($contentData);
                 $avatarUrl = $server . $this->app->getWebRoot() . 'favicon.ico';
 
-                $objectTypeList = array('bug', 'task', 'story', 'feedback', 'demand', 'demandpool', 'deploy');
+                $objectTypeList = array('bug', 'task', 'story', 'feedback', 'demand', 'demandpool', 'deploy', 'aitask');
                 if($target && in_array($objectType, $objectTypeList)) $this->loadModel('im')->messageCreateNotify($target, $title, '', $content, 'object', $url, array(), array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender, 'avatar' => $avatarUrl));
 
                 if($objectType == 'mr' and is_array($this->lang->message->mr->$actionType) and !empty($object->assignee))
