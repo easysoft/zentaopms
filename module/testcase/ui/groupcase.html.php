@@ -21,7 +21,7 @@ if(!empty($cols['actions']['list']))
     {
         if(!isset($methodParams['url'])) continue;
 
-        $cols['actions']['list'][$method]['url'] = str_replace('%executionID%', (string)$executionID, $methodParams['url']);
+        $cols['actions']['list'][$method]['url'] = str_replace(array('%executionID%', '{runID}'), array((string)$executionID, '0'), $methodParams['url']);
     }
 }
 if(!$this->config->testcase->needReview && empty($config->testcase->forceReview)) unset($cols['actions']['menu'][1][0]);
