@@ -1633,7 +1633,7 @@ class executionZen extends execution
         {
             $flow    = $this->loadModel('workflow')->getByModule($module);
             $actions = $this->dao->select('action')->from(TABLE_WORKFLOWACTION)->where('buildin')->eq('0')->andWhere('module')->eq($rawModule)->fetchPairs();
-            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module");
+            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module") . '#app=execution';
             if(in_array($rawModule, $executionModules) && in_array($method, $actions)) $method = $rawModule;
         }
 
