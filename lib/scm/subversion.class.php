@@ -94,6 +94,8 @@ class subversionRepo
 
         foreach($listObject as $list)
         {
+            if(empty($list->name)) continue;
+
             $info = new stdclass();
             $info->size     = 0;
             $info->name     = (string)$list->name;

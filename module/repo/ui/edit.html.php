@@ -39,7 +39,7 @@ formPanel
     (
         set::width('1/2'),
         set::name("product[]"),
-        set::label($lang->story->product),
+        set::label($lang->repo->product),
         set::required(true),
         set::items($products),
         set::multiple(true),
