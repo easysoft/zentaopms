@@ -39,7 +39,7 @@ formGridPanel
     on::change('[name=end]', 'computeWorkDays(NaN)'),
     on::change('[name=project]', 'changeProject()'),
     set::formID('zin_execution_edit_' . $execution->id . '_formGridPanel'),
-    !empty($unclosedTasks) ? set::ajax(array('beforeSubmit' => $beforeSubmit)) : null,
+    $execution->status != 'closed' && !empty($unclosedTasks) ? set::ajax(array('beforeSubmit' => $beforeSubmit)) : null,
     set::fullModeOrders('project', !empty($config->setCode) ? 'lifetime,attribute,name,code,status' : 'lifetime,attribute,name,status', 'planDate,days,productsBox,PO,QD,PM,RD,teamMembers,desc,acl'),
     set::title($lang->execution->edit),
     set::modeSwitcher(false),

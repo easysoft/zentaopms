@@ -36,7 +36,7 @@ $beforeSubmit = jsRaw("() =>
 
 $ajaxOptions = array();
 if(!empty($unclosedTasks)) $ajaxOptions['beforeSubmit'] = $beforeSubmit;
-$ajaxOptions['onValidateField'] = jsRaw('showErrorTip');
+if(in_array($config->edition, array('max', 'ipd'))) $ajaxOptions['onValidateField'] = jsRaw('showErrorTip');
 
 $space = common::checkNotCN() ? ' ' : '';
 modalHeader(set::title($lang->execution->close . $space . $lang->executionCommon));
