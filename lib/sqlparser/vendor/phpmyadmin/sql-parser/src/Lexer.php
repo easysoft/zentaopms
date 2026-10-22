@@ -384,7 +384,7 @@ class Lexer extends Core
      * This methods will change the flag of the "*" tokens when any of those condition above is true. Otherwise, the
      * default flag (arithmetic) will be kept.
      */
-    private function solveAmbiguityOnStarOperator(): void
+    private function solveAmbiguityOnStarOperator()
     {
         $iBak = $this->list->idx;
         while (($starToken = $this->list->getNextOfTypeAndValue(Token::TYPE_OPERATOR, '*')) !== null) {
@@ -427,7 +427,7 @@ class Lexer extends Core
      * condition above is true. Otherwise, the
      * default flag (function keyword) will be kept.
      */
-    private function solveAmbiguityOnFunctionKeywords(): void
+    private function solveAmbiguityOnFunctionKeywords()
     {
         $iBak = $this->list->idx;
         $keywordFunction = Token::TYPE_KEYWORD | Token::FLAG_KEYWORD_FUNCTION;
