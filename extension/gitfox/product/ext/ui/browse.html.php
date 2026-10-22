@@ -27,7 +27,7 @@ $keyword = empty($keyword) ? '' : trim((string)$keyword);
 $browseType = empty($browseType) ? 'noclosed' : $browseType;
 $linkParams = array
 (
-    'productID'  => 0,
+    'productID'  => $spaceID,
     'branch'     => 'all',
     'browseType' => '{key}',
     'param'      => $param,
