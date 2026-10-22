@@ -16,7 +16,7 @@ $fields = useFields('task.close');
 modalHeader();
 formPanel
 (
-    set::ajax(array('onValidateField' => jsRaw('showErrorTip'))),
+    in_array($config->edition, array('max', 'ipd')) ? set::ajax(array('onValidateField' => jsRaw('showErrorTip'))) : null,
     set::fields($fields)
 );
 hr();

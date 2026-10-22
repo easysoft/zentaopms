@@ -31,6 +31,7 @@ class heading extends wg
     {
         list($tab, $lang) = data(array('app.tab', 'lang'));
         $icon = zget($lang->navIconNames, $tab, '');
+        $title = '';
 
         if(!in_array($tab, array('program', 'product', 'project')))
         {
@@ -60,8 +61,11 @@ class heading extends wg
             if($tab == 'product')                      $currentMethod = 'all';
         }
 
+        $appName = $lang->$tab->common;
+        if(empty($appName) && !empty($title)) $appName = trim(strip_tags($title));
+
         /* 项目模板appName点击后跳转到项目模板列表页面。 */
-        if($lang->$tab->common == $lang->project->template)
+        if($appName == $lang->project->template)
         {
             $currentModule = 'project';
             $currentMethod = 'template';
@@ -75,10 +79,10 @@ class heading extends wg
         (
             set::url($url),
             $config->vision == 'gitfox' ? setData('app', $tab) : null,
-            set::hint($lang->$tab->common),
+            set::hint($appName),
             ($tab == 'devops' || $tab == 'bi' || $tab == 'safe') ? setClass('font-brand') : null,
             set::icon($icon),
-            set::text($lang->$tab->common)
+            set::text($appName)
         );
     }
 

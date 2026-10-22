@@ -46,7 +46,7 @@ div
 );
 
 $cols = array();
-foreach($config->release->dtable->defaultFields['linkStory'] as $field) $cols[$field] = zget($config->release->dtable->story->fieldList, $field, array());
+foreach($config->release->dtable->defaultFields['linkStory'] as $field) $cols[$field] = zget($config->release->story->dtable->fieldList, $field, array());
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $cols['title']['link']         = array('module' => 'story', 'method' => 'view', 'params' => 'storyID={id}', 'target' => '_blank');
 $cols['title']['data-toggle']  = 'modal';

@@ -118,7 +118,7 @@ class TokensList implements ArrayAccess
      * Gets the previous token. Skips any irrelevant token (whitespaces and
      * comments).
      */
-    public function getPrevious(): ?Token
+    public function getPrevious()
     {
         for (; $this->idx >= 0; --$this->idx) {
             if (
@@ -201,7 +201,7 @@ class TokensList implements ArrayAccess
      * @param int $type the type of the token
      * @param int $flag the flag of the token
      */
-    public function getNextOfTypeAndFlag(int $type, int $flag): ?Token
+    public function getNextOfTypeAndFlag(int $type, int $flag)
     {
         for (; $this->idx < $this->count; ++$this->idx) {
             if (($this->tokens[$this->idx]->type === $type) && ($this->tokens[$this->idx]->flags === $flag)) {
