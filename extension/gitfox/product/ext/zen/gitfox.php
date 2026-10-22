@@ -47,6 +47,7 @@ public function responseAfterEdit(int $productID, int $programID): array
         if($product) $this->product->updateSystemsByProduct($productID, $product->name);
 
         $spaceID = (int)$this->get->spaceID;
+        if(!$spaceID && $this->app->tab == 'space') $spaceID = (int)$this->session->devopsSpace;
         $response['load'] = $this->createLink('product', 'browse', $spaceID ? "spaceID={$spaceID}" : '');
     }
 

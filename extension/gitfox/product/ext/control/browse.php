@@ -36,6 +36,8 @@ class myProduct extends product
 
         /* 从空间进入时保持空间上下文和菜单高亮。 */
         $spaceID = (int)$this->get->spaceID;
+        if(!$spaceID && $this->app->tab == 'space') $spaceID = (int)$productID;
+        if(!$spaceID && $this->app->tab == 'space') $spaceID = (int)$this->session->devopsSpace;
         if($spaceID)
         {
             $this->app->tab = 'space';

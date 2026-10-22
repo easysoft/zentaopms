@@ -25,6 +25,12 @@ class myProduct extends product
     public function edit(int $productID, string $action = 'edit', string $extra = '', int $programID = 0)
     {
         $spaceID = (int)$this->get->spaceID;
+        if(!$spaceID && ctype_digit($action))
+        {
+            $spaceID = (int)$action;
+            $action  = 'edit';
+        }
+        if(!$spaceID && $this->app->tab == 'space') $spaceID = (int)$this->session->devopsSpace;
         if($spaceID)
         {
             $this->app->tab = 'space';
