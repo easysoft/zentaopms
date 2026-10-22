@@ -15821,7 +15821,7 @@ CREATE TABLE IF NOT EXISTS `zt_duckdbqueue` (
   `syncTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-CREATE UNIQUE INDEX `object` ON `zt_duckdbqueue`(`object`);
+CREATE UNIQUE INDEX `object` ON `zt_duckdbqueue`(`object`(190));
 
 UPDATE `zt_chart` SET `createdBy` = 'system' WHERE `createdBy` = 'admin';
 UPDATE `zt_pivot` SET `createdBy` = 'system' WHERE `createdBy` = 'admin';

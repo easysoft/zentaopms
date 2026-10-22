@@ -2577,7 +2577,7 @@ CREATE TABLE `zt_duckdbqueue` (
   `updatedTime` datetime DEFAULT NULL,
   `syncTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `object` (`object`)
+  UNIQUE KEY `object` (`object`(190))
 ) ENGINE=InnoDB;
 CREATE TABLE `zt_durationestimation` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,

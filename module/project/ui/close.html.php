@@ -22,7 +22,7 @@ if(!empty($confirmTip)) $ajaxOptions['beforeSubmit'] = jsRaw("() => {
         return confirmed;
     });
 }");
-$ajaxOptions['onValidateField'] = jsRaw('showErrorTip');
+if(in_array($config->edition, array('max', 'ipd'))) $ajaxOptions['onValidateField'] = jsRaw('showErrorTip');
 
 formPanel
 (
