@@ -15,8 +15,9 @@ if($repoID)
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
 }
 
-$backApp = $app->tab;
-$backUrl = createLink('pipeline', "browse", "space={$spaceID}&repoID={$repoID}&type={$type}") . "#app={$backApp}";
+$backApp = !empty($fromApp) ? $fromApp : $app->tab;
+$backRepoID = $backApp == 'space' ? 0 : $repoID;
+$backUrl = createLink('pipeline', "browse", "space={$spaceID}&repoID={$backRepoID}&type={$type}") . "#app={$backApp}";
 
 panel
 (
