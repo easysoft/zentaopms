@@ -1,7 +1,240 @@
+var iframeHeight  = 0;
+var sidebarHeight = 0;
+var tabTemp;
+var diffAppose = $.cookie.get('renderSideBySide') == 'true';
+
+/* Close tab. */
+window.closeTab = function(dom)
+{
+    const eleId    = $(dom).parent().attr('href');
+    const tabsEle  = $(dom).parent().parent().parent();
+    const isActive = $(dom).parent().hasClass('active');
+
+    $(dom).parent().parent().remove();
+    $(eleId).remove();
+    $('#' + eleId.substring(5)).parent().removeClass('selected');
+    if(isActive) tabsEle.children().last().find('a').trigger('click');
+    if(!tabsEle.children().length) $('.monaco-dropmenu').addClass('hidden');
+
+    const fileKey = eleId.substring(5).replace(/-/g, '=');
+    $('li[z-key="' + fileKey + '"] .listitem').removeClass('selected');
+}
+
+$(function()
+{
+    setTimeout(function()
+    {
+        if(typeof currentFile == 'undefined') return;
+
+        var fileAsId = currentFile.replace(/=/g, '-');
+        /* Resize moaco height. */
+        $('#monacoTree').css('height', getSidebarHeight() - 8 + 'px');
+        /* Init tab template. */
+        if(!tabTemp) tabTemp = $('#monacoTabs ul li').first().clone();
+
+        /* Load default tab content. */
+        var height = getIframeHeight();
+        $.cookie.set('repoCodePath', file, {expires:config.cookieLife, path:config.webRoot});
+        $('#tab-' + fileAsId).html("<iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetDiffEditorContent', urlParams.replace('%s', '')) + "' width='100%' height='" + height + "' scrolling='no'></iframe>")
+
+        /* Select default tree item. */
+        const currentElement = findItemInTreeItems(tree, fileAsId, 0);
+
+        expandTree();
+        if(currentElement != undefined) setTimeout(() =>
+        {
+            $('#' + currentElement.id).parent().addClass('selected');
+        }, 100);
+
+        $('.btn-left').on('click', function()  {arrowTabs('monacoTabs', 1);});
+        $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
+    }, 300);
+});
+
+window.downloadCode = function()
+{
+    var url            = $(event.target).closest('.repoDownload-code').data('link');
+    var activeFilePath = $('#monacoTabs .nav-item .active').attr('href').substring(5).replace(/-/g, '=');
+    window.open(url.replace('{path}', activeFilePath), '_self');
+    return;
+}
+
 /**
- * DiffHub 模式下保留顶部基准/对比对象切换与比较逻辑。
- * Monaco/文件树渲染已由 DiffHub 控件替换，不再需要编辑器相关 JS。
+ *  Change code encoding.
+ *
+ * @param  string encoding
+ * @access public
+ * @return void
  */
+function changeEncoding(encoding)
+{
+    $('#encoding').val(encoding);
+    $('#encoding').parents('form').submit();
+}
+
+/**
+ *  Html code decode.
+ *
+ * @param  string str
+ * @access public
+ * @return string
+ */
+function htmlspecialchars_decode(str){
+    str = str.replace(/&amp;/g, '&');
+    str = str.replace(/&lt;/g, '<');
+    str = str.replace(/&gt;/g, '>');
+    str = str.replace(/&quot;/g, '"');
+    str = str.replace(/&#039;/g, "'");
+    return str;
+}
+
+/**
+ * Get diffs by file name.
+ *
+ * @param  string fileName
+ * @access public
+ * @return object
+ */
+window.getDiffs = function(fileName)
+{
+    if(fileName.indexOf('./') === 0) fileName = fileName.substring(2);
+
+    var result = {
+        'code': {'new': '', 'old': ''},
+        'line': {'new': [], 'old': []}
+    };
+
+    const newContent = [];
+    const oldContent = [];
+    $.each(diffs, function(i, diff)
+    {
+        if(diff.fileName == fileName)
+        {
+            /* 有完整文件内容时直接使用，避免多 hunk 拼接缺失中间行导致 diff 错乱。 */
+            if(diff.oldContent !== undefined && diff.newContent !== undefined)
+            {
+                result.code.old = htmlspecialchars_decode(diff.oldContent);
+                result.code.new = htmlspecialchars_decode(diff.newContent);
+                const oldLineCount = result.code.old.split('\n').length;
+                const newLineCount = result.code.new.split('\n').length;
+                for(let line = 1; line <= oldLineCount; line ++) result.line.old.push(line);
+                for(let line = 1; line <= newLineCount; line ++) result.line.new.push(line);
+                result.oldRanges = diff.oldRanges;
+                result.newRanges = diff.newRanges;
+                return result;
+            }
+
+            if(!diff.contents || typeof diff.contents[0].lines != 'object') return result;
+
+            $.each(diff.contents, function(k, content)
+            {
+                var lines = content.lines;
+                $.each(lines, function(l, code)
+                {
+                    if(code.type == 'all' || code.type == 'new')
+                    {
+                        newContent.push(htmlspecialchars_decode(code.line.substring(1)));
+                        result.line.new.push(parseInt(code.newlc));
+                    }
+
+                    if(code.type == 'all' || code.type == 'old')
+                    {
+                        oldContent.push(htmlspecialchars_decode(code.line.substring(1)));
+                        result.line.old.push(parseInt(code.oldlc));
+                    }
+                })
+            })
+
+            result.code.new = newContent.join('\n');
+            result.code.old = oldContent.join('\n');
+            return result;
+        }
+    });
+
+    return result;
+}
+
+/**
+ * 打开新tab。
+ * Open new tab.
+ *
+ * @access public
+ * @return void
+ */
+function openTab(entry, name)
+{
+    var eleId   = 'tab-' + entry.replace(/=/g, '-');
+    var element = document.getElementById(eleId);
+    if (element)
+    {
+        $("a[href='" + '#' + eleId + "']").trigger('click');
+        return;
+    }
+
+    var newTab = tabTemp.clone();
+    newTab.find('a').attr('href', '#' + eleId);
+    newTab.find('span').text(name);
+    $('#monacoTabs .nav-tabs').append(newTab);
+
+    var height = getIframeHeight();
+    $.cookie.set('repoCodePath', entry, {expires:config.cookieLife, path:config.webRoot});
+    $('#monacoTabs .tab-content').append("<div id='" + eleId + "' class='tab-pane active in'><iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetDiffEditorContent', urlParams.replace('%s', '')) + "' width='100%' height='" + height + "' scrolling='no'></iframe></div>")
+
+    if($('.monaco-dropmenu').attr('class').indexOf('hidden')) $('.monaco-dropmenu').removeClass('hidden');
+    setTimeout(() => {
+        $("a[href='" + '#' + eleId + "']").trigger('click');
+        updateEditorInline('#' + eleId);
+    }, 100);
+}
+
+function updateEditorInline(eleId)
+{
+    $.cookie.set('renderSideBySide', diffAppose, {expires:config.cookieLife, path:config.webRoot});
+    if(typeof  $(eleId + ' iframe')[0].contentWindow.updateEditorInline == 'function')
+    {
+        $(eleId + ' iframe')[0].contentWindow.updateEditorInline(diffAppose);
+    }
+}
+
+$('#monacoTabs .nav-item a').on('click', function()
+{
+    var eleId = $(this).attr('href');
+    $(eleId + ' iframe')[0].contentWindow.updateEditorInline(diffAppose);
+});
+
+$(document).ready(function()
+{
+    if(diffAppose)
+    {
+        $('.dropdown-menu #inline').show();
+        $('.dropdown-menu #appose').hide();
+    }
+    else
+    {
+        $('.dropdown-menu #appose').show();
+        $('.dropdown-menu #inline').hide();
+    }
+
+    $('.btn-left').on('click', function()  {arrowTabs('monacoTabs', 1);});
+    $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
+});
+
+window.inlineAppose = function()
+{
+    $('.inline-appose').hide();
+    diffAppose = !diffAppose;
+    if(diffAppose)
+    {
+        $('.dropdown-menu #inline').show();
+    }
+    else
+    {
+        $('.dropdown-menu #appose').show();
+    }
+    var tabID = $('#monacoTabs .nav-item .active').attr('href');
+    updateEditorInline(tabID);
+    return;
+}
 
 window.changeDiff = function()
 {
@@ -11,15 +244,28 @@ window.changeDiff = function()
     {
         $('#oldRevision').val(target);
         $('#newRevision').val(source);
-
+        /* SVN 类型 #source/#target 是 input,git 类型是 dropmenu span,用 val/text 分别兼容。 */
         var $source = $('#source');
         var $target = $('#target');
         if($source.is('input')) $source.val(target); else $source.text(target);
         if($target.is('input')) $target.val(source); else $target.text(source);
-
         window.goDiff();
     }
-};
+}
+
+/**
+ * 在当前页面用modal加载链接。
+ * Load link object page.
+ *
+ * @param  string $link
+ * @access public
+ * @return void
+ */
+window.loadLinkPage = function(link)
+{
+    $('#linkObject').attr('href', link);
+    $('#linkObject').trigger('click');
+}
 
 $('body').off('click', '.dropmenu-tree .dropmenu-item').on('click', '.dropmenu-tree .dropmenu-item', function()
 {
@@ -42,10 +288,18 @@ $('body').off('click', '.dropmenu-tree .dropmenu-item').on('click', '.dropmenu-t
         $('#target button.dropmenu-btn').removeClass('focus');
         $('#target button.dropmenu-btn .text').text(branchOrTag);
     }
-});
+})
 
+/**
+ * 触发diff检查。
+ * Trigger diff.
+ *
+ * @access public
+ * @return viod
+ */
 window.goDiff = function()
 {
+    /* SVN 类型 #source/#target 是 input,取当前用户输入同步到 hidden。 */
     var $source = $('#source');
     var $target = $('#target');
     if($source.is('input')) $('#oldRevision').val($source.val());
@@ -54,12 +308,12 @@ window.goDiff = function()
     var oldRevision   = $('#oldRevision').val();
     var newRevision   = $('#newRevision').val();
     var isBranchOrTag = $('#isBranchOrTag').val();
-
     if(!oldRevision || !newRevision)
     {
         zui.Modal.alert(repoLang.error.needTwoVersion);
         return false;
     }
+
     if(oldRevision == newRevision)
     {
         zui.Modal.alert(repoLang.error.differentVersions);
@@ -72,6 +326,6 @@ window.goDiff = function()
         newRevision = btoa(encodeURIComponent(newRevision));
     }
 
-    var url = $.createLink('repo', 'diff', 'repoID=' + repo.id + '&objectID=' + objectID + '&entry=&oldRevision=' + oldRevision + '&newRevision=' + newRevision + '&showBug=0&encoding=&isBranchOrTag=' + isBranchOrTag);
+    var url = $.createLink('repo', 'diff', 'repoID=' + repo.id + '&objectID=' + objectID + '&entry=&oldRevision=' + oldRevision + '&newRevision=' +newRevision + '&showBug=0&encoding=&isBranchOrTag=' + isBranchOrTag);
     openPage(url);
-};
+}

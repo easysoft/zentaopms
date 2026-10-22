@@ -55,8 +55,8 @@ elseif($story->status == 'active')
 {
     $actions = array
     (
-        $canChange ? array('btnType' => 'button', 'class' => 'secondary', 'onclick' => 'window.locateChange(this)', 'text' => $lang->story->change) : null,
         array('btnType' => 'submit', 'class' => 'primary', 'text' => $lang->save),
+        $canChange ? array('btnType' => 'button', 'class' => 'secondary', 'onclick' => 'window.locateChange(this)', 'text' => $lang->story->change) : null,
         isInModal() ? null : array('text' => $lang->goback, 'back' => 'APP')
     );
 }

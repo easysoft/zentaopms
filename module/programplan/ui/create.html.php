@@ -268,7 +268,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         $plan->point        = implode(',', $points);
         if(in_array($config->edition, array('max', 'ipd')) && $executionType == 'stage')
         {
-            $plan->output = empty($plan->output) ? 0 : explode(',', $plan->output);
+            $plan->output = empty($plan->output) ? $plan->output : explode(',', $plan->output);
         }
         $items[] = $plan;
     }
