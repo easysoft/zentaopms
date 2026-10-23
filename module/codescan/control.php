@@ -856,8 +856,15 @@ class codescan extends control
         $params = $this->codescanZen->buildParams('all', '', 0, $orderBy, $pager->recPerPage, $pager->pageID);
         if($status != 'all') $params['latestTaskStatus'] = $status;
 
-        $planList = $this->codescan->getScanPlans($repoID, (array)$params);
-        $repoList = $this->repo->getRepoPairs();
+        $planList    = $this->codescan->getScanPlans($repoID, (array)$params);
+        $repoList    = $this->repo->getRepoPairs();
+        $repoMap     = $repoList;
+        $gitFoxRepos = $this->repo->getGitFoxRepos();
+        foreach($gitFoxRepos as $repo)
+        {
+            if(empty($repo->serviceProject) || !isset($repoList[$repo->id])) continue;
+            $repoMap[$repo->serviceProject] = $repo->name;
+        }
 
         $pager->recTotal = empty($planList->pager) ? 0 : (int)zget($planList->pager, 'total', 0);
         $planList = zget($planList, 'data', array());
@@ -871,6 +878,7 @@ class codescan extends control
         $this->view->pager        = $pager;
         $this->view->orderBy      = $orderBy;
         $this->view->repoList     = $repoList;
+        $this->view->repoMap      = $repoMap;
         $this->view->status       = $status;
         $this->view->solutionList = array_column($solutionList, 'name', 'id');
         $this->display();
