@@ -12,6 +12,7 @@ cid=18488
 - 步骤3：单一分支创建 @7
 - 步骤4：带模块和计划的单分支创建 @8
 - 步骤5：包含bugID和todoID的孪生创建 @9
+- 步骤6：多分支孪生需求连续创建不重复主键 @10
 
 */
 
@@ -94,8 +95,16 @@ $data4->title = 'Single Branch With Plan Story';
 $data5 = clone $data1;
 $data5->title = 'Story With Bug and Todo';
 
-r($tester->story->createTwins($data1, 0, 0)) && p() && e('5'); // 步骤1：正常单分支孪生需求创建
-r($tester->story->createTwins($data2, 0, 0)) && p() && e('6'); // 步骤2：空分支数组情况
-r($tester->story->createTwins($data3, 0, 0)) && p() && e('7'); // 步骤3：单一分支创建
-r($tester->story->createTwins($data4, 0, 0)) && p() && e('8'); // 步骤4：带模块和计划的单分支创建
+// 测试数据6：多分支孪生需求
+$data6 = clone $data1;
+$data6->branches = array(0, 1);
+$data6->modules = array(1, 2);
+$data6->plans = array('0', '0');
+$data6->title = 'Multi Branch Twin Story';
+
+r($tester->story->createTwins($data1, 0, 0))             && p() && e('5'); // 步骤1：正常单分支孪生需求创建
+r($tester->story->createTwins($data2, 0, 0))             && p() && e('6'); // 步骤2：空分支数组情况
+r($tester->story->createTwins($data3, 0, 0))             && p() && e('7'); // 步骤3：单一分支创建
+r($tester->story->createTwins($data4, 0, 0))             && p() && e('8'); // 步骤4：带模块和计划的单分支创建
 r($tester->story->createTwins($data5, 1, 1, 'extra', 1)) && p() && e('9'); // 步骤5：包含bugID和todoID的孪生创建
+r($tester->story->createTwins($data6, 0, 0))             && p() && e('10'); // 步骤6：多分支孪生需求连续创建不重复主键
