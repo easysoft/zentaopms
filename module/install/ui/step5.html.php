@@ -12,6 +12,8 @@ namespace zin;
 
 set::zui(true);
 
+$isGitfox = $config->edition == 'gitfox';
+
 if(isset($error))
 {
     h::js("zui.Modal.alert({size: '480', message: '{$error}'}).then((res) => {openUrl('" . inlink('step3') . "')});");
@@ -83,7 +85,7 @@ div
                     )
                 )
             ),
-            formRow
+            !$isGitfox ? formRow
             (
                 setClass('w-96 m-auto importDemoDataRow'),
                 formGroup
@@ -96,7 +98,7 @@ div
                         set::value(1)
                     )
                 )
-            ),
+            ) : null,
             contactUs()
         )
     )

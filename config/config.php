@@ -279,6 +279,15 @@ if(file_exists($cacheConfig)) include $cacheConfig;
 $extConfigFiles = glob(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ext/*.php');
 if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
 
+/* 扩展配置中可能指定 edition，需在加载扩展配置后再覆盖版本相关的配置。 */
+/* The edition may be specified in the extension config, so override edition-specific config after it is loaded. */
+if($config->edition == 'gitfox')
+{
+    $config->contactUs['email']  = 'wangzhaoning@chandao.com';
+    $config->contactUs['qq']     = '3684528290';
+    $config->contactUs['wechat'] = '17669512663';
+}
+
 /* Set version. */
 if($config->edition != 'open')
 {

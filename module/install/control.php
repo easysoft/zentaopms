@@ -367,7 +367,7 @@ class install extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $data = form::data()->get();
-            if($data->importDemoData) $this->install->importDemoData();
+            if($this->config->edition != 'gitfox' && $data->importDemoData) $this->install->importDemoData();
 
             $this->loadModel('setting');
             $this->setting->updateVersion($this->config->version);
