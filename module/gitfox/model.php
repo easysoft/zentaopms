@@ -439,10 +439,11 @@ class gitfoxModel extends model
      * Get repos of gitfox.
      *
      * @param  string $query
+     * @param  int    $spaceID
      * @access public
      * @return array
      */
-    public function apiGetRepos(string $query = ''): array
+    public function apiGetRepos(string $query = '', int $spaceID = 0): array
     {
         $apiRoot = $this->getApiRoot();
         if(!$apiRoot) return array();
@@ -452,18 +453,20 @@ class gitfoxModel extends model
 
         for($page = 1; true; $page++)
         {
-            $param                     = array();
-            $param['page']             = $page;
-            $param['pageSize']         = 100;
-            if($query) $param['query'] = $query;
+            $param             = array();
+            $param['page']     = $page;
+            $param['pageSize'] = 100;
+
+            if($query)           $param['query'] = $query;
+            if(!empty($spaceID)) $param['space'] = $spaceID;
 
             $response = json_decode(common::http($apiUrl, $param, array(), $apiRoot->header, 'json', 'POST'));
             $result   = $this->getResponse($response);
-            $tagList  = isset($result->data) ? $result->data : array();
-            $isLast   = isset($result->listArgs) ? $result->listArgs->isLast : true;
+            $repoList = isset($result->data) ? $result->data : array();
+            $isLast   = isset($result->pager) ? $result->pager->isLast : true;
 
-            if(empty($tagList) || !is_array($tagList)) break;
-            $allResults = array_merge($allResults, $tagList);
+            if(empty($repoList) || !is_array($repoList)) break;
+            $allResults = array_merge($allResults, $repoList);
             if(!empty($isLast)) break;
         }
 

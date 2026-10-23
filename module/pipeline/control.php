@@ -1273,7 +1273,7 @@ class pipeline extends control
      */
     public function ajaxGetRepos(int $spaceID = 0)
     {
-        $repos = $this->loadModel('gitfox')->apiGetRepos();
+        $repos = $this->loadModel('gitfox')->apiGetRepos('', $spaceID);
         foreach($repos as $repo)
         {
             if($repo->scmType != 'git' || $repo->mirror) continue;
