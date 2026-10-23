@@ -155,6 +155,7 @@ ALTER TABLE `zt_workflowlayout` ADD `wrapAfter`  tinyint unsigned NOT NULL DEFAU
 
 UPDATE `zt_workflowlayout` SET `action` = 'assignTo' WHERE `module` = 'ticket'   AND `action` = 'assign';
 UPDATE `zt_workflowlayout` SET `order` = `order` + 99 WHERE `module` IN (SELECT `module` FROM `zt_workflow` WHERE `buildin` = 1);
+UPDATE `zt_workflowlayout` SET `width` = 12 WHERE `width` = 0;
 
 UPDATE `zt_case` AS t1
 JOIN `zt_case` AS t2 ON t1.`fromCaseID` = t2.`id`

@@ -2575,20 +2575,24 @@ class doc extends control
         {
             $apiID = (int)str_replace('api.', '', $docID);
             $api   = $this->loadModel('api')->getByID($apiID, $version);
-            if($api)
-            {
-                $api->originTitle = $api->title;
-                $api->icon        = "api is-$api->method";
-                $api->title       = "$api->method $api->path $api->title";
-                $api->api         = true;
-                $api->editable    = common::hasPriv('api', 'edit');
-            }
+            if(!$api) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
+            $lib = $this->doc->getLibByID((int)$api->lib);
+            if(!$lib || !$this->doc->checkPrivLib($lib)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
+
+            $api->originTitle = $api->title;
+            $api->icon        = "api is-$api->method";
+            $api->title       = "$api->method $api->path $api->title";
+            $api->api         = true;
+            $api->editable    = common::hasPriv('api', 'edit');
             $this->send(array('result' => 'success', 'doc' => $api));
             return;
         }
 
         $docID = (int)$docID;
         $doc = $this->doc->getByID($docID, $version);
+        if(!$doc || !isset($doc->id)) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
+        if(!$this->doc->checkPrivDoc($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
+
         $doc->versionMarkers = $this->doc->getVersionMarkers($docID);
         $doc->lib     = (int)$doc->lib;
         $doc->module  = (int)$doc->module;

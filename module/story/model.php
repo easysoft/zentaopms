@@ -649,6 +649,9 @@ class storyModel extends model
         $mainStoryID = 0;
         foreach($storyData->branches as $key => $branchID)
         {
+            /* 创建成功后 create() 会把新需求 ID 写回对象，下一轮插入前必须移除，否则会以主键方式插入导致主键重复。*/
+            unset($storyData->id);
+
             $storyData->branch = (int)$branchID;
             $storyData->module = $storyData->modules[$key];
             $storyData->plan   = isset($storyData->plans[$key]) ? $storyData->plans[$key] : 0;
