@@ -2925,7 +2925,7 @@ class repo extends control
         list($branchID, $branches, $tags) = $this->setBranchTag($repo, '');
         unset($branches, $tags);
 
-        $branchID = helper::safe64Encode(base64_encode($branchID));
+        $branchID = helper::safe64Encode($branchID);
         $this->app->loadClass('pager', true);
         $pager = new pager(0, 1, 1);
 
@@ -3020,6 +3020,7 @@ class repo extends control
     public function ajaxGetBranchCommits(int $repoID, string $branchID, string $search = '')
     {
         $repo = $this->repo->getByID($repoID);
+        $branchID = helper::safe64Decode($branchID);
         list($branchID) = $this->repoZen->setBranchTag($repo, $branchID);
         $branchID = helper::safe64Encode(base64_encode($branchID));
         $pageSize = 10;
