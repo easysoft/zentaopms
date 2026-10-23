@@ -16,11 +16,11 @@ CREATE TABLE `ops_artifact_assets` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  KEY `idx_artifactLibID_type_basename_deleted` (`artifactLibID`,`type`,`basename`,`deleted`),
+  KEY `idx_artifactLibID_type_basename_deleted` (`artifactLibID`,`type`,`basename`(140),`deleted`),
   KEY `idx_blobID` (`blobID`),
   KEY `idx_deleted` (`deleted`),
-  KEY `idx_groupID_basename_deleted` (`groupID`,`basename`,`deleted`),
-  KEY `idx_versionID_basename_deleted` (`versionID`,`basename`,`deleted`)
+  KEY `idx_groupID_basename_deleted` (`groupID`,`basename`(190),`deleted`),
+  KEY `idx_versionID_basename_deleted` (`versionID`,`basename`(190),`deleted`)
 ) ENGINE=InnoDB COMMENT='制品资源表';
 CREATE TABLE `ops_artifact_blobs` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -37,7 +37,7 @@ CREATE TABLE `ops_artifact_blobs` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_ref_storageID` (`ref`,`storageID`),
+  UNIQUE KEY `uk_ref_storageID` (`ref`(190),`storageID`),
   KEY `idx_assetID_deleted` (`assetID`,`deleted`),
   KEY `idx_deleted` (`deleted`)
 ) ENGINE=InnoDB COMMENT='制品文件对象表';
@@ -56,7 +56,7 @@ CREATE TABLE `ops_artifact_groups` (
   KEY `idx_artifactLibID_deleted` (`artifactLibID`,`deleted`),
   KEY `idx_artifactLibID_parentID_deleted` (`artifactLibID`,`parentID`,`deleted`),
   KEY `idx_parentID_deleted` (`parentID`,`deleted`),
-  KEY `idx_artifactLibID_parentID_name` (`artifactLibID`,`parentID`,`name`)
+  KEY `idx_artifactLibID_parentID_name` (`artifactLibID`,`parentID`,`name`(189))
 ) ENGINE=InnoDB COMMENT='制品分组表';
 CREATE TABLE `ops_artifact_libs` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -94,7 +94,7 @@ CREATE TABLE `ops_artifact_meta_assets` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_artifactLibID_type_path` (`artifactLibID`,`type`,`path`),
+  UNIQUE KEY `uk_artifactLibID_type_path` (`artifactLibID`,`type`,`path`(140)),
   KEY `idx_artifactLibID_deleted` (`artifactLibID`,`deleted`),
   KEY `idx_blobID` (`blobID`),
   KEY `idx_deleted` (`deleted`)
@@ -112,9 +112,9 @@ CREATE TABLE `ops_artifact_packages` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_artifactLibID_name_namespace_type` (`artifactLibID`,`name`,`namespace`,`type`),
+  UNIQUE KEY `uk_artifactLibID_name_namespace_type` (`artifactLibID`,`name`,`namespace`(40),`type`),
   KEY `idx_artifactLibID_type_deleted` (`artifactLibID`,`type`,`deleted`),
-  KEY `idx_artifactLibID_namespace_deleted` (`artifactLibID`,`namespace`,`deleted`),
+  KEY `idx_artifactLibID_namespace_deleted` (`artifactLibID`,`namespace`(190),`deleted`),
   KEY `idx_groupID_deleted` (`groupID`,`deleted`),
   KEY `idx_deleted` (`deleted`)
 ) ENGINE=InnoDB COMMENT='制品包表';
@@ -133,7 +133,7 @@ CREATE TABLE `ops_artifact_tree_nodes` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_artifactLibID_nodePath_type` (`artifactLibID`,`nodePath`,`type`),
+  UNIQUE KEY `uk_artifactLibID_nodePath_type` (`artifactLibID`,`nodePath`(140),`type`),
   KEY `idx_parentID_deleted` (`parentID`,`deleted`),
   KEY `idx_artifactLibID_linkTable_linkRecord_deleted` (`artifactLibID`,`linkTable`,`linkRecord`,`deleted`),
   KEY `idx_artifactLibID_type_deleted` (`artifactLibID`,`type`,`deleted`),
@@ -195,8 +195,8 @@ CREATE TABLE `ops_branch_type` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_repo_key` (`repo`,`key`),
-  UNIQUE KEY `uk_repo_prefix` (`repo`,`prefix`)
+  UNIQUE KEY `uk_repo_key` (`repo`,`key`(190)),
+  UNIQUE KEY `uk_repo_prefix` (`repo`,`prefix`(190))
 ) ENGINE=InnoDB COMMENT='分支类型表';
 CREATE TABLE `ops_migrations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -226,7 +226,7 @@ CREATE TABLE `ops_pipeline` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_spaceID_repoID_name` (`spaceID`,`repoID`,`name`)
+  UNIQUE KEY `uk_spaceID_repoID_name` (`spaceID`,`repoID`,`name`(189))
 ) ENGINE=InnoDB COMMENT='流水线基本信息表';
 CREATE TABLE `ops_pipeline_content` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -287,8 +287,8 @@ CREATE TABLE `ops_plugins` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_name` (`name`),
-  KEY `idx_type` (`type`)
+  UNIQUE KEY `uk_name` (`name`(191)),
+  KEY `idx_type` (`type`(191))
 ) ENGINE=InnoDB COMMENT='CI插件表';
 CREATE TABLE `ops_ppm` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -329,7 +329,7 @@ CREATE TABLE `ops_ppm` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
   KEY `idx_createdBy` (`createdBy`),
-  KEY `idx_sourceRepoID_sourceBranch_targetRepoID_targetBranch` (`sourceRepoID`,`sourceBranch`,`targetRepoID`,`targetBranch`)
+  KEY `idx_sourceRepoID_sourceBranch_targetRepoID_targetBranch` (`sourceRepoID`,`sourceBranch`(95),`targetRepoID`,`targetBranch`(94))
 ) ENGINE=InnoDB COMMENT='合并请求主表';
 CREATE TABLE `ops_provider` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -358,8 +358,8 @@ CREATE TABLE `ops_public_keys` (
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁编辑',
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_fingerprint` (`fingerprint`),
-  UNIQUE KEY `uk_identifier_account` (`identifier`,`account`)
+  UNIQUE KEY `uk_fingerprint` (`fingerprint`(191)),
+  UNIQUE KEY `uk_identifier_account` (`identifier`(161),`account`)
 ) ENGINE=InnoDB COMMENT='SSH公钥表';
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '代码库ID',
@@ -384,7 +384,7 @@ CREATE TABLE `ops_repo` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_name_spaceID` (`name`,`spaceID`),
+  UNIQUE KEY `uk_name_spaceID` (`name`(190),`spaceID`),
   UNIQUE KEY `uk_gitUID` (`gitUID`),
   KEY `idx_deleted` (`deleted`)
 ) ENGINE=InnoDB COMMENT='代码库表';
@@ -408,8 +408,8 @@ CREATE TABLE `ops_repofiles` (
   `type` varchar(20) NOT NULL DEFAULT '' COMMENT '类型',
   `action` char(1) NOT NULL DEFAULT '' COMMENT '动作',
   PRIMARY KEY (`id`),
-  KEY `idx_path` (`path`),
-  KEY `idx_parent` (`parent`),
+  KEY `idx_path` (`path`(191)),
+  KEY `idx_parent` (`parent`(191)),
   KEY `idx_repo` (`repo`),
   KEY `idx_revision` (`revision`)
 ) ENGINE=InnoDB;
@@ -484,7 +484,7 @@ CREATE TABLE `ops_runner` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  KEY `idx_token` (`token`),
+  KEY `idx_token` (`token`(191)),
   KEY `idx_online` (`online`),
   KEY `idx_status` (`status`)
 ) ENGINE=InnoDB COMMENT='runner 基本信息表';
@@ -528,8 +528,8 @@ CREATE TABLE `ops_scan_issues` (
   `ignoredDate` bigint NOT NULL DEFAULT '0' COMMENT '问题忽略到期时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_issueKey` (`issueKey`),
-  KEY `idx_repoID_repoBranch` (`repoID`,`repoBranch`),
+  UNIQUE KEY `uk_issueKey` (`issueKey`(191)),
+  KEY `idx_repoID_repoBranch` (`repoID`,`repoBranch`(190)),
   KEY `idx_ruleID` (`ruleID`),
   KEY `idx_status` (`status`),
   KEY `idx_scanMethod` (`scanMethod`),
@@ -587,9 +587,9 @@ CREATE TABLE `ops_scan_plans` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_repoID_name_deleted` (`repoID`,`name`,`deleted`),
+  UNIQUE KEY `uk_repoID_name_deleted` (`repoID`,`name`(190),`deleted`),
   KEY `idx_repoID_deleted` (`repoID`,`deleted`),
-  KEY `idx_name` (`name`),
+  KEY `idx_name` (`name`(191)),
   KEY `idx_deleted` (`deleted`)
 ) ENGINE=InnoDB COMMENT='扫描计划表';
 CREATE TABLE `ops_scan_rule_migrations` (
@@ -622,8 +622,8 @@ CREATE TABLE `ops_scan_rules` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_ruleKey_lang_deleted` (`ruleKey`,`lang`,`deleted`),
-  KEY `idx_name` (`name`),
+  UNIQUE KEY `uk_ruleKey_lang_deleted` (`ruleKey`(141),`lang`,`deleted`),
+  KEY `idx_name` (`name`(191)),
   KEY `idx_type` (`type`),
   KEY `idx_plugin_tag` (`plugin`,`tag`),
   KEY `idx_priority_status` (`priority`,`status`),
@@ -663,8 +663,8 @@ CREATE TABLE `ops_scan_rulesets` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_name_lang_deleted` (`name`,`lang`,`deleted`),
-  KEY `idx_name` (`name`),
+  UNIQUE KEY `uk_name_lang_deleted` (`name`(141),`lang`,`deleted`),
+  KEY `idx_name` (`name`(191)),
   KEY `idx_type` (`type`),
   KEY `idx_status` (`status`),
   KEY `idx_plugin_tag` (`plugin`,`tag`),
@@ -699,8 +699,8 @@ CREATE TABLE `ops_scan_solutions` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_name_deleted` (`name`,`deleted`),
-  KEY `idx_name` (`name`),
+  UNIQUE KEY `uk_name_deleted` (`name`(191),`deleted`),
+  KEY `idx_name` (`name`(191)),
   KEY `idx_status` (`status`),
   KEY `idx_deleted` (`deleted`)
 ) ENGINE=InnoDB COMMENT='扫描方案表';
@@ -788,10 +788,10 @@ CREATE TABLE `ops_schedule_jobs` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_name` (`name`),
-  KEY `idx_type` (`type`),
-  KEY `idx_state` (`state`),
-  KEY `idx_groupID` (`groupID`)
+  UNIQUE KEY `uk_name` (`name`(191)),
+  KEY `idx_type` (`type`(191)),
+  KEY `idx_state` (`state`(191)),
+  KEY `idx_groupID` (`groupID`(191))
 ) ENGINE=InnoDB COMMENT='后台任务表';
 CREATE TABLE `ops_space` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -872,7 +872,7 @@ CREATE TABLE `ops_tokens` (
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁编辑',
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_identifier_account` (`identifier`,`account`)
+  UNIQUE KEY `uk_identifier_account` (`identifier`(161),`account`)
 ) ENGINE=InnoDB COMMENT='令牌表';
 CREATE TABLE `ops_triggers` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '触发器ID，自增主键',
@@ -1371,7 +1371,7 @@ CREATE TABLE `zt_ai_useragent` (
   `agent` varchar(255) NOT NULL DEFAULT '' COMMENT 'ZAI agent ID',
   `type` varchar(30) NOT NULL DEFAULT '' COMMENT '类型：'' | executor',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_account_agent` (`account`,`agent`(190))
+  UNIQUE KEY `uk_account_agent` (`account`,`agent`(161))
 ) ENGINE=InnoDB;
 CREATE TABLE `zt_ai_vectorqueue` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
@@ -1747,7 +1747,7 @@ CREATE TABLE `zt_autocache` (
   `code` varchar(30) NOT NULL DEFAULT '',
   `fields` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `cache` (`code`,`fields`(190))
+  UNIQUE KEY `cache` (`code`,`fields`(161))
 ) ENGINE=InnoDB;
 CREATE TABLE `zt_automation` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -2395,7 +2395,7 @@ CREATE TABLE `zt_dept` (
   `manager` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `parent` (`parent`),
-  KEY `path` (`path`)
+  KEY `path` (`path`(191))
 ) ENGINE=InnoDB;
 CREATE TABLE `zt_design` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -3436,7 +3436,7 @@ CREATE TABLE `zt_module` (
   PRIMARY KEY (`id`),
   KEY `root` (`root`),
   KEY `type` (`type`),
-  KEY `path` (`path`)
+  KEY `path` (`path`(191))
 ) ENGINE=InnoDB;
 CREATE TABLE `zt_nc` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -3664,7 +3664,7 @@ CREATE TABLE `zt_pivot` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `dimension` (`dimension`),
-  KEY `group` (`group`)
+  KEY `group` (`group`(191))
 ) ENGINE=InnoDB;
 CREATE TABLE `zt_pivotdrill` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -4143,7 +4143,7 @@ CREATE TABLE `zt_release` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `product` (`product`),
-  KEY `build` (`build`),
+  KEY `build` (`build`(191)),
   KEY `idx_system` (`system`)
 ) ENGINE=InnoDB;
 CREATE TABLE `zt_releaserelated` (
@@ -4814,7 +4814,7 @@ CREATE TABLE `zt_task` (
   KEY `execution` (`execution`),
   KEY `story` (`story`),
   KEY `parent` (`parent`),
-  KEY `path` (`path`),
+  KEY `path` (`path`(191)),
   KEY `assignedTo` (`assignedTo`),
   KEY `order` (`order`),
   KEY `feedback` (`feedback`)
@@ -5111,7 +5111,7 @@ CREATE TABLE `zt_traincategory` (
   `deleted` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `parent` (`parent`),
-  KEY `path` (`path`)
+  KEY `path` (`path`(191))
 ) ENGINE=InnoDB;
 CREATE TABLE `zt_traincontents` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
