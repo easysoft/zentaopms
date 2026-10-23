@@ -1277,9 +1277,8 @@ class pipeline extends control
         foreach($repos as $repo)
         {
             if($repo->scmType != 'git' || $repo->mirror) continue;
-            if($spaceID && $repo->spaceID != $spaceID) continue;
 
-            $repoList[] = array('value' => $repo->gitURL, 'text' => $repo->name, 'key' => $repo->name);
+            $repoList[] = array('value' => $repo->gitURL, 'text' => $repo->name . ' [' . $repo->gitURL . ']', 'key' => $repo->name);
         }
 
         echo json_encode($repoList);
