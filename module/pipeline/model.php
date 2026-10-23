@@ -327,8 +327,12 @@ class pipelineModel extends model
         $check = empty($updatePipeline->repoID) ? "spaceID = {$updatePipeline->spaceID}" : "repoID = {$updatePipeline->repoID}";
         $check .= " AND id != $id";
 
+        /* Jenkins 流水线没有分支配置，编辑时不校验 defaultBranch。 */
+        $requiredFields = $this->config->pipeline->edit->requiredFields;
+        if($updatePipeline->engine == 'jenkins') $requiredFields = str_replace(',defaultBranch', '', $requiredFields);
+
         $this->dao->update(TABLE_PIPELINE)->data($pipeline)
-            ->batchCheck($this->config->pipeline->edit->requiredFields, 'notempty')
+            ->batchCheck($requiredFields, 'notempty')
             ->check('name', 'unique', $check)
             ->where('id')->eq($id)
             ->autoCheck()
