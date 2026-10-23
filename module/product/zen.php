@@ -979,8 +979,10 @@ class productZen extends product
         if($storyType == 'requirement,story' && !empty($this->config->enableER)) $parentIdList = $this->dao->select('id')->from(TABLE_STORY)->where('type')->eq('epic')->andWhere('`isParent`')->eq(1)->fetchPairs('id', 'id');
         if($storyType == 'story' && (!empty($this->config->URAndSR) || $this->config->edition == 'ipd')) $parentIdList = $this->dao->select('id')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('`isParent`')->eq(1)->fetchPairs('id', 'id');
 
-        $productQuery = $this->loadModel('story')->buildProductsCondition($productID, $branch);
-        $stories = $this->dao->select("*,plan,path")->from(TABLE_STORY)
+        $storyTao     = $this->loadModel('story')->storyTao;
+        $orderBy      = $storyTao->processStageOrder($orderBy);
+        $productQuery = $storyTao->buildProductsCondition($productID, $branch);
+        $stories      = $this->dao->select("*,plan,path, " . $storyTao->getStageOrderSQL() . " as `stageOrder`")->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere($productQuery)
             ->andWhere('parent', true)->eq(0)
