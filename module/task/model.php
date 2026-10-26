@@ -1923,16 +1923,18 @@ class taskModel extends model
      * @param  int    $projectID
      * @param  bool   $isPairs
      * @param  int    $executionID
+     * @param  array  $appendTasks
      * @access public
      * @return array
      */
-    public function getProjectTaskList(int $projectID, bool $isPairs = false, int $executionID = 0): array
+    public function getProjectTaskList(int $projectID, bool $isPairs = false, int $executionID = 0, array $appendTasks = array()): array
     {
         $taskList = $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->andWhere('project')->eq($projectID)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!empty($appendTasks))->orWhere('id')->in($appendTasks)->fi()
             ->fetchAll('id');
 
         $taskPairs = array();
