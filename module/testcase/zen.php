@@ -682,7 +682,11 @@ class testcaseZen extends testcase
             ->remove('files,labels,scriptFile,scriptName')
             ->removeIF($formData->data->auto == 'auto' && !$formData->data->script, 'script')
             ->get();
-        if(!empty($oldCase->lib) && empty($oldCase->product) && !empty($_POST['lib'])) $case->lib = $this->post->lib;
+        if(!empty($oldCase->lib) && empty($oldCase->product) && !empty($_POST['lib']))
+        {
+            $case->lib     = $this->post->lib;
+            $case->product = $case->branch = 0;
+        }
 
         return !empty($this->config->testcase->editor->edit['id']) ? $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->edit['id'], $this->post->uid) : $case;
     }
