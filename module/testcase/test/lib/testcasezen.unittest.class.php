@@ -1,8 +1,9 @@
 <?php
 class testcaseZenTest
 {
-    public $testcaseZenTest;
     public $tester;
+    public $objectModel;
+    public $testcaseZenTest;
     function __construct()
     {
         global $tester;
