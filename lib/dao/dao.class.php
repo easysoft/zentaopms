@@ -20,6 +20,8 @@ helper::import(dirname(__FILE__, 2) . '/base/dao/dao.class.php');
  */
 class dao extends baseDAO
 {
+    public $deptManager = '';
+
     public function exec($sql = '')
     {
         if(isset($_SESSION['tutorialMode']) and $_SESSION['tutorialMode']) return true;
