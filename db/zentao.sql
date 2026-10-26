@@ -289,7 +289,7 @@ CREATE TABLE IF NOT EXISTS `zt_autocache` (
   `fields` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-CREATE UNIQUE INDEX `cache` ON `zt_autocache`(`code`, `fields`(190));
+CREATE UNIQUE INDEX `cache` ON `zt_autocache`(`code`, `fields`(161));
 
 -- DROP TABLE IF EXISTS `zt_block`;
 CREATE TABLE IF NOT EXISTS `zt_block` (
@@ -763,7 +763,7 @@ CREATE TABLE IF NOT EXISTS `zt_dept` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `parent` ON `zt_dept`(`parent`);
-CREATE INDEX `path`   ON `zt_dept`(`path`);
+CREATE INDEX `path`   ON `zt_dept`(`path`(191));
 
 -- DROP TABLE IF EXISTS `zt_design`;
 CREATE TABLE IF NOT EXISTS `zt_design` (
@@ -1344,7 +1344,7 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
 ) ENGINE=InnoDB;
 CREATE INDEX `root` ON `zt_module`(`root`);
 CREATE INDEX `type` ON `zt_module`(`type`);
-CREATE INDEX `path` ON `zt_module`(`path`);
+CREATE INDEX `path` ON `zt_module`(`path`(191));
 
 -- DROP TABLE IF EXISTS `zt_notify`;
 CREATE TABLE IF NOT EXISTS `zt_notify` (
@@ -1752,7 +1752,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_release` (`product`);
-CREATE INDEX `build`   ON `zt_release` (`build`);
+CREATE INDEX `build`   ON `zt_release` (`build`(191));
 CREATE INDEX `idx_system` ON `zt_release` (`system`);
 
 -- DROP TABLE IF EXISTS `zt_releaserelated`;
@@ -2121,7 +2121,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
 CREATE INDEX `execution` ON `zt_task` (`execution`);
 CREATE INDEX `story` ON `zt_task` (`story`);
 CREATE INDEX `parent` ON `zt_task` (`parent`);
-CREATE INDEX `path` ON `zt_task` (`path`);
+CREATE INDEX `path` ON `zt_task` (`path`(191));
 CREATE INDEX `assignedTo` ON `zt_task` (`assignedTo`);
 CREATE INDEX `order` ON `zt_task` (`order`);
 CREATE INDEX `feedback` ON `zt_task` (`feedback`);
@@ -3166,7 +3166,7 @@ CREATE TABLE IF NOT EXISTS `zt_traincategory` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `parent` ON `zt_traincategory` (`parent`);
-CREATE INDEX `path` ON `zt_traincategory` (`path`);
+CREATE INDEX `path` ON `zt_traincategory` (`path`(191));
 
 -- DROP TABLE IF EXISTS `zt_trainrecords`;
 CREATE TABLE IF NOT EXISTS `zt_trainrecords` (
@@ -14710,7 +14710,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `dimension` ON `zt_pivot` (`dimension`);
-CREATE INDEX `group`     ON `zt_pivot` (`group`);
+CREATE INDEX `group`     ON `zt_pivot` (`group`(191));
 
 -- DROP TABLE IF EXISTS `zt_pivotspec`;
 CREATE TABLE IF NOT EXISTS `zt_pivotspec` (
@@ -15346,7 +15346,7 @@ CREATE TABLE `zt_ai_useragent` (
   `type` varchar(30) NOT NULL DEFAULT '' COMMENT '类型：'' | executor',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`(190));
+CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`(161));
 
 INSERT INTO `zt_ai_miniprogramfield` (`appID`, `name`, `type`, `placeholder`, `options`, `required`) VALUES
 (1, '教育背景', 'textarea', '学历/专业', NULL, '0'),
@@ -15910,11 +15910,11 @@ CREATE TABLE IF NOT EXISTS `ops_artifact_assets` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='制品资源表';
-CREATE INDEX `idx_artifactLibID_type_basename_deleted` ON `ops_artifact_assets` (`artifactLibID`, `type`, `basename`, `deleted`);
+CREATE INDEX `idx_artifactLibID_type_basename_deleted` ON `ops_artifact_assets` (`artifactLibID`, `type`, `basename`(140), `deleted`);
 CREATE INDEX `idx_blobID` ON `ops_artifact_assets` (`blobID`);
 CREATE INDEX `idx_deleted` ON `ops_artifact_assets` (`deleted`);
-CREATE INDEX `idx_groupID_basename_deleted` ON `ops_artifact_assets` (`groupID`, `basename`, `deleted`);
-CREATE INDEX `idx_versionID_basename_deleted` ON `ops_artifact_assets` (`versionID`, `basename`, `deleted`);
+CREATE INDEX `idx_groupID_basename_deleted` ON `ops_artifact_assets` (`groupID`, `basename`(190), `deleted`);
+CREATE INDEX `idx_versionID_basename_deleted` ON `ops_artifact_assets` (`versionID`, `basename`(190), `deleted`);
 
 -- DROP TABLE IF EXISTS `ops_artifact_blobs`;
 CREATE TABLE IF NOT EXISTS `ops_artifact_blobs` (
@@ -15933,7 +15933,7 @@ CREATE TABLE IF NOT EXISTS `ops_artifact_blobs` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='制品文件对象表';
-CREATE UNIQUE INDEX `uk_ref_storageID` ON `ops_artifact_blobs` (`ref`, `storageID`);
+CREATE UNIQUE INDEX `uk_ref_storageID` ON `ops_artifact_blobs` (`ref`(190), `storageID`);
 CREATE INDEX `idx_assetID_deleted` ON `ops_artifact_blobs` (`assetID`, `deleted`);
 CREATE INDEX `idx_deleted` ON `ops_artifact_blobs` (`deleted`);
 
@@ -15954,7 +15954,7 @@ CREATE TABLE IF NOT EXISTS `ops_artifact_groups` (
 CREATE INDEX `idx_artifactLibID_deleted` ON `ops_artifact_groups` (`artifactLibID`, `deleted`);
 CREATE INDEX `idx_artifactLibID_parentID_deleted` ON `ops_artifact_groups` (`artifactLibID`, `parentID`, `deleted`);
 CREATE INDEX `idx_parentID_deleted` ON `ops_artifact_groups` (`parentID`, `deleted`);
-CREATE INDEX `idx_artifactLibID_parentID_name` ON `ops_artifact_groups` (`artifactLibID`, `parentID`, `name`);
+CREATE INDEX `idx_artifactLibID_parentID_name` ON `ops_artifact_groups` (`artifactLibID`, `parentID`, `name`(189));
 
 -- DROP TABLE IF EXISTS `ops_artifact_libs`;
 CREATE TABLE IF NOT EXISTS `ops_artifact_libs` (
@@ -15996,7 +15996,7 @@ CREATE TABLE IF NOT EXISTS `ops_artifact_meta_assets` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='制品元数据资源表';
-CREATE UNIQUE INDEX `uk_artifactLibID_type_path` ON `ops_artifact_meta_assets` (`artifactLibID`, `type`, `path`);
+CREATE UNIQUE INDEX `uk_artifactLibID_type_path` ON `ops_artifact_meta_assets` (`artifactLibID`, `type`, `path`(140));
 CREATE INDEX `idx_artifactLibID_deleted` ON `ops_artifact_meta_assets` (`artifactLibID`, `deleted`);
 CREATE INDEX `idx_blobID` ON `ops_artifact_meta_assets` (`blobID`);
 CREATE INDEX `idx_deleted` ON `ops_artifact_meta_assets` (`deleted`);
@@ -16016,9 +16016,9 @@ CREATE TABLE IF NOT EXISTS `ops_artifact_packages` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='制品包表';
-CREATE UNIQUE INDEX `uk_artifactLibID_name_namespace_type` ON `ops_artifact_packages` (`artifactLibID`, `name`, `namespace`, `type`);
+CREATE UNIQUE INDEX `uk_artifactLibID_name_namespace_type` ON `ops_artifact_packages` (`artifactLibID`, `name`, `namespace`(40), `type`);
 CREATE INDEX `idx_artifactLibID_type_deleted` ON `ops_artifact_packages` (`artifactLibID`, `type`, `deleted`);
-CREATE INDEX `idx_artifactLibID_namespace_deleted` ON `ops_artifact_packages` (`artifactLibID`, `namespace`, `deleted`);
+CREATE INDEX `idx_artifactLibID_namespace_deleted` ON `ops_artifact_packages` (`artifactLibID`, `namespace`(190), `deleted`);
 CREATE INDEX `idx_groupID_deleted` ON `ops_artifact_packages` (`groupID`, `deleted`);
 CREATE INDEX `idx_deleted` ON `ops_artifact_packages` (`deleted`);
 
@@ -16039,7 +16039,7 @@ CREATE TABLE IF NOT EXISTS `ops_artifact_tree_nodes` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='制品树节点表';
-CREATE UNIQUE INDEX `uk_artifactLibID_nodePath_type` ON `ops_artifact_tree_nodes` (`artifactLibID`, `nodePath`, `type`);
+CREATE UNIQUE INDEX `uk_artifactLibID_nodePath_type` ON `ops_artifact_tree_nodes` (`artifactLibID`, `nodePath`(140), `type`);
 CREATE INDEX `idx_parentID_deleted` ON `ops_artifact_tree_nodes` (`parentID`, `deleted`);
 CREATE INDEX `idx_artifactLibID_linkTable_linkRecord_deleted` ON `ops_artifact_tree_nodes` (`artifactLibID`, `linkTable`, `linkRecord`, `deleted`);
 CREATE INDEX `idx_artifactLibID_type_deleted` ON `ops_artifact_tree_nodes` (`artifactLibID`, `type`, `deleted`);
@@ -16107,8 +16107,8 @@ CREATE TABLE IF NOT EXISTS `ops_branch_type` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='分支类型表';
-CREATE UNIQUE INDEX `uk_repo_key` ON `ops_branch_type` (`repo`, `key`);
-CREATE UNIQUE INDEX `uk_repo_prefix` ON `ops_branch_type` (`repo`, `prefix`);
+CREATE UNIQUE INDEX `uk_repo_key` ON `ops_branch_type` (`repo`, `key`(190));
+CREATE UNIQUE INDEX `uk_repo_prefix` ON `ops_branch_type` (`repo`, `prefix`(190));
 
 -- DROP TABLE IF EXISTS `ops_migrations`;
 CREATE TABLE IF NOT EXISTS `ops_migrations` (
@@ -16142,7 +16142,7 @@ CREATE TABLE IF NOT EXISTS `ops_pipeline` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='流水线基本信息表';
-CREATE UNIQUE INDEX `uk_spaceID_repoID_name` ON `ops_pipeline` (`spaceID`, `repoID`, `name`);
+CREATE UNIQUE INDEX `uk_spaceID_repoID_name` ON `ops_pipeline` (`spaceID`, `repoID`, `name`(189));
 
 -- DROP TABLE IF EXISTS `ops_pipeline_content`;
 CREATE TABLE IF NOT EXISTS `ops_pipeline_content` (
@@ -16211,8 +16211,8 @@ CREATE TABLE IF NOT EXISTS `ops_plugins` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='CI插件表';
-CREATE UNIQUE INDEX `uk_name` ON `ops_plugins` (`name`);
-CREATE INDEX `idx_type` ON `ops_plugins` (`type`);
+CREATE UNIQUE INDEX `uk_name` ON `ops_plugins` (`name`(191));
+CREATE INDEX `idx_type` ON `ops_plugins` (`type`(191));
 
 -- DROP TABLE IF EXISTS `ops_ppm`;
 CREATE TABLE IF NOT EXISTS `ops_ppm` (
@@ -16255,7 +16255,7 @@ CREATE TABLE IF NOT EXISTS `ops_ppm` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='合并请求主表';
 CREATE INDEX `idx_createdBy` ON `ops_ppm` (`createdBy`);
-CREATE INDEX `idx_sourceRepoID_sourceBranch_targetRepoID_targetBranch` ON `ops_ppm` (`sourceRepoID`, `sourceBranch`, `targetRepoID`, `targetBranch`);
+CREATE INDEX `idx_sourceRepoID_sourceBranch_targetRepoID_targetBranch` ON `ops_ppm` (`sourceRepoID`, `sourceBranch`(95), `targetRepoID`, `targetBranch`(94));
 
 -- DROP TABLE IF EXISTS `ops_provider`;
 CREATE TABLE IF NOT EXISTS `ops_provider` (
@@ -16288,8 +16288,8 @@ CREATE TABLE IF NOT EXISTS `ops_public_keys` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='SSH公钥表';
-CREATE UNIQUE INDEX `uk_fingerprint` ON `ops_public_keys` (`fingerprint`);
-CREATE UNIQUE INDEX `uk_identifier_account` ON `ops_public_keys` (`identifier`(225), `account`);
+CREATE UNIQUE INDEX `uk_fingerprint` ON `ops_public_keys` (`fingerprint`(191));
+CREATE UNIQUE INDEX `uk_identifier_account` ON `ops_public_keys` (`identifier`(161), `account`);
 
 -- DROP TABLE IF EXISTS `ops_repo`;
 CREATE TABLE IF NOT EXISTS `ops_repo` (
@@ -16316,7 +16316,7 @@ CREATE TABLE IF NOT EXISTS `ops_repo` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='代码库表';
-CREATE UNIQUE INDEX `uk_name_spaceID` ON `ops_repo` (`name`, `spaceID`);
+CREATE UNIQUE INDEX `uk_name_spaceID` ON `ops_repo` (`name`(190), `spaceID`);
 CREATE UNIQUE INDEX `uk_gitUID` ON `ops_repo` (`gitUID`);
 CREATE INDEX `idx_deleted` ON `ops_repo` (`deleted`);
 
@@ -16344,8 +16344,8 @@ CREATE TABLE IF NOT EXISTS `ops_repofiles` (
   `action` char(1) NOT NULL DEFAULT '' COMMENT '动作',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-CREATE INDEX `idx_path` ON `ops_repofiles` (`path`);
-CREATE INDEX `idx_parent` ON `ops_repofiles` (`parent`);
+CREATE INDEX `idx_path` ON `ops_repofiles` (`path`(191));
+CREATE INDEX `idx_parent` ON `ops_repofiles` (`parent`(191));
 CREATE INDEX `idx_repo` ON `ops_repofiles` (`repo`);
 CREATE INDEX `idx_revision` ON `ops_repofiles` (`revision`);
 
@@ -16430,7 +16430,7 @@ CREATE TABLE IF NOT EXISTS `ops_runner` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='runner 基本信息表';
-CREATE INDEX `idx_token` ON `ops_runner` (`token`);
+CREATE INDEX `idx_token` ON `ops_runner` (`token`(191));
 CREATE INDEX `idx_online` ON `ops_runner` (`online`);
 CREATE INDEX `idx_status` ON `ops_runner` (`status`);
 
@@ -16479,8 +16479,8 @@ CREATE TABLE IF NOT EXISTS `ops_scan_issues` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='扫描问题表';
-CREATE UNIQUE INDEX `uk_issueKey` ON `ops_scan_issues` (`issueKey`);
-CREATE INDEX `idx_repoID_repoBranch` ON `ops_scan_issues` (`repoID`, `repoBranch`);
+CREATE UNIQUE INDEX `uk_issueKey` ON `ops_scan_issues` (`issueKey`(191));
+CREATE INDEX `idx_repoID_repoBranch` ON `ops_scan_issues` (`repoID`, `repoBranch`(190));
 CREATE INDEX `idx_ruleID` ON `ops_scan_issues` (`ruleID`);
 CREATE INDEX `idx_status` ON `ops_scan_issues` (`status`);
 CREATE INDEX `idx_scanMethod` ON `ops_scan_issues` (`scanMethod`);
@@ -16544,9 +16544,9 @@ CREATE TABLE IF NOT EXISTS `ops_scan_plans` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='扫描计划表';
-CREATE UNIQUE INDEX `uk_repoID_name_deleted` ON `ops_scan_plans` (`repoID`, `name`, `deleted`);
+CREATE UNIQUE INDEX `uk_repoID_name_deleted` ON `ops_scan_plans` (`repoID`, `name`(190), `deleted`);
 CREATE INDEX `idx_repoID_deleted` ON `ops_scan_plans` (`repoID`, `deleted`);
-CREATE INDEX `idx_name` ON `ops_scan_plans` (`name`);
+CREATE INDEX `idx_name` ON `ops_scan_plans` (`name`(191));
 CREATE INDEX `idx_deleted` ON `ops_scan_plans` (`deleted`);
 
 -- DROP TABLE IF EXISTS `ops_scan_rule_migrations`;
@@ -16583,8 +16583,8 @@ CREATE TABLE IF NOT EXISTS `ops_scan_rules` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='扫描规则表';
-CREATE UNIQUE INDEX `uk_ruleKey_lang_deleted` ON `ops_scan_rules` (`ruleKey`, `lang`, `deleted`);
-CREATE INDEX `idx_name` ON `ops_scan_rules` (`name`);
+CREATE UNIQUE INDEX `uk_ruleKey_lang_deleted` ON `ops_scan_rules` (`ruleKey`(141), `lang`, `deleted`);
+CREATE INDEX `idx_name` ON `ops_scan_rules` (`name`(191));
 CREATE INDEX `idx_type` ON `ops_scan_rules` (`type`);
 CREATE INDEX `idx_plugin_tag` ON `ops_scan_rules` (`plugin`, `tag`);
 CREATE INDEX `idx_priority_status` ON `ops_scan_rules` (`priority`, `status`);
@@ -16628,8 +16628,8 @@ CREATE TABLE IF NOT EXISTS `ops_scan_rulesets` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='扫描规则集表';
-CREATE UNIQUE INDEX `uk_name_lang_deleted` ON `ops_scan_rulesets` (`name`, `lang`, `deleted`);
-CREATE INDEX `idx_name` ON `ops_scan_rulesets` (`name`);
+CREATE UNIQUE INDEX `uk_name_lang_deleted` ON `ops_scan_rulesets` (`name`(141), `lang`, `deleted`);
+CREATE INDEX `idx_name` ON `ops_scan_rulesets` (`name`(191));
 CREATE INDEX `idx_type` ON `ops_scan_rulesets` (`type`);
 CREATE INDEX `idx_status` ON `ops_scan_rulesets` (`status`);
 CREATE INDEX `idx_plugin_tag` ON `ops_scan_rulesets` (`plugin`, `tag`);
@@ -16668,8 +16668,8 @@ CREATE TABLE IF NOT EXISTS `ops_scan_solutions` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='扫描方案表';
-CREATE UNIQUE INDEX `uk_name_deleted` ON `ops_scan_solutions` (`name`, `deleted`);
-CREATE INDEX `idx_name` ON `ops_scan_solutions` (`name`);
+CREATE UNIQUE INDEX `uk_name_deleted` ON `ops_scan_solutions` (`name`(191), `deleted`);
+CREATE INDEX `idx_name` ON `ops_scan_solutions` (`name`(191));
 CREATE INDEX `idx_status` ON `ops_scan_solutions` (`status`);
 CREATE INDEX `idx_deleted` ON `ops_scan_solutions` (`deleted`);
 
@@ -16765,10 +16765,10 @@ CREATE TABLE IF NOT EXISTS `ops_schedule_jobs` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='后台任务表';
-CREATE UNIQUE INDEX `uk_name` ON `ops_schedule_jobs` (`name`);
-CREATE INDEX `idx_type` ON `ops_schedule_jobs` (`type`);
-CREATE INDEX `idx_state` ON `ops_schedule_jobs` (`state`);
-CREATE INDEX `idx_groupID` ON `ops_schedule_jobs` (`groupID`);
+CREATE UNIQUE INDEX `uk_name` ON `ops_schedule_jobs` (`name`(191));
+CREATE INDEX `idx_type` ON `ops_schedule_jobs` (`type`(191));
+CREATE INDEX `idx_state` ON `ops_schedule_jobs` (`state`(191));
+CREATE INDEX `idx_groupID` ON `ops_schedule_jobs` (`groupID`(191));
 
 -- DROP TABLE IF EXISTS `ops_space`;
 CREATE TABLE IF NOT EXISTS `ops_space` (
@@ -16859,7 +16859,7 @@ CREATE TABLE IF NOT EXISTS `ops_tokens` (
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='令牌表';
-CREATE UNIQUE INDEX `uk_identifier_account` ON `ops_tokens` (`identifier`(225), `account`);
+CREATE UNIQUE INDEX `uk_identifier_account` ON `ops_tokens` (`identifier`(161), `account`);
 
 -- DROP TABLE IF EXISTS `ops_triggers`;
 CREATE TABLE IF NOT EXISTS `ops_triggers` (
