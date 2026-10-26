@@ -20,6 +20,15 @@ helper::import(dirname(__FILE__, 2) . '/base/dao/dao.class.php');
  */
 class dao extends baseDAO
 {
+    /**
+     * 当前用户所属部门的负责人缓存。
+     * Cache of the manager of the department the current user belongs to.
+     *
+     * @var string
+     * @access public
+     */
+    public $deptManager = '';
+
     public function exec($sql = '')
     {
         if(isset($_SESSION['tutorialMode']) and $_SESSION['tutorialMode']) return true;
