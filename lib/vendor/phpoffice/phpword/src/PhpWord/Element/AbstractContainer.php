@@ -23,7 +23,7 @@ namespace PhpOffice\PhpWord\Element;
  * @method Text addText(string $text, mixed $fStyle = null, mixed $pStyle = null)
  * @method TextRun addTextRun(mixed $pStyle = null)
  * @method Bookmark addBookmark(string $name)
- * @method Link addLink(string $target, string $text = null, mixed $fStyle = null, mixed $pStyle = null, boolean $internal = false)
+ * @method Link addLink(string $target, ?string $text = null, mixed $fStyle = null, mixed $pStyle = null, boolean $internal = false)
  * @method PreserveText addPreserveText(string $text, mixed $fStyle = null, mixed $pStyle = null)
  * @method void addTextBreak(int $count = 1, mixed $fStyle = null, mixed $pStyle = null)
  * @method ListItem addListItem(string $txt, int $depth = 0, mixed $font = null, mixed $list = null, mixed $para = null)
@@ -41,7 +41,7 @@ namespace PhpOffice\PhpWord\Element;
  * @method Field addField(string $type = null, array $properties = array(), array $options = array(), mixed $text = null)
  * @method Line addLine(mixed $lineStyle = null)
  * @method Shape addShape(string $type, mixed $style = null)
- * @method Chart addChart(string $type, array $categories, array $values, array $style = null, $seriesName = null)
+ * @method Chart addChart(string $type, array $categories, array $values, ?array $style = null, $seriesName = null)
  * @method FormField addFormField(string $type, mixed $fStyle = null, mixed $pStyle = null)
  * @method SDT addSDT(string $type)
  *
