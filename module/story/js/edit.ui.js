@@ -252,6 +252,7 @@ window.locateChange = function(obj)
         if(!result) return inModal ? loadModal(changeUrl) : loadPage(changeUrl);
 
         formData.append('locate', 'change');
+        formData.append('inModal', inModal ? 1 : 0);
         $.ajaxSubmit({url: $form.attr('action'), data: formData, onFail: (error) =>
         {
             if(error?.message) showValidateMessage(error.message);
