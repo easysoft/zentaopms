@@ -63,6 +63,7 @@ formGridPanel
     set::title($lang->task->create),
     set::fields($fields),
     set::loadUrl($loadUrl),
+    set::formGrid(['$options' => jsRaw('window.setFormGridOptions')]),
     on::change('[name=module]', 'loadExecutionStories'),
     on::change('[name=story]', 'setStoryRelated'),
     on::change('[name=type]', 'typeChange'),
