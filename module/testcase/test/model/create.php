@@ -19,6 +19,7 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen('1');
 zenData('case')->gen('0');
+zenData('casespec')->gen('0');
 
 su('admin');
 
