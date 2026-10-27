@@ -20,6 +20,7 @@ class form extends formBase
         'fullModeOrders?: string|array',   // 完整模式下字段显示顺序。
         'foldableItems?: array|string',    // 可折叠的表单项。
         'pinnedItems?: array|string',      // 固定显示的表单项。
+        'formGrid?: array',                // 表单网格配置。
         'customBtn?: array|bool',          // 是否显示表单自定义按钮。
         'customUrl?: string',              // 自定义表单提交 URL。
         'toolbar?: array|bool',            // 额外的自定义按钮。
@@ -301,10 +302,12 @@ class form extends formBase
         if($this->isLayout('grid'))
         {
             $options = $this->props->pick(array('loadUrl', 'autoLoad', 'fullModeOrders'));
+            $formGridOptions = $this->prop('formGrid');
             $after[] = zui::formGrid
             (
                 set::_to('#' . $this->id()),
-                set($options)
+                set($options),
+                $formGridOptions ? set($formGridOptions) : null
             );
         }
         return $after;
