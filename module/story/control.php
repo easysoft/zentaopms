@@ -364,16 +364,12 @@ class story extends control
             $response['load'] = $this->storyZen->getAfterEditLocation($storyID, $storyType);
             if($this->post->locate == 'change')
             {
-                $locateLink = $this->createLink($this->app->rawModule, 'change', "storyID=$storyID&from=&storyType={$storyType}");
+                $response['load'] = $this->createLink($this->app->rawModule, 'change', "storyID=$storyID&from=&storyType={$storyType}");
                 if($this->post->inModal)
                 {
-                    unset($response['load']);
                     $response['closeModal'] = false;
-                    $response['callback'] = "loadModal('$locateLink')";
-                }
-                else
-                {
-                    $response['load'] = $locateLink;
+                    $response['callback'] = "loadModal('{$response['load']}')";
+                    unset($response['load']);
                 }
             }
             return $this->send($response);
