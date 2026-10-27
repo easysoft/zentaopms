@@ -15,10 +15,10 @@ window.renderBranchTypeCell = function(result, {col, row})
 
         let html = '';
         prefixes.forEach(prefix => {
-            html += '<span class="label label-outline label-primary mr-1">' + prefix + '</span>';
+            html += '<span class="label gray-200-outline mr-1">' + prefix + '</span>';
         });
 
-        result[0] = {html: html, className: 'overflow-x-auto scrollbar-thin scrollbar-hover', style: {whiteSpace: 'nowrap'}};
+        result[0] = {html: html, className: 'overflow-x-auto scrollbar-thin scrollbar-hover px-0.5 py-0.5', style: {whiteSpace: 'nowrap'}};
         return result;
     }
 
