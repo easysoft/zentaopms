@@ -53,9 +53,12 @@ class testcaseModel extends model
 
         /* 存储上传的文件。 */
         /* Save upload files. */
-        $this->config->dangers = '';
-        $this->loadModel('file')->saveUpload('testcase', $caseID, 'autoscript', 'script', 'scriptName');
-        $files = $this->loadModel('file')->saveUpload('testcase', $caseID);
+        $this->loadModel('file');
+        $oldDangers = $this->config->file->dangers;
+        $this->config->file->dangers = '';
+        $this->file->saveUpload('testcase', $caseID, 'autoscript', 'script', 'scriptName');
+        $this->config->file->dangers = $oldDangers;
+        $files = $this->file->saveUpload('testcase', $caseID);
 
         $this->testcaseTao->doCreateSpec($caseID, $case, $files);
 
