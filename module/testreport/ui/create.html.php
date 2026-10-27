@@ -258,7 +258,7 @@ foreach($bugInfo as $infoKey => $infoValue)
             $name  = $infoValue[$listKey]->name;
             $value = $infoValue[$listKey]->value;
         }
-        if(empty($name) || empty($value)) continue;
+        if(empty($value)) continue;
 
         $chartOption[] = array('name' => $name, 'value' => $value);
         $tableTR[]     = h::tr
