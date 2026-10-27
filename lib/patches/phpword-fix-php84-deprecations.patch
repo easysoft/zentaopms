@@ -1,0 +1,424 @@
+--- a/vendor/phpoffice/phpword/src/PhpWord/Element/AbstractElement.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Element/AbstractElement.php
+@@ -157,7 +157,7 @@ abstract class AbstractElement
+      *
+      * @param \PhpOffice\PhpWord\PhpWord $phpWord
+      */
+-    public function setPhpWord(PhpWord $phpWord = null)
++    public function setPhpWord(?PhpWord $phpWord = null)
+     {
+         $this->phpWord = $phpWord;
+     }
+--- a/vendor/phpoffice/phpword/src/PhpWord/Element/Section.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Element/Section.php
+@@ -170,7 +170,7 @@ class Section extends AbstractContainer
+      *
+      * @param FootnoteProperties $footnoteProperties
+      */
+-    public function setFootnoteProperties(FootnoteProperties $footnoteProperties = null)
++    public function setFootnoteProperties(?FootnoteProperties $footnoteProperties = null)
+     {
+         $this->footnoteProperties = $footnoteProperties;
+     }
+--- a/vendor/phpoffice/phpword/src/PhpWord/Exception/CopyFileException.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Exception/CopyFileException.php
+@@ -28,7 +28,7 @@ final class CopyFileException extends Exception
+      * @param int $code The user defined exception code
+      * @param \Exception $previous The previous exception used for the exception chaining
+      */
+-    final public function __construct($source, $destination, $code = 0, \Exception $previous = null)
++    final public function __construct($source, $destination, $code = 0, ?\Exception $previous = null)
+     {
+         parent::__construct(
+             sprintf('Could not copy \'%s\' file to \'%s\'.', $source, $destination),
+--- a/vendor/phpoffice/phpword/src/PhpWord/Exception/CreateTemporaryFileException.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Exception/CreateTemporaryFileException.php
+@@ -26,7 +26,7 @@ final class CreateTemporaryFileException extends Exception
+      * @param int $code The user defined exception code
+      * @param \Exception $previous The previous exception used for the exception chaining
+      */
+-    final public function __construct($code = 0, \Exception $previous = null)
++    final public function __construct($code = 0, ?\Exception $previous = null)
+     {
+         parent::__construct(
+             'Could not create a temporary file with unique name in the specified directory.',
+--- a/vendor/phpoffice/phpword/src/PhpWord/Media.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Media.php
+@@ -47,7 +47,7 @@ class Media
+      *
+      * @return int
+      */
+-    public static function addElement($container, $mediaType, $source, Image $image = null)
++    public static function addElement($container, $mediaType, $source, ?Image $image = null)
+     {
+         // Assign unique media Id and initiate media container if none exists
+         $mediaId = md5($container . $source);
+@@ -214,7 +214,7 @@ class Media
+      *
+      * @codeCoverageIgnore
+      */
+-    public static function addSectionMediaElement($src, $type, Image $image = null)
++    public static function addSectionMediaElement($src, $type, ?Image $image = null)
+     {
+         return self::addElement('section', $type, $src, $image);
+     }
+@@ -280,7 +280,7 @@ class Media
+      *
+      * @codeCoverageIgnore
+      */
+-    public static function addHeaderMediaElement($headerCount, $src, Image $image = null)
++    public static function addHeaderMediaElement($headerCount, $src, ?Image $image = null)
+     {
+         return self::addElement("header{$headerCount}", 'image', $src, $image);
+     }
+@@ -328,7 +328,7 @@ class Media
+      *
+      * @codeCoverageIgnore
+      */
+-    public static function addFooterMediaElement($footerCount, $src, Image $image = null)
++    public static function addFooterMediaElement($footerCount, $src, ?Image $image = null)
+     {
+         return self::addElement("footer{$footerCount}", 'image', $src, $image);
+     }
+--- a/vendor/phpoffice/phpword/src/PhpWord/Metadata/Settings.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Metadata/Settings.php
+@@ -267,7 +267,7 @@ class Settings
+      *
+      * @param TrackChangesView $trackChangesView
+      */
+-    public function setRevisionView(TrackChangesView $trackChangesView = null)
++    public function setRevisionView(?TrackChangesView $trackChangesView = null)
+     {
+         $this->revisionView = $trackChangesView;
+     }
+--- a/vendor/phpoffice/phpword/src/PhpWord/Reader/MsDoc.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Reader/MsDoc.php
+@@ -60,6 +60,18 @@ class MsDoc extends AbstractReader implements ReaderInterface
+      * @var
+      */
+     private $dataObjectPool;
++    /**
++     * Summary Information Stream
++     *
++     * @var string
++     */
++    private $_SummaryInformation;
++    /**
++     * Document Summary Information Stream
++     *
++     * @var string
++     */
++    private $_DocumentSummaryInformation;
+     /**
+      * @var \stdClass[]
+      */
+--- a/vendor/phpoffice/phpword/src/PhpWord/Reader/Word2007/AbstractPart.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Reader/Word2007/AbstractPart.php
+@@ -182,7 +182,7 @@ abstract class AbstractPart
+      * @param array $paragraphStyle
+      * @return number|null
+      */
+-    private function getHeadingDepth(array $paragraphStyle = null)
++    private function getHeadingDepth(?array $paragraphStyle = null)
+     {
+         if (is_array($paragraphStyle) && isset($paragraphStyle['styleName'])) {
+             if ('Title' === $paragraphStyle['styleName']) {
+@@ -590,7 +590,7 @@ abstract class AbstractPart
+      * @param string|array|null $elements
+      * @return string|null
+      */
+-    private function findPossibleElement(XMLReader $xmlReader, \DOMElement $parentNode = null, $elements = null)
++    private function findPossibleElement(XMLReader $xmlReader, ?\DOMElement $parentNode = null, $elements = null)
+     {
+         if (is_array($elements)) {
+             //if element is an array, we take the first element that exists in the XML
+@@ -639,7 +639,7 @@ abstract class AbstractPart
+      * @ignoreScrutinizerPatch
+      * @return array
+      */
+-    protected function readStyleDefs(XMLReader $xmlReader, \DOMElement $parentNode = null, $styleDefs = array())
++    protected function readStyleDefs(XMLReader $xmlReader, ?\DOMElement $parentNode = null, $styleDefs = array())
+     {
+         $styles = array();
+ 
+--- a/vendor/phpoffice/phpword/src/PhpWord/Shared/OLERead.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Shared/OLERead.php
+@@ -26,6 +26,83 @@ class OLERead
+ {
+     private $data = '';
+ 
++    /**
++     * Big block depot chain
++     *
++     * @var string
++     */
++    private $bigBlockChain = '';
++
++    /**
++     * Small block depot chain
++     *
++     * @var string
++     */
++    private $smallBlockChain = '';
++
++    /**
++     * Number of big block depot blocks
++     *
++     * @var int
++     */
++    private $numBigBlockDepotBlocks;
++
++    /**
++     * Root start block
++     *
++     * @var int
++     */
++    private $rootStartBlock;
++
++    /**
++     * Small block depot start block
++     *
++     * @var int
++     */
++    private $sbdStartBlock;
++
++    /**
++     * Extension block
++     *
++     * @var int
++     */
++    private $extensionBlock;
++
++    /**
++     * Number of extension blocks
++     *
++     * @var int
++     */
++    private $numExtensionBlocks;
++
++    /**
++     * Directory stream data
++     *
++     * @var string
++     */
++    private $entry = '';
++
++    /**
++     * Property sets
++     *
++     * @var array
++     */
++    private $props = array();
++
++    /**
++     * Index of the ObjectPool stream
++     *
++     * @var int
++     */
++    private $wrkObjectPoolelseif;
++
++    /**
++     * Index of the root entry
++     *
++     * @var int
++     */
++    private $rootentry;
++
+     // OLE identifier
+     const IDENTIFIER_OLE = IDENTIFIER_OLE;
+ 
+--- a/vendor/phpoffice/phpword/src/PhpWord/Shared/XMLReader.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Shared/XMLReader.php
+@@ -91,7 +91,7 @@ class XMLReader
+      * @param \DOMElement $contextNode
+      * @return \DOMNodeList
+      */
+-    public function getElements($path, \DOMElement $contextNode = null)
++    public function getElements($path, ?\DOMElement $contextNode = null)
+     {
+         if ($this->dom === null) {
+             return array();
+@@ -134,7 +134,7 @@ class XMLReader
+      * @param \DOMElement $contextNode
+      * @return \DOMElement|null
+      */
+-    public function getElement($path, \DOMElement $contextNode = null)
++    public function getElement($path, ?\DOMElement $contextNode = null)
+     {
+         $elements = $this->getElements($path, $contextNode);
+         if ($elements->length > 0) {
+@@ -152,7 +152,7 @@ class XMLReader
+      * @param string $path
+      * @return string|null
+      */
+-    public function getAttribute($attribute, \DOMElement $contextNode = null, $path = null)
++    public function getAttribute($attribute, ?\DOMElement $contextNode = null, $path = null)
+     {
+         $return = null;
+         if ($path !== null) {
+@@ -178,7 +178,7 @@ class XMLReader
+      * @param \DOMElement $contextNode
+      * @return string|null
+      */
+-    public function getValue($path, \DOMElement $contextNode = null)
++    public function getValue($path, ?\DOMElement $contextNode = null)
+     {
+         $elements = $this->getElements($path, $contextNode);
+         if ($elements->length > 0) {
+@@ -195,7 +195,7 @@ class XMLReader
+      * @param \DOMElement $contextNode
+      * @return int
+      */
+-    public function countElements($path, \DOMElement $contextNode = null)
++    public function countElements($path, ?\DOMElement $contextNode = null)
+     {
+         $elements = $this->getElements($path, $contextNode);
+ 
+@@ -209,7 +209,7 @@ class XMLReader
+      * @param \DOMElement $contextNode
+      * @return bool
+      */
+-    public function elementExists($path, \DOMElement $contextNode = null)
++    public function elementExists($path, ?\DOMElement $contextNode = null)
+     {
+         return $this->getElements($path, $contextNode)->length > 0;
+     }
+--- a/vendor/phpoffice/phpword/src/PhpWord/Style/Table.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Style/Table.php
+@@ -779,7 +779,7 @@ class Table extends Border
+      *
+      * @param int[] $value
+      */
+-    public function setColumnWidths(array $value = null)
++    public function setColumnWidths(?array $value = null)
+     {
+         $this->columnWidths = $value;
+     }
+--- a/vendor/phpoffice/phpword/src/PhpWord/Writer/AbstractWriter.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Writer/AbstractWriter.php
+@@ -113,7 +113,7 @@ abstract class AbstractWriter implements WriterInterface
+      * @param \PhpOffice\PhpWord\PhpWord
+      * @return self
+      */
+-    public function setPhpWord(PhpWord $phpWord = null)
++    public function setPhpWord(?PhpWord $phpWord = null)
+     {
+         $this->phpWord = $phpWord;
+ 
+--- a/vendor/phpoffice/phpword/src/PhpWord/Writer/HTML.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Writer/HTML.php
+@@ -44,7 +44,7 @@ class HTML extends AbstractWriter implements WriterInterface
+     /**
+      * Create new instance
+      */
+-    public function __construct(PhpWord $phpWord = null)
++    public function __construct(?PhpWord $phpWord = null)
+     {
+         $this->setPhpWord($phpWord);
+ 
+--- a/vendor/phpoffice/phpword/src/PhpWord/Writer/HTML/Part/AbstractPart.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Writer/HTML/Part/AbstractPart.php
+@@ -49,7 +49,7 @@ abstract class AbstractPart
+     /**
+      * @param \PhpOffice\PhpWord\Writer\AbstractWriter $writer
+      */
+-    public function setParentWriter(AbstractWriter $writer = null)
++    public function setParentWriter(?AbstractWriter $writer = null)
+     {
+         $this->parentWriter = $writer;
+     }
+--- a/vendor/phpoffice/phpword/src/PhpWord/Writer/ODText.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Writer/ODText.php
+@@ -32,7 +32,7 @@ class ODText extends AbstractWriter implements WriterInterface
+      *
+      * @param \PhpOffice\PhpWord\PhpWord $phpWord
+      */
+-    public function __construct(PhpWord $phpWord = null)
++    public function __construct(?PhpWord $phpWord = null)
+     {
+         // Assign PhpWord
+         $this->setPhpWord($phpWord);
+--- a/vendor/phpoffice/phpword/src/PhpWord/Writer/ODText/Element/Text.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Writer/ODText/Element/Text.php
+@@ -124,7 +124,7 @@ class Text extends AbstractElement
+         }
+     }
+ 
+-    private function writeChangeInsertion($start = true, TrackChange $trackChange = null)
++    private function writeChangeInsertion($start = true, ?TrackChange $trackChange = null)
+     {
+         if ($trackChange == null || $trackChange->getChangeType() != TrackChange::INSERTED) {
+             return;
+--- a/vendor/phpoffice/phpword/src/PhpWord/Writer/RTF.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Writer/RTF.php
+@@ -38,7 +38,7 @@ class RTF extends AbstractWriter implements WriterInterface
+      *
+      * @param \PhpOffice\PhpWord\PhpWord $phpWord
+      */
+-    public function __construct(PhpWord $phpWord = null)
++    public function __construct(?PhpWord $phpWord = null)
+     {
+         $this->setPhpWord($phpWord);
+ 
+--- a/vendor/phpoffice/phpword/src/PhpWord/Writer/RTF/Part/AbstractPart.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Writer/RTF/Part/AbstractPart.php
+@@ -49,7 +49,7 @@ abstract class AbstractPart
+     /**
+      * @param \PhpOffice\PhpWord\Writer\AbstractWriter $writer
+      */
+-    public function setParentWriter(AbstractWriter $writer = null)
++    public function setParentWriter(?AbstractWriter $writer = null)
+     {
+         $this->parentWriter = $writer;
+     }
+--- a/vendor/phpoffice/phpword/src/PhpWord/Writer/Word2007.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Writer/Word2007.php
+@@ -46,7 +46,7 @@ class Word2007 extends AbstractWriter implements WriterInterface
+      *
+      * @param \PhpOffice\PhpWord\PhpWord
+      */
+-    public function __construct(PhpWord $phpWord = null)
++    public function __construct(?PhpWord $phpWord = null)
+     {
+         // Assign PhpWord
+         $this->setPhpWord($phpWord);
+--- a/vendor/phpoffice/phpword/src/PhpWord/Writer/Word2007/Part/AbstractPart.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Writer/Word2007/Part/AbstractPart.php
+@@ -51,7 +51,7 @@ abstract class AbstractPart
+      *
+      * @param \PhpOffice\PhpWord\Writer\AbstractWriter $writer
+      */
+-    public function setParentWriter(AbstractWriter $writer = null)
++    public function setParentWriter(?AbstractWriter $writer = null)
+     {
+         $this->parentWriter = $writer;
+     }
+--- a/vendor/phpoffice/phpword/src/PhpWord/Writer/Word2007/Part/Settings.php
++++ b/vendor/phpoffice/phpword/src/PhpWord/Writer/Word2007/Part/Settings.php
+@@ -220,7 +220,7 @@ class Settings extends AbstractPart
+      *
+      * @param ProofState $proofState
+      */
+-    private function setProofState(ProofState $proofState = null)
++    private function setProofState(?ProofState $proofState = null)
+     {
+         if ($proofState != null && $proofState->getGrammar() !== null && $proofState->getSpelling() !== null) {
+             $this->settings['w:proofState'] = array(
+@@ -237,7 +237,7 @@ class Settings extends AbstractPart
+      *
+      * @param TrackChangesView $trackChangesView
+      */
+-    private function setRevisionView(TrackChangesView $trackChangesView = null)
++    private function setRevisionView(?TrackChangesView $trackChangesView = null)
+     {
+         if ($trackChangesView != null) {
+             $revisionView = array();
+@@ -256,7 +256,7 @@ class Settings extends AbstractPart
+      *
+      * @param Language $language
+      */
+-    private function setThemeFontLang(Language $language = null)
++    private function setThemeFontLang(?Language $language = null)
+     {
+         $latinLanguage = ($language == null || $language->getLatin() === null) ? 'en-US' : $language->getLatin();
+         $lang = array();

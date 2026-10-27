@@ -11,7 +11,7 @@ class PageSetup extends BaseParserClass
 
     private $worksheetXml;
 
-    public function __construct(Worksheet $workSheet, \SimpleXMLElement $worksheetXml = null)
+    public function __construct(Worksheet $workSheet, ?\SimpleXMLElement $worksheetXml = null)
     {
         $this->worksheet = $workSheet;
         $this->worksheetXml = $worksheetXml;

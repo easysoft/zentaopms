@@ -653,7 +653,7 @@ class Functions
      *
      * @return bool|string
      */
-    public static function isFormula($cellReference = '', Cell $pCell = null)
+    public static function isFormula($cellReference = '', ?Cell $pCell = null)
     {
         if ($pCell === null) {
             return self::REF();

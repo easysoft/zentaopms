@@ -64,7 +64,11 @@
                 "Optimize OLE date conversion with improved type safety": "patches/phpspreadsheet-ole-date-optimization.patch",
                 "Fix libxml entity loader compatibility for PHP 8.0+": "patches/phpspreadsheet-fix-libxml-php8-compatibility.patch",
                 "Fix alignment check condition in Styles reader": "patches/phpspreadsheet-fix-alignment-check.patch",
-                "Fix Color brightness calculation type casting for PHP 8 compatibility": "patches/phpspreadsheet-fix-color-brightness-type-casting.patch"
+                "Fix Color brightness calculation type casting for PHP 8 compatibility": "patches/phpspreadsheet-fix-color-brightness-type-casting.patch",
+                "Fix PHP 8.4 deprecations (implicit nullable parameters and dynamic properties)": "patches/phpspreadsheet-fix-php84-deprecations.patch"
+            },
+            "phpoffice/phpword": {
+                "Fix PHP 8.4 deprecations (implicit nullable parameters and dynamic properties)": "patches/phpword-fix-php84-deprecations.patch"
             }
         }
     },
