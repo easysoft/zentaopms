@@ -802,6 +802,20 @@ class releaseModel extends model
         foreach($bugs as $bugID) $this->action->create('bug', (int)$bugID, 'linked2release', '', $releaseID);
 
         $this->updateRelated($releaseID, $type, $release->$field);
+        if($type == 'bug')
+        {
+            foreach($bugs as $bugID)
+            {
+                $relation = new stdClass();
+                $relation->product  = 0;
+                $relation->relation = 'interrated';
+                $relation->AType    = 'bug';
+                $relation->AID      = $bugID;
+                $relation->BType    = 'release';
+                $relation->BID      = $releaseID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->autoCheck()->exec();
+            }
+        }
 
         return !dao::isError();
     }
@@ -827,6 +841,16 @@ class releaseModel extends model
         $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromrelease', '', $releaseID);
 
         $this->deleteRelated($releaseID, $type, $bugID);
+        if($type == 'bug')
+        {
+            $this->dao->delete()->from(TABLE_RELATION)
+                ->where('relation')->eq('interrated')
+                ->andWhere('AType')->eq('bug')
+                ->andWhere('AID')->eq($bugID)
+                ->andWhere('BType')->eq('release')
+                ->andWhere('BID')->eq($releaseID)
+                ->exec();
+        }
 
         return !dao::isError();
     }
@@ -858,6 +882,16 @@ class releaseModel extends model
         foreach($bugIdList as $unlinkBugID) $this->action->create('bug', (int)$unlinkBugID, 'unlinkedfromrelease', '', $releaseID);
 
         $this->deleteRelated($releaseID, $type, $bugIdList);
+        if($type == 'bug')
+        {
+            $this->dao->delete()->from(TABLE_RELATION)
+                ->where('relation')->eq('interrated')
+                ->andWhere('AType')->eq('bug')
+                ->andWhere('AID')->in($bugIdList)
+                ->andWhere('BType')->eq('release')
+                ->andWhere('BID')->eq($releaseID)
+                ->exec();
+        }
 
         return !dao::isError();
     }

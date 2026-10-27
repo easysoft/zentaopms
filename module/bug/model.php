@@ -2086,6 +2086,17 @@ class bugModel extends model
             $releaseBugs = array_unique($releaseBugs);
             $this->dao->update(TABLE_RELEASE)->set('bugs')->eq(implode(',', $releaseBugs))->where('id')->eq($release->id)->exec();
             $this->release->updateRelated($release->id, 'bug', $releaseBugs);
+
+            /* 记录 Bug 与发布的内置关联关系。 */
+            /* Record the built-in relation between the bug and release. */
+            $relation = new stdClass();
+            $relation->product  = 0;
+            $relation->relation = 'interrated';
+            $relation->AType    = 'bug';
+            $relation->AID      = $bugID;
+            $relation->BType    = 'release';
+            $relation->BID      = $release->id;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->autoCheck()->exec();
         }
 
         return true;
