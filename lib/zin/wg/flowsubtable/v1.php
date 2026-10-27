@@ -43,7 +43,7 @@ class flowSubTable extends wg
                 'label'        => $field->name,
                 'control'      => $common->flow->buildFormControl($field, 'batch'),
                 'items'        => array_filter($field->options),
-                'width'        => $field->width == 'auto' ? '160px' : $field->width,
+                'width'        => '160px',
                 'required'     => $required,
                 'ditto'        => in_array($field->control, $dittoControl),
                 'defaultDitto' => $dataList ? 'off' : 'on',

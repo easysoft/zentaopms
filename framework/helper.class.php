@@ -918,6 +918,7 @@ function initTableData(array $items, array &$fieldList, ?object $model = null): 
     if(isset($fieldList['actions']))
     {
         $fieldList['actions']['minWidth'] = $maxActionCount * 24 + 24;
+        if(!empty($fieldList['actions']['flow'])) $fieldList['actions']['minWidth'] *= 2;
         if(empty($fieldList['actions']['title'])) $fieldList['actions']['title'] = $lang->actions;
     }
     if($fieldList['actions']['minWidth'] < 48) $fieldList['actions']['minWidth'] = 48;
