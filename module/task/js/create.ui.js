@@ -710,3 +710,17 @@ window.checkEstStartedAndDeadline = function(event)
     if(parentEstStarted == '') $estStartedPicker.$.setValue('');
     if(parentDeadline == '') $deadlinePicker.$.setValue('');
 }
+
+window.setFormGridOptions = function(_, options)
+{
+    const fixFieldOrders = function()
+    {
+        const afterIndex = this._fields.indexOf('after');
+        if(afterIndex < 0) return;
+        this._fields = [...this._fields.filter(x => x !== 'after'), 'after'];
+
+        this.sortFields();
+        if(this.mode === 'full') this.toggleMode('full', true, true);
+    };
+    return $.extend(options, {afterInit: fixFieldOrders});
+};

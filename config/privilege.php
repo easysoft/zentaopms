@@ -17,8 +17,6 @@ $config->openMethods[] = 'misc.captcha';
 $config->openMethods[] = 'misc.checknetconnect';
 $config->openMethods[] = 'misc.checkupdate';
 $config->openMethods[] = 'misc.installevent';
-$config->openMethods[] = 'my.ajaxsavevisiontips';
-$config->openMethods[] = 'my.ajaxswitchvision';
 $config->openMethods[] = 'score.ajax';
 $config->openMethods[] = 'sso.bind';
 $config->openMethods[] = 'sso.feishuauthen';
@@ -38,7 +36,6 @@ $config->openMethods[] = 'gitfox.devopsintroduction';
 $config->openMethods[] = 'gitfox.installgitfox';
 $config->openMethods[] = 'gitfox.upgradegitfox';
 $config->openMethods[] = 'gitfox.ajaxcheckgitfoxhealth';
-$config->openMethods[] = 'zai.syncvectorization';
 
 /* 登录用户可以访问的方法。The methods that can be accessed by the logged users. */
 $config->logonMethods   = [];
@@ -122,6 +119,8 @@ $config->logonMethods[] = 'misc.about';
 $config->logonMethods[] = 'misc.features';
 $config->logonMethods[] = 'misc.ping';
 $config->logonMethods[] = 'misc.qrcode';
+$config->logonMethods[] = 'my.ajaxsavevisiontips';
+$config->logonMethods[] = 'my.ajaxswitchvision';
 $config->logonMethods[] = 'my.changepassword';
 $config->logonMethods[] = 'my.preference';
 $config->logonMethods[] = 'my.profile';
@@ -200,6 +199,7 @@ $config->logonMethods[] = 'artifact.copycmd';
 $config->logonMethods[] = 'zai.ajaxgettoken';
 $config->logonMethods[] = 'zai.ajaxgetuseragent';
 $config->logonMethods[] = 'zai.ajaxsearchknowledges';
+$config->logonMethods[] = 'zai.syncvectorization';
 $config->logonMethods[] = 'repo.import';
 
 /* Ajax 方法依赖的方法。The methods that Ajax methods depend on. */
