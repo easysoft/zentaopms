@@ -15,11 +15,6 @@ $lang->admin->sso           = 'ZDOO整合';
 $lang->admin->ssoAction     = 'ZDOO整合';
 $lang->admin->safeIndex     = '安全';
 $lang->admin->checkWeak     = '弱口令檢查';
-$lang->admin->certifyMobile = '認證手機';
-$lang->admin->certifyEmail  = '認證郵箱';
-$lang->admin->ztCompany     = '認證公司';
-$lang->admin->captcha       = '驗證碼';
-$lang->admin->getCaptcha    = '獲取驗證碼';
 $lang->admin->register      = '登記';
 
 $lang->admin->api     = '介面';

@@ -9,20 +9,6 @@ class adminZenTest extends baseTest
     protected $className  = 'zen';
 
     /**
-     * Test certifyByAPI method.
-     *
-     * @param  string $type mobile|email
-     * @access public
-     * @return mixed
-     */
-    public function certifyByAPITest(string $type = 'mobile')
-    {
-        $result = $this->invokeArgs('certifyByAPI', [$type]);
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
-
-    /**
      * Test fetchAPI method.
      *
      * @param  string $url
@@ -45,33 +31,6 @@ class adminZenTest extends baseTest
     public function getZentaoDataTest()
     {
         $result = $this->invokeArgs('getZentaoData', []);
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
-
-    /**
-     * Test sendCodeByAPI method.
-     *
-     * @param  string $type mobile|email
-     * @access public
-     * @return mixed
-     */
-    public function sendCodeByAPITest(string $type = 'mobile')
-    {
-        $result = $this->invokeArgs('sendCodeByAPI', [$type]);
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
-
-    /**
-     * Test setCompanyByAPI method.
-     *
-     * @access public
-     * @return mixed
-     */
-    public function setCompanyByAPITest()
-    {
-        $result = $this->invokeArgs('setCompanyByAPI', []);
         if(dao::isError()) return dao::getError();
         return $result;
     }
