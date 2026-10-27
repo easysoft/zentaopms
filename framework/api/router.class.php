@@ -1065,6 +1065,8 @@ class api extends router
             $this->appendFlowRoutes();
             $this->routeV2($routes);
         }
+
+        $this->filterUploadFiles();
     }
 
     /**

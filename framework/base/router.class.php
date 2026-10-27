@@ -1521,15 +1521,26 @@ class baseRouter
             $this->triggerError("The request type {$this->config->requestType} not supported", __FILE__, __LINE__, true);
         }
 
+        $this->filterUploadFiles();
+    }
+
+    /**
+     * 按当前模块过滤上传文件。
+     * Filter uploaded files according to the current module.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function filterUploadFiles()
+    {
         $allowedModules = explode(',', $this->config->file->allowedModules);
         if(in_array($this->moduleName, $allowedModules))
         {
             $this->config->file->dangers = '';
+            return;
         }
-        else
-        {
-            $_FILES = validater::filterFiles();
-        }
+
+        $_FILES = validater::filterFiles();
     }
 
     /**
