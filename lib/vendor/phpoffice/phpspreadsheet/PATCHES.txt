@@ -29,3 +29,7 @@ Fix Color brightness calculation type casting for PHP 8 compatibility
 Source: patches/phpspreadsheet-fix-color-brightness-type-casting.patch
 
 
+Fix PHP 8.4 deprecations (implicit nullable parameters and dynamic properties)
+Source: patches/phpspreadsheet-fix-php84-deprecations.patch
+
+

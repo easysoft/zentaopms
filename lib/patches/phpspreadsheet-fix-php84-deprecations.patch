@@ -1,0 +1,714 @@
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/Calculation.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/Calculation.php
+@@ -2200,7 +2200,7 @@ class Calculation
+         ],
+     ];
+ 
+-    public function __construct(Spreadsheet $spreadsheet = null)
++    public function __construct(?Spreadsheet $spreadsheet = null)
+     {
+         $this->delta = 1 * pow(10, 0 - ini_get('precision'));
+ 
+@@ -2228,7 +2228,7 @@ class Calculation
+      *
+      * @return Calculation
+      */
+-    public static function getInstance(Spreadsheet $spreadsheet = null)
++    public static function getInstance(?Spreadsheet $spreadsheet = null)
+     {
+         if ($spreadsheet !== null) {
+             $instance = $spreadsheet->getCalculationEngine();
+@@ -2693,7 +2693,7 @@ class Calculation
+      *
+      * @return mixed
+      */
+-    public function calculate(Cell $pCell = null)
++    public function calculate(?Cell $pCell = null)
+     {
+         try {
+             return $this->calculateCellValue($pCell);
+@@ -2712,7 +2712,7 @@ class Calculation
+      *
+      * @return mixed
+      */
+-    public function calculateCellValue(Cell $pCell = null, $resetLog = true)
++    public function calculateCellValue(?Cell $pCell = null, $resetLog = true)
+     {
+         if ($pCell === null) {
+             return null;
+@@ -2816,7 +2816,7 @@ class Calculation
+      *
+      * @return mixed
+      */
+-    public function calculateFormula($formula, $cellID = null, Cell $pCell = null)
++    public function calculateFormula($formula, $cellID = null, ?Cell $pCell = null)
+     {
+         //    Initialise the logging settings
+         $this->formulaError = null;
+@@ -2892,7 +2892,7 @@ class Calculation
+      *
+      * @return mixed
+      */
+-    public function _calculateFormulaValue($formula, $cellID = null, Cell $pCell = null)
++    public function _calculateFormulaValue($formula, $cellID = null, ?Cell $pCell = null)
+     {
+         $cellValue = null;
+ 
+@@ -3294,7 +3294,7 @@ class Calculation
+      *
+      * @return bool
+      */
+-    private function _parseFormula($formula, Cell $pCell = null)
++    private function _parseFormula($formula, ?Cell $pCell = null)
+     {
+         if (($formula = $this->convertMatrixReferences(trim($formula))) === false) {
+             return false;
+@@ -3628,7 +3628,7 @@ class Calculation
+      *
+      * @return bool
+      */
+-    private function processTokenStack($tokens, $cellID = null, Cell $pCell = null)
++    private function processTokenStack($tokens, $cellID = null, ?Cell $pCell = null)
+     {
+         if ($tokens == false) {
+             return false;
+@@ -4304,7 +4304,7 @@ class Calculation
+      *
+      * @return mixed Array of values in range if range contains more than one element. Otherwise, a single value is returned.
+      */
+-    public function extractCellRange(&$pRange = 'A1', Worksheet $pSheet = null, $resetLog = true)
++    public function extractCellRange(&$pRange = 'A1', ?Worksheet $pSheet = null, $resetLog = true)
+     {
+         // Return value
+         $returnValue = [];
+@@ -4357,7 +4357,7 @@ class Calculation
+      *
+      * @return mixed Array of values in range if range contains more than one element. Otherwise, a single value is returned.
+      */
+-    public function extractNamedRange(&$pRange = 'A1', Worksheet $pSheet = null, $resetLog = true)
++    public function extractNamedRange(&$pRange = 'A1', ?Worksheet $pSheet = null, $resetLog = true)
+     {
+         // Return value
+         $returnValue = [];
+@@ -4464,7 +4464,7 @@ class Calculation
+      *
+      * @return array
+      */
+-    private function addCellReference(array $args, $passCellReference, $functionCall, Cell $pCell = null)
++    private function addCellReference(array $args, $passCellReference, $functionCall, ?Cell $pCell = null)
+     {
+         if ($passCellReference) {
+             if (is_array($functionCall)) {
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/Functions.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/Functions.php
+@@ -653,7 +653,7 @@ class Functions
+      *
+      * @return bool|string
+      */
+-    public static function isFormula($cellReference = '', Cell $pCell = null)
++    public static function isFormula($cellReference = '', ?Cell $pCell = null)
+     {
+         if ($pCell === null) {
+             return self::REF();
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/LookupRef.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/LookupRef.php
+@@ -238,7 +238,7 @@ class LookupRef
+      *
+      * @return mixed The value of $displayName (or $linkURL if $displayName was blank)
+      */
+-    public static function HYPERLINK($linkURL = '', $displayName = null, Cell $pCell = null)
++    public static function HYPERLINK($linkURL = '', $displayName = null, ?Cell $pCell = null)
+     {
+         $linkURL = ($linkURL === null) ? '' : Functions::flattenSingleValue($linkURL);
+         $displayName = ($displayName === null) ? '' : Functions::flattenSingleValue($displayName);
+@@ -275,7 +275,7 @@ class LookupRef
+      *
+      * @todo    Support for the optional a1 parameter introduced in Excel 2010
+      */
+-    public static function INDIRECT($cellAddress = null, Cell $pCell = null)
++    public static function INDIRECT($cellAddress = null, ?Cell $pCell = null)
+     {
+         $cellAddress = Functions::flattenSingleValue($cellAddress);
+         if ($cellAddress === null || $cellAddress === '') {
+@@ -343,7 +343,7 @@ class LookupRef
+      *
+      * @return string A reference to a cell or range of cells
+      */
+-    public static function OFFSET($cellAddress = null, $rows = 0, $columns = 0, $height = null, $width = null, Cell $pCell = null)
++    public static function OFFSET($cellAddress = null, $rows = 0, $columns = 0, $height = null, $width = null, ?Cell $pCell = null)
+     {
+         $rows = Functions::flattenSingleValue($rows);
+         $columns = Functions::flattenSingleValue($columns);
+@@ -903,7 +903,7 @@ class LookupRef
+      *
+      * @return string
+      */
+-    public static function FORMULATEXT($cellReference = '', Cell $pCell = null)
++    public static function FORMULATEXT($cellReference = '', ?Cell $pCell = null)
+     {
+         if ($pCell === null) {
+             return Functions::REF();
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/Cell.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/Cell.php
+@@ -397,7 +397,7 @@ class Cell
+      *
+      * @return Cell
+      */
+-    public function setDataValidation(DataValidation $pDataValidation = null)
++    public function setDataValidation(?DataValidation $pDataValidation = null)
+     {
+         if (!isset($this->parent)) {
+             throw new Exception('Cannot set data validation for cell that is not bound to a worksheet');
+@@ -461,7 +461,7 @@ class Cell
+      *
+      * @return Cell
+      */
+-    public function setHyperlink(Hyperlink $pHyperlink = null)
++    public function setHyperlink(?Hyperlink $pHyperlink = null)
+     {
+         if (!isset($this->parent)) {
+             throw new Exception('Cannot set hyperlink for cell that is not bound to a worksheet');
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Chart.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Chart.php
+@@ -156,7 +156,7 @@ class Chart
+      * @param null|GridLines $majorGridlines
+      * @param null|GridLines $minorGridlines
+      */
+-    public function __construct($name, Title $title = null, Legend $legend = null, PlotArea $plotArea = null, $plotVisibleOnly = true, $displayBlanksAs = '0', Title $xAxisLabel = null, Title $yAxisLabel = null, Axis $xAxis = null, Axis $yAxis = null, GridLines $majorGridlines = null, GridLines $minorGridlines = null)
++    public function __construct($name, ?Title $title = null, ?Legend $legend = null, ?PlotArea $plotArea = null, $plotVisibleOnly = true, $displayBlanksAs = '0', ?Title $xAxisLabel = null, ?Title $yAxisLabel = null, ?Axis $xAxis = null, ?Axis $yAxis = null, ?GridLines $majorGridlines = null, ?GridLines $minorGridlines = null)
+     {
+         $this->name = $name;
+         $this->title = $title;
+@@ -199,7 +199,7 @@ class Chart
+      *
+      * @return Chart
+      */
+-    public function setWorksheet(Worksheet $pValue = null)
++    public function setWorksheet(?Worksheet $pValue = null)
+     {
+         $this->worksheet = $pValue;
+ 
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Legend.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Legend.php
+@@ -55,7 +55,7 @@ class Legend
+      * @param null|Layout $layout
+      * @param bool $overlay
+      */
+-    public function __construct($position = self::POSITION_RIGHT, Layout $layout = null, $overlay = false)
++    public function __construct($position = self::POSITION_RIGHT, ?Layout $layout = null, $overlay = false)
+     {
+         $this->setPosition($position);
+         $this->layout = $layout;
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/PlotArea.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/PlotArea.php
+@@ -26,7 +26,7 @@ class PlotArea
+      * @param null|Layout $layout
+      * @param DataSeries[] $plotSeries
+      */
+-    public function __construct(Layout $layout = null, array $plotSeries = [])
++    public function __construct(?Layout $layout = null, array $plotSeries = [])
+     {
+         $this->layout = $layout;
+         $this->plotSeries = $plotSeries;
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Title.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Title.php
+@@ -24,7 +24,7 @@ class Title
+      * @param null|mixed $caption
+      * @param null|Layout $layout
+      */
+-    public function __construct($caption = null, Layout $layout = null)
++    public function __construct($caption = null, ?Layout $layout = null)
+     {
+         $this->caption = $caption;
+         $this->layout = $layout;
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/HashTable.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/HashTable.php
+@@ -40,7 +40,7 @@ class HashTable
+      *
+      * @throws Exception
+      */
+-    public function addFromSource(array $pSource = null)
++    public function addFromSource(?array $pSource = null)
+     {
+         // Check if an array was passed
+         if ($pSource == null) {
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/NamedRange.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/NamedRange.php
+@@ -125,7 +125,7 @@ class NamedRange
+      *
+      * @return NamedRange
+      */
+-    public function setWorksheet(Worksheet $value = null)
++    public function setWorksheet(?Worksheet $value = null)
+     {
+         if ($value !== null) {
+             $this->worksheet = $value;
+@@ -202,7 +202,7 @@ class NamedRange
+      *
+      * @return NamedRange
+      */
+-    public function setScope(Worksheet $value = null)
++    public function setScope(?Worksheet $value = null)
+     {
+         $this->scope = $value;
+         $this->localOnly = $value != null;
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/Xlsx/ColumnAndRowAttributes.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/Xlsx/ColumnAndRowAttributes.php
+@@ -12,7 +12,7 @@ class ColumnAndRowAttributes extends BaseParserClass
+ 
+     private $worksheetXml;
+ 
+-    public function __construct(Worksheet $workSheet, \SimpleXMLElement $worksheetXml = null)
++    public function __construct(Worksheet $workSheet, ?\SimpleXMLElement $worksheetXml = null)
+     {
+         $this->worksheet = $workSheet;
+         $this->worksheetXml = $worksheetXml;
+@@ -74,7 +74,7 @@ class ColumnAndRowAttributes extends BaseParserClass
+      * @param IReadFilter $readFilter
+      * @param bool $readDataOnly
+      */
+-    public function load(IReadFilter $readFilter = null, $readDataOnly = false)
++    public function load(?IReadFilter $readFilter = null, $readDataOnly = false)
+     {
+         if ($this->worksheetXml === null) {
+             return;
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/Xlsx/PageSetup.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/Xlsx/PageSetup.php
+@@ -11,7 +11,7 @@ class PageSetup extends BaseParserClass
+ 
+     private $worksheetXml;
+ 
+-    public function __construct(Worksheet $workSheet, \SimpleXMLElement $worksheetXml = null)
++    public function __construct(Worksheet $workSheet, ?\SimpleXMLElement $worksheetXml = null)
+     {
+         $this->worksheet = $workSheet;
+         $this->worksheetXml = $worksheetXml;
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/Xlsx/SheetViewOptions.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/Xlsx/SheetViewOptions.php
+@@ -10,7 +10,7 @@ class SheetViewOptions extends BaseParserClass
+ 
+     private $worksheetXml;
+ 
+-    public function __construct(Worksheet $workSheet, \SimpleXMLElement $worksheetXml = null)
++    public function __construct(Worksheet $workSheet, ?\SimpleXMLElement $worksheetXml = null)
+     {
+         $this->worksheet = $workSheet;
+         $this->worksheetXml = $worksheetXml;
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/Xlsx/Styles.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/Xlsx/Styles.php
+@@ -31,7 +31,7 @@ class Styles extends BaseParserClass
+         $this->styleXml = $styleXml;
+     }
+ 
+-    public function setStyleBaseData(Theme $theme = null, $styles = [], $cellStyles = [])
++    public function setStyleBaseData(?Theme $theme = null, $styles = [], $cellStyles = [])
+     {
+         self::$theme = $theme;
+         $this->styles = $styles;
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/RichText/RichText.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/RichText/RichText.php
+@@ -23,7 +23,7 @@ class RichText implements IComparable
+      *
+      * @throws Exception
+      */
+-    public function __construct(Cell $pCell = null)
++    public function __construct(?Cell $pCell = null)
+     {
+         // Initialise variables
+         $this->richTextElements = [];
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/RichText/Run.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/RichText/Run.php
+@@ -42,7 +42,7 @@ class Run extends TextElement implements ITextElement
+      *
+      * @return ITextElement
+      */
+-    public function setFont(Font $pFont = null)
++    public function setFont(?Font $pFont = null)
+     {
+         $this->font = $pFont;
+ 
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/Font.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/Font.php
+@@ -223,7 +223,7 @@ class Font
+      *
+      * @return int Column width
+      */
+-    public static function calculateColumnWidth(\PhpOffice\PhpSpreadsheet\Style\Font $font, $cellText = '', $rotation = 0, \PhpOffice\PhpSpreadsheet\Style\Font $defaultFont = null)
++    public static function calculateColumnWidth(\PhpOffice\PhpSpreadsheet\Style\Font $font, $cellText = '', $rotation = 0, ?\PhpOffice\PhpSpreadsheet\Style\Font $defaultFont = null)
+     {
+         // If it is rich text, use plain text
+         if ($cellText instanceof RichText) {
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/JAMA/EigenvalueDecomposition.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/JAMA/EigenvalueDecomposition.php
+@@ -24,6 +24,13 @@ namespace PhpOffice\PhpSpreadsheet\Shared\JAMA;
+  */
+ class EigenvalueDecomposition
+ {
++    /**
++     * Array for internal storage of the source matrix.
++     *
++     * @var array
++     */
++    private $A = [];
++
+     /**
+      * Row and column dimension (square matrix).
+      *
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Spreadsheet.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Spreadsheet.php
+@@ -930,7 +930,7 @@ class Spreadsheet
+      *
+      * @return null|NamedRange
+      */
+-    public function getNamedRange($namedRange, Worksheet $pSheet = null)
++    public function getNamedRange($namedRange, ?Worksheet $pSheet = null)
+     {
+         $returnValue = null;
+ 
+@@ -957,7 +957,7 @@ class Spreadsheet
+      *
+      * @return Spreadsheet
+      */
+-    public function removeNamedRange($namedRange, Worksheet $pSheet = null)
++    public function removeNamedRange($namedRange, ?Worksheet $pSheet = null)
+     {
+         if ($pSheet === null) {
+             if (isset($this->namedRanges[$namedRange])) {
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Style/Conditional.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Style/Conditional.php
+@@ -232,7 +232,7 @@ class Conditional implements IComparable
+      *
+      * @return Conditional
+      */
+-    public function setStyle(Style $pValue = null)
++    public function setStyle(?Style $pValue = null)
+     {
+         $this->style = $pValue;
+ 
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/AutoFilter.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/AutoFilter.php
+@@ -38,7 +38,7 @@ class AutoFilter
+      * @param string $pRange Cell range (i.e. A1:E10)
+      * @param Worksheet $pSheet
+      */
+-    public function __construct($pRange = '', Worksheet $pSheet = null)
++    public function __construct($pRange = '', ?Worksheet $pSheet = null)
+     {
+         $this->range = $pRange;
+         $this->workSheet = $pSheet;
+@@ -61,7 +61,7 @@ class AutoFilter
+      *
+      * @return AutoFilter
+      */
+-    public function setParent(Worksheet $pSheet = null)
++    public function setParent(?Worksheet $pSheet = null)
+     {
+         $this->workSheet = $pSheet;
+ 
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/AutoFilter/Column.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/AutoFilter/Column.php
+@@ -94,7 +94,7 @@ class Column
+      * @param string $pColumn Column (e.g. A)
+      * @param AutoFilter $pParent Autofilter for this column
+      */
+-    public function __construct($pColumn, AutoFilter $pParent = null)
++    public function __construct($pColumn, ?AutoFilter $pParent = null)
+     {
+         $this->columnIndex = $pColumn;
+         $this->parent = $pParent;
+@@ -149,7 +149,7 @@ class Column
+      *
+      * @return Column
+      */
+-    public function setParent(AutoFilter $pParent = null)
++    public function setParent(?AutoFilter $pParent = null)
+     {
+         $this->parent = $pParent;
+ 
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/AutoFilter/Column/Rule.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/AutoFilter/Column/Rule.php
+@@ -240,7 +240,7 @@ class Rule
+      *
+      * @param Column $pParent
+      */
+-    public function __construct(Column $pParent = null)
++    public function __construct(?Column $pParent = null)
+     {
+         $this->parent = $pParent;
+     }
+@@ -426,7 +426,7 @@ class Rule
+      *
+      * @return Rule
+      */
+-    public function setParent(Column $pParent = null)
++    public function setParent(?Column $pParent = null)
+     {
+         $this->parent = $pParent;
+ 
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/BaseDrawing.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/BaseDrawing.php
+@@ -207,7 +207,7 @@ class BaseDrawing implements IComparable
+      *
+      * @return BaseDrawing
+      */
+-    public function setWorksheet(Worksheet $pValue = null, $pOverrideOld = false)
++    public function setWorksheet(?Worksheet $pValue = null, $pOverrideOld = false)
+     {
+         if ($this->worksheet === null) {
+             // Add drawing to \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet
+@@ -473,7 +473,7 @@ class BaseDrawing implements IComparable
+      *
+      * @return BaseDrawing
+      */
+-    public function setShadow(Drawing\Shadow $pValue = null)
++    public function setShadow(?Drawing\Shadow $pValue = null)
+     {
+         $this->shadow = $pValue;
+ 
+@@ -522,7 +522,7 @@ class BaseDrawing implements IComparable
+     /**
+      * @param null|Hyperlink $pHyperlink
+      */
+-    public function setHyperlink(Hyperlink $pHyperlink = null)
++    public function setHyperlink(?Hyperlink $pHyperlink = null)
+     {
+         $this->hyperlink = $pHyperlink;
+     }
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Column.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Column.php
+@@ -24,7 +24,7 @@ class Column
+      * @param Worksheet $parent
+      * @param string $columnIndex
+      */
+-    public function __construct(Worksheet $parent = null, $columnIndex = 'A')
++    public function __construct(?Worksheet $parent = null, $columnIndex = 'A')
+     {
+         // Set parent and column index
+         $this->parent = $parent;
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/ColumnCellIterator.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/ColumnCellIterator.php
+@@ -43,7 +43,7 @@ class ColumnCellIterator extends CellIterator
+      * @param int $startRow The row number at which to start iterating
+      * @param int $endRow Optionally, the row number at which to stop iterating
+      */
+-    public function __construct(Worksheet $subject = null, $columnIndex = 'A', $startRow = 1, $endRow = null)
++    public function __construct(?Worksheet $subject = null, $columnIndex = 'A', $startRow = 1, $endRow = null)
+     {
+         // Set subject
+         $this->worksheet = $subject;
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Drawing/Shadow.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Drawing/Shadow.php
+@@ -222,7 +222,7 @@ class Shadow implements IComparable
+      *
+      * @return Shadow
+      */
+-    public function setColor(Color $pValue = null)
++    public function setColor(?Color $pValue = null)
+     {
+         $this->color = $pValue;
+ 
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Row.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Row.php
+@@ -24,7 +24,7 @@ class Row
+      * @param Worksheet $worksheet
+      * @param int $rowIndex
+      */
+-    public function __construct(Worksheet $worksheet = null, $rowIndex = 1)
++    public function __construct(?Worksheet $worksheet = null, $rowIndex = 1)
+     {
+         // Set parent and row index
+         $this->worksheet = $worksheet;
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowCellIterator.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowCellIterator.php
+@@ -43,7 +43,7 @@ class RowCellIterator extends CellIterator
+      * @param string $startColumn The column address at which to start iterating
+      * @param string $endColumn Optionally, the column address at which to stop iterating
+      */
+-    public function __construct(Worksheet $worksheet = null, $rowIndex = 1, $startColumn = 'A', $endColumn = null)
++    public function __construct(?Worksheet $worksheet = null, $rowIndex = 1, $startColumn = 'A', $endColumn = null)
+     {
+         // Set subject and row index
+         $this->worksheet = $worksheet;
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Worksheet.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Worksheet.php
+@@ -344,7 +344,7 @@ class Worksheet implements IComparable
+      * @param Spreadsheet $parent
+      * @param string $pTitle
+      */
+-    public function __construct(Spreadsheet $parent = null, $pTitle = 'Worksheet')
++    public function __construct(?Spreadsheet $parent = null, $pTitle = 'Worksheet')
+     {
+         // Set parent and title
+         $this->parent = $parent;
+@@ -2770,7 +2770,7 @@ class Worksheet implements IComparable
+      *
+      * @return Worksheet
+      */
+-    public function setHyperlink($pCellCoordinate, Hyperlink $pHyperlink = null)
++    public function setHyperlink($pCellCoordinate, ?Hyperlink $pHyperlink = null)
+     {
+         if ($pHyperlink === null) {
+             unset($this->hyperlinkCollection[$pCellCoordinate]);
+@@ -2831,7 +2831,7 @@ class Worksheet implements IComparable
+      *
+      * @return Worksheet
+      */
+-    public function setDataValidation($pCellCoordinate, DataValidation $pDataValidation = null)
++    public function setDataValidation($pCellCoordinate, ?DataValidation $pDataValidation = null)
+     {
+         if ($pDataValidation === null) {
+             unset($this->dataValidationCollection[$pCellCoordinate]);
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Ods/Meta.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Ods/Meta.php
+@@ -16,7 +16,7 @@ class Meta extends WriterPart
+      *
+      * @return string XML Output
+      */
+-    public function write(Spreadsheet $spreadsheet = null)
++    public function write(?Spreadsheet $spreadsheet = null)
+     {
+         if (!$spreadsheet) {
+             $spreadsheet = $this->getParentWriter()->getSpreadsheet();
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Ods/Mimetype.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Ods/Mimetype.php
+@@ -13,7 +13,7 @@ class Mimetype extends WriterPart
+      *
+      * @return string XML Output
+      */
+-    public function write(Spreadsheet $spreadsheet = null)
++    public function write(?Spreadsheet $spreadsheet = null)
+     {
+         return 'application/vnd.oasis.opendocument.spreadsheet';
+     }
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Ods/Settings.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Ods/Settings.php
+@@ -16,7 +16,7 @@ class Settings extends WriterPart
+      *
+      * @return string XML Output
+      */
+-    public function write(Spreadsheet $spreadsheet = null)
++    public function write(?Spreadsheet $spreadsheet = null)
+     {
+         $objWriter = null;
+         if ($this->getParentWriter()->getUseDiskCaching()) {
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Ods/Styles.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Ods/Styles.php
+@@ -16,7 +16,7 @@ class Styles extends WriterPart
+      *
+      * @return string XML Output
+      */
+-    public function write(Spreadsheet $spreadsheet = null)
++    public function write(?Spreadsheet $spreadsheet = null)
+     {
+         $objWriter = null;
+         if ($this->getParentWriter()->getUseDiskCaching()) {
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Ods/Thumbnails.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Ods/Thumbnails.php
+@@ -13,7 +13,7 @@ class Thumbnails extends WriterPart
+      *
+      * @return string XML Output
+      */
+-    public function writeThumbnail(Spreadsheet $spreadsheet = null)
++    public function writeThumbnail(?Spreadsheet $spreadsheet = null)
+     {
+         return '';
+     }
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls/Workbook.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls/Workbook.php
+@@ -1143,7 +1143,7 @@ class Workbook extends BIFFwriter
+      *
+      * @param \PhpOffice\PhpSpreadsheet\Shared\Escher $pValue
+      */
+-    public function setEscher(\PhpOffice\PhpSpreadsheet\Shared\Escher $pValue = null)
++    public function setEscher(?\PhpOffice\PhpSpreadsheet\Shared\Escher $pValue = null)
+     {
+         $this->escher = $pValue;
+     }
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls/Worksheet.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls/Worksheet.php
+@@ -2566,7 +2566,7 @@ class Worksheet extends BIFFwriter
+      *
+      * @param \PhpOffice\PhpSpreadsheet\Shared\Escher $pValue
+      */
+-    public function setEscher(\PhpOffice\PhpSpreadsheet\Shared\Escher $pValue = null)
++    public function setEscher(?\PhpOffice\PhpSpreadsheet\Shared\Escher $pValue = null)
+     {
+         $this->escher = $pValue;
+     }
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls/Xf.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls/Xf.php
+@@ -115,6 +115,27 @@ class Xf
+      */
+     private $rightBorderColor;
+ 
++    /**
++     * Diagonal border line style.
++     *
++     * @var int
++     */
++    private $_diag = 0;
++
++    /**
++     * Color of the diagonal border.
++     *
++     * @var int
++     */
++    private $_diag_color = 0x40;
++
++    /**
++     * The cell's style.
++     *
++     * @var Style
++     */
++    private $_style;
++
+     /**
+      * Constructor.
+      *
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/Chart.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/Chart.php
+@@ -112,7 +112,7 @@ class Chart extends WriterPart
+      *
+      * @throws WriterException
+      */
+-    private function writeTitle(XMLWriter $objWriter, Title $title = null)
++    private function writeTitle(XMLWriter $objWriter, ?Title $title = null)
+     {
+         if ($title === null) {
+             return;
+@@ -157,7 +157,7 @@ class Chart extends WriterPart
+      *
+      * @throws WriterException
+      */
+-    private function writeLegend(XMLWriter $objWriter, Legend $legend = null)
++    private function writeLegend(XMLWriter $objWriter, ?Legend $legend = null)
+     {
+         if ($legend === null) {
+             return;
+@@ -215,7 +215,7 @@ class Chart extends WriterPart
+      *
+      * @throws WriterException
+      */
+-    private function writePlotArea(XMLWriter $objWriter, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pSheet, PlotArea $plotArea, Title $xAxisLabel = null, Title $yAxisLabel = null, Axis $xAxis = null, Axis $yAxis = null, GridLines $majorGridlines = null, GridLines $minorGridlines = null)
++    private function writePlotArea(XMLWriter $objWriter, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pSheet, PlotArea $plotArea, ?Title $xAxisLabel = null, ?Title $yAxisLabel = null, ?Axis $xAxis = null, ?Axis $yAxis = null, ?GridLines $majorGridlines = null, ?GridLines $minorGridlines = null)
+     {
+         if ($plotArea === null) {
+             return;
+@@ -344,7 +344,7 @@ class Chart extends WriterPart
+      * @param XMLWriter $objWriter XML Writer
+      * @param \PhpOffice\PhpSpreadsheet\Chart\Layout $chartLayout Chart layout
+      */
+-    private function writeDataLabels(XMLWriter $objWriter, Layout $chartLayout = null)
++    private function writeDataLabels(XMLWriter $objWriter, ?Layout $chartLayout = null)
+     {
+         $objWriter->startElement('c:dLbls');
+ 
+@@ -1421,7 +1421,7 @@ class Chart extends WriterPart
+      * @param XMLWriter $objWriter XML Writer
+      * @param Layout $layout
+      */
+-    private function writeLayout(XMLWriter $objWriter, Layout $layout = null)
++    private function writeLayout(XMLWriter $objWriter, ?Layout $layout = null)
+     {
+         $objWriter->startElement('c:layout');
+ 

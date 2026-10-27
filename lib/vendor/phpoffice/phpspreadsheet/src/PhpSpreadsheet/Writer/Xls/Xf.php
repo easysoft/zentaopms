@@ -116,6 +116,27 @@ class Xf
     private $rightBorderColor;
 
     /**
+     * Diagonal border line style.
+     *
+     * @var int
+     */
+    private $_diag = 0;
+
+    /**
+     * Color of the diagonal border.
+     *
+     * @var int
+     */
+    private $_diag_color = 0x40;
+
+    /**
+     * The cell's style.
+     *
+     * @var Style
+     */
+    private $_style;
+
+    /**
      * Constructor.
      *
      * @param Style $style The XF format
