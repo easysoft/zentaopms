@@ -544,7 +544,7 @@ class kanban extends control
         }
 
         $laneType = $from == 'kanban' ? 'all' : 'story';
-        if($this->config->vision == 'lite') $laneType = 'task';
+        if($from != 'kanban' && $this->config->vision == 'lite') $laneType = 'task';
 
         $this->view->lanes    = $this->kanban->getLanePairsByRegion($regionID, $laneType);
         $this->view->from     = $from;
