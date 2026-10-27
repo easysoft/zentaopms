@@ -948,7 +948,9 @@ class buildModel extends model
      */
     public function getStoryList(string $storyIdList, int $branch = 0, string $orderBy = '', ?object $pager = null): array
     {
-        $stories = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as `priOrder`")->from(TABLE_STORY)
+        $storyTao = $this->loadModel('story')->storyTao;
+        $orderBy  = $storyTao->processStageOrder($orderBy);
+        $stories  = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as `priOrder`, " . $storyTao->getStageOrderSQL() . " as `stageOrder`")->from(TABLE_STORY)
             ->where('id')->in($storyIdList)
             ->andWhere('deleted')->eq(0)
             ->beginIF($orderBy)->orderBy($orderBy)->fi()
