@@ -44,7 +44,7 @@ class HTML extends AbstractWriter implements WriterInterface
     /**
      * Create new instance
      */
-    public function __construct(PhpWord $phpWord = null)
+    public function __construct(?PhpWord $phpWord = null)
     {
         $this->setPhpWord($phpWord);
 

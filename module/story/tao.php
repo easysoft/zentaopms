@@ -409,8 +409,9 @@ class storyTao extends storyModel
 
         if(strpos($orderBy, 'version_') !== false) $orderBy = str_replace('id_', 't2.version_', $orderBy);
         if(strpos($orderBy, 'id_')      !== false) $orderBy = str_replace('id_', 't2.id_',      $orderBy);
+        $orderBy = $this->processStageOrder($orderBy, 't2');
 
-        return $this->dao->select("distinct t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as `priOrder`, t3.type as `productType`, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
+        return $this->dao->select("distinct t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as `priOrder`, t3.type as `productType`, t2.version as version, " . $this->getStageOrderSQL('t2') . " as `stageOrder`")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
             ->beginIF(strpos($storyQuery, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t4')->on('t2.id = t4.story and t2.version = t4.version')->fi()
@@ -626,6 +627,38 @@ class storyTao extends storyModel
         $unclosedStatus = $this->lang->{$moduleName}->statusList;
         unset($unclosedStatus['closed']);
         return array_keys($unclosedStatus);
+    }
+
+    /**
+     * 获取需求阶段按业务流程排序的 SQL 表达式。
+     * Get the SQL expression of the story stage order, the stage lang items are in business flow order.
+     *
+     * @param  string $alias
+     * @access public
+     * @return string
+     */
+    public function getStageOrderSQL(string $alias = ''): string
+    {
+        $stageList = implode(',', array_filter(array_keys((array)$this->lang->story->stageList), 'strlen'));
+        $field     = $alias === '' ? '`stage`' : "{$alias}.`stage`";
+        return "INSTR('{$stageList},', {$field})";
+    }
+
+    /**
+     * 把排序字段中的阶段替换为阶段排序字段。
+     * Replace the stage field in the order by with the stage order field.
+     *
+     * @param  string $orderBy
+     * @param  string $alias
+     * @access public
+     * @return string
+     */
+    public function processStageOrder(string $orderBy, string $alias = ''): string
+    {
+        if(strpos($orderBy, 'stage') === false) return $orderBy;
+
+        $prefix = $alias === '' ? '' : preg_quote($alias, '/') . '\.';
+        return preg_replace('/(?<!\w\.)(?:' . $prefix . ')?`?stage`?(?=_|\s|,|$)/i', 'stageOrder', $orderBy);
     }
 
     /**

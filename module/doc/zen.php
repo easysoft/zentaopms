@@ -35,7 +35,6 @@ class docZen extends doc
 
             $file->fileIcon   = isset($fileIcon[$file->id]) ? $fileIcon[$file->id] : '';
             $file->fileName   = str_replace('.' . $file->extension, '', $file->title);
-            $file->sourceName = isset($sourcePairs[$file->objectType][$file->objectID]) ? $sourcePairs[$file->objectType][$file->objectID] : '';
             $file->sizeText   = number_format($file->size / 1024, 1) . 'K';
 
             if(!$skipImageWidth)
@@ -50,9 +49,16 @@ class docZen extends doc
             }
             else
             {
+                if($file->objectType == 'comment' && strpos($file->extra, '-') !== false)
+                {
+                    $extra            = explode('-', $file->extra);
+                    $file->objectType = $extra[0];
+                    $file->objectID   = $extra[1];
+                }
                 if(!isset($this->lang->{$file->objectType}->common)) $this->app->loadLang($file->objectType);
                 $file->objectName = $this->lang->{$file->objectType}->common . ' : ';
             }
+            $file->sourceName = isset($sourcePairs[$file->objectType][$file->objectID]) ? $sourcePairs[$file->objectType][$file->objectID] : '';
         }
         return $files;
     }

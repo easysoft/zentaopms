@@ -192,7 +192,6 @@
 ,admin/view/register.html.php,
 ,admin/view/safe.html.php,
 ,admin/view/sso.html.php,
-,admin/view/ztcompany.html.php,
 ,api/config.php,
 ,api/control.php,
 ,api/css/common.css,

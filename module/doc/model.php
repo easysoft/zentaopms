@@ -2910,6 +2910,7 @@ class docModel extends model
             ->orWhere("(`objectType` = 'task' and `objectID` in ($taskIdList))")
             ->orWhere("(`objectType` = 'build' and `objectID` in ($buildIdList))")
             ->orWhere("(`objectType` = 'testtask' and `objectID` in ($testtaskIdList))")
+            ->orWhere("(`objectType` = 'comment' and (`extra` like 'task-%' or `extra` like 'build-%' or `extra` like 'testtask-%'))")
             ->beginIF($storyIdList)->orWhere("(`objectType` = 'story' and `objectID` in ($storyIdList))")->fi()
             ->fi()
             ->markRight(1)

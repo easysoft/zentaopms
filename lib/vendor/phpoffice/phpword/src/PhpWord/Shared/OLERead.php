@@ -26,6 +26,83 @@ class OLERead
 {
     private $data = '';
 
+    /**
+     * Big block depot chain
+     *
+     * @var string
+     */
+    private $bigBlockChain = '';
+
+    /**
+     * Small block depot chain
+     *
+     * @var string
+     */
+    private $smallBlockChain = '';
+
+    /**
+     * Number of big block depot blocks
+     *
+     * @var int
+     */
+    private $numBigBlockDepotBlocks;
+
+    /**
+     * Root start block
+     *
+     * @var int
+     */
+    private $rootStartBlock;
+
+    /**
+     * Small block depot start block
+     *
+     * @var int
+     */
+    private $sbdStartBlock;
+
+    /**
+     * Extension block
+     *
+     * @var int
+     */
+    private $extensionBlock;
+
+    /**
+     * Number of extension blocks
+     *
+     * @var int
+     */
+    private $numExtensionBlocks;
+
+    /**
+     * Directory stream data
+     *
+     * @var string
+     */
+    private $entry = '';
+
+    /**
+     * Property sets
+     *
+     * @var array
+     */
+    private $props = array();
+
+    /**
+     * Index of the ObjectPool stream
+     *
+     * @var int
+     */
+    private $wrkObjectPoolelseif;
+
+    /**
+     * Index of the root entry
+     *
+     * @var int
+     */
+    private $rootentry;
+
     // OLE identifier
     const IDENTIFIER_OLE = IDENTIFIER_OLE;
 

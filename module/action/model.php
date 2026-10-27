@@ -110,7 +110,7 @@ class actionModel extends model
             $oldAction->id = $actionID;
             $newAction = clone $oldAction;
 
-            $this->file->processFileDiffsForObject('comment', $oldAction, $newAction);
+            $this->file->processFileDiffsForObject('comment', $oldAction, $newAction, "{$objectType}-{$objectID}");
             if(!empty($newAction->files))
             {
                 $action->files = $newAction->files;
@@ -2045,7 +2045,7 @@ class actionModel extends model
              ->exec();
 
          $this->file->updateObjectID($newComment->uid, $action->objectID, $action->objectType);
-         $this->file->processFileDiffsForObject('comment', $action, $newComment);
+         $this->file->processFileDiffsForObject('comment', $action, $newComment, "{$action->objectType}-{$action->objectID}");
          if(!empty($newComment->files))
          {
              $action->files = $newComment->files;

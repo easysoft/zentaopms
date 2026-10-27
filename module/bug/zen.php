@@ -2112,10 +2112,31 @@ class bugZen extends bug
     {
         /* 解除旧的版本关联关系，关联新的版本。*/
         /* Unlink old resolved build and link new resolved build. */
-        if(!empty($bug->resolvedBuild) && $bug->resolvedBuild != $oldBug->resolvedBuild)
+        if($bug->resolvedBuild != $oldBug->resolvedBuild)
         {
-            if(!empty($oldBug->resolvedBuild)) $this->loadModel('build')->unlinkBug((int)$oldBug->resolvedBuild, $bug->id);
-            $this->bug->linkBugToBuild($bug->id, $bug->resolvedBuild);
+            if(!empty($oldBug->resolvedBuild) && $oldBug->resolvedBuild != 'trunk')
+            {
+                $oldBuildID   = (int)$oldBug->resolvedBuild;
+                $oldReleaseID = $this->dao->select('id')->from(TABLE_RELEASE)
+                    ->where('product')->eq($oldBug->product)
+                    ->andWhere("(FIND_IN_SET('{$oldBuildID}', build) or shadow = {$oldBuildID})")
+                    ->andWhere('deleted')->eq('0')
+                    ->fetch('id');
+
+                if($oldReleaseID)
+                {
+                    $this->dao->delete()->from(TABLE_RELATION)
+                        ->where('relation')->eq('interrated')
+                        ->andWhere('AType')->eq('bug')
+                        ->andWhere('AID')->eq($bug->id)
+                        ->andWhere('BType')->eq('release')
+                        ->andWhere('BID')->eq($oldReleaseID)
+                        ->exec();
+                }
+
+                $this->loadModel('build')->unlinkBug((int)$oldBug->resolvedBuild, $bug->id);
+            }
+            if(!empty($bug->resolvedBuild) && $bug->resolvedBuild != 'trunk') $this->bug->linkBugToBuild($bug->id, $bug->resolvedBuild);
         }
 
         /* 记录解除旧的计划关联关系和关联新的计划的历史。*/

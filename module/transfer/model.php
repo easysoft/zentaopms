@@ -754,6 +754,7 @@ class transferModel extends model
             if($orderBy && strpos($orderBy, 'priOrder') !== false)      $selectedFields .= ",IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder";
             if($orderBy && strpos($orderBy, 'severityOrder') !== false) $selectedFields .= ",IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder";
             if($module == 'task' && $orderBy && strpos($orderBy, 'statusOrder') !== false) $selectedFields .= ",INSTR('wait,doing,done,pause,cancel,closed,', status) AS statusOrder";
+            if(in_array($module, array('story', 'epic', 'requirement')) && $orderBy && strpos($orderBy, 'stageOrder') !== false) $selectedFields .= "," . $this->loadModel('story')->storyTao->getStageOrderSQL() . " AS stageOrder";
 
             $table = zget($this->config->objectTables, $module); //获取对应的表
             $moduleDatas = $this->dao->select($selectedFields)->from($table)

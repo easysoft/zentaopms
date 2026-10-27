@@ -25,6 +25,13 @@ namespace PhpOffice\PhpSpreadsheet\Shared\JAMA;
 class EigenvalueDecomposition
 {
     /**
+     * Array for internal storage of the source matrix.
+     *
+     * @var array
+     */
+    private $A = [];
+
+    /**
      * Row and column dimension (square matrix).
      *
      * @var int
