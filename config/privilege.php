@@ -203,7 +203,6 @@ $config->ajaxDependencies['action.ajaxgetmoreactions']                        = 
 $config->ajaxDependencies['admin.ajaxchangetableengine']                      = 'admin.tableengine';
 $config->ajaxDependencies['admin.ajaxchangecharset']                          = 'admin.charset';
 $config->ajaxDependencies['admin.ajaxregenerateview']                         = 'admin.dbview';
-$config->ajaxDependencies['admin.ajaxsendcode']                               = ['admin.certifyztemail', 'admin.certifyztmobile'];
 $config->ajaxDependencies['admin.ajaxsetzentaodata']                          = 'admin.index';
 $config->ajaxDependencies['ai.ajaxbatchcreateknowledge']                      = ['ai.adddoc', 'product.browse', 'bug.browse', 'execution.task', 'execution.story', 'testcase.browse', 'projectstory.story', 'productplan.story', 'productplan.bug', 'productplan.browsebylist', 'release.browse', 'projectrelease.browse', 'caselib.browse'];
 $config->ajaxDependencies['ai.ajaxtestprompt']                                = ['ai.promptaudit'];

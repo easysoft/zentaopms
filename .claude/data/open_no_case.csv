@@ -1139,9 +1139,6 @@ admin,zen,syncExtensions
 admin,zen,syncPublicClasses
 admin,zen,syncDynamics
 admin,zen,fetchAPI
-admin,zen,sendCodeByAPI
-admin,zen,certifyByAPI
-admin,zen,setCompanyByAPI
 admin,zen,getZentaoData
 api,zen,parseDocSpaceParam
 api,zen,generateLibsDropMenu
