@@ -2116,9 +2116,10 @@ class bugZen extends bug
         {
             if(!empty($oldBug->resolvedBuild) && $oldBug->resolvedBuild != 'trunk')
             {
+                $oldBuildID   = (int)$oldBug->resolvedBuild;
                 $oldReleaseID = $this->dao->select('id')->from(TABLE_RELEASE)
                     ->where('product')->eq($oldBug->product)
-                    ->andWhere("(FIND_IN_SET('{$oldBug->resolvedBuild}', build) or shadow = {$oldBug->resolvedBuild})")
+                    ->andWhere("(FIND_IN_SET('{$oldBuildID}', build) or shadow = {$oldBuildID})")
                     ->andWhere('deleted')->eq('0')
                     ->fetch('id');
 
