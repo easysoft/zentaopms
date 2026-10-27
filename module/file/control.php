@@ -66,6 +66,8 @@ class file extends control
      */
     public function ajaxUpload(string $uid = '', string $objectType = '', int $objectID = 0, string $extra = '', string $field = 'imgFile', bool $api = false, string $gid = '')
     {
+        $_FILES = validater::filterFiles();
+
         /* extra 只允许空值或 editor，editor 由文档应用(docApp)编辑器图片上传使用，禁止客户端写入其他值。Only allow empty or editor extra. */
         if(!in_array($extra, array('', 'editor'))) $extra = '';
 
