@@ -59,13 +59,13 @@ $config->codescan->dtable->fieldList['status']['sortType'] = true;
 $config->codescan->dtable->fieldList['status']['show']     = true;
 $config->codescan->dtable->fieldList['status']['width']    = '40';
 
-$config->codescan->dtable->fieldList['description']['title']    = $lang->codescan->synopsis;
-$config->codescan->dtable->fieldList['description']['type']     = 'html';
-$config->codescan->dtable->fieldList['description']['name']     = 'desc';
-$config->codescan->dtable->fieldList['description']['sortType'] = true;
-$config->codescan->dtable->fieldList['description']['width']    = '180';
-$config->codescan->dtable->fieldList['description']['hint']     = true;
-$config->codescan->dtable->fieldList['description']['show']     = true;
+$config->codescan->dtable->fieldList['desc']['title']    = $lang->codescan->synopsis;
+$config->codescan->dtable->fieldList['desc']['type']     = 'html';
+$config->codescan->dtable->fieldList['desc']['name']     = 'desc';
+$config->codescan->dtable->fieldList['desc']['sortType'] = true;
+$config->codescan->dtable->fieldList['desc']['width']    = '180';
+$config->codescan->dtable->fieldList['desc']['hint']     = true;
+$config->codescan->dtable->fieldList['desc']['show']     = true;
 
 $config->codescan->dtable->fieldList['actions']['name']  = 'actions';
 $config->codescan->dtable->fieldList['actions']['title'] = $lang->actions;
