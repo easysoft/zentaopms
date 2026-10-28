@@ -8,6 +8,8 @@ timeout=0
 cid=16422
 
 - 执行executionzenTest模块的checkPostForCreateTest方法  @1
+- 执行executionzenTest模块的checkPostForCreateTest方法 属性type @『管理方法』不能为空。
+- 执行executionzenTest模块的checkPostForCreateTest方法  @1
 - 执行executionzenTest模块的checkPostForCreateTest方法 属性project @所属项目不能为空。
 - 执行executionzenTest模块的checkPostForCreateTest方法 属性days @可用工作日不能超过『10』天
 - 执行executionzenTest模块的checkPostForCreateTest方法 属性products[0] @最少关联一个产品
@@ -53,6 +55,15 @@ $_POST['name'] = '测试执行1';
 $_POST['begin'] = '2024-01-01';
 $_POST['end'] = '2024-06-30';
 $_POST['days'] = 100;
+r($executionzenTest->checkPostForCreateTest()) && p() && e('1');
+
+$_POST['project']  = 6;
+$_POST['products'] = array(1);
+$_POST['branch']   = array(array());
+unset($_POST['type']);
+r($executionzenTest->checkPostForCreateTest()) && p('type') && e('『管理方法』不能为空。');
+
+$_POST['type'] = 'stage';
 r($executionzenTest->checkPostForCreateTest()) && p() && e('1');
 
 unset($_POST);

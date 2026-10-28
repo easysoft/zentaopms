@@ -22,7 +22,7 @@ foreach($lists as $contactList)
     {
         $myContactList[] = array('text' => $contactList->listName, 'url' => createLink('my', 'manageContacts', "listID=$contactList->id"), 'selected' => $selected);
     }
-    else if($contactList->public)
+    if($contactList->public)
     {
         $publicContactList[] = array('text' => $contactList->listName, 'url' => createLink('my', 'manageContacts', "listID=$contactList->id"), 'selected' => $selected);
         if($selected) $isActivePublicList = true;
