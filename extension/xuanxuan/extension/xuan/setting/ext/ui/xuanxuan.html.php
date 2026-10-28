@@ -11,6 +11,9 @@ declare(strict_types=1);
 
 namespace zin;
 
+$licensePermissions = \extCommonModel::getLicensePropertyValue('permissions');
+$canReadStatus      = is_string($licensePermissions) && strpos($licensePermissions, 'im/messageGetReadStatus') !== false;
+
 if($type == 'edit')
 {
     $https = zget($config->xuanxuan, 'https', 'off');
@@ -217,7 +220,7 @@ if($type == 'edit')
                 )
             )
         ),
-        strpos(\extCommonModel::getLicensePropertyValue('permissions'), 'im/messageGetReadStatus') !== false
+        $canReadStatus
             ? formGroup
             (
                 set::label($lang->im->readStatus),
@@ -266,7 +269,7 @@ else
             item(set::name($lang->im->xxd->uploadFileSize), $lang->im->xxd->max . zget($config->xuanxuan, 'uploadFileSize', 20) . 'M'),
             item(set::name($lang->im->xxd->aes), zget($lang->im->aesOptions, zget($config->xuanxuan, 'aes', 'on'))),
             item(set::name($lang->im->xxd->https), zget($lang->im->httpsOptions, zget($config->xuanxuan, 'https', 'off'))),
-            strpos(\extCommonModel::getLicensePropertyValue('permissions'), 'im/messageGetReadStatus') !== false
+            $canReadStatus
                 ? item(set::name($lang->im->readStatus), zget($lang->im->readOptions, zget($config->xuanxuan, 'readStatus', 'off')))
                 : null,
             item(set::name($lang->im->debug), zget($lang->im->debugStatus, zget($config->xuanxuan, 'debug', 0))),
