@@ -209,6 +209,7 @@ $lang->custom->notice->forceNotReview      = "%s submitted by specified users do
 $lang->custom->notice->longlife            = 'The Stalled tab on the Bug List page displays bugs that have been unresolved for longer than the configured number of days.';
 $lang->custom->notice->invalidNumberKey    = 'The key value must be a number no greater than 255.';
 $lang->custom->notice->invalidStringKey    = 'The key value must be a combination of uppercase/lowercase letters, numbers, or underscores.';
+$lang->custom->notice->invalidTimezone     = 'Please select a valid timezone.';
 $lang->custom->notice->cannotSetTimezone   = 'The function \'date_default_timezone_set\' is missing or disabled; the timezone cannot be set.';
 $lang->custom->notice->noClosedBlock       = 'No permanently closed blocks.';
 $lang->custom->notice->required            = 'Selected fields are mandatory upon form submission.';

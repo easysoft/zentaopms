@@ -638,7 +638,42 @@ class actionModel extends model
      */
     public function getHistory(array|int $actionID): array
     {
-        return $this->dao->select('*')->from(TABLE_HISTORY)->where('action')->in($actionID)->fetchGroup('action');
+        $histories = $this->dao->select('*')->from(TABLE_HISTORY)->where('action')->in($actionID)->fetchGroup('action');
+        return $this->redactHistory($histories);
+    }
+
+    /**
+     * 脱敏历史记录中的敏感字段。
+     * Redact sensitive fields from history records.
+     *
+     * @param  array $histories
+     * @access protected
+     * @return array
+     */
+    protected function redactHistory(array $histories): array
+    {
+        $sensitiveFields = array();
+        foreach($this->config->action->sensitiveHistoryFields as $field)
+        {
+            $sensitiveFields[str_replace(array('_', '-'), '', strtolower($field))] = true;
+        }
+
+        foreach($histories as $actionID => $historyList)
+        {
+            foreach($historyList as $history)
+            {
+                $field = str_replace(array('_', '-'), '', strtolower((string)$history->field));
+                if(!isset($sensitiveFields[$field])) continue;
+
+                $history->old      = '******';
+                $history->oldValue = '******';
+                $history->new      = '******';
+                $history->newValue = '******';
+                $history->diff     = '******';
+            }
+        }
+
+        return $histories;
     }
 
     /**

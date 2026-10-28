@@ -9,6 +9,18 @@ class customZenTest extends baseTest
     protected $className  = 'zen';
 
     /**
+     * Test isValidTimezone method.
+     *
+     * @param  string $timezone
+     * @access public
+     * @return bool
+     */
+    public function isValidTimezoneTest(string $timezone): bool
+    {
+        return $this->invokeArgs('isValidTimezone', array($timezone));
+    }
+
+    /**
      * Test assignFieldListForSet method.
      *
      * @param  string $module

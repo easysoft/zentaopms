@@ -448,7 +448,8 @@ class doc extends control
      */
     public function editSpace(int $spaceID)
     {
-        $this->commonEditAction($spaceID);
+        $result = $this->docZen->editLibOrSpace($spaceID, true);
+        if(!empty($result)) return $this->send($result);
         $this->display();
     }
 
@@ -462,75 +463,9 @@ class doc extends control
      */
     public function editLib(int $libID)
     {
-        $this->commonEditAction($libID);
+        $result = $this->docZen->editLibOrSpace($libID, false);
+        if(!empty($result)) return $this->send($result);
         $this->display();
-    }
-
-    /**
-     * 编辑空间和编辑库的公用方法。
-     * Edit a lib or space.
-     *
-     * @param  int    $libID
-     * @access public
-     * @return void
-     */
-    public function commonEditAction($libID)
-    {
-        if(!common::hasPriv('doc', 'editSpace') && !common::hasPriv('doc', 'editLib')) return;
-        $lib = $this->doc->getLibByID($libID);
-
-        /* 项目模板下setMenu会修改common语言项，所以执行文档要先执行setAclForCreateLib。 */
-        if($lib->type != 'project') $this->docZen->setAclForEditLib($lib);
-        $this->doc->setMenuByType($lib->type, (int)zget($lib, $lib->type, 0), (int)$libID);
-        if($lib->type == 'project') $this->docZen->setAclForEditLib($lib);
-
-        if(!empty($_POST))
-        {
-            $this->lang->doc->name = $this->lang->nameAB;
-            $libData = form::data($this->config->doc->form->editlib)->get();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $changes = $this->doc->updateLib($libID, $libData);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($changes)
-            {
-                $object = ($lib->type == 'custom' && $lib->parent == 0) ? 'docspace' : 'doclib';
-                $actionID = $this->action->create($object, $libID, 'edited');
-                $this->action->logHistory($actionID, $changes);
-            }
-
-            $lib = $this->doc->getLibByID($libID);
-            $docAppActions = array();
-            $docAppActions[] = array('update', ($lib->parent == 0) ? 'space' : 'lib', $lib);
-            $docAppActions[] = array('home:loadHomeLibs');
-            $docAppActions[] = array('list:load');
-            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'closeModal' => true, 'docApp' => $docAppActions));
-        }
-
-        if(!empty($lib->product)) $this->view->object = $this->product->getByID($lib->product);
-        if(!empty($lib->project) && empty($lib->execution)) $this->view->object = $this->project->getByID($lib->project);
-        if(!empty($lib->execution))
-        {
-            $execution = $this->execution->getByID($lib->execution);
-            if($execution->type == 'stage')
-            {
-                if($execution->grade > 1)
-                {
-                    $parentExecutions = $this->execution->getPairsByList(explode(',', trim($execution->path, ',')), 'stage,kanban,sprint');
-                    $execution->name  = implode('/', $parentExecutions);
-                }
-
-                $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
-            }
-
-            $this->view->object = $execution;
-        }
-
-        $this->view->lib    = $lib;
-        $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->user->getPairs('noletter|noclosed', $lib->users);
-        $this->view->libID  = $libID;
     }
 
     /**
@@ -543,7 +478,7 @@ class doc extends control
      */
     public function deleteSpace(int $libID)
     {
-        $this->commonDeleteAction($libID);
+        return $this->send($this->docZen->deleteLibOrSpace($libID, true));
     }
 
     /**
@@ -556,43 +491,7 @@ class doc extends control
      */
     public function deleteLib(int $libID)
     {
-        $this->commonDeleteAction($libID);
-    }
-
-    /**
-     * 删除空间和删除库的公用方法。
-     * Delete a lib or space.
-     *
-     * @param  int    $libID
-     * @access public
-     * @return void
-     */
-    public function commonDeleteAction(int $libID)
-    {
-        if(in_array($libID, array('product', 'execution'))) return;
-
-        $lib = $this->doc->getLibByID($libID);
-        if(!empty($lib->main)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorMainSysLib, 'load' => array('alert' => $this->lang->doc->errorMainSysLib)));
-
-        $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq('1')->where('id')->eq($libID)->exec();
-
-        $object = ($lib->type == 'custom' && $lib->parent == 0) ? 'docspace' : 'doclib';
-        $this->loadModel('action')->create($object, $libID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
-
-        $moduleName = 'doc';
-        $objectType = $lib->type;
-        $methodName = zget($this->config->doc->spaceMethod, $objectType);
-        if($this->app->tab == 'doc') return $this->send(array('result' => 'success', 'load' => $this->createLink($moduleName, $methodName), 'app' => $this->app->tab));
-
-        $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
-        if($this->app->tab == 'execution' && $objectType == 'execution')
-        {
-            $moduleName = 'execution';
-            $methodName = 'doc';
-        }
-        $browseLink = $this->createLink($moduleName, $methodName, "objectID=$objectID");
-
-        return $this->send(array('result' => 'success', 'load' => $browseLink, 'app' => $this->app->tab));
+        return $this->send($this->docZen->deleteLibOrSpace($libID, false));
     }
 
     /**
@@ -824,10 +723,11 @@ class doc extends control
     public function uploadDocs(int $docID, string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '', $from = '')
     {
         $chapterID = 0;
+        $targetDoc = false;
         if(!empty($docID))
         {
             $targetDoc = $this->doc->getByID($docID);
-            if($targetDoc && $targetDoc->type === 'chapter')
+            if($targetDoc && empty($targetDoc->deleted) && $targetDoc->type === 'chapter')
             {
                 $chapterID = (int)$docID;
                 $docID     = 0;
@@ -848,8 +748,21 @@ class doc extends control
             if(!$libID) return $this->send(array('result' => 'fail', 'message' => array('lib' => sprintf($this->lang->error->notempty, $this->lang->doc->lib))));
 
             $doclib   = $this->loadModel('doc')->getLibByID($libID);
-            $canVisit = $this->docZen->checkPrivForCreate($doclib, $objectType);
+            if(!$doclib || !empty($doclib->deleted)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
+
+            $canVisit = $this->docZen->checkPrivForCreate($doclib, $doclib->type);
             if(!$canVisit) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
+
+            if(!empty($docID))
+            {
+                if(!$targetDoc || !empty($targetDoc->deleted) || !$this->docZen->checkPrivForEdit($targetDoc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
+
+                if((int)$targetDoc->lib !== $libID)
+                {
+                    $sourceLib = $this->doc->getLibByID((int)$targetDoc->lib);
+                    if(!$sourceLib || !empty($sourceLib->deleted) || !$this->doc->checkPrivLib($sourceLib)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
+                }
+            }
 
             $moduleID = $this->post->module;
             helper::setcookie('lastDocModule', $moduleID);
@@ -875,8 +788,9 @@ class doc extends control
 
             if(!empty($docID))
             {
-                $docResult   = $this->doc->update($docID, $docData);
-                $docData->id = $docID;
+                $docData->lib = $libID;
+                $docResult    = $this->doc->update($docID, $docData);
+                $docData->id  = $docID;
             }
             elseif($this->post->uploadFormat == 'combinedDocs')
             {
@@ -1012,20 +926,7 @@ class doc extends control
 
             if(!$doc) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
 
-            $isOpen          = $doc->acl == 'open';
-            $currentAccount  = $this->app->user->account;
-            $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || $this->app->user->admin);
-            $isInEditUsers   = strpos(",$doc->users,", ",$currentAccount,") !== false;
-            $isInEditGroups  = false;
-            if(!empty($doc->groups))
-            {
-                foreach($this->app->user->groups as $groupID)
-                {
-                    if(strpos(",$doc->groups,", ",$groupID,") !== false) $isInEditGroups = true;
-                }
-            }
-
-            if(!$isOpen && !$isAuthorOrAdmin && !$isInEditUsers && !$isInEditGroups) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
+            if(!$this->docZen->checkPrivForEdit($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
 
             if(isset($_POST['renameFileID']))
             {

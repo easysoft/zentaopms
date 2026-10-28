@@ -165,6 +165,7 @@ $lang->custom->notice->forceNotReview      = "指定人提交的%s不需要評�
 $lang->custom->notice->longlife            = 'Bug列表頁面的久未處理標籤中，列出設置天數之前未處理的Bug。';
 $lang->custom->notice->invalidNumberKey    = '鍵值應為不大於255的數字';
 $lang->custom->notice->invalidStringKey    = '鍵值應當為小寫英文字母、數字或下劃線的組合';
+$lang->custom->notice->invalidTimezone     = '請選擇有效的時區。';
 $lang->custom->notice->cannotSetTimezone   = 'date_default_timezone_set方法不存在或禁用，不能設置時區。';
 $lang->custom->notice->noClosedBlock       = '沒有永久關閉的區塊';
 $lang->custom->notice->required            = '頁面提交時，選中的欄位必填';

@@ -55,6 +55,80 @@ class docZenTest extends baseTest
     }
 
     /**
+     * Test checkPrivForEdit method.
+     *
+     * @param  object $doc
+     * @access public
+     * @return bool
+     */
+    public function checkPrivForEditTest(object $doc)
+    {
+        $result = $this->invokeArgs('checkPrivForEdit', [$doc]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test checkPrivForDeleteLib method.
+     *
+     * @param  object $doclib
+     * @param  bool   $isSpace
+     * @access public
+     * @return bool
+     */
+    public function checkPrivForDeleteLibTest(object $doclib, bool $isSpace)
+    {
+        $result = $this->invokeArgs('checkPrivForDeleteLib', [$doclib, $isSpace]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test checkPrivForEditLib method.
+     *
+     * @param  object $doclib
+     * @param  bool   $isSpace
+     * @access public
+     * @return bool
+     */
+    public function checkPrivForEditLibTest(object $doclib, bool $isSpace)
+    {
+        $result = $this->invokeArgs('checkPrivForEditLib', [$doclib, $isSpace]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test editLibOrSpace method.
+     *
+     * @param  int  $libID
+     * @param  bool $isSpace
+     * @access public
+     * @return array
+     */
+    public function editLibOrSpaceTest(int $libID, bool $isSpace): array
+    {
+        $result = $this->invokeArgs('editLibOrSpace', [$libID, $isSpace]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test deleteLibOrSpace method.
+     *
+     * @param  int  $libID
+     * @param  bool $isSpace
+     * @access public
+     * @return array
+     */
+    public function deleteLibOrSpaceTest(int $libID, bool $isSpace): array
+    {
+        $result = $this->invokeArgs('deleteLibOrSpace', [$libID, $isSpace]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test formFromSession method.
      *
      * @param  string $type
