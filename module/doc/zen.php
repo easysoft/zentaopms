@@ -401,6 +401,70 @@ class docZen extends doc
     }
 
     /**
+     * 检查文档库的删除权限。
+     * Check the privilege of deleting a document library.
+     *
+     * @param  object $doclib
+     * @param  bool   $isSpace
+     * @access protected
+     * @return bool
+     */
+    protected function checkPrivForDeleteLib(object $doclib, bool $isSpace): bool
+    {
+        if(empty($doclib->id) || !empty($doclib->deleted) || !empty($doclib->main)) return false;
+        if(!in_array($doclib->type, array('custom', 'mine', 'product', 'project', 'execution'), true)) return false;
+
+        $targetIsSpace = in_array($doclib->type, array('custom', 'mine'), true) && empty($doclib->parent);
+        if($targetIsSpace !== $isSpace) return false;
+        if($doclib->type == 'mine' && $doclib->addedBy != $this->app->user->account) return false;
+        if(!$this->doc->checkPrivLib($doclib)) return false;
+        if(!in_array($doclib->type, array('product', 'project', 'execution'), true)) return true;
+
+        $objectID = (int)zget($doclib, $doclib->type, 0);
+        if(!$objectID) return false;
+
+        $object = $this->doc->getObjectByID($doclib->type, $objectID);
+        return $object && empty($object->deleted) && common::canModify($doclib->type, $object);
+    }
+
+    /**
+     * 删除空间或文档库。
+     * Delete a space or document library.
+     *
+     * @param  int  $libID
+     * @param  bool $isSpace
+     * @access public
+     * @return array
+     */
+    public function deleteLibOrSpace(int $libID, bool $isSpace): array
+    {
+        $lib = $this->doc->getLibByID($libID);
+        if(!$lib || !empty($lib->deleted)) return array('result' => 'fail', 'message' => $this->lang->doc->accessDenied);
+        if(!empty($lib->main)) return array('result' => 'fail', 'message' => $this->lang->doc->errorMainSysLib, 'load' => array('alert' => $this->lang->doc->errorMainSysLib));
+        if(!$this->checkPrivForDeleteLib($lib, $isSpace)) return array('result' => 'fail', 'message' => $this->lang->doc->accessDenied);
+
+        $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq('1')->where('id')->eq($libID)->exec();
+
+        $object = ($lib->type == 'custom' && $lib->parent == 0) ? 'docspace' : 'doclib';
+        $this->loadModel('action')->create($object, $libID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+
+        $moduleName = 'doc';
+        $objectType = $lib->type;
+        $methodName = zget($this->config->doc->spaceMethod, $objectType);
+        if($this->app->tab == 'doc') return array('result' => 'success', 'load' => $this->createLink($moduleName, $methodName), 'app' => $this->app->tab);
+
+        $objectID = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
+        if($this->app->tab == 'execution' && $objectType == 'execution')
+        {
+            $moduleName = 'execution';
+            $methodName = 'doc';
+        }
+        $browseLink = $this->createLink($moduleName, $methodName, "objectID=$objectID");
+
+        return array('result' => 'success', 'load' => $browseLink, 'app' => $this->app->tab);
+    }
+
+    /**
      * 在创建文档后的返回。
      * Return after create a document.
      *

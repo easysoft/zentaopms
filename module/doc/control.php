@@ -543,7 +543,7 @@ class doc extends control
      */
     public function deleteSpace(int $libID)
     {
-        $this->commonDeleteAction($libID);
+        return $this->send($this->docZen->deleteLibOrSpace($libID, true));
     }
 
     /**
@@ -556,43 +556,7 @@ class doc extends control
      */
     public function deleteLib(int $libID)
     {
-        $this->commonDeleteAction($libID);
-    }
-
-    /**
-     * 删除空间和删除库的公用方法。
-     * Delete a lib or space.
-     *
-     * @param  int    $libID
-     * @access public
-     * @return void
-     */
-    public function commonDeleteAction(int $libID)
-    {
-        if(in_array($libID, array('product', 'execution'))) return;
-
-        $lib = $this->doc->getLibByID($libID);
-        if(!empty($lib->main)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorMainSysLib, 'load' => array('alert' => $this->lang->doc->errorMainSysLib)));
-
-        $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq('1')->where('id')->eq($libID)->exec();
-
-        $object = ($lib->type == 'custom' && $lib->parent == 0) ? 'docspace' : 'doclib';
-        $this->loadModel('action')->create($object, $libID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
-
-        $moduleName = 'doc';
-        $objectType = $lib->type;
-        $methodName = zget($this->config->doc->spaceMethod, $objectType);
-        if($this->app->tab == 'doc') return $this->send(array('result' => 'success', 'load' => $this->createLink($moduleName, $methodName), 'app' => $this->app->tab));
-
-        $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
-        if($this->app->tab == 'execution' && $objectType == 'execution')
-        {
-            $moduleName = 'execution';
-            $methodName = 'doc';
-        }
-        $browseLink = $this->createLink($moduleName, $methodName, "objectID=$objectID");
-
-        return $this->send(array('result' => 'success', 'load' => $browseLink, 'app' => $this->app->tab));
+        return $this->send($this->docZen->deleteLibOrSpace($libID, false));
     }
 
     /**

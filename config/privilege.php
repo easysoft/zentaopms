@@ -67,7 +67,6 @@ $config->logonMethods[] = 'datatable.ajaxsave';
 $config->logonMethods[] = 'datatable.ajaxreset';
 $config->logonMethods[] = 'doc.buildzentaolist';
 $config->logonMethods[] = 'doc.ajaxgetdropmenu';
-$config->logonMethods[] = 'doc.commondeleteaction';
 $config->logonMethods[] = 'doc.commoneditaction';
 $config->logonMethods[] = 'doc.createbasicinfo';
 $config->logonMethods[] = 'doc.lastviewedlib';
