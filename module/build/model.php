@@ -754,7 +754,21 @@ class buildModel extends model
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
 
         $this->loadModel('action');
-        foreach($bugIdList as $bugID) $this->action->create('bug', (int)$bugID, 'linked2bug', '', $buildID);
+        foreach($bugIdList as $bugID)
+        {
+            $this->action->create('bug', (int)$bugID, 'linked2bug', '', $buildID);
+
+            /* 记录 Bug 与构建的内置关联关系。 */
+            /* Record the built-in relation between the bug and build. */
+            $relation = new stdClass();
+            $relation->product  = 0;
+            $relation->relation = 'interrated';
+            $relation->AType    = 'bug';
+            $relation->AID      = $bugID;
+            $relation->BType    = 'build';
+            $relation->BID      = $buildID;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->autoCheck()->exec();
+        }
 
         return !dao::isError();
     }
@@ -777,6 +791,14 @@ class buildModel extends model
         if($build->bugs) $build->bugs = ',' . $build->bugs;
 
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq($buildID)->exec();
+
+        $this->dao->delete()->from(TABLE_RELATION)
+            ->where('relation')->eq('interrated')
+            ->andWhere('AType')->eq('bug')
+            ->andWhere('AID')->eq($bugID)
+            ->andWhere('BType')->eq('build')
+            ->andWhere('BID')->eq($buildID)
+            ->exec();
         $this->loadModel('action')->create('bug', $bugID, 'unlinkedfrombuild', '', $buildID, '', false);
     }
 
@@ -801,6 +823,14 @@ class buildModel extends model
         $build->bugs = trim($build->bugs, ',');
 
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
+
+        $this->dao->delete()->from(TABLE_RELATION)
+            ->where('relation')->eq('interrated')
+            ->andWhere('AType')->eq('bug')
+            ->andWhere('AID')->in($bugIdList)
+            ->andWhere('BType')->eq('build')
+            ->andWhere('BID')->eq($buildID)
+            ->exec();
 
         $this->loadModel('action');
         foreach($bugIdList as $unlinkBugID) $this->action->create('bug', (int)$unlinkBugID, 'unlinkedfrombuild', '', $buildID);
