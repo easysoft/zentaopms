@@ -2704,3 +2704,6 @@ $config->delete['22_7'][] = 'module/admin/test/zen/certifybyapi.php';
 $config->delete['22_7'][] = 'module/admin/test/zen/sendcodebyapi.php';
 $config->delete['22_7'][] = 'module/admin/test/zen/setcompanybyapi.php';
 $config->delete['22_7'][] = 'www/js/zui3/zin.compatible.js';
+$config->delete['22_7'][] = 'extension/biz/index/ext/control/index.php';
+$config->delete['22_7'][] = 'extension/max/index/ext/control/index.php';
+$config->delete['22_7'][] = 'extension/ipd/index/ext/control/index.php';
