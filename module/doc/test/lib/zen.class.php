@@ -55,6 +55,20 @@ class docZenTest extends baseTest
     }
 
     /**
+     * Test checkPrivForEdit method.
+     *
+     * @param  object $doc
+     * @access public
+     * @return bool
+     */
+    public function checkPrivForEditTest(object $doc)
+    {
+        $result = $this->invokeArgs('checkPrivForEdit', [$doc]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test formFromSession method.
      *
      * @param  string $type

@@ -375,6 +375,32 @@ class docZen extends doc
     }
 
     /**
+     * 检查文档的编辑权限。
+     * Check the privilege of editing a document.
+     *
+     * @param  object    $doc
+     * @access protected
+     * @return bool
+     */
+    protected function checkPrivForEdit(object $doc): bool
+    {
+        $isOpen          = $doc->acl == 'open';
+        $currentAccount  = $this->app->user->account;
+        $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || $this->app->user->admin);
+        $isInEditUsers   = strpos(",$doc->users,", ",$currentAccount,") !== false;
+        $isInEditGroups  = false;
+        if(!empty($doc->groups))
+        {
+            foreach($this->app->user->groups as $groupID)
+            {
+                if(strpos(",$doc->groups,", ",$groupID,") !== false) $isInEditGroups = true;
+            }
+        }
+
+        return $isOpen || $isAuthorOrAdmin || $isInEditUsers || $isInEditGroups;
+    }
+
+    /**
      * 在创建文档后的返回。
      * Return after create a document.
      *

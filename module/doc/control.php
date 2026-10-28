@@ -824,10 +824,11 @@ class doc extends control
     public function uploadDocs(int $docID, string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '', $from = '')
     {
         $chapterID = 0;
+        $targetDoc = false;
         if(!empty($docID))
         {
             $targetDoc = $this->doc->getByID($docID);
-            if($targetDoc && $targetDoc->type === 'chapter')
+            if($targetDoc && empty($targetDoc->deleted) && $targetDoc->type === 'chapter')
             {
                 $chapterID = (int)$docID;
                 $docID     = 0;
@@ -848,8 +849,21 @@ class doc extends control
             if(!$libID) return $this->send(array('result' => 'fail', 'message' => array('lib' => sprintf($this->lang->error->notempty, $this->lang->doc->lib))));
 
             $doclib   = $this->loadModel('doc')->getLibByID($libID);
-            $canVisit = $this->docZen->checkPrivForCreate($doclib, $objectType);
+            if(!$doclib || !empty($doclib->deleted)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
+
+            $canVisit = $this->docZen->checkPrivForCreate($doclib, $doclib->type);
             if(!$canVisit) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
+
+            if(!empty($docID))
+            {
+                if(!$targetDoc || !empty($targetDoc->deleted) || !$this->docZen->checkPrivForEdit($targetDoc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
+
+                if((int)$targetDoc->lib !== $libID)
+                {
+                    $sourceLib = $this->doc->getLibByID((int)$targetDoc->lib);
+                    if(!$sourceLib || !empty($sourceLib->deleted) || !$this->doc->checkPrivLib($sourceLib)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
+                }
+            }
 
             $moduleID = $this->post->module;
             helper::setcookie('lastDocModule', $moduleID);
@@ -875,8 +889,9 @@ class doc extends control
 
             if(!empty($docID))
             {
-                $docResult   = $this->doc->update($docID, $docData);
-                $docData->id = $docID;
+                $docData->lib = $libID;
+                $docResult    = $this->doc->update($docID, $docData);
+                $docData->id  = $docID;
             }
             elseif($this->post->uploadFormat == 'combinedDocs')
             {
@@ -1012,20 +1027,7 @@ class doc extends control
 
             if(!$doc) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
 
-            $isOpen          = $doc->acl == 'open';
-            $currentAccount  = $this->app->user->account;
-            $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || $this->app->user->admin);
-            $isInEditUsers   = strpos(",$doc->users,", ",$currentAccount,") !== false;
-            $isInEditGroups  = false;
-            if(!empty($doc->groups))
-            {
-                foreach($this->app->user->groups as $groupID)
-                {
-                    if(strpos(",$doc->groups,", ",$groupID,") !== false) $isInEditGroups = true;
-                }
-            }
-
-            if(!$isOpen && !$isAuthorOrAdmin && !$isInEditUsers && !$isInEditGroups) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
+            if(!$this->docZen->checkPrivForEdit($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
 
             if(isset($_POST['renameFileID']))
             {
