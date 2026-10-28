@@ -134,7 +134,7 @@ class repoModelTest extends baseTest
         return $result;
     }
 
-    public function setMenuTest(int $repoID = 0)
+    public function setMenuTest(int $repoID = 0, string $menuItem = '', string $field = '')
     {
         $repos  = $this->instance->dao->select('id')->from(TABLE_REPO)->fetchPairs('id');
         ob_start();
@@ -142,6 +142,7 @@ class repoModelTest extends baseTest
         $result = ob_get_clean();
 
         if($result) return $result;
+        if($menuItem) return zget($this->instance->lang->devops->menu->{$menuItem}, $field, '');
         return $this->instance->session->repoID;
     }
 

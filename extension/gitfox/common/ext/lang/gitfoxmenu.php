@@ -111,7 +111,7 @@ $lang->repo->homeMenu->repos = array('link' => "{$lang->devops->repoList}|repo|m
 
 /* 进入代码库后的菜单。 */
 $lang->repo->menu = new stdclass();
-$lang->repo->menu->code     = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'alias' => 'view', 'subModule' => 'my', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules,repo-setbranchrule,repobranchType-browse,repo-browsewebhooks,repo-createwebhook,repo-editwebhook,repo-logwebhook');
+$lang->repo->menu->code     = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'alias' => 'view,blame', 'subModule' => 'my', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules,repo-setbranchrule,repobranchType-browse,repo-browsewebhooks,repo-createwebhook,repo-editwebhook,repo-logwebhook');
 $lang->repo->menu->commit   = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s", 'alias' => 'diff');
 $lang->repo->menu->branch   = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
 $lang->repo->menu->tag      = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
