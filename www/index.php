@@ -77,7 +77,8 @@ $handler = static function ()
                 if($app->getModuleName() != 'upgrade' && $app->getMethodName() != 'safedelete')
                 {
                     $url = helper::createLink('upgrade', 'safeDelete', 'referer=' . helper::safe64Encode($_SERVER['REQUEST_URI']));
-                    die(header("location: $url"));
+                    header("location: $url");
+                    exit();
                 }
             }
         }
