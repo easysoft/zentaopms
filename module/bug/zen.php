@@ -2122,19 +2122,14 @@ class bugZen extends bug
                     ->andWhere("(FIND_IN_SET('{$oldBuildID}', build) or shadow = {$oldBuildID})")
                     ->andWhere('deleted')->eq('0')
                     ->fetch('id');
-
                 if($oldReleaseID)
                 {
-                    $this->dao->delete()->from(TABLE_RELATION)
-                        ->where('relation')->eq('interrated')
-                        ->andWhere('AType')->eq('bug')
-                        ->andWhere('AID')->eq($bug->id)
-                        ->andWhere('BType')->eq('release')
-                        ->andWhere('BID')->eq($oldReleaseID)
-                        ->exec();
+                    $this->loadModel('release')->unlinkBug((int)$oldReleaseID, (int)$bug->id);
                 }
-
-                $this->loadModel('build')->unlinkBug((int)$oldBug->resolvedBuild, $bug->id);
+                else
+                {
+                    $this->loadModel('build')->unlinkBug($oldBuildID, $bug->id);
+                }
             }
             if(!empty($bug->resolvedBuild) && $bug->resolvedBuild != 'trunk') $this->bug->linkBugToBuild($bug->id, $bug->resolvedBuild);
         }
