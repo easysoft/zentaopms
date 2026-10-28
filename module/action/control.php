@@ -436,6 +436,8 @@ class action extends control
      */
     public function ajaxGetList(string $objectType, int $objectID)
     {
+        if(!$this->actionZen->checkPrivForGetList($objectType, $objectID)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+
         $this->app->loadLang($objectType);
         $actions = $this->action->getList($objectType, $objectID);
         $actions = $this->action->buildActionList($actions);
