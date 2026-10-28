@@ -84,6 +84,36 @@ class docZenTest extends baseTest
     }
 
     /**
+     * Test checkPrivForEditLib method.
+     *
+     * @param  object $doclib
+     * @param  bool   $isSpace
+     * @access public
+     * @return bool
+     */
+    public function checkPrivForEditLibTest(object $doclib, bool $isSpace)
+    {
+        $result = $this->invokeArgs('checkPrivForEditLib', [$doclib, $isSpace]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test editLibOrSpace method.
+     *
+     * @param  int  $libID
+     * @param  bool $isSpace
+     * @access public
+     * @return array
+     */
+    public function editLibOrSpaceTest(int $libID, bool $isSpace): array
+    {
+        $result = $this->invokeArgs('editLibOrSpace', [$libID, $isSpace]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test deleteLibOrSpace method.
      *
      * @param  int  $libID

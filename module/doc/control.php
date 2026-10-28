@@ -448,7 +448,8 @@ class doc extends control
      */
     public function editSpace(int $spaceID)
     {
-        $this->commonEditAction($spaceID);
+        $result = $this->docZen->editLibOrSpace($spaceID, true);
+        if(!empty($result)) return $this->send($result);
         $this->display();
     }
 
@@ -462,75 +463,9 @@ class doc extends control
      */
     public function editLib(int $libID)
     {
-        $this->commonEditAction($libID);
+        $result = $this->docZen->editLibOrSpace($libID, false);
+        if(!empty($result)) return $this->send($result);
         $this->display();
-    }
-
-    /**
-     * 编辑空间和编辑库的公用方法。
-     * Edit a lib or space.
-     *
-     * @param  int    $libID
-     * @access public
-     * @return void
-     */
-    public function commonEditAction($libID)
-    {
-        if(!common::hasPriv('doc', 'editSpace') && !common::hasPriv('doc', 'editLib')) return;
-        $lib = $this->doc->getLibByID($libID);
-
-        /* 项目模板下setMenu会修改common语言项，所以执行文档要先执行setAclForCreateLib。 */
-        if($lib->type != 'project') $this->docZen->setAclForEditLib($lib);
-        $this->doc->setMenuByType($lib->type, (int)zget($lib, $lib->type, 0), (int)$libID);
-        if($lib->type == 'project') $this->docZen->setAclForEditLib($lib);
-
-        if(!empty($_POST))
-        {
-            $this->lang->doc->name = $this->lang->nameAB;
-            $libData = form::data($this->config->doc->form->editlib)->get();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $changes = $this->doc->updateLib($libID, $libData);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($changes)
-            {
-                $object = ($lib->type == 'custom' && $lib->parent == 0) ? 'docspace' : 'doclib';
-                $actionID = $this->action->create($object, $libID, 'edited');
-                $this->action->logHistory($actionID, $changes);
-            }
-
-            $lib = $this->doc->getLibByID($libID);
-            $docAppActions = array();
-            $docAppActions[] = array('update', ($lib->parent == 0) ? 'space' : 'lib', $lib);
-            $docAppActions[] = array('home:loadHomeLibs');
-            $docAppActions[] = array('list:load');
-            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'closeModal' => true, 'docApp' => $docAppActions));
-        }
-
-        if(!empty($lib->product)) $this->view->object = $this->product->getByID($lib->product);
-        if(!empty($lib->project) && empty($lib->execution)) $this->view->object = $this->project->getByID($lib->project);
-        if(!empty($lib->execution))
-        {
-            $execution = $this->execution->getByID($lib->execution);
-            if($execution->type == 'stage')
-            {
-                if($execution->grade > 1)
-                {
-                    $parentExecutions = $this->execution->getPairsByList(explode(',', trim($execution->path, ',')), 'stage,kanban,sprint');
-                    $execution->name  = implode('/', $parentExecutions);
-                }
-
-                $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
-            }
-
-            $this->view->object = $execution;
-        }
-
-        $this->view->lib    = $lib;
-        $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->user->getPairs('noletter|noclosed', $lib->users);
-        $this->view->libID  = $libID;
     }
 
     /**
