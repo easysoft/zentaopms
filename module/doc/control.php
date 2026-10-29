@@ -940,6 +940,10 @@ class doc extends control
             $changes = $files = array();
             if(!$comment)
             {
+                $targetLibID = isset($_POST['lib']) ? (int)$_POST['lib'] : (int)$doc->lib;
+                $targetLib   = $this->doc->getLibByID($targetLibID);
+                if(!$targetLib || !$this->docZen->checkPrivForMoveDoc($targetLib)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
+
                 $docData = form::data()
                     ->setDefault('editedBy', $this->app->user->account)
                     ->setDefault('acl', $doc->acl)
@@ -956,6 +960,7 @@ class doc extends control
                     ->removeIF(!$this->post->product, 'product')
                     ->removeIF(!$this->post->execution, 'execution')
                     ->get();
+                $docData->lib = $targetLibID;
                 $result = $this->doc->update($docID, $docData);
                 if(dao::isError())
                 {
