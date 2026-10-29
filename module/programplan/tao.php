@@ -1061,6 +1061,23 @@ class programplanTao extends programplanModel
         $this->dao->update(TABLE_ACTIONRECENT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('`objectType`')->ne('execution')->exec();
         $this->dao->update(TABLE_DOCLIB)->set('execution')->eq($executionID)->where('type')->eq('execution')->andWhere('execution')->eq($parentID)->andWhere('main')->eq('0')->andWhere('deleted')->eq('0')->exec();
 
+        /*
+         * TODO【阶段拆分-同步父数据-需求类型过滤】
+         * 现状：子阶段从父阶段同步项目需求关联时，会把父阶段关联的业务需求、用户需求和研发需求全部转移到子阶段。
+         * 设计（伪代码）：
+         *   $executionType = $this->dao->select('type')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('type');
+         *   $storyIdSQL = $this->dao->select('id')->from(TABLE_STORY)->where('deleted')->eq('0');
+         *   if($executionType == 'kanban' || $executionType == 'sprint')
+         *   {
+         *       // 看板和迭代只同步研发需求，不同步业务需求和用户需求。
+         *       $storyIdSQL->andWhere('type')->eq('story');
+         *   }
+         *   $this->dao->update(TABLE_PROJECTSTORY)->set('project')->eq($executionID)->where('project')->eq($parentID)->andWhere('story')->subIn($storyIdSQL)->exec();
+         *   边界：$executionType 不是 kanban/sprint 时，保持同步全部未删除需求的现有行为。
+         * 备注：
+         *   - 复用 executionModel::linkStory() 对非 stage/project 执行对象“只允许研发需求”的类型规则。
+         *   - TABLE_PROJECTSTORY 只同步需求关联；任务、用例、文档等数据仍按原逻辑同步。
+         */
         $storyIdSQL = $this->dao->select('id')->from(TABLE_STORY)->where('deleted')->eq('0')->get();
         $this->dao->update(TABLE_PROJECTSTORY)->set('project')->eq($executionID)->where('project')->eq($parentID)->andWhere('story')->subIn($storyIdSQL)->exec();
 
