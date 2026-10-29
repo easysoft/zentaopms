@@ -2098,6 +2098,19 @@ class bugModel extends model
             $relation->BID      = $release->id;
             $this->dao->replace(TABLE_RELATION)->data($relation)->autoCheck()->exec();
         }
+        else
+        {
+            /* 记录 Bug 与构建的内置关联关系。 */
+            /* Record the built-in relation between the bug and build. */
+            $relation = new stdClass();
+            $relation->product  = 0;
+            $relation->relation = 'interrated';
+            $relation->AType    = 'bug';
+            $relation->AID      = $bugID;
+            $relation->BType    = 'build';
+            $relation->BID      = $resolvedBuild;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->autoCheck()->exec();
+        }
 
         return true;
     }

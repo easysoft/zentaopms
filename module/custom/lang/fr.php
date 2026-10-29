@@ -208,6 +208,7 @@ $lang->custom->notice->forceNotReview      = "%s un examen n'est pas requis pour
 $lang->custom->notice->longlife            = 'Définir les bugs bloqués.';
 $lang->custom->notice->invalidNumberKey    = 'La clé devrait être =< 255.';
 $lang->custom->notice->invalidStringKey    = 'La clé devrait être composée de miniscules, de chiffres et du caractère souligné.';
+$lang->custom->notice->invalidTimezone     = 'Veuillez sélectionner un fuseau horaire valide.';
 $lang->custom->notice->cannotSetTimezone   = "date_default_timezone_set n'existe pas ou est désactivé. Timezone ne peut pas être fixée.";
 $lang->custom->notice->noClosedBlock       = "Vous n'avez aucun bloc fermé définitivement.";
 $lang->custom->notice->required            = 'Le champ sélectionné est obligatoire.';

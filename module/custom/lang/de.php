@@ -208,6 +208,7 @@ $lang->custom->notice->forceNotReview      = "%s Review is NOT required for cert
 $lang->custom->notice->longlife            = 'Define shelved bugs.';
 $lang->custom->notice->invalidNumberKey    = 'Priority list key should be a natural and not greater than 255.';
 $lang->custom->notice->invalidStringKey    = 'The key should be a combination of lowercase English letters, numbers or underscores';
+$lang->custom->notice->invalidTimezone     = 'Bitte wählen Sie eine gültige Zeitzone aus.';
 $lang->custom->notice->cannotSetTimezone   = 'date_default_timezone_set does not exist or is disabled. Timezone cannot be set.';
 $lang->custom->notice->noClosedBlock       = 'You have no blocks that are closed permanently.';
 $lang->custom->notice->required            = 'The selected field is required.';

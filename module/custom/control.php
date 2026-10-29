@@ -140,7 +140,11 @@ class custom extends control
     {
         if(strtolower($_SERVER['REQUEST_METHOD']) == "post")
         {
-            $this->loadModel('setting')->setItems('system.common', $_POST);
+            $timezone = isset($_POST['timezone']) && is_string($_POST['timezone']) ? trim($_POST['timezone']) : '';
+            if(!$this->customZen->isValidTimezone($timezone)) return $this->send(array('result' => 'fail', 'message' => array('timezone' => $this->lang->custom->notice->invalidTimezone)));
+
+            $this->loadModel('setting')->setItem('system.common.timezone', $timezone);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->sendSuccess(array('load' => true));
         }
 

@@ -3,6 +3,7 @@ class executionZenTest
 {
     public $executionZenTest;
     public $tester;
+    public $objectModel;
     function __construct()
     {
         global $tester;

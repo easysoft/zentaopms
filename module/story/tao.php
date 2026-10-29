@@ -194,7 +194,7 @@ class storyTao extends storyModel
      * @access protected
      * @return string
      */
-    protected function buildProductsCondition(string|int|array $productIdList, array|string|int $branch = 'all'): string
+    public function buildProductsCondition(string|int|array $productIdList, array|string|int $branch = 'all'): string
     {
         /* 如果查询所有分支，直接用 idList 条件。 */
         if(empty($productIdList))  $productIdList = '0';

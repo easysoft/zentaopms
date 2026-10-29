@@ -884,6 +884,14 @@ class executionZen extends execution
         $this->execution->checkBeginAndEndDate($projectID, $_POST['begin'], $_POST['end'], isset($_POST['parent']) ? (int)$this->post->parent : $projectID);
         if(dao::isError()) return false;
 
+        /* 融合项目和 IPD 项目的执行需要明确选择管理方法。*/
+        /* Executions of Agile Plus, Waterfall Plus and IPD projects require an explicit management method. */
+        if(!empty($project) && in_array($project->model, array('agileplus', 'waterfallplus', 'ipd')) && empty($_POST['type']))
+        {
+            dao::$errors['type'] = sprintf($this->lang->error->notempty, $this->lang->execution->method);
+            return false;
+        }
+
         /* Judge workdays is legitimate. */
         $workdays = helper::diffDate($_POST['end'], $_POST['begin']) + 1;
         if(isset($_POST['days']) && $_POST['days'] > $workdays)
