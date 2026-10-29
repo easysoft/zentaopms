@@ -416,6 +416,8 @@ class docZen extends doc
     protected function checkPrivForMoveDoc(object $doclib): bool
     {
         if(empty($doclib->id) || !empty($doclib->deleted)) return false;
+        if(!in_array($doclib->type, array('custom', 'mine', 'product', 'project', 'execution'), true)) return false;
+        if(in_array($doclib->type, array('custom', 'mine'), true) && empty($doclib->parent)) return false;
         if(!$this->doc->checkPrivLib($doclib)) return false;
         return $this->checkPrivForCreate($doclib, (string)$doclib->type);
     }
