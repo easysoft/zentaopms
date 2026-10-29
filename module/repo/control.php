@@ -556,7 +556,7 @@ class repo extends control
 
         /* Set menu and session. */
         $repo = $this->repo->getByID($repoID);
-        $this->commonAction($repoID, $objectID, $repo->spaceID);
+        $this->commonAction($repoID, $objectID, empty($repo) ? 0 : $repo->spaceID);
         $this->repoZen->setBrowseSession($repo);
 
         /* Get repo and synchronous commit. */
@@ -2974,7 +2974,7 @@ class repo extends control
         }
 
         $this->loadModel('gitfox')->apiDeleteBranch($repoID, $branch);
-        if(dao::isError()) return $this->sendError($this->parseErrorContent(dao::getError()));
+        if(dao::isError()) return $this->sendError($this->parseErrorContent(zget(dao::getError(), 'apiMessage', '')));
         $this->repo->unlinkObjectBranch(0, '', $repoID, $branch);
         if(dao::isError()) return $this->sendError(dao::getError());
         $this->loadModel('action')->create('repobranch', $repoID, 'deleted', '', $branch);
@@ -3001,6 +3001,8 @@ class repo extends control
     {
         $tag  = helper::safe64Decode($tag);
         $this->loadModel('gitfox')->apiDeleteTag($repoID, $tag);
+        if(dao::isError()) return $this->sendError(zget(dao::getError(), 'apiMessage', ''));
+
         $this->loadModel('action')->create('repotag', $repoID, 'deleted', '', $tag);
 
         if(dao::isError()) return $this->sendError(dao::getError());
