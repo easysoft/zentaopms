@@ -941,8 +941,11 @@ class doc extends control
             if(!$comment)
             {
                 $targetLibID = isset($_POST['lib']) ? (int)$_POST['lib'] : (int)$doc->lib;
-                $targetLib   = $this->doc->getLibByID($targetLibID);
-                if(!$targetLib || !$this->docZen->checkPrivForMoveDoc($targetLib)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
+                if($targetLibID !== (int)$doc->lib)
+                {
+                    $targetLib = $this->doc->getLibByID($targetLibID);
+                    if(!$targetLib || !$this->docZen->checkPrivForMoveDoc($targetLib)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
+                }
 
                 $docData = form::data()
                     ->setDefault('editedBy', $this->app->user->account)

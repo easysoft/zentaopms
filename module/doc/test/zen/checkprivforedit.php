@@ -14,6 +14,7 @@ timeout=0
 - 无关用户不能编辑 @0
 - 空 groups 不影响其他编辑规则 @1
 - 私有库中的开放文档不能被库外用户编辑 @0
+- 私有产品库白名单用户允许编辑原库中的开放文档 @1
 - 软删除文档不能编辑 @0
 
 */
@@ -46,6 +47,9 @@ $makeLib = function(int $id, string $acl, string $addedBy, string $users = ''): 
 
 $openLib          = $makeLib(101, 'open', 'admin');
 $privateForeignLib = $makeLib(102, 'private', 'admin');
+$privateProductLib = $makeLib(103, 'private', 'admin', 'user1');
+$privateProductLib->type    = 'product';
+$privateProductLib->product = 1;
 
 $openDoc = new stdClass();
 $openDoc->lib     = 101;
@@ -108,6 +112,7 @@ r($docTest->checkPrivForEditTest($editGroupDoc, $openLib)) && p() && e('1');
 r($docTest->checkPrivForEditTest($unrelatedUserDoc, $openLib)) && p() && e('0');
 r($docTest->checkPrivForEditTest($emptyGroupsDoc, $openLib)) && p() && e('1');
 r($docTest->checkPrivForEditTest($openDoc, $privateForeignLib)) && p() && e('0');
+r($docTest->checkPrivForEditTest($openDoc, $privateProductLib)) && p() && e('1');
 
 $deletedDoc = clone $openDoc;
 $deletedDoc->deleted = 1;
