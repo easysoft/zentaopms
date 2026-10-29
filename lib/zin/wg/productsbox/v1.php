@@ -328,6 +328,7 @@ class productsBox extends wg
                             set::value(is_array($branchIdList) ? implode(',', $branchIdList) : $branchIdList),
                             set::disabled($disabledProduct),
                             set::multiple(true),
+                            set::emptyValue(''),
                             setData(array('on' => 'change', 'call' => 'branchChange', 'params' => 'event'))
                         )
                     )
