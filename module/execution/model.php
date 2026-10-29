@@ -2192,6 +2192,12 @@ class executionModel extends model
                     $task->needConfirm = true;
                     $task->status      = 'changed';
                 }
+
+                /* TODO
+                 * bug#76764 多人并行任务在项目列表中负责人显示逻辑和执行任务列表不一致.
+                 * 添加和执行任务列表一致的逻辑
+                 * 如果当前任务的mode为multi并且状态属于done或者closed或者cancel时，将当前任务的指派给设置为团队，如果当前用户为任务团队成员，并且没有完成任务，则指派给显示为当前用户。
+                 */
             }
         }
 
