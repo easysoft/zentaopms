@@ -3109,6 +3109,15 @@ class docModel extends model
         $sourcePairs = array();
         foreach($files as $file)
         {
+            if($file->objectType == 'comment')
+            {
+                if(!empty($file->extra) && strpos($file->extra, '-') !== false)
+                {
+                    $fileExtra = explode('-', $file->extra);
+                    $file->objectType = $fileExtra[0];
+                    $file->objectID   = $fileExtra[1];
+                }
+            }
             if(!isset($sourceList[$file->objectType])) $sourceList[$file->objectType] = array();
             $sourceList[$file->objectType][$file->objectID] = $file->objectID;
         }
