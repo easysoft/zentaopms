@@ -379,11 +379,16 @@ class docZen extends doc
      * Check the privilege of editing a document.
      *
      * @param  object    $doc
+     * @param  object|null $doclib
      * @access protected
      * @return bool
      */
-    protected function checkPrivForEdit(object $doc): bool
+    protected function checkPrivForEdit(object $doc, ?object $doclib = null): bool
     {
+        if(!empty($doc->deleted)) return false;
+        if($doclib === null && !empty($doc->lib)) $doclib = $this->doc->getLibByID((int)$doc->lib);
+        if(!$doclib || empty($doclib->id) || !empty($doclib->deleted) || !$this->doc->checkPrivLib($doclib)) return false;
+
         $isOpen          = $doc->acl == 'open';
         $currentAccount  = $this->app->user->account;
         $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || $this->app->user->admin);
@@ -398,6 +403,23 @@ class docZen extends doc
         }
 
         return $isOpen || $isAuthorOrAdmin || $isInEditUsers || $isInEditGroups;
+    }
+
+    /**
+     * 检查能否把文档移动到目标库。
+     * Check whether a document can be moved to the target library.
+     *
+     * @param  object $doclib
+     * @access protected
+     * @return bool
+     */
+    protected function checkPrivForMoveDoc(object $doclib): bool
+    {
+        if(empty($doclib->id) || !empty($doclib->deleted)) return false;
+        if(!in_array($doclib->type, array('custom', 'mine', 'product', 'project', 'execution'), true)) return false;
+        if(in_array($doclib->type, array('custom', 'mine'), true) && empty($doclib->parent)) return false;
+        if(!$this->doc->checkPrivLib($doclib)) return false;
+        return $this->checkPrivForCreate($doclib, (string)$doclib->type);
     }
 
     /**
