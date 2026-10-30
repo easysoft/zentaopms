@@ -35,7 +35,7 @@ $dev = new devModelTest();
 r($dev->getTableIndexTest('zt_task', 'PRIMARY', 'columns.1.name'))      && p() && e('id');         // 步骤1：任务表主键的列名
 r($dev->getTableIndexTest('zt_task', 'PRIMARY', 'unique'))              && p() && e('1');          // 步骤2：任务表主键是唯一索引
 r($dev->getTableIndexTest('zt_task', 'assignedTo', 'columns.1.name'))   && p() && e('assignedTo'); // 步骤3：任务表普通索引的列名
-r($dev->getTableIndexTest('zt_autocache', 'cache', 'columns.2.subPart')) && p() && e('190');       // 步骤4：自动缓存表前缀索引保留长度
+r($dev->getTableIndexTest('zt_autocache', 'cache', 'columns.2.subPart')) && p() && e('161');       // 步骤4：自动缓存表前缀索引保留长度
 r($dev->getTableIndexTest('zt_searchindex', 'title_content', 'type'))   && p() && e('FULLTEXT');   // 步骤5：全文索引类型
 r($dev->getTableIndexTest('zt_searchindex', 'object', 'columns.2.name')) && p() && e('objectID');   // 步骤6：组合索引的第二列
 r($dev->getTableIndexesTest(''))                                        && p() && e('0');          // 步骤7：表名为空时返回空

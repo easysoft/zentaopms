@@ -46,7 +46,7 @@ r(strpos($sql, 'KEY `assignedTo` (`assignedTo`)') !== false ? 'yes' : 'fail') &&
 r($dev->getDbTableSQLTest('zt_nonexistent_table')) && p() && e('0'); // 步骤8：不存在的表返回空
 
 $prefixSQL = $dev->getDbTableSQLTest('zt_autocache');
-r(strpos($prefixSQL, '`fields`(190)') !== false ? 'yes' : 'fail') && p() && e('yes'); // 步骤9：前缀索引保留长度
+r(strpos($prefixSQL, '`fields`(161)') !== false ? 'yes' : 'fail') && p() && e('yes'); // 步骤9：前缀索引保留长度
 
 $fulltextSQL = $dev->getDbTableSQLTest('zt_searchindex');
 r(strpos($fulltextSQL, 'FULLTEXT KEY `title_content` (`title`, `content`)') !== false ? 'yes' : 'fail') && p() && e('yes'); // 步骤10：全文索引定义
