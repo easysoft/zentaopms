@@ -50,7 +50,7 @@ $storyCols = $this->loadModel('datatable')->getSetting('productplan', 'view');
 if(isset($storyCols['branch']) && $product->type == 'normal') unset($storyCols['branch']);
 
 /* Customize columns for plan context. */
-$storyCols['title']['link']         = $this->createLink('story', 'storyView', "storyID={id}");
+$storyCols['title']['link']         = $this->createLink('story', 'storyView', "storyID={id}&planID={$plan->id}");
 $storyCols['title']['title']        = $lang->productplan->storyTitle;
 $storyCols['assignedTo']['type']    = 'user';
 $storyCols['module']['type']        = 'text';

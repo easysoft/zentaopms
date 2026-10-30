@@ -662,14 +662,21 @@ class story extends control
      * View a story, delay auth.
      *
      * @param  int    $storyID
+     * @param  int    $planID
      * @access public
      * @return void
      */
-    public function storyView(int $storyID)
+    public function storyView(int $storyID, int $planID = 0)
     {
         $story = $this->story->fetchByID($storyID);
         if(common::hasPriv($story->type, 'view'))
         {
+            if($planID > 0 && strpos(",{$story->plan},", ",$planID,") !== false)
+            {
+                $this->app->loadModuleConfig($story->type);
+                $copyParams = $this->config->{$story->type}->actionList['copy']['url']['params'];
+                $this->config->{$story->type}->actionList['copy']['url']['params'] = str_replace('planID=0', "planID=$planID", $copyParams);
+            }
             echo $this->fetch($story->type, 'view', "storyID=$storyID");
         }
         else
