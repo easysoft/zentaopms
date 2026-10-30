@@ -1429,4 +1429,28 @@ class fileModelTest extends baseTest
         }
     }
 
+    /**
+     * Test isValidUploadUID method.
+     *
+     * @param  string $uid
+     * @access public
+     * @return bool
+     */
+    public function isValidUploadUIDTest(string $uid): bool
+    {
+        return $this->instance->isValidUploadUID($uid);
+    }
+
+    /**
+     * Test getUploadSavePath method.
+     *
+     * @param  string $uid
+     * @access public
+     * @return string
+     */
+    public function getUploadSavePathTest(string $uid): string
+    {
+        return $this->instance->getUploadSavePath($uid);
+    }
+
 }
