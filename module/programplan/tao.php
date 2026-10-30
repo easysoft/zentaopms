@@ -1061,7 +1061,8 @@ class programplanTao extends programplanModel
         $this->dao->update(TABLE_ACTIONRECENT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('`objectType`')->ne('execution')->exec();
         $this->dao->update(TABLE_DOCLIB)->set('execution')->eq($executionID)->where('type')->eq('execution')->andWhere('execution')->eq($parentID)->andWhere('main')->eq('0')->andWhere('deleted')->eq('0')->exec();
 
-        $storyIdSQL = $this->dao->select('id')->from(TABLE_STORY)->where('deleted')->eq('0')->get();
+        $executionType = $this->dao->select('type')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('type');
+        $storyIdSQL    = $this->dao->select('id')->from(TABLE_STORY)->where('deleted')->eq('0')->beginIF($executionType == 'kanban' || $executionType == 'sprint')->andWhere('type')->eq('story')->fi()->get();
         $this->dao->update(TABLE_PROJECTSTORY)->set('project')->eq($executionID)->where('project')->eq($parentID)->andWhere('story')->subIn($storyIdSQL)->exec();
 
         $caseIdSQL = $this->dao->select('id')->from(TABLE_CASE)->where('deleted')->eq('0')->get();
