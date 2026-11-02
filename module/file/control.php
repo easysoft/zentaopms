@@ -545,10 +545,9 @@ class file extends control
         if(!$stream) helper::header('Content-type', $mime);
 
         $cacheMaxAge = 10 * 365 * 24 * 3600;
-        helper::header('Cache-Control', 'private');
+        helper::header('Cache-Control', "private, max-age=$cacheMaxAge");
         helper::header('Pragma', 'cache');
         helper::header('Expires', gmdate('D, d M Y H:i:s', time() + $cacheMaxAge) . ' GMT');
-        helper::header('Cache-Control', "max-age=$cacheMaxAge");
 
         if($stream)
         {
@@ -768,10 +767,9 @@ class file extends control
         helper::header('Content-Security-Policy', "default-src 'none'; script-src 'none'; base-uri 'none'; form-action 'none'");
 
         $cacheMaxAge = 10 * 365 * 24 * 3600;
-        helper::header('Cache-Control', 'private');
+        helper::header('Cache-Control', "private, max-age=$cacheMaxAge");
         helper::header('Pragma', 'cache');
         helper::header('Expires', gmdate('D, d M Y H:i:s', time() + $cacheMaxAge) . ' GMT');
-        helper::header('Cache-Control', "max-age=$cacheMaxAge");
 
         $handle = fopen($file->realPath, "r");
         if($handle)
