@@ -34,6 +34,11 @@ cid=0
 - 步骤3：无效输入 @error:TypeError
 - 步骤4：大值输入 @error:TypeError
 - 步骤5：业务规则验证 @error:TypeError
+- 步骤6：DevOps首页菜单不包含代码问题二级导航 @0
+- 步骤7：代码库页面代码问题菜单保留 @1
+- 步骤8：人工审查问题子菜单保留 @1
+- 步骤9：静态扫描问题子菜单保留 @1
+- 步骤10：代码库列表页面使用DevOps首页菜单 @1
 
 */
 
@@ -42,3 +47,11 @@ r($testObj->setMainMenuTest()) && p() && e('error:TypeError'); // 步骤2：边�
 r($testObj->setMainMenuTest()) && p() && e('error:TypeError'); // 步骤3：无效输入
 r($testObj->setMainMenuTest()) && p() && e('error:TypeError'); // 步骤4：大值输入
 r($testObj->setMainMenuTest()) && p() && e('error:TypeError'); // 步骤5：业务规则验证
+
+$devopsHomeMenu = $testObj->setMainMenuDevopsHomeMenuTest();
+
+r($devopsHomeMenu) && p('issue') && e('0');           // 步骤6：DevOps首页菜单不包含代码问题二级导航
+r($devopsHomeMenu) && p('review') && e('1');          // 步骤7：代码库页面代码问题菜单保留
+r($devopsHomeMenu) && p('reviewSubMenu') && e('1');   // 步骤8：人工审查问题子菜单保留
+r($devopsHomeMenu) && p('codescanSubMenu') && e('1'); // 步骤9：静态扫描问题子菜单保留
+r($devopsHomeMenu) && p('homeMenuActive') && e('1');  // 步骤10：代码库列表页面使用DevOps首页菜单
