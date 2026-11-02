@@ -1183,6 +1183,46 @@ class commonModelTest extends baseTest
     }
 
     /**
+     * Test DevOps home menu of setMainMenu method.
+     *
+     * @access public
+     * @return array
+     */
+    public function setMainMenuDevopsHomeMenuTest(): array
+    {
+        global $app, $lang;
+
+        $oldTab       = $app->tab;
+        $oldRawModule = $app->rawModule;
+        $oldRawMethod = $app->rawMethod;
+        $oldMenu      = isset($lang->menu) ? $lang->menu : null;
+        $oldMenuOrder = isset($lang->menuOrder) ? $lang->menuOrder : null;
+
+        $app->tab       = 'devops';
+        $app->rawModule = 'repo';
+        $app->rawMethod = 'maintain';
+        commonModel::setMainMenu();
+
+        $result = array(
+            'issue'           => isset($lang->menu->issue) ? 1 : 0,
+            'review'          => isset($lang->devops->menu->review) ? 1 : 0,
+            'reviewSubMenu'   => isset($lang->devops->menu->review['subMenu']->review) ? 1 : 0,
+            'codescanSubMenu' => isset($lang->devops->menu->review['subMenu']->codescan) ? 1 : 0,
+            'homeMenuActive'  => isset($lang->menu->repos) ? 1 : 0,
+        );
+
+        $app->tab       = $oldTab;
+        $app->rawModule = $oldRawModule;
+        $app->rawMethod = $oldRawMethod;
+        if($oldMenu === null) unset($lang->menu);
+        else $lang->menu = $oldMenu;
+        if($oldMenuOrder === null) unset($lang->menuOrder);
+        else $lang->menuOrder = $oldMenuOrder;
+
+        return $result;
+    }
+
+    /**
      * Test checkMenuVarsReplaced method.
      *
      * @param  int    $testCase
