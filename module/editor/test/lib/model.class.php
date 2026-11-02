@@ -2151,6 +2151,18 @@ class editorModelTest extends baseTest
     }
 
     /**
+     * Test deleteFile method.
+     *
+     * @param  string    $filePath
+     * @access public
+     * @return bool
+     */
+    public function deleteFileTest(string $filePath): bool
+    {
+        return $this->instance->deleteFile($filePath);
+    }
+
+    /**
      * Test getMethodCode with model class specifically.
      *
      * @param  string    $className
