@@ -2227,7 +2227,10 @@ class aiModel extends model
         $targetForm = $this->config->ai->targetForm[$module][$action] ?? null;
         if(!empty($targetForm))
         {
-            $schema = $this->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)] ?? null;
+            $schemaModule = strtolower($targetForm->m);
+            $schemaAction = strtolower($targetForm->f);
+            $schema       = $this->lang->ai->formSchema[$schemaModule][$schemaAction] ?? null;
+            if(empty($schema) && in_array($schemaModule, array('epic', 'requirement'), true)) $schema = $this->lang->ai->formSchema['story'][$schemaAction] ?? null;
             if(!empty($schema)) return $schema;
         }
 

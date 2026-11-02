@@ -15,6 +15,11 @@ cid=15031
 - 步骤6：空字符串输入 @0
 - 步骤7：无效格式（不包含点） @0
 - 步骤8：不存在的配置路径 @0
+- 步骤9：客户需求编辑复用需求表单结构 @1
+- 步骤10：用户需求编辑复用需求表单结构 @1
+- 步骤11：客户需求编辑保留原页面路由 @epic
+- 步骤12：用户需求编辑保留原页面路由 @requirement
+- 步骤13：优先使用客户需求专属表单结构属性title @自定义客户需求
 
 */
 
@@ -37,3 +42,15 @@ r($aiTest->getFunctionCallSchemaTest('risk.create')) && p('title') && e('风险'
 r($aiTest->getFunctionCallSchemaTest('')) && p() && e('0');                                  // 步骤6：空字符串输入
 r($aiTest->getFunctionCallSchemaTest('invalidform')) && p() && e('0');                      // 步骤7：无效格式（不包含点）
 r($aiTest->getFunctionCallSchemaTest('nonexistent.form')) && p() && e('0');                 // 步骤8：不存在的配置路径
+
+$storySchema = $aiTest->getFunctionCallSchemaTest('story.edit');
+r(is_object($storySchema) && $aiTest->getFunctionCallSchemaTest('epic.edit') == $storySchema) && p() && e('1');        // 步骤9：客户需求编辑复用需求表单结构
+r(is_object($storySchema) && $aiTest->getFunctionCallSchemaTest('requirement.edit') == $storySchema) && p() && e('1'); // 步骤10：用户需求编辑复用需求表单结构
+r($config->ai->targetForm['epic']['edit']->m) && p() && e('epic');                          // 步骤11：客户需求编辑保留原页面路由
+r($config->ai->targetForm['requirement']['edit']->m) && p() && e('requirement');            // 步骤12：用户需求编辑保留原页面路由
+
+$originalEpicSchema = $lang->ai->formSchema['epic']['edit'] ?? null;
+$lang->ai->formSchema['epic']['edit'] = (object)array('title' => '自定义客户需求', 'type' => 'object');
+r($aiTest->getFunctionCallSchemaTest('epic.edit')) && p('title') && e('自定义客户需求');     // 步骤13：优先使用客户需求专属表单结构
+if($originalEpicSchema === null) unset($lang->ai->formSchema['epic']['edit']);
+else $lang->ai->formSchema['epic']['edit'] = $originalEpicSchema;
