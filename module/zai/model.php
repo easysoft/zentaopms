@@ -318,7 +318,7 @@ class zaiModel extends model
             $data       = substr($response, $headerSize);
         }
 
-        curl_close($curl);
+        if(PHP_VERSION_ID < 80000) curl_close($curl);
 
         if($code == 404) return array('result' => 'fail', 'data' => null, 'message' => $this->lang->notFound, 'code' => $code);
         if($code == 401) return array('result' => 'fail', 'data' => null, 'message' => $this->lang->zai->authenticationFailed, 'code' => $code);

@@ -744,7 +744,28 @@ class file extends control
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
         $mime = $this->getMimeType($file);
-        helper::header('Content-type', $mime);
+        /* Keep source files as text even when their contents are recognized as HTML or XML. */
+        $textExtensions = array('txt', 'md', 'markdown', 'csv', 'html', 'htm', 'xml', 'css', 'js', 'ts', 'json', 'yaml', 'yml', 'sql');
+        if(in_array(strtolower($file->extension), $textExtensions)) $mime = 'text/plain';
+
+        /* Only known passive formats may be rendered in the application's origin. SVG is not a safe image type here. */
+        $previewMimes = array(
+            'text/plain', 'application/pdf',
+            'image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/x-ms-bmp', 'image/webp', 'image/avif', 'image/x-icon', 'image/vnd.microsoft.icon',
+            'audio/mpeg', 'audio/wav', 'audio/x-wav', 'audio/ogg', 'audio/webm', 'audio/mp4', 'audio/aac', 'audio/flac', 'audio/x-flac', 'application/ogg',
+            'video/mp4', 'video/mpeg', 'video/quicktime', 'video/x-msvideo', 'video/webm', 'video/ogg', 'video/x-flv', 'video/3gpp', 'video/3gpp2'
+        );
+        if(!in_array($mime, $previewMimes))
+        {
+            $mime     = 'application/octet-stream';
+            $fileName = $file->title;
+            if(substr(strtolower($fileName), -strlen($file->extension) - 1) != '.' . strtolower($file->extension)) $fileName .= '.' . $file->extension;
+            helper::header('Content-Disposition', "attachment; filename*=UTF-8''" . rawurlencode(str_replace(array("\r", "\n"), '', $fileName)));
+        }
+
+        helper::header('Content-type', $mime == 'text/plain' ? 'text/plain; charset=UTF-8' : $mime);
+        helper::header('X-Content-Type-Options', 'nosniff');
+        helper::header('Content-Security-Policy', "default-src 'none'; script-src 'none'; base-uri 'none'; form-action 'none'");
 
         $cacheMaxAge = 10 * 365 * 24 * 3600;
         helper::header('Cache-Control', 'private');
