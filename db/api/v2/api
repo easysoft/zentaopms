@@ -72352,7 +72352,7 @@ a:374:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "required": true,
         "desc": "状态(success 成功 | fail 失败)"
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:310;O:8:"stdClass":24:{s:2:"id";i:311;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:402;s:5:"title";s:18:"创建项目变更";s:4:"path";s:28:"/projects/:projectID/changes";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:18:"创建项目变更";s:7:"version";i:1;s:6:"params";s:1270:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:310;O:8:"stdClass":24:{s:2:"id";i:311;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:402;s:5:"title";s:18:"创建项目变更";s:4:"path";s:28:"/projects/:projectID/changes";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:18:"创建项目变更";s:7:"version";i:1;s:6:"params";s:1467:"{
     "header": [
         {
             "field": "Token",
@@ -72372,13 +72372,13 @@ a:374:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "urgency",
             "paramsType": "string",
             "required": true,
-            "desc": "\u7d27\u6025\u7a0b\u5ea6\u3002"
+            "desc": "\u7d27\u6025\u7a0b\u5ea6(normal \u4e00\u822c | major \u91cd\u5927 | critical \u7279\u5927)\u3002"
         },
         {
             "field": "type",
             "paramsType": "string",
             "required": true,
-            "desc": "\u53d8\u66f4\u7c7b\u578b\u3002"
+            "desc": "\u53d8\u66f4\u7c7b\u578b(story \u9700\u6c42\u53d8\u66f4 | design \u8bbe\u8ba1\u53d8\u66f4 | stage \u9636\u6bb5\u53d8\u66f4 | case \u7528\u4f8b\u53d8\u66f4)\u3002"
         },
         {
             "field": "owner",
@@ -72401,10 +72401,10 @@ a:374:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
     ],
     "paramsType": "json",
     "query": []
-}";s:13:"paramsExample";s:170:"{
+}";s:13:"paramsExample";s:172:"{
     "name": "API 变更",
-    "urgency": "urgent",
-    "type": "dev",
+    "urgency": "normal",
+    "type": "story",
     "owner": "admin",
     "reason": "需求变化",
     "desc": "<p>API 创建的变更。<\/p>"
@@ -72939,7 +72939,7 @@ a:374:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             }
         ]
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:313;O:8:"stdClass":24:{s:2:"id";i:314;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:402;s:5:"title";s:18:"编辑项目变更";s:4:"path";s:18:"/changes/:changeID";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"PUT";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:18:"编辑项目变更";s:7:"version";i:1;s:6:"params";s:1270:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:313;O:8:"stdClass":24:{s:2:"id";i:314;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:402;s:5:"title";s:18:"编辑项目变更";s:4:"path";s:18:"/changes/:changeID";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"PUT";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:18:"编辑项目变更";s:7:"version";i:1;s:6:"params";s:1467:"{
     "header": [
         {
             "field": "Token",
@@ -72959,13 +72959,13 @@ a:374:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
             "field": "urgency",
             "paramsType": "string",
             "required": true,
-            "desc": "\u7d27\u6025\u7a0b\u5ea6\u3002"
+            "desc": "\u7d27\u6025\u7a0b\u5ea6(normal \u4e00\u822c | major \u91cd\u5927 | critical \u7279\u5927)\u3002"
         },
         {
             "field": "type",
             "paramsType": "string",
             "required": true,
-            "desc": "\u53d8\u66f4\u7c7b\u578b\u3002"
+            "desc": "\u53d8\u66f4\u7c7b\u578b(story \u9700\u6c42\u53d8\u66f4 | design \u8bbe\u8ba1\u53d8\u66f4 | stage \u9636\u6bb5\u53d8\u66f4 | case \u7528\u4f8b\u53d8\u66f4)\u3002"
         },
         {
             "field": "owner",
@@ -72988,10 +72988,10 @@ a:374:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
     ],
     "paramsType": "json",
     "query": []
-}";s:13:"paramsExample";s:190:"{
+}";s:13:"paramsExample";s:192:"{
     "name": "API 变更（已编辑）",
     "urgency": "normal",
-    "type": "dev",
+    "type": "story",
     "owner": "admin",
     "reason": "需求调整",
     "desc": "<p>更新后的变更描述。<\/p>"
@@ -75079,7 +75079,7 @@ a:374:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         "required": true,
         "desc": "状态(success 成功 | fail 失败)"
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:326;O:8:"stdClass":24:{s:2:"id";i:327;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:406;s:5:"title";s:18:"创建项目周报";s:4:"path";s:9:"/weeklies";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:18:"创建项目周报";s:7:"version";i:1;s:6:"params";s:1649:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:326;O:8:"stdClass":24:{s:2:"id";i:327;s:7:"product";s:0:"";s:3:"lib";i:11;s:6:"module";i:406;s:5:"title";s:18:"创建项目周报";s:4:"path";s:9:"/weeklies";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";s:18:"创建项目周报";s:7:"version";i:1;s:6:"params";s:1639:"{
     "header": [
         {
             "field": "Token",
@@ -75098,8 +75098,8 @@ a:374:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
         {
             "field": "reportModule",
             "paramsType": "string",
-            "required": false,
-            "desc": "\u9879\u76ee\u5468\u62a5\u5206\u7c7b ID\uff0c\u6ca1\u6709\u5206\u7c7b\u65f6\u53ef\u4f20 0\u3002"
+            "required": true,
+            "desc": "\u9879\u76ee\u5468\u62a5\u5206\u7c7b\uff0c\u5fc5\u586b\uff0c\u4e0d\u80fd\u4f20 0\u3002"
         },
         {
             "field": "title",
@@ -75134,9 +75134,9 @@ a:374:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:11;s
     ],
     "paramsType": "json",
     "query": []
-}";s:13:"paramsExample";s:205:"{
+}";s:13:"paramsExample";s:208:"{
     "projectID": 2,
-    "reportModule": "0",
+    "reportModule": "week",
     "title": "API 创建项目周报",
     "templateID": 0,
     "templateDesc": "通过 API 创建的项目周报",
