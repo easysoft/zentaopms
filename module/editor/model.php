@@ -347,6 +347,23 @@ class editorModel extends model
     }
 
     /**
+     * Delete a custom extension file.
+     *
+     * @param  string $filePath
+     * @access public
+     * @return bool
+     */
+    public function deleteFile(string $filePath): bool
+    {
+        $customPath = realpath($this->app->getExtensionRoot() . 'custom');
+        $realPath   = realpath($filePath);
+        if($customPath === false || $realPath === false || !is_file($realPath)) return false;
+        if(strpos(strtolower($realPath), strtolower($customPath . DS)) !== 0) return false;
+
+        return unlink($realPath);
+    }
+
+    /**
      * Extend model.php and get file content.
      *
      * @param  string    $filePath
