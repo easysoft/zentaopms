@@ -934,7 +934,7 @@ class programplanModel extends model
             $this->session->set('projectTaskQueryCondition', $projectTaskQuery, $this->app->tab);
             $this->session->set('projectTaskOnlyCondition', true, $this->app->tab);
 
-            $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, "{$type}_asc,beginDate_asc,id_asc", $pager, 'projectTask');
+            $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, "`order`_asc,{$type}_asc,beginDate_asc,id_asc", $pager, 'projectTask');
         }
         elseif(!empty($planIdList))
         {
