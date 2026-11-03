@@ -96,7 +96,7 @@ class detailForm extends wg
         return <<<'CSS'
         .detail-form-main .form-label {position: sticky; top: 0; background: var(--color-canvas); z-index: 1; margin-bottom: 4px}
         .detail-form-main .form-label .text {font-size: 14px; font-weight: bold;}
-        .detail-form-main {border-right: 1px solid var(--color-border)}
+        .detail-form-main {min-width: 0; border-right: 1px solid var(--color-border)}
         .detail-form-main .form-grid .form-label.required:after {order: 1}
         .detail-form-side {border-left: 1px solid var(--color-border); margin-left: -1px}
         .detail-form-main .form-grid {padding: 12px 16px}
