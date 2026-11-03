@@ -145,11 +145,25 @@ function changeApp()
     }
 }
 
+/**
+ * 判断应用页面请求是否使用 POST。
+ * Check whether an app page request uses POST.
+ *
+ * @param {object} [options] 页面请求选项。
+ * @returns {boolean}
+ */
 function isPostPageRequest(options)
 {
     return String(options && options.method || '').toUpperCase() === 'POST';
 }
 
+/**
+ * 判断目标应用 iframe 是否已经可以加载页面。
+ * Check whether the target app iframe is ready to load pages.
+ *
+ * @param {ZentaoOpenedApp} app 已打开的应用。
+ * @returns {boolean}
+ */
 function canLoadAppPage(app)
 {
     try
@@ -162,6 +176,14 @@ function canLoadAppPage(app)
     }
 }
 
+/**
+ * 清除待处理页面请求及其初始化定时器。
+ * Clear the pending page request and its initialization timer.
+ *
+ * @param {ZentaoOpenedApp} app 已打开的应用。
+ * @param {object} [request] 仅当它仍是当前待处理请求时清除。
+ * @returns {void}
+ */
 function clearPendingPageRequest(app, request)
 {
     if(!app || (request && app.pendingPageRequest !== request)) return;
@@ -173,6 +195,15 @@ function clearPendingPageRequest(app, request)
     }
 }
 
+/**
+ * 终止无法完成的待处理页面请求并提示应用加载失败。
+ * Fail a pending page request that cannot be completed.
+ *
+ * @param {ZentaoOpenedApp} app 已打开的应用。
+ * @param {object} request 待处理请求。
+ * @param {*} error 失败原因。
+ * @returns {void}
+ */
 function failPendingPageRequest(app, request, error)
 {
     if(!app || app.pendingPageRequest !== request) return;
@@ -182,6 +213,14 @@ function failPendingPageRequest(app, request, error)
     zui.Modal.alert(appLoadFailed);
 }
 
+/**
+ * 准备页面请求选项，并在目标 iframe 的 window 中重建 FormData。
+ * Prepare page request options and rebuild FormData in the target iframe window.
+ *
+ * @param {ZentaoOpenedApp} app 目标应用。
+ * @param {object} options 原始请求选项。
+ * @returns {object}
+ */
 function getAppPageRequestOptions(app, options)
 {
     const requestOptions = $.extend({}, options, {updateHeading: true});
@@ -203,6 +242,13 @@ function getAppPageRequestOptions(app, options)
     return requestOptions;
 }
 
+/**
+ * 当目标 iframe 就绪后发送当前待处理的页面请求。
+ * Send the current pending page request when the target iframe is ready.
+ *
+ * @param {string} code 应用代号。
+ * @returns {boolean} 是否已发出请求或已进入失败处理。
+ */
 function loadPendingPageRequest(code)
 {
     const app     = apps.openedMap[code];
@@ -237,6 +283,14 @@ function loadPendingPageRequest(code)
     }
 }
 
+/**
+ * 等待目标 iframe 就绪，超时后终止待处理请求。
+ * Wait for the target iframe and fail the pending request after timeout.
+ *
+ * @param {string} code 应用代号。
+ * @param {object} request 待处理请求。
+ * @returns {void}
+ */
 function waitForPendingPageRequest(code, request)
 {
     const app = apps.openedMap[code];
@@ -253,6 +307,15 @@ function waitForPendingPageRequest(code, request)
     app.pendingPageRequestTimer = setTimeout(() => waitForPendingPageRequest(code, request), 50);
 }
 
+/**
+ * 保存最新页面请求，并覆盖同一应用中尚未发送的旧请求。
+ * Queue the latest page request and replace an unsent request for the same app.
+ *
+ * @param {ZentaoOpenedApp} app 目标应用。
+ * @param {string} url 目标页面地址。
+ * @param {object} options 页面请求选项。
+ * @returns {void}
+ */
 function queuePendingPageRequest(app, url, options)
 {
     const request =
