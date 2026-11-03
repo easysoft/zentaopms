@@ -146,6 +146,190 @@ function changeApp()
 }
 
 /**
+ * 判断应用页面请求是否使用 POST。
+ * Check whether an app page request uses POST.
+ *
+ * @param {object} [options] 页面请求选项。
+ * @returns {boolean}
+ */
+function isPostPageRequest(options)
+{
+    return String(options && options.method || '').toUpperCase() === 'POST';
+}
+
+/**
+ * 判断目标应用 iframe 是否已经可以加载页面。
+ * Check whether the target app iframe is ready to load pages.
+ *
+ * @param {ZentaoOpenedApp} app 已打开的应用。
+ * @returns {boolean}
+ */
+function canLoadAppPage(app)
+{
+    try
+    {
+        return !!(app && app.iframe && app.iframe.contentWindow && app.iframe.contentWindow.loadPage);
+    }
+    catch(error)
+    {
+        return false;
+    }
+}
+
+/**
+ * 清除待处理页面请求及其初始化定时器。
+ * Clear the pending page request and its initialization timer.
+ *
+ * @param {ZentaoOpenedApp} app 已打开的应用。
+ * @param {object} [request] 仅当它仍是当前待处理请求时清除。
+ * @returns {void}
+ */
+function clearPendingPageRequest(app, request)
+{
+    if(!app || (request && app.pendingPageRequest !== request)) return;
+    delete app.pendingPageRequest;
+    if(app.pendingPageRequestTimer)
+    {
+        clearTimeout(app.pendingPageRequestTimer);
+        delete app.pendingPageRequestTimer;
+    }
+}
+
+/**
+ * 终止无法完成的待处理页面请求并提示应用加载失败。
+ * Fail a pending page request that cannot be completed.
+ *
+ * @param {ZentaoOpenedApp} app 已打开的应用。
+ * @param {object} request 待处理请求。
+ * @param {*} error 失败原因。
+ * @returns {void}
+ */
+function failPendingPageRequest(app, request, error)
+{
+    if(!app || app.pendingPageRequest !== request) return;
+
+    clearPendingPageRequest(app, request);
+    console.error('[APPS]', 'Failed to load pending page request.', error);
+    zui.Modal.alert(appLoadFailed);
+}
+
+/**
+ * 准备页面请求选项，并在目标 iframe 的 window 中重建 FormData。
+ * Prepare page request options and rebuild FormData in the target iframe window.
+ *
+ * @param {ZentaoOpenedApp} app 目标应用。
+ * @param {object} options 原始请求选项。
+ * @returns {object}
+ */
+function getAppPageRequestOptions(app, options)
+{
+    const requestOptions = $.extend({}, options, {updateHeading: true});
+    const data           = requestOptions.data;
+    try
+    {
+        const targetWindow = app.iframe.contentWindow;
+        if(data && typeof data.forEach === 'function' && typeof data.append === 'function' && targetWindow.FormData)
+        {
+            const formData = new targetWindow.FormData();
+            data.forEach((value, key) => formData.append(key, value));
+            requestOptions.data = formData;
+        }
+    }
+    catch(error)
+    {
+        console.error('[APPS]', 'Failed to prepare page request data.', error);
+    }
+    return requestOptions;
+}
+
+/**
+ * 当目标 iframe 就绪后发送当前待处理的页面请求。
+ * Send the current pending page request when the target iframe is ready.
+ *
+ * @param {string} code 应用代号。
+ * @returns {boolean} 是否已发出请求或已进入失败处理。
+ */
+function loadPendingPageRequest(code)
+{
+    const app     = apps.openedMap[code];
+    const request = app && app.pendingPageRequest;
+    if(!request || !canLoadAppPage(app)) return false;
+
+    const options = getAppPageRequestOptions(app, request.options);
+    const success = options.success;
+    const error   = options.error;
+    options.success = function()
+    {
+        clearPendingPageRequest(app, request);
+        if(typeof success === 'function') return success.apply(this, arguments);
+    };
+    options.error = function(data, requestError)
+    {
+        failPendingPageRequest(app, request, requestError || data);
+        if(typeof error === 'function') return error.apply(this, arguments);
+    };
+
+    try
+    {
+        app.iframe.contentWindow.loadPage(request.url, options);
+        app.currentUrl = request.url;
+        changeApp();
+        return true;
+    }
+    catch(loadError)
+    {
+        failPendingPageRequest(app, request, loadError);
+        return true;
+    }
+}
+
+/**
+ * 等待目标 iframe 就绪，超时后终止待处理请求。
+ * Wait for the target iframe and fail the pending request after timeout.
+ *
+ * @param {string} code 应用代号。
+ * @param {object} request 待处理请求。
+ * @returns {void}
+ */
+function waitForPendingPageRequest(code, request)
+{
+    const app = apps.openedMap[code];
+    if(!app || app.pendingPageRequest !== request) return;
+
+    if(loadPendingPageRequest(code)) return;
+    if(Date.now() >= request.deadline)
+    {
+        failPendingPageRequest(app, request, new Error('The target app did not become ready before the timeout.'));
+        return;
+    }
+
+    if(app.pendingPageRequestTimer) clearTimeout(app.pendingPageRequestTimer);
+    app.pendingPageRequestTimer = setTimeout(() => waitForPendingPageRequest(code, request), 50);
+}
+
+/**
+ * 保存最新页面请求，并覆盖同一应用中尚未发送的旧请求。
+ * Queue the latest page request and replace an unsent request for the same app.
+ *
+ * @param {ZentaoOpenedApp} app 目标应用。
+ * @param {string} url 目标页面地址。
+ * @param {object} options 页面请求选项。
+ * @returns {void}
+ */
+function queuePendingPageRequest(app, url, options)
+{
+    const request =
+    {
+        url:      url,
+        options:  $.extend({}, options),
+        deadline: (app.pendingPageRequest && app.pendingPageRequest.deadline) || Date.now() + 10000
+    };
+    app.pendingPageRequest = request;
+    app.currentUrl = url;
+    waitForPendingPageRequest(app.code, request);
+}
+
+/**
  * Open app
  * @param {string} url
  * @param {string|object} [code]
@@ -191,6 +375,7 @@ function openApp(url, code, options)
         if(DEBUG) showLog(code, 'APP NOT FOUND!', url, options);
         return zui.Modal.alert(appNotFound);
     }
+    if(app.external && isPostPageRequest(options)) return zui.Modal.alert(appLoadFailed);
 
     let openedApp = apps.openedMap[code];
     if($.apps.workspace && $.apps.workspace !== code)
@@ -201,6 +386,7 @@ function openApp(url, code, options)
     }
 
     /* Create iframe for app */
+    const isPost = isPostPageRequest(options);
     if(!openedApp)
     {
         if(!url) url = app.url;
@@ -226,6 +412,7 @@ function openApp(url, code, options)
         openedApp.$app = $('<div class="app-container loading" id="app-' + code + '"></div>')
             .append($iframe)
             .appendTo('#apps');
+        if(isPost) queuePendingPageRequest(openedApp, url, options);
 
         const finishLoad = () =>
         {
@@ -240,7 +427,8 @@ function openApp(url, code, options)
         {
             const writeToDoc = () => {
                 iframe.contentDocument.open();
-                const html = apps.frameContent.replace('window.defaultAppUrl = ""', `window.defaultAppUrl = "${url}"`);
+                const defaultUrl = isPost ? '' : url;
+                const html = apps.frameContent.replace('window.defaultAppUrl = ""', `window.defaultAppUrl = "${defaultUrl}"`);
                 iframe.contentDocument.write(html);
                 iframe.contentDocument.close();
             };
@@ -363,12 +551,22 @@ function reloadApp(code, url, options)
     try
     {
         if(app.external) iframe.src = url;
-        else if(iframe.contentWindow.loadPage) iframe.contentWindow.loadPage(url, $.extend({updateHeading: true}, options));
+        else if(iframe.contentWindow.loadPage) iframe.contentWindow.loadPage(url, getAppPageRequestOptions(app, options));
+        else if(isPostPageRequest(options))
+        {
+            queuePendingPageRequest(app, url, options);
+            return;
+        }
         else if(DEBUG) showLog(code, 'Reload', 'error:Cannot load page when iframe is not ready.', {options});
         else console.error('[APPS]', 'Reload failed: Cannot load page when iframe is not ready.');
     }
     catch(error)
     {
+        if(isPostPageRequest(options))
+        {
+            failPendingPageRequest(app, app.pendingPageRequest, error);
+            return;
+        }
         iframe.src = url;
     }
 
