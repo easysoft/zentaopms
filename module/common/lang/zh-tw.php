@@ -14,6 +14,8 @@ include(dirname(__FILE__) . '/common.php');
 
 global $config;
 
+$lang->appLoadFailed = '應用載入失敗，請重新整理頁面後重試。';
+
 $lang->arrow     = '&nbsp;<i class="icon-angle-right"></i>&nbsp;';
 $lang->colon     = '：';
 $lang->hyphen    = '-';
