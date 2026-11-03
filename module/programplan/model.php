@@ -934,7 +934,7 @@ class programplanModel extends model
             $this->session->set('projectTaskQueryCondition', $projectTaskQuery, $this->app->tab);
             $this->session->set('projectTaskOnlyCondition', true, $this->app->tab);
 
-            $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, "{$type}_asc,beginDate_asc,id_asc", $pager, 'projectTask');
+            $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, "`order`_asc,{$type}_asc,beginDate_asc,id_asc", $pager, 'projectTask');
         }
         elseif(!empty($planIdList))
         {
@@ -948,11 +948,7 @@ class programplanModel extends model
                 ->beginIF($browseType != 'nowait')->andWhere('t1.status')->ne('cancel')->fi()
                 ->beginIF($browseType != 'nowait')->andWhere('t1.`closedReason`')->ne('cancel')->fi()
                 ->filterTpl('skip')
-                /* TODO
-                 * bug#76757 项目甘特图任务排序功能异常
-                 * 修改甘特图任务的查询排序 按照 "`order`_asc,{$type}_asc,`beginDate`_asc,id_asc" 进行排序。
-                 */
-                ->orderBy("{$type}_asc,`beginDate`_asc,id_asc")
+                ->orderBy("`order`_asc,{$type}_asc,`beginDate`_asc,id_asc")
                 ->fetchAll('id', false);
         }
 
