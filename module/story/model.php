@@ -4080,7 +4080,6 @@ class storyModel extends model
             if($config->vision == 'lite')                        return false;
             if(!in_array($config->edition, array('max', 'ipd'))) return false;
             if($app->tab != 'project')                           return false;
-            if($story->type == 'requirement')                    return false;
             if(!common::hasPriv('story', 'importToLib'))         return false;
             if(strpos($disabledFeatures, ',assetlibStorylib,') !== false || strpos($disabledFeatures, ',assetlib,') !== false) return false;
             return true;
