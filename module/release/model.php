@@ -492,8 +492,9 @@ class releaseModel extends model
         $projects = array();
         foreach($builds as $build)
         {
-            foreach(explode(',', $build->branch) as $buildBranch)
+            foreach(explode(',', (string)$build->branch) as $buildBranch)
             {
+                if($buildBranch === '') $buildBranch = '0';
                 if(!isset($branches[$buildBranch])) $branches[$buildBranch] = $buildBranch;
             }
 
@@ -513,8 +514,11 @@ class releaseModel extends model
             }
         }
 
+        $branchList = trim(implode(',', $branches), ',');
+        if($branchList === '') $branchList = '0';
+
         $release->build   = ',' . trim($release->build, ',') . ',';
-        $release->branch  = ',' . trim(implode(',', $branches), ',') . ',';
+        $release->branch  = ',' . $branchList . ',';
         $release->project = ',' . trim(implode(',', $projects), ',') . ',';
 
         return $release;
@@ -541,14 +545,18 @@ class releaseModel extends model
             $projects = array();
             foreach($builds as $build)
             {
-                foreach(explode(',', $build->branch) as $buildBranch)
+                foreach(explode(',', (string)$build->branch) as $buildBranch)
                 {
+                    if($buildBranch === '') $buildBranch = '0';
                     if(!isset($branches[$buildBranch])) $branches[$buildBranch] = $buildBranch;
                 }
                 $projects[$build->project] = $build->project;
             }
+            $branchList = trim(implode(',', $branches), ',');
+            if($branchList === '') $branchList = '0';
+
             $release->build   = ',' . trim($release->build, ',') . ',';
-            $release->branch  = ',' . trim(implode(',', $branches), ',') . ',';
+            $release->branch  = ',' . $branchList . ',';
             $release->project = ',' . trim(implode(',', $projects), ',') . ',';
         }
 
