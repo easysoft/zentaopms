@@ -15,7 +15,7 @@ $objectID  = !empty($executionID) ? $executionID : $projectID;
 
 $executionLang = $lang->execution->typeList['sprint'];
 if($project->model == 'kanban') $executionLang = $lang->execution->typeList['kanban'];
-if($project->model == 'waterfall' || $project->model == 'waterfallplus') $executionLang = $lang->execution->typeList['stage'];
+if(in_array($project->model, $config->project->waterfallList)) $executionLang = $lang->execution->typeList['stage'];
 
 $isKanbanProject         = $project->model == 'kanban';
 $hasProduct              = !empty($project->hasProduct);
