@@ -165,6 +165,7 @@ $lang->noticeDrag      = 'Click to add or drag to upload, no more than %s';
 $lang->allProgress     = 'All Progress';
 $lang->hasReviewed     = 'The content has already been reviewed and does not need further review !';
 $lang->appNotFound     = 'Vous n\'avez pas les permissions pour accéder à cette application. Veuillez vérifier les paramètres de permissions.';
+$lang->appLoadFailed   = 'Échec du chargement de l\'application. Veuillez actualiser la page et réessayer.';
 
 $lang->fieldDisplaySetting = 'Field Display Setting';
 $lang->fieldSettingTip     = 'The following fields are collapsed by default, click on the "Show more fields" button to expand the view, if you want some fields not to be collapsed by default, you can fix it with a pin.';
