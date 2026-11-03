@@ -671,10 +671,13 @@ $lang->resource->custom->editStoryConcept   = 'editStoryConcept';
 $lang->resource->custom->browseStoryConcept = 'browseStoryConcept';
 $lang->resource->custom->setDefaultConcept  = 'setDefaultConcept';
 $lang->resource->custom->deleteStoryConcept = 'deleteStoryConcept';
-$lang->resource->custom->relateObject       = 'relateObject';
-$lang->resource->custom->removeObjects      = 'removeObjects';
-$lang->resource->custom->showRelationGraph  = 'relationGraph';
-if($config->edition != 'open') $lang->resource->custom->libreoffice = 'libreOffice';
+if($config->edition != 'open')
+{
+    $lang->resource->custom->relateObject      = 'relateObject';
+    $lang->resource->custom->removeObjects     = 'removeObjects';
+    $lang->resource->custom->showRelationGraph = 'relationGraph';
+    $lang->resource->custom->libreoffice       = 'libreOffice';
+}
 
 $lang->custom->methodOrder[10] = 'set';
 $lang->custom->methodOrder[15] = 'product';
@@ -688,10 +691,13 @@ $lang->custom->methodOrder[60] = 'editStoryConcept';
 $lang->custom->methodOrder[65] = 'browseStoryConcept';
 $lang->custom->methodOrder[70] = 'setDefaultConcept';
 $lang->custom->methodOrder[75] = 'deleteStoryConcept';
-$lang->custom->methodOrder[76] = 'relateObject';
-$lang->custom->methodOrder[77] = 'removeObjects';
-$lang->custom->methodOrder[78] = 'showRelationGraph';
-$lang->custom->methodOrder[80] = 'libreoffice';
+if($config->edition != 'open')
+{
+    $lang->custom->methodOrder[76] = 'relateObject';
+    $lang->custom->methodOrder[77] = 'removeObjects';
+    $lang->custom->methodOrder[78] = 'showRelationGraph';
+    $lang->custom->methodOrder[80] = 'libreoffice';
+}
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';
