@@ -64,14 +64,16 @@ $handler = static function ()
         if($app->getViewType() != 'json' && session_id() != $app->sessionID && !$isClient) helper::restartSession($app->sessionID);
 
         /* Remove install.php and upgrade.php. */
-        $installFileExists = file_exists(__DIR__ . DS . 'install.php');
-        $upgradeFileExists = file_exists(__DIR__ . DS . 'upgrade.php');
+        $installFile       = __DIR__ . DS . 'install.php';
+        $upgradeFile       = __DIR__ . DS . 'upgrade.php';
+        $installFileExists = file_exists($installFile);
+        $upgradeFileExists = file_exists($upgradeFile);
         if($installFileExists || $upgradeFileExists)
         {
             if(!empty($config->inContainer) && !isset($_SESSION['installing']))
             {
-                if($installFileExists) unlink('install.php');
-                if($upgradeFileExists) unlink('upgrade.php');
+                if($installFileExists) unlink($installFile);
+                if($upgradeFileExists) unlink($upgradeFile);
             }
             else
             {
