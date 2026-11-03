@@ -251,42 +251,7 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
     let estimate  = 0;
     let rate      = '0%';
     let hasCase   = 0;
-    /*
-      TODO【项目需求列表-用例覆盖率-仅统计研发需求】
-      现状：项目需求列表（tab == 'project'）的数据由 productZen::getStories 以 storyType='all' 查询，
-            列表中会同时出现 epic、requirement、story 三种类型。当前 setStatistics 计算选中项汇总时，
-            只在产品页（tab == 'product'）按 storyType 过滤类型，项目页不做过滤，
-            导致用例覆盖率的分子 hasCase 与分母 rateCount 把业务需求、用户需求也算进去，
-            与页面初始汇总（productModel::summary() 已只统计 type == 'story'）口径不一致。
-      设计（伪代码）：
-        let rateCount = 0;                                  // 不再以选中总数初始化
-        rows.forEach((row) => {
-            if(!checkedIdList.includes(row.id)) return;
-            const story = row.data;
-            if(story.type != storyType && tab == 'product') return;   // 保持现有行为
-            if(story?.needSummaryEstimate) estimate += parseFloat(story.estimate); // 保持现有行为
-            total += 1;                                     // 保持现有行为：选中总数仍统计所有类型
-
-            if(story.type != 'story') return;               // 新增：用例覆盖率只统计研发需求
-            rateCount += 1;                                 // 保持现有行为：非父需求计入分母
-            if(story.caseCount > 0)
-            {
-                hasCase += 1;                               // 保持现有行为：有用例的需求计入分子
-            }
-            else if(typeof story.isParent != 'undefined' && story.isParent == '1')
-            {
-                rateCount -= 1;                             // 保持现有行为：无用例的父需求不计入分母
-            }
-        });
-
-        if(rateCount) rate = Math.round(hasCase / rateCount * 10000) / 100 + '' + '%';
-      备注：
-        - 页面初始汇总由 productModel::summary($stories, 'all') 计算，已通过
-          if($story->type != 'story') continue 过滤，本次无需改动服务端。
-        - 选中总数 total 与预计工时 estimate 保持统计全部类型，不改变现有展示口径。
-        - 执行需求列表（module/execution/js/story.ui.js）是另一套实现，如也需统一口径请另行确认。
-    */
-    let rateCount = checkedIdList.length;
+    let rateCount = 0;
 
     const rows  = element.layout.allRows;
     rows.forEach((row) => {
@@ -295,6 +260,11 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
             const story = row.data;
             if(story.type != storyType && tab == 'product') return;
             if(story?.needSummaryEstimate) estimate += parseFloat(story.estimate);
+            total += 1;
+
+            /* 用例覆盖率只统计研发需求，避免把业务需求、用户需求计入分子和分母。 */
+            if(story.type != 'story') return;
+            rateCount += 1;
             if(story.caseCount > 0)
             {
                 hasCase += 1;
@@ -303,8 +273,6 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
             {
                 rateCount -= 1;
             }
-
-            total += 1;
         }
     })
 
