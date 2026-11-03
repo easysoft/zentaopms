@@ -281,7 +281,7 @@ class projectZen extends project
         parse_str($extra, $output);
 
         if($this->app->tab == 'program' && $programID)                   common::setMenuVars('program', $programID);
-        if($this->app->tab == 'product' && !empty($output['productID'])) $this->product->setMenu($output['productID']);
+        if($this->app->tab == 'product' && !empty($output['productID'])) $this->product->setMenu((int)$output['productID']);
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
 
         if($copyProjectID) $copyProject = isset($this->view->copyProject) ? $this->view->copyProject : $this->getCopyProject((int)$copyProjectID);
