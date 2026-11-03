@@ -145,6 +145,127 @@ function changeApp()
     }
 }
 
+function isPostPageRequest(options)
+{
+    return String(options && options.method || '').toUpperCase() === 'POST';
+}
+
+function canLoadAppPage(app)
+{
+    try
+    {
+        return !!(app && app.iframe && app.iframe.contentWindow && app.iframe.contentWindow.loadPage);
+    }
+    catch(error)
+    {
+        return false;
+    }
+}
+
+function clearPendingPageRequest(app, request)
+{
+    if(!app || (request && app.pendingPageRequest !== request)) return;
+    delete app.pendingPageRequest;
+    if(app.pendingPageRequestTimer)
+    {
+        clearTimeout(app.pendingPageRequestTimer);
+        delete app.pendingPageRequestTimer;
+    }
+}
+
+function failPendingPageRequest(app, request, error)
+{
+    if(!app || app.pendingPageRequest !== request) return;
+
+    clearPendingPageRequest(app, request);
+    console.error('[APPS]', 'Failed to load pending page request.', error);
+    zui.Modal.alert(appLoadFailed);
+}
+
+function getAppPageRequestOptions(app, options)
+{
+    const requestOptions = $.extend({}, options, {updateHeading: true});
+    const data           = requestOptions.data;
+    try
+    {
+        const targetWindow = app.iframe.contentWindow;
+        if(data && typeof data.forEach === 'function' && typeof data.append === 'function' && targetWindow.FormData)
+        {
+            const formData = new targetWindow.FormData();
+            data.forEach((value, key) => formData.append(key, value));
+            requestOptions.data = formData;
+        }
+    }
+    catch(error)
+    {
+        console.error('[APPS]', 'Failed to prepare page request data.', error);
+    }
+    return requestOptions;
+}
+
+function loadPendingPageRequest(code)
+{
+    const app     = apps.openedMap[code];
+    const request = app && app.pendingPageRequest;
+    if(!request || !canLoadAppPage(app)) return false;
+
+    const options = getAppPageRequestOptions(app, request.options);
+    const success = options.success;
+    const error   = options.error;
+    options.success = function()
+    {
+        clearPendingPageRequest(app, request);
+        if(typeof success === 'function') return success.apply(this, arguments);
+    };
+    options.error = function(data, requestError)
+    {
+        failPendingPageRequest(app, request, requestError || data);
+        if(typeof error === 'function') return error.apply(this, arguments);
+    };
+
+    try
+    {
+        app.iframe.contentWindow.loadPage(request.url, options);
+        app.currentUrl = request.url;
+        changeApp();
+        return true;
+    }
+    catch(loadError)
+    {
+        failPendingPageRequest(app, request, loadError);
+        return true;
+    }
+}
+
+function waitForPendingPageRequest(code, request)
+{
+    const app = apps.openedMap[code];
+    if(!app || app.pendingPageRequest !== request) return;
+
+    if(loadPendingPageRequest(code)) return;
+    if(Date.now() >= request.deadline)
+    {
+        failPendingPageRequest(app, request, new Error('The target app did not become ready before the timeout.'));
+        return;
+    }
+
+    if(app.pendingPageRequestTimer) clearTimeout(app.pendingPageRequestTimer);
+    app.pendingPageRequestTimer = setTimeout(() => waitForPendingPageRequest(code, request), 50);
+}
+
+function queuePendingPageRequest(app, url, options)
+{
+    const request =
+    {
+        url:      url,
+        options:  $.extend({}, options),
+        deadline: (app.pendingPageRequest && app.pendingPageRequest.deadline) || Date.now() + 10000
+    };
+    app.pendingPageRequest = request;
+    app.currentUrl = url;
+    waitForPendingPageRequest(app.code, request);
+}
+
 /**
  * Open app
  * @param {string} url
@@ -191,6 +312,7 @@ function openApp(url, code, options)
         if(DEBUG) showLog(code, 'APP NOT FOUND!', url, options);
         return zui.Modal.alert(appNotFound);
     }
+    if(app.external && isPostPageRequest(options)) return zui.Modal.alert(appLoadFailed);
 
     let openedApp = apps.openedMap[code];
     if($.apps.workspace && $.apps.workspace !== code)
@@ -201,6 +323,7 @@ function openApp(url, code, options)
     }
 
     /* Create iframe for app */
+    const isPost = isPostPageRequest(options);
     if(!openedApp)
     {
         if(!url) url = app.url;
@@ -226,6 +349,7 @@ function openApp(url, code, options)
         openedApp.$app = $('<div class="app-container loading" id="app-' + code + '"></div>')
             .append($iframe)
             .appendTo('#apps');
+        if(isPost) queuePendingPageRequest(openedApp, url, options);
 
         const finishLoad = () =>
         {
@@ -240,7 +364,8 @@ function openApp(url, code, options)
         {
             const writeToDoc = () => {
                 iframe.contentDocument.open();
-                const html = apps.frameContent.replace('window.defaultAppUrl = ""', `window.defaultAppUrl = "${url}"`);
+                const defaultUrl = isPost ? '' : url;
+                const html = apps.frameContent.replace('window.defaultAppUrl = ""', `window.defaultAppUrl = "${defaultUrl}"`);
                 iframe.contentDocument.write(html);
                 iframe.contentDocument.close();
             };
@@ -363,12 +488,22 @@ function reloadApp(code, url, options)
     try
     {
         if(app.external) iframe.src = url;
-        else if(iframe.contentWindow.loadPage) iframe.contentWindow.loadPage(url, $.extend({updateHeading: true}, options));
+        else if(iframe.contentWindow.loadPage) iframe.contentWindow.loadPage(url, getAppPageRequestOptions(app, options));
+        else if(isPostPageRequest(options))
+        {
+            queuePendingPageRequest(app, url, options);
+            return;
+        }
         else if(DEBUG) showLog(code, 'Reload', 'error:Cannot load page when iframe is not ready.', {options});
         else console.error('[APPS]', 'Reload failed: Cannot load page when iframe is not ready.');
     }
     catch(error)
     {
+        if(isPostPageRequest(options))
+        {
+            failPendingPageRequest(app, app.pendingPageRequest, error);
+            return;
+        }
         iframe.src = url;
     }
 

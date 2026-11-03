@@ -113,6 +113,7 @@ jsVar('edition',     $config->edition);
 jsVar('vision',      $config->vision);
 jsVar('navGroup',    $lang->navGroup);
 jsVar('appNotFound', $lang->appNotFound);
+jsVar('appLoadFailed', $lang->appLoadFailed);
 jsVar('oldPages',    $config->index->oldPages);
 jsVar('allAppsItems', $allAppsItems);
 jsVar('isTutorialMode', common::isTutorialMode());
