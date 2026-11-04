@@ -22,6 +22,7 @@ featureBar
 foreach($config->my->testtask->dtable->fieldList['actions']['list'] as $actionKey => $action)
 {
     if(!isset($action['data-toggle']) && !isset($action['data-confirm'])) $config->my->testtask->dtable->fieldList['actions']['list'][$actionKey]['data-app'] = 'qa';
+    if($actionKey == 'edit') $config->my->testtask->dtable->fieldList['actions']['list'][$actionKey]['data-toggle'] = 'modal';
 }
 
 $cols  = $this->loadModel('datatable')->getSetting('my', 'testtask');

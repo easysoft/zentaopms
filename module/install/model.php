@@ -45,6 +45,9 @@ class installModel extends model
         $licenseCN = file_get_contents($this->app->getBasePath() . 'LICENSE.CN');
         $licenseEN = file_get_contents($this->app->getBasePath() . 'LICENSE.EN');
 
+        $gitfoxLicense = file_get_contents($this->app->getBasePath() . 'GITFOX_LICENSE');
+        if($this->config->edition == 'gitfox') return $gitfoxLicense;
+
         if($clientLang == 'zh-cn' || $clientLang == 'zh-tw') return $licenseCN . $licenseEN;
         return $licenseEN . $licenseCN;
     }
@@ -290,8 +293,8 @@ class installModel extends model
         if(dao::isError()) return false;
 
         /* Set admin. */
-        //$visions = $this->config->edition == 'ipd' ? 'or,rnd,lite,devops' : 'rnd,lite,devops';
         $visions = $this->config->edition == 'ipd' ? 'or,rnd,lite' : 'rnd,lite';
+        if($this->config->edition == 'gitfox') $visions = 'gitfox';
         $admin   = new stdclass();
         $admin->account  = $data->account;
         $admin->realname = $data->account;
@@ -339,7 +342,8 @@ class installModel extends model
             $this->dao->update(TABLE_STAGE)->set('name')->eq($value)->where('`type`')->eq($key)->exec();
         }
 
-        if($this->config->edition != 'open') $this->updateWorkflowLang();
+        /* GitFox独立版与开源版一样，不涉及工作流等付费版功能。The GitFox edition does not have the workflow features of the paid editions. */
+        if($this->config->edition != 'open' && $this->config->edition != 'gitfox') $this->updateWorkflowLang();
         if($this->config->edition == 'max' || $this->config->edition == 'ipd') $this->updatePaidVersionLang();
 
         return true;

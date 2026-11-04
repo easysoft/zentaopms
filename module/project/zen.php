@@ -281,7 +281,7 @@ class projectZen extends project
         parse_str($extra, $output);
 
         if($this->app->tab == 'program' && $programID)                   common::setMenuVars('program', $programID);
-        if($this->app->tab == 'product' && !empty($output['productID'])) $this->product->setMenu($output['productID']);
+        if($this->app->tab == 'product' && !empty($output['productID'])) $this->product->setMenu((int)$output['productID']);
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
 
         if($copyProjectID) $copyProject = isset($this->view->copyProject) ? $this->view->copyProject : $this->getCopyProject((int)$copyProjectID);
@@ -689,7 +689,6 @@ class projectZen extends project
         $this->view->moduleTree  = $moduleTree;
         $this->view->modules     = $modules;
         $this->view->moduleID    = $moduleID;
-        $this->view->moduleName  = !empty($tree->name) ? $tree->name : $this->lang->tree->all;
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
     }
 
@@ -1456,8 +1455,13 @@ class projectZen extends project
             $project->progress = (float)$project->progress;
         }
 
-        /* 交付物提交进度。 */
-        if(in_array($this->config->edition, array('max', 'ipd'))) $projectList = $this->project->countDeliverable($projectList, 'project');
+        /* 交付物提交进度。列表未展示该字段时不统计。 */
+        $projectType = $this->cookie->projectType && !commonModel::isTutorialMode() ? $this->cookie->projectType : 'bylist';
+        if($projectType == 'bylist' && in_array($this->config->edition, array('max', 'ipd')))
+        {
+            $cols = $this->loadModel('datatable')->getSetting('project', 'browse');
+            if(isset($cols['deliverable'])) $projectList = $this->project->countDeliverable($projectList, 'project');
+        }
 
         return array_values($projectList);
     }

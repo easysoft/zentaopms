@@ -18,6 +18,7 @@ else
 {
     $version     = $config->version;
     $versionName = $lang->pmsName . $config->version;
+    if($config->edition == 'gitfox') $versionName = $config->version;
     $upgradeBtn  = $config->systemMode != 'PLM' ? btn
     (
         setID('bizLink'),
@@ -112,6 +113,7 @@ jsVar('edition',     $config->edition);
 jsVar('vision',      $config->vision);
 jsVar('navGroup',    $lang->navGroup);
 jsVar('appNotFound', $lang->appNotFound);
+jsVar('appLoadFailed', $lang->appLoadFailed);
 jsVar('oldPages',    $config->index->oldPages);
 jsVar('allAppsItems', $allAppsItems);
 jsVar('isTutorialMode', common::isTutorialMode());
@@ -124,6 +126,7 @@ jsVar('pollTime',    (!empty($config->message->browser->turnon) && !empty($confi
 jsVar('turnon',      empty($config->message->browser->turnon) ? 0 : 1);
 jsVar('runnable',    $this->loadModel('cron')->runnable());
 jsVar('showFeatures', $showFeatures);
+jsVar('langNotification', $lang->index->notification);
 
 set::zui(true);
 set::bodyClass($this->cookie->hideMenu ? 'hide-menu' : 'show-menu');
@@ -164,7 +167,7 @@ div
                     span(setClass('text'), $lang->more),
                     toggle::dropdown(array('placement' => 'right-end', 'offset' => 12, 'shift' => true))
                 ),
-                ul(setClass('dropdown-menu menu scrollbar-light overflow-y-auto'), setID('menuMoreList'))
+                ul(setClass('dropdown-menu menu scrollbar-light'), setID('menuMoreList'))
             )
         ),
         ul
@@ -190,6 +193,15 @@ div
 div(setID('apps'));
 
 /* The toolbar docked on the bottom. */
+$versionIcon    = 'zentao text-2xl';
+$versionWebsite = $lang->website;
+if($config->vision == 'gitfox')
+{
+    $gitfoxLogo     = empty($config->gitfox->logoImg) ? 'gf-logo.svg' : $config->gitfox->logoImg;
+    $versionIcon    = img(setClass('h-6 w-6'), set('src', $config->webRoot . 'theme/default/images/main/' . $gitfoxLogo));
+    $versionWebsite = $lang->devops->website;
+}
+
 div
 (
     setID('appsBar'),
@@ -205,8 +217,8 @@ div
         (
             setID('version'),
             setClass('ghost btn-zentao px-1'),
-            set::icon('zentao text-2xl'),
-            set::url($lang->website),
+            set::icon($versionIcon),
+            set::url($versionWebsite),
             set::target('_blank'),
             set::hint($version),
             set::text($versionName)

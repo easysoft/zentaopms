@@ -13,6 +13,8 @@ class globalSearch extends wg
     {
         global $config, $lang;
 
+        if($config->vision == 'gitfox') return null;
+
         if($config->systemMode == 'light') unset($lang->searchObjects['program'], $lang->searchObjects['charter']);
         unset($lang->searchObjects['all']);
 

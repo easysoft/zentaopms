@@ -125,7 +125,7 @@ class commonModel extends model
             ->orderBy('id_desc')
             ->fetchPairs();
 
-        $this->dao->update(TABLE_PROGRAM)->set('status')->eq('doing')->set('realBegan')->eq(helper::now())->where('id')->in($waitList)->exec();
+        $this->dao->update(TABLE_PROGRAM)->set('status')->eq('doing')->set('`realBegan`')->eq(helper::now())->where('id')->in($waitList)->exec();
 
         $this->loadModel('action');
         foreach($waitList as $programID)
@@ -153,7 +153,7 @@ class commonModel extends model
             $realBegan = helper::isZeroDate($project->realBegan) ? $this->dao->select('`realBegan`')->from(TABLE_PROJECT)->where('id')->eq($execution->id)->fetch('realBegan') : $project->realBegan;
             $this->dao->update(TABLE_PROJECT)
                  ->set('status')->eq('doing')
-                 ->set('realBegan')->eq($realBegan)
+                 ->set('`realBegan`')->eq($realBegan)
                  ->where('id')->eq($projectID)
                  ->exec();
 
@@ -185,7 +185,7 @@ class commonModel extends model
         {
             $this->dao->update(TABLE_EXECUTION)
                  ->set('status')->eq('doing')
-                 ->beginIf(helper::isZeroDate($parentExecution->realBegan))->set('realBegan')->eq($today)->fi()
+                 ->beginIf(helper::isZeroDate($parentExecution->realBegan))->set('`realBegan`')->eq($today)->fi()
                  ->where('id')->eq($execution->parent)
                  ->exec();
             $this->loadModel('action')->create('execution', $execution->parent, 'syncexecutionbychild');
@@ -215,7 +215,7 @@ class commonModel extends model
         $today = helper::today();
         if($execution->status == 'wait')
         {
-            $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->set('realBegan')->eq($today)->where('id')->eq($execution->id)->exec();
+            $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->set('`realBegan`')->eq($today)->where('id')->eq($execution->id)->exec();
             $this->loadModel('project')->recordFirstEnd($execution->id);
 
             $this->loadModel('action')->create('execution', $execution->id, 'syncexecution');
@@ -624,7 +624,8 @@ class commonModel extends model
         global $lang, $app, $config;
 
         $app->loadLang('my');
-        if($config->edition != 'open' && $app->isServing()) $app->control->loadModel('common')->mergePrimaryFlows();
+        $commonModel = $app->control->loadModel('common');
+        if(!in_array($config->edition, array('open', 'gitfox')) && $app->isServing()) $commonModel->mergePrimaryFlows();
 
         /* Ensure user has latest rights set. */
         $app->user->rights = $app->control->loadModel('user')->authorize($app->user->account);
@@ -709,8 +710,11 @@ class commonModel extends model
             $moduleLinkList = $currentModule . 'LinkList';
             if(!$display and isset($lang->my->$moduleLinkList) and $config->vision != 'or') list($display, $currentMethod) = commonTao::setPreferenceMenu($display, $currentModule, $currentMethod);
 
-            /* 4. 不可以个性化设置的导航，如果没有落地页的权限，则查看是否有对应app下其他方法的权限. */
-            if(!$display and isset($lang->$currentModule->menu) and !in_array($currentModule, array('program', 'product', 'project', 'execution', 'demandpool'))) list($display, $currentMethod) = commonTao::setOtherMenu($display, $currentModule, $currentMethod);
+            /* 4. 不可以个性化设置的导航，如果没有落地页的权限，则查看是否有对应app下其他方法的权限。 */
+            /* 落地页所属应用与当前导航不一致时跳过，交由第5步按导航自己的菜单判断，避免被其他应用的权限带出。 */
+            $landingNavGroup = isset($lang->navGroup->$currentModule) ? $lang->navGroup->$currentModule : '';
+            $otherAppMenu    = isset($lang->$group->menu) && $landingNavGroup && $landingNavGroup != $group;
+            if(!$display && !$otherAppMenu && isset($lang->$currentModule->menu) && !in_array($currentModule, array('program', 'product', 'project', 'execution', 'demandpool'))) list($display, $currentMethod) = commonTao::setOtherMenu($display, $currentModule, $currentMethod);
 
             /* 5. 如果以上权限都没有，则最后查看是否有该应用下任意一个顶部一级导航的权限。 */
             if(!$display and isset($lang->$group->menu)) list($display, $currentModule, $currentMethod) = commonTao::setMenuByGroup($group, $display, $currentModule, $currentMethod);
@@ -935,7 +939,7 @@ class commonModel extends model
                     $default = $field->options[$newStatus]['default'];
 
                     $common = new self();
-                    $common->dao->update($flow->table)->set('subStatus')->eq($default)->where('id')->eq($oldID)->exec();
+                    $common->dao->update($flow->table)->set('`subStatus`')->eq($default)->where('id')->eq($oldID)->exec();
 
                     $new->subStatus = $default;
                 }
@@ -1249,7 +1253,8 @@ eof;
                     if(commonModel::hasPriv($module, $method)) return true;
                 }
 
-                if($this->app->tab == 'devops')
+                $isGitfox = $this->config->vision == 'gitfox' || $this->config->edition == 'gitfox';
+                if($this->app->tab == 'devops' || $isGitfox)
                 {
                     static::$userPrivs = array();
                     $this->resetDevOpsPriv(); // 项目有继承和重新定义两种权限，在此处需要重置权限。
@@ -1332,7 +1337,7 @@ eof;
          * The following pages can be allowed to open in non-iframe, so ignore these pages.
          */
         $module     = $this->app->getModuleName();
-        $whitelist  = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-viewdownload|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|integration-wopi|instance-terminal|conference-getconferencepermissions|instance-logs|';
+        $whitelist  = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-viewdownload|file-uploadimages|file-ajaxwopifiles|doc-downloadfile|doc-previewfile|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|integration-wopi|instance-terminal|conference-getconferencepermissions|instance-logs|';
         $iframeList = '|cron-index|zanode-create|';
 
         if(strpos($iframeList, "|{$module}-{$method}|") === false && (strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false)) return;
@@ -1345,7 +1350,6 @@ eof;
         $redirectUrl  = helper::createLink('index', 'index');
         $redirectUrl .= strpos($redirectUrl, '?') === false ? "?open=$url" : "&open=$url";
         helper::header('location', $redirectUrl);
-        helper::end();
     }
 
     /**
@@ -1857,11 +1861,7 @@ eof;
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
-        if($isFreepasswd)
-        {
-            header("Location: {$this->config->webRoot}");
-            helper::end();
-        }
+        if($isFreepasswd) header("Location: {$this->config->webRoot}");
 
         $this->session->set('ENTRY_CODE', $this->get->code);
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . helper::getRemoteIp()));
@@ -1950,7 +1950,7 @@ eof;
 
         $commonModel = new commonModel();
 
-        if($config->edition != 'open')
+        if(!in_array($config->edition, array('open', 'gitfox')))
         {
             $workflow = $commonModel->loadModel('workflow')->getByModule($module);
             if($workflow && $workflow->buildin == '0') return true;
@@ -2278,7 +2278,7 @@ eof;
         if(common::isTutorialMode()) return array();
 
         return $this->dao->select('*')->from(TABLE_RELATION)
-            ->where('AType')->eq($AType)
+            ->where('`AType`')->eq($AType)
             ->andWhere('AID')->eq($AID)
             ->andwhere('BType')->eq($BType)
             ->beginIF($BID)->andwhere('BID')->eq($BID)->fi()
@@ -2363,6 +2363,11 @@ eof;
             if(isset($menu['link']) and strpos($menu['link'], '%s') !== false) $varsReplaced = false;
             if(!isset($menu['link']) and is_string($menu) and strpos($menu, '%s') !== false) $varsReplaced = false;
             if(!$varsReplaced) break;
+        }
+
+        if(!$varsReplaced && $tab == 'issue' && isset($lang->issue->menu))
+        {
+            static::setMenuVars('issue', 0);
         }
 
         if(!$varsReplaced and strpos("|program|product|project|execution|qa|safe|", "|{$tab}|") !== false)
@@ -2702,7 +2707,7 @@ eof;
         if(empty($actionData['isClickable']) && isset($this->$moduleName) && method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) return false;
 
         global $config;
-        if($config->edition != 'open')
+        if(!in_array($config->edition, array('open', 'gitfox')))
         {
             $flowAction     = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $action);
             $isActionEnable = $flowAction && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions);
@@ -3306,7 +3311,8 @@ eof;
 
         if(!$tab) return;
         if($tab == 'admin' and $app->control and method_exists($app->control, 'loadModel')) $app->control->loadModel('admin')->setMenu();
-        if($config->edition != 'open' && $app->isServing()) $app->control->loadModel('common')->mergeFlowMenuLang();
+        $commonModel = $app->control->loadModel('common');
+        if(!in_array($config->edition, array('open', 'gitfox')) && $app->isServing()) $commonModel->mergeFlowMenuLang();
         $icon = zget($lang->navIcons, $tab, '');
 
         if(!in_array($tab, array('program', 'product', 'project')))

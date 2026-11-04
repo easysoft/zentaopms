@@ -100,11 +100,20 @@ class messageModel extends model
             if($story) $objectType = $story->type;
             if($story && $story->status == 'draft') return;
         }
+        $settingObjectType = in_array($objectType, array('review', 'projectchange')) ? 'waterfall' : $objectType;
+        $settingObjectType = $objectType == 'testcase' ? 'case' : $settingObjectType;
+
+        /* 如果是文档且状态为草稿，不发送消息通知。 */
+        if($objectType == 'doc')
+        {
+            $docStatus = $this->dao->select('status')->from(TABLE_DOC)->where('id')->eq($objectID)->fetch('status');
+            if($docStatus == 'draft') return;
+        }
 
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
-            if(isset($actions[$objectType]) && in_array($actionType, $actions[$objectType]))
+            if(isset($actions[$settingObjectType]) && in_array($actionType, $actions[$settingObjectType]))
             {
                 /* If it is an api call, get the request method set by the user. */
                 global $config;
@@ -115,7 +124,7 @@ class messageModel extends model
                     include file_exists($configRoot . 'my.php') ? $configRoot . 'my.php' : $configRoot . 'config.php';
                 }
 
-                if($objectType == 'feedback' || $objectType == 'ticket')
+                if(in_array($objectType, array('feedback', 'ticket', 'demand')))
                 {
                     $this->loadModel($objectType)->sendmail($objectID, $actionID);
                 }
@@ -128,23 +137,24 @@ class messageModel extends model
             }
         }
 
+        /* 自定义工作流动作的 Webhook 和系统通知由 flow 的 sendNotice 发送，避免与这里重复。 */
+        $isBuiltinMethod = true;
+        if(!in_array($this->config->edition, array('open', 'gitfox')))
+        {
+            $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($objectType, $objectID);
+            $method  = $this->loadModel('workflowaction')->getByModuleAndAction($objectType, $this->app->rawMethod, $groupID);
+            if($method && !$method->buildin) $isBuiltinMethod = false;
+        }
+
         if(isset($messageSetting['webhook']))
         {
             $actions = $messageSetting['webhook']['setting'];
-            if(isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID, $actor);
+            if($isBuiltinMethod && isset($actions[$settingObjectType]) && in_array($actionType, $actions[$settingObjectType])) $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID, $actor);
         }
         if(isset($messageSetting['message']))
         {
-            $isBuiltinMethod = true;
-            if($this->config->edition != 'open')
-            {
-                $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($objectType, $objectID);
-                $method  = $this->loadModel('workflowaction')->getByModuleAndAction($objectType, $this->app->rawMethod, $groupID);
-                if($method && !$method->buildin) $isBuiltinMethod = false;
-            }
-
             $actions = $messageSetting['message']['setting'];
-            if($isBuiltinMethod && isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
+            if($isBuiltinMethod && isset($actions[$settingObjectType]) && in_array($actionType, $actions[$settingObjectType])) $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
         }
     }
 
@@ -202,13 +212,12 @@ class messageModel extends model
         if($objectType == 'waterfall' && strpos(',toaudit,audited,', ",{$actionType},") !== false) $objectType = 'review';
 
         $this->loadModel('action');
-        $user   = $this->loadModel('user')->getById($actor);
-        if(!$user && $actor != 'guest') return false;
+        $user = $this->loadModel('user')->getById($actor);
+        if(!$user && !in_array($actor, array('guest', 'system'))) return false;
+
         $table  = $this->config->objectTables[$objectType];
-        $field  = $this->config->action->objectNameFields[$objectType];
         $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
-        $toList = $this->getToList($object, $objectType, $actionID);
-        if(empty($toList) || $toList == $actor) return false;
+        if(!$object) return false;
 
         if(in_array($objectType, array('issue', 'risk', 'opportunity')) && !empty($object->lib)) return false; // 资产库中的数据不发送通知
 
@@ -218,27 +227,19 @@ class messageModel extends model
         $isonlybody = isInModal();
         if($isonlybody) unset($_GET['onlybody']);
 
-        if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed')))
-        {
-            $url     = helper::createLink('aitask', 'view', "taskID={$objectID}");
-            $linkUrl = (strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url;
-            $data    = $this->loadModel('aitask')->getNotificationText($object, $objectID, $actionType, 'html', $linkUrl);
-        }
-        else
-        {
-            $methodNmae = 'view';
-            $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
-            if($objectType == 'kanbancard') $moduleName = 'kanban';
-            if($objectType == 'feedback' && $this->config->vision == 'rnd') $methodNmae = 'adminView';
-            if($objectType == 'auditplan') $object->title = $this->lang->auditplan->common . ' #' . $object->id;
+        $methodName = 'view';
+        $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
+        if($objectType == 'kanbancard') $moduleName = 'kanban';
+        if($objectType == 'feedback' && $this->config->vision == 'rnd') $methodName = 'adminView';
+        if($objectType == 'auditplan') $object->title = $this->lang->auditplan->common . ' #' . $object->id;
 
-            $space  = common::checkNotCN() ? ' ' : '';
-            $data   = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
-            $dataID = $objectType == 'kanbancard' ? $object->kanban : $objectID;
-            $url    = helper::createLink($moduleName, $methodNmae, "id={$dataID}");
-            if(in_array($objectType, array('story', 'task')) && $this->app->tab == 'project') $url .= '#app=project'; // 无迭代项目要跳转到项目下
-            $data   .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
-        }
+        $dataID = $objectType == 'kanbancard' ? $object->kanban : $objectID;
+        $url    = helper::createLink($moduleName, $methodName, "id={$dataID}");
+        if(in_array($objectType, array('story', 'task')) && $this->app->tab == 'project') $url .= '#app=project'; // 无迭代项目要跳转到项目下
+
+        $objectUrl   = (strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url;
+        $objectTitle = $this->loadModel('mail')->getObjectTitle($object, $objectType);
+        $objectTitle = html::a($objectUrl, "#{$objectID}::{$objectTitle}", '_self', '', false);
 
         $sendTime = null;
         if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed')))
@@ -256,42 +257,213 @@ class messageModel extends model
 
         if($isonlybody) $_GET['onlybody'] = 'yes';
 
-        foreach(explode(',', trim($toList, ',')) as $to)
+        $toCcList = $this->getToAndCcList($object, $objectType, $actionID);
+        $users    = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
+        foreach($toCcList as $role => $userList)
         {
-            if($to == $actor || empty($to)) continue;
-            $notify = new stdclass();
-            $notify->objectType  = 'message';
-            $notify->action      = $actionID;
-            $notify->toList      = ",{$to},";
-            $notify->data        = $data;
-            $notify->status      = 'wait';
-            $notify->createdBy   = $actor;
-            $notify->createdDate = helper::now();
-            $notify->sendTime    = $sendTime;
+            foreach(array_unique(array_filter(explode(',', $userList))) as $account)
+            {
+                if(empty($account) || !isset($users[$account])) continue;
+                if($objectType != 'aitask' && $account == $actor) continue;
 
-            $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+                $notify = new stdclass();
+                $notify->objectType  = 'message';
+                $notify->action      = $actionID;
+                $notify->toList      = ",{$account},";
+                $notify->subject     = $this->buildNoticeTitle($objectType, $actionType, $account, $object, $role, $users);
+                $notify->data        = $this->buildNoticeTextByAccount($account, $object, $actionType, $actionID, $objectType, $objectTitle, $role, $users);
+                $notify->status      = 'wait';
+                $notify->createdBy   = $actor;
+                $notify->createdDate = helper::now();
+                $notify->sendTime    = $sendTime;
+
+                $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+            }
         }
         return true;
     }
 
     /**
-     * 获取抄送给的人员。
-     * Get toList.
+     * 构建通知标题
+     * Build notice title
+     *
+     * @param  string $objectType
+     * @param  string $actionType
+     * @param  string $account
+     * @param  object $object
+     * @param  string $role      to|cc|other
+     * @param  array  $users
+     * @access public
+     * @return string
+     */
+    public function buildNoticeTitle(string $objectType, string $actionType, string $account, object $object, string $role = 'to', array $users = array()): string
+    {
+        $objectActions  = $this->getObjectActions();
+        $actionName     = zget(zget($objectActions, $objectType, array()), $actionType);
+        $objectTypeName = zget($this->lang->action->objectTypes, $objectType);
+
+        if($actionType == 'assigned')
+        {
+            $assignedTo = zget($object, 'assignedTo', '');
+            if($assignedTo != $account && $role == 'to') $role = 'other';
+            if($assignedTo == $account && $role == 'other') $role = 'to';
+
+            $assignedTo = zget($users, $assignedTo);
+        }
+
+        $noticeTitle = zget($this->lang->message->noticeTitle, $actionType, $this->lang->message->noticeTitle->generic);
+        if(isset($this->lang->message->noticeTitle->extend[$actionType][$role])) $noticeTitle = $this->lang->message->noticeTitle->extend[$actionType][$role];
+        if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed'))) $noticeTitle = zget($this->lang->message->noticeTitle, $objectType . $actionType, $this->lang->message->noticeTitle->generic);
+
+        $noticeTitle = str_replace(array('{objectType}', '{action}'), array($objectTypeName, $actionName), $noticeTitle);
+        if(isset($assignedTo)) $noticeTitle = str_replace('{assignedTo}', $assignedTo, $noticeTitle);
+        return $noticeTitle;
+    }
+
+    /**
+     * 构建通知内容
+     * Build notice text
+     *
+     * @param  string $account
+     * @param  object $object
+     * @param  string $actionType
+     * @param  int    $actionID
+     * @param  string $objectType
+     * @param  string $objectTitle
+     * @param  string $role        to|cc|other
+     * @param  array  $users
+     * @param  bool   $skipCCSuffix
+     * @access public
+     * @return string
+     */
+    public function buildNoticeTextByAccount(string $account, object $object, string $actionType, int $actionID, string $objectType, string $objectTitle, string $role = 'to', array $users = array(), bool $skipCCSuffix = false): string
+    {
+        if($actionType == 'assigned' || $actionType == 'forwarded')
+        {
+            $assignedTo = zget($object, 'assignedTo', '');
+            if($assignedTo != $account && $role == 'to') $role = 'other';
+            if($assignedTo == $account && $role == 'other') $role = 'to';
+
+            $assignedTo = zget($users, $assignedTo);
+        }
+        if($actionType == 'reviewed' || $actionType == 'approvalreview')
+        {
+            $submitAction     = $actionType == 'approvalreview' ? 'approvalsubmit' : 'submitreview';
+            $actionObjectType = in_array($objectType, array('requirement', 'epic')) ? 'story' : $objectType;
+            $submitter = $this->dao->select('actor')->from(TABLE_ACTION)
+                ->where('id')->lt($actionID)
+                ->andWhere('action')->eq($submitAction)
+                ->andWhere('`objectType`')->eq($actionObjectType)
+                ->andWhere('`objectID`')->eq($object->id)
+                ->orderBy('id desc')
+                ->limit(1)
+                ->fetch('actor');
+            if($submitter != $account && $role == 'to') $role = 'other';
+            if($submitter == $account && $role != 'to') $role = 'to';
+            if($objectType == 'case' && $role != 'other') $role = 'other';
+
+            $submitter = zget($users, $submitter);
+        }
+        if($actionType == 'submitreview' && $role == 'to')
+        {
+            if(empty($account)) $role = 'other';
+            if(in_array($objectType, array('story', 'requirement', 'epic')) && $account)
+            {
+                static $reviewers = null;
+                if($reviewers === null) $reviewers = $this->loadModel('story')->getReviewerPairs($object->id, $object->version);
+                if(!isset($reviewers[$account])) $role = 'other';
+            }
+        }
+
+        $action         = $this->loadModel('action')->getById($actionID);
+        $actorName      = $action->actor == 'guest' ? 'guest' : zget($users, $action->actor);
+        $objectTypeName = zget($this->lang->action->objectTypes, $objectType);
+        $actionName     = zget($this->lang->action->label, $actionType);
+
+        $actionType = in_array($objectType, array('story', 'requirement', 'epic', 'case')) && $actionType == 'reviewed' ? 'otherreviewed' : $actionType;
+        $noticeText = zget($this->lang->message->noticeText, $actionType, $this->lang->message->noticeText->generic);
+        if(isset($this->lang->message->noticeText->extend[$actionType][$role])) $noticeText = $this->lang->message->noticeText->extend[$actionType][$role];
+        if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed'))) $noticeText = zget($this->lang->message->noticeText, $objectType . $actionType, $this->lang->message->noticeText->generic);
+
+        $noticeText     = str_replace(array('{actor}', '{action}', '{objectType}', '{objectTitle}'), array($actorName, $actionName, $objectTypeName, $objectTitle), $noticeText);
+        $appendCCSuffix = !isset($this->lang->message->noticeText->extend[$actionType]['cc']);
+        if($role == 'cc' && !$skipCCSuffix && $appendCCSuffix) $noticeText .= $this->lang->message->noticeText->ccSuffix;
+
+        if(isset($assignedTo)) $noticeText = str_replace(array('{assignedTo}'), array($assignedTo), $noticeText);
+        if($actionType == 'otherreviewed')
+        {
+            $reviewResult  = (string)$action->extra;
+            if(strpos($reviewResult, ',') !== false) $reviewResult = explode(',', $reviewResult)[0];
+
+            $reviewResultList = $this->lang->message->reviewResultList;
+            if(in_array($objectType, array('story', 'requirement', 'epic')))
+            {
+                $this->loadModel('story');
+                $reviewResultList = $this->lang->story->reviewResultList;
+            }
+            elseif($objectType == 'case')
+            {
+                $this->loadModel('testcase');
+                $reviewResultList = $this->lang->testcase->reviewResultList;
+            }
+            $reviewResult = zget($reviewResultList, strtolower($reviewResult));
+            $noticeText   = str_replace(array('{submitter}', '{reviewResult}'), array($submitter, $reviewResult), $noticeText);
+        }
+
+        if(in_array($actionType, array('reviewed', 'approvalreview', 'otherreviewed')))
+        {
+            $result  = (string)$action->extra;
+            if(strpos($result, '|') !== false) $result = explode('|', $result)[0];
+            $reviewResult  = $objectType == 'projectchange' ? $action->extra : zget($this->lang->message->reviewResultList, strtolower($result));
+            $reviewComment = trim(strip_tags((string)$action->comment));
+            if(!empty($reviewComment)) $reviewComment = sprintf($this->lang->message->reviewCommentTemplate, $reviewComment);
+
+            $noticeText = str_replace(array('{reviewResult}', '{reviewComment}', '{submitter}'), array($reviewResult, $reviewComment, $submitter), $noticeText);
+        }
+
+        if(in_array($objectType, array('kanban', 'kanbancard')) && $actionType == 'moved' && strpos((string)$action->extra, '|') !== false)
+        {
+            $extraList    = explode('|', $action->extra);
+            $fromLaneID   = $extraList[0];
+            $fromColID    = $extraList[1];
+            $toLaneID     = $extraList[2];
+            $toColID      = $extraList[3];
+            $fromColTitle = $this->dao->select('name')->from(TABLE_KANBANCOLUMN)->where('id')->eq($fromColID)->fetch('name');
+            $toColTitle   = $this->dao->select('name')->from(TABLE_KANBANCOLUMN)->where('id')->eq($toColID)->fetch('name');
+            if($fromLaneID == $toLaneID)
+            {
+                $noticeText .= str_replace(array('{fromColTitle}', '{toColTitle}'), array($fromColTitle, $toColTitle), $this->lang->message->noticeText->skipColSuffix);
+            }
+            else
+            {
+                $fromLaneTitle = $this->dao->select('name')->from(TABLE_KANBANLANE)->where('id')->eq($fromLaneID)->fetch('name');
+                $toLaneTitle   = $this->dao->select('name')->from(TABLE_KANBANLANE)->where('id')->eq($toLaneID)->fetch('name');
+                $noticeText   .= str_replace(array('{fromLaneTitle}', '{fromColTitle}', '{toLaneTitle}', '{toColTitle}'), array($fromLaneTitle, $fromColTitle, $toLaneTitle, $toColTitle), $this->lang->message->noticeText->skipLaneSuffix);
+            }
+        }
+
+        return $noticeText;
+    }
+
+    /**
+     * 获取发送对象和抄送对象。
+     * Get toList and ccList.
      *
      * @param  object $object
      * @param  string $objectType
      * @param  int    $actionID
      * @access public
-     * @return string
+     * @return array
      */
-    public function getToList(object $object, string $objectType, int $actionID = 0): string
+    public function getToAndCcList(object $object, string $objectType, int $actionID = 0): array
     {
         $toList = '';
         $ccList = '';
+
         if($objectType == 'aitask')
         {
             $toList = !empty($object->assignedTo) ? $object->assignedTo : ($object->createdBy ?? '');
-            return trim($toList, ',');
+            return array('to' => trim($toList, ','), 'cc' => '');
         }
         if(!empty($object->assignedTo))                    $toList = $object->assignedTo;
         if(empty($toList) && $objectType == 'todo')        $toList = $object->account;
@@ -301,65 +473,32 @@ class messageModel extends model
         if(empty($toList) and $objectType == 'demandpool') $toList = trim($object->owner, ',') . ',' . trim($object->reviewer, ',');
         if(empty($toList) && in_array($objectType, array('release', 'doc', 'execution', 'build')))
         {
-            list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object);
-            $toList = $toList . ',' . $ccList;
-        }
-
-        if(empty($toList) && $objectType == 'rule' && $actionID)
-        {
-            $action = $this->loadModel('action')->getById($actionID);
-            list($toList, $ccList) = $this->loadModel('rule')->getToAndCcList($object, $action);
-            $toList = $toList . ',' . $ccList;
-        }
-
-        if($toList == 'closed') $toList = '';
-        if($objectType == 'feedback' && $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
-        if(in_array($objectType, array('story', 'epic', 'requirement', 'ticket', 'review', 'deploy', 'task', 'feedback', 'reviewissue', 'bug')) && $actionID)
-        {
-            $action      = $this->loadModel('action')->getById($actionID);
-            $toAndCcList = $this->loadModel($objectType)->getToAndCcList($object, $action->action);
+            $toAndCcList = $this->loadModel($objectType)->getToAndCcList($object);
             if(!empty($toAndCcList)) list($toList, $ccList) = $toAndCcList;
             $toList = $toList . ',' . $ccList;
         }
+        if($objectType == 'case') $objectType = 'testcase';
+        if($objectType == 'kanbancard') $objectType = 'kanban';
 
-        if($objectType == 'testtask')
+        $action      = $this->loadModel('action')->getById($actionID);
+        $objectModel = $this->loadModel($objectType);
+        if($objectModel && method_exists($objectModel, 'getToAndCcList'))
         {
-            $toAndCcList = $this->loadModel('testtask')->getToAndCcList($object);
-            if(empty($toAndCcList)) return '';
-
-            list($toList, $ccList) = $toAndCcList;
-            $toList = array_merge(explode(',', $toList), explode(',', $ccList));
-            $toList = array_filter(array_unique($toList));
-            $toList = implode(',', $toList);
+            if($objectType == 'rule')
+            {
+                $toAndCcList = $objectModel->getToAndCcList($object, $action);
+            }
+            else
+            {
+                $toAndCcList = $objectModel->getToAndCcList($object, $action->action);
+            }
+            if(!empty($toAndCcList)) list($toList, $ccList) = $toAndCcList;
         }
 
-        if(empty($toList) and $objectType == 'demand' and $this->config->edition == 'ipd')
-        {
-            $toList  = $object->assignedTo;
-            $toList .= ',' . str_replace(' ', '', trim($object->mailto, ','));
-            $toList .= ",$object->createdBy";
+        if($objectType == 'case' && $action->action == 'assigned') $toList = $action->extra;
+        if(empty($toList) && $objectType == 'todo') $toList = $object->account;
 
-            $reviewers = $this->loadModel('demand')->getReviewerPairs($object->id, $object->version);
-            $reviewers = array_keys($reviewers);
-            if($reviewers) $toList .= ',' . implode(',', $reviewers);
-            $toList = trim($toList, ',');
-        }
-
-        if(strpos(',opportunity,risk,issue,', ",{$objectType},") !== false) $toList = "{$object->assignedTo},{$object->createdBy}";
-
-        /* 非内置工作流使用工作流的toList。 */
-        if($this->config->edition != 'open')
-        {
-            $flow    = $this->loadModel('workflow')->getByModule($objectType);
-            $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($objectType, $object->id);
-            $method  = $this->loadModel('workflowaction')->getByModuleAndAction($objectType, $this->app->rawMethod, $groupID);
-            if(($flow && !$flow->buildin) || ($method && !$method->buildin)) $toList = $this->loadModel('flow')->getToList($flow, $object->id, $method);
-        }
-
-        if($objectType == 'product') $toList = $object->createdBy . ',' . $object->PO;
-        if($objectType == 'project') $toList = $object->openedBy . ',' . $object->PM;
-
-        return trim($toList, ',');
+        return array('to' => trim($toList, ','), 'cc' => $ccList);
     }
 
     /**
@@ -430,7 +569,7 @@ class messageModel extends model
     public function getUnreadCount(): int
     {
         $account = $this->app->user->account;
-        return $this->dao->select('COUNT(1) as count')->from(TABLE_NOTIFY)->where('toList')->eq(",{$account},")->andWhere('objectType')->eq('message')->andWhere('status')->ne('read')->fetch('count');
+        return $this->dao->select('COUNT(1) as count')->from(TABLE_NOTIFY)->where('`toList`')->eq(",{$account},")->andWhere('`objectType`')->eq('message')->andWhere('status')->ne('read')->fetch('count');
     }
 
     /**
@@ -446,7 +585,7 @@ class messageModel extends model
         $account    = $this->app->user->account;
         $expiryDate = date('Y-m-d 00:00:00', time() - 86400 * ($days + 1));
 
-        $expiredIdList = $this->dao->select('id')->from(TABLE_NOTIFY)->where('toList')->eq(",{$account},")->andWhere('objectType')->eq('message')->andWhere('createdDate')->lt($expiryDate)->fetchPairs('id', 'id');
+        $expiredIdList = $this->dao->select('id')->from(TABLE_NOTIFY)->where('`toList`')->eq(",{$account},")->andWhere('`objectType`')->eq('message')->andWhere('`createdDate`')->lt($expiryDate)->fetchPairs('id', 'id');
         if(empty($expiredIdList)) return;
 
         $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->in($expiredIdList)->exec();
@@ -550,6 +689,9 @@ class messageModel extends model
      */
     public function sendMentionNotice(string $objectType, string $method, int $actionID, object $object, ?object $oldObject = null)
     {
+        /* 草稿文档不发送@通知。 */
+        if($objectType == 'doc' && zget($object, 'status') == 'draft') return;
+
         /* 文档正文用 rawContent 提取 @；备注等场景没有 rawContent，走表单提取。 */
         $isBlocksuite = $objectType == 'doc' && isset($object->rawContent);
         if($isBlocksuite)
@@ -570,7 +712,9 @@ class messageModel extends model
             if($oldObject) $oldMentionUsers = $this->extractMentionUsersFromForm($formConfig, $oldObject);
         }
 
-        if(!empty($oldMentionUsers)) $mentionUsers = array_diff($mentionUsers, $oldMentionUsers);
+        /* 草稿发布为正式文档时，旧草稿中的 @ 用户从未收到过通知，不排除。 */
+        /* Do not exclude old draft mention users when a draft doc is released, since they never got the notice. */
+        if(!empty($oldMentionUsers) && zget($oldObject, 'status') != 'draft') $mentionUsers = array_diff($mentionUsers, $oldMentionUsers);
 
         if(empty($mentionUsers)) return;
 
@@ -581,11 +725,11 @@ class messageModel extends model
         $action = $this->loadModel('action')->getByID($actionID);
         if(!$action) return;
 
-
         if($objectType == 'testcase') $objectType = 'case';
         if($objectType == 'kanban')   $objectType = 'kanbancard';
 
         $settingObjectType = in_array($objectType, array('review', 'projectchange')) ? 'waterfall' : $objectType;
+        if($settingObjectType == 'testcase') $settingObjectType = 'case';
 
         $linkModule = $objectType;
         if($objectType == 'case')       $linkModule = 'testcase';
@@ -594,11 +738,12 @@ class messageModel extends model
         $actor           = zget($action, 'actor', '');
         $user            = $this->loadModel('user')->getByID($actor);
         $actorRealname   = zget($user, 'realname', $actor);
-        $objectNameField = zget($this->config->action->objectNameFields, $objectType, 'title');
         $objectTypeName  = zget($this->lang->action->objectTypes, $settingObjectType, zget($this->lang->action->objectTypes, $objectType, strtoupper($objectType)));
-        $objectTitle     = $objectTypeName . '#' . sprintf("%03d", $object->id) . ($objectType != 'auditplan' ? zget($object, $objectNameField, '') : '');
+        $objectTitle     = $this->loadModel('mail')->getObjectTitle($object, $objectType);
+        $objectTitle     = '#' . sprintf("%03d", $object->id) . ' ' . $objectTitle;
         $viewLink        = $objectType == 'kanbancard' ? helper::createLink('kanban', 'viewCard', "cardID={$object->id}") : helper::createLink($linkModule, 'view', "id={$object->id}");
 
+        $notifyData = str_replace(array('{actor}', '{objectType}', '{objectTitle}'), array($actorRealname, $objectTypeName, $objectTitle), $this->lang->message->noticeText->mentioned);
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
@@ -610,7 +755,7 @@ class messageModel extends model
                 $mailObject     = $this->loadModel('mail')->getObjectForMail($mailObjectType, (int)$object->id);
                 if($mailObject) $object = $mailObject;
 
-                $subject     = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
+                $subject     = $notifyData;
                 $mailContent = $this->mail->getMailContent($mailModule, $object, $action);
                 $this->mail->send(implode(',', $mentionUsers), $subject, $mailContent);
             }
@@ -621,7 +766,6 @@ class messageModel extends model
             $actions = $messageSetting['message']['setting'];
             if(isset($actions[$settingObjectType]) && in_array('mentioned', $actions[$settingObjectType]))
             {
-                $data = sprintf($this->lang->message->mention, $actorRealname, html::a($viewLink, "[{$objectTitle}]"));
                 $now  = helper::now();
                 foreach($mentionUsers as $mentionUser)
                 {
@@ -631,7 +775,8 @@ class messageModel extends model
                     $notify->objectType  = 'message';
                     $notify->action      = $actionID;
                     $notify->toList      = ",{$mentionUser},";
-                    $notify->data        = $data;
+                    $notify->subject     = str_replace('{objectType}', $objectTypeName, $this->lang->message->noticeTitle->mentioned);
+                    $notify->data        = str_replace(array('{actor}', '{objectType}', '{objectTitle}'), array($actorRealname, $objectTypeName, html::a($viewLink, $objectTitle)), $this->lang->message->noticeText->mentioned);
                     $notify->status      = 'wait';
                     $notify->createdBy   = $actor;
                     $notify->createdDate = $now;
@@ -651,7 +796,7 @@ class messageModel extends model
 
                 if($mentionUserIds)
                 {
-                    $title      = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
+                    $title      = $notifyData;
                     $server     = $this->loadModel('im')->getServer('zentao');
                     $url        = $server . $viewLink;
                     $xxcUrl     = 'xxc:openInApp/zentao-integrated/' . urlencode($url);
@@ -672,29 +817,26 @@ class messageModel extends model
                 $webhooks = $this->loadModel('webhook')->getList();
                 if($webhooks)
                 {
-                    $title = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
+                    $title = $notifyData;
                     foreach($webhooks as $id => $webhook)
                     {
                         if(strpos($webhook->type, 'group') !== false)  continue;
 
+                        $openIdList = $this->webhook->getBoundUsers($id, $mentionUsers);
+                        if(empty($openIdList)) continue;
+
                         $host = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
-                        $text = sprintf($this->lang->message->mention, $actorRealname, "[{$objectTitle}]({$host}{$viewLink})");
+                        $text = sprintf($this->lang->message->mention, $actorRealname, $objectTypeName, "[{$objectTitle}]({$host}{$viewLink})");
                         $data = $this->webhook->getDataByType($webhook, $action, $title, $text, '', '', $objectType, (int)$object->id);
                         if(!$data) continue;
 
                         if($webhook->sendType == 'async')
                         {
-                            if($webhook->type == 'dinguser')
-                            {
-                                $openIdList = $this->webhook->getOpenIdList($webhook->id, $actionID);
-                                if(empty($openIdList)) continue;
-                            }
-
-                            $this->webhook->saveData($id, $actionID, $data, $actor);
+                            $this->webhook->saveData($id, $actionID, $data, $actor, null, implode(',', $mentionUsers));
                             continue;
                         }
 
-                        $result = $this->webhook->fetchHook($webhook, $data, $actionID, $mentionUsers);
+                        $result = $this->webhook->fetchHook($webhook, $data, $mentionUsers);
                         if(!empty($result)) $this->webhook->saveLog($webhook, $actionID, $data, (string)$result);
                     }
                 }

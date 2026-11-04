@@ -253,6 +253,7 @@ $lang->user->error->mail           = 'Invalid Email.';
 $lang->user->error->reserved       = 'The account name is reserved by the system.';
 $lang->user->error->weakPassword   = 'The password strength does not meet the system requirements.';
 $lang->user->error->dangerPassword = "Common weak passwords such as [%s] cannot be used.";
+$lang->user->errorEmptyAccount     = "Account cannot be empty, please enter before saving.";
 
 $lang->user->error->url              = "Invalid URL. Please contact the administrator.";
 $lang->user->error->verify           = "Incorrect account or password.";

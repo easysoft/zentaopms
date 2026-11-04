@@ -134,7 +134,7 @@ class repoModelTest extends baseTest
         return $result;
     }
 
-    public function setMenuTest(int $repoID = 0)
+    public function setMenuTest(int $repoID = 0, string $menuItem = '', string $field = '')
     {
         $repos  = $this->instance->dao->select('id')->from(TABLE_REPO)->fetchPairs('id');
         ob_start();
@@ -142,6 +142,7 @@ class repoModelTest extends baseTest
         $result = ob_get_clean();
 
         if($result) return $result;
+        if($menuItem) return zget($this->instance->lang->devops->menu->{$menuItem}, $field, '');
         return $this->instance->session->repoID;
     }
 
@@ -170,6 +171,46 @@ class repoModelTest extends baseTest
         $codeScan = isset($this->instance->lang->devops->menu->repoCodeScan) ? 1 : 0;
         $review   = isset($this->instance->lang->devops->menu->review)       ? 1 : 0;
         return "repoCodeScan:{$codeScan}|review:{$review}";
+    }
+
+    /**
+     * Test setMenu method's mirror branch with gitfox(独立版) menu keys.
+     * Returns "codescan:{0|1}|issue:{0|1}|settings:{0|1}" where 1 = menu still present, 0 = unset.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return string
+     */
+    public function setMenuGitfoxMirrorCheckTest(int $repoID)
+    {
+        global $app, $lang;
+
+        $oldVision = $app->config->vision;
+        $oldTab    = $app->tab;
+        $oldMenu   = isset($lang->repo) && isset($lang->repo->menu) ? $lang->repo->menu : null;
+
+        $app->config->vision = 'gitfox';
+        if(!isset($lang->repo)) $lang->repo = new stdclass();
+        $lang->repo->menu = new stdclass();
+        $lang->repo->menu->codescan = array('link' => 'codescan');
+        $lang->repo->menu->issue    = array('link' => 'issue');
+        $lang->repo->menu->settings = array('link' => 'settings');
+
+        $repos = $this->instance->dao->select('id')->from(TABLE_REPO)->fetchPairs('id');
+        ob_start();
+        $this->instance->setMenu($repos, $repoID);
+        ob_end_clean();
+
+        $codescan = isset($lang->repo->menu->codescan) ? 1 : 0;
+        $issue    = isset($lang->repo->menu->issue)    ? 1 : 0;
+        $settings = isset($lang->repo->menu->settings) ? 1 : 0;
+
+        $app->config->vision = $oldVision;
+        $app->tab            = $oldTab;
+        if($oldMenu === null) unset($lang->repo->menu);
+        else                  $lang->repo->menu = $oldMenu;
+
+        return "codescan:{$codescan}|issue:{$issue}|settings:{$settings}";
     }
 
     /**
@@ -2905,6 +2946,51 @@ SQL);
     }
 
     /**
+     * Test getProductRepos method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getProductReposTest()
+    {
+        $result = $this->instance->getProductRepos();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test the repo count of one product returned by getProductRepos.
+     *
+     * @param  int $productID
+     * @access public
+     * @return int|array
+     */
+    public function getProductReposProductCountTest(int $productID)
+    {
+        $repos = $this->getProductReposTest();
+        if(!is_array($repos)) return $repos;
+
+        return isset($repos[$productID]) ? count($repos[$productID]) : 0;
+    }
+
+    /**
+     * Test the repo name of one product returned by getProductRepos.
+     *
+     * @param  int $productID
+     * @param  int $repoID
+     * @access public
+     * @return string|array
+     */
+    public function getProductReposProductRepoNameTest(int $productID, int $repoID)
+    {
+        $repos = $this->getProductReposTest();
+        if(!is_array($repos)) return $repos;
+
+        return isset($repos[$productID][$repoID]) ? $repos[$productID][$repoID]->name : 'none';
+    }
+
+    /**
      * Test getBugProductsAndExecutions method.
      *
      * @param  array $bugs
@@ -3152,21 +3238,30 @@ SQL);
     public function getGitLabReposFirstFieldTest(string $apiRoot, string $field): string
     {
         $repos = $this->getGitLabReposTest($apiRoot);
-        $repo  = is_array($repos) ? reset($repos) : false;
+        if(!is_array($repos)) return '0';
+        if(empty($repos)) return '1';
+
+        $repo = reset($repos);
         return is_object($repo) && property_exists($repo, $field) ? '1' : '0';
     }
 
     public function getGiteaReposFirstFieldTest(string $apiRoot, string $field): string
     {
         $repos = $this->getGiteaReposTest($apiRoot);
-        $repo  = is_array($repos) ? reset($repos) : false;
+        if(!is_array($repos)) return '0';
+        if(empty($repos)) return '1';
+
+        $repo = reset($repos);
         return is_object($repo) && property_exists($repo, $field) ? '1' : '0';
     }
 
     public function getGogsReposFirstFieldTest(string $apiRoot, string $field): string
     {
         $repos = $this->getGogsReposTest($apiRoot);
-        $repo  = is_array($repos) ? reset($repos) : false;
+        if(!is_array($repos)) return '0';
+        if(empty($repos)) return '1';
+
+        $repo = reset($repos);
         return is_object($repo) && property_exists($repo, $field) ? '1' : '0';
     }
 
@@ -3236,6 +3331,42 @@ SQL);
             if($e instanceof EndResponseException) return 0;
             return 'error:' . get_class($e);
         }
+    }
+
+    /**
+     * Test hasPriv after loading maintain space privs.
+     *
+     * @param  array  $repoList
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return string|array
+     */
+    public function loadMaintainSpacePrivsHasPrivTest(array $repoList, string $module, string $method): string|array
+    {
+        $this->instance->loadMaintainSpacePrivs($repoList);
+        if(dao::isError()) return dao::getError();
+
+        return (string)(int)common::hasPriv($module, $method);
+    }
+
+    /**
+     * Test space priv cache after loading maintain space privs.
+     *
+     * @param  array  $repoList
+     * @param  int    $spaceID
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return string|array
+     */
+    public function loadMaintainSpacePrivsCacheTest(array $repoList, int $spaceID, string $module, string $method): string|array
+    {
+        $this->instance->loadMaintainSpacePrivs($repoList);
+        if(dao::isError()) return dao::getError();
+
+        $privs = zget(repoModel::$maintainSpacePrivs, $spaceID, array());
+        return (string)(int)!empty($privs[$module][$method]);
     }
 
 }

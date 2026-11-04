@@ -15,6 +15,7 @@ namespace zin;
 $taskStatus = isset($task->rawStatus) ? $task->rawStatus : $task->status;
 
 /* ====== Preparing and processing page data ====== */
+jsVar('projectID', $task->project);
 jsVar('oldStoryID', $task->story);
 jsVar('oldAssignedTo', $task->assignedTo);
 jsVar('oldExecutionID', $task->execution);
@@ -48,48 +49,11 @@ jsVar('confirmSyncTip', $confirmSyncTip);
 jsVar('taskID', $task->id);
 jsVar('taskStory', $task->story);
 
-/* zin: Set variables to define picker options for form */
-$formTitle        = $task->name;
-$executionOptions = $executions;
-$moduleOptions    = $modules;
-$storyOptions     = $stories;
-if($taskStatus == 'wait' and $task->isParent == '0')
-{
-    $modeOptions = $lang->task->editModeList;
-}
-else
-{
-    $modeText = $task->mode == '' ? $lang->task->editModeList['single'] : zget($lang->task->editModeList, $task->mode);
-}
-$assignedToOptions      = $taskMembers;
-$typeOptions            = $lang->task->typeList;
-$statusOptions          = (array)$lang->task->statusList;
-$priOptions             = $lang->task->priList;
-$mailtoOptions          = $users;
-$finishedByOptions      = $members;
-$canceledByOptions      = $users;
-$closedByOptions        = $users;
-$closedReasonOptions    = $lang->task->reasonList;
-$teamOptions            = $members;
-$hiddenTeam             = $task->mode != '' ? '' : 'hidden';
-
-$disabledEstStarted = $project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->estStarted);
-$disabledDeadline   = $project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->deadline);
-
 /* 检查是否可以开始执行。*/
 if($this->config->edition == 'ipd')
 {
     $execution->canStartExecution = $this->loadModel('execution')->checkStageStatus($execution->id, 'start');
     $task->executionInfo          = $execution;
-}
-
-if($taskStatus == 'wait') unset($statusOptions['pause']);
-
-$files = array();
-foreach($task->files as $file)
-{
-    if($file->extra != '') continue;
-    $files[] = $file;
 }
 
 if(!empty($task->team))
@@ -114,21 +78,28 @@ if(!empty($task->team))
     }
 }
 
-/* ====== Define the page structure with zin widgets ====== */
+/* ====== Load fields ====== */
+$fields = useFields('task.edit');
 
-detailHeader
+/* ====== Define form ====== */
+detailForm
 (
-    to::prefix(null),
-    to::title
-    (
-        entityLabel
-        (
-            set::entityID($task->id),
-            set::level(1),
-            set::text($task->name),
-            set::reverse(true)
-        )
-    ),
+    /* Event handlers */
+    on::change('[name=execution]', 'loadAll'),
+    on::change('[name=module]', 'loadStories'),
+    on::change('[name=parent]', 'getParentEstStartedAndDeadline'),
+    on::change('[name=mode]', 'changeMode'),
+    on::change('[name=showAllModule]', 'loadAllModule'),
+    on::change('[name=estStarted]', 'checkEstStartedAndDeadline'),
+    on::change('[name=deadline]', 'checkEstStartedAndDeadline'),
+    on::change('[name=story]', 'setStoryModule'),
+    on::change('[name=status]')->do('statusChange(target)'),
+    $task->mode == 'multi' ? on::click('.team-group')->call('disableMembers') : null,
+    set::object($task),
+    set::objectType('task'),
+    set::objectID($task->id),
+    set::fields($fields),
+    set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     to::suffix
     (
         aiAgentEntry
@@ -137,279 +108,9 @@ detailHeader
             set::method('edit'),
             set::type('form')
         )
-    )
-);
-
-$recordWorkhourDisabled = !empty($task->children) ? 'disabled' : '';
-if(!empty($task->team))
-{
-    $assignedToComponent = picker
-    (
-        setID('assignedTo'),
-        setClass('w-full'),
-        set::name('assignedTo'),
-        set::value($task->assignedTo),
-        set::items($assignedToOptions),
-        set::required(true),
-        $task->mode == 'linear' && !in_array($taskStatus, array('done', 'closed')) ? set::disabled(true) : null,
-        $taskStatus == 'closed' ? set::disabled(true) : null,
-    );
-}
-else
-{
-    $assignedToComponent = taskAssignedTo
-    (
-        setID('assignedTo'),
-        setClass('w-full'),
-        set::name('assignedTo'),
-        set::value($task->assignedTo),
-        set::items($assignedToOptions),
-        $taskStatus == 'closed' ? set::disabled(true) : null,
-        $manageLink ? set::manageLink($manageLink) : null
-    );
-}
-
-detailBody
-(
-    set::isForm(true),
-    set::formID("taskEditForm{$task->id}"),
-    set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
-    sectionList
-    (
-        section
-        (
-            set::title($lang->task->name),
-            set::required(true),
-            formGroup
-            (
-                inputControl
-                (
-                    input
-                    (
-                        set::name('name'),
-                        set::value($task->name),
-                        set::placeholder($lang->task->name),
-                    ),
-                    to::suffix
-                    (
-                        colorPicker
-                        (
-                            set::heading($lang->task->colorTag),
-                            set::name('color'),
-                            set::value($task->color),
-                            set::syncColor('#name')
-                        )
-                    ),
-                    set::suffixWidth('35')
-                )
-            )
-        ),
-        section
-        (
-            set::title($lang->task->desc),
-            editor
-            (
-                set::name('desc'),
-                $task->desc && isHTML($task->desc) ? html($task->desc) : $task->desc
-            )
-        ),
-        $execution->lifetime != 'ops' ? section
-        (
-            set::title($lang->task->story),
-            formGroup
-            (
-                set::width('1/2'),
-                control
-                (
-                    set::type('picker'),
-                    set::name('story'),
-                    set::value($task->story),
-                    set::items($storyOptions),
-                    on::change('setStoryModule')
-                )
-            )
-        ) : null,
-        section
-        (
-            setID('files'),
-            set::title($lang->files),
-            fileSelector($files ? set::defaultFiles(array_values($files)) : null)
-        ),
-        formHidden('lastEditedDate', helper::isZeroDate($task->lastEditedDate) ? '' : $task->lastEditedDate)
     ),
-    history(),
-    detailSide
+    to::side
     (
-        set::isForm(true),
-        tableData
-        (
-            setClass('mt-5'),
-            set::title($lang->task->legendBasic),
-            item
-            (
-                set::name($lang->task->execution),
-                formGroup
-                (
-                    picker
-                    (
-                        set::name('execution'),
-                        set::value($task->execution),
-                        set::items($executionOptions),
-                        on::change('loadAll')
-                    )
-                )
-            ),
-            item
-            (
-                set::trClass('moduleTR'),
-                set::name($lang->task->module),
-                set::required(strpos(",{$this->config->task->edit->requiredFields},", ",module,") !== false),
-                formGroup
-                (
-                    inputGroup
-                    (
-                        div
-                        (
-                            setClass('flex grow'),
-                            picker
-                            (
-                                setClass('w-full'),
-                                set::name('module'),
-                                set::value($task->module),
-                                set::items($moduleOptions),
-                                set::width(2/3),
-                                set::required(true),
-                                on::change('loadStories')
-                            )
-                        ),
-                        div
-                        (
-                            setClass('flex'),
-                            checkbox(
-                                setID('showAllModule'),
-                                set::rootClass('items-center ml-3'),
-                                set::name('showAllModule'),
-                                set::text($lang->all),
-                                set::value(1),
-                                set::checked($showAllModule),
-                                on::change('loadAllModule')
-                            )
-                        )
-                    )
-                )
-            ),
-            $task->parent >= 0 && $config->vision != 'lite' ? item
-            (
-                set::name($lang->task->parent),
-                picker
-                (
-                    set::name('parent'),
-                    set::value($task->parent),
-                    set::items($tasks),
-                    set::disabled(!empty($task->mode)),
-                    on::change('getParentEstStartedAndDeadline')
-                )
-            ) : formHidden('parent', $task->parent),
-            empty($modeText) ? item
-            (
-                set::name($lang->task->mode),
-                picker
-                (
-                    set::name('mode'),
-                    set::value($task->mode),
-                    set::items($modeOptions),
-                    set::required(true),
-                    on::change('changeMode')
-                )
-            ) : item
-            (
-                set::name($lang->task->mode),
-                $modeText,
-                formHidden('mode', $task->mode)
-            ),
-            item
-            (
-                set::name($lang->task->assignedTo),
-                set::required(strpos(",{$this->config->task->edit->requiredFields},", ",assignedTo,") !== false),
-                inputGroup
-                (
-                    div
-                    (
-                        setClass('flex grow'),
-                        $assignedToComponent
-                    ),
-                    div
-                    (
-                        btn
-                        (
-                            $lang->task->team,
-                            setClass('input-group-btn team-group', empty($task->team) && (!$task->mode) ? 'hidden' : ''),
-                            set::url('#modalTeam'),
-                            setData('toggle', 'modal'),
-                            $task->mode == 'multi' ? on::click('disableMembers') : null
-                        )
-                    )
-                )
-            ),
-            item
-            (
-                set::name($lang->task->type),
-                picker
-                (
-                    set::name('type'),
-                    set::value($task->type),
-                    set::items($typeOptions),
-                    set::required(true)
-                )
-            ),
-            empty($task->children) ? item
-            (
-                set::name($lang->task->status),
-                picker
-                (
-                    on::change()->do('statusChange(target)'),
-                    set::name('status'),
-                    set::value($taskStatus),
-                    set::items($statusOptions),
-                    set::required(true)
-                )
-            ) : formHidden('status', $taskStatus),
-            item
-            (
-                set::name($lang->task->pri),
-                set::required(strpos(",{$this->config->task->edit->requiredFields},", ",pri,") !== false),
-                formGroup
-                (
-                    priPicker
-                    (
-                        set::name('pri'),
-                        set::value($task->pri),
-                        set::items($priOptions),
-                    )
-                )
-            ),
-            item
-            (
-                set::name($lang->task->progress),
-                progresscircle
-                (
-                    set::percent($task->progress),
-                    set::circleColor('var(--color-success-500)'),
-                    set::circleBg('var(--color-border)'),
-                    set::circleWidth(1)
-                )
-            ),
-            item
-            (
-                set::name($lang->task->keywords),
-                input(set::name('keywords'), set::value($task->keywords))
-            ),
-            item
-            (
-                set::name($lang->task->mailto),
-                mailto(set::items($mailtoOptions), set::value($task->mailto))
-            )
-        ),
         modalTrigger
         (
             modal
@@ -491,205 +192,8 @@ detailBody
                     on::click('.team-saveBtn')->call('saveTeam')
                 )
             )
-        ),
-        tableData
-        (
-            setClass('mt-4'),
-            set::title($lang->task->legendEffort),
-            item
-            (
-                set::name($lang->task->estStarted),
-                set::required(strpos(",{$this->config->task->edit->requiredFields},", ",estStarted,") !== false),
-                formGroup
-                (
-                    datePicker
-                    (
-                        set::name('estStarted'),
-                        set::disabled($disabledEstStarted),
-                        on::change('checkEstStartedAndDeadline'),
-                        set::value((helper::isZeroDate($task->estStarted) || $disabledEstStarted) ? null : $task->estStarted)
-                    )
-                )
-            ),
-            item
-            (
-                set::name($lang->task->deadline),
-                set::required(strpos(",{$this->config->task->edit->requiredFields},", ",deadline,") !== false),
-                formGroup
-                (
-                    datePicker
-                    (
-                        set::name('deadline'),
-                        set::disabled($disabledDeadline),
-                        on::change('checkEstStartedAndDeadline'),
-                        set::value((helper::isZeroDate($task->deadline) || $disabledDeadline) ? null : $task->deadline)
-                    )
-                )
-            ),
-            item
-            (
-                set::name($lang->task->estimate),
-                set::required(strpos(",{$this->config->task->edit->requiredFields},", ",estimate,") !== false),
-                formGroup
-                (
-                    inputControl
-                    (
-                        input
-                        (
-                            set::name('estimate'),
-                            set::value(helper::formatHours($task->estimate)),
-                            !empty($task->team) || !empty($task->children) ? set::readonly(true) : null
-                        ),
-                        to::suffix($lang->task->suffixHour),
-                        set::suffixWidth(20)
-                    )
-                )
-            ),
-            item
-            (
-                set::name($lang->task->consumed),
-                inputGroup
-                (
-                    setClass('items-center'),
-                    span
-                    (
-                        setClass('span-text'),
-                        setID('consumedSpan'),
-                        $task->consumed . $lang->task->suffixHour
-                    ),
-                    $this->task->isClickable($task, 'recordWorkhour') ? btn
-                    (
-                        setClass('ghost text-primary', $recordWorkhourDisabled),
-                        icon('time'),
-                        set::href(inlink('recordWorkhour', "id={$task->id}&from=edittask")),
-                        setData('toggle', 'modal')
-                    ) : null,
-                    formHidden('consumed', helper::formatHours($task->consumed))
-                )
-            ),
-            item
-            (
-                set::name($lang->task->left),
-                formGroup
-                (
-                    inputControl
-                    (
-                        input
-                        (
-                            set::name('left'),
-                            set::value(helper::formatHours($task->left)),
-                            !empty($task->team) || !empty($task->children) ? set::readonly(true) : null
-                        ),
-                        to::suffix($lang->task->suffixHour),
-                        set::suffixWidth(20)
-                    )
-                )
-            )
-        ),
-        tableData
-        (
-            setClass('mt-4'),
-            set::title($lang->task->legendLife),
-            item
-            (
-                set::name($lang->task->realStarted),
-                formGroup
-                (
-                    datetimePicker
-                    (
-                        set::name('realStarted'),
-                        set::value(helper::isZeroDate($task->realStarted) ? '' : $task->realStarted)
-                    )
-                )
-            ),
-            item
-            (
-                set::name($lang->task->finishedBy),
-                formGroup
-                (
-                    picker
-                    (
-                        set::name('finishedBy'),
-                        set::value($task->finishedBy),
-                        set::items($finishedByOptions)
-                    )
-                )
-            ),
-            item
-            (
-                set::name($lang->task->finishedDate),
-                formGroup
-                (
-                    datetimePicker
-                    (
-                        set::name('finishedDate'),
-                        set::value(helper::isZeroDate($task->finishedDate) ? '' : $task->finishedDate)
-                    )
-                )
-            ),
-            item
-            (
-                set::name($lang->task->canceledBy),
-                formGroup
-                (
-                    picker
-                    (
-                        set::name('canceledBy'),
-                        set::value($task->canceledBy),
-                        set::items($canceledByOptions)
-                    )
-                )
-            ),
-            item
-            (
-                set::name($lang->task->canceledDate),
-                formGroup
-                (
-                    datetimePicker
-                    (
-                        set::name('canceledDate'),
-                        set::value(helper::isZeroDate($task->canceledDate) ? '' : $task->canceledDate)
-                    )
-                )
-            ),
-            item
-            (
-                set::name($lang->task->closedBy),
-                formGroup
-                (
-                    picker
-                    (
-                        set::name('closedBy'),
-                        set::value($task->closedBy),
-                        set::items($closedByOptions)
-                    )
-                )
-            ),
-            item
-            (
-                set::name($lang->task->closedReason),
-                formGroup
-                (
-                    picker
-                    (
-                        set::name('closedReason'),
-                        set::value($task->closedReason),
-                        set::items($closedReasonOptions)
-                    )
-                )
-            ),
-            item
-            (
-                set::name($lang->task->closedDate),
-                formGroup
-                (
-                    datetimePicker
-                    (
-                        set::name('closedDate'),
-                        set::value(helper::isZeroDate($task->closedDate) ? '' : $task->closedDate)
-                    )
-                )
-            )
         )
     )
 );
+
+render();

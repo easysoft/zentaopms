@@ -281,7 +281,7 @@ class programTao extends programModel
             $progress        = $totalRealNotDel ? floor($project['totalConsumedNotDel'] / $totalRealNotDel * 10000) / 10000 * 100 : 0;
             $this->dao->update(TABLE_PROJECT)
                 ->set('progress')->eq($progress)
-                ->set('teamCount')->eq($project['teamCount'])
+                ->set('`teamCount`')->eq($project['teamCount'])
                 ->set('estimate')->eq($project['totalEstimate'])
                 ->set('consumed')->eq($project['totalConsumedNotDel'])
                 ->set('left')->eq($project['totalLeftNotDel'])

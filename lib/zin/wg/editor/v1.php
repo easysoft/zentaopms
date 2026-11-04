@@ -51,6 +51,7 @@ class editor extends wg
         .tippy-content zen-editor-menu-item .label {all: unset;}
         .tiptap.ProseMirror {padding-top: 0.5rem;}
         .tiptap.ProseMirror p {margin: 0;}
+        .tiptap.ProseMirror pre {margin: 0.5rem 0;}
     CSS;
 
     public static function getPageCSS(): ?string
@@ -62,7 +63,7 @@ class editor extends wg
     {
         $version = self::$version;
         $content = file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-        $content .= "$.getLib('zen-editor/zeneditor.js?v=$version', {type: 'module'}, () => {document.body.dataset.loadedEditor = true;});";
+        $content .= "window.loadZenEditor('zen-editor/zeneditor.js?v=$version');";
         return $content;
     }
 

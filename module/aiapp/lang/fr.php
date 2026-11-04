@@ -233,7 +233,7 @@ A : Pas de souci — avant que l'IA ne prenne le contrôle du monde, il n'y a pa
 
 ##### Q : Puis-je utiliser ceci dans ZenTao AI ?
 
-A : L'utilisation directe de CLI dans ZenTao n'est pas encore prise en charge, mais nous développons activement la plateforme ZAI Agents, qui prendra en charge l'installation de compétences directement dans ZenTao à l'avenir.
+A : L'utilisation directe du CLI dans ZenTao n'est pas encore prise en charge. ZenTao [Biz 13.5](https://www.zentao.net/download/biz13.5-86523.html), [Max 8.5](https://www.zentao.net/download/max8.5-86524.html) et [IPD 5.5](https://www.zentao.net/download/ipd5.5-86525.html) intègrent déjà des fonctionnalités d'IA permettant d'accéder aux données de ZenTao et de les gérer. Vous pouvez ainsi utiliser des fonctionnalités équivalentes à celles du CLI directement dans l'interface web de ZenTao.
 
 ##### Q : Pourquoi certaines opérations (par exemple, les opérations sur les modules, la lecture/écriture de documents) ne fonctionnent pas ?
 

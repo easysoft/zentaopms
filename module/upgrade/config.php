@@ -93,7 +93,8 @@ $config->upgrade->maxVersion['max8_2']         = '22_2';
 $config->upgrade->maxVersion['max8_3']         = '22_3';
 $config->upgrade->maxVersion['max8_4']         = '22_4';
 $config->upgrade->maxVersion['max8_5']         = '22_5';
-$config->upgrade->maxVersion['max8_6']         = '22_6'; // max insert position.
+$config->upgrade->maxVersion['max8_6']         = '22_6';
+$config->upgrade->maxVersion['max8_7']         = '22_7'; // max insert position.
 
 $config->upgrade->bizVersion = array();
 $config->upgrade->bizVersion['biz1_0']          = '9_5_1';
@@ -216,7 +217,8 @@ $config->upgrade->bizVersion['biz13_2']         = '22_2';
 $config->upgrade->bizVersion['biz13_3']         = '22_3';
 $config->upgrade->bizVersion['biz13_4']         = '22_4';
 $config->upgrade->bizVersion['biz13_5']         = '22_5';
-$config->upgrade->bizVersion['biz13_6']         = '22_6'; // biz insert position.
+$config->upgrade->bizVersion['biz13_6']         = '22_6';
+$config->upgrade->bizVersion['biz13_7']         = '22_7'; // biz insert position.
 
 $config->upgrade->proVersion = array();
 $config->upgrade->proVersion['pro1_0']        = '3_1';
@@ -375,7 +377,11 @@ $config->upgrade->ipdVersion['ipd5_2']         = '22_2';
 $config->upgrade->ipdVersion['ipd5_3']         = '22_3';
 $config->upgrade->ipdVersion['ipd5_4']         = '22_4';
 $config->upgrade->ipdVersion['ipd5_5']         = '22_5';
-$config->upgrade->ipdVersion['ipd5_6']         = '22_6'; // ipd insert position.
+$config->upgrade->ipdVersion['ipd5_6']         = '22_6';
+$config->upgrade->ipdVersion['ipd5_7']         = '22_7'; // ipd insert position.
+
+$config->upgrade->gitfoxVersion = array();
+$config->upgrade->gitfoxVersion['gitfox4_3'] = '22_7';
 
 $config->upgrade->lowerTables = array();
 $config->upgrade->lowerTables[$config->db->prefix . 'caseStep']       = $config->db->prefix . 'casestep';
@@ -424,7 +430,7 @@ $config->upgrade->discardedBugTypes['zh-tw']['designchange'] = '設計變更';
 $config->upgrade->discardedBugTypes['zh-tw']['newfeature']   = "新增需求";
 $config->upgrade->discardedBugTypes['zh-tw']['trackthings']  = '事務跟蹤';
 
-$config->upgrade->openModules  = array('action', 'admin', 'ai', 'bi', 'aiapp', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'cache', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution', 'demand', 'gitfox', 'epic', 'requirement', 'mark', 'zai', 'codescan', 'ppm', 'repobranchtype', 'repobranchrule', 'reporeviewflow', 'artifact', 'provider', 'runner', 'errorlog');
+$config->upgrade->openModules  = array('action', 'admin', 'ai', 'aitask', 'bi', 'aiapp', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'cache', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution', 'demand', 'gitfox', 'epic', 'requirement', 'mark', 'zai', 'codescan', 'ppm', 'repobranchtype', 'repobranchrule', 'reporeviewflow', 'artifact', 'provider', 'runner', 'errorlog');
 $config->upgrade->unsetModules = array('design', 'program', 'programplan', 'projectbuild', 'projectrelease', 'stage', 'stakeholder', 'product', 'branch', 'productplan', 'release', 'build', 'qa', 'bug', 'testcase', 'testtask', 'testreport', 'testsuite', 'caselib', 'automation', 'repo', 'ci', 'compile', 'jenkins', 'job', 'svn', 'gitlab', 'sonarqube', 'mr', 'git', 'report', 'sqlbuilder', 'feedback', 'faq', 'holiday', 'ops', 'host', 'serverroom', 'account', 'domain', 'service', 'deploy', 'conference', 'traincourse', 'pssp', 'baseline', 'classify', 'cm', 'cmcl', 'auditcl', 'reviewcl', 'process', 'activity', 'zoutput', 'auditplan', 'nc', 'subject', 'weekly', 'workestimation', 'issue', 'durationestimation', 'risk', 'opportunity', 'trainplan', 'gapanalysis', 'researchplan', 'researchreport', 'meeting', 'meetingroom', 'budget', 'reviewissue', 'reviewsetting', 'review', 'milestone', 'measurement', 'measrecord', 'assetlib', 'setting', 'im', 'client', 'ldap', 'dev', 'api', 'gitea', 'gogs', 'zanode', 'zahost');
 
 global $lang;

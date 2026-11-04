@@ -37,7 +37,7 @@ class control extends baseControl
 
         $this->app->setOpenApp();
 
-        if($this->config->edition == 'open') return false;
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return false;
 
         /* Code for task #9224. Set requiredFields for workflow. */
         if($this->dbh && ($this->app->isServing() || (helper::isApiRequest())))
@@ -427,7 +427,7 @@ class control extends baseControl
      */
     public function buildOperateMenu(object $object, string $type = 'view')
     {
-        if($this->config->edition == 'open') return false;
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return false;
 
         $moduleName = $this->moduleName;
         return $this->$moduleName->buildOperateMenu($object, $type);
@@ -442,7 +442,7 @@ class control extends baseControl
      */
     public function executeHooks(int $objectID): string
     {
-        if($this->config->edition == 'open') return '';
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return '';
 
         $moduleName = $this->moduleName;
         return $this->$moduleName->executeHooks($objectID);
@@ -456,7 +456,7 @@ class control extends baseControl
      */
     public function getFlowExportFields()
     {
-        if($this->config->edition == 'open') return array();
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return array();
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();
 
         $moduleName = $this->moduleName;
@@ -482,7 +482,7 @@ class control extends baseControl
     public function printExtendFields(object|string $object, string $type, string $extras = '', bool $print = true, string $moduleName = '', string $methodName = '')
     {
         $content = $type == 'items' ? array() : '';
-        if($this->config->edition == 'open') return $content;
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return $content;
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $content;
 
         $moduleName = $moduleName ?: $this->app->getModuleName();
@@ -525,7 +525,7 @@ class control extends baseControl
      */
     public function appendExtendFields(zin\fieldList $fields, string $moduleName = '', string $methodName = '', ?object $object = null): zin\fieldList
     {
-        if($this->config->edition == 'open') return $fields;
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return $fields;
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $fields;
 
         $moduleName = $moduleName ? $moduleName : $this->app->rawModule;
@@ -550,6 +550,9 @@ class control extends baseControl
                 if($objectValue) $field->default = $objectValue;
             }
         }
+
+        if($fieldList)        $fields->defaultOrders = array(implode(',', array_keys($fieldList)));
+        if($action->linkages) $fields->linkages = zget($action->linkages, $uiID, array());
         return $this->loadModel('flow')->buildFormFields($fields, $fieldList, array(), $object);
     }
 
@@ -565,7 +568,7 @@ class control extends baseControl
      */
     public function appendExtendCssAndJS(string $moduleName = '', string $methodName = '', ?object $object = null): string
     {
-        if($this->config->edition == 'open') return '';
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return '';
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return '';
 
         $moduleName = $moduleName ? $moduleName : $this->app->rawModule;
@@ -586,7 +589,6 @@ class control extends baseControl
         if(!empty($action->css)) $html .= "<style>$action->css</style>";
 
         $html .= $this->loadModel('flow')->getFormulaScript($moduleName, $action, $fieldList);
-        if(!empty($action->linkages)) $html .= $this->flow->getLinkageScript($action, $fieldList, $uiID);
         if(!empty($flow->js))         $html .= "<script>$flow->js</script>";
         if(!empty($action->js))       $html .= "<script>$action->js</script>";
 
@@ -606,7 +608,7 @@ class control extends baseControl
      */
     public function appendExtendForm(string $position = 'info', ?object $object = null, string $moduleName = '', string $methodName = ''): array
     {
-        if($this->config->edition == 'open') return array();
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return array();
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();
 
         $moduleName = $moduleName ? $moduleName : $this->app->rawModule;
@@ -638,7 +640,7 @@ class control extends baseControl
 
             foreach($fieldList as $key => $field)
             {
-                if($field->buildin || !$field->show || !isset($layouts[$field->field]) || (!empty($field->position) && $position != $field->position)) unset($fieldList[$key]);
+                if(!$field->show || !isset($layouts[$field->field]) || (!empty($field->position) && $position != $field->position)) unset($fieldList[$key]);
 
                 if((is_numeric($field->default) || $field->default) && empty($field->defaultValue)) $field->defaultValue = $field->default;
                 if($object && empty($object->{$field->field}) && $field->defaultValue !== '') $object->{$field->field} = $field->defaultValue;
@@ -648,7 +650,7 @@ class control extends baseControl
                 $field->control  = $this->flow->buildFormControl($field);
                 $field->items    = $field->options ? array_filter($field->options) : null;
                 $field->value    = isset($object->{$field->field}) ? zget($object, $field->field, '') : '';
-                $field->width    = $field->width != 'auto' ? $field->width : 'full';
+                $field->width    = $field->width != 'auto' ? "$field->width/12" : 'full';
 
                 if(!$field->value && isset($field->defaultValue)) $field->value = $field->defaultValue;
             }
@@ -711,7 +713,7 @@ class control extends baseControl
      */
     public function extendRequireFields(int $objectID = 0)
     {
-        if($this->config->edition == 'open') return;
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return;
 
         $groupID      = $this->loadModel('workflowgroup')->getGroupIDByDataID($this->moduleName, $objectID);
         $uiID         = $this->loadModel('workflowlayout')->getUIByDataID($this->moduleName, $this->methodName, $objectID, $groupID);

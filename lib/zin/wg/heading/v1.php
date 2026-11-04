@@ -31,6 +31,7 @@ class heading extends wg
     {
         list($tab, $lang) = data(array('app.tab', 'lang'));
         $icon = zget($lang->navIconNames, $tab, '');
+        $title = '';
 
         if(!in_array($tab, array('program', 'product', 'project')))
         {
@@ -43,6 +44,13 @@ class heading extends wg
                 {
                     $currentModule = 'space';
                     $currentMethod = 'browse';
+
+                    /* 没有空间列表权限时，如果用户有代码库列表权限，则跳转到代码库列表。 */
+                    if(!common::hasPriv('space', 'browse') && common::hasPriv('repo', 'maintain'))
+                    {
+                        $currentModule = 'repo';
+                        $currentMethod = 'maintain';
+                    }
                 }
             }
         }
@@ -53,8 +61,11 @@ class heading extends wg
             if($tab == 'product')                      $currentMethod = 'all';
         }
 
+        $appName = $lang->$tab->common;
+        if(empty($appName) && !empty($title)) $appName = trim(strip_tags($title));
+
         /* 项目模板appName点击后跳转到项目模板列表页面。 */
-        if($lang->$tab->common == $lang->project->template)
+        if($appName == $lang->project->template)
         {
             $currentModule = 'project';
             $currentMethod = 'template';
@@ -63,13 +74,15 @@ class heading extends wg
         if(empty($currentModule) || empty($currentMethod)) return null;
 
         $url = createLink($currentModule, $currentMethod);
+        global $config;
         return item
         (
             set::url($url),
-            set::hint($lang->$tab->common),
+            $config->vision == 'gitfox' ? setData('app', $tab) : null,
+            set::hint($appName),
             ($tab == 'devops' || $tab == 'bi' || $tab == 'safe') ? setClass('font-brand') : null,
             set::icon($icon),
-            set::text($lang->$tab->common)
+            set::text($appName)
         );
     }
 
@@ -123,7 +136,7 @@ class heading extends wg
     protected function build()
     {
         global $app, $config;
-        if($config->edition != 'open' && $app->isServing()) $app->control->loadModel('common')->mergeFlowMenuLang();
+        if(!in_array($config->edition, array('open', 'gitfox')) && $app->isServing()) $app->control->loadModel('common')->mergeFlowMenuLang();
 
         return div
         (

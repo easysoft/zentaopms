@@ -1,3 +1,8 @@
+function encodeBranchID(branchID)
+{
+    return btoa(unescape(encodeURIComponent(branchID))).replace(/\+/g, '_').replace(/\//g, '.');
+}
+
 window.onRepoChange = function()
 {
     toggleLoading('#tagBranch', true);
@@ -34,7 +39,7 @@ window.onRepoChange = function()
 window.onBranchChange = function ()
 {
     let repoID     = $('input[name="codeRepo"]').val();
-    const branchID = $('input[name="tagBranch"]').val();
+    const branchID = encodeBranchID($('input[name="tagBranch"]').val());
     const $fromDom = $('[name=tagFrom]').zui('picker');
     if(typeof repoID == 'undefined')
     {

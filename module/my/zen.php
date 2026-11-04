@@ -270,7 +270,7 @@ class myZen extends my
         $isMax = $this->config->edition == 'max' ? 1 : 0;
         $isIPD = $this->config->edition == 'ipd' ? 1 : 0;
 
-        if($this->config->edition != 'open')
+        if(!in_array($this->config->edition, array('open', 'gitfox')))
         {
             if(!empty($this->config->enableAITeammate))
             {
@@ -317,7 +317,7 @@ class myZen extends my
 
                 /* Get the number of nc assigned to me. */
                 $pager->recTotal = 0;
-                $this->loadModel('auditplan')->getList(0, 'myChecking', '', 'id_desc', $pager);
+                $this->loadModel('auditplan')->getList(0, 'project', 'myChecking', '', 'id_desc', $pager);
                 $auditplanCount = $pager->recTotal;
                 $count['qa']    = $ncCount + $auditplanCount;
 

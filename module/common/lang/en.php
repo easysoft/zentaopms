@@ -37,6 +37,8 @@ $lang->proName        = 'Pro';
 $lang->bizName        = 'Biz';
 $lang->maxName        = 'Max';
 $lang->liteName       = 'Lite';
+$lang->devopsName     = 'DevOps';
+$lang->gitfoxName     = 'GitFox';
 $lang->devopsPrefix   = 'ZenTao DevOps Platform';
 $lang->logoImg        = 'zt-logo-en.png';
 $lang->welcome        = "%s Project Management System";
@@ -163,6 +165,7 @@ $lang->noticeDrag      = 'Click or drag files here to upload. Maximum size: %s.'
 $lang->allProgress     = 'Progress';
 $lang->hasReviewed     = 'This content has already been reviewed. No further action is required.';
 $lang->appNotFound     = 'You do not have permission to access this application. Please check your permission settings.';
+$lang->appLoadFailed   = 'Failed to load the application. Please refresh the page and try again.';
 $lang->uploadFiles     = 'Upload Files';
 
 $lang->fieldDisplaySetting = 'Field display settings';
@@ -560,7 +563,6 @@ $lang->exportTypeList['selected'] = 'Selected Data';
 $lang->visionList = array();
 $lang->visionList['rnd']    = 'Full Feature Interface';
 $lang->visionList['lite']   = 'Operations Interface';
-//$lang->visionList['devops'] = 'DevOps Interface';
 
 $lang->createObjects['todo']        = 'To-Do';
 $lang->createObjects['effort']      = 'Effort';

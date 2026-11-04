@@ -33,13 +33,15 @@ class cronModel extends model
      */
     public function getCrons(string $params = ''): array
     {
+        /* 根据版本显示相关的定时任务。 */
+        $showCommands = zget($this->config->cron->showCommands, $this->config->edition, array());
+        $hideCommands = zget($this->config->cron->hideCommands, $this->config->edition, array());
+
         return $this->dao->select('*')->from(TABLE_CRON)
             ->where('1=1')
             ->beginIF(strpos($params, 'nostop') !== false)->andWhere('status')->ne('stop')->fi()
-            ->beginIF($this->config->edition != 'max')
-            ->andWhere('command')->ne('moduleName=measurement&methodName=initCrontabQueue')
-            ->andWhere('command')->ne('moduleName=measurement&methodName=execCrontabQueue')
-            ->fi()
+            ->beginIF(!empty($showCommands))->andWhere('command')->in($showCommands)->fi()
+            ->beginIF(!empty($hideCommands))->andWhere('command')->notIn($hideCommands)->fi()
             ->fetchAll('id', false);
     }
 
@@ -79,7 +81,7 @@ class cronModel extends model
                 }
             }
         }
-        $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('`lastTime` IS NULL')->andWhere('status')->ne('stop')->exec();
+        $this->dao->update(TABLE_CRON)->set('`lastTime`')->eq(date(DT_DATETIME1))->where('`lastTime` IS NULL')->andWhere('status')->ne('stop')->exec();
         return $parsedCrons;
     }
 
@@ -274,7 +276,7 @@ class cronModel extends model
             ->andWhere('section')->eq('scheduler')
             ->andWhere('`key`')->eq('execId')
             ->exec();
-        $this->dao->delete()->from(TABLE_QUEUE)->where('createdDate')->le(date("Y-m-d H:i:s", strtotime("-1 week")))->exec();
+        $this->dao->delete()->from(TABLE_QUEUE)->where('`createdDate`')->le(date("Y-m-d H:i:s", strtotime("-1 week")))->exec();
 
         $this->logCron(date('G:i:s') . " restart\n\n");
     }

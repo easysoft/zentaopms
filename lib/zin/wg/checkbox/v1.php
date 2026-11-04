@@ -15,6 +15,7 @@ class checkbox extends wg
         'value?: string',
         'typeClass?: string',
         'rootClass?: string',
+        'rootStyle?: string',
         'labelClass?: string',
         'title?: string'
     );
@@ -30,7 +31,7 @@ class checkbox extends wg
 
     protected function buildPrimary()
     {
-        list($id, $text, $name, $checked, $disabled, $type, $typeClass, $rootClass, $labelClass, $value, $title) = $this->prop(array('id', 'text', 'name', 'checked', 'disabled', 'type', 'typeClass', 'rootClass', 'labelClass', 'value', 'title'));
+        list($id, $text, $name, $checked, $disabled, $type, $typeClass, $rootClass, $rootStyle, $labelClass, $value, $title) = $this->prop(array('id', 'text', 'name', 'checked', 'disabled', 'type', 'typeClass', 'rootClass', 'rootStyle', 'labelClass', 'value', 'title'));
 
         if(empty($typeClass)) $typeClass = $type;
         if(empty($id))        $id        = empty($name) ? $this->gid : ($name . '_' . $value);
@@ -38,6 +39,7 @@ class checkbox extends wg
         return div
         (
             setClass("$typeClass-primary", $rootClass, array('disabled' => $disabled)),
+            $rootStyle ? setStyle($rootStyle) : null,
             h::input
             (
                 set::type($type),

@@ -76,7 +76,11 @@ class usersEntry extends entry
         $visions = $this->request('visions', array('rnd'));
         if(!is_array($visions)) $visions = explode(',', $visions);
 
-        if($this->request('group')) $this->setPost('group', explode(',', $this->request('group')));
+        if($this->request('group'))
+        {
+            $group = is_array($this->request('group')) ? $this->request('group') : explode(',', $this->request('group'));
+            $this->setPost('group', $group);
+        }
         $this->setPost('password1', $password . $this->app->session->rand);
         $this->setPost('password2', $password . $this->app->session->rand);
         $this->setPost('passwordStrength', 3);

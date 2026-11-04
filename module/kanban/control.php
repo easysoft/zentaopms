@@ -544,7 +544,7 @@ class kanban extends control
         }
 
         $laneType = $from == 'kanban' ? 'all' : 'story';
-        if($this->config->vision == 'lite') $laneType = 'task';
+        if($from != 'kanban' && $this->config->vision == 'lite') $laneType = 'task';
 
         $this->view->lanes    = $this->kanban->getLanePairsByRegion($regionID, $laneType);
         $this->view->from     = $from;
@@ -966,8 +966,6 @@ class kanban extends control
             $this->kanban->moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID);
         }
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-        $this->loadModel('action')->create('kanbanCard', $cardID, 'moved');
 
         $card     = $this->kanban->getCardByID($cardID);
         $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);

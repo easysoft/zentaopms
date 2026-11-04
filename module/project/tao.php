@@ -190,7 +190,7 @@ class projectTao extends projectModel
                 if($deadline > $project->end)   $deadline   = $project->end;
 
                 $this->dao->update(TABLE_TASK)
-                    ->set('estStarted')->eq($estStarted)
+                    ->set('`estStarted`')->eq($estStarted)
                     ->set('deadline')->eq($deadline)
                     ->where('id')->eq($task->id)
                     ->exec();
@@ -543,7 +543,7 @@ class projectTao extends projectModel
         }
         else
         {
-            $maxGroupID = $this->dao->select('max(`group`) as maxGroupID')->from(TABLE_PROJECTADMIN)->fetch('maxGroupID');
+            $maxGroupID = $this->dao->select('max(`group`) as `maxGroupID`')->from(TABLE_PROJECTADMIN)->fetch('maxGroupID');
 
             $projectAdmin = new stdclass();
             $projectAdmin->account  = $this->app->user->account;
@@ -863,7 +863,7 @@ class projectTao extends projectModel
             ->where('type')->eq('project')
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($projectID)->andWhere('hasProduct')->eq('1')->fi()
+            ->beginIF($projectID)->andWhere('`hasProduct`')->eq('1')->fi()
             ->beginIF($projectID)->andWhere('multiple')->eq('1')->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
@@ -871,7 +871,7 @@ class projectTao extends projectModel
             ->beginIF($status == 'unclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF($status && !in_array($status, array('all', 'undone', 'unclosed', 'involved')))->andWhere('status')->eq($status)->fi()
             ->beginIF($status == 'involved')
-            ->andWhere('openedBy', true)->eq($this->app->user->account)
+            ->andWhere('`openedBy`', true)->eq($this->app->user->account)
             ->orWhere('PM')->eq($this->app->user->account)
             ->orWhere("CONCAT(',', whitelist, ',')")->like("%,{$this->app->user->account},%")
             ->markRight(1)
@@ -976,7 +976,7 @@ class projectTao extends projectModel
     protected function getTotalTaskByProject(array $projectIdList): array
     {
         $executionIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->in($projectIdList)->andWhere('deleted')->eq(0)->fetchPairs();
-        return $this->dao->select("project, count(id) as allTasks, count(if(status = 'wait', 1, null)) as waitTasks, count(if(status = 'doing', 1, null)) as doingTasks, count(if(status = 'done', 1, null)) as doneTasks, count(if(status = 'wait' or status = 'pause' or status = 'cancel', 1, null)) as leftTasks, count(if(status = 'done' or status = 'closed', 1, null)) as litedoneTasks")->from(TABLE_TASK)
+        return $this->dao->select("project, count(id) as `allTasks`, count(if(status = 'wait', 1, null)) as `waitTasks`, count(if(status = 'doing', 1, null)) as `doingTasks`, count(if(status = 'done', 1, null)) as `doneTasks`, count(if(status = 'wait' or status = 'pause' or status = 'cancel', 1, null)) as `leftTasks`, count(if(status = 'done' or status = 'closed', 1, null)) as `litedoneTasks`")->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq(0)
             ->groupBy('project')
@@ -1046,7 +1046,7 @@ class projectTao extends projectModel
      */
     protected function getTotalBugByProject(array $projectIdList): array
     {
-        return $this->dao->select("project, count(id) AS allBugs, count(if(status = 'active', 1, null)) AS `leftBugs`, count(if(status = 'resolved', 1, null)) AS doneBugs")->from(TABLE_BUG)
+        return $this->dao->select("project, count(id) AS `allBugs`, count(if(status = 'active', 1, null)) AS `leftBugs`, count(if(status = 'resolved', 1, null)) AS `doneBugs`")->from(TABLE_BUG)
             ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
             ->groupBy('project')
@@ -1207,7 +1207,7 @@ class projectTao extends projectModel
      */
     protected function createMilestoneReport(int $projectID): bool
     {
-        $reportID = $this->dao->select('id')->from(TABLE_DOC)->where('project')->eq($projectID)->andWhere('reportModule')->eq('milestone')->andWhere('type')->eq('projectReport')->fetch('id');
+        $reportID = $this->dao->select('id')->from(TABLE_DOC)->where('project')->eq($projectID)->andWhere('`reportModule`')->eq('milestone')->andWhere('type')->eq('projectReport')->fetch('id');
         if(!empty($reportID)) return true;
 
         $report = new stdclass();

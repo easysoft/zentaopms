@@ -92,6 +92,7 @@ class artifact extends control
         $this->view->type            = $type;
         $this->view->artifactLibList = $this->artifact->getLibList($type == 'repo' && !empty($repo) ? $repo->spaceID : $space, $repoID, $type, 'createdDate_asc', $pager);
         $this->view->pager           = $pager;
+        $this->view->spaces          = $this->spaces;
 
         $this->display();
     }
@@ -154,9 +155,12 @@ class artifact extends control
         $node      = $this->artifactZen->getNodeByPath($artifactLib, $selectPath);
         $assetList = $this->artifact->getAssetListByNodeID(empty($node) || empty($node->entityID) ? '' : $node->entityID, $artifactLibID, $orderBy, $pager);
 
+        $formSpaceID = $this->app->tab == 'artifact' ? 0 : $spaceID;
+        $formRepoID  = $this->app->tab == 'artifact' ? 0 : $repoID;
+
         $this->view->title           = $artifactLib->name . $this->lang->hyphen . $this->lang->artifact->repoBrowser;
         $this->view->artifact        = $artifactLib;
-        $this->view->browseLink      = $this->createLink('artifact', 'browse', "space={$spaceID}&repoID={$repoID}&type={$type}");
+        $this->view->browseLink      = $this->createLink('artifact', 'browse', "space={$formSpaceID}&repoID={$formRepoID}&type={$type}");
         $this->view->treeItems       = $this->artifactZen->getArtifactLibTreeData($artifactLib, '/', $selectPath, $spaceID, $repoID, $type, $leaf);
         $this->view->selectNode      = $selectNode;
         $this->view->spaceID         = $spaceID;
@@ -651,9 +655,19 @@ class artifact extends control
 
             $path = helper::safe64Decode($path);
 
-            $file = $_FILES['file'];
-            $result = $this->artifact->uploadArtifact($artifactLibID, $file, $path);
-            if(dao::isError()) $this->sendError(dao::getError());
+            $file      = $_FILES['file'];
+            $overwrite = $this->post->overwrite ? 'true' : '';
+            $result = $this->artifact->uploadArtifact($artifactLibID, $file, $path, $overwrite);
+            if(dao::isError())
+            {
+                $error = dao::getError();
+                /* 制品服务对同名文件会跳过上传并返回固定提示，此处交回前端弹覆盖/重命名处理区。 */
+                if(isset($error['apiMessage']) && strpos($error['apiMessage'], '已存在相同内容') !== false)
+                {
+                    return $this->send(array('result' => 'exists', 'message' => $error['apiMessage']));
+                }
+                $this->sendError($error);
+            }
 
             if($result && !empty($result[0]) && !empty($result[0]->Object))
             {
@@ -663,7 +677,9 @@ class artifact extends control
             $this->sendSuccess($response);
 
         }
-        $this->view->title = $this->lang->artifact->uploadArtifact;
+        $this->view->title          = $this->lang->artifact->uploadArtifact;
+        $this->view->path           = $path;
+        $this->view->artifactLibID  = $artifactLibID;
         $this->display();
     }
 

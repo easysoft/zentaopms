@@ -348,6 +348,7 @@ $lang->doc->zentaoData      = '禅道数据';
 $lang->doc->emptyError      = '不能为空';
 $lang->doc->caselib         = '用例库';
 $lang->doc->customSearch    = '自定义搜索';
+$lang->doc->versionRelation = '版本关联详情';
 
 $lang->doc->addChapter     = '添加章节';
 $lang->doc->editChapter    = '编辑章节';

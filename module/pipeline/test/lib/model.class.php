@@ -32,6 +32,29 @@ class pipelineModelTest extends baseTest
     public function getBySpacesTest(array $spaceIdList): array { return $this->safeCall(fn() => $this->instance->getBySpaces($spaceIdList), array()); }
     public function importFromProviderTest(object $repo, object $formData) { return $this->safeCall(fn() => $this->instance->importFromProvider($repo, $formData), 0); }
     public function isClickableTest(object $pipeline, string $action) { ob_start(); $result = $this->instance->isClickable($pipeline, $action); ob_end_clean(); return $result; }
+    public function hasCancelPrivTest(?object $sessionUser = null, ?object $appUser = null): bool
+    {
+        $app     = $this->instance->app;
+        $session = $app->session;
+
+        $savedSessionUser = $session->user;
+        $savedAppUser     = $app->user;
+
+        if($sessionUser !== null) $session->set('user', $sessionUser);
+        if($appUser !== null)     $app->user = $appUser;
+
+        /* common::$userPrivs 是静态缓存且不区分用户，切换用户前必须清空，否则会复用上一次的判断结果。 */
+        common::$userPrivs = array();
+
+        ob_start();
+        try { $result = $this->instance->hasCancelPriv(); } catch(Throwable $e) { $result = false; }
+        ob_end_clean();
+
+        if($sessionUser !== null) $session->set('user', $savedSessionUser);
+        if($appUser !== null)     $app->user = $savedAppUser;
+
+        return (bool)$result;
+    }
     public function getStepGroupsTest(): object|bool|array { return $this->safeCall(fn() => $this->instance->getStepGroups(), false); }
     public function getStepSchemaTest(string $stepName): string { return $this->safeCall(fn() => $this->instance->getStepSchema($stepName), ''); }
     public function updateContentTest(int $pipelineID, object $content): bool { return $this->safeCall(fn() => $this->instance->updateContent($pipelineID, $content) ? true : false, false); }
@@ -42,6 +65,54 @@ class pipelineModelTest extends baseTest
     public function deleteTriggerTest(int $triggerID): void { $this->instance->deleteTrigger($triggerID); }
     public function apiGetExecInfoTest(int $execID): object|false { return $this->safeCall(fn() => $this->instance->apiGetExecInfo($execID), false); }
     public function getExecByIDTest(int $execID): object|false { return $this->safeCall(fn() => $this->instance->getExecByID($execID), false); }
+    private function runCancel(int $executionID, bool $apiCancelResult): array
+    {
+        /* 用桩顶掉 gitfox model，避免测试真实发起HTTP请求。 */
+        $gitfoxStub = new class($apiCancelResult)
+        {
+            public bool $result;
+            public function __construct(bool $result) { $this->result = $result; }
+            public function apiCancelPipeline(int $executionID): bool { return $this->result; }
+        };
+
+        $model = new class($gitfoxStub) extends pipelineModel
+        {
+            protected object $gitfoxStub;
+
+            public function __construct(object $gitfoxStub)
+            {
+                $this->gitfoxStub = $gitfoxStub;
+                parent::__construct();
+            }
+
+            /* 参数不加类型：父类loadModel的第一个参数在部分版本里没有类型声明，加了会导致签名不兼容。 */
+            public function loadModel($moduleName, $appName = ''): object|bool
+            {
+                if($moduleName == 'gitfox') return $this->gitfoxStub;
+                return parent::loadModel($moduleName, $appName);
+            }
+        };
+
+        dao::$errors = array();
+
+        ob_start();
+        try { $result = $model->cancel($executionID); } catch(Throwable $e) { $result = false; }
+        ob_end_clean();
+
+        return array('result' => (bool)$result, 'errors' => array_keys(dao::getError()));
+    }
+
+    public function cancelTest(int $executionID, bool $apiCancelResult = true): bool
+    {
+        $run = $this->runCancel($executionID, $apiCancelResult);
+        return $run['result'];
+    }
+
+    public function cancelErrorTest(int $executionID, bool $apiCancelResult = true): array
+    {
+        $run = $this->runCancel($executionID, $apiCancelResult);
+        return $run['errors'];
+    }
     public function formatSecondsTest(int|float $seconds): string { return $this->instance->formatSeconds($seconds); }
     public function handleWebhookTest(string $event, object $data, object $pipeline): bool { return $this->safeCall(fn() => $this->instance->handleWebhook($event, $data, $pipeline), false); }
     public function addTriggerCronJobTest(int $pipelineID, string $cronDef, string $engine = 'gitlab'): bool { return $this->safeCall(fn() => $this->instance->addTriggerCronJob($pipelineID, $cronDef, $engine), false); }

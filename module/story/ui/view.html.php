@@ -98,14 +98,8 @@ if($story->files)
 /* 子需求列表。 Children list. */
 if($story->children)
 {
-    $cols['id']         = $config->story->dtable->fieldList['id'];
-    $cols['title']      = $config->story->dtable->fieldList['title'];
-    $cols['pri']        = $config->story->dtable->fieldList['pri'];
-    $cols['assignedTo'] = $config->story->dtable->fieldList['assignedTo'];
-    $cols['estimate']   = $config->story->dtable->fieldList['estimate'];
-    $cols['status']     = $config->story->dtable->fieldList['status'];
-    if($this->config->vision != 'lite') $cols['stage'] = $config->story->dtable->fieldList['stage'];
-    $cols['actions']    = $config->story->dtable->fieldList['actions'];
+    $cols = $this->loadModel('datatable')->getSetting('story', 'children');
+
     $cols['title']['title']      = $lang->story->name;
     $cols['id']['checkbox']      = false;
     $cols['actions']['minWidth'] = 200;
@@ -114,7 +108,9 @@ if($story->children)
         $cols['title']['data-toggle'] = 'modal';
         $cols['title']['data-size']   = 'lg';
     }
+
     if(!hasPriv('story', 'view')) unset($cols['title']['link']);
+    if($this->config->vision == 'lite') unset($cols['stage']);
 
     if(($story->type == 'story' && $config->vision == 'or') || ($story->vision == 'or' && $config->vision == 'rnd')) unset($cols['actions']);
 
@@ -127,7 +123,9 @@ if($story->children)
     (
         'title'        => $lang->story->children,
         'control'      => 'dtable',
+        'methodName'   => 'children',
         'id'           => 'table-story-children',
+        'customCols'   => true,
         'cols'         => $cols,
         'userMap'      => $users,
         'data'         => array_values($story->children),
@@ -265,6 +263,19 @@ foreach($actions as $key => $action)
     {
         $actions[$key]['data-load'] = 'modal';
         $actions[$key]['data-size'] = 'lg';
+    }
+
+    /* 在模态框中查看需求详情时，服务端返回的关闭确认提示不会被模态框处理，改为由前端弹出确认框。 */
+    if($isInModal && !empty($action['url']) && (zget($action, 'name') == 'close' || zget($action, 'key') == 'close'))
+    {
+        $childIdList = $this->story->getAllChildId($story->id, false, false, 'closed');
+        if(!empty($childIdList))
+        {
+            $closeUrl                      = $config->story->actionList['close']['url'];
+            $closeUrl['params']           .= "&confirm=yes";
+            $actions[$key]['url']          = createLink($closeUrl['module'], $closeUrl['method'], $closeUrl['params']);
+            $actions[$key]['data-confirm'] = sprintf($this->lang->story->closeParentTips, '#' . implode(',#', $childIdList));
+        }
     }
 }
 

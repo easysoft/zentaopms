@@ -1,7 +1,8 @@
 <?php
 class dingapi
 {
-    public $apiUrl = 'https://oapi.dingtalk.com/';
+    public  $apiUrl = 'https://oapi.dingtalk.com/';
+    private $agentId;
     private $appKey;
     private $appSecret;
     private $token;

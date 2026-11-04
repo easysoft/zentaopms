@@ -273,7 +273,7 @@ foreach($bugInfo as $infoKey => $infoValue)
             $name  = $infoValue[$listKey]->name;
             $value = $infoValue[$listKey]->value;
         }
-        if(empty($name) && empty($value)) continue;
+        if(empty($value)) continue;
 
         $chartOption[] = array('name' => $name, 'value' => $value);
         $tableTR[]     = h::tr
@@ -471,6 +471,21 @@ detailBody
                     (
                         set::cols($config->testreport->bug->dtable->fieldList),
                         set::data(array_values($legacyBugs)),
+                        set::userMap($users)
+                    )
+                )
+            ),
+            tabPane
+            (
+                set::key('tabActivatedBugs'),
+                to::prefix(icon('bug')),
+                set::title($lang->testreport->legendActivatedBugs),
+                sectionList
+                (
+                    dtable
+                    (
+                        set::cols($config->testreport->bug->dtable->fieldList),
+                        set::data(array_values($activatedBugs)),
                         set::userMap($users)
                     )
                 )

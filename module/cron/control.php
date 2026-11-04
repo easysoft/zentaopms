@@ -148,6 +148,9 @@ class cron extends control
 
         while(true)
         {
+            /* 每轮重置SQL执行记录，防止常驻进程内存占用增长。Reset SQL profiles each round to prevent memory usage growth in the daemon. */
+            dbh::resetProfiles();
+
             /* Only one scheduler and max 4 consumers. */
             $roles = $this->applyExecRoles($execId);
             if(empty($roles))
@@ -192,6 +195,9 @@ class cron extends control
 
         while(true)
         {
+            /* 每轮重置SQL执行记录，防止常驻进程内存占用增长。Reset SQL profiles each round to prevent memory usage growth in the daemon. */
+            dbh::resetProfiles();
+
             if(empty($this->config->global->cron))
             {
                 sleep(60);
@@ -223,6 +229,9 @@ class cron extends control
         $execId = mt_rand();
         while(true)
         {
+            /* 每轮重置SQL执行记录，防止常驻进程内存占用增长。Reset SQL profiles each round to prevent memory usage growth in the daemon. */
+            dbh::resetProfiles();
+
             if(empty($this->config->global->cron))
             {
                 sleep(60);
@@ -286,7 +295,7 @@ class cron extends control
                 if($setting->value < $expirDate)
                 {
                     /* 心跳过期但名下仍有 doing 任务：可能正在执行长任务，保留名额，避免替换风暴。 */
-                    $doing = $this->dao->select('id')->from(TABLE_QUEUE)->where('status')->eq('doing')->andWhere('execId')->eq($setting->key)->fetch();
+                    $doing = $this->dao->select('id')->from(TABLE_QUEUE)->where('status')->eq('doing')->andWhere('`execId`')->eq($setting->key)->fetch();
                     if(!$doing)
                     {
                         $this->dao->delete()->from(TABLE_CONFIG)->where('id')->eq($setting->id)->exec();
@@ -333,7 +342,7 @@ class cron extends control
         }
 
         /* 一次性查询已有 wait/doing 任务的 cron，避免循环内逐条查询。 */
-        $pendingCrons = $this->dao->select('`cron`')->from(TABLE_QUEUE)->where('status')->in(array('wait', 'doing'))->fetchPairs('cron', 'cron');
+        $pendingCrons = $this->dao->select('`cron`,`startedDate`')->from(TABLE_QUEUE)->where('status')->in(array('wait', 'doing'))->orderBy('`startedDate`')->fetchPairs('cron', 'startedDate');
 
         $parsedCrons = $this->cron->parseCron($crons);
         $now         = date(DT_DATETIME1);
@@ -351,7 +360,11 @@ class cron extends control
             if($now < $cron['time']->format(DT_DATETIME1)) continue;
 
             /* 该 cron 已有排队/执行中的任务则跳过，避免重复入队。 */
-            if(isset($pendingCrons[$id])) continue;
+            if(isset($pendingCrons[$id]))
+            {
+                if(helper::isZeroDate($pendingCrons[$id]) || (time() - strtotime($pendingCrons[$id])) < 3600) continue;
+                $this->dao->update(TABLE_QUEUE)->set('status')->eq('done')->set('pending')->eq(null)->where('cron')->eq($id)->andWhere('status')->eq('doing')->exec();
+            }
 
             /* Push task into queue. */
             $task = new stdclass();
@@ -395,10 +408,13 @@ class cron extends control
     {
         while(true)
         {
+            /* 每个任务和空队列轮询边界重置SQL执行记录，防止长队列连续消费时内存占用增长。Reset SQL profiles at each task and empty-queue-polling boundary to prevent memory usage growth during long queue draining. */
+            dbh::resetProfiles();
+
             $this->cron->updateTime('consumer', $execId);
 
             /* Consume. */
-            $task = $this->dao->select('*')->from(TABLE_QUEUE)->where('status')->eq('wait')->orderBy('createdDate')->fetch();
+            $task = $this->dao->select('*')->from(TABLE_QUEUE)->where('status')->eq('wait')->orderBy('`createdDate`')->fetch();
             if(!$task) break;
 
             $this->consumeTask($execId, $task);
@@ -421,11 +437,11 @@ class cron extends control
         if(!empty($task->command))
         {
             $affectedRows = $this->dao->update(TABLE_QUEUE)
-                ->set('status')->eq('doing')->set('execId')->eq($execId)
-                ->set('startedDate')->eq(date(DT_DATETIME1))
+                ->set('status')->eq('doing')->set('`execId`')->eq($execId)
+                ->set('`startedDate`')->eq(date(DT_DATETIME1))
                 ->where('id')->eq($task->id)
                 ->andWhere('status')->eq('wait')
-                ->andWhere('execId')->eq('0')
+                ->andWhere('`execId`')->eq('0')
                 ->exec();
             if($affectedRows != 1) return;
 
@@ -448,6 +464,7 @@ class cron extends control
             $this->common->setCompany();
             $this->common->loadConfigFromDB();
 
+            $taskEditions = $this->config->cron->taskEditions;
             try
             {
                 if($task->type == 'zentao')
@@ -456,12 +473,15 @@ class cron extends control
                     if(isset($params['moduleName']) and isset($params['methodName']))
                     {
                         $this->viewType = 'html';
-                        $moduleName     = $params['moduleName'];
-                        $methodName     = $params['methodName'];
+                        $moduleName     = strtolower($params['moduleName']);
+                        $methodName     = strtolower($params['methodName']);
                         $this->app->loadLang($moduleName);
                         $this->app->loadConfig($moduleName);
                         unset($params['moduleName'], $params['methodName']);
-                        $output = $this->fetch($moduleName, $methodName, $params);
+
+                        $canExec = true;
+                        if(isset($taskEditions["{$moduleName}-{$methodName}"]) && !in_array($this->config->edition, $taskEditions["{$moduleName}-{$methodName}"])) $canExec = false;
+                        if($canExec) $output = $this->fetch($moduleName, $methodName, $params);
                     }
                 }
                 elseif($task->type == 'system')
@@ -481,7 +501,7 @@ class cron extends control
         }
 
         $this->dao->update(TABLE_QUEUE)->set('status')->eq('done')->set('pending')->eq(null)->where('id')->eq($task->id)->exec();
-        $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('id')->eq($task->cron)->exec();
+        $this->dao->update(TABLE_CRON)->set('`lastTime`')->eq(date(DT_DATETIME1))->where('id')->eq($task->cron)->exec();
 
         $log = date('G:i:s') . " execute\ncronId: {$task->cron}\nexecId: $execId\ntaskId: {$task->id}\ncommand: {$task->command}\nreturn : $return\noutput : $output\n\n";
         $this->cron->logCron($log);

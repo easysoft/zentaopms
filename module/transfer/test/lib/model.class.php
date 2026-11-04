@@ -268,19 +268,36 @@ class transferModelTest extends baseTest
     }
 
     /**
-     * 测试initItems。
-     * initItems.
+     * 测试 initItems。
+     * Test initItems.
+     *
+     * 直接调用 initItems，按字段配置补齐 dataSource，避免初始化全部导入字段。
      *
      * @param  string $module
-     * @param  bool   $withKey
      * @param  string $field
+     * @param  array  $object
+     * @param  bool   $withKey
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function initItemsTest(string $module, bool $withKey = false, string $field = '')
+    public function initItemsTest(string $module, string $field, array $object = array(), bool $withKey = false): array|string
     {
-        $fieldList = $this->initFieldListTest($module, $withKey);
-        return $fieldList[$field]['items'];
+        $this->instance->commonActions($module);
+        $this->instance->mergeConfig($module);
+
+        if(!$object)
+        {
+            $fieldConfig = $this->instance->moduleFieldList[$field] ?? array();
+            $dataSource  = array('module' => '', 'method' => '', 'params' => '', 'pairs' => '', 'lang' => '');
+            if(!empty($fieldConfig['dataSource']) && is_array($fieldConfig['dataSource'])) $dataSource = array_merge($dataSource, $fieldConfig['dataSource']);
+
+            $object = array(
+                'items'      => (!empty($fieldConfig['items']) && is_array($fieldConfig['items'])) ? $fieldConfig['items'] : array(),
+                'dataSource' => $dataSource,
+            );
+        }
+
+        return $this->instance->initItems($module, $field, $object, $withKey);
     }
 
     /**

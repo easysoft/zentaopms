@@ -206,6 +206,174 @@ class upgradeModelTest extends baseTest
     }
 
     /**
+     * 测试添加升级错误信息。
+     * Test add upgrade error.
+     *
+     * @param  array  $messages
+     * @access public
+     * @return string
+     */
+    public function addErrorTest(array $messages): string
+    {
+        upgradeModel::$errors = array();
+        foreach($messages as $message) $this->instance->addError($message);
+
+        return implode(',', upgradeModel::$errors);
+    }
+
+    /**
+     * 测试添加升级错误信息后的错误数量。
+     * Test the error count after adding upgrade errors.
+     *
+     * @param  array  $messages
+     * @access public
+     * @return int
+     */
+    public function addErrorCountTest(array $messages): int
+    {
+        upgradeModel::$errors = array();
+        foreach($messages as $message) $this->instance->addError($message);
+
+        return count(upgradeModel::$errors);
+    }
+
+    /**
+     * 测试获取升级来源版本类型。
+     * Test get upgrade from edition.
+     *
+     * @param  string $version
+     * @param  string $edition
+     * @access public
+     * @return string
+     */
+    public function getUpgradeFromEditionTest(string $version, string $edition = ''): string
+    {
+        global $config;
+
+        $oldEdition = $config->edition;
+        if($edition) $config->edition = $edition;
+
+        $result = $this->instance->getUpgradeFromEdition($version);
+
+        $config->edition = $oldEdition;
+        return $result;
+    }
+
+    /**
+     * 测试获取升级时需要执行的其他方法。
+     * Test get the other methods of upgrading.
+     *
+     * @param  string $fromEdition
+     * @param  string $edition
+     * @access public
+     * @return string
+     */
+    public function getOtherMethodsTest(string $fromEdition, string $edition): string
+    {
+        global $config;
+
+        $oldEdition = $config->edition;
+        $config->edition = $edition;
+
+        $methods = $this->instance->getOtherMethods($fromEdition);
+
+        $config->edition = $oldEdition;
+        return implode(',', array_keys($methods));
+    }
+
+    /**
+     * 测试获取确认 SQL 内容的长度。
+     * Test the length of the confirm SQL content.
+     *
+     * @param  string $fromVersion
+     * @access public
+     * @return int
+     */
+    public function getConfirmLengthTest(string $fromVersion): int
+    {
+        return strlen($this->instance->getConfirm($fromVersion));
+    }
+
+    /**
+     * 测试确认 SQL 内容是否包含指定内容。
+     * Test whether the confirm SQL content contains the given string.
+     *
+     * @param  string $fromVersion
+     * @param  string $needle
+     * @access public
+     * @return int
+     */
+    public function getConfirmContainsTest(string $fromVersion, string $needle): int
+    {
+        return strpos($this->instance->getConfirm($fromVersion), $needle) !== false ? 1 : 0;
+    }
+
+    /**
+     * 测试执行升级。
+     * Test execute upgrade.
+     *
+     * @param  string $fromVersion
+     * @param  string $toVersion
+     * @param  string $version
+     * @param  string $installedVersion
+     * @access public
+     * @return string
+     */
+    public function executeUpgradeTest(string $fromVersion, string $toVersion, string $version, string $installedVersion): string
+    {
+        global $config;
+
+        $oldVersion          = $config->version;
+        $oldInstalledVersion = isset($config->installedVersion) ? $config->installedVersion : '';
+        $oldErrors           = upgradeModel::$errors;
+
+        $config->version          = $version;
+        $config->installedVersion = $installedVersion;
+        upgradeModel::$errors     = array();
+
+        $result = $this->instance->execute($fromVersion, $toVersion);
+
+        $config->version          = $oldVersion;
+        $config->installedVersion = $oldInstalledVersion;
+        upgradeModel::$errors     = $oldErrors;
+
+        return $result ? '1' : '0';
+    }
+
+    /**
+     * 测试执行升级后记录的错误信息。
+     * Test the errors after executing upgrade.
+     *
+     * @param  string $fromVersion
+     * @param  string $toVersion
+     * @param  string $version
+     * @param  string $installedVersion
+     * @access public
+     * @return string
+     */
+    public function executeUpgradeErrorTest(string $fromVersion, string $toVersion, string $version, string $installedVersion): string
+    {
+        global $config;
+
+        $oldVersion          = $config->version;
+        $oldInstalledVersion = isset($config->installedVersion) ? $config->installedVersion : '';
+        $oldErrors           = upgradeModel::$errors;
+
+        $config->version          = $version;
+        $config->installedVersion = $installedVersion;
+        upgradeModel::$errors     = array();
+
+        $this->instance->execute($fromVersion, $toVersion);
+        $errors = upgradeModel::$errors;
+
+        $config->version          = $oldVersion;
+        $config->installedVersion = $oldInstalledVersion;
+        upgradeModel::$errors     = $oldErrors;
+
+        return implode(',', $errors);
+    }
+
+    /**
      * 测试检查流程。
      * Test check weither process or not.
      *
@@ -925,5 +1093,34 @@ class upgradeModelTest extends baseTest
     {
         $this->instance->processPIRiskData();
         return $this->instance->dao->select('*')->from(TABLE_RISK)->where('PI')->ne('0')->fetchAll();
+    }
+
+    /**
+     * 测试获取数据库视图列表。
+     * Test get the database view list.
+     *
+     * @access public
+     * @return string
+     */
+    public function getViewsTest(): string
+    {
+        global $tester;
+
+        /* 视图条目数应与定义文件里的 CREATE VIEW 语句数一致，且每条视图都配有删除语句。*/
+        /* The view count should equal the CREATE VIEW statements of the definition file, and every view should have a drop statement. */
+        $viewFile = $tester->app->getAppRoot() . 'db' . DS . 'dbviews.sql';
+        $creates  = array();
+        foreach(explode(';', file_get_contents($viewFile)) as $sql)
+        {
+            if(preg_match('/^CREATE\s+(OR\s+REPLACE\s+)?VIEW\s+`?([^`\s]+)`?/i', trim($sql), $matches)) $creates[] = $matches[2];
+        }
+
+        $views = $this->instance->getViews();
+        $names = array_column($views, 'name');
+
+        $dropped = 0;
+        foreach($views as $view) if(count($view['statements']) > 1) $dropped++;
+
+        return 'views:' . count($views) . ';creates:' . count($creates) . ';missing:' . count(array_diff($creates, $names)) . ';dropped:' . $dropped;
     }
 }

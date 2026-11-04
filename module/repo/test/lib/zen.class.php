@@ -745,6 +745,132 @@ class repoZenTest extends baseTest
     }
 
     /**
+     * Capture API validation errors while executing the real repoZen methods.
+     */
+    private function createApiCheckInstance(array $models, ?object $user = null): object
+    {
+        return new class($models, $user) extends repoZen
+        {
+            public array $models;
+            public array $errors = array();
+
+            public function __construct(array $models, ?object $user)
+            {
+                $this->models = $models;
+                $this->app = (object)array('user' => $user);
+            }
+
+            public function loadModel(string $moduleName = '', string $appName = ''): object|bool
+            {
+                if(!isset($this->models[$moduleName])) throw new LogicException("Unexpected model: $moduleName");
+                return $this->$moduleName = $this->models[$moduleName];
+            }
+
+            public function sendError(mixed $error, string|bool $locate = false)
+            {
+                $this->errors[] = $error;
+            }
+        };
+    }
+
+    /**
+     * Keep exact return types, HTTP status and error details observable to ZTF.
+     */
+    private function invokeApiCheck(object $instance, string $method, array $args = array()): object
+    {
+        $originalStatus = http_response_code();
+        try
+        {
+            http_response_code(200);
+            $returned = $this->invokeArgs($method, $args, 'repo', 'zen', $instance, new ReflectionClass($instance));
+            $error    = $instance->errors[0] ?? '';
+            return (object)array(
+                'result'     => $returned === true ? 'true' : ($returned === false ? 'false' : get_debug_type($returned)),
+                'code'       => http_response_code(),
+                'errorCount' => count($instance->errors),
+                'fields'     => is_array($error) ? implode('|', array_keys($error)) : '',
+                'message'    => is_array($error) ? implode(' | ', $error) : $error,
+            );
+        }
+        finally
+        {
+            http_response_code($originalStatus === false ? 200 : $originalStatus);
+        }
+    }
+
+    /**
+     * Test JSON field validation with a fixed result from the active-user query.
+     */
+    public function checkApiCreateRepoTest(array $post, array $activeUsers): object
+    {
+        $users = new class($activeUsers)
+        {
+            public array $pairs;
+            public string $options = '';
+            public function __construct(array $pairs) {$this->pairs = $pairs;}
+            public function getPairs(string $options): array
+            {
+                $this->options = $options;
+                return $this->pairs;
+            }
+        };
+        $instance     = $this->createApiCheckInstance(array('user' => $users));
+        $originalPost = $_POST;
+        try
+        {
+            $_POST = $post;
+            $result = $this->invokeApiCheck($instance, 'checkApiCreateRepo');
+            $result->userOptions = $users->options;
+            $result->unchanged   = $_POST === $post;
+            return $result;
+        }
+        finally
+        {
+            $_POST = $originalPost;
+        }
+    }
+
+    /**
+     * Test space authorization with explicit space, membership and privilege data.
+     */
+    public function checkApiSpaceTest(int $spaceID, string $method, array $context): object
+    {
+        $space = new class($context['spaces'], $context['members'])
+        {
+            public array $spaces;
+            public array $members;
+            public array $lookups = array();
+            public int $memberReads = 0;
+            public function __construct(array $spaces, array $members) {$this->spaces = $spaces; $this->members = $members;}
+            public function fetchByID(int $id): object|false
+            {
+                $this->lookups[] = $id;
+                return $this->spaces[$id] ?? false;
+            }
+            public function getMemberList(): array {$this->memberReads++; return $this->members;}
+        };
+        $group = new class($context['privs'])
+        {
+            public array $privs;
+            public array $lookups = array();
+            public function __construct(array $privs) {$this->privs = $privs;}
+            public function getDevOpsSpacePrivs(int $id): ?array
+            {
+                $this->lookups[] = $id;
+                return $this->privs[$id] ?? null;
+            }
+        };
+        $instance = $this->createApiCheckInstance(array('space' => $space, 'group' => $group), $context['user']);
+        $result   = $this->invokeApiCheck($instance, 'checkApiSpace', array($spaceID, $method));
+        $result->spaceLookups = implode('|', $space->lookups);
+        $result->privLookups  = implode('|', $group->lookups);
+        $result->spaceReads   = count($space->lookups);
+        $result->privReads    = count($group->lookups);
+        $result->memberReads  = $space->memberReads;
+        return $result;
+    }
+
+    /**
      * Test checkACL method.
      *
      * @access public

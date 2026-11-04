@@ -9,6 +9,21 @@ class actionZenTest extends baseTest
     protected $className  = 'zen';
 
     /**
+     * Test checkPrivForGetList method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return bool
+     */
+    public function checkPrivForGetListTest(string $objectType, int $objectID): bool
+    {
+        $result = $this->invokeArgs('checkPrivForGetList', [$objectType, $objectID]);
+        if(dao::isError()) return false;
+        return $result;
+    }
+
+    /**
      * Test getTrashesHeaderNavigation method.
      *
      * @param  array $objectTypeList

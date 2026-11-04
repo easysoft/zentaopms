@@ -110,7 +110,7 @@ class actionModel extends model
             $oldAction->id = $actionID;
             $newAction = clone $oldAction;
 
-            $this->file->processFileDiffsForObject('comment', $oldAction, $newAction);
+            $this->file->processFileDiffsForObject('comment', $oldAction, $newAction, "{$objectType}-{$objectID}");
             if(!empty($newAction->files))
             {
                 $action->files = $newAction->files;
@@ -131,7 +131,7 @@ class actionModel extends model
 
         $this->saveIndex($objectType, $objectID, $actionType);
 
-        if($this->config->edition != 'open') $this->loadModel('zai')->pushToVectorQueue($objectType, $objectID, $actionType);
+        if(!in_array($this->config->edition, array('open', 'gitfox'))) $this->loadModel('zai')->pushToVectorQueue($objectType, $objectID, $actionType);
 
         $changeFunc = 'after' . ucfirst($objectType);
         if(method_exists($this, $changeFunc)) call_user_func_array(array($this, $changeFunc), array($action, $actionID));
@@ -152,8 +152,8 @@ class actionModel extends model
     {
         $this->dao->update(TABLE_ACTION)
             ->set('`read`')->eq(1)
-            ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->eq($objectID)
+            ->where('`objectType`')->eq($objectType)
+            ->andWhere('`objectID`')->eq($objectID)
             ->andWhere('`read`')->eq(0)
             ->exec();
 
@@ -220,7 +220,7 @@ class actionModel extends model
         foreach($actions as $actionID => $action)
         {
             $actionName = strtolower($action->action);
-            if($this->config->edition != 'open' && !isset($flowList[$action->objectType])) $flowList[$action->objectType] = $this->workflow->getByModule($action->objectType);
+            if(!in_array($this->config->edition, array('open', 'gitfox')) && !isset($flowList[$action->objectType])) $flowList[$action->objectType] = $this->workflow->getByModule($action->objectType);
 
             if(substr($actionName, 0, 7)  == 'linked2')      $this->actionTao->getLinkedExtra($action, substr($actionName, 7));
             if(substr($actionName, 0, 12) == 'unlinkedfrom') $this->actionTao->getLinkedExtra($action, substr($actionName, 12));
@@ -250,7 +250,7 @@ class actionModel extends model
             if(in_array($actionName, array('opened', 'managed', 'edited')) && in_array($objectType, array('execution', 'project'))) $this->processExecutionAndProjectActionExtra($action);
             if(in_array($actionName, array('linkstory', 'unlinkstory', 'linkur', 'unlinkur', 'linkrelatedstory', 'unlinkrelatedstory'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'story', 'storyView');
             if(in_array($actionName, array('linkbug', 'unlinkbug'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'bug', 'view');
-            if($actionName == 'repocreated') $action->extra = str_replace("class='iframe'", 'data-app="devops"', $action->extra);
+            if($actionName == 'repocreated') $action->extra = str_replace("class='iframe'", 'data-app="devops"', (string)preg_replace('~/api\.php/v\d+/[^/?#]+/(?=repo-(?:view|diff)-)~i', '/', (string)$action->extra));
             if($actionName == 'createdsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $action->extra == 'defaultSnap') $action->actor = $this->lang->action->system;
             if($actionName == 'syncgrade') $this->actionTao->processStoryGradeActionExtra($action);
             if(in_array($actionName, array('createdsubtabledata', 'editedsubtabledata', 'deletedsubtabledata'))) $action->extra = !empty($flowList[$action->objectType]->name) ? $flowList[$action->objectType]->name . $action->objectID : '';
@@ -261,6 +261,7 @@ class actionModel extends model
             {
                 if($history->field == 'subversion' || $history->field == 'git')
                 {
+                    $history->diff = (string)preg_replace('~/api\.php/v\d+/[^/?#]+/(?=repo-(?:view|diff)-)~i', '/', (string)$history->diff);
                     $history->diff = str_replace(array("class='iframe'", '+'), array("data-size='{\"width\": 800, \"height\": 500}' data-toggle='modal'", '%2B'), $history->diff);
                 }
 
@@ -426,7 +427,7 @@ class actionModel extends model
 
         /* 当action值为repocreated的时候拼接域名。 */
         /* Splice domain name for connection when the action is equal to 'repocreated'.*/
-        if($action->action == 'repocreated') $action->extra = str_replace("href='", "href='" . common::getSysURL(), $action->extra);
+        if($action->action == 'repocreated') $action->extra = str_replace("href='", "href='" . common::getSysURL(), (string)preg_replace('~/api\.php/v\d+/[^/?#]+/(?=repo-(?:view|diff)-)~i', '/', (string)$action->extra));
 
         return $action;
     }
@@ -462,14 +463,14 @@ class actionModel extends model
         $extra   = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
         $trashes = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('action')->eq('deleted')
-            ->beginIF($objectType != 'all')->andWhere('objectType')->eq($objectType)->fi()
-            ->beginIF($objectType == 'execution')->andWhere('objectID')->notIn($noMultipleExecutions)->fi()
+            ->beginIF($objectType != 'all')->andWhere('`objectType`')->eq($objectType)->fi()
+            ->beginIF($objectType == 'execution')->andWhere('`objectID`')->notIn($noMultipleExecutions)->fi()
             ->beginIF($objectType == 'all')
-            ->andWhere('objectType', true)->ne('execution')
-            ->orWhere('(`objectType`')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
+            ->andWhere('`objectType`', true)->ne('execution')
+            ->orWhere('(`objectType`')->eq('execution')->andWhere('`objectID`')->notIn($noMultipleExecutions)
             ->markRight(2)
             ->fi()
-            ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
+            ->andWhere('`objectType`')->notIn($this->config->action->hiddenTrashObjects)
             ->andWhere('extra')->eq($extra)
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy($orderBy)
@@ -595,7 +596,7 @@ class actionModel extends model
             ->andWhere($trashQuery)
             ->andWhere('t1.extra')->eq($extra)
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
+            ->andWhere('`objectType`')->notIn($this->config->action->hiddenTrashObjects)
             ->beginIF($objectType != 'all')->andWhere('t1.`objectType`')->eq($objectType)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -619,11 +620,11 @@ class actionModel extends model
         return $this->dao->select('`objectType`')->from(TABLE_ACTION)
             ->where('action')->eq('deleted')
             ->andWhere('extra')->eq($extra)
-            ->andWhere('objectType', true)->ne('execution')
-            ->orWhere('(`objectType`')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
+            ->andWhere('`objectType`', true)->ne('execution')
+            ->orWhere('(`objectType`')->eq('execution')->andWhere('`objectID`')->notIn($noMultipleExecutions)
             ->markRight(2)
             ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
+            ->andWhere('`objectType`')->notIn($this->config->action->hiddenTrashObjects)
             ->fetchAll('objectType');
     }
 
@@ -637,7 +638,42 @@ class actionModel extends model
      */
     public function getHistory(array|int $actionID): array
     {
-        return $this->dao->select('*')->from(TABLE_HISTORY)->where('action')->in($actionID)->fetchGroup('action');
+        $histories = $this->dao->select('*')->from(TABLE_HISTORY)->where('action')->in($actionID)->fetchGroup('action');
+        return $this->redactHistory($histories);
+    }
+
+    /**
+     * 脱敏历史记录中的敏感字段。
+     * Redact sensitive fields from history records.
+     *
+     * @param  array $histories
+     * @access protected
+     * @return array
+     */
+    protected function redactHistory(array $histories): array
+    {
+        $sensitiveFields = array();
+        foreach($this->config->action->sensitiveHistoryFields as $field)
+        {
+            $sensitiveFields[str_replace(array('_', '-'), '', strtolower($field))] = true;
+        }
+
+        foreach($histories as $actionID => $historyList)
+        {
+            foreach($historyList as $history)
+            {
+                $field = str_replace(array('_', '-'), '', strtolower((string)$history->field));
+                if(!isset($sensitiveFields[$field])) continue;
+
+                $history->old      = '******';
+                $history->oldValue = '******';
+                $history->new      = '******';
+                $history->newValue = '******';
+                $history->diff     = '******';
+            }
+        }
+
+        return $histories;
     }
 
     /**
@@ -1316,7 +1352,7 @@ class actionModel extends model
 
         return $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
             ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
-            ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
+            ->where('`objectType`')->notIN($this->config->action->ignoreObjectType4Dynamic)
             ->andWhere('action.action')->notIN($this->config->action->ignoreActions4Dynamic)
             ->andWhere("({$sql})")
             ->andWhere("({$condition})")
@@ -1795,7 +1831,7 @@ class actionModel extends model
         $historiesWithoutDiff = array();    // To save histories with diff info.
 
         /* 加载工作流新增的语言包。*/
-        if($this->config->edition != 'open')
+        if(!in_array($this->config->edition, array('open', 'gitfox')))
         {
             $flow = $this->loadModel('workflow')->getByModule($objectType);
             if(!empty($flow)) $this->loadModel('common')->loadCustomLang($objectType, 'view');
@@ -1871,7 +1907,7 @@ class actionModel extends model
      */
     public function deleteByType(string $objectType): bool
     {
-        $this->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq($objectType)->exec();
+        $this->dao->delete()->from(TABLE_ACTION)->where('`objectType`')->eq($objectType)->exec();
 
         return !dao::isError();
     }
@@ -1911,7 +1947,7 @@ class actionModel extends model
             $module = $this->loadModel('tree')->getById($action->objectID);
             if($module->type == 'doc' && $module->parent > 0)
             {
-                $parentActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('objectType')->eq('module')->andWhere('objectID')->eq($module->parent)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
+                $parentActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('`objectType`')->eq('module')->andWhere('`objectID`')->eq($module->parent)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
                 if($parentActionID) $this->undelete($parentActionID);
             }
         }
@@ -1921,7 +1957,7 @@ class actionModel extends model
             $reviewID = $this->dao->select('id')->from(TABLE_REVIEW)->where('type')->eq('projectchange')->andWhere('object')->eq($action->objectID)->andWhere('deleted')->eq('1')->fetch('id');
             if($reviewID)
             {
-                $reviewActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('action')->eq('deleted')->andWhere('objectType')->eq('review')->andWhere('objectID')->eq($reviewID)->andWhere('extra')->eq(self::CAN_UNDELETED)->fetch('id');
+                $reviewActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('action')->eq('deleted')->andWhere('`objectType`')->eq('review')->andWhere('`objectID`')->eq($reviewID)->andWhere('extra')->eq(self::CAN_UNDELETED)->fetch('id');
                 if($reviewActionID) $this->undelete($reviewActionID);
             }
         }
@@ -1931,7 +1967,7 @@ class actionModel extends model
             $review = $this->dao->select('*')->from(TABLE_REVIEW)->where('id')->eq($action->objectID)->fetch();
             if($review->type == 'projectchange')
             {
-                $projectchangeActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('action')->eq('deleted')->andWhere('objectType')->eq('projectchange')->andWhere('objectID')->eq($review->object)->andWhere('extra')->eq(self::CAN_UNDELETED)->fetch('id');
+                $projectchangeActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('action')->eq('deleted')->andWhere('`objectType`')->eq('projectchange')->andWhere('`objectID`')->eq($review->object)->andWhere('extra')->eq(self::CAN_UNDELETED)->fetch('id');
                 if($projectchangeActionID) $this->undelete($projectchangeActionID);
             }
         }
@@ -1955,7 +1991,7 @@ class actionModel extends model
         if($action->objectType == 'release' && !empty($object->system)) $this->loadModel('system')->setSystemRelease((int)$object->system, $action->objectID);
         if(in_array($action->objectType, array('release', 'build')) && !empty($object->system))
         {
-            $systemActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('objectType')->eq('system')->andWhere('objectID')->eq($object->system)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
+            $systemActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('`objectType`')->eq('system')->andWhere('`objectID`')->eq($object->system)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
             if($systemActionID) $this->undelete($systemActionID);
         }
 
@@ -1963,7 +1999,7 @@ class actionModel extends model
         {
             if(!empty($object) && $object->mirror)
             {
-                $providerID = $this->dao->select('id')->from(TABLE_ACTION)->where('objectType')->eq('provider')->andWhere('objectID')->eq($object->providerID)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
+                $providerID = $this->dao->select('id')->from(TABLE_ACTION)->where('`objectType`')->eq('provider')->andWhere('`objectID`')->eq($object->providerID)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
                 if($providerID) $this->undelete($providerID);
             }
         }
@@ -2044,7 +2080,7 @@ class actionModel extends model
              ->exec();
 
          $this->file->updateObjectID($newComment->uid, $action->objectID, $action->objectType);
-         $this->file->processFileDiffsForObject('comment', $action, $newComment);
+         $this->file->processFileDiffsForObject('comment', $action, $newComment, "{$action->objectType}-{$action->objectID}");
          if(!empty($newComment->files))
          {
              $action->files = $newComment->files;
@@ -2135,7 +2171,7 @@ class actionModel extends model
     public function saveIndex(string $objectType, int $objectID, string $actionType): bool
     {
         $this->loadModel('search');
-        if($this->config->edition != 'open' && $this->app->isServing()) $this->loadModel('workflow')->appendSearchConfig();
+        if(!in_array($this->config->edition, array('open', 'gitfox')) && $this->app->isServing()) $this->loadModel('workflow')->appendSearchConfig();
 
         $actionType = strtolower($actionType);
         if(!isset($this->config->search->fields->{$objectType})) return false;
@@ -2165,8 +2201,8 @@ class actionModel extends model
         }
 
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->eq($objectID)
+            ->where('`objectType`')->eq($objectType)
+            ->andWhere('`objectID`')->eq($objectID)
             ->orderBy('id asc')
             ->fetchAll();
         foreach($actions as $action)
@@ -2334,8 +2370,8 @@ class actionModel extends model
     public function restoreStages(array $stageList): bool
     {
         $deletedActions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectID')->in(array_keys($stageList))
-            ->andWhere('objectType')->eq('execution')
+            ->where('`objectID`')->in(array_keys($stageList))
+            ->andWhere('`objectType`')->eq('execution')
             ->andWhere('action')->eq('deleted')
             ->orderBy('id_desc')
             ->fetchGroup('objectID');

@@ -317,7 +317,7 @@ class testreportZen extends testreport
                 if(!empty($testtask->members)) $taskMembers .= ',' . (string)$testtask->members;
             }
             $taskMembers = explode(',', $taskMembers);
-            $members     = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
+            $members     = $this->dao->select('DISTINCT `lastRunner`')->from(TABLE_TESTRUN)->where('task')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
             $this->view->members = implode(',', array_merge($members, $taskMembers));
         }
 
@@ -482,6 +482,8 @@ class testreportZen extends testreport
         $bugSummary['countBugByTask']      = $byCaseNum;
         $bugSummary['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((zget($resolutionGroups, 'fixed', 0) + zget($resolutionGroups, 'postponed', 0)) / $resolvedBugs * 100, 2);
         $bugSummary['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($foundBugs) * 100, 2);
+
+        $this->view->activatedBugs = $activatedBugs;
 
         /* Set bug info. */
         $bugInfo = $this->buildBugInfo($stageGroups, $handleGroups, $severityGroups, $typeGroups, $statusGroups, $openedByGroups, $moduleGroups, $resolvedByGroups, $resolutionGroups, $productIdList);

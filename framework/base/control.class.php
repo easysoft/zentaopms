@@ -1084,6 +1084,10 @@ class baseControl
         $context->data    = (array)$this->view;
         $context->data['zinDebug'] = array();
 
+        /* 使用保留前缀保存渲染参数，视图数据应避免同名。Reserve contextRender-prefixed names for render parameters. */
+        $contextRenderModuleName = $moduleName;
+        $contextRenderMethodName = $methodName;
+
         $debug     = $this->config->debug ?? 0;
         $installed = $this->config->installed ?? false;
         if($debug >= 2 && $installed && $this->config->db->driver == 'mysql')
@@ -1102,9 +1106,17 @@ class baseControl
 
         /* 加载 common.field.php 和 method.field.php。 */
         $commonFieldFile = dirname($viewFile) . DS . 'common.field.php';
-        $methodFieldFile = dirname($viewFile) . DS . $methodName . '.field.php';
+        $methodFieldFile = dirname($viewFile) . DS . $contextRenderMethodName . '.field.php';
         helper::import($commonFieldFile);
         helper::import($methodFieldFile);
+
+        /* 加载扩展的 field hook 文件。Load extension field hook files. */
+        $lowerMethodName    = strtolower($contextRenderMethodName);
+        $viewExtPath        = $this->app->getModuleExtPath($contextRenderModuleName, 'ui');
+        $commonExtHookFiles = empty($viewExtPath['common']) ? array() : glob($viewExtPath['common'] . $lowerMethodName . ".*.field.hook.php");
+        $siteExtHookFiles   = empty($viewExtPath['site'])   ? array() : glob($viewExtPath['site']   . $lowerMethodName . ".*.field.hook.php");
+        $extHookFiles       = array_merge((array)$commonExtHookFiles, (array)$siteExtHookFiles);
+        foreach($extHookFiles as $extHookFile) helper::import($extHookFile);
 
         $this->setResponseHeader();
 
@@ -1152,12 +1164,15 @@ class baseControl
         $context->control = $this;
         $context->data    = (array)$this->view;
 
+        /* 使用保留前缀保存渲染参数，视图数据应避免同名。Reserve contextRender-prefixed names for render parameters. */
+        $contextRenderMethodName = $methodName;
+
         extract($context->data);
 
         if(!empty($hookFiles)) $context->addHookFiles($hookFiles);
 
         $commonFieldFile = dirname($viewFile) . DS . 'common.field.php';
-        $methodFieldFile = dirname($viewFile) . DS . $methodName . '.field.php';
+        $methodFieldFile = dirname($viewFile) . DS . $contextRenderMethodName . '.field.php';
         helper::import($commonFieldFile);
         helper::import($methodFieldFile);
 
@@ -1404,6 +1419,5 @@ class baseControl
     public function locate(string $url)
     {
         helper::header('location', $url);
-        helper::end();
     }
 }

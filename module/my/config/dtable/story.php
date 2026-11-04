@@ -204,7 +204,7 @@ $config->my->story->dtable->fieldList['caseCount']['link']        = array('modul
 $config->my->story->dtable->fieldList['caseCount']['data-toggle'] = 'modal';
 $config->my->story->dtable->fieldList['caseCount']['group']       = 7;
 
-if($config->edition != 'open')
+if(!in_array($config->edition, array('open', 'gitfox')))
 {
     $config->my->story->dtable->fieldList['relatedObject']['name']            = 'relatedObject';
     $config->my->story->dtable->fieldList['relatedObject']['title']           = $lang->custom->relateObject;
@@ -294,6 +294,7 @@ $config->my->story->dtable->fieldList['notifyEmail']['group']    = 11;
 
 $config->my->story->dtable->fieldList['mailto']['name']     = 'mailto';
 $config->my->story->dtable->fieldList['mailto']['title']    = $lang->story->mailto;
+$config->my->story->dtable->fieldList['mailto']['type']     = 'category';
 $config->my->story->dtable->fieldList['mailto']['width']    = '100';
 $config->my->story->dtable->fieldList['mailto']['sortType'] = true;
 $config->my->story->dtable->fieldList['mailto']['group']    = 11;

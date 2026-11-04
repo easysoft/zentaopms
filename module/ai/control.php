@@ -1045,4 +1045,16 @@ class ai extends control
             ));
         }
     }
+
+    /**
+     * Cron entry: run due timer agents.
+     * Open edition stub. Paid editions override this in the biz extension.
+     *
+     * @access public
+     * @return void
+     */
+    public function runTimerAgents()
+    {
+        echo 'success';
+    }
 }

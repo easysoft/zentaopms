@@ -55,10 +55,10 @@ if($config->db->driver == 'mysql')
     $lang->admin->menuList->system['tabMenu']['menuOrder']['database']['10'] = 'charset';
 }
 $lang->admin->menuList->system['tabMenu']['database']['dbview']      = array('link' => "{$lang->admin->dbView}|admin|dbview|");
-if($config->edition != 'open' && $config->vision == 'rnd') $lang->admin->menuList->system['tabMenu']['database']['metriclib'] = array('link' => "{$lang->metriclib->common}|admin|metriclib|");
+if(!in_array($config->edition, array('open', 'gitfox')) && $config->vision == 'rnd') $lang->admin->menuList->system['tabMenu']['database']['metriclib'] = array('link' => "{$lang->metriclib->common}|admin|metriclib|");
 
 $lang->admin->menuList->system['tabMenu']['menuOrder']['database']['15'] = 'dbview';
-if($config->edition != 'open' && $config->vision == 'rnd') $lang->admin->menuList->system['tabMenu']['menuOrder']['database']['20'] = 'metriclib';
+if(!in_array($config->edition, array('open', 'gitfox')) && $config->vision == 'rnd') $lang->admin->menuList->system['tabMenu']['menuOrder']['database']['20'] = 'metriclib';
 
 $lang->admin->menuList->system['menuOrder']['5']  = 'mode';
 if(in_array($config->db->driver, $config->mysqlDriverList)) $lang->admin->menuList->system['menuOrder']['10'] = 'backup';
@@ -83,7 +83,7 @@ $lang->admin->menuList->company['menuOrder']['15'] = 'group';
 
 $lang->admin->menuList->feature['subMenu']['my']          = array('link' => "{$lang->my->common}|custom|set|module=todo&field=priList", 'exclude' => 'set,required');
 $lang->admin->menuList->feature['subMenu']['product']     = array('link' => "{$lang->productCommon}|custom|required|module=product", 'exclude' => 'set,required', 'alias' => 'browsestoryconcept,product');
-$lang->admin->menuList->feature['subMenu']['project']     = array('link' => "{$lang->projectCommon}|custom|required|module=project", 'alias' => 'flow,percent,hours,estimate,project', 'subModule' => 'subject,holiday,design,reviewcl', 'exclude' => 'set,required');
+$lang->admin->menuList->feature['subMenu']['project']     = array('link' => "{$lang->projectCommon}|custom|required|module=project", 'alias' => 'flow,percent,hours,estimate,project', 'subModule' => 'subject,holiday,design,reviewcl,alert', 'exclude' => 'set,required');
 $lang->admin->menuList->feature['subMenu']['execution']   = array('link' => "{$lang->execution->common}|custom|required|module=execution", 'exclude' => 'required,set', 'alias' => 'execution,limittaskdate', 'subModule' => 'stage');
 $lang->admin->menuList->feature['subMenu']['qa']          = array('link' => "{$lang->qa->common}|custom|required|module=bug", 'exclude' => 'set,required');
 $lang->admin->menuList->feature['subMenu']['kanban']      = array('link' => "{$lang->kanban->common}|custom|kanban|");

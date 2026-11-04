@@ -629,9 +629,14 @@ class testcase extends control
 
         if(!empty($_POST))
         {
+            /* 显式提交空步骤表示清空，$case添加一个额外标记，避免与真实步骤内容冲突。v1 由 entry 自行处理。*/
+            /* Empty steps explicitly submitted means clearing; pass a flag to the model to avoid conflicts with real step content. v1 entries handle it themselves. */
+            $clearSteps = $this->app->apiVersion != 'v1' && isset($_POST['steps']) && is_array($_POST['steps']) && !array_filter($_POST['steps'], function($step){ return trim((string)$step) !== ''; });
+
             $formData = form::data($this->config->testcase->form->edit, $caseID);
             $case     = $this->testcaseZen->prepareEditExtras($formData, $oldCase);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($clearSteps && is_object($case)) $case->clearSteps = true;
 
             $changes = array();
             if($comment != 'true')
@@ -649,7 +654,7 @@ class testcase extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $caseID, 'changes' => $objectChanges));
             if(isInModal() && $this->app->tab == 'my') return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'changes' => $objectChanges));
             $testtaskID = $from == 'testtask' && $this->session->testtaskID ? $this->session->testtaskID : 0;
-            $locate     = $oldCase->lib ? $this->createLink('caselib', 'viewCase', "caseID={$caseID}") : $this->createLink('testcase', 'view', "caseID={$caseID}&version=0&from={$from}&testtaskID={$testtaskID}");
+            $locate     = ($oldCase->lib && empty($oldCase->product)) ? $this->createLink('caselib', 'viewCase', "caseID={$caseID}") : $this->createLink('testcase', 'view', "caseID={$caseID}&version=0&from={$from}&testtaskID={$testtaskID}");
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $locate, 'changes' => $objectChanges));
         }
 
@@ -748,8 +753,17 @@ class testcase extends control
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
-        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch, array(), 'all', 'id_desc', 0, '', 'story', false);
-        $cases   = $this->testcaseZen->processStepsAndExpectsForBatchEdit($cases);
+        if($this->app->tab != 'qa' && $this->app->tab != 'product' && $this->app->tab != 'my')
+        {
+            $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            $stories   = $this->loadModel('story')->getExecutionStoryPairs($projectID, $productID, $branch === 'all' ? 0 : $branch, array(), 'full', 'unclosed', 'story', false);
+        }
+        else
+        {
+            $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch, array(), 'active,reviewing', 'id_desc', 50, '', 'story', false);
+        }
+
+        $cases = $this->testcaseZen->processStepsAndExpectsForBatchEdit($cases);
 
         /* 展示变量. */
         /* Show the variables. */
@@ -797,6 +811,7 @@ class testcase extends control
         $this->view->title      = $this->lang->testcase->review;
         $this->view->users      = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->testcaseID = $caseID;
+        $this->view->testcase   = $oldCase;
         $this->view->actions    = $this->loadModel('action')->getList('case', $caseID);
         $this->display();
     }
@@ -1065,7 +1080,7 @@ class testcase extends control
      public function batchConfirmLibcaseChange()
      {
          $caseIdList     = zget($_POST, 'caseIdList',  array());
-         $fromCaseIdList = $this->dao->select('id, fromCaseID')->from(TABLE_CASE)->where('id')->in($caseIdList)->andWhere('fromCaseID')->ne(0)->fetchPairs('id');
+         $fromCaseIdList = $this->dao->select('id, `fromCaseID`')->from(TABLE_CASE)->where('id')->in($caseIdList)->andWhere('`fromCaseID`')->ne(0)->fetchPairs('id');
          foreach($fromCaseIdList as $caseID => $libCaseID) $this->testcase->confirmLibcaseChange($caseID, $libCaseID);
          return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
      }
@@ -1081,7 +1096,7 @@ class testcase extends control
     public function ignoreLibcaseChange(int $caseID)
     {
         $case = $this->testcase->fetchBaseInfo($caseID);
-        $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($case->version)->where('id')->eq($caseID)->exec();
+        $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($case->version)->where('id')->eq($caseID)->exec();
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
 
@@ -1099,7 +1114,7 @@ class testcase extends control
          foreach($caseList as $case)
          {
              if($case->fromCaseVersion == $case->version) continue;
-             $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($case->version)->where('id')->eq($case->id)->exec();
+             $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($case->version)->where('id')->eq($case->id)->exec();
          }
          return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
      }
@@ -1120,7 +1135,7 @@ class testcase extends control
             $story = $this->loadModel('story')->fetchBaseInfo($case->story);
             if($story->version != $case->storyVersion)
             {
-                $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($story->version)->where('id')->eq($caseID)->exec();
+                $this->dao->update(TABLE_CASE)->set('`storyVersion`')->eq($story->version)->where('id')->eq($caseID)->exec();
                 $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $story->version);
             }
         }

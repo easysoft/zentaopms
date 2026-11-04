@@ -163,7 +163,7 @@ $config->my->requirement->dtable->fieldList['assignedDate']['sortType'] = true;
 $config->my->requirement->dtable->fieldList['assignedDate']['type']     = 'date';
 $config->my->requirement->dtable->fieldList['assignedDate']['group']    = 6;
 
-if($config->edition != 'open')
+if(!in_array($config->edition, array('open', 'gitfox')))
 {
     $config->my->requirement->dtable->fieldList['relatedObject']['name']            = 'relatedObject';
     $config->my->requirement->dtable->fieldList['relatedObject']['title']           = $lang->custom->relateObject;
@@ -253,6 +253,7 @@ $config->my->requirement->dtable->fieldList['notifyEmail']['group']    = 11;
 
 $config->my->requirement->dtable->fieldList['mailto']['name']     = 'mailto';
 $config->my->requirement->dtable->fieldList['mailto']['title']    = $lang->story->mailto;
+$config->my->requirement->dtable->fieldList['mailto']['type']     = 'category';
 $config->my->requirement->dtable->fieldList['mailto']['width']    = '100';
 $config->my->requirement->dtable->fieldList['mailto']['sortType'] = true;
 $config->my->requirement->dtable->fieldList['mailto']['group']    = 11;

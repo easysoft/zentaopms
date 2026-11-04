@@ -206,19 +206,6 @@ class admin extends control
     }
 
     /**
-     * 获取验证码。
-     * Get the verification code.
-     *
-     * @param  string $type mobile|email
-     * @access public
-     * @return void
-     */
-    public function ajaxSendCode(string $type)
-    {
-        return print($this->adminZen->sendCodeByAPI($type));
-    }
-
-    /**
      * 设置日志保存天数。
      * Set save days of log.
      *
@@ -541,7 +528,7 @@ class admin extends control
             $sqlite->exec($query->sql);
             $this->dao->update(TABLE_SQLITE_QUEUE)
                 ->set('status')->eq('done')
-                ->set('execDate')->eq($now)
+                ->set('`execDate`')->eq($now)
                 ->where('id')->eq($query->id)
                 ->exec();
         }

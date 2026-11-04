@@ -145,7 +145,7 @@ class bug extends control
         $this->bugZen->buildBrowseSearchForm($productID, $branch, $queryID, $actionURL);
 
         $executions = $this->loadModel('execution')->fetchPairs($this->projectID, 'all', false);
-        $bugs       = $this->bugZen->getBrowseBugs((int)$product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
+        $bugs       = $this->bugZen->getBrowseBugs((int)$product->id, $branch, $browseType, array(), $moduleID, $queryID, $realOrderBy, $pager);
 
         $this->bugZen->buildBrowseView($bugs, (object)$product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager);
 
@@ -185,7 +185,7 @@ class bug extends control
 
         /* 检查用户是否拥有所属执行的权限。*/
         /* Check bug execution priv. */
-        $this->bugZen->checkBugExecutionPriv($bug);
+        if($this->bugZen->checkBugExecutionPriv($bug) === false) return;
 
         /* Update action. */
         if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
@@ -349,6 +349,13 @@ class bug extends control
         $oldBug = $this->bug->getByID($bugID);
         if(!$oldBug) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
 
+        if($this->config->edition == 'gitfox')
+        {
+            $hiddenEditFields = $this->config->bug->edit->gitfoxHiddenFields;
+            $requiredFields   = array_diff(explode(',', $this->config->bug->edit->requiredFields), $hiddenEditFields);
+            $this->config->bug->edit->requiredFields = implode(',', $requiredFields);
+        }
+
         if(!empty($_POST))
         {
             $formData = form::data($this->config->bug->form->edit, $bugID);
@@ -372,7 +379,7 @@ class bug extends control
             return $this->bugZen->responseAfterOperate($bugID, $changes, $message);
         }
 
-        $this->bugZen->checkBugExecutionPriv($oldBug);
+        if($this->bugZen->checkBugExecutionPriv($oldBug) === false) return;
         $this->bugZen->setEditMenu($oldBug);
         $this->bugZen->buildEditForm($oldBug);
         $this->display();
@@ -392,7 +399,7 @@ class bug extends control
         /* Get old bug and check privilege of the execution. */
         $oldBug = $this->bug->getByID($bugID);
         if(!$oldBug) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
-        $this->bugZen->checkBugExecutionPriv($oldBug);
+        if($this->bugZen->checkBugExecutionPriv($oldBug) === false) return;
 
         if(!empty($_POST))
         {
@@ -448,7 +455,7 @@ class bug extends control
 
         /* 检查 bug 所属执行的权限。*/
         /* Check privilege for execution of the bug. */
-        $this->bugZen->checkBugExecutionPriv($oldBug);
+        if($this->bugZen->checkBugExecutionPriv($oldBug) === false) return;
 
         if(!empty($_POST))
         {
@@ -496,7 +503,7 @@ class bug extends control
         /* Get bug info, and check privilege of bug 所属执行的权限。*/
         $oldBug = $this->bug->getById($bugID);
         if(!$oldBug) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
-        $this->bugZen->checkBugExecutionPriv($oldBug);
+        if($this->bugZen->checkBugExecutionPriv($oldBug) === false) return;
 
         if(!empty($_POST))
         {
@@ -572,7 +579,7 @@ class bug extends control
         /* Get bug info, and check privilege of bug 所属执行的权限。*/
         $oldBug = $this->bug->getByID($bugID);
         if(!$oldBug) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
-        $this->bugZen->checkBugExecutionPriv($oldBug);
+        if($this->bugZen->checkBugExecutionPriv($oldBug) === false) return;
 
         if(!empty($_POST))
         {
@@ -630,7 +637,7 @@ class bug extends control
         /* Get bug info, and check privilege of bug 所属执行的权限。*/
         $oldBug = $this->bug->getByID($bugID);
         if(!$oldBug) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
-        $this->bugZen->checkBugExecutionPriv($oldBug);
+        if($this->bugZen->checkBugExecutionPriv($oldBug) === false) return;
 
         if(!empty($_POST))
         {
@@ -821,7 +828,7 @@ class bug extends control
 
         /* 检查 bug 所属执行的权限。*/
         /* Check privilege of bug 所属执行的权限。*/
-        $this->bugZen->checkBugExecutionPriv($bug);
+        if($this->bugZen->checkBugExecutionPriv($bug) === false) return;
 
         $this->qa->setMenu($bug->product, $bug->branch);
 
@@ -1420,7 +1427,7 @@ class bug extends control
         /* 获取更新前的 bug，并且检查所属执行的权限。*/
         /* Get old bug and check privilege of the execution. */
         $oldBug = $this->bug->getById($bugID);
-        $this->bugZen->checkBugExecutionPriv($oldBug);
+        if($this->bugZen->checkBugExecutionPriv($oldBug) === false) return;
 
         /* 更新 bug 的需求版本。 */
         /* Update the version of the story. */

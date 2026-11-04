@@ -14,6 +14,8 @@ include(dirname(__FILE__) . '/common.php');
 
 global $config;
 
+$lang->appLoadFailed = '應用載入失敗，請重新整理頁面後重試。';
+
 $lang->arrow     = '&nbsp;<i class="icon-angle-right"></i>&nbsp;';
 $lang->colon     = '：';
 $lang->hyphen    = '-';
@@ -29,6 +31,8 @@ $lang->dash      = '-';
 $lang->zentaoPMS      = '禪道';
 $lang->pmsName        = '開源版';
 $lang->proName        = '專業版';
+$lang->devopsName     = 'DevOps';
+$lang->gitfoxName     = 'GitFox';
 $lang->logoImg        = 'zt-logo.png';
 $lang->welcome        = "%s項目管理系統";
 $lang->logout         = '退出';
@@ -361,6 +365,7 @@ $lang->exportTypeList['selected'] = '選中記錄';
 $lang->visionList = array();
 $lang->visionList['rnd']  = '研發綜合介面';
 $lang->visionList['lite'] = '營運管理介面';
+$lang->visionList['gitfox'] = 'GitFox介面';
 
 if($config->edition == 'ipd')
 {

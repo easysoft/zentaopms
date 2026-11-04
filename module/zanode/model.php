@@ -229,7 +229,7 @@ class zanodemodel extends model
 
         /* 更新快照状态。*/
         /* Update snapshot status. */
-        $this->dao->update(TABLE_IMAGE)->set('status')->eq('restoring')->set('restoreDate')->eq(helper::now())->where('id')->eq($snapshotID)->exec();
+        $this->dao->update(TABLE_IMAGE)->set('status')->eq('restoring')->set('`restoreDate`')->eq(helper::now())->where('id')->eq($snapshotID)->exec();
 
         /* 执行还原命令。*/
         /* Execute the restore command. */
@@ -402,7 +402,7 @@ class zanodemodel extends model
             if(isset($osList[$node->osName]) && !empty($osList[$node->osName]))
             {
                 $this->dao->update(TABLE_ZAHOST)
-                    ->beginIF(isset($osList[$node->osName]) && !empty($osList[$node->osName]))->set('osName')->eq($osList[$node->osName])->fi()
+                    ->beginIF(isset($osList[$node->osName]) && !empty($osList[$node->osName]))->set('`osName`')->eq($osList[$node->osName])->fi()
                     ->where('id')->eq($node->id)
                     ->exec();
             }
@@ -575,7 +575,7 @@ class zanodemodel extends model
      */
     public function getNodeByID(int $id): object|bool
     {
-        $node = $this->dao->select("t1.*, t2.name as hostName, if(t1.`hostType`='', t2.extranet, t1.extranet) ip,t2.zap as hzap,if(t1.`hostType`='', t3.`osName`, t1.`osName`) `osName`, if(t1.`hostType`='', t2.`tokenSN`, t1.`tokenSN`) `tokenSN`, if(t1.`hostType`='', t2.secret, t1.secret) secret")
+        $node = $this->dao->select("t1.*, t2.name as `hostName`, if(t1.`hostType`='', t2.extranet, t1.extranet) ip,t2.zap as hzap,if(t1.`hostType`='', t3.`osName`, t1.`osName`) `osName`, if(t1.`hostType`='', t2.`tokenSN`, t1.`tokenSN`) `tokenSN`, if(t1.`hostType`='', t2.secret, t1.secret) secret")
             ->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')

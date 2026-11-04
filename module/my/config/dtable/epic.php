@@ -163,7 +163,7 @@ $config->my->epic->dtable->fieldList['assignedDate']['sortType'] = true;
 $config->my->epic->dtable->fieldList['assignedDate']['type']     = 'date';
 $config->my->epic->dtable->fieldList['assignedDate']['group']    = 6;
 
-if($config->edition != 'open')
+if(!in_array($config->edition, array('open', 'gitfox')))
 {
     $config->my->epic->dtable->fieldList['relatedObject']['name']            = 'relatedObject';
     $config->my->epic->dtable->fieldList['relatedObject']['title']           = $lang->custom->relateObject;
@@ -253,6 +253,7 @@ $config->my->epic->dtable->fieldList['notifyEmail']['group']    = 11;
 
 $config->my->epic->dtable->fieldList['mailto']['name']     = 'mailto';
 $config->my->epic->dtable->fieldList['mailto']['title']    = $lang->story->mailto;
+$config->my->epic->dtable->fieldList['mailto']['type']     = 'category';
 $config->my->epic->dtable->fieldList['mailto']['width']    = '100';
 $config->my->epic->dtable->fieldList['mailto']['sortType'] = true;
 $config->my->epic->dtable->fieldList['mailto']['group']    = 11;

@@ -37,6 +37,8 @@ $lang->proName        = '专业版';
 $lang->bizName        = '企业版';
 $lang->maxName        = '旗舰版';
 $lang->liteName       = '迅捷版';
+$lang->devopsName     = 'DevOps';
+$lang->gitfoxName     = 'GitFox';
 $lang->devopsPrefix   = '禅道DevOps平台';
 $lang->logoImg        = 'zt-logo.png';
 $lang->welcome        = "%s项目管理系统";
@@ -163,6 +165,7 @@ $lang->noticeDrag      = '可点击添加或拖拽上传, 不超过 %s';
 $lang->allProgress     = '总进度';
 $lang->hasReviewed     = '该内容已经评审过，无需重复评审！';
 $lang->appNotFound     = '无权访问该应用，请检查权限设置。';
+$lang->appLoadFailed   = '应用加载失败，请刷新页面后重试。';
 
 $lang->fieldDisplaySetting = '字段显示设置';
 $lang->fieldSettingTip     = '以下字段默认收起，点击「显示更多字段」按钮展开查看，若您希望某些字段默认不收起，通过图钉固定即可。';
@@ -559,7 +562,6 @@ $lang->exportTypeList['selected'] = '选中记录';
 $lang->visionList = array();
 $lang->visionList['rnd']    = '研发综合界面';
 $lang->visionList['lite']   = '运营管理界面';
-//$lang->visionList['devops'] = 'DevOps界面';
 
 $lang->createObjects['todo']        = '待办';
 $lang->createObjects['effort']      = '日志';

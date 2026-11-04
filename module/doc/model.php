@@ -456,7 +456,7 @@ class docModel extends model
         $oldLib = $this->getLibByID($libID);
         if($oldLib->type == 'project')
         {
-            $libCreatedBy = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('doclib')->andWhere('objectID')->eq($libID)->andWhere('action')->eq('created')->fetch('actor');
+            $libCreatedBy = $this->dao->select('*')->from(TABLE_ACTION)->where('`objectType`')->eq('doclib')->andWhere('`objectID`')->eq($libID)->andWhere('action')->eq('created')->fetch('actor');
 
             $openedBy = $this->dao->findById($oldLib->project)->from(TABLE_PROJECT)->fetch('openedBy');
             if($lib->acl == 'private' && $lib->acl == 'custom') $lib->users .= ',' . $libCreatedBy ? $libCreatedBy : $openedBy;
@@ -590,13 +590,13 @@ class docModel extends model
         $query     = $this->getDocQuery($this->session->contributeDocQuery);
         $query     = preg_replace('/(`\w+`)/', 't1.$1', $query);
         $docIDList = $this->dao->select('`objectID`')->from(TABLE_ACTION)
-            ->where('objectType')->eq('doc')
-            ->andWhere('objectID')->in($hasPrivDocIdList)
+            ->where('`objectType`')->eq('doc')
+            ->andWhere('`objectID`')->in($hasPrivDocIdList)
             ->andWhere('actor')->eq($this->app->user->account)
             ->andWhere('action')->eq('edited')
             ->fetchAll('objectID');
 
-        return $this->dao->select('t1.*, t2.name as libName, t2.type as `objectType`')->from(TABLE_DOC)->alias('t1')
+        return $this->dao->select('t1.*, t2.name as `libName`, t2.type as `objectType`')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
             ->where('t1.deleted')->eq(0)
             ->andWhere($query)
@@ -745,10 +745,10 @@ class docModel extends model
         $docs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('templateType')->eq('')
+            ->andWhere('`templateType`')->eq('')
             ->andWhere('id')->in($docIdList)
             ->beginIF($browseType == 'all')->andWhere("(status = 'normal' or (status = 'draft' and `addedBy`='{$this->app->user->account}'))")->fi()
-            ->beginIF($browseType == 'draft')->andWhere('status')->eq('draft')->andWhere('addedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($browseType == 'draft')->andWhere('status')->eq('draft')->andWhere('`addedBy`')->eq($this->app->user->account)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id',false);
@@ -801,7 +801,7 @@ class docModel extends model
             ->where('t1.lib')->in($libs)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF(!$queryTemplate)->andWhere('t1.`templateType`')->eq('')->fi()
-            ->beginIF($queryTemplate)->andWhere('t1.`templateType`')->ne('')->andWhere('builtIn')->eq('0')->fi()
+            ->beginIF($queryTemplate)->andWhere('t1.`templateType`')->ne('')->andWhere('`builtIn`')->eq('0')->fi()
             ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.`addedBy`='{$this->app->user->account}'))")
             ->andWhere('t1.module')->in(array('0', ''))
             ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
@@ -1002,11 +1002,11 @@ class docModel extends model
             ->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('templateType')->eq('')
+            ->andWhere('`templateType`')->eq('')
             ->andWhere('id')->in($docIdList)
-            ->beginIF($filterType === 'draft')->andWhere('status')->eq('draft')->andWhere('addedBy')->eq($this->app->user->account)->fi()
-            ->beginIF($filterType === 'createdByMe')->andWhere('addedBy')->eq($this->app->user->account)->fi()
-            ->beginIF($filterType === 'editedByMe')->andWhere('editedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($filterType === 'draft')->andWhere('status')->eq('draft')->andWhere('`addedBy`')->eq($this->app->user->account)->fi()
+            ->beginIF($filterType === 'createdByMe')->andWhere('`addedBy`')->eq($this->app->user->account)->fi()
+            ->beginIF($filterType === 'editedByMe')->andWhere('`editedBy`')->eq($this->app->user->account)->fi()
             ->beginIF(!empty($searchCond))->andWhere('(' . implode(' OR ', $searchCond) . ')')->fi()
             ->fetch('cnt');
 
@@ -1214,7 +1214,7 @@ class docModel extends model
                 ->groupBy('doc')
                 ->get();
 
-            $dao = $this->dao->select('t1.*,t2.date,t3.name as libName,t3.type as `objectType`')->from(TABLE_DOC)->alias('t1')
+            $dao = $this->dao->select('t1.*,t2.date,t3.name as `libName`,t3.type as `objectType`')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc")
                 ->leftJoin(TABLE_DOCLIB)->alias('t3')->on("t1.lib=t3.id")
                 ->where('t1.deleted')->eq(0)
@@ -1232,7 +1232,7 @@ class docModel extends model
         }
         else
         {
-            $dao = $this->dao->select('t1.*,t2.name as libName,t2.type as `objectType`')->from(TABLE_DOC)->alias('t1')->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
+            $dao = $this->dao->select('t1.*,t2.name as `libName`,t2.type as `objectType`')->from(TABLE_DOC)->alias('t1')->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne(0)
                 ->andWhere('t1.`templateType`')->eq('')
@@ -1281,7 +1281,7 @@ class docModel extends model
 
         $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`readUsers`,`groups`,`readGroups`,`status`,`path`,`deleted`")->from(TABLE_DOC)
             ->where('vision')->eq($this->config->vision)
-            ->andWhere('templateType')->eq('')
+            ->andWhere('`templateType`')->eq('')
             ->beginIF(!empty($modules))->andWhere('module')->in($modules)->fi()
             ->beginIF($mode == 'normal')->andWhere('deleted')->eq(0)->fi()
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
@@ -1321,8 +1321,8 @@ class docModel extends model
         if($doc->status == 'normal')
         {
             $releaseInfo = $this->dao->select('*')->from(TABLE_ACTION)
-                ->where('objectType')->eq('doc')
-                ->andWhere('objectID')->eq($docID)
+                ->where('`objectType`')->eq('doc')
+                ->andWhere('`objectID`')->eq($docID)
                 ->andWhere('action')->eq('releaseddoc')
                 ->fetch();
             $doc->releasedBy   = $releaseInfo ? $releaseInfo->actor : $doc->addedBy;
@@ -1355,6 +1355,128 @@ class docModel extends model
     }
 
     /**
+     * Get deliverable and baseline markers for document versions.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return array
+     */
+    public function getVersionMarkers(int $docID): array
+    {
+        if(!in_array($this->config->edition, array('max', 'ipd')) || !$docID) return array();
+
+        $markers = array();
+        $versionList = $this->dao->select('t1.`docVersion`, t1.`submittedBy`, t2.`isBaseline`')
+            ->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.review = t2.id')
+            ->where('t1.doc')->eq($docID)
+            ->fetchAll();
+        $historyList = $this->dao->select('t1.`docVersion`, t1.`isBaseline`')
+            ->from(TABLE_REVIEW)->alias('t1')
+            ->leftJoin(TABLE_PROJECTDELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->where('t2.doc')->eq($docID)
+            ->andWhere('t1.type')->eq('deliverable')
+            ->andWhere('t1.deleted')->eq('0')
+            ->fetchAll();
+
+        foreach($versionList as $version)
+        {
+            if(empty($version->docVersion)) continue;
+            if(!isset($markers[$version->docVersion])) $markers[$version->docVersion] = array();
+            if(!empty($version->submittedBy)) $markers[$version->docVersion]['deliverable'] = true;
+            if($version->isBaseline) $markers[$version->docVersion]['baseline'] = true;
+        }
+        foreach($historyList as $version)
+        {
+            if(empty($version->docVersion)) continue;
+            if(!isset($markers[$version->docVersion])) $markers[$version->docVersion] = array();
+            $markers[$version->docVersion]['deliverable'] = true;
+            if($version->isBaseline) $markers[$version->docVersion]['baseline'] = true;
+        }
+
+        return $markers;
+    }
+
+    /**
+     * Get deliverable and baseline relations of a document version.
+     *
+     * @param  int    $docID
+     * @param  int    $version
+     * @access public
+     * @return array
+     */
+    public function getVersionRelations(int $docID, int $version): array
+    {
+        if(!in_array($this->config->edition, array('max', 'ipd')) || !$docID || !$version) return array();
+
+        $currentDeliverables = $this->dao->select('t1.id, t1.project, t3.id AS `relationReview`, t1.version AS `deliverableVersion`, t2.name AS `deliverableType`, t3.version AS `reviewVersion`, t3.`isBaseline`')
+            ->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->leftJoin(TABLE_REVIEW)->alias('t3')->on('t1.review = t3.id')
+            ->where('t1.doc')->eq($docID)
+            ->andWhere('t1.`docVersion`')->eq($version)
+            ->andWhere('(t1.`submittedBy`')->ne('')->orWhere('t3.`isBaseline`')->eq(1)->markRight()
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchAll('id');
+        $historyDeliverables = $this->dao->select('t1.id, t1.project, t3.id AS `relationReview`, t1.version AS `deliverableVersion`, t2.name AS `deliverableType`, t3.version AS `reviewVersion`, t3.`isBaseline`')
+            ->from(TABLE_REVIEW)->alias('t3')
+            ->leftJoin(TABLE_PROJECTDELIVERABLE)->alias('t1')->on('t3.deliverable = t1.id')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->where('t1.doc')->eq($docID)
+            ->andWhere('t3.`docVersion`')->eq($version)
+            ->andWhere('t3.type')->eq('deliverable')
+            ->andWhere('t3.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq(0)
+            ->orderBy('t3.id_asc')
+            ->fetchAll('id');
+
+        $deliverables = $currentDeliverables ? $currentDeliverables : array();
+        foreach($historyDeliverables as $id => $deliverable) $deliverables[$id] = $deliverable;
+        if(!$deliverables) return array();
+
+        $projectIdList = array_unique(array_column($deliverables, 'project'));
+        $baselines = $this->dao->select('id, project, title, version, `categoryVersion`')
+            ->from(TABLE_OBJECT)
+            ->where('project')->in($projectIdList)
+            ->andWhere('type')->eq('taged')
+            ->andWhere('status')->eq('pass')
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll();
+
+        $relations = array();
+        foreach($deliverables as $deliverable)
+        {
+            $relation = new stdclass();
+            $relation->deliverableID      = $deliverable->id;
+            $relation->reviewID           = $deliverable->relationReview;
+            $relation->deliverableType    = $deliverable->deliverableType;
+            $relation->deliverableVersion = $deliverable->reviewVersion ?: $deliverable->deliverableVersion;
+            $relation->baselineID         = 0;
+            $relation->baseline           = '';
+            $relation->baselineVersion    = '';
+
+            $hasBaseline = false;
+            foreach($baselines as $baseline)
+            {
+                if($baseline->project != $deliverable->project) continue;
+                $categoryVersion = json_decode($baseline->categoryVersion, true);
+                if(!isset($categoryVersion[$deliverable->id]) || $categoryVersion[$deliverable->id] != $deliverable->relationReview) continue;
+
+                $baselineRelation = clone $relation;
+                $baselineRelation->baselineID      = $baseline->id;
+                $baselineRelation->baseline        = $baseline->title;
+                $baselineRelation->baselineVersion = $baseline->version;
+                $relations[] = $baselineRelation;
+                $hasBaseline = true;
+            }
+
+            if(!$hasBaseline) $relations[] = $relation;
+        }
+
+        return $relations;
+    }
+
+    /**
      * 处理文档数据。
      * Process doc data.
      *
@@ -1366,7 +1488,7 @@ class docModel extends model
     public function processDoc(object $doc, int $version, bool $setImgSize = false): object
     {
         /* When file change then version add one. */
-        $files      = $this->loadModel('file')->getByObject('doc', $doc->id);
+        $files      = $this->loadModel('file')->getByObject('doc', $doc->id, '', !empty($doc->deleted));
         $docFiles   = array();
         $docContent = $this->getContent($doc->id, $version);
         if($docContent)
@@ -1433,7 +1555,7 @@ class docModel extends model
      */
     public function getByIdList(array $docIdList = array()): array
     {
-        return $this->dao->select('*,t1.id as docID,t1.type as docType,t1.version as `docVersion`,t2.type as `contentType`')->from(TABLE_DOC)->alias('t1')
+        return $this->dao->select('*,t1.id as `docID`,t1.type as `docType`,t1.version as `docVersion`,t2.type as `contentType`')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc and t1.version=t2.version')
             ->where('t1.id')->in($docIdList)
             ->andWhere('deleted')->eq(0)
@@ -1531,7 +1653,7 @@ class docModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($type == 'all')->andWhere('type')->in('mine,custom')->fi()
             ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
-            ->beginIF($type == 'mine')->andWhere('addedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($type == 'mine')->andWhere('`addedBy`')->eq($this->app->user->account)->fi()
             ->orderBy('type_desc')
             ->fetchAll('', false);
 
@@ -1612,7 +1734,7 @@ class docModel extends model
                 ->andWhere('parent')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere('type', true)->eq('custom')
-                ->orWhere('(type')->eq('mine')->andWhere('addedBy')->eq($this->app->user->account)
+                ->orWhere('(type')->eq('mine')->andWhere('`addedBy`')->eq($this->app->user->account)
                 ->markRight(2)
                 ->orderBy('type_desc')
                 ->fetchAll('', false);
@@ -1987,19 +2109,20 @@ class docModel extends model
         unset($doc->deleteFiles);
 
         $oldDoc = $this->getByID($docID);
-
-        /* 处理重命名的附件。 Handle renamed files. */
         if(!empty($doc->renameFiles))
         {
-            $renamedFileList = array();
-            foreach($doc->renameFiles as $renamedFileID => $newName)
+            foreach($doc->renameFiles as $fileID => $fileName)
             {
-                if(empty($newName)) continue;
-                $this->dao->update(TABLE_FILE)->set('title')->eq($newName)->where('id')->eq($renamedFileID)->exec();
-                $renamedFileList[$renamedFileID] = array('old' => isset($oldDoc->files[$renamedFileID]) ? $oldDoc->files[$renamedFileID]->title : '', 'new' => $newName);
+                if(!isset($oldDoc->files[$fileID])) continue;
+                if(!validater::checkLength($fileName, 80, 1)) continue;
+                $this->dao->update(TABLE_FILE)->set('title')->eq($fileName)
+                    ->where('id')->eq((int)$fileID)
+                    ->andWhere('`objectType`')->eq('doc')
+                    ->andWhere('`objectID`')->eq($docID)
+                    ->exec();
             }
-            $doc->renameFiles = $renamedFileList;
         }
+        unset($doc->renameFiles);
 
         $changes          = common::createChanges($oldDoc, $doc);
         $oldRawContent    = isset($oldDoc->rawContent) ? $oldDoc->rawContent : '';
@@ -2058,7 +2181,7 @@ class docModel extends model
         {
             $this->dao->update(TABLE_PROJECTDELIVERABLE)
                  ->set('name')->eq($doc->title)
-                 ->set('docVersion')->eq($doc->version)
+                 ->set('`docVersion`')->eq($doc->version)
                  ->where('doc')->eq($docID)
                  ->andWhere('status')->eq('draft')
                  ->exec();
@@ -2455,7 +2578,7 @@ class docModel extends model
 
         $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`readUsers`,`groups`,`readGroups`,`status`,`path`,`deleted`")->from(TABLE_DOC)
             ->where('lib')->in($libIDList)
-            ->andWhere('builtIn')->eq('0')
+            ->andWhere('`builtIn`')->eq('0')
             ->andWhere('type')->ne('chapter')
             ->fetchAll();
 
@@ -2682,7 +2805,7 @@ class docModel extends model
     {
         if(empty($idList)) return array();
 
-        $moduleCounts = $this->dao->select("`root`, count(id) as moduleCount")->from(TABLE_MODULE)
+        $moduleCounts = $this->dao->select("`root`, count(id) as `moduleCount`")->from(TABLE_MODULE)
             ->where('type')->eq('doc')
             ->andWhere('root')->in($idList)
             ->andWhere('deleted')->eq(0)
@@ -2693,7 +2816,7 @@ class docModel extends model
             ->where('lib')->in($idList)
             ->andWhere('type')->ne('chapter')
             ->andWhere('deleted')->eq('0')
-            ->andWhere('builtIn')->eq('0')
+            ->andWhere('`builtIn`')->eq('0')
             ->andWhere('module')->eq('0')
             ->fetchAll();
         $docs = $this->docTao->filterDeletedDocs($docs);
@@ -2787,6 +2910,7 @@ class docModel extends model
             ->orWhere("(`objectType` = 'task' and `objectID` in ($taskIdList))")
             ->orWhere("(`objectType` = 'build' and `objectID` in ($buildIdList))")
             ->orWhere("(`objectType` = 'testtask' and `objectID` in ($testtaskIdList))")
+            ->orWhere("(`objectType` = 'comment' and (`extra` like 'task-%' or `extra` like 'build-%' or `extra` like 'testtask-%'))")
             ->beginIF($storyIdList)->orWhere("(`objectType` = 'story' and `objectID` in ($storyIdList))")->fi()
             ->fi()
             ->markRight(1)
@@ -2985,6 +3109,15 @@ class docModel extends model
         $sourcePairs = array();
         foreach($files as $file)
         {
+            if($file->objectType == 'comment')
+            {
+                if(!empty($file->extra) && strpos($file->extra, '-') !== false)
+                {
+                    $fileExtra = explode('-', $file->extra);
+                    $file->objectType = $fileExtra[0];
+                    $file->objectID   = $fileExtra[1];
+                }
+            }
             if(!isset($sourceList[$file->objectType])) $sourceList[$file->objectType] = array();
             $sourceList[$file->objectType][$file->objectID] = $file->objectID;
         }
@@ -3152,7 +3285,7 @@ class docModel extends model
         $statistic->totalDocs = $this->dao->select('COUNT(1) AS count')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
             ->andWhere('type')->in($this->config->doc->docTypes)
-            ->andWhere('templateType')->eq('')
+            ->andWhere('`templateType`')->eq('')
             ->andWhere('vision')->eq($this->config->vision)
             ->fetch('count');
 
@@ -3179,9 +3312,9 @@ class docModel extends model
             ->fetch('count');
 
         $myStatistic = $this->dao->select("COUNT(1) AS `myDocs`, SUM(views) as `docViews`, SUM(collects) as `docCollects`")->from(TABLE_DOC)
-            ->where('addedBy')->eq($this->app->user->account)
+            ->where('`addedBy`')->eq($this->app->user->account)
             ->andWhere('type')->in($this->config->doc->docTypes)
-            ->andWhere('templateType')->eq('')
+            ->andWhere('`templateType`')->eq('')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('lib')->ne(0)
@@ -3400,7 +3533,7 @@ class docModel extends model
         $docIdList = $this->getPrivDocs(array_keys($libs));
         $docs      = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
-            ->andWhere('builtIn')->eq('0')
+            ->andWhere('`builtIn`')->eq('0')
             ->andWhere($query)
             ->andWhere('lib')->in(array_keys($libs))
             ->andWhere('vision')->eq($this->config->vision)
@@ -3913,7 +4046,7 @@ class docModel extends model
         }
 
         $editingDate[$account] = $now;
-        $this->dao->update(TABLE_DOC)->set('editingDate')->eq(json_encode($editingDate))->where('id')->eq($docID)->exec();
+        $this->dao->update(TABLE_DOC)->set('`editingDate`')->eq(json_encode($editingDate))->where('id')->eq($docID)->exec();
 
         return $otherEditing;
     }
@@ -3936,13 +4069,13 @@ class docModel extends model
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('vision')->eq($this->config->vision)
             ->andWhere('((`objectType`')->eq('doclib')
-            ->andWhere('objectID')->in(array_keys($allLibs))
+            ->andWhere('`objectID`')->in(array_keys($allLibs))
             ->markRight(1)
             ->orWhere('(`objectType`')->eq('doc')
-            ->andWhere('objectID')->in($hasPrivDocIdList)
+            ->andWhere('`objectID`')->in($hasPrivDocIdList)
             ->markRight(1)
             ->orWhere('(`objectType`')->eq('api')
-            ->andWhere('objectID')->in(array_keys($apiList))
+            ->andWhere('`objectID`')->in(array_keys($apiList))
             ->markRight(2)
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             ->orderBy('date_desc,id_asc')
@@ -3969,7 +4102,7 @@ class docModel extends model
         if(!isset($editingDate[$account])) return false;
 
         unset($editingDate[$account]);
-        $this->dao->update(TABLE_DOC)->set('editingDate')->eq(json_encode($editingDate))->where('id')->eq($doc->id)->exec();
+        $this->dao->update(TABLE_DOC)->set('`editingDate`')->eq(json_encode($editingDate))->where('id')->eq($doc->id)->exec();
 
         return !dao::isError();
     }
@@ -3987,8 +4120,8 @@ class docModel extends model
     {
         if(!$docID) return array();
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->eq($docID)
+            ->where('`objectType`')->eq($objectType)
+            ->andWhere('`objectID`')->eq($docID)
             ->andWhere('action')->in('edited')
             ->orderBy('date_desc')
             ->fetchAll('id', false);
@@ -4191,6 +4324,40 @@ class docModel extends model
     }
 
     /**
+     * 重命名文档附件。
+     * Rename doc file.
+     *
+     * @param  int    $docID
+     * @param  int    $fileID
+     * @param  string $fileName
+     * @param  string $extension
+     * @access public
+     * @return array
+     */
+    public function renameFile(int $docID, int $fileID, string $fileName, string $extension = ''): array
+    {
+        $file = $this->dao->select('*')->from(TABLE_FILE)
+            ->where('id')->eq($fileID)
+            ->andWhere('`objectType`')->eq('doc')
+            ->andWhere('`objectID`')->eq($docID)
+            ->fetch();
+        if(!$file) return array('result' => 'fail', 'message' => $this->lang->file->fileNotFound);
+        if(!validater::checkLength($fileName, 80, 1)) return array('result' => 'fail', 'message' => sprintf($this->lang->error->length[1], $this->lang->file->title, 80, 1));
+
+        $this->dao->update(TABLE_FILE)
+            ->set('title')->eq($fileName)
+            ->beginIF($extension)->set('extension')->eq($extension)->fi()
+            ->where('id')->eq($fileID)
+            ->exec();
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+        $actionID = $this->loadModel('action')->create('doc', $docID, 'editfile', '', $fileName);
+        $changes  = array(array('field' => 'fileName', 'old' => $file->title, 'new' => $fileName, 'diff' => ''));
+        $this->action->logHistory($actionID, $changes);
+        return array('result' => 'success');
+    }
+
+    /**
      * 移动文档库。
      * Move library.
      *
@@ -4300,10 +4467,10 @@ class docModel extends model
 
         $docID = $this->dao->select('id')->from(TABLE_DOC)
             ->where('vision')->eq($this->config->vision)
-            ->andWhere('templateType')->eq('')
+            ->andWhere('`templateType`')->eq('')
             ->andWhere('deleted')->eq(0)
             ->andWhere('lib')->eq($lib->id)
-            ->andWhere('addedBy')->ne($this->app->user->account)
+            ->andWhere('`addedBy`')->ne($this->app->user->account)
             ->fetch('id');
 
         return !empty($docID);
@@ -4617,7 +4784,7 @@ class docModel extends model
      */
     public function getHotTemplates($scopeID = 0, $limit = 0)
     {
-        return $this->dao->select('t1.*, CASE WHEN t1.`addedDate` > t1.`editedDate` THEN t1.`addedDate` ELSE t1.`editedDate` END as hotDate')->from(TABLE_DOC)->alias('t1')
+        return $this->dao->select('t1.*, CASE WHEN t1.`addedDate` > t1.`editedDate` THEN t1.`addedDate` ELSE t1.`editedDate` END as `hotDate`')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module = t2.id')
             ->where('t2.type')->eq('docTemplate')
             ->andWhere('t1.`builtIn`')->eq('0')
@@ -4626,7 +4793,7 @@ class docModel extends model
             ->andWhere('t1.parent')->eq(0)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF($scopeID)->andWhere('t1.lib')->eq($scopeID)->fi()
-            ->orderBy('hotDate_desc')
+            ->orderBy('`hotDate`_desc')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('', false);
     }
@@ -4815,13 +4982,13 @@ class docModel extends model
     {
         if(!defined('CONFLUENCE_TMPRELATION')) define('CONFLUENCE_TMPRELATION', '`confluencetmprelation`');
 
-        $docID     = $this->dao->dbh($this->dbh)->select('`BID`')->from(CONFLUENCE_TMPRELATION)->where('BType')->eq('zdoc')->andWhere('AID')->eq($originPageID)->fetch('BID');
+        $docID     = $this->dao->dbh($this->dbh)->select('`BID`')->from(CONFLUENCE_TMPRELATION)->where('`BType`')->eq('zdoc')->andWhere('AID')->eq($originPageID)->fetch('BID');
         $doc       = $this->getByID((int)$docID);
         $docIdList = $this->dao->select('id')->from(TABLE_DOC)->where('lib')->eq($doc->lib)->andWhere('title')->eq($title)->andWhere('status')->eq('normal')->andWhere('deleted')->eq(0)->fetchAll();
 
         $idList = array();
         foreach($docIdList as $item) $idList[] = $item->id;
-        $parentID = $this->dao->dbh($this->dbh)->select('`BID`')->from(CONFLUENCE_TMPRELATION)->where('BType')->eq('zdoc')->andWhere('BID')->in($idList)->fetch('BID');
+        $parentID = $this->dao->dbh($this->dbh)->select('`BID`')->from(CONFLUENCE_TMPRELATION)->where('`BType`')->eq('zdoc')->andWhere('BID')->in($idList)->fetch('BID');
         return $parentID ? (int)$parentID : 0;
     }
 
@@ -5077,7 +5244,7 @@ class docModel extends model
     public function addBuiltInDocTemplateByType()
     {
         $builtInDocTemplateType = array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC');
-        $builtInDocTemplate     = $this->dao->select('*')->from(TABLE_DOC)->where('builtIn')->eq('1')->andWhere('templateType')->in($builtInDocTemplateType)->fetchAll();
+        $builtInDocTemplate     = $this->dao->select('*')->from(TABLE_DOC)->where('`builtIn`')->eq('1')->andWhere('`templateType`')->in($builtInDocTemplateType)->fetchAll();
         if(!empty($builtInDocTemplate)) return;
 
         $rndScopeMaps   = $this->loadModel('setting')->getItem('vision=rnd&owner=system&module=doc&key=builtInScopeMaps');
@@ -5323,7 +5490,7 @@ class docModel extends model
                 $gids = array_unique($gids);
                 $fileRecords = $this->dao->select('*')->from(TABLE_FILE)
                     ->where('gid')->in($gids)
-                    ->andWhere('objectID')->eq($originalContent->doc)
+                    ->andWhere('`objectID`')->eq($originalContent->doc)
                     ->andWhere('deleted')->eq(0)
                     ->fetchAll();
             }

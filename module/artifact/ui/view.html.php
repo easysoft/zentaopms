@@ -26,6 +26,7 @@ if($artifact->type == 'file')
 else
 {
     unset($config->artifact->dtable->fieldList['path']);
+    $config->artifact->dtable->fieldList['sysArch']['hint'] = jsRaw('(cell) => cell.row.data.sysArchFull || cell.value');
 }
 
 $breadCrumbsBox = array();
@@ -151,6 +152,7 @@ div
             setClass('ghost text-primary square'),
             set::title('home'),
             set::icon('back'),
+            setData('app', $app->tab),
             set::url($browseLink)
         ),
         picker

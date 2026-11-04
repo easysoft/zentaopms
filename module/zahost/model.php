@@ -21,7 +21,7 @@ class zahostModel extends model
      */
     public function getByID(int $hostID): object|false
     {
-        $host = $this->dao->select('*, id AS hostID')->from(TABLE_ZAHOST)->where('id')->eq($hostID)->fetch();
+        $host = $this->dao->select('*, id AS `hostID`')->from(TABLE_ZAHOST)->where('id')->eq($hostID)->fetch();
         if(!$host) return false;
 
         if(empty($host->heartbeat)) $host->heartbeat = '';
@@ -74,7 +74,7 @@ class zahostModel extends model
             $query = $this->session->zahostQuery;
         }
 
-        $hostList = $this->dao->select('*, id AS hostID')->from(TABLE_ZAHOST)
+        $hostList = $this->dao->select('*, id AS `hostID`')->from(TABLE_ZAHOST)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('zahost')
             ->beginIF($query)->andWhere($query)->fi()
@@ -371,7 +371,7 @@ class zahostModel extends model
      */
     public function getNodeGroupHost(): array
     {
-        return $this->dao->select('t1.id AS hostID, t2.*')->from(TABLE_ZAHOST)->alias('t1')
+        return $this->dao->select('t1.id AS `hostID`, t2.*')->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t2.parent = t1.id')
             ->where('t2.deleted')->eq('0')
             ->andWhere('t1.deleted')->eq('0')

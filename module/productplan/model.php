@@ -52,6 +52,28 @@ class productplanModel extends model
     }
 
     /**
+     * 获取产品计划邮件通知的收件人。
+     * Get toList and ccList.
+     *
+     * 与产品计划webhook通知人保持一致：创建人 + 产品负责人。
+     * @param  object $plan
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList(object $plan): bool|array
+    {
+        $toList = trim($plan->createdBy, ',');
+
+        $product = $this->loadModel('product')->fetchByID((int)$plan->product);
+        if($product) $toList .= ',' . $product->PO;
+
+        $toList = implode(',', array_unique(array_filter(explode(',', $toList))));
+        if(empty($toList)) return false;
+
+        return array($toList, '');
+    }
+
+    /**
      * 获取创建的最后一个计划。
      * Get last plan.
      *
@@ -227,7 +249,7 @@ class productplanModel extends model
             }
         }
 
-        $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.type as productType,t1.branch')->from(TABLE_PRODUCTPLAN)->alias('t1')
+        $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.type as `productType`,t1.branch')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
             ->where('t1.deleted')->eq('0')
             ->beginIF($productIdList)->andWhere('t1.product')->in($productIdList)->fi()
@@ -297,7 +319,7 @@ class productplanModel extends model
      */
     public function getGroupByProduct(array $productIdList = array(), string $param = '', string $orderBy = 'id_desc'): array
     {
-        $plans = $this->dao->select('t1.*,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
+        $plans = $this->dao->select('t1.*,t2.type as `productType`')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
             ->where('t1.deleted')->eq(0)
             ->beginIF($productIdList)->andWhere('t1.product')->in($productIdList)->fi()
@@ -365,7 +387,7 @@ class productplanModel extends model
     public function getPlansByStories(array $storyIdList): array
     {
         if(empty($storyIdList)) return array();
-        return $this->dao->select('t2.id as storyID, t3.*')->from(TABLE_PLANSTORY)->alias('t1')
+        return $this->dao->select('t2.id as `storyID`, t3.*')->from(TABLE_PLANSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t2.id=t1.story')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t3')->on('t3.id=t1.plan')
             ->where('t2.id')->in($storyIdList)

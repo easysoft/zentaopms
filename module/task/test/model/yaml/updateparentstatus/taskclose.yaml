@@ -17,5 +17,7 @@ fields:
   range: 'multi{3},{100}'
 - field: execution
   range: 1
+- field: project
+  range: 1
 - field: openedBy
   range: "user2"

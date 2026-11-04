@@ -68,6 +68,10 @@ class changeStatus extends tester
             'form'      => 'project',
             'storyType' => 'story'
         );
+        global $uiTester;
+        $account  = $this->config->uitest->defaultAccount;
+        $realname = $uiTester->dao->select('realname')->from(TABLE_USER)->where('account')->eq($account)->fetch('realname');
+
         $form = $this->initForm('projectstory', 'story', array('projectID' => '1'), 'appIframe-project');
         $form->wait(3);
         $form = $this->initForm('story', 'review', $storyURL, 'appIframe-project');  //进入研发评审页面
@@ -79,7 +83,13 @@ class changeStatus extends tester
                 'reject'  => $this->lang->story->reviewResultList->reject//拒绝
         );
         $form->dom->result->picker($resultOptions[$result]); //选择目标评审结果
-        if($result != 'reject') $form->dom->assignedTo->picker('admin'); //指派人选择admin
+        if($result == 'reject')
+        {
+            $form->dom->closedReason->picker('done');
+        }else
+        {
+            $form->dom->assignedTo->picker('admin'); //选择关闭原因
+        }
         $form->dom->btn($this->lang->save)->click();
 
         $viewPage = $this->loadPage('projectstory', 'view');
@@ -94,7 +104,7 @@ class changeStatus extends tester
         if($result != 'revert')
         {
             $viewPage->dom->TargetLife->click();
-            if($viewPage->dom->storyReviwer->getText() != 'admin') return $this->failed('目标评审人错误');
+            if($viewPage->dom->storyReviwer->getText() != $realname) return $this->failed('目标评审人错误');
         }else
         {
             if($viewPage->dom->storyName->getText() != '目标4') return $this->failed('目标名称错误');

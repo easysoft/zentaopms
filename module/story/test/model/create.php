@@ -15,7 +15,7 @@ cid=18486
  - 属性product @1
  - 属性story @6
 - 如果传入Bug，检查Bug是否已经关闭了。 @closed
-- 测试创建时在 spec 中 @用户发送 mention 通知
+- 测试创建时在 spec 中提到的用户发送 mention 通知
  - 属性notifyCount @1
  - 属性mentionUser @user1
  - 属性status @wait
@@ -25,6 +25,14 @@ cid=18486
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
+
+zenData('user')->gen(0);
+$user = zenData('user');
+$user->id->range('1-2');
+$user->account->range('admin,user1');
+$user->realname->range('管理员,用户1');
+$user->gen(2);
+
 su('admin');
 
 zenData('product')->gen(20);
@@ -84,15 +92,19 @@ r($test2->linkedProjects[0])     && p('project,product,story') && e('11,1,6');  
 r($test3->linkedBug->status)     && p()                        && e('closed');       // 如果传入Bug，检查Bug是否已经关闭了。
 
 zenData('notify')->gen(0);
-$user = zenData('user');
-$user->account->range('admin,user1');
-$user->realname->range('管理员,用户1');
-$user->gen(2);
 
 $types = array();
 $types['story']       = array('mentioned');
 $types['requirement'] = array('mentioned');
 $tester->config->message->setting = array('message' => array('setting' => $types));
+
+global $app;
+$lang->SRCommon = '研发需求';
+$lang->URCommon = '用户需求';
+$lang->ERCommon = '业务需求';
+$app::$loadedLangs = array();
+$app->loadLang('action');
+$app->loadLang('message');
 
 $mentionData = clone $data;
 $mentionData->title = 'mention story';

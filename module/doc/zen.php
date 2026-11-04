@@ -35,7 +35,6 @@ class docZen extends doc
 
             $file->fileIcon   = isset($fileIcon[$file->id]) ? $fileIcon[$file->id] : '';
             $file->fileName   = str_replace('.' . $file->extension, '', $file->title);
-            $file->sourceName = isset($sourcePairs[$file->objectType][$file->objectID]) ? $sourcePairs[$file->objectType][$file->objectID] : '';
             $file->sizeText   = number_format($file->size / 1024, 1) . 'K';
 
             if(!$skipImageWidth)
@@ -50,9 +49,16 @@ class docZen extends doc
             }
             else
             {
+                if($file->objectType == 'comment' && strpos($file->extra, '-') !== false)
+                {
+                    $extra            = explode('-', $file->extra);
+                    $file->objectType = $extra[0];
+                    $file->objectID   = $extra[1];
+                }
                 if(!isset($this->lang->{$file->objectType}->common)) $this->app->loadLang($file->objectType);
                 $file->objectName = $this->lang->{$file->objectType}->common . ' : ';
             }
+            $file->sourceName = isset($sourcePairs[$file->objectType][$file->objectID]) ? $sourcePairs[$file->objectType][$file->objectID] : '';
         }
         return $files;
     }
@@ -366,6 +372,218 @@ class docZen extends doc
             break;
         }
         return $canVisit;
+    }
+
+    /**
+     * 检查文档的编辑权限。
+     * Check the privilege of editing a document.
+     *
+     * @param  object    $doc
+     * @param  object|null $doclib
+     * @access protected
+     * @return bool
+     */
+    protected function checkPrivForEdit(object $doc, ?object $doclib = null): bool
+    {
+        if(!empty($doc->deleted)) return false;
+        if($doclib === null && !empty($doc->lib)) $doclib = $this->doc->getLibByID((int)$doc->lib);
+        if(!$doclib || empty($doclib->id) || !empty($doclib->deleted) || !$this->doc->checkPrivLib($doclib)) return false;
+
+        $isOpen          = $doc->acl == 'open';
+        $currentAccount  = $this->app->user->account;
+        $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || $this->app->user->admin);
+        $isInEditUsers   = strpos(",$doc->users,", ",$currentAccount,") !== false;
+        $isInEditGroups  = false;
+        if(!empty($doc->groups))
+        {
+            foreach($this->app->user->groups as $groupID)
+            {
+                if(strpos(",$doc->groups,", ",$groupID,") !== false) $isInEditGroups = true;
+            }
+        }
+
+        return $isOpen || $isAuthorOrAdmin || $isInEditUsers || $isInEditGroups;
+    }
+
+    /**
+     * 检查能否把文档移动到目标库。
+     * Check whether a document can be moved to the target library.
+     *
+     * @param  object $doclib
+     * @access protected
+     * @return bool
+     */
+    protected function checkPrivForMoveDoc(object $doclib): bool
+    {
+        if(empty($doclib->id) || !empty($doclib->deleted)) return false;
+        if(!in_array($doclib->type, array('custom', 'mine', 'product', 'project', 'execution'), true)) return false;
+        if(in_array($doclib->type, array('custom', 'mine'), true) && empty($doclib->parent)) return false;
+        if(!$this->doc->checkPrivLib($doclib)) return false;
+        return $this->checkPrivForCreate($doclib, (string)$doclib->type);
+    }
+
+    /**
+     * 检查文档库的删除权限。
+     * Check the privilege of deleting a document library.
+     *
+     * @param  object $doclib
+     * @param  bool   $isSpace
+     * @access protected
+     * @return bool
+     */
+    protected function checkPrivForDeleteLib(object $doclib, bool $isSpace): bool
+    {
+        if(empty($doclib->id) || !empty($doclib->deleted) || !empty($doclib->main)) return false;
+        if(!in_array($doclib->type, array('custom', 'mine', 'product', 'project', 'execution'), true)) return false;
+
+        $targetIsSpace = in_array($doclib->type, array('custom', 'mine'), true) && empty($doclib->parent);
+        if($targetIsSpace !== $isSpace) return false;
+        if($doclib->type == 'mine' && $doclib->addedBy != $this->app->user->account) return false;
+        if(!$this->doc->checkPrivLib($doclib)) return false;
+        if(!in_array($doclib->type, array('product', 'project', 'execution'), true)) return true;
+
+        $objectID = (int)zget($doclib, $doclib->type, 0);
+        if(!$objectID) return false;
+
+        $object = $this->doc->getObjectByID($doclib->type, $objectID);
+        return $object && empty($object->deleted) && common::canModify($doclib->type, $object);
+    }
+
+    /**
+     * 检查文档库的编辑权限。
+     * Check the privilege of editing a document library.
+     *
+     * @param  object $doclib
+     * @param  bool   $isSpace
+     * @access protected
+     * @return bool
+     */
+    protected function checkPrivForEditLib(object $doclib, bool $isSpace): bool
+    {
+        if(empty($doclib->id) || !empty($doclib->deleted)) return false;
+        if(!in_array($doclib->type, array('custom', 'mine', 'product', 'project', 'execution'), true)) return false;
+
+        $targetIsSpace = in_array($doclib->type, array('custom', 'mine'), true) && empty($doclib->parent);
+        if($targetIsSpace !== $isSpace) return false;
+        if($doclib->type == 'mine' && $doclib->addedBy != $this->app->user->account) return false;
+        if(!$this->doc->checkPrivLib($doclib)) return false;
+        if(!in_array($doclib->type, array('product', 'project', 'execution'), true)) return true;
+
+        $objectID = (int)zget($doclib, $doclib->type, 0);
+        if(!$objectID) return false;
+
+        $object = $this->doc->getObjectByID($doclib->type, $objectID);
+        return $object && empty($object->deleted) && common::canModify($doclib->type, $object);
+    }
+
+    /**
+     * 编辑空间或文档库。
+     * Edit a space or document library.
+     *
+     * @param  int  $libID
+     * @param  bool $isSpace
+     * @access public
+     * @return array
+     */
+    public function editLibOrSpace(int $libID, bool $isSpace): array
+    {
+        $lib = $this->doc->getLibByID($libID);
+        if(!$lib || !empty($lib->deleted)) return array('result' => 'fail', 'message' => $this->lang->doc->accessDenied);
+        if(!$this->checkPrivForEditLib($lib, $isSpace)) return array('result' => 'fail', 'message' => $this->lang->doc->accessDenied);
+
+        /* 项目模板下setMenu会修改common语言项，所以执行文档要先执行setAclForEditLib。 */
+        if($lib->type != 'project') $this->setAclForEditLib($lib);
+        $this->doc->setMenuByType($lib->type, (int)zget($lib, $lib->type, 0), $libID);
+        if($lib->type == 'project') $this->setAclForEditLib($lib);
+
+        if(!empty($_POST))
+        {
+            $this->lang->doc->name = $this->lang->nameAB;
+            $libData = form::data($this->config->doc->form->editlib)->get();
+            if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+            if(!empty($libData->space) && $libData->space !== $this->doc->getLibTargetSpace($lib)) return array('result' => 'fail', 'message' => $this->lang->doc->accessDenied);
+            $libData->space = '';
+
+            $changes = $this->doc->updateLib($libID, $libData);
+            if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+            if($changes)
+            {
+                $object = ($lib->type == 'custom' && $lib->parent == 0) ? 'docspace' : 'doclib';
+                $actionID = $this->action->create($object, $libID, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            $lib = $this->doc->getLibByID($libID);
+            $docAppActions = array();
+            $docAppActions[] = array('update', ($lib->parent == 0) ? 'space' : 'lib', $lib);
+            $docAppActions[] = array('home:loadHomeLibs');
+            $docAppActions[] = array('list:load');
+            return array('message' => $this->lang->saveSuccess, 'result' => 'success', 'closeModal' => true, 'docApp' => $docAppActions);
+        }
+
+        if(!empty($lib->product)) $this->view->object = $this->product->getByID($lib->product);
+        if(!empty($lib->project) && empty($lib->execution)) $this->view->object = $this->project->getByID($lib->project);
+        if(!empty($lib->execution))
+        {
+            $execution = $this->execution->getByID($lib->execution);
+            if($execution->type == 'stage')
+            {
+                if($execution->grade > 1)
+                {
+                    $parentExecutions = $this->execution->getPairsByList(explode(',', trim($execution->path, ',')), 'stage,kanban,sprint');
+                    $execution->name  = implode('/', $parentExecutions);
+                }
+
+                $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
+            }
+
+            $this->view->object = $execution;
+        }
+
+        $this->view->lib    = $lib;
+        $this->view->groups = $this->loadModel('group')->getPairs();
+        $this->view->users  = $this->user->getPairs('noletter|noclosed', $lib->users);
+        $this->view->libID  = $libID;
+        return array();
+    }
+
+    /**
+     * 删除空间或文档库。
+     * Delete a space or document library.
+     *
+     * @param  int  $libID
+     * @param  bool $isSpace
+     * @access public
+     * @return array
+     */
+    public function deleteLibOrSpace(int $libID, bool $isSpace): array
+    {
+        $lib = $this->doc->getLibByID($libID);
+        if(!$lib || !empty($lib->deleted)) return array('result' => 'fail', 'message' => $this->lang->doc->accessDenied);
+        if(!empty($lib->main)) return array('result' => 'fail', 'message' => $this->lang->doc->errorMainSysLib, 'load' => array('alert' => $this->lang->doc->errorMainSysLib));
+        if(!$this->checkPrivForDeleteLib($lib, $isSpace)) return array('result' => 'fail', 'message' => $this->lang->doc->accessDenied);
+
+        $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq('1')->where('id')->eq($libID)->exec();
+
+        $object = ($lib->type == 'custom' && $lib->parent == 0) ? 'docspace' : 'doclib';
+        $this->loadModel('action')->create($object, $libID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+
+        $moduleName = 'doc';
+        $objectType = $lib->type;
+        $methodName = zget($this->config->doc->spaceMethod, $objectType);
+        if($this->app->tab == 'doc') return array('result' => 'success', 'load' => $this->createLink($moduleName, $methodName), 'app' => $this->app->tab);
+
+        $objectID = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
+        if($this->app->tab == 'execution' && $objectType == 'execution')
+        {
+            $moduleName = 'execution';
+            $methodName = 'doc';
+        }
+        $browseLink = $this->createLink($moduleName, $methodName, "objectID=$objectID");
+
+        return array('result' => 'success', 'load' => $browseLink, 'app' => $this->app->tab);
     }
 
     /**
@@ -872,6 +1090,7 @@ class docZen extends doc
         $this->view->productID      = $doc->product;
         $this->view->projectID      = $doc->project;
         $this->view->executionID    = $doc->execution;
+        $this->view->versionMarkers = $this->doc->getVersionMarkers($docID);
     }
 
     /**
@@ -1024,7 +1243,7 @@ class docZen extends doc
         $systemMineLibCount = $this->dao->select('count(1) as count')->from(TABLE_DOCLIB)
             ->where('type')->eq('mine')
             ->andWhere('main')->eq(1)
-            ->andWhere('addedBy')->eq($this->app->user->account)
+            ->andWhere('`addedBy`')->eq($this->app->user->account)
             ->andWhere('vision')->eq($this->config->vision)
             ->fetch('count');
         if(!empty($systemMineLibCount)) return;

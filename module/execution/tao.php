@@ -285,7 +285,7 @@ class executionTao extends executionModel
         $burns = $this->dao->select("execution, '$today' AS date, sum(estimate) AS `estimate`, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq('0')
-            ->andWhere('isParent')->eq('0')
+            ->andWhere('`isParent`')->eq('0')
             ->andWhere('status')->ne('cancel')
             ->groupBy('execution')
             ->fetchAll('execution');
@@ -293,7 +293,7 @@ class executionTao extends executionModel
         $closedLefts = $this->dao->select('execution, sum(`left`) AS `left`')->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq('0')
-            ->andWhere('isParent')->eq('0')
+            ->andWhere('`isParent`')->eq('0')
             ->andWhere('status')->eq('closed')
             ->groupBy('execution')
             ->fetchAll('execution');
@@ -301,7 +301,7 @@ class executionTao extends executionModel
         $finishedEstimates = $this->dao->select("execution, sum(`estimate`) AS `estimate`")->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq('0')
-            ->andWhere('isParent')->eq('0')
+            ->andWhere('`isParent`')->eq('0')
             ->andWhere('status', true)->eq('done')
             ->orWhere('status')->eq('closed')
             ->markRight(1)
@@ -432,7 +432,7 @@ class executionTao extends executionModel
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where($sql)
             ->andWhere('status')->eq('active')
-            ->andWhere('toTask')->eq(0)
+            ->andWhere('`toTask`')->eq(0)
             ->andWhere('tostory')->eq(0)
             ->beginIF(!empty($productIdList))->andWhere('product')->in($productIdList)->fi()
             ->beginIF(empty($productIdList))->andWhere('execution')->eq($executionID)->fi()
@@ -743,6 +743,12 @@ class executionTao extends executionModel
         }
 
         /* Remove the member who left the team. */
+        $removedAccounts = array();
+        foreach(array_keys($team) as $account)
+        {
+            if(in_array($account, $members) || $account == $oldExecution->openedBy) continue;
+            $removedAccounts[] = $account;
+        }
         $this->dao->delete()->from(TABLE_TEAM)
             ->where('root')->eq($executionID)
             ->andWhere('type')->eq('execution')
@@ -751,6 +757,22 @@ class executionTao extends executionModel
             ->andWhere('account')->ne($oldExecution->openedBy)
             ->exec();
         if(isset($execution->project) and $execution->project) $this->addProjectMembers((int)$execution->project, $teamMembers);
+
+        /* 编辑执行维护团队成员后，单独记一条维护团队历史。 */
+        $addedAccounts = array_keys($changedAccounts);
+        if($addedAccounts || $removedAccounts)
+        {
+            $users        = $this->user->getPairs('noletter');
+            $addedNames   = array_map(function($account) use ($users) { return zget($users, $account); }, $addedAccounts);
+            $removedNames = array_map(function($account) use ($users) { return zget($users, $account); }, $removedAccounts);
+
+            $changes = array();
+            if(!empty($addedNames))   $changes[] = array('field' => 'addDiff',    'old' => '', 'new' => '', 'diff' => implode(',', $addedNames));
+            if(!empty($removedNames)) $changes[] = array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => implode(',', $removedNames));
+
+            $actionID = $this->loadModel('action')->create('execution', $executionID, 'managedTeam');
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+        }
 
         /* Fix bug#3074, Update views for team members. */
         if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);

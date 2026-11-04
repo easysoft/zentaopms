@@ -119,7 +119,7 @@ class storyModel extends model
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->beginIF($planID)
             ->andWhere("CONCAT(',', `plan`, ',')")->like("%,{$planID},%")
-            ->beginIF(!$hasParent)->andWhere("isParent")->eq('0')->fi()
+            ->beginIF(!$hasParent)->andWhere("`isParent`")->eq('0')->fi()
             ->fi()
             ->fetchPairs();
     }
@@ -147,7 +147,7 @@ class storyModel extends model
             return $stories;
         }
 
-        return $this->dao->select('t1.*, t1.mailto, t2.spec, t2.verify, t3.name as productTitle, t3.deleted as productDeleted')
+        return $this->dao->select('t1.*, t1.mailto, t2.spec, t2.verify, t3.name as `productTitle`, t3.deleted as `productDeleted`')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
@@ -303,6 +303,7 @@ class storyModel extends model
 
         /* 格式化参数。 */
         $orderBy    = str_replace('branch_', 't2.branch_', $orderBy);
+        $orderBy    = $this->storyTao->processStageOrder($orderBy, 't2');
         $browseType = strtolower($browseType);
         if(is_string($excludeStories)) $excludeStories = array_filter(explode(',', $excludeStories));
 
@@ -318,7 +319,7 @@ class storyModel extends model
 
             /* 设置查询需求的公共 DAO 变量。 */
             $browseType = (!empty($browseType) and strpos('bymodule|byproduct', $browseType) !== false and $this->session->storyBrowseType) ? $this->session->storyBrowseType : $browseType;
-            $storyDAO = $this->dao->select("DISTINCT t1.*, t2.*, t2.`path`, t2.`plan`, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
+            $storyDAO = $this->dao->select("DISTINCT t1.*, t2.*, t2.`path`, t2.`plan`, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as `priOrder`, t3.type as `productType`, t2.version as version, " . $this->storyTao->getStageOrderSQL('t2') . " as `stageOrder`")->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
                 ->where('t1.project')->in($executionID)
@@ -381,8 +382,9 @@ class storyModel extends model
 
         if(strpos($orderBy, 'version_') !== false) $orderBy = str_replace('id_', 't2.version_', $orderBy);
         if(strpos($orderBy, 'id_')      !== false) $orderBy = str_replace('id_', 't2.id_',      $orderBy);
+        $orderBy = $this->storyTao->processStageOrder($orderBy, 't2');
 
-        $stories = $this->dao->select("distinct t1.*, t2.`path`, t2.`plan`, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
+        $stories = $this->dao->select("distinct t1.*, t2.`path`, t2.`plan`, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as `priOrder`, t3.type as `productType`, t2.version as version, " . $this->storyTao->getStageOrderSQL('t2') . " as `stageOrder`")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
             ->where('t1.project')->in($executionIdList)
@@ -410,7 +412,7 @@ class storyModel extends model
      * Get stories pairs of a execution.
      *
      * @param  int              $executionID
-     * @param  int              $productID
+     * @param  int|array        $productID
      * @param  string|int       $branch       0|all|integer
      * @param  array|string|int $moduleIdList
      * @param  string           $type         full|short
@@ -420,7 +422,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionStoryPairs(int $executionID = 0, int $productID = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string $type = 'full', string $status = 'all', string $storyType = '', bool $hasParent = true): array
+    public function getExecutionStoryPairs(int $executionID = 0, int|array $productID = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string $type = 'full', string $status = 'all', string $storyType = '', bool $hasParent = true): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStoryPairs();
 
@@ -432,7 +434,7 @@ class storyModel extends model
             ->beginIF($storyType)->andWhere('t2.type')->in($storyType)->fi()
             ->beginIF(!$hasParent)->andWhere('t2.`isParent`')->eq('0')->fi()
             ->andWhere('t2.deleted')->eq('0')
-            ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
+            ->beginIF($productID)->andWhere('t2.product')->in($productID)->fi()
             ->beginIF($branch !== 'all')->andWhere('t2.branch')->in("0,$branch")->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
             ->beginIF($status == 'unclosed')->andWhere('t2.status')->ne('closed')->fi()
@@ -457,6 +459,7 @@ class storyModel extends model
     {
         if(common::isTutorialMode()) return array();
 
+        $orderBy = $this->storyTao->processStageOrder($orderBy, 't2');
         if(strpos($orderBy, 'module') !== false)
         {
             $orderBy = (strpos($orderBy, 'module_asc') !== false) ? 't3.path asc' : 't3.path desc';
@@ -473,7 +476,7 @@ class storyModel extends model
         }
         else
         {
-            $stories = $this->dao->select("distinct t1.story, t1.`plan`, t1.order, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder")
+            $stories = $this->dao->select("distinct t1.story, t1.`plan`, t1.order, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as `priOrder`, " . $this->storyTao->getStageOrderSQL('t2') . " as `stageOrder`")
                 ->from(TABLE_PLANSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->where('t1.plan')->eq($planID)
@@ -649,6 +652,9 @@ class storyModel extends model
         $mainStoryID = 0;
         foreach($storyData->branches as $key => $branchID)
         {
+            /* 创建成功后 create() 会把新需求 ID 写回对象，下一轮插入前必须移除，否则会以主键方式插入导致主键重复。*/
+            unset($storyData->id);
+
             $storyData->branch = (int)$branchID;
             $storyData->module = $storyData->modules[$key];
             $storyData->plan   = isset($storyData->plans[$key]) ? $storyData->plans[$key] : 0;
@@ -1100,10 +1106,10 @@ class storyModel extends model
         $childrenStatus = $this->dao->select('id,status')->from(TABLE_STORY)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
         if(empty($childrenStatus))
         {
-            $this->dao->update(TABLE_STORY)->set('isParent')->eq('0')->where('id')->eq($parentID)->exec();
+            $this->dao->update(TABLE_STORY)->set('`isParent`')->eq('0')->where('id')->eq($parentID)->exec();
             return true;
         }
-        $this->dao->update(TABLE_STORY)->set('isParent')->eq('1')->where('id')->eq($parentID)->exec();
+        $this->dao->update(TABLE_STORY)->set('`isParent`')->eq('1')->where('id')->eq($parentID)->exec();
 
         $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->andWhere('deleted')->eq(0)->fetch();
         if(empty($oldParentStory))
@@ -1320,7 +1326,7 @@ class storyModel extends model
 
         $this->dao->update(TABLE_STORYREVIEW)
             ->set('result')->eq($story->result)
-            ->set('reviewDate')->eq($now)
+            ->set('`reviewDate`')->eq($now)
             ->where('story')->in($storyID . ($oldStory->twins ? ",{$oldStory->twins}" : ''))
             ->andWhere('version')->eq($oldStory->version)
             ->andWhere('reviewer')->eq($account)
@@ -1328,7 +1334,7 @@ class storyModel extends model
 
         $story = $this->updateStoryByReview($storyID, $oldStory, $story);
 
-        $skipFields      = 'finalResult,result,comment';
+        $skipFields      = 'finalResult,result,comment,checkAffection';
         $isSuperReviewer = $this->storyTao->isSuperReviewer();
         if($isSuperReviewer)
         {
@@ -1426,7 +1432,7 @@ class storyModel extends model
             $story->reviewedBy     = str_contains(",{$oldStory->reviewedBy},", ",{$account},") ? $oldStory->reviewedBy : ($oldStory->reviewedBy . ',' . $account);
 
             $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
-            $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($result)->set('reviewDate')->eq($now)->where('story')->in($twinsIdList)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($account)->exec();
+            $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($result)->set('`reviewDate`')->eq($now)->where('story')->in($twinsIdList)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($account)->exec();
 
             /* Update the story status by review rules. */
             $reviewedBy = explode(',', trim($story->reviewedBy, ','));
@@ -1602,7 +1608,7 @@ class storyModel extends model
             $path = rtrim($oldStory->path, ',') . ",$childStoryID,";
             $this->dao->update(TABLE_STORY)
                  ->set('parent')->eq($storyID)
-                 ->set('parentVersion')->eq($oldStory->version)
+                 ->set('`parentVersion`')->eq($oldStory->version)
                  ->set('root')->eq($oldStory->root)
                  ->set('path')->eq($path)
                  ->where('id')->eq($childStoryID)
@@ -1689,7 +1695,7 @@ class storyModel extends model
             $this->action->logHistory($actionID, $changes);
         }
 
-        $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->set('assignedDate')->eq(helper::now())->where('id')->eq((int)$storyID)->exec();
+        $this->dao->update(TABLE_STORY)->set('`assignedTo`')->eq('closed')->set('`assignedDate`')->eq(helper::now())->where('id')->eq((int)$storyID)->exec();
 
         if($oldStory->isParent == '1') $this->closeAllChildren($storyID, $story->closedReason);
         $this->setStage($storyID);
@@ -2191,7 +2197,7 @@ class storyModel extends model
             if($story->stage == 'released') $story->releasedDate = $now;
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
-            $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($stage)->set('stagedBy')->eq($account)->where('story')->eq((int)$storyID)->exec();
+            $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($stage)->set('`stagedBy`')->eq($account)->where('story')->eq((int)$storyID)->exec();
             if(!dao::isError())
             {
                 $changes  = common::createChanges($oldStory, $story);
@@ -2356,6 +2362,7 @@ class storyModel extends model
         $story->status = $this->getActivateStatus($storyID);
 
         $this->dao->update(TABLE_STORY)->data($story, 'comment')->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
+        if(dao::isError()) return false;
 
         /* Update parent story status. */
         if(!empty($oldStory->parent) && $oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
@@ -2520,10 +2527,11 @@ class storyModel extends model
         }
 
         $productQuery = $this->storyTao->buildProductsCondition($productID, $branch);
-        $stories      = $this->dao->select("*,`plan`,`path`,IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
+        $orderBy      = $this->storyTao->processStageOrder($orderBy);
+        $stories      = $this->dao->select("*,`plan`,`path`,IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as `priOrder`, " . $this->storyTao->getStageOrderSQL() . " as `stageOrder`")->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere($productQuery)
-            ->beginIF(!$hasParent)->andWhere("isParent")->eq('0')->fi()
+            ->beginIF(!$hasParent)->andWhere("`isParent`")->eq('0')->fi()
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF(!empty($excludeStories))->andWhere('id')->notIN($excludeStories)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
@@ -2598,13 +2606,13 @@ class storyModel extends model
         $this->dao->update(TABLE_STORY)
              ->set('status')->eq('closed')
              ->set('stage')->eq('closed')
-             ->set('assignedTo')->eq('closed')
-             ->set('assignedDate')->eq($now)
-             ->set('closedReason')->eq($closedReason)
-             ->set('closedBy')->eq($this->app->user->account)
-             ->set('closedDate')->eq($now)
-             ->set('lastEditedBy')->eq($this->app->user->account)
-             ->set('lastEditedDate')->eq($now)
+             ->set('`assignedTo`')->eq('closed')
+             ->set('`assignedDate`')->eq($now)
+             ->set('`closedReason`')->eq($closedReason)
+             ->set('`closedBy`')->eq($this->app->user->account)
+             ->set('`closedDate`')->eq($now)
+             ->set('`lastEditedBy`')->eq($this->app->user->account)
+             ->set('`lastEditedDate`')->eq($now)
              ->where('id')->in($childIdList)
              ->exec();
 
@@ -2811,9 +2819,9 @@ class storyModel extends model
         if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName) and $fieldName != 'reviewBy' and $fieldName != 'assignedBy') return array();
 
         $actionIDList = array();
-        if($fieldName == 'assignedBy') $actionIDList = $this->dao->select('`objectID`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($fieldValue)->fetchPairs('objectID', 'objectID');
+        if($fieldName == 'assignedBy') $actionIDList = $this->dao->select('`objectID`')->from(TABLE_ACTION)->where('`objectType`')->eq('story')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($fieldValue)->fetchPairs('objectID', 'objectID');
 
-        $sql = $this->dao->select("t1.*, t1.`path`, t1.`plan`, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1');
+        $sql = $this->dao->select("t1.*, t1.`path`, t1.`plan`, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as `priOrder`, " . $this->storyTao->getStageOrderSQL('t1') . " as `stageOrder`")->from(TABLE_STORY)->alias('t1');
         if($fieldName == 'reviewBy') $sql = $sql->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version');
 
         $showGrades = isset($this->config->{$type}->showGrades) ? $this->config->{$type}->showGrades : null;
@@ -2830,6 +2838,7 @@ class storyModel extends model
             $fieldName  = 'stage';
         }
 
+        $orderBy = $this->storyTao->processStageOrder($orderBy, 't1');
         $stories = $sql->where('t1.product')->in($productID)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
@@ -2873,7 +2882,8 @@ class storyModel extends model
             $showGrades = isset($matches[1]) ? $matches[1] : null;
         }
 
-        $stories = $this->dao->select("*, `path`, `plan`, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
+        $orderBy = $this->storyTao->processStageOrder($orderBy);
+        $stories = $this->dao->select("*, `path`, `plan`, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as `priOrder`, " . $this->storyTao->getStageOrderSQL() . " as `stageOrder`")->from(TABLE_STORY)
             ->where('product')->in($productID)
             ->andWhere('type')->eq($type)
             ->beginIF($showGrades)->andWhere('grade')->in($showGrades)->fi()
@@ -3058,7 +3068,8 @@ class storyModel extends model
             $showGrades = isset($matches[1]) ? $matches[1] : null;
         }
 
-        $tmpStories = $this->dao->select("DISTINCT t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1')
+        $orderBy    = $this->storyTao->processStageOrder($orderBy, 't1');
+        $tmpStories = $this->dao->select("DISTINCT t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as `priOrder`, " . $this->storyTao->getStageOrderSQL('t1') . " as `stageOrder`")->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
             ->beginIF(strpos($sql, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story and t1.version = t3.version')->fi()
             ->where($sql)
@@ -3288,10 +3299,11 @@ class storyModel extends model
      */
     public function getUserStories(string $account, string $type = 'assignedTo', string $orderBy = 'id_desc', ?object $pager = null, string $storyType = 'story', bool $includeLibStories = true, string|int $shadow = 0, int $productID = 0): array
     {
-        $sql = $this->dao->select("t1.*, t1.`path`, t1.`plan`, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow")->from(TABLE_STORY)->alias('t1')
+        $sql = $this->dao->select("t1.*, t1.`path`, t1.`plan`, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as `priOrder`, t2.name as `productTitle`, t2.shadow as shadow, " . $this->storyTao->getStageOrderSQL('t1') . " as `stageOrder`")->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id');
         if($type == 'reviewBy') $sql = $sql->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story and t1.version = t3.version');
 
+        $orderBy = $this->storyTao->processStageOrder($orderBy, 't1');
         $stories = $sql->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t1.type')->eq($storyType)
@@ -3335,7 +3347,7 @@ class storyModel extends model
         return $this->dao->select('id, title')->from(TABLE_STORY)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq($type)
-            ->andWhere('assignedTo')->eq($account)
+            ->andWhere('`assignedTo`')->eq($account)
             ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
             ->andWhere('status')->ne('closed')
             ->andWhere('product')->ne(0)
@@ -3988,19 +4000,15 @@ class storyModel extends model
         if((strtolower($actionType) == 'changed' or strtolower($actionType) == 'reviewed') && $story->type == 'story')
         {
             $teamMembers = $this->getTeamMembers($story->id, $actionType);
-            if($teamMembers)
-            {
-                $ccList .= ',' . implode(',', $teamMembers);
-                $ccList = ltrim($ccList, ',');
-            }
+            if($teamMembers) $ccList = ltrim($ccList . ',' . implode(',', $teamMembers), ',');
         }
 
         if(in_array(strtolower($actionType), array('changed', 'opened', 'submitreview')))
         {
             $reviewerList = $this->getReviewerPairs($story->id, $story->version);
-            unset($reviewerList[$story->assignedTo]);
+            if($story->assignedTo && isset($reviewerList[$story->assignedTo])) unset($reviewerList[$story->assignedTo]);
 
-            $ccList .= ',' . implode(',', array_keys($reviewerList));
+            $toList = ltrim($toList . ',' . implode(',', array_keys($reviewerList)), ',');
         }
 
         if(empty($toList))
@@ -4021,6 +4029,7 @@ class storyModel extends model
         elseif($story->status == 'closed')
         {
             $ccList .= ',' . $story->openedBy;
+            $ccList  = ltrim($ccList, ',');
         }
 
         return array($toList, $ccList);
@@ -4071,7 +4080,6 @@ class storyModel extends model
             if($config->vision == 'lite')                        return false;
             if(!in_array($config->edition, array('max', 'ipd'))) return false;
             if($app->tab != 'project')                           return false;
-            if($story->type == 'requirement')                    return false;
             if(!common::hasPriv('story', 'importToLib'))         return false;
             if(strpos($disabledFeatures, ',assetlibStorylib,') !== false || strpos($disabledFeatures, ',assetlib,') !== false) return false;
             return true;
@@ -4472,10 +4480,11 @@ class storyModel extends model
             ->where('t1.project')->eq($executionID)
             ->andWhere('t2.category')->eq('SRS')
             ->fetch('id');
+        if(empty($projectDeliverableID)) return;
 
         $this->dao->update(TABLE_PROJECTDELIVERABLE)
-            ->set('submittedBy')->eq($this->app->user->account)
-            ->set('submittedDate')->eq(helper::now())
+            ->set('`submittedBy`')->eq($this->app->user->account)
+            ->set('`submittedDate`')->eq(helper::now())
             ->where('id')->eq($projectDeliverableID)
             ->exec();
     }
@@ -4539,8 +4548,8 @@ class storyModel extends model
         $idList = "$storyID,$linkedStoryID";
 
         $this->dao->delete()->from(TABLE_RELATION)
-            ->where('AType')->in('story,requirement,epic')
-            ->andWhere('BType')->in('story,requirement,epic')
+            ->where('`AType`')->in('story,requirement,epic')
+            ->andWhere('`BType`')->in('story,requirement,epic')
             ->andWhere('relation')->in('linkedto,linkedfrom')
             ->andWhere('AID')->in($idList)
             ->andWhere('BID')->in($idList)
@@ -5112,7 +5121,7 @@ class storyModel extends model
             if(!empty($relatedSpec[0]->files)) $fileIdList[] = $relatedSpec[0]->files;
         }
         $fileIdList   = array_unique($fileIdList);
-        $relatedFiles = $this->dao->select('id, `objectID`, pathname, title')->from(TABLE_FILE)->where('objectType')->eq($storyType)->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+        $relatedFiles = $this->dao->select('id, `objectID`, pathname, title')->from(TABLE_FILE)->where('`objectType`')->eq($storyType)->andWhere('`objectID`')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
         $filesInfo    = $this->dao->select('id, `objectID`, pathname, title')->from(TABLE_FILE)->where('id')->in($fileIdList)->andWhere('extra')->ne('editor')->fetchAll('id');
 
         $gradeGroup = $this->getGradeGroup();
@@ -5200,8 +5209,8 @@ class storyModel extends model
         $action     = 'closed,reviewrejected,closedbysystem,closedbyparent';
         $action     = $hasTwins ? $action . ',synctwins' : $action;
         $lastRecord = $this->dao->select('action,extra')->from(TABLE_ACTION)
-            ->where('objectType')->eq('story')
-            ->andWhere('objectID')->eq($storyID)
+            ->where('`objectType`')->eq('story')
+            ->andWhere('`objectID`')->eq($storyID)
             ->andWhere('action')->in($action)
             ->orderBy('id_desc')
             ->fetch();
@@ -5314,7 +5323,7 @@ class storyModel extends model
             if(empty($twinID)) continue;
 
             $this->dao->update(TABLE_STORY)->data($syncFieldList)->where('id')->eq($twinID)->exec();
-            if(strtolower($operate) == 'closed') $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->where('id')->eq($twinID)->exec();
+            if(strtolower($operate) == 'closed') $this->dao->update(TABLE_STORY)->set('`assignedTo`')->eq('closed')->where('id')->eq($twinID)->exec();
             if(dao::isError()) continue;
 
             $this->setStage($twinID);
@@ -5428,7 +5437,7 @@ class storyModel extends model
     public function updateStoryReleasedDate(string $stories, string $releasedDate): bool
     {
         $this->dao->update(TABLE_STORY)
-            ->set('releasedDate')->eq($releasedDate)
+            ->set('`releasedDate`')->eq($releasedDate)
             ->where('id')->in($stories)
             ->exec();
 
@@ -5445,7 +5454,7 @@ class storyModel extends model
      */
     public function getListByProject(int $projectID): array
     {
-        return $this->dao->select('t2.*, t1.version as taskVersion')->from(TABLE_PROJECTSTORY)->alias('t1')
+        return $this->dao->select('t2.*, t1.version as `taskVersion`')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.project')->eq($projectID)
             ->andWhere('t2.deleted')->eq(0)
@@ -5671,7 +5680,7 @@ class storyModel extends model
      */
     public function getMaxGradeGroup($status = 'enable')
     {
-        return $this->dao->select('type, max(grade) as maxGrade')->from(TABLE_STORYGRADE)
+        return $this->dao->select('type, max(grade) as `maxGrade`')->from(TABLE_STORYGRADE)
             ->where('1 = 1')
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->groupBy('type')
@@ -5713,12 +5722,12 @@ class storyModel extends model
     public function checkGrade(object $story, object $oldStory, string $mode = 'single')
     {
         $children = $this->getAllChildId($oldStory->id);
-        $maxGrade = $this->dao->select('max(grade) as maxGrade')->from(TABLE_STORY)
+        $maxGrade = $this->dao->select('max(grade) as `maxGrade`')->from(TABLE_STORY)
              ->where('id')->in($children)
              ->andWhere('deleted')->eq('0')
              ->fetch('maxGrade');
 
-        $systemMaxGrade = $this->dao->select('max(grade) as maxGrade')->from(TABLE_STORYGRADE)
+        $systemMaxGrade = $this->dao->select('max(grade) as `maxGrade`')->from(TABLE_STORYGRADE)
             ->where('type')->eq($oldStory->type)
             ->andWhere('status')->eq('enable')
             ->fetch('maxGrade');

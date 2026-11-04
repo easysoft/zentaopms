@@ -164,10 +164,11 @@ class spaceModel extends model
      * 获取所有空间成员列表。
      * Get all space members list.
      *
+     * @param  bool $includeRepoUsers
      * @access public
      * @return array
      */
-    public function getMemberList(): array
+    public function getMemberList(bool $includeRepoUsers = true): array
     {
         $managers   = $this->dao->select('*')->from(TABLE_DEVOPSSPACEUSER)->fetchAll();
         $memberList = array();
@@ -195,6 +196,8 @@ class spaceModel extends model
                 $memberList[$groupMember->space][$user->account] = $user;
             }
         }
+        if(!$includeRepoUsers) return $memberList;
+
         $repoMembers  = $this->getRepoUsersBySpace();
         if(!empty($repoMembers))
         {
@@ -221,19 +224,26 @@ class spaceModel extends model
      */
     public function getPairs(string $account = '', bool $filterRepoCreate = false): array
     {
-        $userSpaces = $this->getSpacesByAccount($account);
+        if(!$account) $account = $this->app->user->account;
 
-        $spaces = $this->getByIdList(array_keys($userSpaces), false);
+        $userSpaces  = $this->getSpacesByAccount($account);
+        $spaceIdList = array_keys($userSpaces);
+
+        if(empty($spaceIdList) && !$this->app->user->admin) $spaceIdList = array(0);
+
+        $spaces = $this->getByIdList($spaceIdList, false);
+
+        $isAdmin      = !empty($this->app->user->admin);
+        $spaceMembers = $filterRepoCreate && !$isAdmin ? $this->getMemberList(false) : array();
 
         $spacesPairs = array();
         foreach($spaces as $space)
         {
             if($filterRepoCreate)
             {
-                /* 创建/导入代码库的可选空间：私有空间必须持有 repo.create 空间权限（管理员/空间管理员/被授权组），
-                 * 仅仓库成员（devopsrepouser）不再放行；auth=reset 的公开空间沿用原判定。浏览/列表语境不受影响。 */
-                $needRepoCreatePriv = ($space->acl == 'private') || ($space->auth == 'reset');
-                if($needRepoCreatePriv)
+                if($space->acl == 'private' && !$isAdmin && !isset($spaceMembers[$space->id][$account])) continue;
+
+                if($space->auth == 'reset')
                 {
                     $privs = $this->loadModel('group')->getDevOpsSpacePrivs((int)$space->id);
                     if($privs === null || empty($privs['repo']['create'])) continue;
@@ -411,7 +421,7 @@ class spaceModel extends model
     public function getReposBySpace(int $spaceID, $acl = ''): array
     {
         return $this->dao->select('*')->from(TABLE_REPO)
-            ->where('spaceID')->eq($spaceID)
+            ->where('`spaceID`')->eq($spaceID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->ne('importing')
             ->beginIF($acl)->andWhere('acl')->eq($acl)->fi()
@@ -429,7 +439,7 @@ class spaceModel extends model
     public function getArtifactLibsBySpace(int $spaceID): array
     {
         return $this->dao->select('*')->from(TABLE_ARTIFACT)
-            ->where('spaceID')->eq($spaceID)
+            ->where('`spaceID`')->eq($spaceID)
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
     }
@@ -445,7 +455,7 @@ class spaceModel extends model
     public function getPipelineBySpace(int $spaceID): array
     {
         return $this->dao->select('*')->from(TABLE_PIPELINE)
-            ->where('spaceID')->eq($spaceID)
+            ->where('`spaceID`')->eq($spaceID)
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
     }
@@ -511,6 +521,16 @@ class spaceModel extends model
             $userSpaces = $this->getPairs($this->app->user->account);
             if(!isset($userSpaces[$spaceID])) return $this->app->control->locate(helper::createLink('user', 'deny', "module={$this->app->rawModule}&method={$this->app->rawMethod}"));
             $this->session->set('devopsSpace', $spaceID);
+
+            $isGitfox = $this->config->vision == 'gitfox' || $this->config->edition == 'gitfox';
+            if($isGitfox && $this->app->tab == 'space' && isset($this->lang->space->menu))
+            {
+                $this->app->tab = 'space';
+                common::setMenuVars('space', $spaceID);
+
+                if(isset($this->lang->space->menu->settings['subMenu']->group)) unset($this->lang->space->menu->settings['subMenu']->group);
+            }
+
             unset($this->lang->devops->homeMenu->space);
             unset($this->lang->devops->homeMenu->configure);
             unset($this->lang->devops->homeMenu->codescan);
@@ -561,6 +581,21 @@ class spaceModel extends model
     }
 
     /**
+     * 获取空间权限对应的导航分组。
+     * Get nav groups of the modules that belong to a space.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getSpaceNavGroups(): array
+    {
+        /* GitFox独立版的代码库、代码扫描、代码评审、流水线和制品库都是一级导航，navGroup 不再是 devops。 */
+        if($this->config->vision == 'gitfox') return array('devops', 'repo', 'codescan', 'ppm', 'pipeline', 'artifact');
+
+        return array('devops');
+    }
+
+    /**
      * 获取空间所有权限。
      * Get space privs.
      *
@@ -569,15 +604,17 @@ class spaceModel extends model
      */
     public function getPrivs(): object
     {
+        $spaceNavGroups = $this->getSpaceNavGroups();
+
         $privs = new stdclass();
         foreach($this->lang->resource as $module => $methods)
         {
             if(empty($methods)) continue;
             if($module == 'space') continue;
 
-            /* Only include modules that belong to the devops nav group. */
+            /* Only include modules that belong to the devops space. */
             $navGroup = zget($this->lang->navGroup, $module, '');
-            if($navGroup != 'devops') continue;
+            if(!in_array($navGroup, $spaceNavGroups)) continue;
 
             foreach($methods as $method => $label)
             {
@@ -598,6 +635,8 @@ class spaceModel extends model
      */
     public function getDevOpsAllPrivs(): array
     {
+        $spaceNavGroups = $this->getSpaceNavGroups();
+
         $privs = array();
         foreach($this->lang->resource as $module => $methods)
         {
@@ -605,7 +644,7 @@ class spaceModel extends model
             if($module == 'space') continue;
 
             $navGroup = zget($this->lang->navGroup, $module, '');
-            if($navGroup != 'devops') continue;
+            if(!in_array($navGroup, $spaceNavGroups)) continue;
 
             foreach($methods as $method => $label)
             {
@@ -790,7 +829,7 @@ class spaceModel extends model
             {
                 if($type == 'group')
                 {
-                    $group = $this->dao->select('id')->from(TABLE_GROUP)->where('devopsSpace')->eq($spaceID)->fetchPairs();
+                    $group = $this->dao->select('id')->from(TABLE_GROUP)->where('`devopsSpace`')->eq($spaceID)->fetchPairs();
                     $this->dao->delete()->from(TABLE_USERGROUP)
                         ->where('`account`')->in($deleteUsers)
                         ->andWhere('`group`')->in(array_keys($group))
@@ -893,7 +932,7 @@ class spaceModel extends model
         $repos = $this->dao->select('id,product,acl')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
             ->andWhere('status')->ne('importing')
-            ->andWhere('spaceID')->eq($spaceID)->fetchAll();
+            ->andWhere('`spaceID`')->eq($spaceID)->fetchAll();
         $productIdList = array();
         foreach($repos as $key => $repo)
         {

@@ -251,7 +251,7 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
     let estimate  = 0;
     let rate      = '0%';
     let hasCase   = 0;
-    let rateCount = checkedIdList.length;
+    let rateCount = 0;
 
     const rows  = element.layout.allRows;
     rows.forEach((row) => {
@@ -260,6 +260,11 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
             const story = row.data;
             if(story.type != storyType && tab == 'product') return;
             if(story?.needSummaryEstimate) estimate += parseFloat(story.estimate);
+            total += 1;
+
+            /* 用例覆盖率只统计研发需求，避免把业务需求、用户需求计入分子和分母。 */
+            if(story.type != 'story') return;
+            rateCount += 1;
             if(story.caseCount > 0)
             {
                 hasCase += 1;
@@ -268,8 +273,6 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
             {
                 rateCount -= 1;
             }
-
-            total += 1;
         }
     })
 

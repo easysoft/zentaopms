@@ -94,7 +94,9 @@
         if(!requestID || fetchedErrorLogIDs.has(requestID)) return;
         fetchedErrorLogIDs.add(requestID);
 
-        const logURL = $.createLink('errorlog', 'ajaxGetLog', 'requestID=' + encodeURIComponent(requestID));
+        /* requestID 含 '-'，与 PATH_INFO 模式的参数分隔符冲突，按 safe64（base64 后把 / + 换成 . _）编码后再放进链接，服务端用 helper::safe64Decode 还原。The requestID contains '-', which conflicts with the param separator of PATH_INFO mode, encode it with safe64 before putting it in the link. */
+        const encodedID = btoa(requestID).replace(/\//g, '.').replace(/\+/g, '_');
+        const logURL    = $.createLink('errorlog', 'ajaxGetLog', 'requestID=' + encodedID);
         fetch(logURL, {headers: {'X-Zin-Request-ID': requestID, 'X-Requested-With': 'XMLHttpRequest'}}).then(res => res.json()).then(data =>
         {
             if(data && data.result === 'success' && data.data) showErrorLog(data.data);
@@ -1125,7 +1127,7 @@
      * @param {string}   [selector]
      * @returns {void}
      */
-    function loadPage(options, selector)
+    async function loadPage(options, selector)
     {
         if(typeof options === 'string') options = {url: options};
         options = options || {};
@@ -1146,7 +1148,7 @@
 
         if(window.beforePageLoad)
         {
-            const result = window.beforePageLoad(options);
+            const result = await window.beforePageLoad(options);
             if(result === false) return;
             if(result) $.extend(options, result);
         }
@@ -2106,6 +2108,14 @@
             if(state && state.url) openPage(state.url);
         });
     }
+
+    /* Register view command to open object view page. */
+    zui.registerGlobalCommand('view', (context, params) =>
+    {
+        const viewObject = window.top.handleGlobalSearch;
+        if(!viewObject || !Array.isArray(params) || params.length < 2) return;
+        return viewObject(params[0], String(params[1]));
+    });
 
     $(() =>
     {

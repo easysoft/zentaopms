@@ -10,37 +10,14 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$fields = useFields('task.restart');
+
 jsVar('confirmFinish', $lang->task->confirmFinish);
 jsVar('confirmTeamFinish', $lang->task->confirmTeamFinish);
 jsVar('consumedSmallError', $lang->task->error->consumedSmall);
 jsVar('recordedConsumed', !empty($currentTeam) ? (float)$currentTeam->consumed : (float)$task->consumed);
 jsVar('currentTeam', $currentTeam);
 
-/* zin: Set variables to define control for form. */
-$assignedToControl = '';
-if($task->mode == 'linear')
-{
-    $assignedToControl = inputGroup(
-        set::className('no-background'),
-        zget($members, $assignedTo),
-        input
-        (
-            set::className('hidden'),
-            set::name('assignedTo'),
-            set::value($assignedTo)
-        )
-    );
-}
-elseif($canRecordEffort)
-{
-    $assignedToControl = select(
-        set::name('assignedTo'),
-        set::value($assignedTo),
-        set::items($members)
-    );
-}
-
-/* ====== Define the page structure with zin widgets ====== */
 modalHeader();
 if(!$canRecordEffort)
 {
@@ -74,70 +51,8 @@ else
     (
         setID('restartForm'),
         set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
-        formGroup
-        (
-            set::className($task->mode == 'multi' ? 'hidden' : ''),
-            set::width('1/3'),
-            set::label($lang->task->assignedTo),
-            $assignedToControl
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::label($lang->task->realStarted),
-            datetimePicker
-            (
-                set::name('realStarted'),
-                set::value(helper::isZeroDate($task->realStarted) ? helper::now() : $task->realStarted)
-            )
-        ),
-        formRow
-        (
-            formGroup
-            (
-                set::width('1/3'),
-                set::label(!empty($currentTeam) ? $lang->task->myConsumed : $lang->task->consumed),
-                inputControl
-                (
-                    input
-                    (
-                        set::name('consumed'),
-                        set::value(!empty($currentTeam) ? helper::formatHours((float)$currentTeam->consumed) : helper::formatHours((float)$task->consumed)),
-                        set::disabled((!empty($currentTeam) || $task->isParent) ? true : false),
-                    ),
-                    !empty($currentTeam) ? formHidden('consumed', (float)$currentTeam->consumed) : null,
-                    $task->isParent      ? formHidden('consumed', (float)$task->consumed)        : null,
-                    to::suffix($lang->task->suffixHour),
-                    set::suffixWidth(20)
-                )
-            ),
-            formGroup
-            (
-                set::label($lang->task->left),
-                set::width('1/3'),
-                inputControl
-                (
-                    input
-                    (
-                        set::name('left'),
-                        set::value(!empty($currentTeam) ? helper::formatHours((float)$currentTeam->left) : helper::formatHours((float)$task->left)),
-                        set::disabled($task->isParent ? true : false),
-                    ),
-                    $task->isParent ? formHidden('left', $task->left) : null,
-                    to::suffix($lang->task->suffixHour),
-                    set::suffixWidth(20)
-                )
-            )
-        ),
-        formGroup
-        (
-            set::label($lang->comment),
-            editor(set::name('comment'), set::rows('5'))
-        )
+        set::fields($fields)
     );
     hr();
     history();
 }
-
-/* ====== Render page ====== */
-render();

@@ -53,11 +53,10 @@ $config->my->bug->dtable->fieldList['module']['display']    = false;
 
 $config->my->bug->dtable->fieldList['title']['title']    = $lang->bug->title;
 $config->my->bug->dtable->fieldList['title']['type']     = 'title';
-$config->my->bug->dtable->fieldList['title']['fixed']    = 'left';
 $config->my->bug->dtable->fieldList['title']['link']     = array('module' => 'bug', 'method' => 'view', 'params' => "bugID={id}");
 $config->my->bug->dtable->fieldList['title']['required'] = true;
 $config->my->bug->dtable->fieldList['title']['group']    = 1;
-$config->my->bug->dtable->fieldList['title']['data-app'] = $app->tab;
+$config->my->bug->dtable->fieldList['title']['data-app'] = 'qa';
 $config->my->bug->dtable->fieldList['title']['sortType'] = true;
 
 $config->my->bug->dtable->fieldList['severity']['title']        = $lang->bug->severity;

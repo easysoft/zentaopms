@@ -311,26 +311,6 @@ class webhookTaoTest extends baseTest
     }
 
     /**
-     * Test getOpenIdList method.
-     *
-     * @param  int $webhookID
-     * @param  int $actionID
-     * @param  string|array $toList
-     * @access public
-     * @return mixed
-     */
-    public function getOpenIdListTest($webhookID, $actionID, $toList = '')
-    {
-        try {
-            $result = $this->objectModel->getOpenIdList($webhookID, $actionID, $toList);
-            if(dao::isError()) return dao::getError();
-            return $result;
-        } catch (Exception $e) {
-            return false;
-        }
-    }
-
-    /**
      * Save data Test
      *
      * @param  int    $webhookID
@@ -444,9 +424,9 @@ class webhookTaoTest extends baseTest
      * @access public
      * @return mixed
      */
-    public function fetchHookTest($webhook, $sendData, $actionID = 0, $appendUser = '')
+    public function fetchHookTest($webhook, $sendData, $appendUser = '')
     {
-        $result = $this->objectModel->fetchHook($webhook, $sendData, $actionID, $appendUser);
+        $result = $this->objectModel->fetchHook($webhook, $sendData, $appendUser);
 
         if(dao::isError()) return dao::getError();
 
@@ -658,18 +638,17 @@ class webhookTaoTest extends baseTest
      *
      * @param  object $data
      * @param  object $action
-     * @param  object $object
      * @param  array  $users
      * @access public
      * @return string
      */
-    public function getActionTextTest($data, $action, $object, $users)
+    public function getActionTextTest($data, $action, $users)
     {
         $reflection = new ReflectionClass($this->instance);
         $method = $reflection->getMethod('getActionText');
         $method->setAccessible(true);
 
-        $result = $method->invoke($this->instance, $data, $action, $object, $users);
+        $result = $method->invoke($this->instance, $data, $action, '', $users);
         if(dao::isError()) return dao::getError();
 
         return $result;

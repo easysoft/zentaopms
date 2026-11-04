@@ -3,6 +3,7 @@ class executionZenTest
 {
     public $executionZenTest;
     public $tester;
+    public $objectModel;
     function __construct()
     {
         global $tester;
@@ -2438,5 +2439,32 @@ class executionZenTest
         }
 
         return '';
+    }
+
+    /**
+     * 测试准备关联需求的接口数据。
+     * Test prepare link story api data.
+     *
+     * @param  int    $objectID
+     * @param  string $rawModule
+     * @param  array  $stories
+     * @access public
+     * @return array
+     */
+    public function prepareLinkStoryApiDataTest(int $objectID, string $rawModule, array $stories = array()): array
+    {
+        $oldStories = isset($_POST['stories']) ? $_POST['stories'] : null;
+        $_POST['stories'] = $stories;
+
+        $result = callZenMethod('execution', 'prepareLinkStoryApiData', array($objectID, $rawModule));
+
+        if($oldStories === null) unset($_POST['stories']);
+        else $_POST['stories'] = $oldStories;
+
+        if(dao::isError()) return dao::getError();
+
+        $result['storyList']  = !empty($result['stories']) ? implode('|', $result['stories']) : 'none';
+        $result['hasMessage'] = empty($result['message']) ? 'no' : 'yes';
+        return $result;
     }
 }

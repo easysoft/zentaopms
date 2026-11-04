@@ -20,6 +20,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
+zenData('oauth')->gen(0);
+
 $webhook = zenData('webhook');
 $webhook->id->range('1-5');
 $webhook->type->range('dinguser{1},wechatuser{1},feishuuser{1},dinggroup{1},default{1}');
@@ -66,8 +68,8 @@ $testWebhook5->secret = 'test_secret';
 
 $testSendData = '{"msgtype":"text","text":{"content":"测试消息"}}';
 
-r($webhookTest->sendToUserTest($testWebhook1, $testSendData, 0, '')) && p() && e('0'); // 步骤1：测试钉钉用户类型（无actionID）
-r($webhookTest->sendToUserTest($testWebhook2, $testSendData, 0, '')) && p() && e('0'); // 步骤2：测试企业微信用户类型（无actionID）
-r($webhookTest->sendToUserTest($testWebhook3, $testSendData, 0, '')) && p() && e('0'); // 步骤3：测试飞书用户类型（无actionID）
-r($webhookTest->sendToUserTest($testWebhook4, $testSendData, 0, '')) && p() && e('0'); // 步骤4：测试无效webhook类型
-r($webhookTest->sendToUserTest($testWebhook5, $testSendData, 0, '')) && p() && e('0'); // 步骤5：测试dinggroup类型（应该跳过）
+r($webhookTest->sendToUserTest($testWebhook1, $testSendData, '')) && p() && e('0'); // 步骤1：测试钉钉用户类型（无actionID）
+r($webhookTest->sendToUserTest($testWebhook2, $testSendData, '')) && p() && e('0'); // 步骤2：测试企业微信用户类型（无actionID）
+r($webhookTest->sendToUserTest($testWebhook3, $testSendData, '')) && p() && e('0'); // 步骤3：测试飞书用户类型（无actionID）
+r($webhookTest->sendToUserTest($testWebhook4, $testSendData, '')) && p() && e('0'); // 步骤4：测试无效webhook类型
+r($webhookTest->sendToUserTest($testWebhook5, $testSendData, '')) && p() && e('0'); // 步骤5：测试dinggroup类型（应该跳过）

@@ -15,7 +15,7 @@ cid=0
 - 执行ppmModel模块的createTest方法，参数是$noReviewerPPM 属性apiMessage @仓库不存在。
 - 执行ppmModel模块的createTest方法，参数是$crossRepoBranchPPM 属性apiMessage @仓库不存在。
 - 执行ppmModel模块的createTest方法，参数是$approvalFlowPPM 属性apiMessage @仓库不存在。
-- 执行instance模块的fetchByID方法，参数是6401 
+- 执行instance模块的fetchByID方法，参数是6401
  - 属性status @opened
  - 属性title @Create PPM 6401
 - 执行$ppmModel->instance->dao->select('count(*)')->from(TABLE_PPM)->where('repoID')->eq(6401)->fetch('count(*)' @1

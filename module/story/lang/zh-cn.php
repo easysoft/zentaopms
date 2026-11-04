@@ -61,6 +61,7 @@ $lang->story->caseCount          = '用例数';
 $lang->story->taskCountAB        = 'T';
 $lang->story->bugCountAB         = 'B';
 $lang->story->caseCountAB        = 'C';
+$lang->story->twinsStory         = "分支&模块";
 $lang->story->linkStory          = "关联需求";
 $lang->story->unlinkStory        = "您确认移除相关需求吗？";
 $lang->story->linkStoriesAB      = "关联相关{$lang->SRCommon}";

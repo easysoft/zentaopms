@@ -19,10 +19,22 @@ class reviewStoryTester extends tester
      */
     public function reviewStory($storyType, $storyID, $result, $status)
     {
+        /*获取当前用户的真实姓名*/
+        global $uiTester;
+        $account  = $this->config->uitest->defaultAccount;
+        $realname = $uiTester->dao->select('realname')->from(TABLE_USER)->where('account')->eq($account)->fetch('realname');
+
         $form = $this->initForm($storyType, 'review', array('id' => $storyID), 'appIframe-product');  //进入研发评审页面
 
         $form->dom->result->picker($result); //选择研发评审结果
-        if($result != '拒绝') $form->dom->assignedTo->picker('admin'); //指派人选择admin
+        if($result == '拒绝')
+        {
+            $form->dom->closedReason->picker('done');//选择拒绝原因
+        }else
+        {
+            $form->dom->assignedTo->picker('admin'); //指派人选择admin
+        }
+
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
 
@@ -31,7 +43,7 @@ class reviewStoryTester extends tester
 
         if($viewPage->dom->status->getText() != $status) return $this->failed('需求状态错误');
         $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
-        if($viewPage->dom->reviewer->getText() != 'admin') return $this->failed('需求评审人错误');
+        if($viewPage->dom->reviewer->getText() != $realname) return $this->failed('需求评审人错误');
 
         return $this->success('评审需求成功');
     }

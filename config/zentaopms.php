@@ -182,6 +182,8 @@ $config->hourPointCommonList['pt'][2] = 'Ponto de função';
 $config->manualUrl['home'] = 'https://www.zentao.net/book/zentaopms/38.html?fullScreen=zentao';
 $config->manualUrl['int']  = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html?fullScreen=zentao';
 
+$config->gitfoxManualUrl['home'] = 'https://gitfox.net/book/open-source/40.html?fullScreen=gitfox';
+
 /* Supported charsets. */
 $config->charsets['zh-cn']['utf-8'] = 'UTF-8';
 $config->charsets['zh-cn']['gbk']   = 'GBK';
@@ -411,6 +413,7 @@ define('TABLE_RESEARCHPLAN',           '`' . $config->db->prefix . 'researchplan
 define('TABLE_RESEARCHREPORT',         '`' . $config->db->prefix . 'researchreport`');
 define('TABLE_REVIEW',                 '`' . $config->db->prefix . 'review`');
 define('TABLE_REVIEWCL',               '`' . $config->db->prefix . 'reviewcl`');
+define('TABLE_REVIEWDELIVERABLE',      '`' . $config->db->prefix . 'reviewdeliverable`');
 define('TABLE_REVIEWISSUE',            '`' . $config->db->prefix . 'reviewissue`');
 define('TABLE_REVIEWRESULT',           '`' . $config->db->prefix . 'reviewresult`');
 define('TABLE_RISK',                   '`' . $config->db->prefix . 'risk`');
@@ -497,6 +500,7 @@ define('TABLE_SPACE',            '`ops_space`');
 define('TABLE_DEVOPSSPACEUSER',  '`ops_spaceuser`');
 define('TABLE_PPM',              '`ops_ppm`');
 define('TABLE_PPMREVIEWERS',     '`ops_request_reviewers`');
+define('TABLE_SCANISSUE',        '`ops_scan_issues`');
 define('TABLE_REPO',             '`ops_repo`');
 define('TABLE_DEVOPSREPOUSER',   '`ops_repouser`');
 define('TABLE_REPOHISTORY',      '`ops_repohistory`');

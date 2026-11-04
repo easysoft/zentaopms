@@ -422,11 +422,8 @@ user,tao,fetchExecutions
 action,zen,getConfirmNoMessage
 action,zen,processTrash
 action,zen,restoreStages
-admin,zen,certifyByAPI
 admin,zen,fetchAPI
 admin,zen,getZentaoData
-admin,zen,sendCodeByAPI
-admin,zen,setCompanyByAPI
 admin,zen,syncDynamics
 admin,zen,syncExtensions
 admin,zen,syncPublicClasses

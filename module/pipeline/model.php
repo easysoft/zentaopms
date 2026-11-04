@@ -54,7 +54,18 @@ class pipelineModel extends model
      */
     public function getList(int $spaceID = 0, int $repoID = 0, $type = '', string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        $pipelines = $this->dao->select('t1.*, t2.`spaceID` AS space, t2.name AS `repoName`, t3.variables as variables, t4.name AS providerName')->from(TABLE_PIPELINE)->alias('t1')
+        $privCondition = '';
+        if(!$this->app->user->admin)
+        {
+            $spaceIdList = array_keys($this->loadModel('space')->getPairs());
+            $repoIdList  = array_keys($this->loadModel('repo')->getRepoPairs());
+
+            $spaceIds = empty($spaceIdList) ? '0' : implode(',', $spaceIdList);
+            $repoIds  = empty($repoIdList) ? '0' : implode(',', $repoIdList);
+            $privCondition = "((t1.`repoID` = 0 AND t1.`spaceID` IN ({$spaceIds})) OR (t1.`repoID` != 0 AND t1.`repoID` IN ({$repoIds})))";
+        }
+
+        $pipelines = $this->dao->select('t1.*, t2.`spaceID` AS space, t2.name AS `repoName`, t3.variables as variables, t4.name AS `providerName`')->from(TABLE_PIPELINE)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.`repoID`=t2.id')
             ->leftJoin(TABLE_PIPELINECONTENT)->alias('t3')->on('t1.id=t3.`pipelineID`')
             ->leftJoin(TABLE_PROVIDER)->alias('t4')->on('t1.`providerID`=t4.id')
@@ -66,6 +77,7 @@ class pipelineModel extends model
             ->beginIF($spaceID)->andWhere('t1.`spaceID`')->eq($spaceID)->fi()
             ->beginIF($type == 'repo')->andWhere('t1.`repoID`')->ne(0)->fi()
             ->beginIF($type == 'space')->andWhere('t1.`repoID`')->eq(0)->fi()
+            ->beginIF(!empty($privCondition))->andWhere($privCondition)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -108,7 +120,7 @@ class pipelineModel extends model
      */
     public function getExecutionList(int $spaceID = 0, int $repoID = 0, string $type = '', int $pipelineID = 0, string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('t1.*, t2.`scope`, t2.`spaceID` AS space, t2.`repoID` AS repo, t2.`name` AS pipelineName')->from(TABLE_PIPELINEEXEC)->alias('t1')
+        return $this->dao->select('t1.*, t2.`scope`, t2.`spaceID` AS space, t2.`repoID` AS repo, t2.`name` AS `pipelineName`, t2.`engine`')->from(TABLE_PIPELINEEXEC)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.`pipelineID`=t2.id')
             ->where('1=1')
             ->beginIF($repoID)->andWhere('t2.`repoID`')->eq($repoID)->fi()
@@ -133,7 +145,7 @@ class pipelineModel extends model
     public function getExecutionByPipeline(array $pipelineIdList, bool $showLast = false): array
     {
         $executions = $this->dao->select('*')->from(TABLE_PIPELINEEXEC)
-            ->where('pipelineID')->in($pipelineIdList)
+            ->where('`pipelineID`')->in($pipelineIdList)
             ->fetchAll('id', false);
         if(empty($executions)) return array();
         if(!$showLast) return $executions;
@@ -166,7 +178,7 @@ class pipelineModel extends model
     {
         return $this->dao->select('id, name')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
-            ->andWhere('repoID')->eq($repoID)
+            ->andWhere('`repoID`')->eq($repoID)
             ->orderBy('id_desc')
             ->fetchPairs();
     }
@@ -252,7 +264,7 @@ class pipelineModel extends model
             $content->createdDate = helper::now();
             if($hasCopy)
             {
-                $copyPipelineContent = $this->dao->select('*')->from(TABLE_PIPELINECONTENT)->where('pipelineID')->eq($copyPipelineID)->fetch();
+                $copyPipelineContent = $this->dao->select('*')->from(TABLE_PIPELINECONTENT)->where('`pipelineID`')->eq($copyPipelineID)->fetch();
 
                 $content->data      = $copyPipelineContent->data;
                 $content->variables = $copyPipelineContent->variables;
@@ -286,7 +298,7 @@ class pipelineModel extends model
 
             if($hasCopy)
             {
-                $copyTrigger = $this->dao->select('*')->from(TABLE_PIPELINETRIGGER)->where('pipelineID')->eq($copyPipelineID)->fetch();
+                $copyTrigger = $this->dao->select('*')->from(TABLE_PIPELINETRIGGER)->where('`pipelineID`')->eq($copyPipelineID)->fetch();
 
                 $content->event = $copyTrigger->event;
                 $content->cron    = $copyTrigger->cron;
@@ -315,8 +327,12 @@ class pipelineModel extends model
         $check = empty($updatePipeline->repoID) ? "spaceID = {$updatePipeline->spaceID}" : "repoID = {$updatePipeline->repoID}";
         $check .= " AND id != $id";
 
+        /* Jenkins 流水线没有分支配置，编辑时不校验 defaultBranch。 */
+        $requiredFields = $this->config->pipeline->edit->requiredFields;
+        if($updatePipeline->engine == 'jenkins') $requiredFields = str_replace(',defaultBranch', '', $requiredFields);
+
         $this->dao->update(TABLE_PIPELINE)->data($pipeline)
-            ->batchCheck($this->config->pipeline->edit->requiredFields, 'notempty')
+            ->batchCheck($requiredFields, 'notempty')
             ->check('name', 'unique', $check)
             ->where('id')->eq($id)
             ->autoCheck()
@@ -514,7 +530,7 @@ class pipelineModel extends model
     public function getBySpaces(array $spaceIdList): array
     {
         return $this->dao->select('*')->from(TABLE_PIPELINE)
-            ->where('spaceID')->in($spaceIdList)
+            ->where('`spaceID`')->in($spaceIdList)
             ->andWhere('deleted')->eq('0')
             ->fetchAll('id');
     }
@@ -534,8 +550,8 @@ class pipelineModel extends model
         if(!$provider) return false;
 
         $existPipeline = $this->dao->select('id')->from(TABLE_PIPELINE)
-            ->where('spaceID')->eq($repo->spaceID)
-            ->andWhere('repoID')->eq($repo->id)
+            ->where('`spaceID`')->eq($repo->spaceID)
+            ->andWhere('`repoID`')->eq($repo->id)
             ->andWhere('name')->eq($formData->name)
             ->andWhere('deleted')->eq('0')
             ->fetch();
@@ -601,10 +617,28 @@ class pipelineModel extends model
     {
         $action = strtolower($action);
         if(in_array($action, array('execution', 'exec'))) return !empty($pipeline->status) && $pipeline->status != 'draft';
-
+        if($action === 'cancel') return $pipeline->engine == 'gitfox' && in_array($pipeline->status, array('running', 'pending'));
         if($action === 'edit') return $pipeline->engine != 'gitfox';
         if($action === 'arrange') return $pipeline->engine == 'gitfox';
         return true;
+    }
+
+    /**
+     * 判断当前用户是否有取消流水线执行的权限。
+     * Judge the current user has the privilege to cancel pipeline execution.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasCancelPriv(): bool
+    {
+        /* 取消执行的请求不携带空间参数，服务端按用户自身的系统权限校验，这里与之一致。 */
+        $user            = $this->app->user;
+        $this->app->user = $this->session->user;
+        $hasPriv         = common::hasPriv('pipeline', 'cancel');
+        $this->app->user = $user;
+
+        return $hasPriv;
     }
 
     /**
@@ -657,7 +691,7 @@ class pipelineModel extends model
     public function updateContent(int $pipelineID, object $content): bool
     {
         $this->dao->update(TABLE_PIPELINECONTENT)->data($content)
-            ->where('pipelineID')->eq($pipelineID)
+            ->where('`pipelineID`')->eq($pipelineID)
             ->exec();
 
         return !dao::isError();
@@ -772,7 +806,7 @@ class pipelineModel extends model
     public function getTriggers(int $pipelineID): array
     {
         return $this->dao->select('*')->from(TABLE_PIPELINETRIGGER)
-            ->where('pipelineID')->eq($pipelineID)
+            ->where('`pipelineID`')->eq($pipelineID)
             ->fetchAll();
     }
 
@@ -789,8 +823,8 @@ class pipelineModel extends model
     {
         $this->dao->update(TABLE_PIPELINETRIGGER)
             ->set($field)->eq($value)
-            ->set('editedBy')->eq($this->app->user->account)
-            ->set('editedDate')->eq(helper::now())
+            ->set('`editedBy`')->eq($this->app->user->account)
+            ->set('`editedDate`')->eq(helper::now())
             ->where('id')->eq($triggerID)
             ->exec();
     }
@@ -840,6 +874,38 @@ class pipelineModel extends model
         return $this->dao->select('*')->from(TABLE_PIPELINEEXEC)
             ->where('id')->eq($execID)
             ->fetch();
+    }
+
+    /**
+     * 取消流水线执行。
+     * Cancel pipeline execution.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return bool
+     */
+    public function cancel(int $executionID): bool
+    {
+        $execution = $this->getExecByID($executionID);
+        if(empty($execution)) return false;
+
+        $pipeline = $this->getByID($execution->pipelineID);
+        if(empty($pipeline) || $pipeline->engine != 'gitfox')
+        {
+            dao::$errors['engine'][] = $this->lang->pipeline->cancelFail;
+            return false;
+        }
+
+        if(!in_array($execution->status, array('running', 'pending')))
+        {
+            dao::$errors['status'][] = $this->lang->pipeline->cancelFail;
+            return false;
+        }
+
+        if(!$this->loadModel('gitfox')->apiCancelPipeline($executionID)) return false;
+
+        $this->loadModel('action')->create('pipeline', $pipeline->id, 'canceled');
+        return true;
     }
 
     /**

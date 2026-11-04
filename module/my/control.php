@@ -89,7 +89,7 @@ class my extends control
      */
     public function work(string $mode = 'task', string $browseType = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        if($this->config->edition != 'open')
+        if(!in_array($this->config->edition, array('open', 'gitfox')))
         {
             $this->my->appendWorkFlowMenu();
             $flows = $this->my->getFlowPairs();
@@ -167,6 +167,7 @@ class my extends control
         /* Append id for second sort, get todos and tasks. */
         $sort = common::appendOrder($orderBy);
         if($browseType == 'before') $status = 'undone';
+        if($browseType == 'all')    $status = 'noclosed';
         $todos = $this->loadModel('todo')->getList($browseType, $account, $status, 0, $pager, $sort);
         $tasks = $this->loadModel('task')->getUserSuspendedTasks($account);
 
@@ -778,6 +779,7 @@ class my extends control
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->doc;
         $this->view->docs       = $docs;
+        $this->view->libs       = $this->doc->getLibs();
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->browseType = $browseType;
         $this->view->recTotal   = $recTotal;
@@ -1113,7 +1115,7 @@ class my extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager  = pager::init($recTotal, $recPerPage, $pageID);
 
-        $auditplans = $this->loadModel('auditplan')->getList(0, $browseType, $param, $orderBy, $pager);
+        $auditplans = $this->loadModel('auditplan')->getList(0, 'project', $browseType, $param, $orderBy, $pager);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
@@ -1869,13 +1871,20 @@ class my extends control
      */
     public function createSSH()
     {
+        if($this->app->apiVersion == 'v2' && $this->app->action != 'post')
+        {
+            header('Allow: POST');
+            http_response_code(405);
+            return $this->sendError('Method not allowed.');
+        }
+
         if($_POST)
         {
             $formData = form::data($this->config->my->form->createSSH)->get();
             $this->myZen->checkSSH($formData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $this->my->createSSH($formData);
+            $result = $this->my->createSSH($formData);
             if(dao::isError())
             {
                 $error = dao::getError();
@@ -1887,6 +1896,8 @@ class my extends control
                 return $this->sendError($error);
             }
 
+            if($result === false) return $this->sendError($this->lang->error->httpServerError);
+            if($this->app->apiVersion == 'v2') return $this->sendSuccess();
             return $this->sendSuccess(array('load' => true));
         }
 

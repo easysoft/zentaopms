@@ -290,11 +290,6 @@ $config->productplan->view->dtable->fieldList['version']['sortType'] = true;
 $config->productplan->view->dtable->fieldList['version']['type']     = 'number';
 $config->productplan->view->dtable->fieldList['version']['group']    = 11;
 
-$config->productplan->view->dtable->fieldList['childItem']['title']    = $lang->story->childItem;
-$config->productplan->view->dtable->fieldList['childItem']['sortType'] = false;
-$config->productplan->view->dtable->fieldList['childItem']['type']     = 'text';
-$config->productplan->view->dtable->fieldList['childItem']['group']    = 6;
-
 $config->productplan->view->dtable->fieldList['activatedDate']['title']    = $lang->story->activatedDate;
 $config->productplan->view->dtable->fieldList['activatedDate']['sortType'] = true;
 $config->productplan->view->dtable->fieldList['activatedDate']['type']     = 'date';
@@ -439,7 +434,7 @@ $config->productplan->viewBug->dtable->fieldList['activatedCount']['title']    =
 $config->productplan->viewBug->dtable->fieldList['activatedCount']['type']     = 'count';
 $config->productplan->viewBug->dtable->fieldList['activatedCount']['sortType'] = true;
 
-if($config->edition != 'open')
+if(!in_array($config->edition, array('open', 'gitfox')))
 {
     $app->loadLang('custom');
     $config->productplan->viewBug->dtable->fieldList['relatedObject']['name']        = 'relatedObject';

@@ -1241,7 +1241,7 @@ CREATE TABLE `zt_ai_useragent` (
   `agent` varchar(255) NOT NULL DEFAULT '' COMMENT 'ZAI agent ID',
   `type` varchar(30) NOT NULL DEFAULT '' COMMENT '类型：'' | executor',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_account_agent` (`account`,`agent`)
+  UNIQUE KEY `uk_account_agent` (`account`,`agent`(190))
 ) ENGINE=InnoDB;
 CREATE TABLE `zt_ai_vectorqueue` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
@@ -1253,7 +1253,7 @@ CREATE TABLE `zt_ai_vectorqueue` (
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedDate` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_object` (`objectType`,`objectID`),
+  UNIQUE KEY `uk_object` (`objectType`(190), `objectID`),
   KEY `idx_retries` (`retries`)
 ) ENGINE=InnoDB;
 CREATE TABLE `zt_api` (

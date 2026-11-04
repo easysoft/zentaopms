@@ -18,13 +18,14 @@ jsVar('executeFailed', $lang->upgrade->executeFailed);
 $isEn = $app->getClientLang() == 'en';
 
 $editionNames = [];
-foreach(['open', 'biz', 'max', 'ipd'] as $edition)
+foreach(['open', 'biz', 'max', 'ipd', 'gitfox'] as $edition)
 {
     $editionName = $lang->{$edition . 'Name'} ?? $edition;
     $editionNames[$edition] = $edition == 'open' ? $lang->pmsName : $editionName;
 }
+$editionNames['gitfox'] = $lang->gitfoxName ?? 'GitFox';
 
-$toVersionEdition = is_numeric($toVersion[0]) ? 'open' : substr($toVersion, 0, 3);
+$toVersionEdition = is_numeric($toVersion[0]) ? 'open' : (str_starts_with($toVersion, 'gitfox') ? 'gitfox' : (str_starts_with($toVersion, 'devops') ? 'devops' : substr($toVersion, 0, 3)));
 $formatVersion    = static function(string $version): string
 {
     return str_replace('_', '.', $version);
@@ -39,7 +40,7 @@ $buildVersions = function() use ($upgradeVersions, $editionNames, $formatVersion
     $versions = [];
     foreach($upgradeVersions as $version => $label)
     {
-        $edition = is_numeric($version[0]) ? 'open' : substr($version, 0, 3);
+        $edition = is_numeric($version[0]) ? 'open' : (str_starts_with($version, 'gitfox') ? 'gitfox' : (str_starts_with($version, 'devops') ? 'devops' : substr($version, 0, 3)));
         $versions[] = row
         (
             setClass('version-item items-center gap-2'),

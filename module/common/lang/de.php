@@ -37,6 +37,8 @@ $lang->proName        = 'Pro';
 $lang->bizName        = 'Biz';
 $lang->maxName        = 'Max';
 $lang->liteName       = 'Lite';
+$lang->devopsName     = 'DevOps';
+$lang->gitfoxName     = 'GitFox';
 $lang->devopsPrefix   = 'DevOps ';
 $lang->logoImg        = 'zt-logo-en.png';
 $lang->welcome        = "%s PMS";
@@ -163,6 +165,7 @@ $lang->noticeDrag      = 'Click to add or drag to upload, no more than %s';
 $lang->allProgress     = 'All Progress';
 $lang->hasReviewed     = 'The content has already been reviewed and does not need further review !';
 $lang->appNotFound     = 'Sie haben keine Berechtigung, um auf diese Anwendung zuzugreifen. Bitte überprüfen Sie die Berechtigungseinstellungen.';
+$lang->appLoadFailed   = 'Die Anwendung konnte nicht geladen werden. Bitte aktualisieren Sie die Seite und versuchen Sie es erneut.';
 
 $lang->fieldDisplaySetting = 'Field Display Setting';
 $lang->fieldSettingTip     = 'The following fields are collapsed by default, click on the "Show more fields" button to expand the view, if you want some fields not to be collapsed by default, you can fix it with a pin.';
@@ -558,7 +561,6 @@ $lang->exportTypeList['selected'] = 'Ausgewählte';
 $lang->visionList = array();
 $lang->visionList['rnd']    = 'Full Feature Interface';
 $lang->visionList['lite']   = 'Operation Management Interface';
-//$lang->visionList['devops'] = 'DevOps Interface';
 
 $lang->createObjects['todo']        = 'Todo';
 $lang->createObjects['effort']      = 'Effort';

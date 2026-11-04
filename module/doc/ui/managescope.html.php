@@ -20,6 +20,7 @@ $dataItems = array();
 foreach($scopeList as $scopeID => $scope)
 {
     $item = new stdClass();
+    $item->rowKey = 'scope' . $scopeID;
     $item->id     = $scopeID;
     $item->scopes = $scope->name;
     $item->main   = $scope->main;
@@ -27,6 +28,7 @@ foreach($scopeList as $scopeID => $scope)
 }
 
 $batchFormOptions = array();
+$batchFormOptions['idKey']         = 'rowKey';
 $batchFormOptions['onClickAction'] = jsRaw('window.handleClickBatchFormAction'); // 定义操作列按钮点击事件处理函数。
 $batchFormOptions['onRenderRow']   = jsRaw('window.handleRenderRow'); // 定义行渲染事件处理函数。
 

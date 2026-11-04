@@ -50,15 +50,24 @@ $storyCols = $this->loadModel('datatable')->getSetting('productplan', 'view');
 if(isset($storyCols['branch']) && $product->type == 'normal') unset($storyCols['branch']);
 
 /* Customize columns for plan context. */
-$storyCols['title']['link']         = $this->createLink('story', 'storyView', "storyID={id}");
+$storyCols['title']['link']         = $this->createLink('story', 'storyView', "storyID={id}&planID={$plan->id}");
 $storyCols['title']['title']        = $lang->productplan->storyTitle;
 $storyCols['assignedTo']['type']    = 'user';
 $storyCols['module']['type']        = 'text';
 $storyCols['module']['map']         = $modulePairs;
 $storyCols['module']['sortType']    = true;
 if(isset($storyCols['branch'])) $storyCols['branch']['map'] = $branchOption;
-$storyCols['actions']['list']       = $config->productplan->actionList;
-$storyCols['actions']['menu']       = array('unlinkStory');
+$storyCols['actions']['list']         = $config->productplan->actionList;
+$storyCols['actions']['list']['copy'] = array
+(
+    'icon'        => 'copy',
+    'text'        => $lang->story->copy,
+    'hint'        => $lang->story->copy,
+    'url'         => array('module' => 'story', 'method' => 'copy', 'params' => "product={product}&branch={branch}&moduleID={module}&storyID={id}&executionID=0&bugID=0&planID={$plan->id}&todoID=0&extra=&storyType={type}"),
+    'data-app'    => $app->tab,
+    'notInModal'  => true
+);
+$storyCols['actions']['menu']       = array('unlinkStory', 'copy');
 $storyCols['actions']['minWidth']   = 60;
 
 /* Sort column for drag-and-drop sorting. */ if(common::hasPriv('execution', 'storySort'))

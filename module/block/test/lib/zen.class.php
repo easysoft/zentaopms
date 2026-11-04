@@ -883,6 +883,39 @@ class blockZenTest extends baseTest
     }
 
     /**
+     * 测试GitFox独立版的团队成就区块。
+     * Test printGitfoxTeamAchievementBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printGitfoxTeamAchievementBlockTest()
+    {
+        $years  = array(date('Y'), date('Y', strtotime('-1 day')));
+        $months = array(date('m'), date('m', strtotime('-1 day')));
+
+        /* 与printTeamAchievementBlock保持一致，先加载metric模块，再获取度量数据。 */
+        $this->instance->loadModel('metric');
+
+        $this->invokeArgs('printGitfoxTeamAchievementBlock', array($years, $months));
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->getProperty('view');
+
+        $result = new stdClass();
+        $result->commits              = isset($view->commits)              ? $view->commits              : 0;
+        $result->yesterdayCommits     = isset($view->yesterdayCommits)     ? $view->yesterdayCommits     : 0;
+        $result->createdReviews       = isset($view->createdReviews)       ? $view->createdReviews       : 0;
+        $result->yesterdayCreatedReviews = isset($view->yesterdayCreatedReviews) ? $view->yesterdayCreatedReviews : 0;
+        $result->mergedReviews        = isset($view->mergedReviews)        ? $view->mergedReviews        : 0;
+        $result->yesterdayMergedReviews = isset($view->yesterdayMergedReviews) ? $view->yesterdayMergedReviews : 0;
+        $result->resolvedIssues       = isset($view->resolvedIssues)       ? $view->resolvedIssues       : 0;
+        $result->yesterdayResolvedIssues = isset($view->yesterdayResolvedIssues) ? $view->yesterdayResolvedIssues : 0;
+
+        return $result;
+    }
+
+    /**
      * Test printWaterfallEstimateBlock method.
      *
      * @access public
@@ -1633,6 +1666,56 @@ class blockZenTest extends baseTest
     public function printWelcomeBlockTest()
     {
         $this->invokeArgs('printWelcomeBlock');
+        if(dao::isError()) return dao::getError();
+        return $this->getProperty('view');
+    }
+
+    /**
+     * Test printGitfoxWelcomeBlock method in zen layer.
+     *
+     * @param  string $usageDays
+     * @param  string $welcomeType
+     * @access public
+     * @return object
+     */
+    public function printGitfoxWelcomeBlockTest(string $usageDays = '0天', string $welcomeType = '06:00')
+    {
+        $this->prepareContext();
+        $this->invokeArgs('printGitfoxWelcomeBlock', array($usageDays, $welcomeType));
+        if(dao::isError()) return dao::getError();
+        return $this->getProperty('view');
+    }
+
+    /**
+     * Test printReviewByMeBlock method in zen layer.
+     *
+     * @param  object $block
+     * @param  array  $params
+     * @access public
+     * @return object
+     */
+    public function printReviewByMeBlockTest(?object $block = null, array $params = array())
+    {
+        $this->prepareContext();
+        $block = $this->prepareBlock($block);
+        $this->invokeArgs('printReviewByMeBlock', array($block, $params));
+        if(dao::isError()) return dao::getError();
+        return $this->getProperty('view');
+    }
+
+    /**
+     * Test printReviewCreatedByMeBlock method in zen layer.
+     *
+     * @param  object $block
+     * @param  array  $params
+     * @access public
+     * @return object
+     */
+    public function printReviewCreatedByMeBlockTest(?object $block = null, array $params = array())
+    {
+        $this->prepareContext();
+        $block = $this->prepareBlock($block);
+        $this->invokeArgs('printReviewCreatedByMeBlock', array($block, $params));
         if(dao::isError()) return dao::getError();
         return $this->getProperty('view');
     }

@@ -33,6 +33,45 @@ class ciModelTest extends baseTest
     }
 
     /**
+     * Test setMenu method's mirror branch with gitfox(独立版) menu keys.
+     * Returns "codescan:{0|1}|issue:{0|1}|settings:{0|1}" where 1 = menu still present, 0 = unset.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return string
+     */
+    public function setMenuGitfoxMirrorCheckTest(int $repoID)
+    {
+        global $app, $lang;
+
+        $oldVision = $app->config->vision;
+        $oldTab    = $app->tab;
+        $oldMenu   = isset($lang->repo) && isset($lang->repo->menu) ? $lang->repo->menu : null;
+
+        $app->config->vision = 'gitfox';
+        if(!isset($lang->repo)) $lang->repo = new stdclass();
+        $lang->repo->menu = new stdclass();
+        $lang->repo->menu->codescan = array('link' => 'codescan');
+        $lang->repo->menu->issue    = array('link' => 'issue');
+        $lang->repo->menu->settings = array('link' => 'settings');
+
+        ob_start();
+        $this->instance->setMenu($repoID);
+        ob_end_clean();
+
+        $codescan = isset($lang->repo->menu->codescan) ? 1 : 0;
+        $issue    = isset($lang->repo->menu->issue)    ? 1 : 0;
+        $settings = isset($lang->repo->menu->settings) ? 1 : 0;
+
+        $app->config->vision = $oldVision;
+        $app->tab            = $oldTab;
+        if($oldMenu === null) unset($lang->repo->menu);
+        else                  $lang->repo->menu = $oldMenu;
+
+        return "codescan:{$codescan}|issue:{$issue}|settings:{$settings}";
+    }
+
+    /**
      * Test getCompileByID method.
      *
      * @param  int    $compileID
@@ -121,6 +160,24 @@ class ciModelTest extends baseTest
     {
         $result = $this->instance->sendRequest($url, $data, $userPWD);
         return $result ? 1 : 0;
+    }
+
+    /**
+     * Send request and return the raw result.
+     * 发送请求并返回原始结果，便于校验参数处理逻辑。
+     *
+     * @param  string $url
+     * @param  object $data
+     * @param  string $userPWD
+     * @access public
+     * @return mixed
+     */
+    public function sendRequestRawTest(string $url, object $data, string $userPWD = '')
+    {
+        $result = $this->instance->sendRequest($url, $data, $userPWD);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**

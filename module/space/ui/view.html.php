@@ -164,7 +164,7 @@ div
                         //    div(setClass('text-3xl h-10'), $artifactRepoCount),
                         //    div($lang->space->artifactrepo)
                         //),
-                        cell
+                        $config->edition == 'gitfox' ? null : cell
                         (
                             set::title($systemCount),
                             div(setClass('text-3xl h-10'), $systemCount),

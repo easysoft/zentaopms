@@ -296,3 +296,162 @@ $config->dev->onlyMainMenu = array('kanban');
 
 $config->dev->skipTags['project-testcase'] = array('suite', 'autocase');
 $config->dev->skipTags['testcase-browse']  = array('casetype', 'suite', 'autocase');
+
+/* 表关联关系，供数据库结构接口使用。键为去前缀表名，与 group、tableList 的键一致，输出时自动补全前缀。Relations for the database schema API. */
+$config->dev->relations = array();
+
+/* 任务。Task. */
+$config->dev->relations['task']['project']      = array('toTable' => 'project', 'toColumn' => 'id');
+$config->dev->relations['task']['execution']    = array('toTable' => 'project', 'toColumn' => 'id');    // 执行存储在 zt_project 表。
+$config->dev->relations['task']['module']       = array('toTable' => 'module',  'toColumn' => 'id');
+$config->dev->relations['task']['design']       = array('toTable' => 'design',  'toColumn' => 'id');
+$config->dev->relations['task']['story']        = array('toTable' => 'story',   'toColumn' => 'id');
+$config->dev->relations['task']['fromBug']      = array('toTable' => 'bug',     'toColumn' => 'id');
+$config->dev->relations['task']['fromIssue']    = array('toTable' => 'issue',   'toColumn' => 'id');
+$config->dev->relations['task']['feedback']     = array('toTable' => 'feedback', 'toColumn' => 'id');
+$config->dev->relations['task']['parent']       = array('toTable' => 'task',    'toColumn' => 'id');
+$config->dev->relations['task']['openedBy']     = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['task']['assignedTo']   = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['task']['finishedBy']   = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['task']['canceledBy']   = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['task']['closedBy']     = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['task']['lastEditedBy'] = array('toTable' => 'user',    'toColumn' => 'account');
+
+/* Bug。 */
+$config->dev->relations['bug']['project']      = array('toTable' => 'project', 'toColumn' => 'id');
+$config->dev->relations['bug']['product']      = array('toTable' => 'product', 'toColumn' => 'id');
+$config->dev->relations['bug']['module']       = array('toTable' => 'module',  'toColumn' => 'id');
+$config->dev->relations['bug']['execution']    = array('toTable' => 'project', 'toColumn' => 'id');    // 执行存储在 zt_project 表。
+$config->dev->relations['bug']['plan']         = array('toTable' => 'productplan', 'toColumn' => 'id');
+$config->dev->relations['bug']['branch']       = array('toTable' => 'branch',  'toColumn' => 'id');
+$config->dev->relations['bug']['story']        = array('toTable' => 'story',   'toColumn' => 'id');
+$config->dev->relations['bug']['task']         = array('toTable' => 'task',    'toColumn' => 'id');
+$config->dev->relations['bug']['toTask']       = array('toTable' => 'task',    'toColumn' => 'id');
+$config->dev->relations['bug']['toStory']      = array('toTable' => 'story',   'toColumn' => 'id');
+$config->dev->relations['bug']['case']         = array('toTable' => 'case',    'toColumn' => 'id');
+$config->dev->relations['bug']['duplicateBug'] = array('toTable' => 'bug',     'toColumn' => 'id');
+$config->dev->relations['bug']['feedback']     = array('toTable' => 'feedback', 'toColumn' => 'id');
+$config->dev->relations['bug']['testtask']     = array('toTable' => 'testtask', 'toColumn' => 'id');
+$config->dev->relations['bug']['openedBy']     = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['bug']['assignedTo']   = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['bug']['resolvedBy']   = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['bug']['closedBy']     = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['bug']['lastEditedBy'] = array('toTable' => 'user',    'toColumn' => 'account');
+
+/* 需求。Story. */
+$config->dev->relations['story']['product']        = array('toTable' => 'product', 'toColumn' => 'id');
+$config->dev->relations['story']['branch']         = array('toTable' => 'branch',  'toColumn' => 'id');
+$config->dev->relations['story']['module']         = array('toTable' => 'module',  'toColumn' => 'id');
+$config->dev->relations['story']['plan']           = array('toTable' => 'productplan', 'toColumn' => 'id');
+$config->dev->relations['story']['parent']         = array('toTable' => 'story',   'toColumn' => 'id');
+$config->dev->relations['story']['fromBug']        = array('toTable' => 'bug',     'toColumn' => 'id');
+$config->dev->relations['story']['fromStory']      = array('toTable' => 'story',   'toColumn' => 'id');
+$config->dev->relations['story']['duplicateStory'] = array('toTable' => 'story',   'toColumn' => 'id');
+$config->dev->relations['story']['feedback']       = array('toTable' => 'feedback', 'toColumn' => 'id');
+$config->dev->relations['story']['openedBy']       = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['story']['assignedTo']     = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['story']['lastEditedBy']   = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['story']['changedBy']      = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['story']['closedBy']       = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['story']['retractedBy']    = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['story']['submitedBy']     = array('toTable' => 'user',    'toColumn' => 'account');
+
+/* 项目与项目集。Project and program. */
+$config->dev->relations['project']['parent']       = array('toTable' => 'project', 'toColumn' => 'id');
+$config->dev->relations['project']['openedBy']     = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['project']['lastEditedBy'] = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['project']['closedBy']     = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['project']['canceledBy']   = array('toTable' => 'user',    'toColumn' => 'account');
+
+/* 产品。Product. */
+$config->dev->relations['product']['program']   = array('toTable' => 'project', 'toColumn' => 'id');    // 项目集存储在 zt_project 表。
+$config->dev->relations['product']['createdBy'] = array('toTable' => 'user',    'toColumn' => 'account');
+
+/* 版本。Build. */
+$config->dev->relations['build']['project']   = array('toTable' => 'project', 'toColumn' => 'id');
+$config->dev->relations['build']['product']   = array('toTable' => 'product', 'toColumn' => 'id');
+$config->dev->relations['build']['branch']    = array('toTable' => 'branch',  'toColumn' => 'id');
+$config->dev->relations['build']['execution'] = array('toTable' => 'project', 'toColumn' => 'id');
+$config->dev->relations['build']['builder']   = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['build']['createdBy'] = array('toTable' => 'user',    'toColumn' => 'account');
+
+/* 发布。Release. */
+$config->dev->relations['release']['project']   = array('toTable' => 'project', 'toColumn' => 'id');
+$config->dev->relations['release']['product']   = array('toTable' => 'product', 'toColumn' => 'id');
+$config->dev->relations['release']['branch']    = array('toTable' => 'branch',  'toColumn' => 'id');
+$config->dev->relations['release']['build']     = array('toTable' => 'build',   'toColumn' => 'id');
+$config->dev->relations['release']['createdBy'] = array('toTable' => 'user',    'toColumn' => 'account');
+
+/* 测试用例。Test case. */
+$config->dev->relations['case']['project']      = array('toTable' => 'project', 'toColumn' => 'id');
+$config->dev->relations['case']['product']      = array('toTable' => 'product', 'toColumn' => 'id');
+$config->dev->relations['case']['execution']    = array('toTable' => 'project', 'toColumn' => 'id');
+$config->dev->relations['case']['branch']       = array('toTable' => 'branch',  'toColumn' => 'id');
+$config->dev->relations['case']['lib']          = array('toTable' => 'testsuite', 'toColumn' => 'id');
+$config->dev->relations['case']['module']       = array('toTable' => 'module',  'toColumn' => 'id');
+$config->dev->relations['case']['story']        = array('toTable' => 'story',   'toColumn' => 'id');
+$config->dev->relations['case']['fromBug']      = array('toTable' => 'bug',     'toColumn' => 'id');
+$config->dev->relations['case']['openedBy']     = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['case']['scriptedBy']   = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['case']['lastRunner']   = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['case']['lastEditedBy'] = array('toTable' => 'user',    'toColumn' => 'account');
+
+/* 测试单。Test task. */
+$config->dev->relations['testtask']['project']    = array('toTable' => 'project', 'toColumn' => 'id');
+$config->dev->relations['testtask']['product']    = array('toTable' => 'product', 'toColumn' => 'id');
+$config->dev->relations['testtask']['execution']  = array('toTable' => 'project', 'toColumn' => 'id');
+$config->dev->relations['testtask']['build']      = array('toTable' => 'build',   'toColumn' => 'id');
+$config->dev->relations['testtask']['testreport'] = array('toTable' => 'testreport', 'toColumn' => 'id');
+$config->dev->relations['testtask']['owner']      = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['testtask']['createdBy']  = array('toTable' => 'user',    'toColumn' => 'account');
+
+/* 文档。Doc. */
+$config->dev->relations['doc']['project']    = array('toTable' => 'project', 'toColumn' => 'id');
+$config->dev->relations['doc']['product']    = array('toTable' => 'product', 'toColumn' => 'id');
+$config->dev->relations['doc']['execution']  = array('toTable' => 'project', 'toColumn' => 'id');
+$config->dev->relations['doc']['lib']        = array('toTable' => 'doclib',  'toColumn' => 'id');
+$config->dev->relations['doc']['module']     = array('toTable' => 'module',  'toColumn' => 'id');
+$config->dev->relations['doc']['parent']     = array('toTable' => 'doc',     'toColumn' => 'id');
+$config->dev->relations['doc']['addedBy']    = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['doc']['editedBy']   = array('toTable' => 'user',    'toColumn' => 'account');
+$config->dev->relations['doc']['assignedTo'] = array('toTable' => 'user',    'toColumn' => 'account');
+
+/* 项目需求关联表。Project story relation. */
+$config->dev->relations['projectstory']['project'] = array('toTable' => 'project', 'toColumn' => 'id');
+$config->dev->relations['projectstory']['product'] = array('toTable' => 'product', 'toColumn' => 'id');
+$config->dev->relations['projectstory']['branch']  = array('toTable' => 'branch',  'toColumn' => 'id');
+$config->dev->relations['projectstory']['story']   = array('toTable' => 'story',   'toColumn' => 'id');
+
+/* 附件。File. */
+$config->dev->relations['file']['objectID'] = array(
+    'type'          => 'polymorphic',
+    'discriminator' => 'objectType',
+    'targets'       => array(
+        array('when' => 'bug',      'toTable' => 'bug',      'toColumn' => 'id'),
+        array('when' => 'task',     'toTable' => 'task',     'toColumn' => 'id'),
+        array('when' => 'story',    'toTable' => 'story',    'toColumn' => 'id'),
+        array('when' => 'case',     'toTable' => 'case',     'toColumn' => 'id'),
+        array('when' => 'doc',      'toTable' => 'doc',      'toColumn' => 'id'),
+        array('when' => 'project',  'toTable' => 'project',  'toColumn' => 'id'),
+        array('when' => 'execution', 'toTable' => 'project', 'toColumn' => 'id'),
+        array('when' => 'product',  'toTable' => 'product',  'toColumn' => 'id'),
+        array('when' => 'build',    'toTable' => 'build',    'toColumn' => 'id'),
+        array('when' => 'release',  'toTable' => 'release',  'toColumn' => 'id'),
+        array('when' => 'testtask', 'toTable' => 'testtask', 'toColumn' => 'id'),
+        array('when' => 'feedback', 'toTable' => 'feedback', 'toColumn' => 'id'),
+        array('when' => 'ticket',   'toTable' => 'ticket',   'toColumn' => 'id'),
+    ),
+);
+$config->dev->relations['file']['addedBy'] = array('toTable' => 'user', 'toColumn' => 'account');
+
+/* 数据库查询接口设置。Settings of the database query API. */
+$config->dev->sqlQuery = new stdclass();
+$config->dev->sqlQuery->defaultLimit      = 100;      // 默认返回行数。Default row count.
+$config->dev->sqlQuery->maxLimit          = 1000;     // 单次最大返回行数。Max row count of one request.
+$config->dev->sqlQuery->maxExecutionTime  = 3000;     // 最长执行时间，单位毫秒。Max execution time in milliseconds.
+$config->dev->sqlQuery->maxSqlLength      = 10000;    // SQL 最大长度。Max length of the sql.
+$config->dev->sqlQuery->sensitiveFields   = 'password,resetToken,token,secret,privateKey,apiKey,accessToken';
+$config->dev->sqlQuery->forbiddenKeywords = array(
+    'into outfile', 'into dumpfile', 'load_file(', 'benchmark(', 'sleep(', 'get_lock(', 'for update', 'lock in share mode',
+    'information_schema', 'performance_schema', 'mysql.', 'sys.', '/*!',
+);

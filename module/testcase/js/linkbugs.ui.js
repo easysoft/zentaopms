@@ -12,7 +12,7 @@ $(document).off('click', '.link-btn').on('click', '.link-btn', function()
 
         $('#linkBug').append("<div class='checkbox-primary'><input type='checkbox' id='linkBug[]_" + id + "' name='linkBug[]' checked value=" + id + "><label for='linkBug[]_" + id + "'>" + bugTitle + "</label></div>");
 
-        $('#linkBug').closest('tr').removeClass('hidden');
+        $('#linkBug').closest('.form-group').removeClass('hidden');
     });
 
     $(this).closest('.modal').modal('hide');

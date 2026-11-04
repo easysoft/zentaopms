@@ -20,6 +20,7 @@ class form extends formBase
         'fullModeOrders?: string|array',   // 完整模式下字段显示顺序。
         'foldableItems?: array|string',    // 可折叠的表单项。
         'pinnedItems?: array|string',      // 固定显示的表单项。
+        'formGrid?: array',                // 表单网格配置。
         'customBtn?: array|bool',          // 是否显示表单自定义按钮。
         'customUrl?: string',              // 自定义表单提交 URL。
         'toolbar?: array|bool',            // 额外的自定义按钮。
@@ -110,6 +111,7 @@ class form extends formBase
             if(!is_null($fields->labelData))      $this->setProp('labelData',     $fields->labelData);
             if(!is_null($fields->valueData))      $this->setProp('data',          $fields->valueData);
             if(!is_null($fields->ordersForFull))  $this->setProp('fullModeOrders', $fields->ordersForFull);
+            if(!is_null($fields->linkages))       $this->setProp('linkages',       $fields->linkages);
 
             if(!is_null($fields->autoLoadRule))
             {
@@ -118,6 +120,7 @@ class form extends formBase
                 $autoLoad = array_merge($autoLoad, $fields->autoLoadRule);
                 $this->setProp('autoLoad', $autoLoad);
             }
+            if(!empty($fields->autoLoadUrl)) $this->setProp('loadUrl', $fields->autoLoadUrl);
         }
     }
 
@@ -175,6 +178,9 @@ class form extends formBase
                 if(is_array($control) && !isset($control['id'])) $control['id'] = '';
                 $item['control'] = $control;
             }
+
+            unset($item['group']);
+            unset($item['position']);
         }
         return $item;
     }
@@ -296,10 +302,12 @@ class form extends formBase
         if($this->isLayout('grid'))
         {
             $options = $this->props->pick(array('loadUrl', 'autoLoad', 'fullModeOrders'));
+            $formGridOptions = $this->prop('formGrid');
             $after[] = zui::formGrid
             (
                 set::_to('#' . $this->id()),
-                set($options)
+                set($options),
+                $formGridOptions ? set($formGridOptions) : null
             );
         }
         return $after;
@@ -313,7 +321,16 @@ class form extends formBase
             foreach($items as $key => $item)
             {
                 if(!($item instanceof formGroup)) continue;
-                $items[$key] = new formRow($item);
+                if($item->prop('hidden'))
+                {
+                    $item->setProp('hidden', false);
+                    $items[$key] = new formRow($item);
+                    $items[$key]->setProp('hidden', true);
+                }
+                else
+                {
+                    $items[$key] = new formRow($item);
+                }
             }
         }
         else

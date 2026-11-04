@@ -443,7 +443,7 @@ class product extends control
         /* Execute hooks. */
         $this->executeHooks($productID);
 
-        if($this->config->edition != 'open') $this->view->workflowGroups = $this->loadModel('workflowgroup')->getPairs('product', 'scrum', 1, 'all');
+        if(!in_array($this->config->edition, array('open', 'gitfox'))) $this->view->workflowGroups = $this->loadModel('workflowgroup')->getPairs('product', 'scrum', 1, 'all');
 
         $this->view->title     = $product->name . $this->lang->hyphen . $this->lang->product->view;
         $this->view->product   = $product;
@@ -637,6 +637,7 @@ class product extends control
     public function showErrorNone(string $moduleName = 'qa', string $activeMenu = 'index', int $objectID = 0)
     {
         $this->productZen->setShowErrorNoneMenu($moduleName, $activeMenu, $objectID);
+        if($this->app->tab == 'project') $this->view->projectID = $objectID;
 
         $this->view->title    = $this->lang->$moduleName->common;
         $this->view->objectID = $objectID;

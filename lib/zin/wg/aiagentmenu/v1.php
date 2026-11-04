@@ -23,7 +23,6 @@ class aiAgentMenu extends wg
         if(empty($items)) return null;
 
         list($btnName, $btnClass, $placement) = $this->prop(array('btnName', 'btnClass', 'placement'));
-        $itemClass = 'btn ghost size-sm font-medium text-left';
 
         if(empty($btnName))
         {
@@ -40,13 +39,9 @@ class aiAgentMenu extends wg
         $formMethod = $this->prop('method');
         if($isFormPage && $formModule && $formMethod) $app->loadConfig('ai');
 
-        $menuItems = array_map(function($prompt) use ($isFormPage, $objectID, $itemClass, $app, $formModule, $formMethod)
+        $menuItems = array_map(function($prompt) use ($isFormPage, $objectID, $app, $formModule, $formMethod)
         {
-            $itemProps = array
-            (
-                set::text($prompt->name),
-                set('class', $itemClass),
-            );
+            $itemProps = ['text' => $prompt->name];
 
             if($isFormPage)
             {
@@ -60,22 +55,22 @@ class aiAgentMenu extends wg
                     ? $app->control->ai->getPromptSkillIDs($prompt)
                     : [];
 
-                $itemProps[] = set('data-on', 'click');
-                $itemProps[] = set('data-call', "executeWithFormContext({$prompt->id})");
-                $itemProps[] = set('data-prompt-fields', $fieldsData);
-                $itemProps[] = set('data-allowed-fields', helper::jsonEncode($allowedFields));
-                $itemProps[] = set('data-field-labels', helper::jsonEncode($fieldLabels));
-                $itemProps[] = set('data-agent-role', $agentRole);
-                $itemProps[] = set('data-agent-purpose', $agentPurpose);
-                $itemProps[] = set('data-agent-skills', helper::jsonEncode($agentSkills));
+                $itemProps['data-on'] = 'click';
+                $itemProps['data-call'] = "executeWithFormContext({$prompt->id})";
+                $itemProps['data-prompt-fields'] = $fieldsData;
+                $itemProps['data-allowed-fields'] = helper::jsonEncode($allowedFields);
+                $itemProps['data-field-labels'] = helper::jsonEncode($fieldLabels);
+                $itemProps['data-agent-role'] = $agentRole;
+                $itemProps['data-agent-purpose'] = $agentPurpose;
+                $itemProps['data-agent-skills'] = helper::jsonEncode($agentSkills);
             }
             else
             {
-                $itemProps[] = set('data-on', 'click');
-                $itemProps[] = set('data-call', "callZentaoAgent({$prompt->id}, {$objectID})");
+                $itemProps['data-on'] = 'click';
+                $itemProps['data-call'] = "callZentaoAgent({$prompt->id}, {$objectID})";
             }
 
-            return item(...$itemProps);
+            return $itemProps;
         }, array_values($items));
 
         return dropdown
@@ -88,14 +83,7 @@ class aiAgentMenu extends wg
                 $btnName,
             ),
             set::placement($placement),
-            to::menu
-            (
-                menu
-                (
-                    setClass('dropdown-menu'),
-                    ...$menuItems
-                )
-            )
+            set::items($menuItems)
         );
     }
 }

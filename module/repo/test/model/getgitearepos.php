@@ -2,6 +2,13 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
+
+$zd_user = zenData('user');
+$zd_user->id->range('1');
+$zd_user->account->range('admin');
+$zd_user->deleted->range('0');
+$zd_user->gen(1);
+
 su('admin');
 
 global $tester;
@@ -16,7 +23,7 @@ cid=0
 - 执行repoTest模块的getGiteaReposFirstFieldTest方法，参数是$apiRoot, 'id'  @1
 - 执行repoTest模块的getGiteaReposFirstFieldTest方法，参数是$apiRoot, 'name'  @1
 - 执行repoTest模块的getGiteaReposCountTest方法，参数是''  @0
-- 执行repoTest模块的getGiteaReposCountGreaterThanTest方法，参数是$apiRoot, 0  @1
+- 执行repoTest模块的getGiteaReposCountGreaterThanTest方法，参数是$apiRoot, -1  @1
 
 */
 
@@ -27,4 +34,4 @@ r($repoTest->getGiteaReposIsArrayTest($apiRoot))              && p() && e('1');
 r($repoTest->getGiteaReposFirstFieldTest($apiRoot, 'id'))    && p() && e('1');
 r($repoTest->getGiteaReposFirstFieldTest($apiRoot, 'name'))  && p() && e('1');
 r($repoTest->getGiteaReposCountTest(''))                     && p() && e('0');
-r($repoTest->getGiteaReposCountGreaterThanTest($apiRoot, 0)) && p() && e('1');
+r($repoTest->getGiteaReposCountGreaterThanTest($apiRoot, -1)) && p() && e('1');

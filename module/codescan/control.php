@@ -856,8 +856,15 @@ class codescan extends control
         $params = $this->codescanZen->buildParams('all', '', 0, $orderBy, $pager->recPerPage, $pager->pageID);
         if($status != 'all') $params['latestTaskStatus'] = $status;
 
-        $planList = $this->codescan->getScanPlans($repoID, (array)$params);
-        $repoList = $this->repo->getPairs();
+        $planList    = $this->codescan->getScanPlans($repoID, (array)$params);
+        $repoList    = $this->repo->getRepoPairs();
+        $repoMap     = $repoList;
+        $gitFoxRepos = $this->repo->getGitFoxRepos();
+        foreach($gitFoxRepos as $repo)
+        {
+            if(empty($repo->serviceProject) || !isset($repoList[$repo->id])) continue;
+            $repoMap[$repo->serviceProject] = $repo->name;
+        }
 
         $pager->recTotal = empty($planList->pager) ? 0 : (int)zget($planList->pager, 'total', 0);
         $planList = zget($planList, 'data', array());
@@ -871,6 +878,7 @@ class codescan extends control
         $this->view->pager        = $pager;
         $this->view->orderBy      = $orderBy;
         $this->view->repoList     = $repoList;
+        $this->view->repoMap      = $repoMap;
         $this->view->status       = $status;
         $this->view->solutionList = array_column($solutionList, 'name', 'id');
         $this->display();
@@ -1004,7 +1012,7 @@ class codescan extends control
         }
 
         $pager = $this->codescanZen->setPager($recPerPage, $pageID);
-        $this->view->repoList = $this->repo->getPairs();
+        $this->view->repoList = $this->repo->getRepoPairs();
         $this->view->planList = array_column($this->codescanZen->getListByQuery('plan'), 'name', 'id');
 
         $queryID   = $type == 'bySearch' ? $queryID : 0;
@@ -1204,6 +1212,23 @@ class codescan extends control
     }
 
     /**
+     * 获取扫描计划的分级下拉数据。
+     * Get scan plan picker items for step schema.
+     *
+     * 返回 空间 > 代码库 > 扫描计划 三级结构，repoID 为 0 时查询全部代码库的计划。
+     * Returns the space > repo > scan plan tree, all repos' plans are fetched when repoID is 0.
+     *
+     * @param  int    $spaceID 空间ID，0 为不限
+     * @param  int    $repoID  代码库ID，0 为不限
+     * @access public
+     * @return void
+     */
+    public function ajaxGetScanPlans(int $spaceID = 0, int $repoID = 0)
+    {
+        echo json_encode($this->codescan->buildScanPlanSchemaItems($spaceID, $repoID));
+    }
+
+    /**
      * 规则列表。
      * Issues list.
      *
@@ -1238,12 +1263,20 @@ class codescan extends control
             $this->loadModel('ci')->setMenu($repoID);
         }
 
-        $repoList = $this->loadModel('repo')->getRepoPairs();
+        $originTaskID = $taskID;
+        $taskID       = empty($params['taskID']) ? $taskID : (int)$params['taskID'];
+
+        $repoList    = $this->loadModel('repo')->getRepoPairs();
+        $issueRepoID = $repoID;
 
         if($taskID)
         {
             $task = $this->codescan->getScanTask((int)$taskID, $serviceRepoID);
-            $this->view->task = $this->codescanZen->processTaskData($task, $repoList);
+            if(!empty($task))
+            {
+                if(!empty($task->repoID)) $issueRepoID = (int)$task->repoID;
+                $this->view->task = $this->codescanZen->processTaskData($task, $repoList);
+            }
 
             unset($this->config->codescan->issue->search['fields']['plan']);
             unset($this->config->codescan->issue->search['params']['plan']);
@@ -1252,13 +1285,10 @@ class codescan extends control
             unset($this->config->codescan->issue->search['params']['scanBranch']);
         }
 
-        $originTaskID = $taskID;
-        $taskID       = empty($params['taskID']) ? $taskID : (int)$params['taskID'];
-
         $this->codescanZen->commonData('plugin');
 
-        $pager    = $this->codescanZen->setPager($recPerPage, $pageID);
-        $repo = $this->loadModel('repo')->getByID($repoID);
+        $pager = $this->codescanZen->setPager($recPerPage, $pageID);
+        $repo  = $this->loadModel('repo')->getByID($repoID);
         if(!empty($repo))
         {
             $scm = $this->app->loadClass('scm');
@@ -1266,10 +1296,13 @@ class codescan extends control
             $this->config->codescan->issue->search['params']['scanBranch']['values'] = $scm->branch();
 
             if(empty($serviceRepoID)) $serviceRepoID = $repo->id;
+        }
 
+        if($issueRepoID)
+        {
             $urlTpl   = inLink('issue', "repoID={$repoID}&taskID=0&serviceRepoID={$serviceRepoID}&type=" . ($type == 'bySearch' ? 'wait' : $type) . "&queryID=0&severity={$severity}&extras=%s&orderBy={$orderBy}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
-            $fileTree = $this->codescan->getIssueTreeList($repoID, $taskID, 'file', array('check', 'smell'));
-            $ruleTree = $this->codescan->getIssueTreeList($repoID, $taskID, 'rule');
+            $fileTree = $this->codescan->getIssueTreeList($issueRepoID, $taskID, 'file', array('check', 'smell'));
+            $ruleTree = $this->codescan->getIssueTreeList($issueRepoID, $taskID, 'rule');
 
             $this->view->fileTree = $this->codescanZen->processIssueFileTree($fileTree, $urlTpl, $params);
             $this->view->ruleTree = $this->codescanZen->processIssueRuleTree($ruleTree, $urlTpl, $params);
@@ -1293,18 +1326,20 @@ class codescan extends control
         $issueList  = $this->codescan->getScanIssueList((int)$taskID, $conditions);
         $pager->recTotal = zget(zget($issueList, 'pager', array()), 'total', 0);
 
-        $taskList = $this->codescanZen->getListByQuery('task', (int)$serviceRepoID);
+        $taskListRepoID = $repoID ? (int)$serviceRepoID : 0;
+        $taskList = $this->codescanZen->getListByQuery('task', $taskListRepoID);
         foreach($taskList as &$repoTask) $repoTask = $this->codescanZen->processTaskData($repoTask, $repoList);
         if(isset($issueList->data) && is_array($issueList->data)) foreach($issueList->data as &$issue) $issue = $this->codescanZen->processIssueData($issue);
 
         $this->view->title         = $this->lang->codescan->issue;
         $this->view->type          = 'issue';
         $this->view->issues        = zget($issueList, 'data', array());
+        $this->view->repoList      = $repoList;
         $this->view->pager         = $pager;
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $type;
         $this->view->repoID        = $repoID;
-        $this->view->realRepoID    = $repoID;
+        $this->view->realRepoID    = $issueRepoID;
         $this->view->productID     = empty($repo) || empty($repo->product) ? 0 : explode(',', $repo->product)[0];
         $this->view->taskID        = $originTaskID;
         $this->view->queryID       = $queryID;

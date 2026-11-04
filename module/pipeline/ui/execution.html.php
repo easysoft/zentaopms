@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+h::css('.status-failure, .status-create_fail {color: var(--color-danger-600, #fb2b2b);} .status-canceled, .status-killed {color: var(--color-gray-400, #b2b9c5);}');
+
 jsVar('repoID', $repoID);
 
 if($repoID)
@@ -35,6 +37,7 @@ featureBar
         setClass('mr-2'),
         set::icon('back'),
         set::type('secondary'),
+        $app->tab == 'pipeline' ? set::url($this->createLink('pipeline', 'browse', "space=0&repoID=0&type={$type}")) :
         set::url($this->createLink('pipeline', 'browse', "space={$spaceID}&repoID={$repoID}&type={$type}")),
         $lang->goback . $lang->pipeline->common
     ),
@@ -43,6 +46,21 @@ featureBar
 if(isset($config->pipeline->execution->dtable->fieldList['repo'])) $config->pipeline->execution->dtable->fieldList['repo']['map'] = $repos;
 $config->pipeline->execution->dtable->fieldList['actions']['list']['view']['url'] = array('module' => 'pipeline', 'method' => 'execview', 'params' => "id={id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}");
 $tableData = initTableData($executionList, $config->pipeline->execution->dtable->fieldList, $this->pipeline);
+if(!$canCancel)
+{
+    /* 无取消执行权限时，取消按钮置灰显示。 */
+    foreach($tableData as $execution)
+    {
+        $hasCancelAction = false;
+        foreach($execution->actions as $key => $action)
+        {
+            if(!is_array($action) || $action['name'] != 'cancel') continue;
+            $execution->actions[$key]['disabled'] = true;
+            $hasCancelAction = true;
+        }
+        if(!$hasCancelAction) $execution->actions[] = array('name' => 'cancel', 'disabled' => true);
+    }
+}
 dtable
 (
     set::cols($config->pipeline->execution->dtable->fieldList),

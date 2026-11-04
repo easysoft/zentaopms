@@ -38,18 +38,19 @@ class fileModel extends model
      * @param  string    $objectType
      * @param  int|array $objectID
      * @param  string    $extra
+     * @param  bool      $ignoreDeleted
      * @access public
      * @return array
      */
-    public function getByObject(string $objectType, int|array $objectID, string $extra = ''): array
+    public function getByObject(string $objectType, int|array $objectID, string $extra = '', bool $ignoreDeleted = false): array
     {
         if(!$objectID) return array();
         $files = $this->dao->select('*')->from(TABLE_FILE)
-            ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->in($objectID)
+            ->where('`objectType`')->eq($objectType)
+            ->andWhere('`objectID`')->in($objectID)
             ->andWhere('extra')->ne('editor')
             ->beginIF($extra)->andWhere('extra')->in($extra)->fi()
-            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$ignoreDeleted)->andWhere('deleted')->eq('0')->fi()
             ->orderBy('id')
             ->fetchAll('id');
 
@@ -69,8 +70,8 @@ class fileModel extends model
     public function groupByObjectID(string $objectType, string|array $objectID): array
     {
         $fileGroup = $this->dao->select('*')->from(TABLE_FILE)
-            ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->in($objectID)
+            ->where('`objectType`')->eq($objectType)
+            ->andWhere('`objectID`')->in($objectID)
             ->andWhere('deleted')->eq('0')
             ->orderBy('id')
             ->fetchGroup('objectID', 'id');
@@ -93,8 +94,8 @@ class fileModel extends model
     public function deleteByObject($objectType, $objectID)
     {
         $files = $this->dao->select('*')->from(TABLE_FILE)
-            ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->in($objectID)
+            ->where('`objectType`')->eq($objectType)
+            ->andWhere('`objectID`')->in($objectID)
             ->andWhere('deleted')->eq('0')
             ->fetchAll('id');
 
@@ -156,8 +157,8 @@ class fileModel extends model
     public function query(string $objectType, int $objectID = 0, string $title = '', string $extra = ''): object|false
     {
         $file = $this->dao->select('*')->from(TABLE_FILE)
-            ->where('objectType')->eq($objectType)
-            ->beginIF($objectID)->andWhere('objectID')->eq($objectID)->fi()
+            ->where('`objectType`')->eq($objectType)
+            ->beginIF($objectID)->andWhere('`objectID`')->eq($objectID)->fi()
             ->beginIF($title)->andWhere('title')->eq($title)->fi()
             ->beginIF($extra)->andWhere('extra')->eq($extra)->fi()
             ->fetch();
@@ -350,6 +351,45 @@ class fileModel extends model
     }
 
     /**
+     * Check upload uid.
+     *
+     * @param  string $uid
+     * @access public
+     * @return bool
+     */
+    public function isValidUploadUID(string $uid): bool
+    {
+        return $uid === '' || preg_match('/^[A-Za-z0-9_-]+$/', $uid) === 1;
+    }
+
+    /**
+     * Get upload save path.
+     *
+     * @param  string $uid
+     * @access public
+     * @return string
+     */
+    public function getUploadSavePath(string $uid): string
+    {
+        if(!$this->isValidUploadUID($uid)) return '';
+
+        $tmpFilePath = $this->app->getTmpRoot() . 'uploadfiles' . DS;
+        if(!is_dir($tmpFilePath) && !mkdir($tmpFilePath, 0755, true) && !is_dir($tmpFilePath)) return '';
+
+        $realTmpFilePath = realpath($tmpFilePath);
+        if($realTmpFilePath === false) return '';
+
+        $tmpFileSavePath = $tmpFilePath . $uid . DS;
+        if(!is_dir($tmpFileSavePath) && !mkdir($tmpFileSavePath, 0755) && !is_dir($tmpFileSavePath)) return '';
+
+        $realTmpFileSavePath = realpath($tmpFileSavePath);
+        if($realTmpFileSavePath === false) return '';
+        if($realTmpFileSavePath !== $realTmpFilePath && strpos($realTmpFileSavePath . DS, $realTmpFilePath . DS) !== 0) return '';
+
+        return $realTmpFileSavePath . DS;
+    }
+
+    /**
      * Save uploaded file by chunk.
      *
      * @param  array  $file
@@ -361,12 +401,13 @@ class fileModel extends model
     {
         if($file['chunks'] == 0) return array();
 
-        $tmpFilePath = $this->app->getTmpRoot() . 'uploadfiles/';
-        $tmpFileSavePath = $tmpFilePath . $uid . '/';
-        if(!is_dir($tmpFileSavePath)) mkdir($tmpFileSavePath, 0777, true);
+        $tmpFileSavePath = $this->getUploadSavePath($uid);
+        if($tmpFileSavePath === '') return array();
 
         $file['realpath'] = $tmpFileSavePath . basename($this->getSaveName($file['pathname']));
-        file_put_contents($file['realpath'], file_get_contents('php://input'), $file['chunkIndex'] == 0 ? 0 : FILE_APPEND);
+        $contents = file_get_contents('php://input');
+        if($contents === false) return array();
+        if(file_put_contents($file['realpath'], $contents, $file['chunkIndex'] == 0 ? 0 : FILE_APPEND) === false) return array();
 
         $uploadFile = array();
         $uploadFile['extension'] = $file['extension'];
@@ -632,6 +673,22 @@ class fileModel extends model
     {
         if(empty($file->realPath)) return false;
         return @unlink($file->realPath);
+    }
+
+    /**
+     * 删除文件记录对应的物理文件。
+     * Delete the physical file of a file record.
+     *
+     * @param  object $file
+     * @access public
+     * @return void
+     */
+    public function unlinkFileIfUnreferenced(object $file): void
+    {
+        if(empty($file->pathname)) return;
+
+        $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
+        if(empty($fileRecord)) $this->unlinkFile($file);
     }
 
     /**
@@ -1198,7 +1255,7 @@ class fileModel extends model
      */
     public function updateTestcaseVersion(object $file): void
     {
-        $oldCase = $this->dao->select('*')->from(TABLE_CASE)->where('fromCaseID')->eq($file->objectID)->fetch();
+        $oldCase = $this->dao->select('*')->from(TABLE_CASE)->where('`fromCaseID`')->eq($file->objectID)->fetch();
         if(empty($oldCase)) return;
 
         $isLibCase = $oldCase->lib && empty($oldCase->product);
@@ -1222,8 +1279,8 @@ class fileModel extends model
         if(empty($storySpec)) return;
 
         $files = $this->dao->select('id')->from(TABLE_FILE)
-            ->where('objectType')->eq('story')
-            ->andWhere('objectID')->eq($storyID)
+            ->where('`objectType`')->eq('story')
+            ->andWhere('`objectID`')->eq($storyID)
             ->orderBy('id')
             ->fetchAll();
 
@@ -1258,7 +1315,8 @@ class fileModel extends model
                 $this->dao->delete()->from(TABLE_FILE)->where('id')->in($deleteFiles)->exec();
                 foreach($deleteFiles as $fileID)
                 {
-                    $this->unlinkFile($oldObject->files[$fileID]);
+                    if(!isset($oldObject->files[$fileID])) continue;
+                    $this->unlinkFileIfUnreferenced($oldObject->files[$fileID]);
                     $oldFiles = empty($oldFiles) ? '' : trim(str_replace(",$fileID,", ',', ",$oldFiles,"), ',');
                 }
             }
@@ -1307,10 +1365,13 @@ class fileModel extends model
             $imageWidth = $imageSize[0] ?? 0;
         }
 
-        $downloadLink  = helper::createLink('file', 'download', "fileID=$file->id");
+        $downloadModule = $file->objectType == 'doc' ? 'doc' : 'file';
+        $downloadMethod = $file->objectType == 'doc' ? 'downloadFile' : 'download';
+        $downloadLink  = helper::createLink($downloadModule, $downloadMethod, "fileID=$file->id");
         $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
         $downloadLink .= $sessionString;
-        $fileTitleLink = common::hasPriv('file', 'download') ? html::a($downloadLink, $fileTitle . " <span class='text-gray'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'") : "<div id='fileTitle$file->id' style='display: inline-block'>" . $fileTitle . " <span class='text-gray'>({$fileSize})</span></div>";
+        $canDownload = common::hasPriv('file', 'download') || ($file->objectType == 'doc' && common::hasPriv('doc', 'view'));
+        $fileTitleLink = $canDownload ? html::a($downloadLink, $fileTitle . " <span class='text-gray'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'") : "<div id='fileTitle$file->id' style='display: inline-block'>" . $fileTitle . " <span class='text-gray'>({$fileSize})</span></div>";
 
         $objectType = zget($this->config->file->objectType, $file->objectType);
         $viewMethod = $objectType == 'feedback' && $this->config->vision != 'lite' ? 'adminView' : 'view';
@@ -1369,12 +1430,16 @@ class fileModel extends model
         if(stripos('txt|jpg|jpeg|gif|png|bmp|mp4', $file->extension) !== false) $canPreview = true;
         if(isset($this->config->file->libreOfficeTurnon) and $this->config->file->libreOfficeTurnon == 1 && $isOfficeFile) $canPreview = true;
 
-        if($canPreview && common::hasPriv('file', 'preview'))
+        $canPreviewPriv = common::hasPriv('file', 'preview') || ($file->objectType == 'doc' && common::hasPriv('doc', 'view'));
+        if($canPreview && $canPreviewPriv)
         {
             $dataToggle = $isOfficeFile ? '' : " data-toggle='modal' data-size='lg'";
-            $html      .= html::a(helper::createLink('file', 'preview', "fileID=$file->id&mouse=left"), "<i class='icon icon-eye'></i>", $isOfficeFile ? '_blank' : '', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' {$dataToggle}");
+            $previewModule = $file->objectType == 'doc' ? 'doc' : 'file';
+            $previewMethod = $file->objectType == 'doc' ? 'previewFile' : 'preview';
+            $html      .= html::a(helper::createLink($previewModule, $previewMethod, "fileID=$file->id&mouse=left"), "<i class='icon icon-eye'></i>", $isOfficeFile ? '_blank' : '', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' {$dataToggle}");
         }
-        if(common::hasPriv('file', 'download')) $html .= html::a($downloadLink, "<i class='icon icon-download'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->downloadFile}'");
+        $canDownload = common::hasPriv('file', 'download') || ($file->objectType == 'doc' && common::hasPriv('doc', 'view'));
+        if($canDownload) $html .= html::a($downloadLink, "<i class='icon icon-download'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->downloadFile}'");
         if(common::hasPriv($objectType, 'edit', $object))
         {
             if($showEdit and common::hasPriv('file', 'edit')) $html .= html::a('###', "<i class='icon icon-pencil-alt'></i>", '', "id='renameFile$file->id' class='fileAction btn btn-link edit text-primary' onclick='showRenameBox($file->id)' title='{$this->lang->file->edit}'");
@@ -1540,7 +1605,7 @@ class fileModel extends model
                 foreach($newObject->deleteFiles as $fileID)
                 {
                     if(!isset($oldObject->{$filesName}[$fileID])) continue;
-                    $this->unlinkFile($oldObject->{$filesName}[$fileID]);
+                    $this->unlinkFileIfUnreferenced($oldObject->{$filesName}[$fileID]);
                     $deleteFiles[] = isset($oldObject->{$filesName}[$fileID]) ? $oldObject->{$filesName}[$fileID]->title : '';
                 }
             }

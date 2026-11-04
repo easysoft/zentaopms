@@ -95,6 +95,14 @@ $lang->kanban->maxColWidth         = 'Max Column Width';
 $lang->kanban->nearing             = 'The card is due soon.';
 $lang->kanban->due                 = 'The card is due.';
 
+$lang->kanban->noticeText = new stdclass();
+$lang->kanban->noticeText->due     = 'Card 《{objectTitle}》is due（{deadline}）, Please complete it as soon as possible.';
+$lang->kanban->noticeText->nearing = 'Card 《{objectTitle}》is nearing（{deadline}）, Please complete it as soon as possible.';
+
+$lang->kanban->noticeWebhookText = new stdclass();
+$lang->kanban->noticeWebhookText->due     = 'The card《[#%s::%s](%s)》has reached its deadline (%s). Please follow up in time.';
+$lang->kanban->noticeWebhookText->nearing = 'The card《[#%s::%s](%s)》is due soon (%s). Please follow up in time.';
+
 /* Fields. */
 $lang->kanban->space          = 'Space';
 $lang->kanban->name           = 'Name';

@@ -440,7 +440,6 @@ class executionZen extends execution
         $this->view->stories         = array( 0 => '') + $this->loadModel('story')->getPairs($productID);
         $this->view->moduleTree      = $moduleTree;
         $this->view->moduleID        = $moduleID;
-        $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
     }
 
@@ -884,6 +883,14 @@ class executionZen extends execution
         $project   = $this->loadModel('project')->fetchByID($projectID);
         $this->execution->checkBeginAndEndDate($projectID, $_POST['begin'], $_POST['end'], isset($_POST['parent']) ? (int)$this->post->parent : $projectID);
         if(dao::isError()) return false;
+
+        /* 融合项目和 IPD 项目的执行需要明确选择管理方法。*/
+        /* Executions of Agile Plus, Waterfall Plus and IPD projects require an explicit management method. */
+        if(!empty($project) && in_array($project->model, array('agileplus', 'waterfallplus', 'ipd')) && empty($_POST['type']))
+        {
+            dao::$errors['type'] = sprintf($this->lang->error->notempty, $this->lang->execution->method);
+            return false;
+        }
 
         /* Judge workdays is legitimate. */
         $workdays = helper::diffDate($_POST['end'], $_POST['begin']) + 1;
@@ -1634,7 +1641,7 @@ class executionZen extends execution
         {
             $flow    = $this->loadModel('workflow')->getByModule($module);
             $actions = $this->dao->select('action')->from(TABLE_WORKFLOWACTION)->where('buildin')->eq('0')->andWhere('module')->eq($rawModule)->fetchPairs();
-            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module");
+            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module") . '#app=execution';
             if(in_array($rawModule, $executionModules) && in_array($method, $actions)) $method = $rawModule;
         }
 
@@ -2215,6 +2222,51 @@ class executionZen extends execution
             $newPlans = implode(',', $newPlans);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=no")));
         }
+    }
+
+    /**
+     * 校验并整理关联需求的 API 请求数据。
+     * Prepare and validate API request data for linking stories.
+     *
+     * @param  int    $objectID
+     * @param  string $rawModule
+     * @access protected
+     * @return array
+     */
+    protected function prepareLinkStoryApiData(int $objectID, string $rawModule): array
+    {
+        $from = '';
+        if($rawModule == 'projectstory')
+        {
+            $from = 'project';
+        }
+        elseif($rawModule == 'execution')
+        {
+            $from = 'execution';
+        }
+
+        $stories = isset($_POST['stories']) ? $_POST['stories'] : array();
+
+        $storyIDError = sprintf($this->lang->error->int[0], $this->lang->story->story);
+        $storyIdList  = array();
+        foreach($stories as $storyID)
+        {
+            if((!is_int($storyID) && !is_string($storyID)) || !preg_match('/^[1-9][0-9]*$/', (string)$storyID)) return array('status' => 'fail', 'message' => $storyIDError);
+            $storyIdList[] = (int)$storyID;
+        }
+        $storyIdList = array_values(array_unique($storyIdList));
+
+        $validObjectTypes = array(
+            'project'   => array('project'),
+            'execution' => array('sprint', 'stage', 'kanban')
+        );
+        $linkedObject = $this->loadModel('project')->getByID($objectID, 'project,sprint,stage,kanban');
+        if(empty($linkedObject) || !in_array($linkedObject->type, $validObjectTypes[$from], true))
+        {
+            return array('status' => 'fail', 'message' => '404 Not found');
+        }
+
+        return array('status' => 'success', 'stories' => $storyIdList);
     }
 
     /**

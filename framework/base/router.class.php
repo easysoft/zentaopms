@@ -992,7 +992,7 @@ class baseRouter
         }
 
         [$defaultVision] = explode(',', trim((string) $this->config->visions, ','));
-        if($defaultVision != 'lite' && $defaultVision != 'or' && $defaultVision != 'devops') $defaultVision = 'rnd';
+        if($defaultVision != 'lite' && $defaultVision != 'or' && $defaultVision != 'gitfox') $defaultVision = 'rnd';
         if($vision and !str_contains((string) $this->config->visions, ",{$vision},")) $vision = $defaultVision;
 
         $vision = $vision ?: $defaultVision;
@@ -1016,7 +1016,7 @@ class baseRouter
         if(empty($account) && isset($_COOKIE['za']))    $account = $_COOKIE['za'];
 
         $devopsSpace = '';
-        if($this->config->installed && validater::checkAccount($account) && !$this->upgrading)
+        if(!empty($this->config->installed) && validater::checkAccount($account) && !$this->upgrading)
         {
             $devopsSpace = $this->dao->select("value")->from(TABLE_CONFIG)->where('owner')->eq($account)->andWhere('`key`')->eq('devopsSpace')->limit(1)->fetch('value');
         }
@@ -1521,15 +1521,26 @@ class baseRouter
             $this->triggerError("The request type {$this->config->requestType} not supported", __FILE__, __LINE__, true);
         }
 
+        $this->filterUploadFiles();
+    }
+
+    /**
+     * 按当前模块过滤上传文件。
+     * Filter uploaded files according to the current module.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function filterUploadFiles()
+    {
         $allowedModules = explode(',', $this->config->file->allowedModules);
         if(in_array($this->moduleName, $allowedModules))
         {
             $this->config->file->dangers = '';
+            return;
         }
-        else
-        {
-            $_FILES = validater::filterFiles();
-        }
+
+        $_FILES = validater::filterFiles();
     }
 
     /**
@@ -2438,11 +2449,8 @@ class baseRouter
         if(empty($url)) return false;
 
         $url .= (str_contains($url, '?') ? '&' : '?') . $this->config->sessionVar . '=' . session_id() . '&account=' . $_SESSION['user']->account;
-        if($extension == '302')
-        {
-            helper::header('location', $url);
-            helper::end();
-        }
+
+        if($extension == '302') helper::header('location', $url);
 
         if($extension == 'api')
         {
@@ -3089,6 +3097,34 @@ class baseRouter
     }
 
     /**
+     * 获取 DAO 类名。
+     * Get the dao class name. The config driver name may differ from the dao class name, e.g. postgres => pgsql.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDaoClassName(): string
+    {
+        $driver  = $this->config->db->driver ?? '';
+        $daoRoot = $this->coreLibRoot . 'dao' . DS;
+
+        /* 插件配置的显式映射优先级最高。 */
+        /* The explicit map configured by plugins has the highest priority. */
+        if($driver && isset($this->config->db->driverDaoMap[$driver])) return $this->config->db->driverDaoMap[$driver];
+
+        /* 配置驱动名同名类存在时优先使用，例如 dm/highgo/kingbase/gauss。 */
+        /* Use the dao class named after the config driver when it exists, e.g. dm/highgo/kingbase/gauss. */
+        if($driver && file_exists($daoRoot . $driver . '.class.php')) return $driver;
+
+        /* 回退到 PDO 驱动同名类，例如 postgres => pgsql。 */
+        /* Fall back to the pdo driver name, e.g. postgres => pgsql. */
+        $pdoDriver = $this->dbh ? $this->dbh->getPdoDriver() : $driver;
+        if($pdoDriver && file_exists($daoRoot . $pdoDriver . '.class.php')) return $pdoDriver;
+
+        return 'dao';
+    }
+
+    /**
      * 加载DAO。
      * Load DAO.
      *
@@ -3099,12 +3135,11 @@ class baseRouter
     {
         global $dao;
 
-        $driver = $this->config->db->driver;
-
-        $classFile = $this->coreLibRoot . 'dao' . DS . $driver . '.class.php';
+        $daoClass  = $this->getDaoClassName();
+        $classFile = $this->coreLibRoot . 'dao' . DS . $daoClass . '.class.php';
         include_once($classFile);
 
-        $dao = new $driver($this);
+        $dao = new $daoClass($this);
         $this->dao = $dao;
 
         $this->loadClass('mao', true);
@@ -3209,7 +3244,11 @@ class baseRouter
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $dbh->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
             if(isset($params->emulatePrepare)) $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, $params->emulatePrepare);
-            if(isset($params->bufferQuery))    $dbh->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, $params->bufferQuery);
+            if(isset($params->bufferQuery))
+            {
+                $bufferQueryAttribute = defined('Pdo\Mysql::ATTR_USE_BUFFERED_QUERY') ? \Pdo\Mysql::ATTR_USE_BUFFERED_QUERY : PDO::MYSQL_ATTR_USE_BUFFERED_QUERY;
+                $dbh->setAttribute($bufferQueryAttribute, $params->bufferQuery);
+            }
 
             return $dbh;
         }
@@ -3220,7 +3259,6 @@ class baseRouter
             {
                 /* Try to repair table. */
                 helper::header('location', "{$this->config->webRoot}checktable.php");
-                helper::end();
             }
             static::triggerError($message, __FILE__, __LINE__, true);
         }
@@ -3304,9 +3342,23 @@ class baseRouter
     public function triggerError(string $message, string $file, int $line, bool $exit = false)
     {
         $function = null;
+
+        /* 保留原始消息用于错误日志，下面的 $message 会被转成 gbk 用于页面显示。Keep the raw message for the error log, the $message below is converted to gbk for display. */
+        $rawMessage = $message;
+
         /* 设置错误信息(Set the error info) */
         $message = htmlSpecialString($message);
         if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
+
+        /**
+         * 框架级的错误不会产生 PHP 错误：debug 关闭时下面直接 die；$exit 为 true 时抛出的 EndResponseException 会被 www/index.php 吞掉。
+         * 这两种情况都在这里显式落库，前端才能按 requestID 拉到错误日志。debug 打开且 $exit 为 false 时，下面的
+         * trigger_error(E_USER_WARNING) 会由错误处理句柄落库，无需重复记录。
+         * Framework errors never become PHP errors: the code dies when debug is off, and the $exit branch throws an
+         * EndResponseException which is swallowed by www/index.php. Save them here so the frontend can fetch the log by
+         * requestID. When debug is on and $exit is false, trigger_error() below is recorded by the error handler.
+         */
+        if(!$this->config->debug or $exit) $this->saveErrorLog(E_USER_ERROR, $rawMessage, $file, $line, (new Exception())->getTraceAsString());
 
         /* Only show error when debug is open. */
         if(!$this->config->debug) die;
@@ -3531,8 +3583,19 @@ class baseRouter
 
             $sql  = $this->dbh->formatSQL('INSERT INTO ' . TABLE_ERRORLOGREQ . ' (`requestID`, `md5`, `module`, `method`, `account`, `url`, `createdDate`) VALUES (?, ?, ?, ?, ?, ?, ?)');
             $stmt = $this->dbh->prepare($sql);
-            $stmt->execute(array($this->requestID, $md5, $this->moduleName, $this->rawMethod, $account, substr((string)$this->getURI(), 0, 255), helper::now()));
+            /* module/method 在路由解析之前可能为空，插入 NULL 会因表的 NOT NULL 约束失败（关联记录写不进去，前端就按 requestID 查不到日志），统一转成字符串。module/method may be empty before the router resolves the request; inserting NULL would break the NOT NULL constraint so the request record is lost and the log cannot be fetched by requestID, cast them to string. */
+            $stmt->execute(array((string)$this->requestID, $md5, (string)$this->moduleName, (string)$this->rawMethod, (string)$account, substr((string)$this->getURI(), 0, 255), helper::now()));
             $this->savedErrorLogRecords[$recordKey] = true;
+
+            /**
+             * 错误日志是直接走 PDO 写库的，不会像 DAO 的写方法那样刷新表缓存时间；这里按 DAO 的约定补一次。
+             * 否则开启 DAO 缓存（后台 → 系统设置 → 缓存）的站点会一直读到写入前的旧快照，表现为「分页计数是新的、列表还是旧的」。
+             * setTableCache() 会按 SQL 里出现的表逐个刷新，所以这里一次把两张表都刷了（多刷只是让这两张表的缓存多失效一次，不会误刷别人的表）。
+             * The error log rows are written with raw PDO, which never refreshes the DAO table cache time; refresh it here,
+             * otherwise sites with the DAO cache enabled keep reading the list as it was before the new logs were saved.
+             * setTableCache() refreshes every table found in the given SQL, so one call covers both tables.
+             */
+            if(!empty($this->dao)) $this->dao->setTableCache('SELECT 1 FROM ' . TABLE_ERRORLOGREQ . ', ' . TABLE_ERRORLOG);
         }
         catch(Throwable $e)
         {

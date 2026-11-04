@@ -258,6 +258,12 @@ window.getItem = function(info)
         avatar = '<div class="avatar child-item rounded-full size-xs ml-1" title="' + storyLang.children + '" style="background: #ccc; color: #fff; cursor: pointer;"><i class="icon icon-split"></i></div>';
     }
 
+    let delayLabel = '';
+    if(info.laneInfo.type == 'task' && info.item.delay > 0)
+    {
+        delayLabel = "<span class='label danger-pale ml-1 flex-none nowrap'>" + taskLang.delayWarning.replace('%s', info.item.delay) + "</span>";
+    }
+
     if(info.laneInfo.type == 'risk')
     {
         var content = `
@@ -266,7 +272,7 @@ window.getItem = function(info)
             <span class='pri-${info.item.priLevel}'>${info.item.pri}</span>
             <span class='ml-1'>${info.item.strategy}</span>
             <span class='date ml-1'>${beginAndEnd}</span>
-            <div class='flex-1 flex justify-end'>${avatar}</div>
+            <div class='flex-1 flex justify-end items-center'>${delayLabel}${avatar}</div>
           </div>
         `;
     }
@@ -277,7 +283,7 @@ window.getItem = function(info)
             <span class='text-gray mr-1'>#${info.item.id}</span>
             <span class='pri-${info.item.pri}'>${info.item.pri}</span>
             <span class='date ml-1'>${beginAndEnd}</span>
-            <div class='flex-1 flex justify-end'>${avatar}</div>
+            <div class='flex-1 flex justify-end items-center'>${delayLabel}${avatar}</div>
           </div>
         `;
     }

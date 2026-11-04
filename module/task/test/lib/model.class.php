@@ -718,10 +718,12 @@ class taskModelTest extends baseTest
      * @param  int    $estimateID
      * @param  object $record
      * @param  int    $taskID
+     * @param  int    $task
+     * @param  string $lastDate
      * @access public
      * @return array
      */
-    public function updateTeamByEffortTest(int $effortID, object $record, int $taskID, mixed $task = null, string $lastDate): array
+    public function updateTeamByEffortTest(int $effortID, object $record, int $taskID, mixed $task = null, string $lastDate = ''): array
     {
         $task        = $this->instance->getByID($taskID);
         $currentTeam = $this->instance->getTeamByAccount($task->team);

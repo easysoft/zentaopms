@@ -205,7 +205,7 @@ class docApp extends wg
         $fileUrl    = $this->prop('fileUrl');
         if(empty($fileUrl))
         {
-            $fileUrl    = createLink('file', 'download', 'fileID={id}');
+            $fileUrl    = createLink('doc', 'downloadFile', 'fileID={id}');
             $fileUrl   .= strpos($fileUrl, '?') === false ? '?' : '&';
             $fileUrl   .= $sessionStr;
         }
@@ -235,6 +235,8 @@ class docApp extends wg
         $langData->createRelease     = $lang->api->createRelease;
         $langData->libTypeList       = $lang->api->libTypeList;
         $langData->latestVersion     = $lang->api->latestVersion;
+        $langData->deliverableLabel  = isset($lang->project->deliverableAbbr) ? $lang->project->deliverableAbbr : '';
+        $langData->baselineLabel     = isset($lang->project->baseline) ? $lang->project->baseline : '';
         $langData->template          = $lang->doc->template;
         $langData->labelAllVersions  = $lang->doc->allVersion;
         $langData->labelDiff         = $lang->doc->diff;
@@ -323,8 +325,9 @@ class docApp extends wg
         $app->control->loadModel('file');
 
         $fileListProps   = array();
-        $canPreviewFile  = common::hasPriv('file', 'preview');
-        $canDownloadFile = common::hasPriv('file', 'download');
+        $privs           = $this->prop('privs', array());
+        $canPreviewFile  = isset($privs['previewFile']) ? $privs['previewFile'] : common::hasPriv('file', 'preview');
+        $canDownloadFile = isset($privs['downloadFile']) ? $privs['downloadFile'] : common::hasPriv('file', 'download');
         if(!$canDownloadFile) $fileUrl = '';
 
         jsVar('libreOfficeTurnon', !empty($config->file->libreOfficeTurnon));
@@ -340,7 +343,7 @@ class docApp extends wg
         $fileListProps['itemProps']        = array('target' => '_blank');
         $fileListProps['fileActions']      = jsCallback('file')->do('return getFileActions(file)');
 
-        $canPreviewOffice  = common::hasPriv('file', 'preview') && !empty($config->file->libreOfficeTurnon);
+        $canPreviewOffice  = $canPreviewFile && !empty($config->file->libreOfficeTurnon);
         $historyPanelProps = $this->prop('historyPanel');
         if(empty($historyPanelProps)) $historyPanelProps = array();
         if(is_array($historyPanelProps)) $historyPanelProps['fileListProps'] = $fileListProps;
@@ -362,9 +365,18 @@ class docApp extends wg
             )], $this->convertZentaoListMenu($zentaoListMenu))
             : array();
 
-        $privs = $this->prop('privs', []);
         if(!isset($privs['downloadFile'])) $privs['downloadFile'] = $canDownloadFile;
-        if(empty($privs['previewFile']))   $privs['previewFile']  = $canPreviewOffice;
+        if(!isset($privs['previewFile']))  $privs['previewFile']  = $canPreviewOffice;
+
+        /* 交付物从模板创建时先创建文档草稿，确保模板区块在打开编辑器前完成复制和 ID 替换。 */
+        $docAppProps          = $this->props;
+        $templateDocID        = data('docID');
+        $createFromTemplateID = $this->prop('mode') == 'create' && !empty($templateDocID) ? (int)$templateDocID : 0;
+        if($createFromTemplateID)
+        {
+            jsVar('window.createFromTemplateID', $createFromTemplateID);
+            $docAppProps = array_merge($this->props->toArray(), array('mode' => 'list', 'docID' => 0));
+        }
 
         return zui::docApp
         (
@@ -405,7 +417,7 @@ class docApp extends wg
             set::downloadUrl($downloadUrl),
             set::sessionStr($sessionStr),
             set('$options', jsRaw('window.setDocAppOptions')),
-            set($this->props),
+            set($docAppProps),
             set::privs($privs),
             set::fileUrl($fileUrl),
             set::viewModeUrl($viewModeUrl),

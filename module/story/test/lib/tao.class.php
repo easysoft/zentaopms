@@ -734,4 +734,31 @@ class storyTaoTest extends baseTest
             return array_map(function($item){return str_replace(',', ':', $item);}, $twins);
         }
     }
+
+    /**
+     * 测试 getStageOrderSQL 方法。
+     * Test getStageOrderSQL method.
+     *
+     * @param  string $alias
+     * @access public
+     * @return string
+     */
+    public function getStageOrderSQLTest(string $alias = ''): string
+    {
+        return $this->invokeTaoMethod('getStageOrderSQL', array($alias));
+    }
+
+    /**
+     * 测试 processStageOrder 方法。
+     * Test processStageOrder method.
+     *
+     * @param  string $orderBy
+     * @param  string $alias
+     * @access public
+     * @return string
+     */
+    public function processStageOrderTest(string $orderBy, string $alias = ''): string
+    {
+        return $this->invokeTaoMethod('processStageOrder', array($orderBy, $alias));
+    }
 }

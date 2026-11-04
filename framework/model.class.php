@@ -67,8 +67,15 @@ class model extends baseModel
 
         if(!isset($config->biDB)) return;
 
-        $driver = $config->db->driver;
-        $biDAO = new $driver();
+        /* DAO 类名可能与驱动名不同，例如 postgres 对应 pgsql 类。 */
+        /* The dao class name may differ from the driver name, e.g. postgres uses the pgsql class. */
+        $daoClass = $this->app->getDaoClassName();
+        if(!class_exists($daoClass))
+        {
+            $classFile = $this->app->coreLibRoot . 'dao' . DS . $daoClass . '.class.php';
+            include_once($classFile);
+        }
+        $biDAO = new $daoClass();
 
         $biDAO->slaveDBH = $this->app->connectByPDO($config->biDB, 'BI');
 
@@ -222,7 +229,7 @@ class model extends baseModel
      */
     public function buildFlowMenu($module, $data, $type = 'browse', $show = '')
     {
-        if($this->config->edition == 'open') return '';
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return '';
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return '';
 
         $moduleName = $module;
@@ -339,7 +346,7 @@ class model extends baseModel
     public function processStatus($module, $record)
     {
         if($module == 'story') $module = $record->type;
-        if($this->config->edition == 'open' or empty($record->subStatus)) return zget($this->lang->$module->statusList, $record->status);
+        if(in_array($this->config->edition, array('open', 'gitfox')) or empty($record->subStatus)) return zget($this->lang->$module->statusList, $record->status);
 
         return $this->loadModel('workflowfield')->processSubStatus($module, $record);
     }
@@ -353,7 +360,7 @@ class model extends baseModel
      */
     public function processExportData($data)
     {
-        if($this->config->edition == 'open') return $data;
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return $data;
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $data;
 
         return $this->loadModel('workflowfield')->processExportData($data);
@@ -368,7 +375,7 @@ class model extends baseModel
      */
     public function processExportOptions($data)
     {
-        if($this->config->edition == 'open') return $data;
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return $data;
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $data;
 
         return $this->loadModel('workflowfield')->processExportOptions($data);
@@ -383,7 +390,7 @@ class model extends baseModel
      */
     public function processImportData($data)
     {
-        if($this->config->edition == 'open') return $data;
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return $data;
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $data;
 
         return $this->loadModel('workflowfield')->processImportData($data);
@@ -398,7 +405,7 @@ class model extends baseModel
      */
     public function getFlowExtendFields(int $objectID = 0): array
     {
-        if($this->config->edition == 'open') return array();
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return array();
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();
 
         return $this->loadModel('flow')->getExtendFields($this->app->rawModule, $this->app->rawMethod, $objectID);
@@ -412,7 +419,7 @@ class model extends baseModel
      */
     public function getFlowExportFields()
     {
-        if($this->config->edition == 'open') return array();
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return array();
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();
 
         return $this->loadModel('workflowfield')->getExportFields($this->app->rawModule);
@@ -427,7 +434,7 @@ class model extends baseModel
      */
     public function executeHooks(int $objectID): string
     {
-        if($this->config->edition == 'open') return '';
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return '';
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return '';
 
         $moduleName = $this->app->rawModule;
@@ -449,11 +456,21 @@ class model extends baseModel
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $moduleName);
         $uiID   = $this->loadModel('workflowlayout')->getUIByDataID($moduleName, $methodName, $objectID);
         $fields = $this->workflowaction->getPageFields($moduleName, $action->action, '', null, $uiID, $action->group);
-        foreach($fields as $field)
+
+        if(!empty($_POST))
         {
-            if($field->control == 'file' && $field->show && !$field->readonly)
+            $oldObject = new stdclass();
+            $oldObject->id = $objectID;
+
+            $newObject = new stdclass();
+            $newObject->deleteFiles = $_POST['deleteFiles'] ?? array();
+            $newObject->renameFiles = $_POST['renameFiles'] ?? array();
+            foreach($fields as $field)
             {
-                $this->file->saveUpload($moduleName, $objectID, $field->field, $field->field, $field->field);
+                if($field->control == 'file' && $field->show && !$field->readonly)
+                {
+                    $this->file->processFileDiffsForObject($moduleName, $oldObject, $newObject, $field->field, $field->field, $field->field);
+                }
             }
         }
 

@@ -505,6 +505,23 @@ class myModelTest extends baseTest
     }
 
     /**
+     * 测试获取欢迎总览区块中评审相关的统计数据。
+     * Test get my review statistics.
+     *
+     * @param  string $field
+     * @access public
+     * @return string|array
+     */
+    public function getMyReviewStatisticsFieldTest(string $field = '')
+    {
+        $result = $this->instance->getMyReviewStatistics();
+        if(dao::isError()) return dao::getError();
+        if(empty($field)) return implode(',', $result);
+
+        return isset($result[$field]) ? (string)$result[$field] : 'none';
+    }
+
+    /**
      * 测试获取审批中的用例。
      * Test get reviewing cases.
      *
@@ -723,6 +740,21 @@ class myModelTest extends baseTest
         $method->setAccessible(true);
 
         $result = $method->invokeArgs($this->instance, [$objectGroup, $actions, $flows]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getReviewActionGroup method.
+     *
+     * @param  array $objectTypeList
+     * @access public
+     * @return array
+     */
+    public function getReviewActionGroupTest(array $objectTypeList): array
+    {
+        $result = $this->invokeArgs('getReviewActionGroup', array($objectTypeList));
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -1368,6 +1400,20 @@ class myModelTest extends baseTest
             if($e instanceof EndResponseException) return 0;
             return 'error:' . get_class($e);
         }
+    }
+
+    /**
+     * Test get audit object opened by method.
+     *
+     * @param  object $object
+     * @access public
+     * @return string
+     */
+    public function getAuditObjectOpenedByTest(object $object): string
+    {
+        $result = $this->invokeArgs('getAuditObjectOpenedBy', array($object));
+        if(dao::isError()) return json_encode(dao::getError());
+        return (string)$result;
     }
 
 }

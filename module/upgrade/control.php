@@ -179,8 +179,18 @@ class upgrade extends control
         if($command) return $this->displayCommand($command);
 
         $upgradeVersions = $this->upgradeZen->getUpgradeVersions(str_replace('.', '_', $this->config->installedVersion));
+        if($this->upgrade->isError())
+        {
+            $this->view->errors = $this->upgrade->getError();
+            return $this->display('upgrade', 'sqlfail');
+        }
         $versionsKey     = array_keys($upgradeVersions);
         $toVersion       = reset($versionsKey);
+        if(empty($toVersion))
+        {
+            $this->view->errors = array($this->lang->upgrade->noUpgradeVersion);
+            return $this->display('upgrade', 'sqlfail');
+        }
         $upgradeChanges  = $this->upgradeZen->getUpgradeChanges($fromVersion, $toVersion);
 
         /* 把需要执行的变更记录到数据库，便于后续调用。*/
@@ -415,7 +425,7 @@ class upgrade extends control
             if(empty($hourPoint)) $this->setting->setItem('system.custom.hourPoint', 0);
 
             $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll('id');
-            $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->andWhere('objectType')->eq('project')->exec();
+            $this->dao->update(TABLE_ACTION)->set('`objectType`')->eq('execution')->where('`objectID`')->in(array_keys($sprints))->andWhere('`objectType`')->eq('project')->exec();
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->locate(inlink('afterExec', "fromVersion={$fromVersion}"));
@@ -760,7 +770,7 @@ class upgrade extends control
     {
         $this->view->title     = $this->lang->upgrade->dbView->common;
         $this->view->viewList  = $this->upgrade->getViews();
-        $this->view->viewCount = count($this->upgrade->getViewSQLs());
+        $this->view->viewCount = count($this->view->viewList);
         $this->display();
     }
 
@@ -1154,7 +1164,7 @@ class upgrade extends control
     public function ajaxUpgradeDoc(int $docID)
     {
         $doc = $this->dao->select('t1.*,t2.title,t2.content,t2.type as `contentType`,t2.`rawContent`,t1.version')->from(TABLE_DOC)->alias('t1')
-            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc AND t1.version=t2.version')
             ->where('t1.id')->eq($docID)
             ->fetch();
 
@@ -1235,7 +1245,7 @@ class upgrade extends control
     public function ajaxUpgradeDocTemplate(int $docID)
     {
         $docTemplate = $this->dao->select('t1.*, t2.title, t2.content, t2.type as `contentType`, t1.version')->from(TABLE_DOC)->alias('t1')
-            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc AND t1.version=t2.version')
             ->where('t1.id')->eq($docID)
             ->fetch();
         if(empty($docTemplate)) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));

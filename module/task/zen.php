@@ -77,7 +77,7 @@ class taskZen extends task
         $this->view->from              = $storyID || $todoID || $bugID  ? 'other' : 'task';
         $this->view->taskID            = $taskID;
         $this->view->parents           = $parents;
-        $this->view->loadUrl           = $this->createLink('task', $this->app->rawMethod, "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}");
+        $this->view->loadUrl           = $this->createLink('task', $this->app->rawMethod, "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}&type={type}");
         $this->view->assignedToOptions = $this->getAssignedToOptions($manageLink);
         $this->view->manageLink        = $manageLink;
     }
@@ -399,7 +399,7 @@ class taskZen extends task
         $projectModel = $this->dao->findById($task->project)->from(TABLE_PROJECT)->fetch('model');
         $memberType   = $projectModel == 'research' ? 'project'      : 'execution';
         $objectID     = $projectModel == 'research' ? $task->project : $executionID;
-        $members      = $this->loadModel('user')->getTeamMemberPairs($objectID, $memberType, 'nodeleted');
+        $members      = $this->loadModel('user')->getTeamMemberPairs($objectID, $memberType, 'nodeleted', $task->assignedTo);
 
         /* Compute next assignedTo. */
         if(!empty($task->team))
@@ -408,9 +408,7 @@ class taskZen extends task
             $members = $this->task->getMemberPairs($task);
         }
 
-        if(!isset($members[$task->assignedTo])) $members[$task->assignedTo] = $task->assignedTo;
         if(isset($members['closed']) || $task->status == 'closed') $members['closed'] = 'Closed';
-
         if($this->view->execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$this->view->execution->id}") : '';
         if(!$this->view->execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$this->view->execution->project}") : '';
 
@@ -567,7 +565,10 @@ class taskZen extends task
         if(dao::isError()) return false;
 
         $now  = helper::now();
-        $task = form::data($this->config->task->form->edit, $task->id)
+        $formConfig = $this->config->task->form->edit;
+        if(in_array($this->post->mode, array('multi', 'linear'))) $formConfig['assignedTo']['skipRequired'] = true;
+
+        $task = form::data($formConfig, $task->id)
             ->add('id', $task->id)
             ->add('lastEditedDate', $now)
             ->setDefault('design', $oldTask->design)
@@ -799,6 +800,9 @@ class taskZen extends task
      */
     protected function buildTaskForActivate(int $taskID): object|bool
     {
+        $taskMode = $this->task->getByID($taskID)->mode;
+        if(in_array($taskMode, array('multi', 'linear'))) $this->config->task->activate->requiredFields = str_replace(',assignedTo,', ',', ",{$this->config->task->activate->requiredFields},");
+
         $task = form::data($this->config->task->form->activate, $taskID)->add('id', $taskID)->get();
         if($task->left && $task->left < 0)
         {
@@ -823,6 +827,7 @@ class taskZen extends task
         $now  = helper::now();
         $task = form::data($this->config->task->form->start, $oldTask->id)->add('id', $oldTask->id)
             ->setIF($oldTask->assignedTo != $this->app->user->account, 'assignedDate', $now)
+            ->remove('comment')
             ->get();
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->start['id'], (string)$this->post->uid);
@@ -950,7 +955,7 @@ class taskZen extends task
     protected function buildTaskForFinish(object $oldTask): object
     {
         $now = helper::now();
-        $task = form::data($this->config->task->form->finish, $oldTask->id)
+        $task = form::data($this->config->task->form->finish, $oldTask->id)->add('id', $oldTask->id)
             ->setIF(!$this->post->realStarted && helper::isZeroDate($oldTask->realStarted), 'realStarted', $now)
             ->setDefault('assignedTo', $oldTask->openedBy)
             ->get();
@@ -1008,7 +1013,7 @@ class taskZen extends task
      * @access protected
      * @return object
      */
-    protected function buildTaskForClose(object $oldTask): object
+    public function buildTaskForClose(object $oldTask): object
     {
         $task = form::data($this->config->task->form->close, $oldTask->id)->add('id', $oldTask->id)
             ->setIF($oldTask->status == 'done',   'closedReason', 'done')
@@ -1060,9 +1065,13 @@ class taskZen extends task
      */
     protected function commonAction(int $taskID, string $vision = ''): void
     {
-        $this->view->task      = $this->task->getByID($taskID, true, $vision);
+        $task         = $this->task->getByID($taskID, true, $vision);
+        $memberAppend = '';
+        if(empty($this->view->task->team) && $this->app->rawMethod == 'activate') $memberAppend = $task->finishedBy;
+
+        $this->view->task      = $task;
         $this->view->execution = $this->execution->getByID($this->view->task->execution);
-        $this->view->members   = $this->loadModel('user')->getTeamMemberPairs($this->view->execution->id, 'execution','nodeleted');
+        $this->view->members   = $this->loadModel('user')->getTeamMemberPairs($this->view->execution->id, 'execution','nodeleted', $memberAppend);
         $this->view->actions   = $this->loadModel('action')->getList('task', $taskID);
 
         /* Set menu. */
@@ -1526,7 +1535,7 @@ class taskZen extends task
 
         /* Get related objects title or names. */
         $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
-        $relatedFiles   = $this->dao->select('id, `objectID`, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+        $relatedFiles   = $this->dao->select('id, `objectID`, pathname, title')->from(TABLE_FILE)->where('`objectType`')->eq('task')->andWhere('`objectID`')->in(array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
         $relatedModules = $this->loadModel('tree')->getAllModulePairs('task');
 
         $bugs = $this->loadModel('bug')->getByIdList($relatedBugIdList);
@@ -1845,7 +1854,9 @@ class taskZen extends task
             return $response;
         }
 
-        $response['load'] = $from != 'edittask';
+        $load = $from != 'edittask';
+        if(!empty($_SESSION['ignoredChildTaskID'])) $load = array('alert' => array('title' => $this->lang->task->deliverableTips->closeTitle, 'message' => sprintf($this->lang->task->deliverableTips->closeMessage, $_SESSION['ignoredChildTaskID']), 'actions' => array('text' => $this->lang->IKnow, 'btnType' => 'primary')), 'locate' => array('load' => true));
+        $response['load'] = $load;
         return $response;
     }
 
@@ -1912,7 +1923,7 @@ class taskZen extends task
      * @access protected
      * @return array
      */
-    protected function responseAfterbatchCreate(array $taskIdList, object $execution): array
+    public function responseAfterbatchCreate(array $taskIdList, object $execution): array
     {
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
@@ -1955,7 +1966,9 @@ class taskZen extends task
         $message = $message ?: $this->lang->saveSuccess;
         if($this->viewType == 'json' || (helper::isApiRequest())) return array('result' => 'success');
         if(isInModal()) return $this->responseModal($task, $from, $message);
-        return array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true);
+
+        $load = !empty($_SESSION['ignoredChildTaskID']) ? array('alert' => array('title' => $this->lang->task->deliverableTips->closeTitle, 'message' => sprintf($this->lang->task->deliverableTips->closeMessage, $_SESSION['ignoredChildTaskID']), 'actions' => array('text' => $this->lang->IKnow, 'btnType' => 'primary')), 'locate' => array('load' => true)) : true;
+        return array('result' => 'success', 'message' => $message, 'load' => $load, 'closeModal' => true);
     }
 
     /**

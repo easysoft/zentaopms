@@ -1590,8 +1590,8 @@ class screenModel extends model
             case 'option':
                 if($field)
                 {
-                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
-                    if(is_file($path))
+                    $path = $this->bi->getTableSchemaFile((string)$object);
+                    if($path)
                     {
                         include $path;
                         $options = $schema->fields[$field]['options'];
@@ -1604,8 +1604,8 @@ class screenModel extends model
                     $useField = $field;
                     $useTable = $object;
 
-                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
-                    if(is_file($path))
+                    $path = $this->bi->getTableSchemaFile((string)$object);
+                    if($path)
                     {
                         include $path;
                         if(isset($schema->fields[$field]['object']))
@@ -1673,6 +1673,10 @@ class screenModel extends model
      */
     public function getOptionsFromSql($sql, $keyField, $valueField)
     {
+        /* 与 biModel::getOptionsFromSql() 保持一致，执行前拒绝写文件/读文件等危险语法。*/
+        /* Keep the same protection as biModel::getOptionsFromSql(). */
+        $this->loadModel('bi')->checkExecutableSql((string)$sql);
+
         $options = array();
         $cols    = $this->dbh->query($sql)->fetchAll();
         $sample  = current($cols);
@@ -3021,7 +3025,7 @@ class screenModel extends model
         $date = date("Y-m-t", strtotime("$year-$month"));
 
         $loginUserList = $this->dao->select('distinct actor')->from(TABLE_ACTION)
-            ->where('objectType')->eq('user')
+            ->where('`objectType`')->eq('user')
             ->andWhere('action')->eq('login')
             ->andWhere('year(date)')->eq($year)
             ->andWhere('month(date)')->eq($month)
@@ -3100,7 +3104,7 @@ class screenModel extends model
             ->where('product')->ne(',0,')
             ->andWhere('product')->ne(',,')
             ->andWhere('product')->ne(',,0,,')
-            ->andWhere('objectType')->notin('project,execution,task')
+            ->andWhere('`objectType`')->notin('project,execution,task')
             ->andWhere('year(date)')->eq($year)
             ->andWhere('month(date)')->eq($month)
             ->fetchPairs();
@@ -3163,7 +3167,7 @@ class screenModel extends model
                 ->andWhere('t1.id')->eq($productID)
                 ->fetch();
 
-            $fixedBugList = $this->dao->select('t2.id,datediff(t2.`closedDate`, t2.`openedDate`) as fixedCycle')->from(TABLE_PRODUCT)->alias('t1')
+            $fixedBugList = $this->dao->select('t2.id,datediff(t2.`closedDate`, t2.`openedDate`) as `fixedCycle`')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.id=t2.product')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t2.deleted')->eq('0')
@@ -3332,7 +3336,7 @@ class screenModel extends model
      */
     public function getProjectStoryTable($year, $month, $projectList)
     {
-        $releasedStories = $this->dao->select('t3.id,t1.id as projectID')->from(TABLE_PROJECT)->alias('t1')
+        $releasedStories = $this->dao->select('t3.id,t1.id as `projectID`')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.project')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
             ->leftJoin(TABLE_ACTION)->alias('t4')->on('t3.id=t4.`objectID`')
@@ -3426,7 +3430,7 @@ class screenModel extends model
             ->andWhere("NOT FIND_IN_SET('or', vision)")
             ->andWhere('date(`closedDate`)', true)->gt($date)
             ->orWhere('date(`closedDate`)')->eq('0000-00-00')
-            ->orWhere('closedDate')->in(NULL)
+            ->orWhere('`closedDate`')->in(NULL)
             ->markRight(true)
             ->fetchPairs();
     }

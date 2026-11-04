@@ -45,7 +45,7 @@ function loadModuleRelated()
 
 function checkScript()
 {
-    $('.autoScript').toggleClass('hidden', !$('#auto').prop('checked'));
+    $('.autoScript').closest('.form-row').toggleClass('hidden', !$('#auto').prop('checked'));
 }
 
 window.readScriptContent = function(object)

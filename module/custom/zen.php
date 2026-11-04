@@ -12,6 +12,20 @@ declare(strict_types=1);
 class customZen extends custom
 {
     /**
+     * 检查时区是否有效。
+     * Check whether the timezone is valid.
+     *
+     * @param  string $timezone
+     * @access protected
+     * @return bool
+     */
+    protected function isValidTimezone(string $timezone): bool
+    {
+        include $this->app->getConfigRoot() . 'timezones.php';
+        return isset($timezoneList[$timezone]);
+    }
+
+    /**
      * 设置自定义字段列表。
      * Set the list of custom fields.
      *
@@ -256,6 +270,12 @@ class customZen extends custom
             if($addItems)    $this->upgrade->createTestcaseDeliverable($addItems);
             if($delItems)    $this->upgrade->deleteTestcaseDeliverable($delItems);
             if($changeItems) $this->upgrade->changeTestcaseDeliverable($changeItems);
+        }
+
+        if($this->config->edition == 'max' || $this->config->edition == 'ipd')
+        {
+            if($module == 'stage' && $field == 'ipdTypeList') $this->loadModel('deliverable')->addOtherDeliverbaleStage('ipd');
+            if($module == 'task'  && $field == 'typeList')    $this->loadModel('deliverable')->addOtherDeliverbaleStage('task');
         }
         return !dao::isError();
     }

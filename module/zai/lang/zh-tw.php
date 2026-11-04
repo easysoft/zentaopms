@@ -7,6 +7,7 @@ $lang->zai->token      = '應用密鑰';
 $lang->zai->adminToken = '管理密鑰';
 $lang->zai->addSetting = '添加 ZAI 設定';
 
+$lang->zai->testConnection           = '測試連接';
 $lang->zai->configurationUnavailable = 'ZAI 設定不可用。';
 $lang->zai->illegalZentaoUser        = '非法禪道用戶！';
 $lang->zai->onlyPostRequest          = '此操作只支持 POST 請求。';
@@ -14,11 +15,17 @@ $lang->zai->vectorizedAlreadyEnabled = '數據向量化已經啟用。';
 $lang->zai->vectorizedEnabled        = '數據向量化已啟用。';
 $lang->zai->authenticationFailed     = '認證失敗！';
 $lang->zai->syncRequestFailed        = '同步請求失敗，請稍後再試';
-$lang->zai->syncingHint              = '數據正在後台自動同步，無需保持此頁面打開。';
+$lang->zai->syncingHint              = '向量化數據會在後台自動同步。';
+$lang->zai->enqueueHint              = '檢測到有未入隊歷史數據，點擊「繼續入隊」開始入隊。';
+$lang->zai->enqueueResult            = "創建 %s 入隊, 已入隊 <strong class='%scount'>%s</strong> 條；";
+$lang->zai->enqueueFinished          = '歷史數據入隊完成，將由計劃任務自動同步。';
+$lang->zai->enqueueContinue          = '繼續入隊';
 $lang->zai->syncedWithFailedHint     = '一些數據同步失敗，系統將自動重試';
 $lang->zai->cannotFindMemoryInZai    = '無法在 ZAI 中找到指定 key 的知識庫，請重新啟用向量化。';
 $lang->zai->confirmResetSync         = '是否重置同步狀態，這將在 ZAI 中創建新的知識庫。';
+$lang->zai->lastFailReason           = '失敗原因';
 $lang->zai->settingTips              = '請安裝<a class="btn btn-link text-primary px-1" style="text-decoration: none;" href="%s" target="_blank">ZAI服務</a>獲取金鑰。';
+$lang->zai->settingSavedSuccess      = 'ZAI設定修改成功，刷新瀏覽器後生效。';
 
 $lang->zai->zentaoVectorization       = '禪道數據向量化';
 $lang->zai->vectorized                = '數據向量化';
@@ -35,12 +42,13 @@ $lang->zai->totalSync        = '總計';
 $lang->zai->lastSyncTime     = '上次同步時間';
 
 $lang->zai->syncActions = new stdClass();
-$lang->zai->syncActions->enable     = '啟用數據向量化';
-$lang->zai->syncActions->startSync  = '開始同步';
-$lang->zai->syncActions->resync     = '重新同步';
-$lang->zai->syncActions->pauseSync  = '暫停同步';
-$lang->zai->syncActions->resumeSync = '繼續同步';
-$lang->zai->syncActions->resetSync  = '重置同步';
+$lang->zai->syncActions->enable          = '啟用數據向量化';
+$lang->zai->syncActions->startSync       = '開始同步';
+$lang->zai->syncActions->resync          = '重新同步';
+$lang->zai->syncActions->pauseSync       = '暫停同步';
+$lang->zai->syncActions->resumeSync      = '繼續同步';
+$lang->zai->syncActions->resetSync       = '重置同步';
+$lang->zai->syncActions->continueEnqueue = '繼續入隊';
 
 $lang->zai->syncingTypeList = array();
 $lang->zai->syncingTypeList['story']    = '需求';

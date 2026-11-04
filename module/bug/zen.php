@@ -14,6 +14,14 @@ class bugZen extends bug
     {
         if($bug->execution && !$this->loadModel('execution')->checkPriv($bug->execution))
         {
+            /* API 请求直接返回失败 JSON，避免界面提示和响应内容拼接成多段 JSON。*/
+            /* For API requests, return a failure JSON directly to avoid concatenated JSON from the UI notice and the response. */
+            if($this->app->apiVersion)
+            {
+                $this->send(array('result' => 'fail', 'message' => $this->lang->bug->notice->executionAccessDenied));
+                return false;
+            }
+
             if(isInModal() || !$this->server->http_referer)
             {
                 echo js::alert($this->lang->bug->notice->executionAccessDenied);
@@ -207,6 +215,15 @@ class bugZen extends bug
      */
     protected function getBrowseBugs(int $productID, string $branch, string $browseType, array $executions, int $moduleID, int $queryID, string $orderBy, object $pager): array
     {
+        if(empty($executions))
+        {
+            $projects   = $this->loadModel('product')->getProjectPairsByProduct($productID, (string)$branch);
+            $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('vision')->eq($this->config->vision)
+                ->andWhere('type')->in('stage,sprint,kanban')
+                ->andWhere('project')->in(array_keys($projects))->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+                ->fetchPairs();
+        }
         $bugs = $this->bug->getList($browseType, (array)$productID, $this->projectID, $executions, $branch, $moduleID, $queryID, $orderBy, $pager);
 
         /* 把查询条件保存到 session。*/
@@ -700,6 +717,15 @@ class bugZen extends bug
 
         if($oldBug->resolvedBy == $bug->resolvedBy && !$this->post->resolvedDate) unset($bug->resolvedDate);
 
+        if($this->config->edition == 'gitfox')
+        {
+            $hiddenFields = $this->config->bug->edit->gitfoxHiddenFields;
+            foreach($hiddenFields as $field)
+            {
+                if(property_exists($oldBug, $field)) $bug->$field = $oldBug->$field;
+            }
+        }
+
         $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->edit['id'], $bug->uid);
 
         return $bug;
@@ -761,6 +787,7 @@ class bugZen extends bug
             if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
             if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
 
+            if(!isset($executions[$bug->execution])) $bug->execution = 0;
             if($this->config->edition != 'open') $bug->relatedObject = zget($bugRelatedObjectList, $bug->id, 0);
         }
 
@@ -2085,10 +2112,26 @@ class bugZen extends bug
     {
         /* 解除旧的版本关联关系，关联新的版本。*/
         /* Unlink old resolved build and link new resolved build. */
-        if(!empty($bug->resolvedBuild) && $bug->resolvedBuild != $oldBug->resolvedBuild)
+        if($bug->resolvedBuild != $oldBug->resolvedBuild)
         {
-            if(!empty($oldBug->resolvedBuild)) $this->loadModel('build')->unlinkBug((int)$oldBug->resolvedBuild, $bug->id);
-            $this->bug->linkBugToBuild($bug->id, $bug->resolvedBuild);
+            if(!empty($oldBug->resolvedBuild) && $oldBug->resolvedBuild != 'trunk')
+            {
+                $oldBuildID   = (int)$oldBug->resolvedBuild;
+                $oldReleaseID = $this->dao->select('id')->from(TABLE_RELEASE)
+                    ->where('product')->eq($oldBug->product)
+                    ->andWhere("(FIND_IN_SET('{$oldBuildID}', build) or shadow = {$oldBuildID})")
+                    ->andWhere('deleted')->eq('0')
+                    ->fetch('id');
+                if($oldReleaseID)
+                {
+                    $this->loadModel('release')->unlinkBug((int)$oldReleaseID, (int)$bug->id);
+                }
+                else
+                {
+                    $this->loadModel('build')->unlinkBug($oldBuildID, $bug->id);
+                }
+            }
+            if(!empty($bug->resolvedBuild) && $bug->resolvedBuild != 'trunk') $this->bug->linkBugToBuild($bug->id, $bug->resolvedBuild);
         }
 
         /* 记录解除旧的计划关联关系和关联新的计划的历史。*/

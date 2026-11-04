@@ -523,6 +523,8 @@ class user extends control
         if(!empty($_POST))
         {
             $users = form::batchData($this->config->user->form->batchCreate)->get();
+            if(empty($users)) return $this->sendError($this->lang->user->errorEmptyAccount, true);
+
             foreach($users as $user)
             {
                 $user->password = $user->passwordfield;
@@ -905,7 +907,7 @@ class user extends control
 
             $token   = bin2hex(random_bytes(16));
             $expired = strtotime("+{$this->config->user->resetPasswordTimeout} minutes");
-            $this->dao->update(TABLE_USER)->set('resetToken')->eq(md5($token))->set('resetExpired')->eq($expired)->where('account')->eq($user->account)->exec();
+            $this->dao->update(TABLE_USER)->set('`resetToken`')->eq(md5($token))->set('`resetExpired`')->eq($expired)->where('account')->eq($user->account)->exec();
 
             $result = $this->mail->send($user->account, $this->lang->user->resetPWD, sprintf($this->lang->mail->forgetPassword, commonModel::getSysURL() . inlink('resetPassword', 'token=' . $token)), '', true, array(), true);
             if(strstr($result, 'ERROR')) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->sendMailFail));
@@ -930,7 +932,7 @@ class user extends control
         $account = '';
         if(preg_match("/^[a-z0-9]{32}$/i", $token))
         {
-            $account = $this->dao->select('account')->from(TABLE_USER)->where('resetToken')->eq(md5($token))->andWhere('resetExpired')->gt(time())->fetch('account');
+            $account = $this->dao->select('account')->from(TABLE_USER)->where('`resetToken`')->eq(md5($token))->andWhere('`resetExpired`')->gt(time())->fetch('account');
         }
 
         if(!empty($_POST))
@@ -945,7 +947,7 @@ class user extends control
             $this->user->resetPassword($user);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->dao->update(TABLE_USER)->set('resetToken')->eq('')->set('resetExpired')->eq(0)->where('account')->eq($account)->exec();
+            $this->dao->update(TABLE_USER)->set('`resetToken`')->eq('')->set('`resetExpired`')->eq(0)->where('account')->eq($account)->exec();
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('login')));
         }

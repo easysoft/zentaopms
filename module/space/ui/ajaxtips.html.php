@@ -32,7 +32,7 @@ panel
             set::target('_blank'),
             set::url(createLink('space', 'manageMembers', "spaceID={$spaceID}"))
         ) : null,
-        hasPriv('space', 'group') ? btn
+        hasPriv('space', 'group') && $config->edition != 'gitfox' ? btn
         (
             set::className('mr-2 tipBtn'),
             $lang->space->setACL,

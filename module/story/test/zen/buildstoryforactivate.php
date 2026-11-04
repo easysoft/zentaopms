@@ -44,6 +44,13 @@ $product->type->range('normal{3},branch{2}');
 $product->gen(5);
 
 // 3. 用户登录（选择合适角色）
+zenData('user')->gen(0);
+$user = zenData('user');
+$user->id->range('1-2');
+$user->account->range('admin,user1');
+$user->realname->range('管理员,用户1');
+$user->gen(2);
+
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）

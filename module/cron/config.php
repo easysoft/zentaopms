@@ -9,6 +9,19 @@ $config->cron->maxRunDays  = 8;
 $config->cron->maxRunTime  = 65;
 $config->cron->maxConsumer = 4;
 
+$config->cron->showCommands = array();
+$config->cron->showCommands['gitfox'] = array();
+$config->cron->showCommands['gitfox'][] = 'moduleName=metric&methodName=updateDashboardMetricLib';
+$config->cron->showCommands['gitfox'][] = 'moduleName=mail&methodName=asyncSend';
+$config->cron->showCommands['gitfox'][] = 'moduleName=webhook&methodName=asyncSend';
+$config->cron->showCommands['gitfox'][] = 'moduleName=admin&methodName=deleteLog';
+$config->cron->showCommands['gitfox'][] = 'moduleName=errorlog&methodName=deleteLog';
+$config->cron->showCommands['gitfox'][] = 'moduleName=backup&methodName=backup';
+
+$config->cron->hideCommands = array();
+$config->cron->hideCommands['open'][] = 'moduleName=aitask&methodName=exec';
+$config->cron->hideCommands['open'][] = 'moduleName=ai&methodName=runTimerAgents';
+
 global $lang;
 $config->cron->dtable = new stdclass();
 $config->cron->dtable->fieldList = array();
@@ -22,3 +35,10 @@ $config->cron->dtable->fieldList['status']   = array('sortType' => false, 'type'
 $config->cron->dtable->fieldList['remark']   = array('sortType' => false, 'type' => 'text',     'title' => $lang->cron->remark);
 $config->cron->dtable->fieldList['lastTime'] = array('sortType' => false, 'type' => 'datetime', 'title' => $lang->cron->lastTime);
 $config->cron->dtable->fieldList['actions']  = array('sortType' => false, 'width' => '110px',   'title' => $lang->actions, 'type' => 'html');
+
+$config->cron->taskEditions['weekly-createcyclereport']           = ['max', 'ipd'];
+$config->cron->taskEditions['effort-remindnotrecord']             = ['biz', 'max', 'ipd'];
+$config->cron->taskEditions['execution-computetaskeffort']        = ['biz', 'max', 'ipd'];
+$config->cron->taskEditions['auditplan-ajaxcreatecycleauditplan'] = ['max', 'ipd'];
+$config->cron->taskEditions['ai-runtimeragents']                  = ['biz', 'max', 'ipd'];
+$config->cron->taskEditions['aitask-exec']                        = ['biz', 'max', 'ipd'];

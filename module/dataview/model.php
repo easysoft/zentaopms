@@ -335,6 +335,9 @@ class dataviewModel extends model
     */
     public function includeTable(string $table): object|null
     {
+        /* 表名只允许字母、数字与下划线，避免请求参数穿越到目录之外。Only letters, digits and underscore are allowed in the table name. */
+        if(!$this->loadModel('bi')->isSafeTableObject($table)) return null;
+
         $path = __DIR__ . DS . 'table' . DS . "$table.php";
         if(file_exists($path))
         {

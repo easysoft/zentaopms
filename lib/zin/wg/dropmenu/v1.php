@@ -185,6 +185,9 @@ class dropmenu extends wg
         $lang   = data('lang');
         $config = data('config');
 
+        /* GitFox 独立版中，评审、扫描、问题、流水线、制品库作为一级导航时不展示对象下拉框。 */
+        if($config->vision == 'gitfox' && in_array($app->tab, array('ppm', 'codescan', 'issue', 'pipeline', 'artifact'))) return array();
+
         if(empty($tab))      $tab      = $app->tab;
         if(empty($module))   $module   = $app->rawModule;
         if(empty($method))   $method   = $app->rawMethod;
@@ -199,7 +202,7 @@ class dropmenu extends wg
         }
 
         /* 打印工作流1.5级导航. */
-        if($config->edition != 'open')
+        if(!in_array($config->edition, array('open', 'gitfox')))
         {
             $flow = $app->control->loadModel('workflow')->getByModule($module);
             if($flow && $flow->buildin == '0' && $flow->belong) $tab = $flow->belong;
@@ -226,7 +229,7 @@ class dropmenu extends wg
 
         if($module == 'testcase' && in_array($method, array('view', 'edit')) && data('isLibCase')) $tab = 'caselib';
 
-        if($config->vision != 'lite' && strpos(',story-create,story-batchcreate,product-browse,projectstory-story,', ",$module-$method,") !== false) $extra = data('storyType');
+        if($config->vision != 'lite' && strpos(',story-create,story-batchcreate,product-browse,projectstory-story,', ",$module-$method,") !== false) $extra = (string)data('storyType');
 
         if($tab == 'dimension' && $module == 'tree' && $method == 'browsegroup') $extra = data('viewType');
 
@@ -270,7 +273,7 @@ class dropmenu extends wg
             if($tab == 'execution')
             {
                 $project = $app->control->loadModel('project')->getByID((int)$object->project);
-                $text = $project->name . ' / ' . $text;
+                $text = $project->name . ' / ' . htmlspecialchars_decode((string)$text, ENT_QUOTES);
             }
         }
 

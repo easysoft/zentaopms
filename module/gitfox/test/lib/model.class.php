@@ -501,6 +501,65 @@ class gitfoxModelTest extends baseTest
     }
 
     /**
+     * 测试获取系统账号。
+     * Test getSystemAccount method.
+     *
+     * @access public
+     * @return string
+     */
+    public function getSystemAccountTest(): string
+    {
+        return $this->invokeForTest('getSystemAccount');
+    }
+
+    /**
+     * 测试以系统账号发送请求并返回原始响应的类型。
+     * Test requestSystem method and return the type of the raw response.
+     *
+     * @param  string $url
+     * @access public
+     * @return string
+     */
+    public function requestSystemRawTypeTest(string $url): string
+    {
+        $result = $this->invokeForTest('requestSystem', array($url, 'GET', array(), false));
+
+        return $this->normalizeType($result);
+    }
+
+    /**
+     * 测试以系统账号请求接口的响应是否包含data属性。
+     * Test whether the response of requestSystem contains the data property.
+     *
+     * @param  string $url
+     * @access public
+     * @return int
+     */
+    public function requestSystemHasDataTest(string $url): int
+    {
+        $result = $this->invokeForTest('requestSystem', array($url));
+        if(dao::isError()) dao::getError();
+
+        return is_object($result) && isset($result->data) ? 1 : 0;
+    }
+
+    /**
+     * 测试以系统账号请求接口的data属性类型。
+     * Test the type of the data property of requestSystem response.
+     *
+     * @param  string $url
+     * @access public
+     * @return string
+     */
+    public function requestSystemDataTypeTest(string $url): string
+    {
+        $result = $this->invokeForTest('requestSystem', array($url));
+        if(dao::isError()) dao::getError();
+
+        return is_object($result) && isset($result->data) ? $this->normalizeType($result->data) : 'none';
+    }
+
+    /**
      * 通过对象属性灌入仓库缓存。
      * Inject repo cache into the model instance.
      *

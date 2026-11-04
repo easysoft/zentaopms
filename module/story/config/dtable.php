@@ -1,5 +1,6 @@
 <?php
 global $lang, $app;
+$app->loadLang('story');
 $isEn = $app->getClientLang() == 'en';
 $config->story->dtable = new stdclass();
 
@@ -216,7 +217,7 @@ $config->story->dtable->fieldList['caseCount']['link']        = array('module' =
 $config->story->dtable->fieldList['caseCount']['data-toggle'] = 'modal';
 $config->story->dtable->fieldList['caseCount']['group']       = 7;
 
-if($config->edition != 'open')
+if(!in_array($config->edition, array('open', 'gitfox')))
 {
     $config->story->dtable->fieldList['relatedObject']['name']        = 'relatedObject';
     $config->story->dtable->fieldList['relatedObject']['title']       = $lang->custom->relateObject;
@@ -566,3 +567,15 @@ $config->story->caseTable->fieldList['lastRunResult']['type']     = 'category';
 $config->story->caseTable->fieldList['lastRunResult']['map']      = $lang->testcase->resultList;
 $config->story->caseTable->fieldList['lastRunResult']['sortType'] = true;
 $config->story->caseTable->fieldList['lastRunResult']['group']    = 5;
+
+$config->story->children = new stdclass();
+$config->story->children->dtable = new stdclass();
+$config->story->children->dtable->fieldList = array();
+$config->story->children->dtable->fieldList['id']         = $config->story->dtable->fieldList['id'];
+$config->story->children->dtable->fieldList['title']      = $config->story->dtable->fieldList['title'];
+$config->story->children->dtable->fieldList['pri']        = $config->story->dtable->fieldList['pri'];
+$config->story->children->dtable->fieldList['assignedTo'] = $config->story->dtable->fieldList['assignedTo'];
+$config->story->children->dtable->fieldList['estimate']   = $config->story->dtable->fieldList['estimate'];
+$config->story->children->dtable->fieldList['status']     = $config->story->dtable->fieldList['status'];
+$config->story->children->dtable->fieldList['stage']      = $config->story->dtable->fieldList['stage'];
+$config->story->children->dtable->fieldList['actions']    = $config->story->dtable->fieldList['actions'];

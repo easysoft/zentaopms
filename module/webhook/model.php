@@ -54,9 +54,9 @@ class webhookModel extends model
     public function getBindAccount(int $webhookID, string $webhookType, string $openID)
     {
         return $this->dao->select('account')->from(TABLE_OAUTH)
-            ->where('providerID')->eq($webhookID)
-            ->andWhere('providerType')->eq($webhookType)
-            ->andWhere('openID')->eq($openID)
+            ->where('`providerID`')->eq($webhookID)
+            ->andWhere('`providerType`')->eq($webhookType)
+            ->andWhere('`openID`')->eq($openID)
             ->fetch('account');
     }
 
@@ -91,8 +91,8 @@ class webhookModel extends model
     public function getLogList(int $id, string $orderBy = 'date_desc', ?object $pager = null): array
     {
         $logs = $this->dao->select('*')->from(TABLE_LOG)
-            ->where('objectType')->eq('webhook')
-            ->andWhere('objectID')->eq($id)
+            ->where('`objectType`')->eq('webhook')
+            ->andWhere('`objectID`')->eq($id)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
@@ -124,7 +124,7 @@ class webhookModel extends model
                 $object->$field = '';
             }
 
-            $log->action    = $this->webhookTao->getActionText($data, $action, $object, $users);
+            $log->action    = $this->webhookTao->getActionText($data, $action, zget($object, $field, ''), $users);
             $log->actionURL = $this->getViewLink($action->objectType, $action->objectID);
             $log->module    = $action->objectType;
             $log->moduleID  = $action->objectID;
@@ -145,14 +145,14 @@ class webhookModel extends model
         $now = helper::now();
         $dataList  = $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('status')->eq('wait')
-            ->andWhere('objectType')->eq('webhook')
+            ->andWhere('`objectType`')->eq('webhook')
             ->andWhere('(`sendTime` IS NULL OR `sendTime` <= "' . $now . '")')
             ->orderBy('id')
             ->fetchAll('id', false);
         $threeHoursAgo = date('Y-m-d H:i:s', time() - 3 * 3600);
         $dataList += $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('status')->eq('senting')
-            ->andWhere('objectType')->eq('webhook')
+            ->andWhere('`objectType`')->eq('webhook')
             ->andWhere('(`sendTime` IS NULL OR (`sendTime` <= "' . $now . '" AND sendTime >= "' . $threeHoursAgo . '"))')
             ->orderBy('id')
             ->fetchAll('id', false);
@@ -170,8 +170,8 @@ class webhookModel extends model
      */
     public function getBoundUsers(int $webhookID, array|string $users = array())
     {
-        return $this->dao->select('*')->from(TABLE_OAUTH)->where('providerType')->eq('webhook')
-            ->andWhere('providerID')->eq($webhookID)
+        return $this->dao->select('*')->from(TABLE_OAUTH)->where('`providerType`')->eq('webhook')
+            ->andWhere('`providerID`')->eq($webhookID)
             ->beginIF($users)->andWhere('account')->in($users)->fi()
             ->fetchPairs('account', 'openID');
     }
@@ -289,8 +289,8 @@ class webhookModel extends model
         if(!$userList) return false;
 
         $this->dao->delete()->from(TABLE_OAUTH)
-            ->where('providerType')->eq('webhook')
-            ->andWhere('providerID')->eq($webhookID)
+            ->where('`providerType`')->eq('webhook')
+            ->andWhere('`providerID`')->eq($webhookID)
             ->andWhere('account')->in(array_keys($userList))
             ->exec();
 
@@ -335,31 +335,64 @@ class webhookModel extends model
             $aitaskObject = $this->dao->select('*')->from(TABLE_AI_TASK)->where('id')->eq($objectID)->fetch();
         }
 
+        $action = $this->loadModel('action')->getById($actionID);
+        if(empty($action)) return true;;
+
+        $table  = zget($this->config->objectTables, $action->objectType, '');
+        $object = null;
+        if(!empty($table)) $object = $this->dao->select('*')->from($table)->where('id')->eq($action->objectID)->fetch();
+        if(empty($object)) return false;
+
         foreach($webhooks as $id => $webhook)
         {
-            $postData = $this->buildData($objectType, $objectID, $actionType, $actionID, $webhook);
-            if(!$postData) continue;
+            $toCcList   = array('to' => '');
+            $openIdList = array();
+            $isUserHook = in_array($webhook->type, array('dinguser', 'wechatuser', 'feishuuser'));
+            if($isUserHook)
+            {
+
+                $toCcList   = $this->loadModel('message')->getToAndCcList((object)$object, $action->objectType, $actionID);
+                $openIdList = $this->getBoundUsers($id, implode(',', $toCcList));
+                if(empty($openIdList)) continue;
+            }
 
             $needDelay = false;
-            if($aitaskObject && !empty($aitaskObject->noticeTime) && $aitaskObject->noticeTime != '1')
+            if($aitaskObject && !empty($aitaskObject->noticeTime) && $aitaskObject->noticeTime != '1') $needDelay = true;
+
+            $messageGroups = array();
+            foreach($toCcList as $role => $userList)
             {
-                $needDelay = true;
+                $userList = array_unique(array_filter(explode(',', $userList)));
+                if(!$isUserHook) $userList = array('');
+                foreach($userList as $account)
+                {
+                    /* 用户没有绑定，跳过 */
+                    if(!empty($openIdList) && !isset($openIdList[$account])) continue;
+                    if($objectType != 'aitask' && $account == $this->app->user->account) continue;
+
+                    $postData = $this->buildData($objectType, $object, $actionType, $actionID, $webhook, $account, $role);
+                    if(!$postData) continue;
+
+                    $hash = md5($postData);
+                    if(!isset($messageGroups[$hash])) $messageGroups[$hash] = array();
+                    $messageGroups[$hash]['postData'] = $postData;
+                    $messageGroups[$hash]['users'][]  = $account;
+                }
             }
 
-            if($webhook->sendType == 'async' || $needDelay)
+            foreach($messageGroups as $message)
             {
-                if($webhook->type == 'dinguser')
+                $postData = $message['postData'];
+                $toList   = implode(',', $message['users']);
+                if($webhook->sendType == 'async' || $needDelay)
                 {
-                    $openIdList = $this->getOpenIdList($webhook->id, $actionID);
-                    if(empty($openIdList)) continue;
+                    $this->saveData($id, $actionID, $postData, $actor, $aitaskObject, $toList);
+                    continue;
                 }
 
-                $this->saveData($id, $actionID, $postData, $actor, $aitaskObject);
-                continue;
+                $result = $this->fetchHook($webhook, $postData, $toList);
+                if(!empty($result)) $this->saveLog($webhook, $actionID, $postData, (string)$result);
             }
-
-            $result = $this->fetchHook($webhook, $postData, $actionID);
-            if(!empty($result)) $this->saveLog($webhook, $actionID, $postData, (string)$result);
         }
         return !dao::isError();
     }
@@ -368,14 +401,16 @@ class webhookModel extends model
      * Build data.
      *
      * @param  string $objectType
-     * @param  int    $objectID
+     * @param  object $object
      * @param  string $actionType
      * @param  int    $actionID
      * @param  object $webhook
+     * @param  string $account
+     * @param  string $role       to|cc|other
      * @access public
      * @return string
      */
-    public function buildData(string $objectType, int $objectID, string $actionType, int $actionID, object $webhook)
+    public function buildData(string $objectType, object $object, string $actionType, int $actionID, object $webhook, string $account = '', $role = 'to')
     {
         /* Validate data. */
         if(!isset($this->lang->action->label)) $this->loadModel('action');
@@ -394,25 +429,22 @@ class webhookModel extends model
         if($webhook->executions && strpos(",$webhook->executions,", ",$action->execution,") === false) return false;
 
         static $users = array();
-        if(empty($users)) $users = $this->loadModel('user')->getList();
+        if(empty($users)) $users = $this->loadModel('user')->getPairs('nodeleted|noclosed|noletter');
 
-        $object = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
-        if(!$object) return false;
-
-        $host     = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
-        $viewLink = $this->getViewLink($objectType == 'kanbancard' ? 'kanban' : $objectType, $objectType == 'kanbancard' ? $object->kanban : $objectID);
+        $host        = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
+        $viewLink    = $this->getViewLink($objectType == 'kanbancard' ? 'kanban' : $objectType, $objectType == 'kanbancard' ? $object->kanban : $action->objectID);
+        $objectTitle = $this->loadModel('mail')->getObjectTitle($object, $objectType);
 
         if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed')))
         {
-            $text  = $this->loadModel('aitask')->getNotificationText($object, $objectID, $actionType, 'markdown', '', $viewLink, $host);
+            $text  = $this->loadModel('aitask')->getNotificationText($object, $action->objectID, $actionType, 'markdown', '', $viewLink, $host);
             $title = $text;
         }
         else
         {
-            $field          = $this->config->action->objectNameFields[$objectType];
-            $objectTypeName = ($objectType == 'story' and $object->type == 'requirement') ? $this->lang->action->objectTypes['requirement'] : $this->lang->action->objectTypes[$objectType];
-            $title          = $this->app->user->realname . $this->lang->action->label->$actionType . $objectTypeName;
-            $text           = $title . ' ' . "[#{$objectID}::{$object->$field}](" . $host . $viewLink . ")";
+            $field = $this->config->action->objectNameFields[$objectType];
+            $title = $this->loadModel('message')->buildNoticeTitle($objectType, $actionType, $account, $object, $role, $users);
+            $text  = $this->loadModel('message')->buildNoticeTextByAccount($account, $object, $actionType, $actionID, $objectType, "[#{$object->id}::{$objectTitle}]({$host}{$viewLink})", $role, $users);
         }
         $action->text = $text;
 
@@ -430,7 +462,7 @@ class webhookModel extends model
             }
         }
 
-        return $this->getDataByType($webhook, $action, $title, $text, $mobile, $email, $objectType, $objectID, $assignedTo);
+        return $this->getDataByType($webhook, $action, $title, $text, $mobile, $email, $objectType, $object->id, $assignedTo);
     }
 
     /**
@@ -599,7 +631,7 @@ class webhookModel extends model
         if(!empty($_FILES['files']['name'][0]))
         {
             $this->loadModel('file');
-            $files = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->orderBy('addedDate_desc,id_desc')->limit(count($_FILES['files']['name']))->fetchAll();
+            $files = $this->dao->select('*')->from(TABLE_FILE)->where('`objectType`')->eq($objectType)->andWhere('`objectID`')->eq($objectID)->orderBy('`addedDate`_desc,id_desc')->limit(count($_FILES['files']['name']))->fetchAll();
             if($files)
             {
                 foreach($files as $file)
@@ -672,65 +704,20 @@ class webhookModel extends model
     }
 
     /**
-     * 获取openID列表。
-     * Get openID list.
-     *
-     * @param  int          $webhookID
-     * @param  int          $actionID
-     * @param  string|array $toList
-     * @access public
-     * @return string
-     */
-    public function getOpenIdList(int $webhookID, int $actionID, string|array $toList = ''): string
-    {
-        if($toList)
-        {
-            $openIdList = $this->getBoundUsers($webhookID, $toList);
-            $openIdList = implode(',', $openIdList);
-            return $openIdList;
-        }
-
-        if(empty($actionID)) return false;
-
-        $action = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($actionID)->fetch();
-        $table  = zget($this->config->objectTables, $action->objectType, '');
-        if(empty($table)) return false;
-
-        $object = $this->dao->select('*')->from($table)->where('id')->eq($action->objectID)->fetch();
-        $toList = $this->loadModel('message')->getToList((object)$object, $action->objectType, $actionID);
-        if(!empty($object->mailto)) $toList .= ',' . $object->mailto;
-        if(empty($toList)) return false;
-
-        /* Remove duplicate people. */
-        if($action->objectType == 'release')
-        {
-            $toList = array_unique(explode(',', $toList));
-            $toList = implode(',', $toList);
-        }
-
-        $toList = str_replace(",{$this->app->user->account},", ',', ",$toList,");
-
-        $openIdList = $this->getBoundUsers($webhookID, $toList);
-        $openIdList = implode(',', $openIdList);
-        return $openIdList;
-    }
-
-    /**
      * 请求发送数据的接口。
      * Post hook data.
      *
      * @param  object       $webhook
      * @param  string       $sendData
-     * @param  int          $actionID
      * @param  string|array $appendUser
      * @access public
      * @return int
      */
-    public function fetchHook(object $webhook, string $sendData, int $actionID = 0, string|array $appendUser = '')
+    public function fetchHook(object $webhook, string $sendData, string|array $appendUser = '')
     {
         if(!extension_loaded('curl')) return print(helper::jsonEncode($this->lang->webhook->error->curl));
 
-        if(in_array($webhook->type, array('dinguser', 'wechatuser', 'feishuuser'))) return $this->sendToUser($webhook, $sendData, $actionID, $appendUser);
+        if(in_array($webhook->type, array('dinguser', 'wechatuser', 'feishuuser'))) return $this->sendToUser($webhook, $sendData, $appendUser);
 
         $contentType = "Content-Type: {$webhook->contentType};charset=utf-8";
         if($webhook->type == 'dinggroup' or $webhook->type == 'wechatgroup' or $webhook->type == 'feishugroup') $contentType = "Content-Type: application/json";
@@ -783,17 +770,17 @@ class webhookModel extends model
      *
      * @param  object       $webhook
      * @param  string       $sendData
-     * @param  int          $actionID
      * @param  string|array $appendUser
      * @access public
      * @return string|false
      */
-    public function sendToUser(object $webhook, string $sendData, int $actionID, string|array $appendUser): string|false
+    public function sendToUser(object $webhook, string $sendData, string|array $appendUser): string|false
     {
         if(is_string($webhook->secret)) $webhook->secret = json_decode($webhook->secret);
 
-        $openIdList = $this->getOpenIdList($webhook->id, $actionID, $appendUser);
+        $openIdList = implode(',', $this->getBoundUsers($webhook->id, $appendUser));
         if(empty($openIdList)) return false;
+
         if($webhook->type == 'dinguser')
         {
             $this->app->loadClass('dingapi', true);
@@ -825,10 +812,12 @@ class webhookModel extends model
      * @param  int    $actionID
      * @param  string $data
      * @param  string $actor
+     * @param  object $aitaskObject
+     * @param  string $account
      * @access public
      * @return bool
      */
-    public function saveData(int $webhookID, int $actionID, string $data, string $actor = '', ?object $aitaskObject = null): bool
+    public function saveData(int $webhookID, int $actionID, string $data, string $actor = '', ?object $aitaskObject = null, string $account = ''): bool
     {
         if(empty($actor)) $actor = $this->app->user->account;
 
@@ -856,6 +845,7 @@ class webhookModel extends model
         $webhookData->objectType  = 'webhook';
         $webhookData->objectID    = $webhookID;
         $webhookData->action      = $actionID;
+        $webhookData->toList      = $account;
         $webhookData->data        = $data;
         $webhookData->status      = 'wait';
         $webhookData->createdBy   = $actor;
@@ -907,7 +897,7 @@ class webhookModel extends model
     {
         $this->dao->update(TABLE_NOTIFY)
             ->set('status')->eq($status)
-            ->beginIF(!empty($time))->set('sendTime')->eq($time)->fi()
+            ->beginIF(!empty($time))->set('`sendTime`')->eq($time)->fi()
             ->where('id')->in($idList)
             ->exec();
     }

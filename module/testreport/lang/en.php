@@ -43,15 +43,16 @@ $lang->testreport->all         = 'All Reports';
 $lang->testreport->deleted     = 'Deleted';
 $lang->testreport->selectTask  = 'Create report by request';
 
-$lang->testreport->legendBasic       = 'Basic Info';
-$lang->testreport->legendStoryAndBug = 'Test Scope';
-$lang->testreport->legendBuild       = 'Test Rounds';
-$lang->testreport->legendCase        = 'Linked Cases';
-$lang->testreport->legendLegacyBugs  = 'Left Bugs';
-$lang->testreport->legendReport      = 'Report';
-$lang->testreport->legendComment     = 'Summary';
-$lang->testreport->legendMore        = 'More';
-$lang->testreport->date              = 'Date';
+$lang->testreport->legendBasic         = 'Basic Info';
+$lang->testreport->legendStoryAndBug   = 'Test Scope';
+$lang->testreport->legendBuild         = 'Test Rounds';
+$lang->testreport->legendCase          = 'Linked Cases';
+$lang->testreport->legendLegacyBugs    = 'Left Bugs';
+$lang->testreport->legendActivatedBugs = 'Reactivated Bugs';
+$lang->testreport->legendReport        = 'Report';
+$lang->testreport->legendComment       = 'Summary';
+$lang->testreport->legendMore          = 'More';
+$lang->testreport->date                = 'Date';
 
 $lang->testreport->bugSeverityGroups   = 'Bug Severity Distribution';
 $lang->testreport->bugTypeGroups       = 'Bug Type Distribution';

@@ -192,7 +192,7 @@ class groupModel extends model
     {
         return $this->dao->select('*')->from(TABLE_GROUP)
             ->where('project')->eq($projectID)
-            ->andWhere('devopsSpace')->eq($devopsSpaceID)
+            ->andWhere('`devopsSpace`')->eq($devopsSpaceID)
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->orderBy('id')
             ->fetchAll();

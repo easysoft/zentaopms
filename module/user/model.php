@@ -253,15 +253,16 @@ class userModel extends model
      * 获取用户名和真实姓名的键值对。
      * Get account and realname pairs.
      *
-     * @param  string       $params           noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname|outside|inside|all, can be sets of theme
+     * @param  string       $params           noletter|noempty|nodeleted|noclosed|withguest|nofeedback|pofirst|devfirst|qafirst|pmfirst|realname|outside|inside|all, can be sets of theme
      * @param  string|array $usersToAppended  account1,account2
      * @param  int          $maxCount
      * @param  string|array $accounts
      * @param  bool         $followShowOutside
+     * @param  bool         $filterVision 是否按当前vision过滤用户，无会话上下文的接口调用（如GitFox成员权限接口）需传false
      * @access public
      * @return array
      */
-    public function getPairs(string $params = '', string|array $usersToAppended = '', int $maxCount = 0, string|array $accounts = '', bool $followShowOutside = true)
+    public function getPairs(string $params = '', string|array $usersToAppended = '', int $maxCount = 0, string|array $accounts = '', bool $followShowOutside = true, bool $filterVision = true)
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getUserPairs();
 
@@ -287,9 +288,10 @@ class userModel extends model
         $users = $this->dao->select($fields)->from(TABLE_USER)
             ->where('1=1')
             ->beginIF(strpos($params, 'nodeleted') !== false || empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
+            ->beginIF(strpos($params, 'nofeedback') !== false)->andWhere('visions')->ne('lite')->fi()
             ->beginIF(!$showAll)->andWhere('type')->eq($type)->fi()
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
-            ->beginIF($this->config->vision && $this->app->rawModule !== 'kanban')->andWhere("FIND_IN_SET('{$this->config->vision}', visions)")->fi()
+            ->beginIF($filterVision && $this->config->vision && !in_array($this->app->rawModule, array('kanban', 'feedback')))->andWhere("FIND_IN_SET('{$this->config->vision}', visions)")->fi()
             ->orderBy($orderBy)
             ->beginIF($maxCount)->limit($maxCount)->fi()
             ->fetchAll($keyField);
@@ -1320,7 +1322,7 @@ class userModel extends model
 
         $groups = $this->dao->select('id, name, vision')->from(TABLE_GROUP)
             ->where('project')->eq(0)
-            ->andWhere('devopsSpace')->eq(0)
+            ->andWhere('`devopsSpace`')->eq(0)
             ->andWhere('role')->ne('projectAdmin')
             ->andWhere('vision')->in($visions)
             ->fetchAll('id');
@@ -2061,8 +2063,8 @@ class userModel extends model
     {
         $stakeholderGroups = array();
         $stmt = $this->dao->select('`objectID`,user')->from(TABLE_STAKEHOLDER)
-            ->where('objectType')->eq('program')
-            ->andWhere('objectID')->in(array_keys($programProduct))
+            ->where('`objectType`')->eq('program')
+            ->andWhere('`objectID`')->in(array_keys($programProduct))
             ->query();
 
         while($programStakeholder = $stmt->fetch())
@@ -2108,8 +2110,8 @@ class userModel extends model
 
         /* Get linked projects stakeholders. */
         $stmt = $this->dao->select('`objectID`,user')->from(TABLE_STAKEHOLDER)
-            ->where('objectType')->eq('project')
-            ->andWhere('objectID')->in(array_keys($projectProducts))
+            ->where('`objectType`')->eq('project')
+            ->andWhere('`objectID`')->in(array_keys($projectProducts))
             ->andWhere('deleted')->eq(0)
             ->query();
 
@@ -2278,7 +2280,7 @@ class userModel extends model
         $parentPMGroup          = $this->loadModel('program')->getParentPM($programIDList);             // Get all parent program and subprogram relation.
         $programAdmins          = $this->loadModel('group')->getAdmins($programIDList, 'programs');     // Get programs's admins.
 
-        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('objectType')->eq('program')->andWhere('objectID')->in($programIDList)->query();
+        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('`objectType`')->eq('program')->andWhere('`objectID`')->in($programIDList)->query();
         $whiteListGroup  = array();
         while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
@@ -2337,7 +2339,7 @@ class userModel extends model
         while($team = $stmt->fetch()) $teamsGroup[$team->root][$team->account] = $team->account;
 
         /* Get white list group. */
-        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('objectType')->eq('project')->andWhere('objectID')->in($projectIDList)->query();
+        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('`objectType`')->eq('project')->andWhere('`objectID`')->in($projectIDList)->query();
         $whiteListGroup  = array();
         while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
@@ -2399,7 +2401,7 @@ class userModel extends model
         list($teamsGroup, $stakeholderGroup) = $this->getProductMembers($products);
 
         /* Get white list group. */
-        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('objectType')->eq('product')->andWhere('objectID')->in($productIDList)->query();
+        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('`objectType`')->eq('product')->andWhere('`objectID`')->in($productIDList)->query();
         $whiteListGroup  = array();
         while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
@@ -2463,7 +2465,7 @@ class userModel extends model
         $teamsGroup = array();
         while($team = $stmt->fetch()) $teamsGroup[$team->root][$team->account] = $team->account;
 
-        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('objectType')->eq('sprint')->andWhere('objectID')->in($sprintIDList)->query();
+        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('`objectType`')->eq('sprint')->andWhere('`objectID`')->in($sprintIDList)->query();
         $whiteListGroup  = array();
         while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
@@ -2853,7 +2855,7 @@ class userModel extends model
             if(!$stakeholders) $stakeholders = isset($productStakeholders[$product->id]) ? $productStakeholders[$product->id] : array();
         }
 
-        if(!$whiteList) $whiteList = $this->dao->select('account')->from(TABLE_ACL)->where('objectType')->eq('product')->andWhere('objectID')->eq($product->id)->fetchPairs();
+        if(!$whiteList) $whiteList = $this->dao->select('account')->from(TABLE_ACL)->where('`objectType`')->eq('product')->andWhere('`objectID`')->eq($product->id)->fetchPairs();
         if(!$admins)    $admins    = $this->dao->select('account')->from(TABLE_PROJECTADMIN)->where("FIND_IN_SET({$product->id}, products)")->orWhere('products')->eq('all')->fetchPairs();
 
         $users += $teams        ? $teams        : array();
@@ -3097,6 +3099,8 @@ class userModel extends model
         if(!$user) return false;
 
         /* 获取指定用户的权限信息 */
+        if($this->config->edition == 'gitfox') $this->config->vision = 'gitfox';
+
         $userRights = $this->authorize($account);
         $rights     = $userRights['rights'];
         $isAdmin    = strpos($app->company->admins, ",{$account},") !== false;

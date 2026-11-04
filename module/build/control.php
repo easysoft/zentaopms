@@ -51,16 +51,12 @@ class build extends control
         $this->loadModel('project');
         $this->loadModel('file');
 
+        /* 从迭代进入创建时，无论当前处在哪个导航，都以迭代所属项目为准，避免 project 丢失。 */
+        $execution = $executionID ? $this->execution->getByID($executionID) : false;
+        if($execution) $projectID = (int)$execution->project;
+
         /* Set menu. */
-        if($this->app->tab == 'project')
-        {
-            $this->project->setMenu($projectID);
-        }
-        elseif(in_array($this->app->tab, array('execution', 'qa')))
-        {
-            $execution = $this->execution->getByID($executionID);
-            $projectID = $execution ? $execution->project : 0;
-        }
+        if($this->app->tab == 'project') $this->project->setMenu($projectID);
 
         if($this->app->tab == 'execution') $this->execution->setMenu($executionID);
 

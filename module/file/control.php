@@ -66,6 +66,8 @@ class file extends control
      */
     public function ajaxUpload(string $uid = '', string $objectType = '', int $objectID = 0, string $extra = '', string $field = 'imgFile', bool $api = false, string $gid = '')
     {
+        $_FILES = validater::filterFiles();
+
         /* extra 只允许空值或 editor，editor 由文档应用(docApp)编辑器图片上传使用，禁止客户端写入其他值。Only allow empty or editor extra. */
         if(!in_array($extra, array('', 'editor'))) $extra = '';
 
@@ -433,6 +435,8 @@ class file extends control
      */
     public function uploadImages(string $module, string $params, string $uid = '', string $locate = '')
     {
+        if(!$this->file->isValidUploadUID($uid)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorUploadUID)));
+
         if($locate)
         {
             $sessionName = $uid . 'ImagesFile';
@@ -449,16 +453,15 @@ class file extends control
             if(empty($file['extension']) or !in_array($file['extension'], $this->config->file->imageExtensions)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat)));
 
             $imageFile = $this->file->saveChunkedFile($file, $uid);
-            if(!empty($imageFile))
-            {
-                $sessionName = $uid . 'ImagesFile';
-                $imageFiles  = $this->session->$sessionName;
-                $fileName    = basename($imageFile['pathname']);
+            if(empty($imageFile)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileMove)));
 
-                if(empty($imageFiles)) $imageFiles = array();
-                $imageFiles[$fileName] = $imageFile;
-                $this->session->set($sessionName, $imageFiles);
-            }
+            $sessionName = $uid . 'ImagesFile';
+            $imageFiles  = $this->session->$sessionName;
+            $fileName    = basename($imageFile['pathname']);
+
+            if(empty($imageFiles)) $imageFiles = array();
+            $imageFiles[$fileName] = $imageFile;
+            $this->session->set($sessionName, $imageFiles);
             return print(json_encode(array('result' => 'success', 'file' => $file, 'message' => $this->lang->file->uploadSuccess)));
         }
 
@@ -542,10 +545,9 @@ class file extends control
         if(!$stream) helper::header('Content-type', $mime);
 
         $cacheMaxAge = 10 * 365 * 24 * 3600;
-        helper::header('Cache-Control', 'private');
+        helper::header('Cache-Control', "private, max-age=$cacheMaxAge");
         helper::header('Pragma', 'cache');
         helper::header('Expires', gmdate('D, d M Y H:i:s', time() + $cacheMaxAge) . ' GMT');
-        helper::header('Cache-Control', "max-age=$cacheMaxAge");
 
         if($stream)
         {
@@ -680,6 +682,7 @@ class file extends control
         if(empty($file)) return print($this->lang->file->fileNotFound);
 
         if(!empty($this->lang->{$this->app->tab}->menu)) $this->lang->{$this->app->tab}->menu = array();
+        if(!$this->canViewDownload($file, $mode)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->file->accessDenied, 'locate' => helper::createLink('my', 'index')), 'closeModal' => true));
 
         $officeTypes = 'doc|docx|xls|xlsx|ppt|pptx';
         $isOffice    = stripos($officeTypes, $file->extension) !== false;
@@ -688,13 +691,39 @@ class file extends control
         switch($mode)
         {
             case 'preview':
-                if($isOffice && $officeOn) $this->locate(helper::createLink('file', 'preview', "fileID={$file->id}&mouse=left"));
+                if($isOffice && $officeOn)
+                {
+                    $previewModule = $file->objectType == 'doc' ? 'doc' : 'file';
+                    $previewMethod = $file->objectType == 'doc' ? 'previewFile' : 'preview';
+                    $this->locate(helper::createLink($previewModule, $previewMethod, "fileID={$file->id}&mouse=left"));
+                }
                 return $this->preview($file->id, 'left');
             case 'download':
                 return $this->download($file->id);
             default:
                 return $this->readFileContent($file);
         }
+    }
+
+    /**
+     * Check view download privilege.
+     *
+     * @param  object $file
+     * @param  string $mode
+     * @access private
+     * @return bool
+     */
+    private function canViewDownload(object $file, string $mode): bool
+    {
+        if($file->objectType == 'doc')
+        {
+            if(!common::hasPriv('doc', 'view')) return false;
+            return $this->file->checkPriv($file);
+        }
+
+        if($mode == 'download') return common::hasPriv('file', 'download') && $this->file->checkPriv($file);
+
+        return common::hasPriv('file', 'preview') && $this->file->checkPriv($file);
     }
 
     /**
@@ -714,13 +743,33 @@ class file extends control
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
         $mime = $this->getMimeType($file);
-        helper::header('Content-type', $mime);
+        /* Keep source files as text even when their contents are recognized as HTML or XML. */
+        $textExtensions = array('txt', 'md', 'markdown', 'csv', 'html', 'htm', 'xml', 'css', 'js', 'ts', 'json', 'yaml', 'yml', 'sql');
+        if(in_array(strtolower($file->extension), $textExtensions)) $mime = 'text/plain';
+
+        /* Only known passive formats may be rendered in the application's origin. SVG is not a safe image type here. */
+        $previewMimes = array(
+            'text/plain', 'application/pdf',
+            'image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/x-ms-bmp', 'image/webp', 'image/avif', 'image/x-icon', 'image/vnd.microsoft.icon',
+            'audio/mpeg', 'audio/wav', 'audio/x-wav', 'audio/ogg', 'audio/webm', 'audio/mp4', 'audio/aac', 'audio/flac', 'audio/x-flac', 'application/ogg',
+            'video/mp4', 'video/mpeg', 'video/quicktime', 'video/x-msvideo', 'video/webm', 'video/ogg', 'video/x-flv', 'video/3gpp', 'video/3gpp2'
+        );
+        if(!in_array($mime, $previewMimes))
+        {
+            $mime     = 'application/octet-stream';
+            $fileName = $file->title;
+            if(substr(strtolower($fileName), -strlen($file->extension) - 1) != '.' . strtolower($file->extension)) $fileName .= '.' . $file->extension;
+            helper::header('Content-Disposition', "attachment; filename*=UTF-8''" . rawurlencode(str_replace(array("\r", "\n"), '', $fileName)));
+        }
+
+        helper::header('Content-type', $mime == 'text/plain' ? 'text/plain; charset=UTF-8' : $mime);
+        helper::header('X-Content-Type-Options', 'nosniff');
+        helper::header('Content-Security-Policy', "default-src 'none'; script-src 'none'; base-uri 'none'; form-action 'none'");
 
         $cacheMaxAge = 10 * 365 * 24 * 3600;
-        helper::header('Cache-Control', 'private');
+        helper::header('Cache-Control', "private, max-age=$cacheMaxAge");
         helper::header('Pragma', 'cache');
         helper::header('Expires', gmdate('D, d M Y H:i:s', time() + $cacheMaxAge) . ' GMT');
-        helper::header('Cache-Control', "max-age=$cacheMaxAge");
 
         $handle = fopen($file->realPath, "r");
         if($handle)

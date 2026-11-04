@@ -3295,8 +3295,20 @@ class executionModelTest extends baseTest
      */
     public function generateRowTest()
     {
+        $app = $this->instance->app;
+        $oldRawModule = $app->rawModule;
+        $oldRawMethod = $app->rawMethod;
+
+        $app->rawModule = 'execution';
+        $app->rawMethod = 'browse';
+
         $executions = $this->instance->getStatData();
-        return $this->instance->generateRow($executions, array(), array());
+        $rows       = $this->instance->generateRow($executions, array(), array());
+
+        $app->rawModule = $oldRawModule;
+        $app->rawMethod = $oldRawMethod;
+
+        return $rows;
     }
 
     /**

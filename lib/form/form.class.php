@@ -121,10 +121,12 @@ class form extends fixer
     public function appendExtendFormConfig(array $configObject, string $moduleName = '', string $methodName = '', int $objectID = 0, int $flowGroupID = 0): array
     {
         global $app, $config;
-        if($config->edition == 'open' ||  !empty($app->installing)) return $configObject;
+        if(in_array($config->edition, array('open', 'gitfox')) ||  !empty($app->installing)) return $configObject;
 
         $moduleName = $moduleName ? $moduleName : $app->rawModule;
         $methodName = $methodName ? $methodName : $app->rawMethod;
+
+        if($moduleName == 'projectstory') $moduleName = 'story';
 
         /* 项目发布和项目版本用自己的工作流。 */
         if($moduleName == 'projectrelease') $moduleName = 'release';
@@ -215,10 +217,19 @@ class form extends fixer
         {
             foreach($fieldList as $key => $field)
             {
-                if($field->buildin || !$field->show || !isset($layouts[$field->field])) continue;
+                if(!$field->show || !isset($layouts[$field->field])) continue;
+                if(in_array($field->field, zget($config->workflow->layoutFields, $flow->module, array()))) continue;
                 if($field->control == 'file') continue;
 
                 $required = !$field->readonly && $notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false;
+
+                /* 页面原有的内置字段已经在表单配置里，不用重复追加；页面原本没有的内置字段需要按工作流配置追加，否则提交的数据会被丢弃。*/
+                if($field->buildin && isset($configObject[$field->field]))
+                {
+                    $configObject[$field->field]['required'] = $required;
+                    continue;
+                }
+
                 if($field->control == 'multi-select' || $field->control == 'checkbox')
                 {
                     $configObject[$field->field] = array('required' => $required, 'type' => 'array', 'default' => array(''), 'filter' => 'join', 'label' => $field->name);
@@ -303,6 +314,7 @@ class form extends fixer
         if($app->rawModule == 'feedback'    && $app->rawMethod == 'touserstory') $module = 'requirement';
         if($app->rawModule == 'feedback'    && $app->rawMethod == 'toepic')      $module = 'epic';
 
+        if($app->rawModule == 'testtask' && strtolower($app->rawMethod) == 'runcase') $module = 'testcase';
         if($app->rawModule == 'projectrelease') $module = 'release';
 
         if($method == 'batchcreate') $method = 'create';

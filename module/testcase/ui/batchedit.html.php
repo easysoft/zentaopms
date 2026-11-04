@@ -17,6 +17,7 @@ jsVar('scenePairs',    $scenePairs);
 jsVar('productID',     $productID);
 jsVar('products',      $products);
 jsVar('cases',         $cases);
+jsVar('projectID',     $app->tab == 'project' && isset($projectID) ? $projectID : 0);
 
 if(isset($suhosinInfo))
 {
@@ -46,13 +47,6 @@ else
     }
 
     $items = array();
-    $items[] = array
-    (
-        'name'    => 'id',
-        'label'   => $lang->idAB,
-        'control' => 'hidden',
-        'hidden'  => true
-    );
     $items[] = array
     (
         'name'    => 'product',
@@ -209,7 +203,15 @@ else
         set::mode('edit'),
         set::data(array_values($cases)),
         set::items($items),
-        set::onRenderRow(jsRaw('handleRenderRow'))
+        set::onRenderRow(jsRaw('handleRenderRow')),
+        /* 隐藏的 id 列写成子节点，避免与序号列重名而被工作流扩展字段的去重逻辑丢弃。 */
+        formBatchItem
+        (
+            set::name('id'),
+            set::label($lang->idAB),
+            set::control('hidden'),
+            set::hidden(true)
+        )
     );
 }
 

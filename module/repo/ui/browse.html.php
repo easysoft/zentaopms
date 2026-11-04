@@ -112,7 +112,7 @@ $createItem = array('text' => $lang->repo->createAction, 'url' => createLink('re
 $config->repo->repoDtable->fieldList['revision']['link'] = inLink('revision', "repoID={$repo->id}&objectID={$objectID}&revision={revision}");
 $tableData = initTableData($infos, $config->repo->repoDtable->fieldList, $this->repo);
 
-$downloadWg = div
+$downloadWg = hasPriv('repo', 'download') ? div
 (
     set::id('modal-downloadCode'),
     set::title($lang->repo->downloadCode),
@@ -217,9 +217,7 @@ $downloadWg = div
         ) : null,
         empty($repo->mirror) ? btn(on::click()->call('loadSSHmanager'), setClass('ml-2'), set::icon('cog'), $lang->repo->sshManager) : null
     )
-);
-
-
+) : null;
 
 $mirrorStatus = zget($repo, 'status', 'active');
 
@@ -277,7 +275,7 @@ toolbar
             )
         )
     ) : null,
-    dropdown
+    hasPriv('repo', 'download') ? dropdown
     (
         set::staticMenu(true),
         btn
@@ -288,9 +286,9 @@ toolbar
         ),
         to::items
         (
-            array($downloadWg)
+           hasPriv('repo', 'download') ? array($downloadWg) : null
         )
-    ),
+    ) : null,
     //hasPriv('repo', 'create') && $app->tab == 'project' ? item
     //(
     //    set($createItem + array

@@ -3,6 +3,146 @@ declare(strict_types=1);
 class actionZen extends action
 {
     /**
+     * 检查是否可以获取对象的操作历史。
+     * Check whether the action history of an object can be viewed.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return bool
+     */
+    public function checkPrivForGetList(string $objectType, int $objectID): bool
+    {
+        $objectType = strtolower(trim($objectType));
+        $objectID   = (int)$objectID;
+        if(empty($objectType) || empty($objectID) || !preg_match('/^[a-z][a-z0-9_]*$/', $objectType)) return false;
+        if(!empty($this->app->user->admin)) return true;
+
+        if($objectType == 'user')
+        {
+            $user = $this->loadModel('user')->getById($objectID, 'id');
+            if(empty($user) || !empty($user->deleted)) return false;
+            return $user->account == $this->app->user->account;
+        }
+
+        if($objectType == 'doc' || $objectType == 'doctemplate')
+        {
+            $doc = $this->loadModel('doc')->getByID($objectID);
+            return !empty($doc) && empty($doc->deleted) && $this->doc->checkPrivDoc($doc);
+        }
+
+        if($objectType == 'doclib' || $objectType == 'docspace')
+        {
+            $lib = $this->loadModel('doc')->getLibByID($objectID);
+            return !empty($lib) && empty($lib->deleted) && $this->doc->checkPrivLib($lib);
+        }
+
+        if($objectType == 'product')
+        {
+            $product = $this->loadModel('product')->getByID($objectID);
+            return !empty($product) && empty($product->deleted) && $this->product->checkPriv($objectID);
+        }
+
+        if($objectType == 'program')
+        {
+            $program = $this->loadModel('program')->getByID($objectID);
+            return !empty($program) && empty($program->deleted) && $this->program->checkPriv($objectID);
+        }
+
+        if($objectType == 'project')
+        {
+            $project = $this->loadModel('project')->getByID($objectID);
+            return !empty($project) && empty($project->deleted) && $this->project->checkPriv($objectID);
+        }
+
+        if($objectType == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getByID($objectID);
+            return !empty($execution) && empty($execution->deleted) && $this->execution->checkPriv($objectID);
+        }
+
+        if($objectType == 'task')
+        {
+            $task = $this->loadModel('task')->getByID($objectID);
+            if(empty($task) || !empty($task->deleted)) return false;
+            if(!empty($task->execution) && !$this->loadModel('execution')->checkPriv((int)$task->execution)) return false;
+            return common::hasPriv('task', 'view', $task);
+        }
+
+        if($objectType == 'bug')
+        {
+            $bug = $this->loadModel('bug')->getByID($objectID);
+            if(empty($bug) || !empty($bug->deleted)) return false;
+            if(!empty($bug->product) && !$this->loadModel('product')->checkPriv((int)$bug->product)) return false;
+            return common::hasPriv('bug', 'view', $bug);
+        }
+
+        if(in_array($objectType, array('story', 'requirement', 'epic'), true))
+        {
+            $story = $this->loadModel('story')->getByID($objectID);
+            if(empty($story) || !empty($story->deleted)) return false;
+            if(!empty($story->product) && !$this->loadModel('product')->checkPriv((int)$story->product)) return false;
+            if(!empty($story->project) && !$this->loadModel('project')->checkPriv((int)$story->project)) return false;
+            return common::hasPriv($objectType, 'view', $story);
+        }
+
+        if($objectType == 'case' || $objectType == 'testcase')
+        {
+            $case = $this->dao->select('*')->from(TABLE_CASE)->where('id')->eq($objectID)->fetch();
+            if(empty($case) || !empty($case->deleted)) return false;
+            if(!empty($case->product) && !$this->loadModel('product')->checkPriv((int)$case->product)) return false;
+            return common::hasPriv('testcase', 'view', $case);
+        }
+
+        if($objectType == 'kanbancard')
+        {
+            $card = $this->dao->select('*')->from(TABLE_KANBANCARD)->where('id')->eq($objectID)->fetch();
+            if(empty($card) || !empty($card->deleted)) return false;
+            $kanban = $this->loadModel('kanban')->getByID((int)zget($card, 'kanban', 0));
+            return !empty($kanban) && common::hasPriv('kanban', 'view', $kanban) && common::hasPriv('kanban', 'viewCard', $card);
+        }
+
+        if($objectType == 'module')
+        {
+            $product = $this->loadModel('product')->getByID($objectID);
+            return !empty($product) && empty($product->deleted) && $this->product->checkPriv($objectID) && common::hasPriv('tree', 'viewHistory');
+        }
+
+        /*
+         * 通用对象兜底：未配置专用适配器时，依据历史页面的动作对象映射和对象表映射判断。
+         * Fallback for objects without a dedicated adapter, using the action object mapping
+         * maintained by history pages and the object table mapping.
+         *
+         * 页面动作映射中的类型直接放行，没有对象表时可正常返回历史或空列表；有对象表时，
+         * 已有历史可直接放行，否则校验目标记录存在且未删除。两张映射都未命中的类型拒绝。
+         * Types in the page action mapping are allowed directly. If no object table exists,
+         * history or an empty list can be returned normally. With an object table, existing
+         * history is sufficient; otherwise the target must exist and not be deleted. Types
+         * absent from both mappings are rejected.
+         */
+        $table = '';
+        foreach($this->config->objectTables as $type => $objectTable)
+        {
+            if(strtolower($type) != $objectType) continue;
+            $table = $objectTable;
+            break;
+        }
+        $knownObject = isset($this->lang->action->objectTypes[$objectType]) || isset($this->config->action->objectNameFields[$objectType]);
+        if(!$knownObject && empty($table)) return false;
+        if(empty($table)) return true;
+
+        $hasHistory = (bool)$this->dao->select('id')->from(TABLE_ACTION)
+            ->where('objectType')->eq($objectType)
+            ->andWhere('objectID')->eq($objectID)
+            ->limit(1)
+            ->fetch();
+        if($hasHistory) return true;
+
+        $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
+        return !empty($object) && empty($object->deleted);
+    }
+
+    /**
      * 获取回收站的导航栏。
      * Get the navigation bar of the trashes.
      *

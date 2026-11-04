@@ -242,6 +242,8 @@ class blockZen extends block
             if(empty($block->width))  $block->width  = array_key_first($sizeConfig);
             if(empty($block->height)) $block->height = zget($sizeConfig, $block->width, reset($sizeConfig));
 
+            if(($this->config->edition == 'gitfox' || $this->config->vision == 'gitfox') && $block->module == 'teamachievement') $block->height = zget($sizeConfig, $block->width, reset($sizeConfig));
+
             /* 设置区块距离左侧的宽度和距离顶部的高度。 */
             if($block->left === '') $block->left = $block->width == 1 ? 2 : 0;
             if($block->top  === 0)  $block->top  = -1; // -1 将会自动计算高度。
@@ -356,7 +358,8 @@ class blockZen extends block
 
         /* 调取接口获取数据。 */
         $startTime = microtime(true);
-        $result    = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http(sprintf($this->config->admin->dynamicAPIURL, $this->config->version))));
+        $apiURL    = $this->config->vision == 'gitfox' || $this->config->edition == 'gitfox' ? $this->config->admin->dynamicAPIURL : sprintf($this->config->admin->dynamicAPIURL, $this->config->version);
+        $result    = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http($apiURL)));
 
         /* 请求超过一定时间后判断为网络请求缓慢。 */
         if(microtime(true) - $startTime > $this->config->timeout / 1000) $this->session->set('isSlowNetwork', true);
@@ -421,6 +424,13 @@ class blockZen extends block
         if(!empty($dateUsed->day))   $usageDays .= $dateUsed->day   . ' ' . $this->lang->day   . ' ';
         if(!$usageDays) $usageDays = "0 {$this->lang->day}";
         if(strpos($this->app->getClientLang(), 'zh') !== false) $usageDays = str_replace(' ', '', $usageDays);
+
+        /* GitFox独立版本不存在任务相关功能，欢迎总览区域展示代码评审相关的统计数据。 */
+        if($this->config->edition == 'gitfox' || $this->config->vision == 'gitfox')
+        {
+            $this->printGitfoxWelcomeBlock($usageDays, $welcomeType);
+            return;
+        }
 
         $yesterday = strtotime("-1 day");
         $year  = date('Y', $yesterday);
@@ -543,6 +553,88 @@ class blockZen extends block
     }
 
     /**
+     * 打印 GitFox 版本的欢迎总览区块。
+     * Print the welcome block of the GitFox version.
+     *
+     * @param  string    $usageDays
+     * @param  string    $welcomeType
+     * @access protected
+     * @return void
+     */
+    protected function printGitfoxWelcomeBlock(string $usageDays, string $welcomeType): void
+    {
+        $statistics = $this->loadModel('my')->getMyReviewStatistics();
+        $reviewList = $this->my->getReviewingList('ppm');
+
+        $reviewByMe = array();
+        $reviewByMe['reviewByMe']      = array('number' => count($reviewList),            'href' => common::hasPriv('my', 'audit')    ? helper::createLink('my', 'audit', 'browseType=ppm') : '');
+        $reviewByMe['myCreatedReview'] = array('number' => $statistics['createdReviews'], 'href' => common::hasPriv('ppm', 'browse')  ? helper::createLink('ppm', 'browse') : '');
+        $reviewByMe['myIssue']         = array('number' => $statistics['pendingIssues'],  'href' => common::hasPriv('repo', 'review') ? helper::createLink('repo', 'review', 'repoID=0&browseType=all') . '#app=issue' : '');
+
+        $this->view->todaySummary   = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())];
+        $this->view->welcomeType    = $welcomeType;
+        $this->view->usageDays      = $usageDays;
+        $this->view->finishTask     = 0;
+        $this->view->fixBug         = 0;
+        $this->view->honorary       = '';
+        $this->view->assignToMe     = array();
+        $this->view->reviewByMe     = $reviewByMe;
+        $this->view->welcomeSummary = sprintf($this->lang->block->summary->welcome, $usageDays, '');
+    }
+
+    /**
+     * 打印待我评审区块。
+     * Print the review by me block.
+     *
+     * @param  object    $block
+     * @param  array     $params
+     * @access protected
+     * @return void
+     */
+    protected function printReviewByMeBlock(object $block, array $params = array()): void
+    {
+        $this->loadModel('ppm');
+
+        $browseType = isset($params['browseType']) ? $params['browseType'] : 'all';
+        if(!isset($this->lang->block->reviewbyme->featureBar[$browseType])) $browseType = 'all';
+
+        $count = isset($block->params->count) ? (int)$block->params->count : 20;
+        if($count <= 0) $count = 20;
+
+        $this->app->loadClass('pager', true);
+        $pager = pager::init(0, $count, 1);
+
+        $this->view->browseType = $browseType;
+        $this->view->reviews    = $this->ppm->getReviewListByAccount($browseType, $this->app->user->account, 'createdDate_desc', $pager);
+    }
+
+    /**
+     * 打印我创建的评审区块。
+     * Print the review created by me block.
+     *
+     * @param  object    $block
+     * @param  array     $params
+     * @access protected
+     * @return void
+     */
+    protected function printReviewCreatedByMeBlock(object $block, array $params = array()): void
+    {
+        $this->loadModel('ppm');
+
+        $browseType = isset($params['browseType']) ? $params['browseType'] : 'all';
+        if(!isset($this->lang->block->reviewcreatedbyme->featureBar[$browseType])) $browseType = 'all';
+
+        $count = isset($block->params->count) ? (int)$block->params->count : 20;
+        if($count <= 0) $count = 20;
+
+        $this->app->loadClass('pager', true);
+        $pager = pager::init(0, $count, 1);
+
+        $this->view->browseType = $browseType;
+        $this->view->reviews    = $this->ppm->getReviewListByCreator($browseType, $this->app->user->account, 'createdDate_desc', $pager);
+    }
+
+    /**
      * 打印任务列表区块。
      * Print task block.
      *
@@ -623,7 +715,7 @@ class blockZen extends block
                 ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
                 ->orderBy($block->params->orderBy)
                 ->beginIF($this->viewType != 'json')->limit((int)$block->params->count)->fi()
-                ->fetchAll();
+                ->fetchAll('id', false);
         }
         $this->view->cases = $cases;
     }
@@ -647,7 +739,7 @@ class blockZen extends block
         if(preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
         $this->view->projects  = $this->loadModel('project')->getPairsByProgram();
-        $this->view->testtasks = $this->dao->select("DISTINCT t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as projectName, CONCAT(t4.name, '/', t3.name) as executionBuild")->from(TABLE_TESTTASK)->alias('t1')
+        $this->view->testtasks = $this->dao->select("DISTINCT t1.*,t2.name as `productName`,t2.shadow,t3.name as `buildName`,t4.name as `projectName`, CONCAT(t4.name, '/', t3.name) as `executionBuild`")->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.execution=t4.id')
@@ -723,7 +815,7 @@ class blockZen extends block
 
         $type = $block->params->type;
         $this->app->loadLang('release');
-        $this->view->releases = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_RELEASE)->alias('t1')
+        $this->view->releases = $this->dao->select('t1.*,t2.name as `productName`')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.shadow')->eq(0)
@@ -832,7 +924,7 @@ class blockZen extends block
         $this->session->set('buildList', $this->createLink('my', 'index'), 'execution');
         $this->app->loadLang('build');
 
-        $builds = $this->dao->select('t1.*, t2.name AS productName, t2.shadow, t3.name AS projectName')->from(TABLE_BUILD)->alias('t1')
+        $builds = $this->dao->select('t1.*, t2.name AS `productName`, t2.shadow, t3.name AS `projectName`')->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project=t3.id')
             ->where('t1.deleted')->eq('0')
@@ -1066,7 +1158,7 @@ class blockZen extends block
             ->andWhere('execution.type')->eq('sprint')
             ->andWhere('relation.product')->in($productIdList)
             ->andWhere('execution.status')->eq('doing')
-            ->orderBy('realBegan_desc,id_desc')
+            ->orderBy('`realBegan`_desc,id_desc')
             ->fetchGroup('product');
 
         /* 根据产品列表获取发布日期距离现在最近且发布日期小于当前日期的发布。 */
@@ -1345,7 +1437,7 @@ class blockZen extends block
         $workhour  = $this->loadModel('project')->getWorkhour($projectID);
         if(empty($budget)) $budget = new stdclass();
 
-        $consumed = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->andWhere('isParent')->eq('0')->fetch('consumed');
+        $consumed = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->andWhere('`isParent`')->eq('0')->fetch('consumed');
 
         $this->view->people    = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('project')->eq($this->session->project)->fetch('people');
         $this->view->members   = count($members) ? count($members) - 1 : 0;
@@ -1369,7 +1461,7 @@ class blockZen extends block
         $this->app->loadLang('execution');
 
         $projectID     = $this->session->project;
-        $projectWeekly = $this->dao->select('*')->from(TABLE_WEEKLYREPORT)->where('project')->eq($projectID)->orderBy('weekStart_asc')->fetchAll('weekStart');
+        $projectWeekly = $this->dao->select('*')->from(TABLE_WEEKLYREPORT)->where('project')->eq($projectID)->orderBy('`weekStart`_asc')->fetchAll('weekStart');
 
         $progresses = $this->dao->select('t2.*')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCBLOCK)->alias('t2')->on('t1.id = t2.doc')
@@ -1625,7 +1717,7 @@ class blockZen extends block
         $this->app->loadLang('testtask');
 
         $this->view->project   = $this->loadModel('project')->getByID($this->session->project);
-        $this->view->testtasks = $this->dao->select("DISTINCT t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as executionName, CONCAT(t4.name, '/', t3.name) as executionBuild")->from(TABLE_TESTTASK)->alias('t1')
+        $this->view->testtasks = $this->dao->select("DISTINCT t1.*,t2.name as `productName`,t2.shadow,t3.name as `buildName`,t4.name as `executionName`, CONCAT(t4.name, '/', t3.name) as `executionBuild`")->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.execution=t4.id')
@@ -2154,6 +2246,7 @@ class blockZen extends block
         if((common::hasPriv('task',  'view') && $this->config->vision == 'rnd') || (common::hasPriv('researchtask', 'view') && $this->config->vision == 'or')) $hasViewPriv['task'] = true;
         if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                                   $hasViewPriv['story']       = true;
         if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite')         $hasViewPriv['requirement'] = true;
+        if($this->config->enableER && common::hasPriv('story', 'view') && $this->config->vision != 'lite')        $hasViewPriv['epic']        = true;
         if(common::hasPriv('bug',   'view')       && !in_array($this->config->vision, array('lite', 'or')))       $hasViewPriv['bug']         = true;
         if(common::hasPriv('testcase', 'view')    && !in_array($this->config->vision, array('lite', 'or')))       $hasViewPriv['testcase']    = true;
         if(common::hasPriv('testtask', 'cases')   && !in_array($this->config->vision, array('lite', 'or')))       $hasViewPriv['testtask']    = true;
@@ -2164,7 +2257,7 @@ class blockZen extends block
         if((common::hasPriv('feedback', 'view') || common::hasPriv('feedback', 'adminView')) && in_array($this->config->edition, array('max', 'biz', 'ipd')))                       $hasViewPriv['feedback']    = true;
         if(common::hasPriv('ticket', 'view')    && in_array($this->config->edition, array('max', 'biz', 'ipd')) && $this->config->vision != 'or') $hasViewPriv['ticket']   = true;
 
-        $objectList = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories', 'requirement' => 'requirements');
+        $objectList = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories', 'requirement' => 'requirements', 'epic' => 'epics');
         if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             if($hasRisk) $objectList += array('risk' => 'risks');
@@ -2183,7 +2276,7 @@ class blockZen extends block
             $table   = $objectType == 'requirement' ? TABLE_STORY : $this->config->objectTables[$objectType];
             $orderBy = $objectType == 'todo' ? '`date` desc' : 'id_desc';
             $objects = $this->dao->select('t1.*')->from($table)->alias('t1')
-                ->beginIF($objectType == 'story' || $objectType == 'requirement')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
+                ->beginIF(in_array($objectType, array('epic', 'requirement', 'story')))->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'bug')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'task')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')->fi()
                 ->beginIF(in_array($objectType, array('issue', 'risk', 'reviewissue')))->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')->fi()
@@ -2191,10 +2284,11 @@ class blockZen extends block
                 ->beginIF($objectType == 'demand')->leftJoin(TABLE_DEMANDPOOL)->alias('t2')->on('t1.pool = t2.id')->fi()
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.`assignedTo`')->eq($this->app->user->account)->fi()
+                ->beginIF($objectType == 'epic')->andWhere('t1.type')->eq('epic')->andWhere('t2.deleted')->eq('0')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
                 ->beginIF($objectType == 'story')->andWhere('t1.type')->eq('story')->andWhere('t2.deleted')->eq('0')->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF($objectType == 'requirement')->andWhere('t1.type')->eq('requirement')->andWhere('t2.deleted')->eq('0')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
                 ->beginIF($objectType == 'bug')->andWhere('t2.deleted')->eq('0')->fi()
-                ->beginIF($objectType == 'story' || $objectType == 'requirement')->andWhere('t2.deleted')->eq('0')->fi()
+                ->beginIF(in_array($objectType, array('epic', 'requirement', 'story')))->andWhere('t2.deleted')->eq('0')->fi()
                 ->beginIF($objectType == 'todo')->andWhere('t1.cycle')->eq(0)->andWhere('t1.status')->eq('wait')->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF($objectType != 'todo')->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($objectType == 'feedback')->andWhere('t1.status')->in('wait, noreview')->fi()
@@ -2534,7 +2628,7 @@ class blockZen extends block
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productIdList)
             ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
-            ->orderBy('product,status,editedDate_desc')
+            ->orderBy('product,status,`editedDate`_desc')
             ->query();
         $docGroup = array();
         while($doc = $stmt->fetch())
@@ -2928,6 +3022,10 @@ class blockZen extends block
         }
 
         $this->loadModel('metric');
+
+        /* GitFox独立版不存在任务、需求、Bug等功能，展示GitFox相关的度量数据。The GitFox edition displays the metrics of GitFox. */
+        if($this->config->edition == 'gitfox' || $this->config->vision == 'gitfox') return $this->printGitfoxTeamAchievementBlock($years, $months);
+
         $finishedTaskGroup = $this->metric->getResultByCodeWithArray('count_of_daily_finished_task', array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 完成任务数。
         $createdStoryGroup = $this->metric->getResultByCodeWithArray('count_of_daily_created_story', array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 创建需求数。
         $closedBugGroup    = $this->metric->getResultByCodeWithArray('count_of_daily_closed_bug',    array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 关闭Bug数。
@@ -3012,6 +3110,45 @@ class blockZen extends block
     }
 
     /**
+     * 打印GitFox独立版的团队成就区块数据。
+     * Print the team achievement block data of the GitFox edition.
+     *
+     * @param  array  $years
+     * @param  array  $months
+     * @access protected
+     * @return void
+     */
+    protected function printGitfoxTeamAchievementBlock(array $years, array $months)
+    {
+        $metrics = array
+        (
+            'commits'        => 'count_of_daily_gitfox_commits',
+            'createdReviews' => 'count_of_daily_gitfox_created_reviews',
+            'mergedReviews'  => 'count_of_daily_gitfox_merged_reviews',
+            'resolvedIssues' => 'count_of_daily_gitfox_resolved_issues'
+        );
+
+        foreach($metrics as $name => $code)
+        {
+            $group     = $this->metric->getResultByCodeWithArray($code, array('year' => join(',', $years), 'month' => join(',', $months)), 'cron');
+            $today     = 0;
+            $yesterday = 0;
+            if($group)
+            {
+                foreach($group as $data)
+                {
+                    $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
+                    if($currentDay == date('Y-m-d'))                      $today     = $data['value'];
+                    if($currentDay == date('Y-m-d', strtotime("-1 day"))) $yesterday = $data['value'];
+                }
+            }
+
+            $this->view->$name = $today;
+            $this->view->{'yesterday' . ucfirst($name)} = $yesterday;
+        }
+    }
+
+    /**
      * 打印单个产品统计区块。
      * Print product statistic block.
      *
@@ -3069,7 +3206,7 @@ class blockZen extends block
             ->andWhere('execution.type')->eq('sprint')
             ->andWhere('relation.product')->eq($productID)
             ->andWhere('execution.status')->eq('doing')
-            ->orderBy('realBegan_desc,id_desc')
+            ->orderBy('`realBegan`_desc,id_desc')
             ->fetch();
 
         /* 根据产品列表获取发布日期距离现在最近且发布日期小于当前日期的发布。 */
@@ -3239,7 +3376,7 @@ class blockZen extends block
         $productID = $this->session->product;
 
         $this->app->loadLang('release');
-        $this->view->releases = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_RELEASE)->alias('t1')
+        $this->view->releases = $this->dao->select('t1.*,t2.name as `productName`')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.product')->eq($productID)

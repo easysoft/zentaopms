@@ -253,6 +253,7 @@ $lang->user->error->mail           = 'entrez une adresse mail valide';
 $lang->user->error->reserved       = 'compte réservé. Vous ne pouvez pas l\'utiliser.';
 $lang->user->error->weakPassword   = 'la force du mot de passe est inférieure au paramètrage système.';
 $lang->user->error->dangerPassword = "Les mots de passe ne peuvent pas utiliser ces [%s] mots de passe faibles couramment utilisés.";
+$lang->user->errorEmptyAccount     = "Le nom d'utilisateur ne peut pas être vide, veuillez saisir avant d'enregistrer.";
 
 $lang->user->error->url              = "Invalid address. Please contact your ZenTao Admin.";
 $lang->user->error->verify           = "Wrong account or password.";

@@ -15,9 +15,24 @@ jsVar('docID', $docID);
 if(!isInModal()) include 'lefttree.html.php';
 
 $versionList = array();
+$versionMarkers = isset($versionMarkers) ? $versionMarkers : array();
+$deliverableLabel = isset($lang->project->deliverableAbbr) ? $lang->project->deliverableAbbr : '';
+$baselineLabel    = isset($lang->project->baseline) ? $lang->project->baseline : '';
 for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--)
 {
-    $versionList[] = array('text' => "#$itemVersion", 'url' => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"), 'key' => $itemVersion, 'active' => $itemVersion == $version);
+    $versionText = "#$itemVersion";
+    $versionHtml = $versionText;
+    if($deliverableLabel && !empty($versionMarkers[$itemVersion]['deliverable'])) $versionHtml .= " <span class='label rounded-full size-sm outline m-1 ml-2' title='{$deliverableLabel}'>{$deliverableLabel}</span>";
+    if($baselineLabel && !empty($versionMarkers[$itemVersion]['baseline']))       $versionHtml .= " <span class='label rounded-full size-sm outline m-1 ml-2' title='{$baselineLabel}'>{$baselineLabel}</span>";
+
+    $versionList[] = array
+    (
+        'text'    => $versionText,
+        'content' => array('html' => $versionHtml),
+        'url'     => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"),
+        'key'     => $itemVersion,
+        'active'  => $itemVersion == $version
+    );
 }
 
 $canCollect = hasPriv('doc', 'collect') && !$doc->deleted;

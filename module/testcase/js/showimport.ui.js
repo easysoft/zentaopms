@@ -13,7 +13,7 @@ window.renderRowCol = function($result, col, row)
     {
         $result.find('.picker-box').on('inited', function(e, info)
         {
-            const storyLink = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + row.branch + '&moduleID=' + row.module + '&storyID=' + row.story + '&onlyOption=false&status=active&limit=0&type=&hasParent=0');
+            const storyLink = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + (row.branch ? row.branch : 0) + '&moduleID=' + (row.module ? row.module : 0) + '&storyID=' + (row.story ? row.story : 0) + '&onlyOption=false&status=active&limit=0&type=&hasParent=0');
             $.getJSON(storyLink, function(stories)
             {
                 let $story = info[0];
@@ -54,26 +54,33 @@ function importNextPage()
 
 function changeModule(event)
 {
-    const $target      = $(event.target);
-    const moduleID     = $target.val();
-    const $currentRow  = $target.closest('tr');
+    const $target     = $(event.target);
+    const moduleID    = $target.val();
+    const $currentRow = $target.closest('tr');
+
     const $storyPicker = $currentRow.find('.form-batch-control[data-name="story"] .picker').zui('picker');
-    const oldStory     = $currentRow.find('input[name^=story]').val();
-    const storyLink    = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=active&limit=0&type=&hasParent=0');
-    $.getJSON(storyLink, function(stories)
+    if($storyPicker)
     {
-        $storyPicker.render({items: stories});
-        $storyPicker.$.setValue(oldStory);
-    });
+        const oldStory  = $currentRow.find('input[name^=story]').val();
+        const storyLink = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=active&limit=0&type=&hasParent=0');
+        $.getJSON(storyLink, function(stories)
+        {
+            $storyPicker.render({items: stories});
+            $storyPicker.$.setValue(oldStory);
+        });
+    }
 
     const $scenePicker = $currentRow.find('.form-batch-control[data-name="scene"] .picker').zui('picker');
-    const oldScene     = $currentRow.find('input[name^=scene]').val();
-    const sceneLink    = $.createLink('testcase', 'ajaxGetProductScenes', 'productID=' + productID + '&moduleID=' + moduleID + '&branch=' + branch);
-    $.getJSON(sceneLink, function(scenes)
+    if($scenePicker)
     {
-        $scenePicker.render({items: scenes});
-        $scenePicker.$.setValue(oldScene);
-    });
+        const oldScene  = $currentRow.find('input[name^=scene]').val();
+        const sceneLink = $.createLink('testcase', 'ajaxGetProductScenes', 'productID=' + productID + '&moduleID=' + moduleID + '&branch=' + branch);
+        $.getJSON(sceneLink, function(scenes)
+        {
+            $scenePicker.render({items: scenes});
+            $scenePicker.$.setValue(oldScene);
+        });
+    }
 }
 
 function changeBranch(event)

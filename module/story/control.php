@@ -152,13 +152,13 @@ class story extends control
      * @param  int    $planID
      * @param  int    $todoID
      * @param  string $extra for example feedbackID=0
-     * @param  string $storyType requirement|story
+     * @param  string $storyType story|requirement|epic
      * @access public
      * @return void
      */
     public function copy(int $productID = 0, string $branch = '', int $moduleID = 0, int $storyID = 0, int $objectID = 0, int $bugID = 0, int $planID = 0, int $todoID = 0, string $extra = '', string $storyType = 'story')
     {
-        echo $this->fetch('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=story");
+        echo $this->fetch('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=$storyType");
     }
 
     /**
@@ -362,7 +362,16 @@ class story extends control
             $objectChanges = array('type' => 'update', 'objectType' => $storyType, 'objectList' => array($storyID));
             $response      = array('result' => 'success', 'message' => $message, 'changes' => $objectChanges);
             $response['load'] = $this->storyZen->getAfterEditLocation($storyID, $storyType);
-            if($this->post->locate == 'change') $response['load'] = $this->createLink($this->app->rawModule, 'change', "storyID=$storyID&from=&storyType={$storyType}");
+            if($this->post->locate == 'change')
+            {
+                $response['load'] = $this->createLink($this->app->rawModule, 'change', "storyID=$storyID&from=&storyType={$storyType}");
+                if($this->post->inModal)
+                {
+                    $response['closeModal'] = false;
+                    $response['callback'] = "loadModal('{$response['load']}')";
+                    unset($response['load']);
+                }
+            }
             return $this->send($response);
         }
 
@@ -455,12 +464,13 @@ class story extends control
             $storyData = $this->storyZen->buildStoryForChange($storyID);
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $location = $this->storyZen->getAfterChangeLocation($storyID, $storyType);
+            $location    = $this->storyZen->getAfterChangeLocation($storyID, $storyType);
             $dataChanged = $this->storyZen->checkDataChanged($storyID, $storyData);
-            if(!$dataChanged) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $location));
-
-            $changes = $this->story->change($storyID, $storyData);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($dataChanged)
+            {
+                $this->story->change($storyID, $storyData);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
 
             $message = $this->executeHooks($storyID);
             if(empty($message)) $message = $this->lang->saveSuccess;
@@ -652,14 +662,21 @@ class story extends control
      * View a story, delay auth.
      *
      * @param  int    $storyID
+     * @param  int    $planID
      * @access public
      * @return void
      */
-    public function storyView(int $storyID)
+    public function storyView(int $storyID, int $planID = 0)
     {
         $story = $this->story->fetchByID($storyID);
         if(common::hasPriv($story->type, 'view'))
         {
+            if($planID > 0 && strpos(",{$story->plan},", ",$planID,") !== false)
+            {
+                $this->app->loadModuleConfig($story->type);
+                $copyParams = $this->config->{$story->type}->actionList['copy']['url']['params'];
+                $this->config->{$story->type}->actionList['copy']['url']['params'] = str_replace('planID=0', "planID=$planID", $copyParams);
+            }
             echo $this->fetch($story->type, 'view', "storyID=$storyID");
         }
         else
@@ -1685,7 +1702,7 @@ class story extends control
 
         $parent = $this->story->fetchByID($story->parent);
 
-        $this->dao->update(TABLE_STORY)->set('parentVersion')->eq($parent->version)->where('id')->eq($storyID)->exec();
+        $this->dao->update(TABLE_STORY)->set('`parentVersion`')->eq($parent->version)->where('id')->eq($storyID)->exec();
         return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
     }
 
@@ -1769,7 +1786,7 @@ class story extends control
 
         if($objectID)
         {
-            $stories = $this->story->getExecutionStoryPairs($objectID, $productID, $branch, $modules, $type, 'all', 'story', $hasParent);
+            $stories = $this->story->getExecutionStoryPairs($objectID, $productID, $branch, $modules, $type, 'unclosed', 'story', $hasParent);
         }
         else
         {
@@ -1897,7 +1914,7 @@ class story extends control
         if($this->app->tab != 'qa' && $this->app->tab != 'product' && $this->app->tab != 'my')
         {
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
-            if($projectID) $stories = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules, 'full', 'all', 'story', false);
+            if($projectID) $stories = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules, 'full', 'unclosed', 'story', false);
         }
         if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, 'active,reviewing', 'id_desc', 0, '', 'story', false);
 

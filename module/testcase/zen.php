@@ -611,7 +611,6 @@ class testcaseZen extends testcase
         $this->view->browseType  = $browseType;
         $this->view->param       = $param;
         $this->view->moduleID    = $moduleID;
-        $this->view->moduleName  = $moduleID ? $tree->name : $this->lang->tree->all;
         $this->view->suiteID     = $suiteID;
         $this->view->caseType    = $caseType;
         $this->view->users       = $this->user->getPairs('noletter');
@@ -683,7 +682,11 @@ class testcaseZen extends testcase
             ->remove('files,labels,scriptFile,scriptName')
             ->removeIF($formData->data->auto == 'auto' && !$formData->data->script, 'script')
             ->get();
-        if(!empty($oldCase->lib) && empty($oldCase->product) && !empty($_POST['lib'])) $case->lib = $this->post->lib;
+        if(!empty($oldCase->lib) && empty($oldCase->product) && !empty($_POST['lib']))
+        {
+            $case->lib     = $this->post->lib;
+            $case->product = $case->branch = 0;
+        }
 
         return !empty($this->config->testcase->editor->edit['id']) ? $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->edit['id'], $this->post->uid) : $case;
     }
@@ -1104,7 +1107,7 @@ class testcaseZen extends testcase
             $modules[$branchID] = array();
             foreach($moduleList as $moduleID => $moduleName)
             {
-                $modules[$branchID][$moduleID] = $moduleName;
+                $modules[$branchID][] = array('text' => $moduleName, 'value' => $moduleID);
             }
         }
 
@@ -1203,7 +1206,7 @@ class testcaseZen extends testcase
 
         if($from == 'testsuite')
         {
-            $suiteCaseVersion = $this->dao->select('caseVersion')->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->andWhere('`case`')->eq($case->id)->fetch('caseVersion');
+            $suiteCaseVersion = $this->dao->select('`caseVersion`')->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->andWhere('`case`')->eq($case->id)->fetch('caseVersion');
             $case->version    = $suiteCaseVersion ?: $case->version;
         }
 
@@ -1273,7 +1276,15 @@ class testcaseZen extends testcase
 
         /* 设置需求键对。 */
         /* Set story pairs. */
-        $storyPairs  = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch, array(), 'active,reviewing', 'id_desc', 50, '', 'story', false);
+        if($this->app->tab != 'qa' && $this->app->tab != 'product' && $this->app->tab != 'my')
+        {
+            $projectID  = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            $storyPairs = $this->loadModel('story')->getExecutionStoryPairs($projectID, $productID, $branch === 'all' ? 0 : $branch, array(), 'full', 'unclosed', 'story', false);
+        }
+        else
+        {
+            $storyPairs = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch, array(), 'active,reviewing', 'id_desc', 50, '', 'story', false);
+        }
         $story       = $storyID ? $this->story->fetchByID($storyID) : '';
         $storyPairs += $storyID ? array($storyID => $story->id . ':' . $story->title) : array();
         if($storyID && empty($moduleID)) $moduleID = $story->module;
@@ -1449,7 +1460,7 @@ class testcaseZen extends testcase
         /* Initialize variables. */
         $now               = helper::now();
         $account           = $this->app->user->account;
-        $cases             = form::batchData($this->config->testcase->form->showImport)->get();
+        $cases             = form::batchData($this->config->testcase->form->showimport)->get();
         $forceNotReview    = $this->testcase->forceNotReview();
         $insert            = $this->post->insert;
         $caseIdList        = !$insert ? array_keys($this->post->title) : array();
@@ -1622,7 +1633,6 @@ class testcaseZen extends testcase
             if(!isset($fromCases[$caseID])) continue;
 
             $case = clone $fromCases[$caseID];
-            $case->lib             = 0;
             $case->steps           = array();
             $case->expects         = array();
             $case->stepType        = array();
@@ -1631,7 +1641,7 @@ class testcaseZen extends testcase
             $case->fromCaseVersion = $case->version;
             if(isset($modules[$case->id]))  $case->module = $modules[$case->id];
             if(isset($branches[$case->id])) $case->branch = $branches[$case->id];
-            unset($case->id);
+            unset($case->id, $case->lastRunResult, $case->lastRunner, $case->lastRunDate);
 
             foreach($case as $key => $value)
             {
@@ -1676,8 +1686,8 @@ class testcaseZen extends testcase
         $fromSteps      = $this->testcase->fetchStepsByList($caseIdList);
         $fromFiles      = $this->testcase->getRelatedFiles($caseIdList);
         $libCases       = $this->dao->select('*')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('product')->eq(0)->andWhere('deleted')->eq('0')->fetchGroup('fromCaseID', 'id');
-        $maxOrder       = $this->dao->select('max(`order`) as maxOrder')->from(TABLE_CASE)->where('deleted')->eq(0)->fetch('maxOrder');
-        $maxModuleOrder = $this->dao->select('max(`order`) as maxOrder')->from(TABLE_MODULE)->where('deleted')->eq(0)->fetch('maxOrder');
+        $maxOrder       = $this->dao->select('max(`order`) as `maxOrder`')->from(TABLE_CASE)->where('deleted')->eq(0)->fetch('maxOrder');
+        $maxModuleOrder = $this->dao->select('max(`order`) as `maxOrder`')->from(TABLE_MODULE)->where('deleted')->eq(0)->fetch('maxOrder');
         foreach($fromCases as $caseID => $case)
         {
             /* 初始化用例。 */
@@ -1883,7 +1893,7 @@ class testcaseZen extends testcase
                 $field = trim($field);
                 if($field && empty($case->{$field}))
                 {
-                    $fieldName = $this->config->testcase->form->showImport[$field]['type'] != 'array' ? "{$field}[{$i}]" : "{$field}[{$i}][]";
+                    $fieldName = $this->config->testcase->form->showimport[$field]['type'] != 'array' ? "{$field}[{$i}]" : "{$field}[{$i}][]";
                     $caseErrors[$fieldName][] = sprintf($this->lang->error->notempty, $this->lang->testcase->{$field});
                 }
             }
@@ -2048,10 +2058,7 @@ class testcaseZen extends testcase
         {
             $case->openedBy   = $this->app->user->account;
             $case->openedDate = helper::now();
-            unset($case->id);
-            unset($case->version);
-            unset($case->lastEditedBy);
-            unset($case->lastEditedDate);
+            unset($case->id, $case->version, $case->lastEditedBy, $case->lastEditedDate);
         }
         else
         {
@@ -2064,9 +2071,7 @@ class testcaseZen extends testcase
             $case->id             = $libCaseID;
         }
 
-        unset($case->scriptedDate);
-        unset($case->reviewedDate);
-        unset($case->lastRunDate);
+        unset($case->scriptedDate, $case->reviewedDate, $case->lastRunDate, $case->lastRunResult, $case->lastRunner);
 
         foreach($case as $key => $value)
         {
@@ -3127,11 +3132,13 @@ class testcaseZen extends testcase
         $stepChanged = false;
         if($this->post->steps)
         {
-            $steps = array();
+            $postStepTypes = is_array($this->post->stepType) ? $this->post->stepType : array();
+            $postExpects   = is_array($this->post->expects) ? $this->post->expects : array();
+            $steps         = array();
             foreach($this->post->steps as $key => $desc)
             {
-                if(!$desc) continue;
-                $steps[] = array('desc' => trim($desc), 'type' => trim(zget($this->post->stepType, $key, 'step')), 'expect' => trim(zget($this->post->expects, $key, '')));
+                if(!is_scalar($desc) || trim((string)$desc) === '') continue;
+                $steps[] = array('desc' => trim((string)$desc), 'type' => trim((string)zget($postStepTypes, $key, 'step')), 'expect' => trim((string)zget($postExpects, $key, '')));
             }
 
             /* 如果步骤数量发生变化，步骤变更。*/

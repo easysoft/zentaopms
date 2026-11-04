@@ -1346,6 +1346,23 @@ class fileModelTest extends baseTest
     }
 
     /**
+     * Test unlinkFileIfUnreferenced method.
+     *
+     * @param  object $file
+     * @access public
+     * @return string
+     */
+    public function unlinkFileIfUnreferencedTest(object $file): string
+    {
+        set_error_handler(static function() { return true; });
+        $this->instance->unlinkFileIfUnreferenced($file);
+        restore_error_handler();
+        if(dao::isError()) return implode(',', dao::getError());
+
+        return file_exists($file->realPath) ? 'exists' : 'unlinked';
+    }
+
+    /**
      * Test saveFile method.
      *
      * @param  array  $file
@@ -1410,6 +1427,30 @@ class fileModelTest extends baseTest
             if($e instanceof EndResponseException) return 0;
             return 'error:' . get_class($e);
         }
+    }
+
+    /**
+     * Test isValidUploadUID method.
+     *
+     * @param  string $uid
+     * @access public
+     * @return bool
+     */
+    public function isValidUploadUIDTest(string $uid): bool
+    {
+        return $this->instance->isValidUploadUID($uid);
+    }
+
+    /**
+     * Test getUploadSavePath method.
+     *
+     * @param  string $uid
+     * @access public
+     * @return string
+     */
+    public function getUploadSavePathTest(string $uid): string
+    {
+        return $this->instance->getUploadSavePath($uid);
     }
 
 }

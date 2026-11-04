@@ -231,7 +231,7 @@ class metricTao extends metricModel
         if($scope == 'system') return false;
 
         $scopeObjects = $this->dao->select($scope)->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
+            ->where('`metricCode`')->eq($code)
             ->beginIF(!empty($extra))->andWhere($scope)->in($extra)->fi();
 
         $scopeObjects = $this->processDAOWithDate($scopeObjects, $query, $dateType)->fetchPairs();
@@ -351,7 +351,7 @@ class metricTao extends metricModel
 
         $stmt = $this->dao->select($dataFieldStr)
             ->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
+            ->where('`metricCode`')->eq($code)
             ->beginIF($scopeKey != 'system' && !empty($objectList))->andWhere($scopeKey)->in($objectList)->fi()
             ->beginIF(!empty($scopeValue))->andWhere($scopeKey)->in($scopeValue)->fi();
 
@@ -377,7 +377,7 @@ class metricTao extends metricModel
         $dataFieldStr = implode(',', $wrapFields);
 
         $stmt = $this->dao->select($dataFieldStr)->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code);
+            ->where('`metricCode`')->eq($code);
 
         if(!empty($options))
         {
@@ -429,7 +429,7 @@ class metricTao extends metricModel
 
         $stmt = $this->dao->select($dataFieldStr)
             ->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
+            ->where('`metricCode`')->eq($code)
             ->beginIF($scopeKey != 'system')->andWhere($scopeKey)->in($objectList)->fi()
             ->beginIF(!empty($scopeValue))->andWhere($scopeKey)->in($scopeValue)->fi();
 
@@ -456,7 +456,7 @@ class metricTao extends metricModel
         $nextDate = empty($date) ? '' : date('Y-m-d', strtotime($date) + 86400);
         $records = $this->dao->select('id')->from(TABLE_METRICLIB)
             ->where('1 = 1')
-            ->beginIF($code != 'all')->andWhere('metricCode')->eq($code)->fi()
+            ->beginIF($code != 'all')->andWhere('`metricCode`')->eq($code)->fi()
             ->beginIF(!empty($date))
             ->andWhere('date')->ge($date)
             ->andWhere('date')->lt($nextDate)
@@ -479,7 +479,7 @@ class metricTao extends metricModel
     {
         $this->dao->update(TABLE_METRICLIB)
             ->set('deleted')->eq($value)
-            ->where('metricCode')->eq($code)
+            ->where('`metricCode`')->eq($code)
             ->exec();
     }
 
@@ -526,7 +526,7 @@ class metricTao extends metricModel
     protected function executeDelete($code)
     {
         $this->dao->delete()->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
+            ->where('`metricCode`')->eq($code)
             ->andWhere('deleted', true)->eq('1')
             ->orWhere('value')->eq(0)->markRight(1)
             ->exec();

@@ -16,7 +16,9 @@ featureBar
 
 $config->repo->dtable->system->fieldList['latestRelease']['map'] = $releases;
 $config->repo->dtable->system->fieldList['product']['map']       = $products;
-if(hasPriv('system', 'view')) $config->repo->dtable->system->fieldList['name']['link'] = createLink('system', 'view', "id={id}&spaceID={$spaceID}") . '#app=devops';
+$isGitfox  = $config->vision == 'gitfox' || $config->edition == 'gitfox';
+$systemApp = $isGitfox ? ($inSpace ? 'space' : 'system') : 'devops';
+if(hasPriv('system', 'view')) $config->repo->dtable->system->fieldList['name']['link'] = createLink('system', 'view', "id={id}&spaceID={$spaceID}") . '#app=' . $systemApp;
 $tableData = initTableData($appList, $config->repo->dtable->system->fieldList);
 
 dtable

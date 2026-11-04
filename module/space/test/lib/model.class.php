@@ -317,12 +317,13 @@ class spaceModelTest extends baseTest
     /**
      * Test getMemberList method.
      *
+     * @param  bool $includeRepoUsers
      * @access public
      * @return array
      */
-    public function getMemberListTest(): array
+    public function getMemberListTest(bool $includeRepoUsers = true): array
     {
-        $members = $this->instance->getMemberList();
+        $members = $this->instance->getMemberList($includeRepoUsers);
 
         if(dao::isError()) return dao::getError();
         return $members;
@@ -331,12 +332,13 @@ class spaceModelTest extends baseTest
     /**
      * Test getMemberList method count.
      *
+     * @param  bool $includeRepoUsers
      * @access public
      * @return int|array
      */
-    public function getMemberListCountTest(): int|array
+    public function getMemberListCountTest(bool $includeRepoUsers = true): int|array
     {
-        $members = $this->instance->getMemberList();
+        $members = $this->instance->getMemberList($includeRepoUsers);
 
         if(dao::isError()) return dao::getError();
         return count($members);
@@ -345,13 +347,14 @@ class spaceModelTest extends baseTest
     /**
      * Test getMemberList method by space ID.
      *
-     * @param  int $spaceID
+     * @param  int  $spaceID
+     * @param  bool $includeRepoUsers
      * @access public
      * @return array
      */
-    public function getMemberListBySpaceTest(int $spaceID): array
+    public function getMemberListBySpaceTest(int $spaceID, bool $includeRepoUsers = true): array
     {
-        $members = $this->instance->getMemberList();
+        $members = $this->instance->getMemberList($includeRepoUsers);
 
         if(dao::isError()) return dao::getError();
         return zget($members, $spaceID, array());
@@ -360,13 +363,14 @@ class spaceModelTest extends baseTest
     /**
      * Test getMemberList method count by space ID.
      *
-     * @param  int $spaceID
+     * @param  int  $spaceID
+     * @param  bool $includeRepoUsers
      * @access public
      * @return int|array
      */
-    public function getMemberListBySpaceCountTest(int $spaceID): int|array
+    public function getMemberListBySpaceCountTest(int $spaceID, bool $includeRepoUsers = true): int|array
     {
-        $members = $this->instance->getMemberList();
+        $members = $this->instance->getMemberList($includeRepoUsers);
 
         if(dao::isError()) return dao::getError();
         return count(zget($members, $spaceID, array()));
@@ -377,12 +381,13 @@ class spaceModelTest extends baseTest
      *
      * @param  int    $spaceID
      * @param  string $account
+     * @param  bool   $includeRepoUsers
      * @access public
      * @return object|bool|array
      */
-    public function getMemberListByAccountTest(int $spaceID, string $account): object|bool|array
+    public function getMemberListByAccountTest(int $spaceID, string $account, bool $includeRepoUsers = true): object|bool|array
     {
-        $members = $this->instance->getMemberList();
+        $members = $this->instance->getMemberList($includeRepoUsers);
 
         if(dao::isError()) return dao::getError();
         return zget(zget($members, $spaceID, array()), $account, false);
@@ -1014,6 +1019,47 @@ class spaceModelTest extends baseTest
     }
 
     /**
+     * Test setMenu method of the gitfox standalone version.
+     * 返回 "defined:{0|1}|group:{0|1}|overview:{0|1}|member:{0|1}"，1 表示菜单保留，0 表示菜单隐藏。
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return string
+     */
+    public function setMenuGitfoxPrivMenuTest(int $spaceID): string
+    {
+        global $app, $lang;
+
+        $oldVision  = $app->config->vision;
+        $oldEdition = $app->config->edition;
+        $oldTab     = $app->tab;
+        $oldMenu    = isset($lang->space->menu) ? $lang->space->menu : null;
+
+        $app->config->vision  = 'gitfox';
+        $app->config->edition = 'gitfox';
+        $app->tab             = 'space';
+
+        include dirname(__FILE__, 5) . '/extension/gitfox/common/ext/lang/zh-cn/gitfoxcommon.php';
+
+        $defined = isset($lang->space->menu->settings['subMenu']->group) ? 1 : 0;
+
+        $this->instance->setMenu($spaceID);
+
+        $subMenu  = isset($lang->space->menu->settings['subMenu']) ? $lang->space->menu->settings['subMenu'] : new stdclass();
+        $group    = isset($subMenu->group)    ? 1 : 0;
+        $overview = isset($subMenu->overview) ? 1 : 0;
+        $member   = isset($subMenu->member)   ? 1 : 0;
+
+        $app->config->vision  = $oldVision;
+        $app->config->edition = $oldEdition;
+        $app->tab             = $oldTab;
+        if($oldMenu === null) unset($lang->space->menu);
+        else                  $lang->space->menu = $oldMenu;
+
+        return "defined:{$defined}|group:{$group}|overview:{$overview}|member:{$member}";
+    }
+
+    /**
      * Test getPrivs method.
      *
      * @access public
@@ -1055,6 +1101,29 @@ class spaceModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
         return $privs;
+    }
+
+    /**
+     * 测试获取空间导航分组。
+     * Test getSpaceNavGroups method.
+     *
+     * @param  string $vision
+     * @access public
+     * @return string|array
+     */
+    public function getSpaceNavGroupsTest(string $vision = '')
+    {
+        global $config;
+
+        $oldVision = $config->vision;
+        $config->vision = $vision;
+
+        $groups = $this->invokeArgs('getSpaceNavGroups');
+
+        $config->vision = $oldVision;
+
+        if(dao::isError()) return dao::getError();
+        return implode(',', $groups);
     }
 
     /**

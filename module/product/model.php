@@ -56,6 +56,23 @@ class productModel extends model
     }
 
     /**
+     * 获取产品邮件通知的收件人。
+     * Get toList and ccList.
+     *
+     * @param  object $product
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList(object $product): bool|array
+    {
+        $toList = trim($product->createdBy . ',' . $product->PO, ',');
+        $toList = implode(',', array_unique(array_filter(explode(',', $toList))));
+        if(empty($toList)) return false;
+
+        return array($toList, '');
+    }
+
+    /**
      * 根据权限控制范围获取产品。
      * Get products by acl.
      *
@@ -522,7 +539,7 @@ class productModel extends model
         $changes = common::createChanges($oldProduct, $product);
         if(!empty($product->comment) or !empty($changes))
         {
-            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', (string)$product->comment);
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', zget($product, 'comment', ''));
             $this->action->logHistory($actionID, $changes);
 
             if(!empty($product->comment))
@@ -559,7 +576,7 @@ class productModel extends model
         $changes = common::createChanges($oldProduct, $product);
         if(!empty($product->comment) or !empty($changes))
         {
-            $actionID = $this->loadModel('action')->create('product', $productID, 'Activated', (string)$product->comment);
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Activated', zget($product, 'comment', ''));
             $this->action->logHistory($actionID, $changes);
 
             if(!empty($product->comment))
@@ -1012,7 +1029,7 @@ class productModel extends model
         $hasWaterfallplus = in_array('waterfallplus', helper::arrayColumn($projects, 'model'));
         $waterfallOrderBy = ($hasWaterfall || $hasWaterfallplus) ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
 
-        $executions = $this->dao->select('t2.id,t2.name,t2.project,t2.grade,t2.path,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executions = $this->dao->select('t2.id,t2.name,t2.project,t2.grade,t2.path,t2.parent,t2.attribute,t2.multiple,t3.name as `projectName`')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
             ->where('t1.product')->eq($productID)
@@ -1733,7 +1750,7 @@ class productModel extends model
         $finishClosedStory = $this->dao->select('product, count(1) as finish')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('status')->eq('closed')
-            ->andWhere('closedReason')->eq('done')
+            ->andWhere('`closedReason`')->eq('done')
             ->groupBy('product')
             ->fetchPairs('product', 'finish');
         $launchedStory = $this->dao->select('product, count(1) as launched')->from(TABLE_STORY)
@@ -2187,6 +2204,7 @@ class productModel extends model
         /* 2. Refresh stats to db. */
         foreach($stats as $productID=> $product)
         {
+            if(empty($productID)) continue;
             $this->dao->update(TABLE_PRODUCT)->data($product)->where('id')->eq($productID)->exec();
         }
 
@@ -2303,7 +2321,7 @@ class productModel extends model
      */
     public function createSystem(int $productID, string $productName)
     {
-        if($this->config->vision != 'rnd') return;
+        if(!in_array($this->config->vision, array('rnd', 'gitfox'))) return;
 
         $hasSameName = $this->dao->select('name')->from(TABLE_SYSTEM)->where('name')->eq($productName)->fetch('name');
 

@@ -433,7 +433,16 @@ class programZen extends program
         if($this->config->edition != 'open')
         {
             $flow = $this->loadModel('workflow')->getByModule($moduleName);
-            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=$programID&moduleName=$moduleName");
+            if(!empty($flow) && $flow->buildin == '0')
+            {
+                /* 工作流可能是一级导航，也可能是项目、执行下的二级导航，跳转时需要带上所属应用的代号，否则前端无法识别要打开的应用，会回到地盘。 */
+                $flowApp = $flow->app;
+                if(in_array($flowApp, array('scrum', 'waterfall', 'kanbanProject'))) $flowApp = 'project';
+
+                $link = helper::createLink('flow', 'ajaxSwitchBelong', "objectID=$programID&moduleName=$moduleName");
+                if(!empty($flowApp)) $link .= '#app=' . $flowApp;
+                return $link;
+            }
         }
         if($moduleName == 'project')
         {

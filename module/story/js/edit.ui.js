@@ -213,6 +213,8 @@ window.locateChange = function(obj)
     const $form    = $(obj).closest('form');
     const formData = new FormData($form[0]);
     let   changed  = false;
+    const $modal   = $this.closest('.modal');
+    const inModal  = $modal.length > 0;
 
     $this.parent().find('.toolbar-item').attr('disabled', 'disabled');
     for(let entry of formData.entries())
@@ -228,7 +230,7 @@ window.locateChange = function(obj)
             field   = key.replace('[]', '');
         }
         if(field == 'comment' && value != '') changed = true;
-        if(storyData[field] == undefined || field == 'title' || field == 'reviewer') continue;
+        if(storyData[field] == undefined || field == 'title' || field == 'reviewer' || field == 'files') continue;
 
         if(!isArray)
         {
@@ -242,17 +244,35 @@ window.locateChange = function(obj)
         if(changed) break;
     }
 
-    if(!changed) return loadPage($.createLink(config.rawModule, 'change', 'storyID=' + storyData.id));
+    const changeUrl = $.createLink(storyType, 'change', 'storyID=' + storyData.id);
+    if(!changed) return inModal ? loadModal(changeUrl) : loadPage(changeUrl);
 
     zui.Modal.confirm(langConfirmChange).then((result) =>
     {
-        if(!result) return loadPage($.createLink(config.rawModule, 'change', 'storyID=' + storyData.id));
+        if(!result) return inModal ? loadModal(changeUrl) : loadPage(changeUrl);
 
         formData.append('locate', 'change');
+        if(inModal) formData.append('inModal', 1);
         $.ajaxSubmit({url: $form.attr('action'), data: formData, onFail: (error) =>
         {
             if(error?.message) showValidateMessage(error.message);
             $this.parent().find('.toolbar-item').removeAttr('disabled');
         }});
     });
+}
+
+window.toggleFeedback = function(event)
+{
+    if(storyType == 'requirement') return false;
+
+    const $this  = $(event.target);
+    const source = $this.val();
+    if(!source) return;
+    $('.feedbackBox').toggleClass('hidden', !feedbackSource.includes(source));
+}
+
+window.setStory = function(event)
+{
+    var reason = $(event.target).val();
+    $('[name=duplicateStory]').closest('.form-row').toggleClass('hidden', reason != 'duplicate');
 }

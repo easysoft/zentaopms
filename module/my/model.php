@@ -193,9 +193,9 @@ class myModel extends model
         }
         else
         {
-            $overview->myTaskTotal  = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
-            $overview->myStoryTotal = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
-            $overview->myBugTotal   = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
+            $overview->myTaskTotal  = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_TASK)->where('`assignedTo`')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
+            $overview->myStoryTotal = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_STORY)->where('`assignedTo`')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
+            $overview->myBugTotal   = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_BUG)->where('`assignedTo`')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
         }
 
         return $overview;
@@ -214,16 +214,16 @@ class myModel extends model
         $inTeam  = $this->dao->select('root')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('account')->eq($account)->fetchPairs('root', 'root');
 
         $contribute = new stdclass();
-        $contribute->myTaskTotal          = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($account)->andWhere('deleted')->eq(0)->fetch('count');
-        $contribute->myStoryTotal         = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($account)->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
-        $contribute->myBugTotal           = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($account)->andWhere('deleted')->eq(0)->fetch('count');
-        $contribute->docCreatedTotal      = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_DOC)->where('addedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $contribute->myTaskTotal          = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_TASK)->where('`assignedTo`')->eq($account)->andWhere('deleted')->eq(0)->fetch('count');
+        $contribute->myStoryTotal         = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_STORY)->where('`assignedTo`')->eq($account)->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
+        $contribute->myBugTotal           = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_BUG)->where('`assignedTo`')->eq($account)->andWhere('deleted')->eq(0)->fetch('count');
+        $contribute->docCreatedTotal      = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_DOC)->where('`addedBy`')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
         $contribute->ownerProductTotal    = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_PRODUCT)->where('PO')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
         $contribute->involvedProjectTotal = (int)$this->dao->select('COUNT(DISTINCT id) AS count')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('project')
             ->andWhere('id', true)->in($inTeam)
-            ->orWhere('openedBy')->eq($account)
+            ->orWhere('`openedBy`')->eq($account)
             ->orWhere('PO')->eq($account)
             ->orWhere('PM')->eq($account)
             ->orWhere('QD')->eq($account)
@@ -267,7 +267,7 @@ class myModel extends model
         $module       = in_array($objectType, array('epic', 'requirement')) ? 'story' : $objectType;
         $objectIdList = $this->dao->select('`objectID`')->from(TABLE_ACTION)
             ->where('actor')->eq($account)
-            ->andWhere('objectType')->eq($module)
+            ->andWhere('`objectType`')->eq($module)
             ->andWhere('action')->eq('assigned')
             ->fetchPairs('objectID');
         if(empty($objectIdList)) return array();
@@ -340,7 +340,7 @@ class myModel extends model
 
         $orderBy = str_replace(array_keys($tableFields), array_values($tableFields), $orderBy);
 
-        $objectList = $this->dao->select("t1.*, t3.id as project, t2.name as executionName, t2.multiple as executionMultiple, t3.name as projectName, t2.type as executionType, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_TASK)->alias('t1')
+        $objectList = $this->dao->select("t1.*, t3.id as project, t2.name as `executionName`, t2.multiple as `executionMultiple`, t3.name as `projectName`, t2.type as `executionType`, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as `priOrder`")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id")
             ->where('t1.deleted')->eq(0)
@@ -437,7 +437,7 @@ class myModel extends model
         }
         else
         {
-            $cases = $this->dao->select('t1.*,t3.name AS taskName')->from(TABLE_CASE)->alias('t1')
+            $cases = $this->dao->select('t1.*,t3.name AS `taskName`')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
                 ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t2.task = t3.id')
                 ->where($myTestcaseQuery)
@@ -729,9 +729,9 @@ class myModel extends model
             $risks = $this->dao->select('*')->from(TABLE_RISK)
                 ->where($riskQuery)
                 ->andWhere('deleted')->eq('0')
-                ->andWhere('createdBy',1)->eq($this->app->user->account)
+                ->andWhere('`createdBy`',1)->eq($this->app->user->account)
                 ->orWhere('id')->in(array_keys($assignedByMe))
-                ->orWhere('closedBy')->eq($this->app->user->account)
+                ->orWhere('`closedBy`')->eq($this->app->user->account)
                 ->markRight(1)
                 ->orderBy($orderBy)
                 ->page($pager)
@@ -742,7 +742,7 @@ class myModel extends model
             $risks = $this->dao->select('*')->from(TABLE_RISK)
                 ->where($riskQuery)
                 ->andWhere('deleted')->eq('0')
-                ->andWhere('assignedTo')->eq($this->app->user->account)
+                ->andWhere('`assignedTo`')->eq($this->app->user->account)
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
@@ -1187,6 +1187,22 @@ class myModel extends model
     }
 
     /**
+     * 获取审批对象的提交人。
+     * Get opened by for audit objects.
+     *
+     * @param  object $object
+     * @access protected
+     * @return string
+     */
+    protected function getAuditObjectOpenedBy(object $object): string
+    {
+        if(isset($object->openedBy) && $object->openedBy !== '')  return $object->openedBy;
+        if(isset($object->createdBy) && $object->createdBy !== '') return $object->createdBy;
+        if(isset($object->account) && $object->account !== '')    return $object->account;
+        return '';
+    }
+
+    /**
      * 获取待评审的需求池需求。
      * Get reviewing demands.
      *
@@ -1230,16 +1246,20 @@ class myModel extends model
             $data->status  = $demand->status;
             $data->product = $demand->product;
             $data->project = 0;
+            $data->openedBy = $this->getAuditObjectOpenedBy($demand);
 
             $reviewList[$id] = $data;
         }
 
-        if($checkExists) return !empty($reviewList);
+        if($checkExists)
+        {
+            return !empty($reviewList);
+        }
 
-         $actions = $this->dao->select('`objectID`, `date`')->from(TABLE_ACTION)->where('objectType')->eq('demand')->andWhere('objectID')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
-         foreach($actions as $demandID => $date) $reviewList[$demandID]->time = $date;
+        $actions = $this->dao->select('`objectID`, `date`')->from(TABLE_ACTION)->where('`objectType`')->eq('demand')->andWhere('`objectID`')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
+        foreach($actions as $demandID => $date) $reviewList[$demandID]->time = $date;
 
-         return array_values($reviewList);
+        return array_values($reviewList);
     }
 
     /**
@@ -1268,7 +1288,7 @@ class myModel extends model
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll('id');
 
-        if($this->config->edition != 'open')
+        if(!in_array($this->config->edition, array('open', 'gitfox')))
         {
             $reviewAction = $this->loadModel('workflowaction')->getByModuleAndAction($type, 'review');
             if($reviewAction)
@@ -1298,13 +1318,14 @@ class myModel extends model
             $data->product   = $story->product;
             $data->project   = 0;
             $data->parent    = $story->parent;
+            $data->openedBy  = $this->getAuditObjectOpenedBy($story);
 
             $reviewList[$storyID] = $data;
         }
 
         if($checkExists) return !empty($reviewList);
 
-        $actions = $this->dao->select('`objectID`,`date`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('objectID')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs();
+        $actions = $this->dao->select('`objectID`,`date`')->from(TABLE_ACTION)->where('`objectType`')->eq('story')->andWhere('`objectID`')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs();
         foreach($actions as $storyID => $date) $reviewList[$storyID]->time = $date;
 
         return array_values($reviewList);
@@ -1329,7 +1350,7 @@ class myModel extends model
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll('id');
 
-        if($this->config->edition != 'open')
+        if(!in_array($this->config->edition, array('open', 'gitfox')))
         {
             $reviewAction = $this->loadModel('workflowaction')->getByModuleAndAction('testcase', 'review');
 
@@ -1358,6 +1379,7 @@ class myModel extends model
             $data->status  = $case->status;
             $data->product = isset($case->product) ? $case->product : 0;
             $data->project = isset($case->project) ? $case->project : 0;
+            $data->openedBy = $this->getAuditObjectOpenedBy($case);
             $reviewList[] = $data;
         }
 
@@ -1379,7 +1401,7 @@ class myModel extends model
         $server = $this->loadModel('gitfox')->getServer();
         if(!$server) return array();
 
-        $ppms = $this->dao->select("t1.`id`, t1.`title`, IF(t1.`flow`='1', 'pullreq', 'ppm') AS type, t1.`createdDate` AS time, 0 AS product, 0 AS project, t3.definition, t1.`reviewStatus`")->from(TABLE_PPM)->alias('t1')
+        $ppms = $this->dao->select("t1.`id`, t1.`title`, IF(t1.`flow`='1', 'pullreq', 'ppm') AS type, t1.`createdDate` AS time, 0 AS product, 0 AS project, t1.`createdBy` AS `openedBy`, t3.definition, t1.`reviewStatus`")->from(TABLE_PPM)->alias('t1')
             ->leftJoin(TABLE_PPMREVIEWERS)->alias('t2')->on('t1.id = t2.`requestID`')
             ->leftJoin(TABLE_REVIEWFLOW)->alias('t3')->on('t3.repo = t1.`repoID`')
             ->where('t1.status')->ne('closed')
@@ -1404,6 +1426,36 @@ class myModel extends model
             if(empty($ppm->status)) $ppm->status = 'pending';
         }
         return $ppms;
+    }
+
+    /**
+     * 获取欢迎总览区块中评审相关的统计数据。
+     * Get the review statistics for the welcome block.
+     *
+     * @access public
+     * @return array
+     */
+    public function getMyReviewStatistics(): array
+    {
+        $account = $this->app->user->account;
+
+        /* 我发起的评审：当前用户发起且未关闭的代码评审数量。 */
+        $createdReviews = $this->dao->select('COUNT(1) AS count')->from(TABLE_PPM)
+            ->where('createdBy')->eq($account)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('status')->ne('closed')
+            ->fetch('count');
+
+        /* 待我解决的问题：当前用户发起的代码评审中处于激活状态的问题数量。 */
+        $pendingIssues = $this->dao->select('COUNT(1) AS count')->from(TABLE_SCANISSUE)->alias('t1')
+            ->leftJoin(TABLE_PPM)->alias('t2')->on('t1.`ppmID` = t2.`id`')
+            ->where('t2.`createdBy`')->eq($account)
+            ->andWhere('t2.`deleted`')->eq('0')
+            ->andWhere('t1.`deleted`')->eq('0')
+            ->andWhere('t1.`status`')->in('wait,todo,solving')
+            ->fetch('count');
+
+        return array('createdReviews' => (int)$createdReviews, 'pendingIssues' => (int)$pendingIssues);
     }
 
     /**
@@ -1449,6 +1501,7 @@ class myModel extends model
             $data->status  = $review->status;
             $data->product = $review->product;
             $data->project = $review->project;
+            $data->openedBy = $this->getAuditObjectOpenedBy($review);
             $reviewList[] = $data;
         }
         return $reviewList;
@@ -1471,17 +1524,17 @@ class myModel extends model
         $dataList = $this->dao->select('t2.`objectType`,t2.`objectID`')->from(TABLE_APPROVALNODE)->alias('t1')
             ->leftJoin(TABLE_APPROVALOBJECT)->alias('t2')->on('t2.approval = t1.approval')
             ->where('t2.`objectType`')->ne('review')
-            ->andWhere('objectType')->ne('projectchange')
-            ->andWhere('objectType')->ne('baseline')
+            ->andWhere('`objectType`')->ne('projectchange')
+            ->andWhere('`objectType`')->ne('baseline')
             ->beginIF($objectType != 'all')->andWhere('t2.`objectType`')->eq($objectType)->fi()
             ->andWhere('t1.account')->eq($this->app->user->account)
             ->andWhere('t1.status')->eq('doing')
             ->andWhere('t1.type')->eq('review')
-            ->beginIF(!helper::hasFeature('project_cm'))->andWhere('objectType')->ne('baseline')->fi()
-            ->beginIF(!helper::hasFeature('project_risk'))->andWhere('objectType')->ne('risk')->fi()
-            ->beginIF(!helper::hasFeature('project_issue'))->andWhere('objectType')->ne('issue')->fi()
-            ->beginIF(!helper::hasFeature('project_opportunity'))->andWhere('objectType')->ne('opportunity')->fi()
-            ->beginIF($this->config->systemMode == 'light' || (!helper::hasFeature('program') && $this->config->edition != 'ipd'))->andWhere('objectType')->ne('charter')->fi()
+            ->beginIF(!helper::hasFeature('project_cm'))->andWhere('`objectType`')->ne('baseline')->fi()
+            ->beginIF(!helper::hasFeature('project_risk'))->andWhere('`objectType`')->ne('risk')->fi()
+            ->beginIF(!helper::hasFeature('project_issue'))->andWhere('`objectType`')->ne('issue')->fi()
+            ->beginIF(!helper::hasFeature('project_opportunity'))->andWhere('`objectType`')->ne('opportunity')->fi()
+            ->beginIF($this->config->systemMode == 'light' || (!helper::hasFeature('program') && $this->config->edition != 'ipd'))->andWhere('`objectType`')->ne('charter')->fi()
             ->orderBy("t2.{$orderBy}")
             ->fetchAll();
 
@@ -1490,7 +1543,7 @@ class myModel extends model
 
         $this->loadModel('flow');
         $this->loadModel('workflowaction');
-        $flows       = $this->dao->select('module,`table`,name,`titleField`,app')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectIdList))->andWhere('vision')->eq($this->config->vision)->fetchAll('module');
+        $flows       = $this->dao->select('module,`table`,name,`titleField`,app,`buildin`')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectIdList))->andWhere('vision')->eq($this->config->vision)->fetchAll('module');
         $objectGroup = array();
         foreach($objectIdList as $objectType => $idList)
         {
@@ -1530,7 +1583,7 @@ class myModel extends model
      */
     public function getReviewingFeedbacks(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
-        if($this->config->edition == 'open') return array();
+        if(in_array($this->config->edition, array('open', 'gitfox'))) return array();
 
         $this->session->set('feedbackProduct', 'all');
         $feedbacks = $this->loadModel('feedback')->getList('review', $orderBy);
@@ -1552,6 +1605,7 @@ class myModel extends model
             $data->status  = $feedback->status;
             $data->product = isset($feedback->product) ? $feedback->product : 0;
             $data->project = isset($feedback->project) ? $feedback->project : 0;
+            $data->openedBy = $this->getAuditObjectOpenedBy($feedback);
             $reviewList[] = $data;
         }
 
@@ -1602,7 +1656,7 @@ class myModel extends model
             ->fetchPairs();
 
         $objectTypeList = array();
-        $actions        = $this->dao->select('`objectType`,`objectID`,actor,action,`date`,extra')->from(TABLE_ACTION)->where('id')->in($actionIdList)->orderBy($orderBy)->fetchAll();
+        $actions        = $this->dao->select('`objectType`,`objectID`,actor,action,`date`,comment,extra')->from(TABLE_ACTION)->where('id')->in($actionIdList)->orderBy($orderBy)->fetchAll();
         foreach($actions as $action) $objectTypeList[$action->objectType][] = $action->objectID;
 
         $flows       = $this->config->edition == 'open' ? array() : $this->dao->select('module,`table`,name,`titleField`')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectTypeList))->andWhere('buildin')->eq(0)->fetchAll('module');
@@ -1631,7 +1685,8 @@ class myModel extends model
             }
         }
 
-        $reviewedList = $this->buildReviewedList($objectGroup, $actions, $flows);
+        $reviewActions = $this->getReviewActionGroup($objectTypeList);
+        $reviewedList  = $this->buildReviewedList($objectGroup, $actions, $flows, $reviewActions);
         if(!is_null($pager))
         {
             $pager->setRecTotal(count($reviewedList));
@@ -1645,16 +1700,53 @@ class myModel extends model
     }
 
     /**
+     * 获取对象最近一次审批动作。
+     * Get the latest review action for objects.
+     *
+     * @param  array  $objectTypeList
+     * @access private
+     * @return array
+     */
+    private function getReviewActionGroup(array $objectTypeList): array
+    {
+        $actionIdList = array();
+        foreach($objectTypeList as $objectType => $idList)
+        {
+            $idList = array_filter(array_unique($idList));
+            if(empty($idList)) continue;
+
+            $reviewActionIdList = $this->dao->select('MAX(`id`) AS `id`')->from(TABLE_ACTION)
+                ->where('`objectType`')->eq($objectType)
+                ->andWhere('`objectID`')->in($idList)
+                ->andWhere('action')->in('reviewed,approvalreview')
+                ->andWhere('vision')->eq($this->config->vision)
+                ->groupBy('`objectType`,`objectID`')
+                ->fetchPairs();
+
+            if(!empty($reviewActionIdList)) $actionIdList = array_merge($actionIdList, $reviewActionIdList);
+        }
+
+        if(empty($actionIdList)) return array();
+
+        $reviewActions     = $this->dao->select('`objectType`,`objectID`,actor,action,`date`,comment,extra')->from(TABLE_ACTION)->where('id')->in($actionIdList)->fetchAll();
+        $reviewActionGroup = array();
+        foreach($reviewActions as $reviewAction) $reviewActionGroup[$reviewAction->objectType][$reviewAction->objectID] = $reviewAction;
+
+        return $reviewActionGroup;
+    }
+
+    /**
      * 构建评审列表。
      * Build reviewed list.
      *
      * @param  array   $objectGroup
      * @param  array   $actions
      * @param  array   $flows
+     * @param  array   $reviewActions
      * @access private
      * @return array
      */
-    private function buildReviewedList(array $objectGroup, array $actions, array $flows): array
+    private function buildReviewedList(array $objectGroup, array $actions, array $flows, array $reviewActions = array()): array
     {
         $this->app->loadConfig('action');
         $reviewList = array();
@@ -1673,9 +1765,27 @@ class myModel extends model
             $review->result = strtolower($action->extra);
             $review->status = $objectType == 'attend' ? $object->reviewStatus : (isset($object->status) && !isset($flows[$objectType]) ? $object->status : 'done');
             if(strpos($review->result, ',') !== false) list($review->result) = explode(',', $review->result);
+            if(strpos($review->result, '|') !== false) list($review->result) = explode('|', $review->result);
 
-            $review->product = isset($object->product) ? $object->product : 0;
-            $review->project = isset($object->project) ? $object->project : 0;
+            $review->product    = isset($object->product) ? $object->product : 0;
+            $review->project    = isset($object->project) ? $object->project : 0;
+            $review->reviewer   = '';
+            $review->opinion    = '';
+            $review->reviewTime = '';
+
+            $review->openedBy = $this->getAuditObjectOpenedBy($object);
+
+            $reviewAction = isset($reviewActions[$objectType][$action->objectID]) ? $reviewActions[$objectType][$action->objectID] : null;
+            if(isset($action->action) && in_array($action->action, array('reviewed', 'approvalreview'))) $reviewAction = $action;
+            if($reviewAction)
+            {
+                $review->reviewer   = isset($reviewAction->actor) ? $reviewAction->actor : '';
+                $review->opinion    = isset($reviewAction->comment) ? trim(strip_tags((string)$reviewAction->comment)) : '';
+                $review->reviewTime = isset($reviewAction->date) ? substr($reviewAction->date, 0, 19) : '';
+                if(isset($reviewAction->extra) && $reviewAction->extra !== '') $review->result = strtolower((string)$reviewAction->extra);
+                if(strpos($review->result, ',') !== false) list($review->result) = explode(',', $review->result);
+                if(strpos($review->result, '|') !== false) list($review->result) = explode('|', $review->result);
+            }
 
             if($objectType == 'story')    $review->storyType = $object->type;
             if($review->type == 'review') $review->type = 'projectreview';
@@ -1734,7 +1844,7 @@ class myModel extends model
      */
     public function getProducts(string $type = 'undone'): object
     {
-        $products = $this->dao->select('t1.*, t2.name as programName')->from(TABLE_PRODUCT)->alias('t1')
+        $products = $this->dao->select('t1.*, t2.name as `programName`')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($type == 'undone')->andWhere('t1.status')->eq('normal')->fi()

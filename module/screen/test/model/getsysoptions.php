@@ -50,6 +50,8 @@ cid=18256
 - 测试type为other，对象类型为空，字段为空，sql为空的情况下，数据获取是否正确。
  - 属性user1 @user1
  - 属性user9 @user9
+- 测试type为option，对象名为路径穿越时，不加载任何文件。
+ - 内容为空 @1
 
 */
 
@@ -70,3 +72,6 @@ r($screen->getSysOptionsTest($typeList[5], $objectList[5], $fieldList[5], $sqlLi
 r($screen->getSysOptionsTest($typeList[6], $objectList[6], $fieldList[6], $sqlList[6])) && p('active,resolved,closed')            && e('激活,已解决,已关闭');                   //测试type为option，对象类型为空，字段为空，sql为空的情况下，数据获取是否正确。
 r($screen->getSysOptionsTest($typeList[7], $objectList[7], $fieldList[7], $sqlList[7])) && p('1,5')                               && e('BUG1,BUG5');                            //测试type为object，对象类型为空，字段为空，sql为空的情况下，数据获取是否正确。
 r($screen->getSysOptionsTest($typeList[8], $objectList[8], $fieldList[8], $sqlList[8])) && p('user1,user9')                       && e('user1,user9');                          //测试type为other，对象类型为空，字段为空，sql为空的情况下，数据获取是否正确。
+
+/* 路径穿越的对象名不加载任何文件，避免本地文件包含。The traversal object name must not include any file. */
+r($screen->getSysOptionsTest('option', '../../../../../tmp/vuln014_marker', 'demo', '') === array()) && p() && e('1'); //测试type为option，对象名为路径穿越时，不加载任何文件。

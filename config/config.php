@@ -16,8 +16,9 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version       = '22.6';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version       = '22.7';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->liteVersion   = '1.2';                // 迅捷版版本。      The version of Lite.
+$config->gitfoxVersion = '4.3';                // GitFox独立版版本。The version of GitFox.
 $config->charset       = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The cookie life time.
 $config->timezone      = 'Asia/Shanghai';      // 时区设置。        The time zone setting, for more see http://www.php.net/manual/en/timezones.php.
@@ -36,7 +37,7 @@ $config->methodVar   = 'f';                       // 请求类型为GET：模块
 $config->viewVar     = 't';                       // 请求类型为GET：视图变量名。            requestType=GET: the view var name.
 $config->sessionVar  = 'zentaosid';               // 请求类型为GET：session变量名。         requestType=GET: the session var name.
 $config->views       = ',html,json,mhtml,xhtml,'; // 支持的视图类型。                       Supported view formats.
-$config->visions     = ',rnd,lite,or,';     // 支持的界面类型。                       Supported vision formats.
+$config->visions     = ',rnd,lite,or,gitfox,';     // 支持的界面类型。                       Supported vision formats.
 
 /* ZIN 设置。 ZIN settings. */
 $config->zin         = new stdclass();
@@ -156,6 +157,7 @@ $config->xFrameOptions = 'SAMEORIGIN';
 $config->features = new stdclass();
 $config->features->apiGetModel    = false;
 $config->features->apiSQL         = false;
+$config->features->apiSqlQuery    = false;
 $config->features->cronSystemCall = false;
 $config->features->checkClient    = true;
 
@@ -164,7 +166,7 @@ $config->file = new stdclass();
 $config->file->dangers        = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
 $config->file->allowed        = 'txt,md,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql,xmind,mm';
 $config->file->storageType    = 'fs';       // fs or s3
-$config->file->allowedModules = 'artifact,testcase'; // 设置上传文件时不需要过滤文件类型的模块。
+$config->file->allowedModules = 'artifact'; // 设置上传文件时不需要过滤文件类型的模块。
 
 /* 文档多人协同配置。 Document Hocus Pocus. */
 $config->docHocuspocus = new stdclass();
@@ -174,7 +176,7 @@ $config->docHocuspocus->websocket = 'ws://127.0.0.1:1234';
 
 /* Upload settings. */
 $config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul><li><img><a><b><font><hr><pre><div><table><td><th><tr><tbody><embed><style><s>';
-$config->accountRule = '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_\.]{1,}[a-zA-Z0-9_]{1}$|';
+$config->accountRule = '|^[a-zA-Z0-9_\-]{1}[a-zA-Z0-9_\.\-]{0,}[a-zA-Z0-9_\-]{1}$|';
 $config->checkVersion = true;              // Auto check for new version or not.
 
 /* Set the wide window size and timeout(ms). */
@@ -245,7 +247,8 @@ if($config->inContainer || $config->inQuickon)
 $config->devops = new stdclass();
 $config->devops->gitfoxURL     = 'http://localhost';
 $config->devops->gitfoxPort    = 3000;
-$config->devops->gitfoxVersion = '2.1';
+$config->devops->gitfoxEdition = 'community';
+$config->devops->gitfoxVersion = '4.3';
 
 /* 引用自定义的配置。 Include the custom config file. */
 $myConfigRoot = (defined('RUN_MODE') and in_array(RUN_MODE, array('test', 'uitest'))) ? dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'config' : dirname(__FILE__);
@@ -276,6 +279,15 @@ if(file_exists($cacheConfig)) include $cacheConfig;
 $extConfigFiles = glob(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ext/*.php');
 if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
 
+/* 扩展配置中可能指定 edition，需在加载扩展配置后再覆盖版本相关的配置。 */
+/* The edition may be specified in the extension config, so override edition-specific config after it is loaded. */
+if($config->edition == 'gitfox')
+{
+    $config->contactUs['email']  = 'wangzhaoning@chandao.com';
+    $config->contactUs['qq']     = '3684528290';
+    $config->contactUs['wechat'] = '17669512663';
+}
+
 /* Set version. */
 if($config->edition != 'open')
 {
@@ -288,6 +300,7 @@ else
     unset($config->bizVersion);
     unset($config->maxVersion);
     unset($config->ipdVersion);
+    unset($config->gitfoxVersion);
 }
 
 if($config->db->driver == 'mysql')

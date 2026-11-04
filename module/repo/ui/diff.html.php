@@ -141,7 +141,19 @@ featureBar
     $breadcrumbItems
 );
 
-if($diffs)
+if(!empty($diffText))
+{
+    zui::diffHub
+    (
+        set::diffText($diffText),
+        set::enableAnnotations(false),
+        set::product(0),
+        set::module(''),
+        set::repoID($repoID),
+        set::ppmID(0)
+    );
+}
+elseif($diffs)
 {
     include 'diffeditor.html.php';
 }
