@@ -1196,8 +1196,9 @@ class taskModel extends model
             /* If the type of task is affair and assignedTo is empty, skip it. */
             if(count($assignedToList) > 1 && empty($assignedTo)) continue;
 
-            $task->assignedTo = $assignedTo;
-            $taskID = $this->create($task);
+            $cloneTask = clone $task;
+            $cloneTask->assignedTo = $assignedTo;
+            $taskID = $this->create($cloneTask);
             if(!$taskID) return false;
 
             $taskIdList[] = $taskID;
