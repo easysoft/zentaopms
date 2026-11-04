@@ -637,6 +637,7 @@ class product extends control
     public function showErrorNone(string $moduleName = 'qa', string $activeMenu = 'index', int $objectID = 0)
     {
         $this->productZen->setShowErrorNoneMenu($moduleName, $activeMenu, $objectID);
+        if($this->app->tab == 'project') $this->view->projectID = $objectID;
 
         $this->view->title    = $this->lang->$moduleName->common;
         $this->view->objectID = $objectID;
