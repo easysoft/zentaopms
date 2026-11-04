@@ -41,7 +41,7 @@ if(!empty($task->team))
 $isEn = $app->getClientLang() == 'en';
 
 $fields = useFields('task.create');
-$fields->autoLoad('execution', 'execution,type,name,assignedTo,region,lane,module,story,datePlan,pri,estimate,desc,files,mailto,keywords,after,testStoryBox');
+$fields->autoLoad('execution', 'execution,type,name,parent,assignedTo,region,lane,module,story,datePlan,pri,estimate,desc,files,mailto,keywords,after,testStoryBox');
 
 $fields->orders('type,testStoryBox', 'type,testStoryBox,parent,assignedTo', 'desc,module,story');
 $fields->fullModeOrders('type,module,story,testStoryBox', 'desc,files,mailto,keywords');
