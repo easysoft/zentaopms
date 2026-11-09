@@ -77,6 +77,8 @@ foreach(array('PATH_INFO', 'GET', 'API') as $mode)
     $cases = array(
         'relative' => array('<img src="' . $relative . '" />', true),
         'absolute' => array('<img src="https://retention.example' . $relative . '" />', true),
+        'newline after source' => array('<img src="https://retention.example' . $relative . '"' . "\n" . 'alt="sample">', true),
+        'tab after source' => array('<img src="https://retention.example' . $relative . '"' . "\t" . 'alt="sample">', true),
         'http' => array('<img src="http://retention.example' . $relative . '" />', true),
         'authority case' => array('<img src="https://RETENTION.EXAMPLE' . $relative . '" />', true),
         'default port' => array('<img src="https://retention.example:443' . $relative . '" />', true),
@@ -114,6 +116,12 @@ foreach(array('PATH_INFO', 'GET', 'API') as $mode)
             {
                 check(str_contains($data->spec, ' src="{101.png}" '), 'canonical renderable source');
                 check(!str_contains($data->spec, '/ >'), 'valid self-closing image tag');
+                if($mode === 'PATH_INFO')
+                {
+                    $rendered = $probe->setImgSize($data->spec);
+                    check(str_contains($rendered, 'src="' . $relative . '"'), 'stored image must render as a file URL');
+                    check(!str_contains($rendered, '{101.png}'), 'rendered image must not contain an internal reference');
+                }
             }
             else check($data->spec === $html, 'unrelated HTML must remain unchanged');
             check($_SESSION['album']['other'] === array(102), 'other editor remains untouched');

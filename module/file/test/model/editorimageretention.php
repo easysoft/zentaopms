@@ -38,7 +38,7 @@ try
         file_put_contents($directory . "image$id", 'original image bytes');
     }
     $data = new stdclass();
-    $data->spec = '<img src="https://retention.example/zentao/file-read-1.png" /><img src="/zentao/file-read-2.png" />';
+    $data->spec = "<img src=\"https://retention.example/zentao/file-read-1.png\"\nalt=\"newline\"><img src=\"/zentao/file-read-2.png\"\talt=\"tab\">";
     $data->verify = "<img alt='example' src='https://retention.example/zentao/file-read-3.png'/><img src=\"{4.png}\" />";
     $file->processImgURL($data, 'spec,verify', $uid);
     $file->updateObjectID($uid, 1001, 'story');

@@ -904,8 +904,7 @@ class fileModel extends model
             /* Normalize only real image sources; absolute same-site URLs must also mark uploads as used. */
             $processed = preg_replace_callback('~<img\b(?:[^>"\']++|"[^"]*"|\'[^\']*\')*>~i', function($image) use ($readLinkReg, $requestType, $editorID, &$imageIdList)
             {
-                $normalized = false;
-                $tag = preg_replace_callback('~\s+([^\s=/>]+)\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|([^\s>]+))~', function($attribute) use ($readLinkReg, $requestType, &$imageIdList, &$normalized)
+                $tag = preg_replace_callback('~\s+([^\s=/>]+)\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|([^\s>]+))(?=(\s|/?>))~', function($attribute) use ($readLinkReg, $requestType, &$imageIdList)
                 {
                     if(strtolower($attribute[1]) != 'src') return $attribute[0];
                     $source = html_entity_decode($attribute[2] ?? $attribute[3] ?? $attribute[4] ?? '', ENT_QUOTES, 'UTF-8');
@@ -934,12 +933,9 @@ class fileModel extends model
                     else return $attribute[0];
 
                     $imageIdList[$imageID] = $imageID;
-                    $normalized = true;
-                    return ' src="{' . $imageID . '.' . $extension . '}"';
+                    /* Rendering requires a literal space after the internal source. */
+                    return ' src="{' . $imageID . '.' . $extension . '}"' . ($attribute[5] === ' ' ? '' : ' ');
                 }, $image[0], -1, $count, PREG_UNMATCHED_AS_NULL);
-                if($tag === null) $this->failEditorImageProcessing($editorID);
-                /* replaceImgURL() expects whitespace after the quoted internal source. */
-                if($normalized) $tag = preg_replace('~(?<![\s/])(/?>)$~', ' $1', $tag);
                 if($tag === null) $this->failEditorImageProcessing($editorID);
                 return $tag;
             }, $data->$editorID);
