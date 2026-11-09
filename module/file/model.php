@@ -890,26 +890,61 @@ class fileModel extends model
         if(is_string($editorList)) $editorList = explode(',', str_replace(' ', '', $editorList));
         if(empty($editorList)) return $data;
 
-        $readLinkReg = helper::createLink('file', 'read', 'fileID=(%fileID%)', '(%viewType%)');
-        $readLinkReg = str_replace(array('%fileID%', '%viewType%', '?', '/'), array('[0-9]+', '\w+', '\?', '\/'), $readLinkReg);
+        $readLinkReg = preg_quote(helper::createLink('file', 'read', 'fileID=%fileID%', '%viewType%'), '~');
+        $readLinkReg = str_replace(array('%fileID%', '%viewType%'), array('([0-9]+)', '(\w+)'), $readLinkReg);
+        $requestType = $this->config->originRequestType ?? $this->config->requestType;
         $imageIdList = array();
         foreach($editorList as $editorID)
         {
             if(empty($editorID) or empty($data->$editorID)) continue;
 
-            $imgURL = $this->config->requestType == 'GET' ? '{$2.$1}' : '{$1.$2}';
-
             $content = $this->pasteImage($data->$editorID, $uid);
             if($content) $data->$editorID = $content;
 
-            $data->$editorID = preg_replace("/ src=\"$readLinkReg\" /", ' src="' . $imgURL . '" ', $data->$editorID);
-            $data->$editorID = preg_replace("/ src=\"" . htmlSpecialString($readLinkReg) . "\" /", ' src="' . $imgURL . '" ', $data->$editorID);
-
-            preg_match_all('/ src="{([0-9]+)\.\w+}"/', $data->$editorID, $matches);
-            if($matches[1])
+            /* Normalize only real image sources; absolute same-site URLs must also mark uploads as used. */
+            $processed = preg_replace_callback('~<img\b(?:[^>"\']++|"[^"]*"|\'[^\']*\')*>~i', function($image) use ($readLinkReg, $requestType, $editorID, &$imageIdList)
             {
-                foreach($matches[1] as $imageID) $imageIdList[$imageID] = $imageID;
-            }
+                $normalized = false;
+                $tag = preg_replace_callback('~\s+([^\s=/>]+)\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|([^\s>]+))~', function($attribute) use ($readLinkReg, $requestType, &$imageIdList, &$normalized)
+                {
+                    if(strtolower($attribute[1]) != 'src') return $attribute[0];
+                    $source = html_entity_decode($attribute[2] ?? $attribute[3] ?? $attribute[4] ?? '', ENT_QUOTES, 'UTF-8');
+                    $url = parse_url($source);
+                    if($url === false) return $attribute[0];
+                    if(isset($url['host']))
+                    {
+                        $scheme = strtolower($url['scheme'] ?? 'https');
+                        $site = parse_url('http://' . ($_SERVER['HTTP_HOST'] ?? ''));
+                        if(!in_array($scheme, array('http', 'https')) || isset($url['user']) || isset($url['pass']) || empty($site['host'])) return $attribute[0];
+                        $defaultPort = $scheme == 'https' ? 443 : 80;
+                        if(strcasecmp($url['host'], $site['host']) != 0 || ($url['port'] ?? $defaultPort) != ($site['port'] ?? $defaultPort)) return $attribute[0];
+                        $source = ($url['path'] ?? '') . (isset($url['query']) ? '?' . $url['query'] : '');
+                    }
+                    elseif(isset($url['scheme'])) return $attribute[0];
+
+                    if(preg_match('~^\{([0-9]+)\.(\w+)\}$~D', $source, $matches))
+                    {
+                        list(, $imageID, $extension) = $matches;
+                    }
+                    elseif(preg_match('~^' . $readLinkReg . '$~D', $source, $matches))
+                    {
+                        $imageID   = $requestType == 'GET' ? $matches[2] : $matches[1];
+                        $extension = $requestType == 'GET' ? $matches[1] : $matches[2];
+                    }
+                    else return $attribute[0];
+
+                    $imageIdList[$imageID] = $imageID;
+                    $normalized = true;
+                    return ' src="{' . $imageID . '.' . $extension . '}"';
+                }, $image[0], -1, $count, PREG_UNMATCHED_AS_NULL);
+                if($tag === null) $this->failEditorImageProcessing($editorID);
+                /* replaceImgURL() expects whitespace after the quoted internal source. */
+                if($normalized) $tag = preg_replace('~(?<![\s/])(/?>)$~', ' $1', $tag);
+                if($tag === null) $this->failEditorImageProcessing($editorID);
+                return $tag;
+            }, $data->$editorID);
+            if($processed === null) $this->failEditorImageProcessing($editorID);
+            $data->$editorID = $processed;
         }
 
         if(!empty($_SESSION['album'][$uid]))
@@ -920,6 +955,24 @@ class fileModel extends model
             }
         }
         return $data;
+    }
+
+    /**
+     * Stop before saving or cleaning uploads when image reference discovery is incomplete.
+     *
+     * @param  string $editorID
+     * @access private
+     * @return never
+     */
+    private function failEditorImageProcessing(string $editorID): never
+    {
+        error_log(json_encode(array('event' => 'file.editor_images.parse_failed', 'level' => 'error', 'field' => $editorID, 'pcreError' => preg_last_error())));
+        $code = 'editor_image_parse_failed';
+        $message = 'Could not process images in "' . $editorID . '". Simplify the image formatting and retry saving.';
+        if(helper::isApiRequest()) helper::end(helper::response(array('error' => $message, 'code' => $code), 400));
+        helper::end(json_encode(array(
+            'result' => 'fail', 'status' => 'fail', 'code' => $code, 'message' => $message
+        )));
     }
 
     /**
