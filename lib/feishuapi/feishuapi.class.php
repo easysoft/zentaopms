@@ -40,7 +40,7 @@ class feishuapi
         if(!isset($config->feishuTokens)) $config->feishuTokens = array();
         if(isset($config->feishuTokens[$hookKey])) list($this->token, $this->expires) = $config->feishuTokens[$hookKey];
 
-        if($this->token and (time() - $this->expires) >= 0) return $this->token;
+        if($this->token and time() < $this->expires) return $this->token;
 
         $response = $this->queryAPI($this->apiUrl . "auth/v3/tenant_access_token/internal/", json_encode(array('app_id' => $this->appId, 'app_secret' => $this->appSecret)));
         if($this->isError()) return false;
