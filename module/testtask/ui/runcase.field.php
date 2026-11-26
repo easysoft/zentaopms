@@ -80,10 +80,10 @@ $buildStepsBox = function() use($run, $confirm, $deployID, $lang)
                     (
                         setClass('inputGroup row', 'pl-' . (($step->grade - 1) * 2)),
                         h::span(setClass('step-item-id mr-2'), $step->name),
-                        div(setClass('wrap break-all whitespace-pre-line'), html_entity_decode(str_replace(' ', '&nbsp;', $step->desc)))
+                        div(setClass('wrap whitespace-pre-line'), html_entity_decode($step->desc))
                     )
                 ),
-                h::td(setClass('text-left border break-all whitespace-pre-line'), html_entity_decode(str_replace(' ', '&nbsp;', $step->expect))),
+                h::td(setClass('text-left border whitespace-pre-line'), html_entity_decode($step->expect)),
                 h::td
                 (
                     setClass('result-td'),
